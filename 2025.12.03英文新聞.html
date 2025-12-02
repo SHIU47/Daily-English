@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英語新聞學習與測驗</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 護眼主題設定 */
+        :root {
+            --primary-color: #10b981; /* Emerald-500, 柔和的綠色主調 */
+            --soft-bg-color: #f5f7f5; /* 非常淡的灰綠色背景 */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--soft-bg-color); /* 使用柔和背景色 */
+            color: #374151; /* Muted dark text color */
+        }
+        .tab-button.active {
+            border-bottom: 4px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+            background-color: #ffffff;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 6px 10px -3px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* 練習題項目的柔和背景 */
+        .quiz-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background-color: #fcfcfc;
+        }
+        /* 正確/錯誤答案的柔和配色 */
+        .correct-answer {
+            background-color: #e0f2f1; /* Teal-100 */
+            border-color: #0d9488; /* Teal-600 */
+        }
+        .wrong-answer {
+            background-color: #fef2f2; /* Red-50 (更淡的紅色) */
+            border-color: #ef4444;
+        }
+        .vocab-list li:nth-child(even) {
+            background-color: #f7f7f7; /* 柔和的條紋背景 */
+        }
+        .vocab-list li:hover {
+            background-color: #e6f9f5; /* 柔和的 hover 效果 */
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">英語新聞學習中心</h1>
+
+    <div class="max-w-6xl mx-auto card p-0">
+        <!-- Tab Navigation -->
+        <div id="tab-nav" class="flex flex-wrap border-b border-gray-200 bg-gray-50 rounded-t-xl overflow-hidden">
+            <!-- Buttons will be injected here -->
+        </div>
+
+        <!-- Tab Content Area -->
+        <div id="tab-content-area" class="p-6 md:p-8">
+            <!-- Content will be injected here -->
+        </div>
+
+    </div>
+
+    <script>
+        // --- Data Structure for all Articles ---
+        const articles = [
+            {
+                id: 0,
+                title: "淡水停水事件 (Tamsui Water Cut)",
+                reading: `A construction accident on the Danbei Road project left more than 62,000 households in Tamsui without water after a crew accidentally drilled into an underground water pipe on Nov. 27. Sixteen neighborhoods were affected as pressure was reduced and later fully shut off. The city said repairs were completed and normal supply resumed at 5 p.m. Sunday.`,
+                vocab: [
+                    { en: "construction accident", zh: "施工意外" },
+                    { en: "households", zh: "住戶" },
+                    { en: "crew", zh: "工作人員/工程隊" },
+                    { en: "accidentally drilled into", zh: "意外鑽入" },
+                    { en: "underground water pipe", zh: "地下水管" },
+                    { en: "neighborhoods", zh: "鄰里/社區" },
+                    { en: "were affected", zh: "受到影響" },
+                    { en: "pressure was reduced", zh: "水壓降低" },
+                    { en: "fully shut off", zh: "完全切斷" },
+                    { en: "repairs", zh: "維修/修理" },
+                    { en: "normal supply", zh: "正常供水" },
+                    { en: "resumed", zh: "恢復供應" },
+                    { en: "incident", zh: "事件" },
+                    { en: "temporary measure", zh: "臨時措施" },
+                    { en: "water outage", zh: "停水" },
+                    { en: "infrastructure", zh: "基礎設施" },
+                    { en: "potential damage", zh: "潛在損壞" },
+                    { en: "city officials", zh: "市政府官員" },
+                    { en: "excavation", zh: "挖掘" },
+                    { en: "utility lines", zh: "公用管線" },
+                    { en: "disruption", zh: "中斷" },
+                    { en: "to alleviate", zh: "緩解" },
+                    { en: "precautionary", zh: "預防性的" },
+                    { en: "wastage", zh: "浪費" },
+                    { en: "scheduled maintenance", zh: "排程維護" }
+                ],
+                quiz: [
+                    { type: "fill", text: "A construction _________ left thousands of homes without water.", answer: "accident", hint: "事件" },
+                    { type: "fill", text: "The worker's drill went into an _________ water pipe.", answer: "underground", hint: "地下的" },
+                    { type: "fill", text: "Sixteen _________ were affected by the water shutoff.", answer: "neighborhoods", hint: "社區/鄰里" },
+                    { type: "fill", text: "Water _________ was reduced before being fully shut off.", answer: "pressure", hint: "壓力" },
+                    { type: "fill", text: "The normal water supply _________ at 5 p.m. Sunday.", answer: "resumed", hint: "恢復" },
+                    { type: "mc", text: "What is the meaning of 'households'?", options: ["建築工人", "家庭/住戶", "水壓表", "修復程序"], answer: "家庭/住戶" },
+                    { type: "mc", text: "The water supply was 'fully shut off'. What does 'shut off' mean?", options: ["開啟", "延遲", "切斷/關閉", "測試"], answer: "切斷/關閉" },
+                    { type: "mc", text: "The city completed the 'repairs'. What did they complete?", options: ["宣傳活動", "簽訂合約", "維修工作", "新的鑽探"], answer: "維修工作" },
+                    { type: "mc", text: "What caused the water outage?", options: ["A storm", "Scheduled maintenance", "A construction accident", "An increase in pressure"], answer: "A construction accident" },
+                    { type: "mc", text: "Which word means '工作人員'?", options: ["Repairs", "Households", "Crew", "Supply"], answer: "Crew" },
+                    { type: "fill", text: "The crew _________ drilled into the pipe.", answer: "accidentally", hint: "意外地" },
+                    { type: "fill", text: "More than 62,000 _________ were left without water.", answer: "households", hint: "住戶" },
+                    { type: "fill", text: "The incident caused a significant _________.", answer: "disruption", hint: "中斷" },
+                    { type: "fill", text: "The goal was to _________ the situation quickly.", answer: "alleviate", hint: "緩解" },
+                    { type: "mc", text: "What is the English term for '地下水管'?", options: ["Overhead pipe", "Pipeline infrastructure", "Underground water pipe", "Pressure gauge"], answer: "Underground water pipe" }
+                ]
+            },
+            {
+                id: 1,
+                title: "台灣盾牌軍購 (Taiwan Arms Requests)",
+                reading: `President Lai’s “Shield of Taiwan” initiative is moving forward as the Ministry of National Defense works with AIT’s security team on a special budget for asymmetric defense. The plan includes submitting Letters of Request for nine items, notably a fourth set of Patriot PAC-3 missiles with the U.S. ICBS system and upgrades for nine existing Patriot units.`,
+                vocab: [
+                    { en: "initiative", zh: "倡議/計畫" },
+                    { en: "moving forward", zh: "正在推進" },
+                    { en: "Ministry of National Defense", zh: "國防部" },
+                    { en: "security team", zh: "安全團隊" },
+                    { en: "special budget", zh: "特別預算" },
+                    { en: "asymmetric defense", zh: "不對稱防禦" },
+                    { en: "submitting", zh: "提交" },
+                    { en: "Letters of Request (LOR)", zh: "申請函/需求信函" },
+                    { en: "notably", zh: "特別是/尤其" },
+                    { en: "Patriot PAC-3 missiles", zh: "愛國者三型飛彈" },
+                    { en: "ICBS system", zh: "整合式指揮作戰系統" },
+                    { en: "upgrades", zh: "升級" },
+                    { en: "existing units", zh: "現有單位" },
+                    { en: "procurement", zh: "採購" },
+                    { en: "acquisition", zh: "獲取" },
+                    { en: "sovereignty", zh: "主權" },
+                    { en: "deterrence", zh: "威懾" },
+                    { en: "alliance", zh: "聯盟" },
+                    { en: "diplomatic relations", zh: "外交關係" },
+                    { en: "expenditure", zh: "支出" },
+                    { en: "military readiness", zh: "軍事準備" },
+                    { en: "interoperability", zh: "互通性" },
+                    { en: "modernization", zh: "現代化" },
+                    { en: "foreign military sales", zh: "對外軍事銷售" }
+                ],
+                quiz: [
+                    { type: "fill", text: "The 'Shield of Taiwan' _________ is moving forward.", answer: "initiative", hint: "倡議" },
+                    { type: "fill", text: "The Ministry of National Defense is preparing a special _________.", answer: "budget", hint: "預算" },
+                    { type: "fill", text: "The plan focuses on _________ defense.", answer: "asymmetric", hint: "不對稱的" },
+                    { type: "fill", text: "Taiwan is _________ Letters of Request for nine items.", answer: "submitting", hint: "提交" },
+                    { type: "fill", text: "The request includes _________ for nine existing Patriot units.", answer: "upgrades", hint: "升級" },
+                    { type: "mc", text: "What does 'asymmetric defense' refer to?", options: ["攻擊性武器", "不對稱防禦", "核武器", "全面戰爭"], answer: "不對稱防禦" },
+                    { type: "mc", text: "What item is 'notably' mentioned in the requests?", options: ["F-16 Fighters", "Patriot PAC-3 missiles", "Submarines", "Tanks"], answer: "Patriot PAC-3 missiles" },
+                    { type: "mc", text: "The Ministry of National Defense is working with AIT's what?", options: ["Diplomatic corps", "Trade office", "Security team", "Cultural center"], answer: "Security team" },
+                    { type: "mc", text: "Which word means '特別是/尤其'?", options: ["Existing", "Budget", "Notably", "Submitting"], answer: "Notably" },
+                    { type: "mc", text: "What is the function of the 'ICBS system'?", options: ["A banking system", "An integrated command system", "An international broadcast service", "An environmental policy board"], answer: "An integrated command system" },
+                    { type: "fill", text: "The plan focuses on military _________.", answer: "modernization", hint: "現代化" },
+                    { type: "fill", text: "The country is dedicated to preserving its _________.", answer: "sovereignty", hint: "主權" },
+                    { type: "fill", text: "The requests are part of a larger _________ plan.", answer: "procurement", hint: "採購" },
+                    { type: "fill", text: "The military must maintain a high level of _________.", answer: "readiness", hint: "準備" },
+                    { type: "mc", text: "Which word means '現有單位'?", options: ["New recruits", "Existing units", "Future plans", "Defense teams"], answer: "Existing units" }
+                ]
+            },
+            {
+                id: 2,
+                title: "臺南垃圾掩埋場火災 (Tainan Landfill Fire)",
+                reading: `A fire at Tainan’s Wushulin storm-debris site has yet to be fully extinguished, and another blaze broke out on the night of Nov. 30 at the Chengxi Phase II landfill in Annan District marking the city’s third fire this year. Mayor Huang Wei-che and senior officials inspected the scene. Authorities believe the blaze may be a continuation of last month’s incident but say no asbestos materials were burning.`,
+                vocab: [
+                    { en: "storm-debris site", zh: "風災碎片堆放場" },
+                    { en: "fully extinguished", zh: "完全撲滅" },
+                    { en: "blaze broke out", zh: "大火爆發" },
+                    { en: "landfill", zh: "垃圾掩埋場" },
+                    { en: "marking", zh: "標誌著" },
+                    { en: "senior officials", zh: "高級官員" },
+                    { en: "inspected the scene", zh: "視察現場" },
+                    { en: "authorities", zh: "當局/官方" },
+                    { en: "continuation", zh: "延續" },
+                    { en: "asbestos materials", zh: "石棉材料" },
+                    { en: "incineration", zh: "焚化" },
+                    { en: "smoke plume", zh: "煙羽" },
+                    { en: "environmental impact", zh: "環境影響" },
+                    { en: "combustible", zh: "可燃的" },
+                    { en: "mitigation efforts", zh: "緩解工作" },
+                    { en: "prevention measures", zh: "預防措施" },
+                    { en: "investigation", zh: "調查" },
+                    { en: "site management", zh: "場地管理" },
+                    { en: "hazardous waste", zh: "有害廢棄物" },
+                    { en: "toxic fumes", zh: "有毒煙霧" },
+                    { en: "residue", zh: "殘留物" },
+                    { en: "spontaneous combustion", zh: "自燃" },
+                    { en: "debris", zh: "碎片/殘骸" },
+                    { en: "municipal", zh: "市政的" },
+                    { en: "waste disposal", zh: "廢棄物處理" }
+                ],
+                quiz: [
+                    { type: "fill", text: "The fire at the storm-_________ site has yet to be fully extinguished.", answer: "debris", hint: "碎片/殘骸" },
+                    { type: "fill", text: "Another _________ broke out at the Chengxi Phase II landfill.", answer: "blaze", hint: "大火" },
+                    { type: "fill", text: "The fire is _________ the city’s third fire this year.", answer: "marking", hint: "標誌著" },
+                    { type: "fill", text: "The Mayor and _________ officials inspected the scene.", answer: "senior", hint: "高級的" },
+                    { type: "fill", text: "They believe the blaze may be a _________ of last month’s incident.", answer: "continuation", hint: "延續" },
+                    { type: "mc", text: "Which word means '垃圾掩埋場'?", options: ["Landmark", "Landfill", "Landing strip", "Landlord"], answer: "Landfill" },
+                    { type: "mc", text: "What did the officials do at the scene?", options: ["Left immediately", "Held a party", "Inspected the scene", "Started construction"], answer: "Inspected the scene" },
+                    { type: "mc", text: "What are 'asbestos materials'?", options: ["Recycled paper", "Highly flammable waste", "Non-combustible insulation", "Building debris containing asbestos"], answer: "Building debris containing asbestos" },
+                    { type: "mc", text: "The fire has 'yet to be fully extinguished'. What does this imply?", options: ["It is out", "It is still burning", "It was never burning", "The cleanup is done"], answer: "It is still burning" },
+                    { type: "mc", text: "Who are the 'authorities'?", options: ["The residents", "The public media", "The government officials", "The cleanup crew"], answer: "The government officials" },
+                    { type: "fill", text: "The fire produced a large _________ plume.", answer: "smoke", hint: "煙霧" },
+                    { type: "fill", text: "They are concerned about the _________ impact.", answer: "environmental", hint: "環境" },
+                    { type: "fill", text: "The waste site needs better _________ efforts.", answer: "mitigation", hint: "緩解" },
+                    { type: "fill", text: "The accident was likely caused by _________ combustion.", answer: "spontaneous", hint: "自燃的" },
+                    { type: "mc", text: "What does 'municipal' relate to?", options: ["National laws", "International trade", "City or town administration", "Private companies"], answer: "City or town administration" }
+                ]
+            },
+            {
+                id: 3,
+                title: "美國暫停庇護決定 (U.S. Halts Asylum Decisions)",
+                reading: `The Trump administration has halted all asylum decisions following the shooting of two national soldiers in Washington, D.C. It came hours after U.S. President Donald Trump pledged to “permanently pause migration” from all “third world countries.” The flurry of immigration decisions comes in the wake of Wednesday’s shooting, which left one soldier dead and another in critical condition, and which officials have accused an Afghan national of perpetrating. While the first of these specifically targeted Afghan seeking to enter the U.S. other decisions have been far more wide-reaching. USCIS— a branch of the Department of Homeland Security has been told not to approve, deny, or close asylum applications it receives from all nationalities. Its officers can continue to work on asylum applications and review cases up to the point of making a decision.`,
+                vocab: [
+                    { en: "halted", zh: "暫停/停止" },
+                    { en: "asylum decisions", zh: "庇護決定" },
+                    { en: "following", zh: "在...之後" },
+                    { en: "pledged to", zh: "承諾要" },
+                    { en: "permanently pause migration", zh: "永久暫停移民" },
+                    { en: "flurry of decisions", zh: "一連串的決定" },
+                    { en: "in the wake of", zh: "在...之後發生" },
+                    { en: "critical condition", zh: "危急狀態" },
+                    { en: "accused of", zh: "被指控" },
+                    { en: "perpetrating", zh: "犯下(罪行)" },
+                    { en: "specifically targeted", zh: "專門針對" },
+                    { en: "wide-reaching", zh: "影響深遠的" },
+                    { en: "USCIS", zh: "美國公民及移民服務局" },
+                    { en: "approve", zh: "批准" },
+                    { en: "deny", zh: "拒絕" },
+                    { en: "close applications", zh: "結案申請" },
+                    { en: "homeland security", zh: "國土安全" },
+                    { en: "nationalities", zh: "國籍" },
+                    { en: "review cases", zh: "審查案件" },
+                    { en: "refugee status", zh: "難民身份" },
+                    { en: "deportation", zh: "驅逐出境" },
+                    { en: "policy shift", zh: "政策轉變" },
+                    { en: "border control", zh: "邊境管制" },
+                    { en: "unprecedented", zh: "史無前例的" }
+                ],
+                quiz: [
+                    { type: "fill", text: "The administration has _________ all asylum decisions.", answer: "halted", hint: "暫停" },
+                    { type: "fill", text: "President Trump _________ to 'permanently pause migration'.", answer: "pledged", hint: "承諾" },
+                    { type: "fill", text: "The decisions came in the _________ of Wednesday’s shooting.", answer: "wake", hint: "在...之後" },
+                    { type: "fill", text: "Officials have _________ an Afghan national of perpetrating the shooting.", answer: "accused", hint: "指控" },
+                    { type: "fill", text: "The later decisions have been far more _________.", answer: "wide-reaching", hint: "影響深遠的" },
+                    { type: "mc", text: "What is the meaning of 'asylum decisions'?", options: ["商業合約", "庇護決定", "稅收政策", "教育改革"], answer: "庇護決定" },
+                    { type: "mc", text: "The soldier left in 'critical condition' is:", options: ["Very happy", "Severely injured", "Ready for duty", "Traveling abroad"], answer: "Severely injured" },
+                    { type: "mc", text: "What does USCIS stand for?", options: ["US Climate Investigation Service", "Universal Citizen Identification System", "US Citizenship and Immigration Services", "Unilateral Consensus Initiative Security"], answer: "US Citizenship and Immigration Services" },
+                    { type: "mc", text: "Which word means '犯下(罪行)'?", options: ["Approving", "Perpetrating", "Reviewing", "Halting"], answer: "Perpetrating" },
+                    { type: "mc", text: "USCIS officers are told not to do what?", options: ["Approve, deny, or close applications", "Process background checks", "Review cases", "Work on application forms"], answer: "Approve, deny, or close applications" },
+                    { type: "fill", text: "The change represents a significant _________ shift.", answer: "policy", hint: "政策" },
+                    { type: "fill", text: "The shooting led to a _________ of immigration decisions.", answer: "flurry", hint: "一連串" },
+                    { type: "fill", text: "The decisions were initially _________ targeted.", answer: "specifically", hint: "專門地" },
+                    { type: "fill", text: "The agency is a branch of _________ Security.", answer: "homeland", hint: "國土" },
+                    { type: "mc", text: "What is 'migration' in this context?", options: ["Moving birds", "Movement of people between countries", "Software updates", "Stock market changes"], answer: "Movement of people between countries" }
+                ]
+            },
+            {
+                id: 4,
+                title: "印尼和斯里蘭卡洪災 (Indonesia and Sri Lanka Floods)",
+                reading: `Some residents of the flood-hit Indonesian island of Sumatra have resorted to stealing food and water to survive, while Sri Lankan officials said deaths from floods and mudslides in that island nation have risen to 193. The floods, which hit Indonesia nearly a week ago, have killed 303 people with the number expected to rise as more bodies are recovered and displaced thousands. The deluges triggered landslides, damaged roads, cut off parts of the island, and downed communication lines. The challenging weather conditions and the lack of heavy equipment also hampered rescue efforts. Aid has been slow to reach the hardest-hit city of Sibolga and the Central Tapanuli district in North Sumatra. Video on social media showed people scrambling past crumbling barricades, flooded road, and broken glass to get their hands on food, medicine, and gas.`,
+                vocab: [
+                    { en: "resorted to", zh: "訴諸於/採取" },
+                    { en: "to survive", zh: "生存" },
+                    { en: "mudslides", zh: "土石流" },
+                    { en: "risen to", zh: "上升到" },
+                    { en: "displaced", zh: "流離失所的" },
+                    { en: "deluges", zh: "洪水/暴雨" },
+                    { en: "triggered landslides", zh: "引發土石流" },
+                    { en: "downed communication lines", zh: "通訊線路中斷" },
+                    { en: "hampered rescue efforts", zh: "阻礙救援工作" },
+                    { en: "aid", zh: "援助/救濟" },
+                    { en: "slow to reach", zh: "緩慢到達" },
+                    { en: "hardest-hit", zh: "受災最嚴重的" },
+                    { en: "scrambling past", zh: "倉皇經過" },
+                    { en: "crumbling barricades", zh: "崩塌的路障" },
+                    { en: "recovery efforts", zh: "復原工作" },
+                    { en: "humanitarian crisis", zh: "人道危機" },
+                    { en: "relief supplies", zh: "救濟物資" },
+                    { en: "devastation", zh: "破壞" },
+                    { en: "inaccessible", zh: "難以到達的" },
+                    { en: "calamity", zh: "災難" },
+                    { en: "death toll", zh: "死亡人數" },
+                    { en: "tributary", zh: "支流" },
+                    { en: "emergency response", zh: "緊急響應" },
+                    { en: "flood victims", zh: "洪水受害者" },
+                    { en: "looting", zh: "搶劫" }
+                ],
+                quiz: [
+                    { type: "fill", text: "Some residents have _________ to stealing food to survive.", answer: "resorted", hint: "訴諸於" },
+                    { type: "fill", text: "The deaths from floods and _________ have risen to 193.", answer: "mudslides", hint: "土石流" },
+                    { type: "fill", text: "The number of casualties is expected to _________ as more bodies are recovered.", answer: "rise", hint: "上升" },
+                    { type: "fill", text: "The heavy rains, or _________, triggered landslides.", answer: "deluges", hint: "洪水/暴雨" },
+                    { type: "fill", text: "Lack of heavy equipment _________ rescue efforts.", answer: "hampered", hint: "阻礙" },
+                    { type: "mc", text: "What does 'displaced' mean in this context?", options: ["迷路的", "流離失所的", "被逮捕的", "非常快樂的"], answer: "流離失所的" },
+                    { type: "mc", text: "What were 'downed communication lines' caused by?", options: ["Internet hackers", "Challenging weather conditions", "Scheduled maintenance", "Lack of funding"], answer: "Challenging weather conditions" },
+                    { type: "mc", text: "Which phrase means '受災最嚴重的'?", options: ["The hardest-hit", "The slowest moving", "The least affected", "The highest point"], answer: "The hardest-hit" },
+                    { type: "mc", text: "People were 'scrambling past' crumbling barricades. What were they doing?", options: ["Walking slowly", "Standing still", "Organizing the crowd", "Rushing/struggling to get past"], answer: "Rushing/struggling to get past" },
+                    { type: "mc", text: "What is 'aid' that was slow to reach the area?", options: ["News reports", "Medical assistance/relief supplies", "Military training", "New construction plans"], answer: "Medical assistance/relief supplies" },
+                    { type: "fill", text: "The situation quickly became a _________ crisis.", answer: "humanitarian", hint: "人道" },
+                    { type: "fill", text: "The whole region suffered massive _________.", answer: "devastation", hint: "破壞" },
+                    { type: "fill", text: "Many roads were rendered _________.", answer: "inaccessible", hint: "難以到達" },
+                    { type: "fill", text: "The final _________ toll is expected to be high.", answer: "death", hint: "死亡" },
+                    { type: "mc", text: "What is the meaning of 'looting'?", options: ["Singing songs", "Helping others", "Stealing goods during a disaster", "Clearing debris"], answer: "Stealing goods during a disaster" }
+                ]
+            }
+        ];
+
+        let activeArticleId = 0;
+
+        // --- Core Functions ---
+
+        function generateVocabList(vocab) {
+            let html = '<ul class="vocab-list divide-y divide-gray-200 border border-gray-200 rounded-lg overflow-hidden">';
+            vocab.forEach(item => {
+                html += `
+                    <li class="flex justify-between items-center p-3 text-sm transition duration-150 ease-in-out">
+                        <span class="font-medium text-gray-700">${item.en}</span>
+                        <span class="text-emerald-700 font-semibold">${item.zh}</span>
+                    </li>
+                `;
+            });
+            html += '</ul>';
+            return html;
+        }
+
+        function generateQuiz(quiz) {
+            let html = '<form id="quiz-form" class="space-y-6">';
+            quiz.forEach((q, index) => {
+                const questionNumber = index + 1;
+                html += `<div class="quiz-item" data-index="${index}">`;
+                html += `<p class="text-lg font-semibold text-gray-800 mb-3">#${questionNumber}. `;
+
+                if (q.type === 'fill') {
+                    // Fill-in-the-blank
+                    const parts = q.text.split('_________');
+                    html += `請填入正確的單字/片語 (提示: ${q.hint})`;
+                    html += `</p>`;
+                    html += `<div class="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-2 mt-2">`;
+                    html += `<span class="text-gray-600">${parts[0]}</span>`;
+                    html += `<input type="text" data-type="fill" name="q${index}" class="flex-grow w-full md:w-auto p-2 border-2 border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500 transition duration-150" placeholder="請輸入答案...">`;
+                    html += `<span class="text-gray-600">${parts[1] || ''}</span>`;
+                    html += `</div>`;
+
+                } else if (q.type === 'mc') {
+                    // Multiple Choice
+                    html += `${q.text}</p>`;
+                    html += `<div class="space-y-2 mt-2">`;
+                    q.options.forEach((option, optIndex) => {
+                        const optionId = `q${index}-opt${optIndex}`;
+                        html += `
+                            <label for="${optionId}" class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150">
+                                <input id="${optionId}" type="radio" name="q${index}" value="${option}" data-type="mc" class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300">
+                                <span class="ml-3 text-gray-700">${option}</span>
+                            </label>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+                html += `</div>`;
+            });
+
+            html += `
+                <div class="flex justify-center mt-8 space-x-4">
+                    <button type="button" onclick="checkQuiz()" class="px-6 py-3 bg-emerald-600 text-white font-bold rounded-lg shadow-md hover:bg-emerald-700 transition duration-200 focus:outline-none focus:ring-4 focus:ring-emerald-500 focus:ring-opacity-50">
+                        批改測驗 (Check Answers)
+                    </button>
+                    <button type="button" onclick="resetQuiz()" class="px-6 py-3 bg-gray-400 text-white font-bold rounded-lg shadow-md hover:bg-gray-500 transition duration-200 focus:outline-none focus:ring-4 focus:ring-gray-300 focus:ring-opacity-50">
+                        重新開始 (Reset)
+                    </button>
+                </div>
+                <div id="quiz-result" class="mt-6 text-center text-xl font-bold p-4 rounded-lg hidden"></div>
+            </form>`;
+            return html;
+        }
+
+        window.checkQuiz = function() {
+            const form = document.getElementById('quiz-form');
+            const resultDiv = document.getElementById('quiz-result');
+            const currentQuiz = articles[activeArticleId].quiz;
+            let score = 0;
+
+            currentQuiz.forEach((q, index) => {
+                const itemDiv = document.querySelector(`.quiz-item[data-index="${index}"]`);
+                itemDiv.classList.remove('correct-answer', 'wrong-answer');
+
+                // Remove previous hints
+                const oldHint = itemDiv.querySelector('.answer-hint');
+                if (oldHint) {
+                    oldHint.remove();
+                }
+
+                let userAnswer = '';
+                let isCorrect = false;
+
+                if (q.type === 'fill') {
+                    const input = form.elements[`q${index}`];
+                    userAnswer = input ? input.value.trim().toLowerCase() : '';
+                    const correctAnswer = q.answer.trim().toLowerCase();
+                    isCorrect = userAnswer === correctAnswer;
+
+                    if (!isCorrect) {
+                        const hint = document.createElement('p');
+                        hint.className = 'answer-hint mt-2 text-sm font-medium text-red-700';
+                        hint.innerHTML = `正確答案: <span class="text-base text-red-900">${q.answer}</span>`;
+                        itemDiv.appendChild(hint);
+                    }
+
+                } else if (q.type === 'mc') {
+                    const selected = form.elements[`q${index}`];
+                    if (selected && selected.value) {
+                        userAnswer = selected.value;
+                        isCorrect = userAnswer === q.answer;
+
+                        // Highlight the correct option
+                        const allOptions = itemDiv.querySelectorAll('input[type="radio"]');
+                        allOptions.forEach(radio => {
+                            const label = radio.closest('label');
+                            if (radio.value === q.answer) {
+                                label.classList.add('bg-green-100', 'border-green-500');
+                                label.classList.remove('hover:bg-gray-100');
+                            } else {
+                                label.classList.remove('bg-green-100', 'border-green-500');
+                                label.classList.add('hover:bg-gray-100');
+                            }
+                        });
+                    }
+                }
+
+                if (isCorrect) {
+                    score++;
+                    itemDiv.classList.add('correct-answer');
+                } else {
+                    itemDiv.classList.add('wrong-answer');
+                }
+            });
+
+            resultDiv.textContent = `您的得分: ${score} / ${currentQuiz.length} 題。繼續加油！`;
+            resultDiv.classList.remove('hidden', 'bg-red-200', 'text-red-800', 'bg-yellow-200', 'text-yellow-800', 'bg-green-200', 'text-green-800');
+
+            if (score / currentQuiz.length < 0.6) {
+                resultDiv.classList.add('bg-red-200', 'text-red-800');
+            } else if (score / currentQuiz.length < 0.9) {
+                resultDiv.classList.add('bg-yellow-200', 'text-yellow-800');
+            } else {
+                resultDiv.classList.add('bg-green-200', 'text-green-800');
+            }
+            resultDiv.classList.remove('hidden');
+
+            // Disable further checks until reset
+            form.querySelector('button[onclick="checkQuiz()"]').disabled = true;
+        }
+
+        window.resetQuiz = function() {
+            const form = document.getElementById('quiz-form');
+            form.reset();
+            const resultDiv = document.getElementById('quiz-result');
+            resultDiv.classList.add('hidden');
+            form.querySelector('button[onclick="checkQuiz()"]').disabled = false;
+
+            document.querySelectorAll('.quiz-item').forEach(itemDiv => {
+                itemDiv.classList.remove('correct-answer', 'wrong-answer');
+                
+                // Remove hints
+                const oldHint = itemDiv.querySelector('.answer-hint');
+                if (oldHint) {
+                    oldHint.remove();
+                }
+
+                // Reset Multiple Choice background
+                itemDiv.querySelectorAll('label').forEach(label => {
+                    label.classList.remove('bg-green-100', 'border-green-500');
+                    label.classList.add('hover:bg-gray-100');
+                });
+            });
+        }
+
+        function renderTabContent(article) {
+            const contentArea = document.getElementById('tab-content-area');
+            contentArea.innerHTML = `
+                <div class="space-y-10">
+                    <!-- Section 1: Reading Comprehension -->
+                    <section>
+                        <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-[var(--primary-color)] pb-2 mb-4">
+                            1. 閱讀測驗 (Reading Comprehension)
+                        </h2>
+                        <div class="card p-6 border-l-4 border-emerald-400 bg-emerald-50 text-gray-700 text-base leading-relaxed whitespace-pre-wrap">
+                            ${article.reading}
+                        </div>
+                    </section>
+
+                    <!-- Section 2: Vocabulary List -->
+                    <section>
+                        <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-[var(--primary-color)] pb-2 mb-4">
+                            2. 單字與片語本 (Vocabulary & Phrases) - ${article.vocab.length} 組
+                        </h2>
+                        ${generateVocabList(article.vocab)}
+                    </section>
+
+                    <!-- Section 3: Practice Questions -->
+                    <section>
+                        <h2 class="text-2xl font-bold text-gray-800 border-b-2 border-[var(--primary-color)] pb-2 mb-4">
+                            3. 單字與片語練習題 (Practice Quiz) - ${article.quiz.length} 題
+                        </h2>
+                        ${generateQuiz(article.quiz)}
+                    </section>
+                </div>
+            `;
+        }
+
+        function switchTab(id) {
+            activeArticleId = id;
+
+            // Update Tab Active State
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`tab-btn-${id}`).classList.add('active');
+
+            // Render Content
+            const selectedArticle = articles.find(a => a.id === id);
+            if (selectedArticle) {
+                renderTabContent(selectedArticle);
+            }
+        }
+
+        // --- Initialization ---
+        function initializeApp() {
+            const tabNav = document.getElementById('tab-nav');
+
+            // Generate Tab Buttons
+            articles.forEach((article, index) => {
+                const button = document.createElement('button');
+                button.id = `tab-btn-${article.id}`;
+                button.className = `tab-button px-4 py-3 text-sm md:text-base text-gray-600 transition duration-150 ease-in-out hover:bg-gray-100`;
+                button.textContent = article.title;
+                button.onclick = () => switchTab(article.id);
+                tabNav.appendChild(button);
+            });
+
+            // Load first tab content
+            if (articles.length > 0) {
+                switchTab(articles[0].id);
+            }
+        }
+
+        window.onload = initializeApp;
+
+    </script>
+
+</body>
+</html>
