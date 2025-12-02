@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英文新聞學習APP - 互動式練習</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 設定字體為 Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        .app-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+    <div class="max-w-4xl mx-auto app-bg rounded-3xl shadow-2xl p-6 sm:p-10 text-white">
+        <!-- 應用程式標題 -->
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center mb-2">
+            英文新聞深度學習
+        </h1>
+        <p class="text-center text-indigo-200 mb-8">
+            從新聞報導中練習詞彙、文法和理解力
+        </p>
+
+        <!-- 導航選單 (主題選擇) -->
+        <div id="topic-navigation" class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+            <!-- 按鈕將由 JS 動態生成 -->
+        </div>
+
+        <!-- 學習區塊 -->
+        <div id="study-area" class="bg-white text-gray-800 p-4 sm:p-6 rounded-2xl shadow-lg min-h-96">
+            <!-- 初始畫面 -->
+            <div id="initial-screen" class="text-center py-20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-indigo-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332-.477 4.5-1.253m0 0V5.412a19.09 19.09 0 011.5-.078A19.09 19.09 0 0116.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332-.477-4.5-1.253z" />
+                </svg>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-2">
+                    請選擇一個新聞主題開始練習
+                </h2>
+                <p class="text-gray-500">
+                    點擊上方的按鈕，即可開始詞彙、文法與理解力的測驗。
+                </p>
+            </div>
+
+            <!-- 詞彙學習畫面 (Vocabulary Study View) -->
+            <div id="vocab-study-view" class="hidden">
+                <h2 id="vocab-title" class="text-2xl font-bold mb-4 text-purple-700 border-b pb-2"></h2>
+                <p class="text-gray-600 mb-4">📚 **學習詞彙：** 請先複習以下關鍵單字及定義。</p>
+                <div id="vocab-list-container" class="space-y-2 max-h-96 overflow-y-auto p-2 rounded-lg bg-gray-50 border">
+                    <!-- 詞彙列表將動態生成 -->
+                </div>
+                <button id="start-quiz-button" class="w-full mt-6 py-3 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 transition duration-200 shadow-md">
+                    開始測驗 →
+                </button>
+            </div>
+
+            <!-- 測驗進行畫面 (Question/Quiz View) -->
+            <div id="quiz-view" class="hidden">
+                <h2 id="topic-title" class="text-2xl font-bold mb-4 text-indigo-700 border-b pb-2"></h2>
+                
+                <!-- 狀態顯示 -->
+                <div class="flex justify-between items-center mb-4 text-sm font-medium">
+                    <span id="question-index-display" class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full"></span>
+                    <span id="question-type" class="text-gray-500"></span>
+                </div>
+
+                <!-- 問題內容 -->
+                <div id="question-container" class="mb-6 p-4 bg-gray-50 border-l-4 border-indigo-400 rounded-lg">
+                    <p id="question-text" class="text-lg font-medium"></p>
+                </div>
+                
+                <!-- 選項區 -->
+                <div id="options-container" class="space-y-3">
+                    <!-- 選項將動態生成 -->
+                </div>
+
+                <!-- 答案輸入框 (用於填空/簡答 - 備用) -->
+                <div id="input-container" class="hidden mt-6">
+                    <input type="text" id="answer-input" placeholder="請輸入答案..." class="w-full p-3 border-2 border-indigo-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                </div>
+
+                <!-- 提交按鈕 -->
+                <button id="submit-button" class="w-full mt-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition duration-200 shadow-md">
+                    提交答案
+                </button>
+
+                <!-- 提示訊息 -->
+                <div id="feedback-message" class="mt-4 p-3 rounded-lg text-center font-semibold transition duration-300 hidden"></div>
+            </div>
+
+            <!-- 結果畫面 (Summary View) -->
+            <div id="summary-view" class="hidden text-center py-10">
+                <h2 class="text-3xl font-bold text-green-600 mb-4">
+                    🎉 測驗完成！
+                </h2>
+                <p class="text-xl mb-6">
+                    您的成績：<span id="final-score" class="text-green-600 font-extrabold text-4xl"></span> / <span id="total-questions" class="text-gray-500"></span>
+                </p>
+                <button id="restart-button" class="mt-4 py-2 px-6 bg-indigo-500 text-white font-bold rounded-xl hover:bg-indigo-600 transition duration-200">
+                    選擇新主題或重新測驗
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --------------------------------------------------------
+        // 應用程式數據 (Questions Data) - 已擴充至 15 題，每題 4 個選項
+        // --------------------------------------------------------
+        const appData = {
+            'politics': {
+                title: '1. 台灣政治議題：雙重國籍與忠誠',
+                vocabulary: [
+                    { word: 'amend', definition: '修改；修訂 (to make minor changes to a text)' },
+                    { word: 'allegiance', definition: '效忠；忠誠 (loyalty or commitment to a group or cause)' },
+                    { word: 'dual', definition: '雙重的 (having two parts or aspects)' },
+                    { word: 'opposition parties', definition: '在野黨 (political parties that are not in power)' },
+                    { word: 'public office', definition: '公職 (a position of authority or service in government)' },
+                    { word: 'refuse', definition: '拒絕 (to indicate that one is not willing to do something)' },
+                    { word: 'stressing', definition: '強調 (giving particular emphasis or importance to something)' },
+                    { word: 'local chiefs', definition: '地方首長 (leaders of local government bodies)' },
+                    { word: 'barring', definition: '禁止；排除 (preventing someone from doing something)' },
+                    { word: 'removed', definition: '被免職 (taken away from a position)' },
+                    { word: 'Nationality Act', definition: '國籍法 (the law concerning citizenship)' },
+                    { word: 'lawmaker', definition: '立法委員 (a person who makes laws)' },
+                    { word: 'step down', definition: '辭職；下台 (to resign from an important position)' },
+                    { word: 'seek to', definition: '試圖；尋求 (to try to achieve or obtain something)' },
+                    { word: 'rules', definition: '規定；規則 (prescribed guide for conduct or action)' }
+                ],
+                questions: [
+                    // Vocabulary (5)
+                    { type: '詞彙題 (Vocabulary)', text: 'Taiwan’s opposition parties seek to **amend** the Nationality Act. The word "amend" is closest in meaning to:', options: ['a. abolish', 'b. modify', 'c. enforce', 'd. protest'], answer: 'b. modify' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Premier Cho Jung-tai stressed loyalty to Taiwan, referring to **allegiance**. What is a synonym for this word?', options: ['a. rivalry', 'b. neutrality', 'c. faithfulness', 'd. apathy'], answer: 'c. faithfulness' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Five local chiefs were **removed** from public office. The word "removed" implies they were:', options: ['a. promoted', 'b. dismissed', 'c. relocated', 'd. hired'], answer: 'b. dismissed' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Which word means "having two parts or aspects"?', options: ['a. sole', 'b. single', 'c. dual', 'd. triple'], answer: 'c. dual' },
+                    { type: '詞彙題 (Vocabulary)', text: 'The rules are **barring** PRC citizens from public office. What is the meaning of "barring"?', options: ['a. permitting', 'b. preventing', 'c. questioning', 'd. inviting'], answer: 'b. preventing' },
+                    // Comprehension (5)
+                    { type: '理解題 (Comprehension)', text: 'The opposition parties are seeking to amend the Nationality Act.', options: ['a. True', 'b. False', 'c. Not mentioned', 'd. Maybe'], answer: 'a. True' },
+                    { type: '理解題 (Comprehension)', text: 'The news states that the Premier would refuse questioning from lawmakers with dual allegiance.', options: ['a. True', 'b. False', 'c. Not directly stated', 'd. Only if they are local chiefs'], answer: 'a. True' },
+                    { type: '理解題 (Comprehension)', text: 'How many local chiefs were mentioned as being removed from office?', options: ['a. Three', 'b. Five', 'c. Ten', 'd. Fifteen'], answer: 'b. Five' },
+                    { type: '理解題 (Comprehension)', text: 'The Premier emphasized loyalty to which entity?', options: ['a. The opposition parties', 'b. Taiwan', 'c. The PRC', 'd. The military'], answer: 'b. Taiwan' },
+                    { type: '理解題 (Comprehension)', text: 'Why did the officials have to step down?', options: ['a. They committed fraud', 'b. They held Chinese nationality', 'c. They were too old', 'd. They had dual US citizenship'], answer: 'b. They held Chinese nationality' },
+                    // Grammar/Inference (5)
+                    { type: '文法/推論題 (Inference)', text: 'In the sentence "The Premier said he would refuse questioning...", the verb "refuse" implies:', options: ['a. He will accept the questioning later.', 'b. He is unwilling to submit to the questioning.', 'c. He is simply delaying the process.', 'd. He misunderstands the question.'], answer: 'b. He is unwilling to submit to the questioning.' },
+                    { type: '文法/推論題 (Grammar)', text: 'The word "lawmakers" is a compound noun formed from which two words?', options: ['a. law + makers', 'b. legal + workers', 'c. law + enforcement', 'd. law + followers'], answer: 'a. law + makers' },
+                    { type: '文法/推論題 (Grammar)', text: 'The phrase "seek to amend" means:', options: ['a. they have already amended it.', 'b. they are attempting to amend it.', 'c. they must avoid amending it.', 'd. they are satisfied with the current law.'], answer: 'b. they are attempting to amend it.' },
+                    { type: '文法/推論題 (Inference)', text: 'The Premier stressing loyalty suggests that dual allegiance is viewed as a:', options: ['a. benefit.', 'b. strength.', 'c. conflict of interest.', 'd. constitutional right.'], answer: 'c. conflict of interest.' },
+                    { type: '文法/推論題 (Grammar)', text: 'Which word in the vocabulary list is a synonym for "to quit"?', options: ['a. amend', 'b. step down', 'c. refuse', 'd. stressing'], answer: 'b. step down' }
+                ]
+            },
+            'spouse': {
+                title: '2. 刑事案件：中國籍配偶涉案',
+                vocabulary: [
+                    { word: 'spouse', definition: '配偶 (a husband or wife)' },
+                    { word: 'detained', definition: '拘留 (kept in custody)' },
+                    { word: 'allegedly', definition: '據稱；據說 (claimed but not proven)' },
+                    { word: 'remittance', definition: '匯款 (a sum of money sent, especially by mail)' },
+                    { word: 'underground', definition: '秘密的；地下的 (operating secretly or illegally)' },
+                    { word: 'secure', definition: '獲得；取得 (to succeed in obtaining something)' },
+                    { word: 'fraud', definition: '詐欺 (criminal deception intended to result in gain)' },
+                    { word: 'loan', definition: '貸款 (a sum of money that is borrowed)' },
+                    { word: 'citing', definition: '引述；提及 (referring to as an example or reason)' },
+                    { word: 'collusion', definition: '串通；共謀 (secret or illegal cooperation)' },
+                    { word: 'Chinese-born', definition: '中國出生的 (born in China)' },
+                    { word: 'fake documents', definition: '偽造文件 (counterfeit papers or records)' },
+                    { word: 'support (v)', definition: '資助；支持 (to give financial assistance to)' },
+                    { word: 'court', definition: '法院 (a body of people presided over by a judge)' },
+                    { word: 'risk of flight', definition: '逃亡風險 (the possibility of escaping lawful custody)' }
+                ],
+                questions: [
+                    // Vocabulary (5)
+                    { type: '詞彙題 (Vocabulary)', text: 'Hsu Chun-ying was detained for allegedly running an underground **remittance** network. What does "remittance" mean?', options: ['a. trade of goods', 'b. transfer of money', 'c. banking services', 'd. illegal trade'], answer: 'b. transfer of money' },
+                    { type: '詞彙題 (Vocabulary)', text: 'She was **allegedly** running a network. "Allegedly" is a synonym for:', options: ['a. certainly', 'b. supposedly', 'c. openly', 'd. verified'], answer: 'b. supposedly' },
+                    { type: '詞彙題 (Vocabulary)', text: 'The court ordered her held, citing risks of **collusion**. What is the definition of "collusion"?', options: ['a. Open conflict', 'b. Secret cooperation for illegal purposes', 'c. Public announcement', 'd. Honest negotiation'], answer: 'b. Secret cooperation for illegal purposes' },
+                    { type: '詞彙題 (Vocabulary)', text: 'She used fake documents to **secure** bank loans. "Secure" means to:', options: ['a. lose', 'b. obtain', 'c. deny', 'd. protect'], answer: 'b. obtain' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Which word describes a person born in China?', options: ['a. Mainland spouse', 'b. Chinese-born', 'c. Taiwanese spouse', 'd. Native-born'], answer: 'b. Chinese-born' },
+                    // Comprehension (5)
+                    { type: '理解題 (Comprehension)', text: 'Hsu Chun-ying was detained for running an underground remittance network.', options: ['a. True', 'b. False', 'c. Unknown', 'd. She was only questioned'], answer: 'a. True' },
+                    { type: '理解題 (Comprehension)', text: 'She was accused of receiving Chinese funds to support which two political figures?', options: ['a. Ko Wen-je and Han Kuo-yu', 'b. Huang Shan-shan and Ko Wen-je', 'c. Tsai Ing-wen and Lai Ching-te', 'd. Ma Ying-jeou and Eric Chu'], answer: 'b. Huang Shan-shan and Ko Wen-je' },
+                    { type: '理解題 (Comprehension)', text: 'The court ordered her held due to risks of flight and collusion.', options: ['a. True', 'b. False', 'c. Only flight risk', 'd. Only collusion risk'], answer: 'a. True' },
+                    { type: '理解題 (Comprehension)', text: 'What was the specific illegal activity mentioned besides remittance?', options: ['a. Counterfeiting currency', 'b. Using fake documents for bank loans', 'c. Smuggling goods', 'd. Insider trading'], answer: 'b. Using fake documents for bank loans' },
+                    { type: '理解題 (Comprehension)', text: 'What type of person is Hsu Chun-ying?', options: ['a. A Chinese national only', 'b. A Chinese-born Taiwanese spouse', 'c. A Taiwanese official', 'd. An American citizen'], answer: 'b. A Chinese-born Taiwanese spouse' },
+                    // Grammar/Inference (5)
+                    { type: '文法/推論題 (Inference)', text: 'The phrase "underground remittance network" suggests the activity was:', options: ['a. legal and transparent.', 'b. illegal and secretive.', 'c. government-sanctioned.', 'd. publicly funded.'], answer: 'b. illegal and secretive.' },
+                    { type: '文法/推論題 (Grammar)', text: 'The court cited risks of **flight** and **collusion**. In this context, these words are used as:', options: ['a. Verbs', 'b. Adjectives', 'c. Nouns', 'd. Adverbs'], answer: 'c. Nouns' },
+                    { type: '文法/推論題 (Grammar)', text: 'The sentence "She was detained for allegedly running..." uses the passive voice to emphasize:', options: ['a. the person who detained her.', 'b. the fact that she was taken into custody.', 'c. her willingness to cooperate.', 'd. the location of the detention.'], answer: 'b. the fact that she was taken into custody.' },
+                    { type: '文法/推論題 (Inference)', text: 'The accusation of receiving Chinese funds to support politicians implies the case has what element?', options: ['a. Financial investment', 'b. Foreign interference', 'c. Domestic trade', 'd. Charitable donation'], answer: 'b. Foreign interference' },
+                    { type: '文法/推論題 (Grammar)', text: 'Which word in the vocabulary is an adjective describing her origin?', options: ['a. allegedly', 'b. Chinese-born', 'c. spouse', 'd. detained'], answer: 'b. Chinese-born' }
+                ]
+            },
+            'submarine': {
+                title: '3. 台灣國防：海鯤潛艦試航',
+                vocabulary: [
+                    { word: 'domestically built', definition: '國產的 (produced or manufactured in one\'s own country)' },
+                    { word: 'sea trial', definition: '海試 (a test run of a ship or boat)' },
+                    { word: 'consecutive', definition: '連續的 (following sequentially)' },
+                    { word: 'departing', definition: '啟程；離開 (leaving a place)' },
+                    { word: 'escorted', definition: '護送 (accompanied for protection)' },
+                    { word: 'unmanned vessel', definition: '無人艦艇 (a ship or boat that operates without a human crew)' },
+                    { word: 'military-grade', definition: '軍事級的 (meeting military standards for quality)' },
+                    { word: 'crew', definition: '全體船員 (the people who work on and operate a ship)' },
+                    { word: 'enthusiastic', definition: '熱情的 (having or showing eager enjoyment)' },
+                    { word: 'cheers on', definition: '為...加油 (shouts in support or encouragement)' },
+                    { word: 'IDS', definition: '自製防禦潛艦 (Indigenous Defense Submarine)' },
+                    { word: 'submarine', definition: '潛艦 (a warship designed to operate underwater)' },
+                    { word: 'Kaohsiung Harbor', definition: '高雄港 (the specific port mentioned in the news)' },
+                    { word: 'navy speedboats', definition: '海軍快艇 (fast boats used by the navy)' },
+                    { word: 'testing', definition: '測試 (the process of subjecting a product to test conditions)' }
+                ],
+                questions: [
+                    // Vocabulary (5)
+                    { type: '詞彙題 (Vocabulary)', text: 'The submarine **conducted** its fifth sea trial. What is a synonym for "conducted" in this context?', options: ['a. avoided', 'b. postponed', 'c. performed', 'd. halted'], answer: 'c. performed' },
+                    { type: '詞彙題 (Vocabulary)', text: 'The sea trial was its second **consecutive** day of testing. "Consecutive" means:', options: ['a. following one after the other', 'b. interrupted', 'c. occasionally', 'd. randomized'], answer: 'a. following one after the other' },
+                    { type: '詞彙題 (Vocabulary)', text: 'The submarine was **escorted** by a military-grade unmanned vessel. The word "escorted" means:', options: ['a. attacked', 'b. guided and protected', 'c. followed closely', 'd. damaged'], answer: 'b. guided and protected' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Which word describes the ship\'s origin as being built in Taiwan?', options: ['a. foreign-made', 'b. domestically built', 'c. commercially designed', 'd. internationally sourced'], answer: 'b. domestically built' },
+                    { type: '詞彙題 (Vocabulary)', text: 'The military fans showed a lot of **enthusiasm**. What is an adjective form of this feeling?', options: ['a. enthused', 'b. enthusiastic', 'c. entho', 'd. enthusiastical'], answer: 'b. enthusiastic' },
+                    // Comprehension (5)
+                    { type: '理解題 (Comprehension)', text: 'The submarine mentioned in the article is named Hai Kun.', options: ['a. True', 'b. False', 'c. It is not named', 'd. It is named Sea Dragon'], answer: 'a. True' },
+                    { type: '理解題 (Comprehension)', text: 'What number sea trial did the Hai Kun conduct on November 28th?', options: ['a. Third', 'b. Fourth', 'c. Fifth', 'd. Sixth'], answer: 'c. Fifth' },
+                    { type: '理解題 (Comprehension)', text: 'The submarine departed from where?', options: ['a. Taiwan Shipyard', 'b. Taipei Port', 'c. Keelung Base', 'd. Tainan Dock'], answer: 'a. Taiwan Shipyard' },
+                    { type: '理解題 (Comprehension)', text: 'Who escorted the submarine during its departure?', options: ['a. Fishing boats only', 'b. Unmanned vessels, navy speedboats, and workboats', 'c. Foreign warships', 'd. Coast Guard only'], answer: 'b. Unmanned vessels, navy speedboats, and workboats' },
+                    { type: '理解題 (Comprehension)', text: 'Who cheered on the submarine as it left the harbor?', options: ['a. Navy officials only', 'b. Military fans', 'c. Government ministers', 'd. Local fishermen'], answer: 'b. Military fans' },
+                    // Grammar/Inference (5)
+                    { type: '文法/推論題 (Inference)', text: 'The presence of an "unmanned vessel" suggests the navy is incorporating what type of technology?', options: ['a. Traditional', 'b. Robotic/autonomous', 'c. Outdated', 'd. Human-crewed'], answer: 'b. Robotic/autonomous' },
+                    { type: '文法/推論題 (Grammar)', text: 'In the phrase "Enthusiastic military fans cheers on...", the word "enthusiastic" is a(n):', options: ['a. Adverb', 'b. Noun', 'c. Adjective', 'd. Verb'], answer: 'c. Adjective' },
+                    { type: '文法/推論題 (Grammar)', text: 'The phrase "marking its second consecutive day" is an example of a:', options: ['a. Main clause', 'b. Gerund phrase', 'c. Participial phrase', 'd. Infinitive phrase'], answer: 'c. Participial phrase' },
+                    { type: '文法/推論題 (Inference)', text: 'The fact that the submarine is "domestically built" implies what about Taiwan\'s defense capability?', options: ['a. It relies heavily on imports.', 'b. It is advancing self-sufficiency.', 'c. It is stagnant.', 'd. It is a joint venture with the US.'], answer: 'b. It is advancing self-sufficiency.' },
+                    { type: '文法/推論題 (Grammar)', text: 'The Hai Kun is an "IDS." The acronym stands for:', options: ['a. Industrial Defense System', 'b. Indigenous Defense Submarine', 'c. Integrated Diving School', 'd. International Deployment Ship'], answer: 'b. Indigenous Defense Submarine' }
+                ]
+            },
+            'hongkong': {
+                title: '4. 香港災難：高樓火警',
+                vocabulary: [
+                    { word: 'engulfs', definition: '吞噬；包圍 (sweeps over to cover it completely)' },
+                    { word: 'high-rise', definition: '高層的 (a building or structure having many stories)' },
+                    { word: 'housing estate', definition: '屋邨；住宅區 (a residential area with multiple units)' },
+                    { word: 'plumes', definition: '濃煙 (a long cloud of smoke or vapor)' },
+                    { word: 'unaccounted for', definition: '下落不明 (not having been located or identified)' },
+                    { word: 'scaffolding', definition: '鷹架 (a temporary structure used by workers)' },
+                    { word: 'renovation', definition: '翻新；修復 (the action of restoring something old)' },
+                    { word: 'deadliest', definition: '最致命的 (most likely to cause death)' },
+                    { word: 'aided by', definition: '在...的幫助下 (helped or assisted by something)' },
+                    { word: 'subsequently', definition: '隨後；接著 (afterward)' },
+                    { word: 'major fire', definition: '大火 (a very large and destructive fire)' },
+                    { word: 'multiple', definition: '多個的 (having or involving several parts)' },
+                    { word: 'broke out', definition: '爆發 (started suddenly, especially a fire)' },
+                    { word: 'manslaughter', definition: '過失殺人 (the unlawful killing of a person without malice)' },
+                    { word: 'residential units', definition: '住宅單位 (apartments or homes in a complex)' }
+                ],
+                questions: [
+                    // Vocabulary (5)
+                    { type: '詞彙題 (Vocabulary)', text: 'A major fire **tore through** multiple high-rise towers. The phrase "tore through" suggests:', options: ['a. gently passed by', 'b. rapidly spread through and destroyed', 'c. surrounded the outside', 'd. slowly enveloped'], answer: 'b. rapidly spread through and destroyed' },
+                    { type: '詞彙題 (Vocabulary)', text: 'The fire spread along the external bamboo **scaffolding**. What is "scaffolding"?', options: ['a. A decorative wall', 'b. A temporary framework for construction workers', 'c. A roof structure', 'd. A permanent barrier'], answer: 'b. A temporary framework for construction workers' },
+                    { type: '詞彙題 (Vocabulary)', text: 'The fire was the **deadliest** in Hong Kong in decades. "Deadliest" is the superlative form of what word?', options: ['a. dead', 'b. death', 'c. deadly', 'd. dying'], answer: 'c. deadly' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Thick **plumes** of dark smoke could be seen. "Plumes" refers to:', options: ['a. small bursts', 'b. long clouds', 'c. light mist', 'd. sparks'], answer: 'b. long clouds' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Which crime is defined as "the unlawful killing of a person without malice"?', options: ['a. arson', 'b. theft', 'c. manslaughter', 'd. fraud'], answer: 'c. manslaughter' },
+                    // Comprehension (5)
+                    { type: '理解題 (Comprehension)', text: 'The fire broke out at a housing complex in which district of Hong Kong?', options: ['a. Kowloon', 'b. Tai Po', 'c. Central', 'd. Tsim Sha Tsui'], answer: 'b. Tai Po' },
+                    { type: '理解題 (Comprehension)', text: 'What was erected outside several towers due to renovation?', options: ['a. Metal fences', 'b. Bamboo scaffolding', 'c. Advertising billboards', 'd. Steel cables'], answer: 'b. Bamboo scaffolding' },
+                    { type: '理解題 (Comprehension)', text: 'How did the fire spread to other buildings?', options: ['a. Through the ventilation system', 'b. Along the bamboo scaffolding and construction netting', 'c. Via internal stairwells', 'd. By collapsing onto neighboring buildings'], answer: 'b. Along the bamboo scaffolding and construction netting' },
+                    { type: '理解題 (Comprehension)', text: 'How many firefighters were injured in the incident?', options: ['a. Three', 'b. Eleven', 'c. Seventy', 'd. One hundred'], answer: 'b. Eleven' },
+                    { type: '理解題 (Comprehension)', text: 'What condition likely aided the spread of the fire?', options: ['a. Calm conditions', 'b. Windy conditions', 'c. Rainy weather', 'd. High humidity'], answer: 'b. Windy conditions' },
+                    // Grammar/Inference (5)
+                    { type: '文法/推論題 (Inference)', text: 'The use of the phrase "**unaccounted for**" suggests:', options: ['a. They are known to be safe.', 'b. Their location is currently unknown.', 'c. They have been identified.', 'd. They are not citizens.'], answer: 'b. Their location is currently unknown.' },
+                    { type: '文法/推論題 (Grammar)', text: 'The sentence "A major fire tear through multiple high-rise towers" should use the past tense, which is:', options: ['a. tears', 'b. tore', 'c. tearing', 'd. torn'], answer: 'b. tore' },
+                    { type: '文法/推論題 (Grammar)', text: 'The phrase "which opened in 1983" is a:', options: ['a. Non-essential relative clause', 'b. Main clause', 'c. Prepositional phrase', 'd. Dependent noun clause'], answer: 'a. Non-essential relative clause' },
+                    { type: '文法/推論題 (Inference)', text: 'The fact that the fire was the deadliest in decades highlights its:', options: ['a. Low severity', 'b. Unusual scale and impact', 'c. Common occurrence', 'd. Predictability'], answer: 'b. Unusual scale and impact' },
+                    { type: '文法/推論題 (Grammar)', text: 'Which word in the vocabulary is a noun describing a group of residential buildings?', options: ['a. high-rise', 'b. renovation', 'c. housing estate', 'd. scaffolding'], answer: 'c. housing estate' }
+                ]
+            },
+            'australia': {
+                title: '5. 澳洲法律爭議：社群媒體禁令',
+                vocabulary: [
+                    { word: 'constitutional', definition: '憲法的 (relating to an established set of principles)' },
+                    { word: 'challenge', definition: '挑戰；質疑 (a call to prove or justify something)' },
+                    { word: 'set to take effect', definition: '即將生效 (scheduled to begin or become operative)' },
+                    { word: 'proceedings', definition: '訴訟程序 (an action or step taken to effect an agreement)' },
+                    { word: 'plaintiffs', definition: '原告 (a person who brings a case against another in court)' },
+                    { word: 'silenced', definition: '被噤聲 (prevented from speaking or expressing one\'s opinions)' },
+                    { word: 'deactivated', definition: '被停用 (made inactive or inoperative)' },
+                    { word: 'opinion polling', definition: '民意調查 (the process of using surveys to determine public opinion)' },
+                    { word: 'comply with', definition: '遵守 (act in accordance with a wish or command)' },
+                    { word: 'penalties', definition: '罰款；懲罰 (a punishment imposed for breaking a law)' },
+                    { word: 'campaign group', definition: '倡議團體 (an organization working to promote a cause)' },
+                    { word: 'bid to', definition: '試圖 (an effort or attempt to achieve something)' },
+                    { word: 'expressing their views', definition: '表達他們的觀點 (stating their thoughts or opinions)' },
+                    { word: 'voters of tomorrow', definition: '未來的選民 (young people who will soon be eligible to vote)' },
+                    { word: 'platforms', definition: '平台 (websites or services where people interact)' }
+                ],
+                questions: [
+                    // Vocabulary (5)
+                    { type: '詞彙題 (Vocabulary)', text: 'A **constitutional challenge** has been filed against the ban. What does this refer to?', options: ['a. A simple public protest', 'b. A challenge based on the country\'s fundamental law', 'c. A petition signed by many people', 'd. A local government ordinance'], answer: 'b. A challenge based on the country\'s fundamental law' },
+                    { type: '詞彙題 (Vocabulary)', text: 'More than one million accounts are set to be **deactivated**. What is the meaning of "deactivated"?', options: ['a. created and opened', 'b. disabled and made inactive', 'c. verified', 'd. upgraded'], answer: 'b. disabled and made inactive' },
+                    { type: '詞彙題 (Vocabulary)', text: 'The young people felt they would be **silenced**. What is a synonym for "silenced" here?', options: ['a. encouraged', 'b. censored', 'c. permitted to speak', 'd. applauded'], answer: 'b. censored' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Companies that fail to **comply with** the ban could face penalties. "Comply with" means:', options: ['a. ignore', 'b. violate', 'c. obey', 'd. object to'], answer: 'c. obey' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Which word describes the people who initiated the lawsuit?', options: ['a. defendants', 'b. plaintiffs', 'c. judges', 'd. witnesses'], answer: 'b. plaintiffs' },
+                    // Comprehension (5)
+                    { type: '理解題 (Comprehension)', text: 'The new law bans social media for children younger than:', options: ['a. 14', 'b. 16', 'c. 18', 'd. 21'], answer: 'b. 16' },
+                    { type: '理解題 (Comprehension)', text: 'What is the name of the campaign group that filed the constitutional challenge?', options: ['a. The Digital Rights Group', 'b. The High Court Project', 'c. The Digital Freedom Project', 'd. The Netizen Alliance'], answer: 'c. The Digital Freedom Project' },
+                    { type: '理解題 (Comprehension)', text: 'The ban is set to take effect on what date?', options: ['a. November 2024', 'b. December 10th', 'c. January 1st', 'd. Christmas Eve'], answer: 'b. December 10th' },
+                    { type: '理解題 (Comprehension)', text: 'The law is supported by a majority of Australians, according to opinion polling.', options: ['a. True', 'b. False', 'c. Polling was inconclusive', 'd. Only elderly people supported it'], answer: 'a. True' },
+                    { type: '理解題 (Comprehension)', text: 'What is the maximum penalty for companies that fail to comply with the ban?', options: ['a. 1 million AUD', 'b. 49.5 million AUD', 'c. 1984 AUD', 'd. 100 million AUD'], answer: 'b. 49.5 million AUD' },
+                    // Grammar/Inference (5)
+                    { type: '文法/推論題 (Inference)', text: 'Macy Neyland compared the law to the book "1984" to imply that the ban is:', options: ['a. beneficial to society.', 'b. an act of government overreach/control.', 'c. historically accurate.', 'd. a work of fiction.'], answer: 'b. an act of government overreach/control.' },
+                    { type: '文法/推論題 (Grammar)', text: 'The phrase "**set to take effect**" is grammatically equivalent to:', options: ['a. has already taken effect.', 'b. is going to take effect.', 'c. will never take effect.', 'd. is currently being debated.'], answer: 'b. is going to take effect.' },
+                    { type: '文法/推論題 (Grammar)', text: 'The campaign group launched **proceedings**. In this sentence, "proceedings" is a:', options: ['a. verb', 'b. noun', 'c. adjective', 'd. adverb'], answer: 'b. noun' },
+                    { type: '文法/推論題 (Inference)', text: 'The plaintiff\'s statement "Young people like me are the voters of tomorrow..." is an appeal to:', options: ['a. financial stability.', 'b. future democratic rights.', 'c. immediate pleasure.', 'd. career prospects.'], answer: 'b. future democratic rights.' },
+                    { type: '文法/推論題 (Grammar)', text: 'Which word in the vocabulary is a noun for a form of punishment?', options: ['a. penalties', 'b. challenge', 'c. comply', 'd. expressing'], answer: 'a. penalties' }
+                ]
+            },
+            'germany': {
+                title: '6. 德國文化：聖誕市集',
+                vocabulary: [
+                    { word: 'festive cheer', definition: '節日歡樂 (joy and happiness associated with a holiday)' },
+                    { word: 'traditional', definition: '傳統的 (existing in or as part of a tradition)' },
+                    { word: 'revelers', definition: '狂歡者 (people who are enjoying themselves in a lively way)' },
+                    { word: 'mulled wine', definition: '熱紅酒 (wine heated with spices and sugar)' },
+                    { word: 'caramelized', definition: '焦糖化的 (coated or cooked until it forms caramel)' },
+                    { word: 'stepped up', definition: '加強；增加 (increased the amount or intensity of something)' },
+                    { word: 'cherished', definition: '珍愛的 (holding something dear)' },
+                    { word: 'exported', definition: '輸出；出口 (sent goods or services to another country)' },
+                    { word: 'vendors', definition: '攤販；賣主 (a person or company offering something for sale)' },
+                    { word: 'carousels', definition: '旋轉木馬 (a merry-go-round)' },
+                    { word: 'drawing', definition: '吸引 (attracting someone to a place)' },
+                    { word: 'security', definition: '安全 (the state of being free from danger or threat)' },
+                    { word: 'deadly attacks', definition: '致命襲擊 (violent acts causing death)' },
+                    { word: 'annual tradition', definition: '年度傳統 (a custom that occurs once every year)' },
+                    { word: 'skating on ice rinks', definition: '在溜冰場溜冰 (moving on ice with skates on a prepared surface)' }
+                ],
+                questions: [
+                    // Vocabulary (5)
+                    { type: '詞彙題 (Vocabulary)', text: 'Markets are **drawing** revelers to their wooden stands. "Drawing" is a synonym for:', options: ['a. repelling', 'b. ignoring', 'c. attracting', 'd. pushing'], answer: 'c. attracting' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Traditional Christmas markets are opening. The word "traditional" is a(n):', options: ['a. Noun', 'b. Adjective', 'c. Adverb', 'd. Verb'], answer: 'b. Adjective' },
+                    { type: '詞彙題 (Vocabulary)', text: 'Security has been **stepped up** due to past attacks. "Stepped up" means:', options: ['a. reduced', 'b. increased', 'c. maintained at the same level', 'd. postponed'], answer: 'b. increased' },
+                    { type: '詞彙題 (Vocabulary)', text: 'What kind of wine is heated with spices and sugar?', options: ['a. red wine', 'b. mulled wine', 'c. spiced wine', 'd. white wine'], answer: 'b. mulled wine' },
+                    { type: '詞彙題 (Vocabulary)', text: 'The **vendors** sell goods. A "vendor" is a:', options: ['a. customer', 'b. seller', 'c. security guard', 'd. buyer'], answer: 'b. seller' },
+                    // Comprehension (5)
+                    { type: '理解題 (Comprehension)', text: 'The Christmas markets tradition dates back to:', options: ['a. The Renaissance', 'b. The Middle Ages', 'c. The 20th Century', 'd. The 19th Century'], answer: 'b. The Middle Ages' },
+                    { type: '理解題 (Comprehension)', text: 'What is a food item sold at the markets?', options: ['a. Seafood salad', 'b. Grilled sausages', 'c. French fries', 'd. Hamburgers'], answer: 'b. Grilled sausages' },
+                    { type: '理解題 (Comprehension)', text: 'The famous Berlin market opened at which location?', options: ['a. The Central Train Station', 'b. The Gedächtniskirche church', 'c. The Brandenburg Gate', 'd. Potsdamer Platz'], answer: 'b. The Gedächtniskirche church' },
+                    { type: '理解題 (Comprehension)', text: 'What activity is available for children at the markets?', options: ['a. Roller coasters', 'b. Go-kart racing', 'c. Skating on ice rinks', 'd. Swimming'], answer: 'c. Skating on ice rinks' },
+                    { type: '理解題 (Comprehension)', text: 'Security was stepped up because of memories of two deadly attacks on Christmas markets.', options: ['a. True', 'b. False', 'c. Security was always high', 'd. It was due to a single attack'], answer: 'a. True' },
+                    // Grammar/Inference (5)
+                    { type: '文法/推論題 (Inference)', text: 'The description of items like handmade candles and shiny Christmas stars suggests the markets sell:', options: ['a. Mass-produced commercial goods', 'b. Unique artisan crafts', 'c. Essential household items', 'd. Used electronics'], answer: 'b. Unique artisan crafts' },
+                    { type: '文法/推論題 (Grammar)', text: 'The phrase "German have cherished" contains an error. The correct structure is:', options: ['a. Germans have cherished', 'b. German is cherished', 'c. Germans cherished', 'd. German has cherished'], answer: 'a. Germans have cherished' },
+                    { type: '文法/推論題 (Grammar)', text: 'The markets were "successfully exported to much of the Western world." "Successfully" is a(n):', options: ['a. Adjective modifying "exported"', 'b. Adverb modifying "exported"', 'c. Noun', 'd. Verb'], answer: 'b. Adverb modifying "exported"'},
+                    { type: '文法/推論題 (Inference)', text: 'The fact that the markets open "with festive cheer" indicates the general mood is:', options: ['a. Somber and quiet', 'b. Joyful and celebratory', 'c. Formal and serious', 'd. Tense and anxious'], answer: 'b. Joyful and celebratory' },
+                    { type: '文法/推論題 (Grammar)', text: 'Which word in the vocabulary list refers to someone who is enjoying a party?', options: ['a. vendors', 'b. security', 'c. revelers', 'd. guards'], answer: 'c. revelers' }
+                ]
+            }
+        };
+
+        // --------------------------------------------------------
+        // 全局狀態 (Global State)
+        // --------------------------------------------------------
+        let currentTopicId = null;
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isAnswered = false;
+
+        // --------------------------------------------------------
+        // DOM 元素引用 (DOM Elements)
+        // --------------------------------------------------------
+        const topicNav = document.getElementById('topic-navigation');
+        const initialScreen = document.getElementById('initial-screen');
+        const vocabStudyView = document.getElementById('vocab-study-view');
+        const vocabTitle = document.getElementById('vocab-title');
+        const vocabListContainer = document.getElementById('vocab-list-container');
+        const startQuizButton = document.getElementById('start-quiz-button');
+        
+        const quizView = document.getElementById('quiz-view');
+        const summaryView = document.getElementById('summary-view');
+        const topicTitle = document.getElementById('topic-title');
+        const questionIndexDisplay = document.getElementById('question-index-display');
+        const questionType = document.getElementById('question-type');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const inputContainer = document.getElementById('input-container');
+        const answerInput = document.getElementById('answer-input');
+        const submitButton = document.getElementById('submit-button');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const finalScore = document.getElementById('final-score');
+        const totalQuestions = document.getElementById('total-questions');
+        const restartButton = document.getElementById('restart-button');
+
+        // --------------------------------------------------------
+        // 函式定義 (Function Definitions)
+        // --------------------------------------------------------
+
+        // 初始化導航欄
+        function initNavigation() {
+            topicNav.innerHTML = '';
+            Object.keys(appData).forEach(id => {
+                const topic = appData[id];
+                const button = document.createElement('button');
+                button.textContent = topic.title.split('. ')[1] || topic.title; // 顯示主題名稱
+                button.className = 'topic-btn bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-3 px-3 rounded-xl transition duration-200 shadow-lg text-sm sm:text-base truncate';
+                button.onclick = () => loadTopic(id);
+                topicNav.appendChild(button);
+            });
+
+            // 設置重啟按鈕事件
+            restartButton.onclick = resetApp;
+        }
+
+        // 重置應用程式狀態並返回初始畫面
+        function resetApp() {
+            currentTopicId = null;
+            questions = [];
+            currentQuestionIndex = 0;
+            score = 0;
+            isAnswered = false;
+            
+            initialScreen.classList.remove('hidden');
+            quizView.classList.add('hidden');
+            summaryView.classList.add('hidden');
+            vocabStudyView.classList.add('hidden'); 
+            feedbackMessage.classList.add('hidden');
+            
+            // 重置導航按鈕樣式
+            document.querySelectorAll('.topic-btn').forEach(btn => {
+                btn.classList.remove('bg-purple-600', 'hover:bg-purple-500');
+                btn.classList.add('bg-indigo-500', 'hover:bg-indigo-400');
+            });
+        }
+
+        // 載入選定的新聞主題 (現在會先顯示詞彙學習)
+        function loadTopic(id) {
+            currentTopicId = id;
+            questions = appData[id].questions;
+            currentQuestionIndex = 0;
+            score = 0;
+            isAnswered = false;
+
+            // 隱藏初始畫面、測驗畫面和結果畫面，顯示詞彙學習畫面
+            initialScreen.classList.add('hidden');
+            summaryView.classList.add('hidden');
+            quizView.classList.add('hidden');
+            vocabStudyView.classList.remove('hidden'); 
+            
+            // 更新導航按鈕樣式
+            document.querySelectorAll('.topic-btn').forEach(btn => {
+                btn.classList.remove('bg-purple-600', 'hover:bg-purple-500');
+                btn.classList.add('bg-indigo-500', 'hover:bg-indigo-400');
+                if (btn.textContent === appData[id].title.split('. ')[1]) {
+                    btn.classList.remove('bg-indigo-500', 'hover:bg-indigo-400');
+                    btn.classList.add('bg-purple-600', 'hover:bg-purple-500');
+                }
+            });
+
+            renderVocabulary(); // 渲染詞彙列表
+        }
+
+        // 渲染詞彙列表
+        function renderVocabulary() {
+            const currentTopic = appData[currentTopicId];
+            vocabTitle.textContent = currentTopic.title;
+            vocabListContainer.innerHTML = '';
+
+            currentTopic.vocabulary.forEach(item => {
+                const vocabItem = document.createElement('div');
+                vocabItem.className = 'py-2 px-4 bg-white rounded-lg shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center transition duration-150 hover:shadow-md';
+                vocabItem.innerHTML = `
+                    <span class="font-bold text-lg text-indigo-700">${item.word}</span>
+                    <span class="text-sm text-gray-500 mt-1 sm:mt-0">${item.definition}</span>
+                `;
+                vocabListContainer.appendChild(vocabItem);
+            });
+
+            startQuizButton.onclick = startQuiz;
+        }
+
+        // 從詞彙學習頁面進入測驗頁面
+        function startQuiz() {
+            vocabStudyView.classList.add('hidden');
+            quizView.classList.remove('hidden');
+            topicTitle.textContent = appData[currentTopicId].title;
+            displayQuestion();
+        }
+
+        // 顯示當前問題
+        function displayQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showSummary();
+                return;
+            }
+
+            const currentQ = questions[currentQuestionIndex];
+            
+            // 清除之前的狀態
+            optionsContainer.innerHTML = '';
+            answerInput.value = '';
+            inputContainer.classList.add('hidden');
+            feedbackMessage.classList.add('hidden');
+            submitButton.classList.remove('hidden');
+            submitButton.textContent = '提交答案'; // 重置按鈕文字
+            isAnswered = false;
+
+            // 更新介面
+            questionIndexDisplay.textContent = `問題 ${currentQuestionIndex + 1} / ${questions.length}`;
+            questionType.textContent = currentQ.type;
+            questionText.textContent = currentQ.text;
+            
+            // 渲染選項
+            if (currentQ.options && currentQ.options.length > 0) {
+                currentQ.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.className = 'option-btn w-full text-left p-3 border border-indigo-300 bg-white hover:bg-indigo-50 rounded-lg transition duration-150 cursor-pointer shadow-sm';
+                    button.setAttribute('data-answer', option);
+                    button.onclick = () => selectOption(button);
+                    optionsContainer.appendChild(button);
+                });
+                optionsContainer.classList.remove('hidden');
+            } else {
+                // 處理填空題或其他輸入類型
+                optionsContainer.classList.add('hidden');
+                inputContainer.classList.remove('hidden');
+            }
+        }
+
+        // 選擇選項
+        function selectOption(selectedButton) {
+            if (isAnswered) return;
+            
+            // 清除所有選項的選中狀態
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-200', 'border-indigo-500');
+            });
+
+            // 標記選中的選項
+            selectedButton.classList.add('bg-indigo-200', 'border-indigo-500');
+            
+            // 立即提交答案 (因為是單選題)
+            submitAnswer(selectedButton.getAttribute('data-answer'));
+        }
+
+        // 提交答案並檢查
+        function submitAnswer(userAnswer) {
+            if (isAnswered) return;
+
+            // 確保這裡使用的是傳入的 userAnswer (來自選擇按鈕)
+            const currentQ = questions[currentQuestionIndex];
+            const isCorrect = (userAnswer === currentQ.answer);
+            isAnswered = true;
+
+            // 顯示反饋訊息
+            feedbackMessage.classList.remove('hidden');
+            feedbackMessage.classList.remove('bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800', 'bg-yellow-100', 'text-yellow-800');
+
+            if (isCorrect) {
+                score++;
+                feedbackMessage.classList.add('bg-green-100', 'text-green-800');
+                feedbackMessage.textContent = '✅ 正確！答案是: ' + currentQ.answer;
+            } else {
+                feedbackMessage.classList.add('bg-red-100', 'text-red-800');
+                feedbackMessage.textContent = '❌ 錯誤！正確答案是: ' + currentQ.answer;
+            }
+
+            // 視覺化正確答案
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.onclick = null; // 禁用點擊
+                const option = btn.getAttribute('data-answer');
+                if (option === currentQ.answer) {
+                    btn.classList.remove('bg-indigo-200', 'border-indigo-500');
+                    btn.classList.add('bg-green-500', 'text-white', 'font-bold'); // 正確答案顯示綠色
+                } else if (option === userAnswer && !isCorrect) {
+                    btn.classList.remove('bg-indigo-200', 'border-indigo-500');
+                    btn.classList.add('bg-red-500', 'text-white'); // 錯誤選擇顯示紅色
+                }
+            });
+
+            // 準備進入下一題
+            submitButton.textContent = '下一題 (Next Question)';
+            submitButton.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+            submitButton.classList.add('bg-gray-500', 'hover:bg-gray-600');
+            submitButton.onclick = nextQuestion;
+        }
+
+        // 前進到下一題
+        function nextQuestion() {
+            currentQuestionIndex++;
+            submitButton.textContent = '提交答案';
+            submitButton.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+            submitButton.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+            // 重新設置提交按鈕的默認行為 (雖然單選題會被 selectOption 覆蓋)
+            submitButton.onclick = () => {
+                if (!isAnswered) {
+                    feedbackMessage.classList.remove('hidden');
+                    feedbackMessage.classList.add('bg-yellow-100', 'text-yellow-800');
+                    feedbackMessage.textContent = '請先點擊一個選項。';
+                }
+            }; 
+            displayQuestion();
+        }
+
+        // 顯示結果畫面
+        function showSummary() {
+            quizView.classList.add('hidden');
+            summaryView.classList.remove('hidden');
+            finalScore.textContent = score;
+            totalQuestions.textContent = questions.length;
+        }
+
+        // --------------------------------------------------------
+        // 啟動應用程式
+        // --------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavigation();
+            // 初始設置提交按鈕的默認行為，提示用戶點擊選項
+            submitButton.onclick = () => {
+                if (!isAnswered && optionsContainer.querySelectorAll('.option-btn').length > 0) {
+                    feedbackMessage.classList.remove('hidden');
+                    feedbackMessage.classList.add('bg-yellow-100', 'text-yellow-800');
+                    feedbackMessage.textContent = '請先點擊一個選項。';
+                }
+            };
+        });
+    </script>
+</body>
+</html>
