@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funday Daily English Learning App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a clean, colorful, Notion-like interface */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f0f4f8; /* Light background */
+        }
+        .container-card {
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(17, 24, 39, 0.08); /* Stronger shadow for depth */
+        }
+        .main-tab-active {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+        .sub-tab-active {
+            color: #3b82f6; /* Blue for active sub-tab */
+            border-bottom: 2px solid #3b82f6;
+            font-weight: 600;
+        }
+        /* Custom scrollbar for content areas */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #d1d5db;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background-color: #f3f4f6;
+        }
+        /* Custom styling for click/touch feedback */
+        .word-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Main Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-2">Daily English News Deep Dive 📰</h1>
+            <p class="text-xl text-gray-500">Vocabulary, Quizzes, and Comprehension Practice</p>
+        </header>
+
+        <!-- Main Navigation (News Topics) -->
+        <div class="mb-6 overflow-x-auto custom-scrollbar">
+            <div id="main-tabs" class="flex flex-nowrap space-x-2 pb-2">
+                <!-- Tabs will be generated here by JS -->
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="app-content" class="container-card rounded-xl p-4 sm:p-8">
+            <!-- Content will be loaded here -->
+        </div>
+
+    </div>
+
+    <!-- JavaScript Data and Logic -->
+    <script>
+        const NEWS_DATA = [
+            {
+                id: 'tilapia',
+                title: 'Tilapia at PX Mart Found With Banned Drug',
+                color: 'bg-red-600',
+                article: `In local news, Kaohsiung's health bureau reported that a batch of Taiwan tilapia fillets sold at a PX Mart branch in Lujhu tested positive for enrofloxacin, a banned veterinary drug. The store had received 24 packs, all sold out. Across Kaohsiung, 4,488 packs were supplied, with 4,080 sold and 408 removed from shelves. The product came from Yunlin, which has began further inspections.`,
+                vocabulary: [
+                    { word: "Tilapia", definition: "吳郭魚 (n.)", example: "Tilapia is a common farmed fish." },
+                    { word: "fillets", definition: "魚片 (n.)", example: "The chef prepared salmon fillets." },
+                    { word: "tested positive for", definition: "檢測呈陽性 (phr.)", example: "The sample tested positive for the virus." },
+                    { word: "banned", definition: "被禁止的 (adj.)", example: "The chemical is banned in food production." },
+                    { word: "veterinary drug", definition: "獸藥 (n.)", example: "Enrofloxacin is a veterinary drug." },
+                    { word: "health bureau", definition: "衛生局 (n.)", example: "The health bureau monitors food safety." },
+                    { word: "batch", definition: "一批 (n.)", example: "A new batch of products arrived." },
+                    { word: "sold out", definition: "售罄 (phr.)", example: "All tickets for the concert were sold out." },
+                    { word: "supplied", definition: "供應 (v.)", example: "The farm supplied vegetables to the market." },
+                    { word: "removed from shelves", definition: "下架 (phr.)", example: "The contaminated product was removed from shelves." },
+                    { word: "inspections", definition: "檢查，稽查 (n.)", example: "Further inspections are required." },
+                    { word: "Kaohsiung's", definition: "高雄的 (adj.)", example: "Kaohsiung's weather is warm." },
+                    { word: "Lujhu", definition: "路竹 (n.)", example: "The PX Mart branch is in Lujhu." },
+                    { word: "enrofloxacin", definition: "恩諾沙星 (n.)", example: "A banned antibiotic." },
+                    { word: "PX Mart", definition: "全聯福利中心 (n.)", example: "A major supermarket chain in Taiwan." },
+                    { word: "further", definition: "進一步的 (adj.)", example: "They need to take further action." },
+                    { word: "reported", definition: "報告，報導 (v.)", example: "The incident was reported to the police." },
+                    { word: "across", definition: "遍及 (prep.)", example: "Across the city, sales increased." },
+                    { word: "fillet", definition: "去骨肉片 (n.)", example: "A chicken fillet." },
+                    { word: "product", definition: "產品 (n.)", example: "The product came from Yunlin." },
+                    { word: "drug", definition: "藥物 (n.)", example: "A controlled drug." },
+                    { word: "branch", definition: "分店 (n.)", example: "A branch of the bank." }
+                ],
+                quizVocab: [
+                    { question: "Which word means 'a flat piece of fish or meat, usually without bones'?", options: ["batch", "fillets", "inspections", "banned"], answer: "fillets" },
+                    { question: "What does 'tested positive for' mean?", options: ["rejected the test", "failed the inspection", "showed the presence of something", "sold the product"], answer: "showed the presence of something" },
+                    { question: "If a product is 'banned,' it is:", options: ["highly recommended", "newly developed", "officially forbidden", "exported"], answer: "officially forbidden" },
+                    { question: "Which body monitors food safety in the city?", options: ["veterinary drug", "health bureau", "PX Mart", "Yunlin"], answer: "health bureau" },
+                    { question: "What is the meaning of 'sold out'?", options: ["removed from shelves", "all items were received", "all packs were contaminated", "all packs were purchased"], answer: "all packs were purchased" }
+                ],
+                quizReading: [
+                    { question: "What substance was found in the Taiwan tilapia fillets?", options: ["Diesel fragments", "A cleaning thermos", "Enrofloxacin", "Snails"], answer: "Enrofloxacin" },
+                    { question: "Which city's health bureau reported the contamination?", options: ["Yunlin", "Keelung", "Kaohsiung", "New Taipei"], answer: "Kaohsiung" },
+                    { question: "What action did the store take regarding the 24 contaminated packs?", options: ["They were supplied to other stores", "They were all sold out", "They were all removed from shelves", "They were sent back to Yunlin"], answer: "They were all sold out" },
+                    { question: "What is Enrofloxacin?", options: ["A common food additive", "A newly discovered fish species", "A banned veterinary drug", "A type of water pollutant"], answer: "A banned veterinary drug" },
+                    { question: "Which area is responsible for the product's origin?", options: ["Lujhu", "Kaohsiung", "PX Mart", "Yunlin"], answer: "Yunlin" }
+                ]
+            },
+            {
+                id: 'keelung',
+                title: 'Keelung Tap Water Contaminated by Diesel Fragments',
+                color: 'bg-blue-600',
+                article: `A lawmaker from Keelung, Lin Yu-chang, said he met with Mayor Chung-tung, New Taipei lawmaker Liao Shang-shu, and Taiwan Water Corporation President Li Yong-hsin to discuss the recent tap water contamination. Lee said testers suggest the pollution may be diesel fragments. The incident affected households in Keelung and New Taipei's Xizhi and authorities are reviewing compensation plan and water quality improvements.`,
+                vocabulary: [
+                    { word: "lawmaker", definition: "立法委員 (n.)", example: "A lawmaker drafts new bills." },
+                    { word: "contamination", definition: "污染 (n.)", example: "The contamination of the river affected marine life." },
+                    { word: "tap water", definition: "自來水 (n.)", example: "It is safe to drink the tap water here." },
+                    { word: "diesel fragments", definition: "柴油碎片 (n.)", example: "The leak left behind diesel fragments." },
+                    { word: "discuss", definition: "討論 (v.)", example: "They met to discuss the problem." },
+                    { word: "recent", definition: "最近的 (adj.)", example: "The recent incident caused concern." },
+                    { word: "testers", definition: "測試人員 (n.)", example: "The testers found the source of the leak." },
+                    { word: "suggest", definition: "建議，暗示 (v.)", example: "The data suggests a strong correlation." },
+                    { word: "pollution", definition: "污染 (n.)", example: "Air pollution is a global issue." },
+                    { word: "incident", definition: "事件 (n.)", example: "The incident affected many households." },
+                    { word: "affected", definition: "影響 (v.)", example: "The storm affected travel plans." },
+                    { word: "households", definition: "住戶 (n.)", example: "Hundreds of households lost power." },
+                    { word: "authorities", definition: "當局，官方 (n.)", example: "The authorities are investigating the case." },
+                    { word: "reviewing", definition: "審查 (v.)", example: "They are reviewing the documents." },
+                    { word: "compensation plan", definition: "賠償計劃 (phr.)", example: "A compensation plan was offered to the victims." },
+                    { word: "water quality", definition: "水質 (n.)", example: "Water quality standards must be maintained." },
+                    { word: "improvements", definition: "改善 (n.)", example: "They promised infrastructure improvements." },
+                    { word: "Taiwan Water Corporation", definition: "台灣自來水公司 (n.)", example: "Responsible for public water supply." },
+                    { word: "President", definition: "總裁 (n.)", example: "The President of the corporation." },
+                    { word: "Xizhi", definition: "汐止 (n.)", example: "A district in New Taipei City." },
+                    { word: "met with", definition: "會見 (phr.)", example: "The official met with the press." },
+                    { word: "Mayor", definition: "市長 (n.)", example: "The Keelung Mayor." }
+                ],
+                quizVocab: [
+                    { question: "What is a synonym for 'contamination'?", options: ["purification", "discussion", "pollution", "improvement"], answer: "pollution" },
+                    { question: "Who is a 'lawmaker'?", options: ["a water tester", "a politician who makes laws", "a mayor", "a corporation president"], answer: "a politician who makes laws" },
+                    { question: "What is 'tap water'?", options: ["bottled water", "water from a faucet/tap", "river water", "polluted water"], answer: "water from a faucet/tap" },
+                    { question: "The word 'reviewing' means to:", options: ["ignore", "approve immediately", "examine or assess", "compensate"], answer: "examine or assess" },
+                    { question: "What are 'households'?", options: ["city officials", "water testing devices", "families or groups living together", "lawyer firms"], answer: "families or groups living together" }
+                ],
+                quizReading: [
+                    { question: "Who did Keelung lawmaker Lin Yu-chang meet with?", options: ["The PX Mart manager and the health bureau", "Mayor Chung-tung, Liao Shang-shu, and Li Yong-hsin", "The German far-right party leaders", "The Louvre museum officials"], answer: "Mayor Chung-tung, Liao Shang-shu, and Li Yong-hsin" },
+                    { question: "What do testers suggest caused the water contamination?", options: ["Banned veterinary drugs", "Cleaning chemicals", "Diesel fragments", "Raw material stock"], answer: "Diesel fragments" },
+                    { question: "Which areas were affected by the contaminated tap water?", options: ["Lujhu and Yunlin", "Giessen and Reims", "Keelung and New Taipei's Xizhi", "Kaohsiung and Xizhi"], answer: "Keelung and New Taipei's Xizhi" },
+                    { question: "What are the authorities currently reviewing?", options: ["A criminal investigation", "Further inspections of tilapia", "Compensation plan and water quality improvements", "The farm's security systems"], answer: "Compensation plan and water quality improvements" },
+                    { question: "Who is Li Yong-hsin?", options: ["Mayor of Keelung", "A New Taipei lawmaker", "President of Taiwan Water Corporation", "A food authority"], answer: "President of Taiwan Water Corporation" }
+                ]
+            },
+            {
+                id: 'chunshuitang',
+                title: 'Chun Shui Tang Incident Injures Three Customers',
+                color: 'bg-green-600',
+                article: `Taiwanese Chun Shui Tang branch faced a food safety incident on November 30. A new employee mistakenly used a cleaning in-progress thermos for serving tea, causing throat burns for three customers who were rushed to China Medical University Hospital. The store closed for two days, and city food authorities ordered suspension and launched a criminal investigation.`,
+                vocabulary: [
+                    { word: "food safety", definition: "食品安全 (phr.)", example: "Food safety is a critical concern." },
+                    { word: "incident", definition: "事件 (n.)", example: "The recent incident was regrettable." },
+                    { word: "mistakenly", definition: "錯誤地 (adv.)", example: "He mistakenly took the wrong bag." },
+                    { word: "cleaning in-progress", definition: "正在清潔中 (phr.)", example: "The sign read: Cleaning in-progress." },
+                    { word: "thermos", definition: "保溫瓶 (n.)", example: "She poured hot coffee from the thermos." },
+                    { word: "serving tea", definition: "端茶，提供茶水 (phr.)", example: "The staff were busy serving tea." },
+                    { word: "causing", definition: "造成 (v.)", example: "The fire caused extensive damage." },
+                    { word: "throat burns", definition: "喉嚨灼傷 (phr.)", example: "The chemical caused severe throat burns." },
+                    { word: "rushed to", definition: "被緊急送往 (phr.)", example: "The patient was rushed to the hospital." },
+                    { word: "closed for", definition: "關閉 (一段時間) (phr.)", example: "The restaurant closed for renovation." },
+                    { word: "city food authorities", definition: "城市食品主管機關 (phr.)", example: "They enforce food safety regulations." },
+                    { word: "ordered suspension", definition: "下令停業 (phr.)", example: "The official ordered suspension of the factory." },
+                    { word: "launched", definition: "發起，啟動 (v.)", example: "The police launched an investigation." },
+                    { word: "criminal investigation", definition: "刑事調查 (phr.)", example: "A criminal investigation is underway." },
+                    { word: "employee", definition: "員工 (n.)", example: "A new employee made a mistake." },
+                    { word: "branch", definition: "分店 (n.)", example: "The incident happened at a local branch." },
+                    { word: "used", definition: "使用 (v.)", example: "He used the wrong tool." },
+                    { word: "mistake", definition: "錯誤 (n.)", example: "It was an honest mistake." },
+                    { word: "customers", definition: "顧客 (n.)", example: "Three customers were injured." },
+                    { word: "hospital", definition: "醫院 (n.)", example: "They were taken to the hospital." },
+                    { word: "serving", definition: "服務 (v.)", example: "He is serving the guests." },
+                    { word: "safety", definition: "安全 (n.)", example: "Prioritize safety at work." }
+                ],
+                quizVocab: [
+                    { question: "What is 'food safety' primarily concerned with?", options: ["food cost", "food hygiene and quality", "food taste", "food quantity"], answer: "food hygiene and quality" },
+                    { question: "If you 'mistakenly' do something, you do it:", options: ["on purpose", "very quickly", "incorrectly or by error", "carefully"], answer: "incorrectly or by error" },
+                    { question: "What item was used by mistake?", options: ["a coffee cup", "a cleaning in-progress thermos", "a tea bag", "a kettle"], answer: "a cleaning in-progress thermos" },
+                    { question: "Which phrase means 'to start an official investigation'?", options: ["closed for", "rushed to", "ordered suspension", "launched a criminal investigation"], answer: "launched a criminal investigation" },
+                    { question: "What is a 'thermos' used for?", options: ["measuring temperature", "keeping liquids hot or cold", "cleaning tables", "making noise"], answer: "keeping liquids hot or cold" }
+                ],
+                quizReading: [
+                    { question: "What was the cause of the customer injuries at Chun Shui Tang?", options: ["Expired ingredients", "A food fight", "A new employee using a cleaning thermos for tea", "Tap water contamination"], answer: "A new employee using a cleaning thermos for tea" },
+                    { question: "When did the food safety incident occur?", options: ["December 2nd", "November 30th", "October", "January 14th"], answer: "November 30th" },
+                    { question: "Where were the injured customers rushed to?", options: ["PX Mart", "The Louvre", "China Medical University Hospital", "Giessen police station"], answer: "China Medical University Hospital" },
+                    { question: "What immediate action did the city food authorities take?", options: ["They paid compensation", "They ordered suspension and launched a criminal investigation", "They conducted further inspections of the tea", "They dissolved the employee's organization"], answer: "They ordered suspension and launched a criminal investigation" },
+                    { question: "How long did the store close for?", options: ["One day", "Three days", "Two days", "A week"], answer: "Two days" }
+                ]
+            },
+            {
+                id: 'germany',
+                title: 'German Far-right Party Sets Up New Youth Wing as Thousands Protest',
+                color: 'bg-indigo-600',
+                article: `A confident far-right Alternative for Germany gathered Saturday to found its new youth organization, as thousands of protesters converged on the western city of Giessen, some of them clashing with police. Demonstrators began descending on the central town in the early morning with police also out in force. The meeting had been due to start at 10:00 a.m. local time, but only got underway hours later, accompanied by audible whistles, drums, and chants from the protesters outside. Demonstrators blocked or attempted to block roads in and around the city of some 93,000 residents, delaying many delegates' arrival. Police said they used pepper spray after stones were thrown at officers at one location. In another case, police said they used water cannons to clear a blockade by some 2,000 protesters after they ignored calls to leave. The new youth organization's predecessor, the Young Alternative, a largely autonomous group with relatively loose links to the party, was dissolved at the end of March after the AFD decided to formally cut ties with it. Germany's domestic intelligence agency had concluded that the Young Alternative was a proven right-wing extremist group.`,
+                vocabulary: [
+                    { word: "far-right", definition: "極右翼的 (adj.)", example: "The far-right party gained seats." },
+                    { word: "gathered", definition: "聚集 (v.)", example: "Thousands gathered for the rally." },
+                    { word: "found", definition: "創立 (v.)", example: "They plan to found a new company." },
+                    { word: "youth wing", definition: "青年組織 (n.)", example: "The party's youth wing is very active." },
+                    { word: "protesters", definition: "抗議者 (n.)", example: "The protesters marched peacefully." },
+                    { word: "converged on", definition: "匯集於 (phr.)", example: "Crowds converged on the square." },
+                    { word: "clashing with", definition: "與...發生衝突 (phr.)", example: "Demonstrators were clashing with police." },
+                    { word: "descending on", definition: "降臨於，來到 (phr.)", example: "Visitors were descending on the town." },
+                    { word: "out in force", definition: "大量出動 (phr.)", example: "Police were out in force to control the crowd." },
+                    { word: "got underway", definition: "開始，進行 (phr.)", example: "The meeting finally got underway." },
+                    { word: "audible", definition: "聽得見的 (adj.)", example: "The shouts were clearly audible." },
+                    { word: "chants", definition: "口號 (n.)", example: "They chanted slogans for change." },
+                    { word: "blocked", definition: "阻塞 (v.)", example: "The fallen tree blocked the road." },
+                    { word: "delegates", definition: "代表 (n.)", example: "The arrival of the delegates was delayed." },
+                    { word: "pepper spray", definition: "胡椒噴霧 (n.)", example: "Police used pepper spray for crowd control." },
+                    { word: "water cannons", definition: "水砲 (n.)", example: "Water cannons were used to clear the blockade." },
+                    { word: "blockade", definition: "封鎖 (n.)", example: "The protesters created a blockade." },
+                    { word: "dissolved", definition: "解散 (v.)", example: "The group was officially dissolved." },
+                    { word: "autonomous", definition: "自治的，獨立的 (adj.)", example: "A largely autonomous organization." },
+                    { word: "domestic intelligence agency", definition: "國內情報機構 (phr.)", example: "Responsible for internal security." },
+                    { word: "concluded", definition: "總結，斷定 (v.)", example: "The report concluded the findings." },
+                    { word: "extremist group", definition: "極端主義團體 (phr.)", example: "The agency monitors extremist groups." }
+                ],
+                quizVocab: [
+                    { question: "The word 'converged on' is closest in meaning to:", options: ["scattered from", "left quickly", "met at a point", "protested peacefully"], answer: "met at a point" },
+                    { question: "What is a 'youth wing' of a political party?", options: ["a secret police force", "the party's military branch", "the organization for young members", "a conservative group"], answer: "the organization for young members" },
+                    { question: "If something is 'audible,' you can:", options: ["see it clearly", "smell it strongly", "hear it", "touch it"], answer: "hear it" },
+                    { question: "What does 'dissolved' mean in this context?", options: ["restarted", "formally ended", "merged", "expanded"], answer: "formally ended" },
+                    { question: "Who are 'delegates'?", options: ["police officers", "reporters", "representatives sent to a conference", "protesters"], answer: "representatives sent to a conference" }
+                ],
+                quizReading: [
+                    { question: "What was the Far-right Alternative for Germany party doing on Saturday?", options: ["Protesting against police", "Gathering to dissolve their youth wing", "Founding a new youth organization", "Throwing stones at officers"], answer: "Founding a new youth organization" },
+                    { question: "What delayed the delegates' arrival at the meeting?", options: ["Heavy rain", "The police blockade", "Protesters blocking roads", "The use of water cannons"], answer: "Protesters blocking roads" },
+                    { question: "What did the police use to clear a blockade of 2,000 protesters?", options: ["Pepper spray", "Water cannons", "Drums and whistles", "Stones"], answer: "Water cannons" },
+                    { question: "What was the former youth organization, the Young Alternative, concluded to be?", options: ["A largely autonomous group", "A political rival", "A proven right-wing extremist group", "A newly founded wing"], answer: "A proven right-wing extremist group" },
+                    { question: "Where did the far-right meeting and protests take place?", options: ["Berlin", "Giessen", "Reims", "Xizhi"], answer: "Giessen" }
+                ]
+            },
+            {
+                id: 'snails',
+                title: 'French Farm Has €90,000 Worth of Snails Stolen',
+                color: 'bg-orange-600',
+                article: `Thieves have stolen 90,000 euro worth of snails from a farm in northern France that supplies gourmet restaurants. This Gacou de Granch in Bussy said it had been robbed for its entire stock of fresh and frozen snails, a real blow ahead of the holiday season. The thieves broke into the farm overnight into Monday, cutting a border fence before breaking into the farm buildings, but a complaint was only filed with police later in the week. Edible snails, or escargots, are a French delicacy , usually cooked in garlic butter or wine before being extracted from their shells. Producers in France see a rise in sales around December as people shell out for the treat during Christmas and New Year's Day celebrations. The farm has supplied restaurants including the Michelin-starred Less Crays in Reims, as well as delicatessens and private clients. Photos of the farm after the theft show shelves and fridges nearly completely cleared of snail products. The farm's manager said: "A whole section of finished products was stolen from the store, along with raw material stock from my laboratory. It was my end-of-year stock. We had just the right amount to get through the holidays without any worries."`,
+                vocabulary: [
+                    { word: "thieves", definition: "小偷，竊賊 (n.)", example: "The thieves stole jewelry." },
+                    { word: "stolen", definition: "偷竊 (v. past participle)", example: "The car was stolen last night." },
+                    { word: "worth of", definition: "價值...的 (phr.)", example: "It is worth of €1000." },
+                    { word: "supplies", definition: "供應 (v.)", example: "The company supplies raw materials." },
+                    { word: "gourmet restaurants", definition: "美食餐廳 (phr.)", example: "They dine only at gourmet restaurants." },
+                    { word: "robbed for", definition: "因...被搶劫 (phr.)", example: "The store was robbed for cash." },
+                    { word: "entire stock", definition: "全部庫存 (phr.)", example: "The fire destroyed the entire stock." },
+                    { word: "a real blow", definition: "一次真正的打擊 (phr.)", example: "Losing the contract was a real blow." },
+                    { word: "ahead of", definition: "在...之前 (phr.)", example: "The event is scheduled ahead of the holiday." },
+                    { word: "broke into", definition: "闖入 (phr.)", example: "Thieves broke into the house." },
+                    { word: "cutting", definition: "切割 (v.)", example: "Cutting the border fence." },
+                    { word: "border fence", definition: "邊界圍欄 (n.)", example: "The farm had a border fence." },
+                    { word: "complaint", definition: "投訴，報案 (n.)", example: "A formal complaint was filed." },
+                    { word: "filed with police", definition: "向警方報案 (phr.)", example: "The incident was filed with police." },
+                    { word: "edible", definition: "可食用的 (adj.)", example: "The mushrooms are edible." },
+                    { word: "escargots", definition: "蝸牛 (n., French)", example: "Escargots are a delicacy." },
+                    { word: "delicacy", definition: "美味佳餚 (n.)", example: "Caviar is a famous delicacy." },
+                    { word: "shell out", definition: "掏錢 (phr., informal)", example: "They shell out for expensive gifts." },
+                    { word: "cleared of", definition: "被清空 (phr.)", example: "The shelves were cleared of products." },
+                    { word: "raw material stock", definition: "原材料庫存 (phr.)", example: "Essential for manufacturing." },
+                    { word: "worry", definition: "擔心 (n.)", example: "Without any worries." },
+                    { word: "holiday season", definition: "假日季節 (phr.)", example: "The busiest time of the year." }
+                ],
+                quizVocab: [
+                    { question: "What does 'gourmet restaurants' refer to?", options: ["fast food chains", "restaurants specializing in fine food", "cheap diners", "all-you-can-eat buffets"], answer: "restaurants specializing in fine food" },
+                    { question: "The phrase 'a real blow' means:", options: ["a strong wind", "a sudden success", "a significant setback or shock", "a physical injury"], answer: "a significant setback or shock" },
+                    { question: "Which word means 'suitable or safe to eat'?", options: ["stolen", "frozen", "edible", "gourmet"], answer: "edible" },
+                    { question: "To 'shell out' for something means to:", options: ["remove it from a shell", "complain about it", "spend money on it", "display it"], answer: "spend money on it" },
+                    { question: "If the stock was 'cleared of' products, it means:", options: ["it was organized", "it was full", "it was emptied", "it was counted"], answer: "it was emptied" }
+                ],
+                quizReading: [
+                    { question: "How much were the snails stolen from the French farm worth?", options: ["€28,000", "€90,000", "€32,000", "€102 million"], answer: "€90,000" },
+                    { question: "What is the farm's entire stock used to supply?", options: ["PX Mart branches", "China Medical University Hospital", "Michelin-starred restaurants and private clients", "German far-right organizations"], answer: "Michelin-starred restaurants and private clients" },
+                    { question: "What is the French name for edible snails?", options: ["Tilapia", "Delicacy", "Escargots", "Gacou"], answer: "Escargots" },
+                    { question: "When do French producers see a rise in snail sales?", options: ["During summer holidays", "Around December for Christmas and New Year's Day", "Only during October", "When ticket prices hike"], answer: "Around December for Christmas and New Year's Day" },
+                    { question: "What material was stolen besides finished products?", options: ["The farm buildings", "The border fence", "Raw material stock from the laboratory", "Jewelry"], answer: "Raw material stock from the laboratory" }
+                ]
+            },
+            {
+                id: 'louvre',
+                title: 'Louvre to Hike Ticket Prices for Most Non-EU Tourists by 45%',
+                color: 'bg-purple-600',
+                article: `The Louvre announced that ticket prices will rise by 45% for most non-European Union visitors starting early next year. Tourists from countries such as the US, UK, and China will have to pay 32 euros to enter the museum, a price increase expected to raise millions of euros annually to help fund an overhaul of the famous gallery. The museum's security and management have faced criticism since a brazen heist in October when a four-person gang stole a jewelry worth 102 million and fled with minutes. An official audit of the museum published shortly after the heist highlighted the institution's inadequate security systems and aging infrastructure. From the 14th of January, visitors from countries outside the European Economic Area, a group that includes EU member states, will pay an extra €10 to enter the world's most visited museum. Non-EU visitors in groups with accredited guides will also have to pay €28 starting next year. The price hike is expected to raise between 15 million and €20 million annually to support the museum's modernization plans. The Louvre received nearly 9 million visitors last year, with the majority coming from abroad. More than a tenth of its visitors are from the US, and around 6% are from China.`,
+                vocabulary: [
+                    { word: "Hike", definition: "提高，增加 (v.)", example: "They decided to hike taxes." },
+                    { word: "Ticket prices", definition: "票價 (phr.)", example: "Ticket prices have increased significantly." },
+                    { word: "Non-EU tourists", definition: "非歐盟遊客 (phr.)", example: "Targeted by the price hike." },
+                    { word: "Announced", definition: "宣布 (v.)", example: "The news was announced yesterday." },
+                    { word: "Expected to", definition: "預計會 (phr.)", example: "The revenue is expected to rise." },
+                    { word: "Raise millions", definition: "籌集數百萬 (phr.)", example: "The event aims to raise millions for charity." },
+                    { word: "Fund", definition: "資助 (v.)", example: "The project needs funding." },
+                    { word: "Overhaul", definition: "徹底檢修，翻修 (n.)", example: "A major overhaul of the system is needed." },
+                    { word: "Gallery", definition: "畫廊，美術館 (n.)", example: "The famous art gallery." },
+                    { word: "Faced criticism", definition: "面臨批評 (phr.)", example: "The policy faced criticism." },
+                    { word: "Brazen heist", definition: "厚顏無恥的搶劫 (phr.)", example: "The brazen heist shocked the city." },
+                    { word: "Fled with minutes", definition: "幾分鐘內逃離 (phr.)", example: "The thieves fled with minutes." },
+                    { word: "Official audit", definition: "官方審計 (phr.)", example: "The audit revealed financial issues." },
+                    { word: "Highlighted", definition: "強調，突出 (v.)", example: "The report highlighted the risks." },
+                    { word: "Inadequate", definition: "不充分的，不足的 (adj.)", example: "The security was inadequate." },
+                    { word: "Aging infrastructure", definition: "老化的基礎設施 (phr.)", example: "A common problem in old buildings." },
+                    { word: "European Economic Area (EEA)", definition: "歐洲經濟區 (n.)", example: "Includes EU and EFTA countries." },
+                    { word: "Member states", definition: "成員國 (phr.)", example: "All EU member states agree." },
+                    { word: "Accredited guides", definition: "經認證的導遊 (phr.)", example: "Groups must use accredited guides." },
+                    { word: "Modernization plans", definition: "現代化計劃 (phr.)", example: "Plans to modernize the museum." },
+                    { word: "Majority", definition: "多數 (n.)", example: "The majority of visitors come from abroad." },
+                    { word: "Abroad", definition: "國外 (adv.)", example: "He lives abroad." }
+                ],
+                quizVocab: [
+                    { question: "To 'hike' prices means to:", options: ["lower them", "keep them stable", "increase them sharply", "announce them"], answer: "increase them sharply" },
+                    { question: "What is an 'overhaul'?", options: ["a small repair", "a complete and thorough examination and repair", "a ticket price", "a museum tour"], answer: "a complete and thorough examination and repair" },
+                    { question: "The word 'inadequate' means:", options: ["perfect", "sufficient", "not good enough", "modernized"], answer: "not good enough" },
+                    { question: "What does 'faced criticism' mean?", options: ["received praise", "dealt with negative feedback", "ignored the problem", "started an audit"], answer: "dealt with negative feedback" },
+                    { question: "A 'brazen heist' is a theft that is:", options: ["small and secretive", "done with great boldness and without shame", "planned over many years", "related to ticket prices"], answer: "done with great boldness and without shame" }
+                ],
+                quizReading: [
+                    { question: "By what percentage will the Louvre hike ticket prices for most non-EU visitors?", options: ["10%", "28%", "45%", "102%"], answer: "45%" },
+                    { question: "What is the new ticket price for most non-EU visitors?", options: ["€10", "€28", "€32", "€15"], answer: "€32" },
+                    { question: "What major incident caused security criticism before the announcement?", options: ["The tap water contamination", "The German far-right protests", "A brazen jewelry heist in October", "The snail theft in France"], answer: "A brazen jewelry heist in October" },
+                    { question: "What problem did the official audit highlight at the museum?", options: ["Too many visitors", "High energy costs", "Inadequate security systems and aging infrastructure", "Lack of foreign tourists"], answer: "Inadequate security systems and aging infrastructure" },
+                    { question: "The price hike is expected to raise funds for which purpose?", options: ["Paying back the stolen jewelry", "Compensating French snail farmers", "Funding an overhaul/modernization of the famous gallery", "Lowering ticket prices for EU visitors"], answer: "Funding an overhaul/modernization of the famous gallery" }
+                ]
+            }
+        ];
+
+        // Add a placeholder for the two missing topics (since the user only provided 4 articles after the intro)
+        // I will re-extract the first two Taiwan local news items which were combined previously to ensure 6 distinct tabs
+        const TAIWAN_NEWS = [
+            {
+                id: 'keelung_tap_water',
+                title: 'Keelung Water Contaminated by Diesel',
+                color: 'bg-teal-600',
+                article: `A lawmaker from Keelung, Lin Yu-chang, said he met with Mayor Chung-tung, New Taipei lawmaker Liao Shang-shu, and Taiwan Water Corporation President Li Yong-hsin to discuss the recent tap water contamination. Lee said testers suggest the pollution may be diesel fragments. The incident affected households in Keelung and New Taipei's Xizhi and authorities are reviewing compensation plan and water quality improvements.`,
+                vocabulary: NEWS_DATA[1].vocabulary,
+                quizVocab: NEWS_DATA[1].quizVocab,
+                quizReading: NEWS_DATA[1].quizReading
+            },
+            {
+                id: 'chun_shui_tang',
+                title: 'Chun Shui Tang Incident Injures Customers',
+                color: 'bg-emerald-600',
+                article: `Taiwanese Chun Shui Tang branch faced a food safety incident on November 30. A new employee mistakenly used a cleaning in-progress thermos for serving tea, causing throat burns for three customers who were rushed to China Medical University Hospital. The store closed for two days, and city food authorities ordered suspension and launched a criminal investigation.`,
+                vocabulary: NEWS_DATA[2].vocabulary,
+                quizVocab: NEWS_DATA[2].quizVocab,
+                quizReading: NEWS_DATA[2].quizReading
+            }
+        ];
+
+        // The initial data structure only had 4 unique stories + the intro. I will re-split the stories to ensure 6 distinct tabs as implied by the previous structure, though the original text only contained 6 paragraphs of news total (1 intro + 5 stories). I'll use 5 distinct stories for now and group the first two local news items under one tab.
+
+        const FINAL_NEWS_DATA = [
+            {
+                id: 'tilapia',
+                title: 'Taiwan Local News: Tilapia & Water Contamination',
+                color: 'bg-red-600',
+                article: `**Tilapia at PX Mart Found With Banned Drug:** In local news, Kaohsiung's health bureau reported that a batch of Taiwan tilapia fillets sold at a PX Mart branch in Lujhu tested positive for enrofloxacin, a banned veterinary drug. The store had received 24 packs, all sold out. Across Kaohsiung, 4,488 packs were supplied, with 4,080 sold and 408 removed from shelves. The product came from Yunlin, which has began further inspections.<br><br>**Keelung Tap Water Contaminated by Diesel Fragments:** A lawmaker from Keelung, Lin Yu-chang, said he met with Mayor Chung-tung, New Taipei lawmaker Liao Shang-shu, and Taiwan Water Corporation President Li Yong-hsin to discuss the recent tap water contamination. Lee said testers suggest the pollution may be diesel fragments. The incident affected households in Keelung and New Taipei's Xizhi and authorities are reviewing compensation plan and water quality improvements.`,
+                vocabulary: NEWS_DATA[0].vocabulary.concat(NEWS_DATA[1].vocabulary),
+                quizVocab: NEWS_DATA[0].quizVocab.concat(NEWS_DATA[1].quizVocab),
+                quizReading: NEWS_DATA[0].quizReading.concat(NEWS_DATA[1].quizReading)
+            },
+            {
+                id: 'chunshuitang',
+                title: 'Chun Shui Tang Incident',
+                color: 'bg-green-600',
+                article: NEWS_DATA[2].article,
+                vocabulary: NEWS_DATA[2].vocabulary,
+                quizVocab: NEWS_DATA[2].quizVocab,
+                quizReading: NEWS_DATA[2].quizReading
+            },
+            {
+                id: 'germany',
+                title: 'German Far-Right Protest',
+                color: 'bg-indigo-600',
+                article: NEWS_DATA[3].article,
+                vocabulary: NEWS_DATA[3].vocabulary,
+                quizVocab: NEWS_DATA[3].quizVocab,
+                quizReading: NEWS_DATA[3].quizReading
+            },
+            {
+                id: 'snails',
+                title: 'French Snail Heist',
+                color: 'bg-orange-600',
+                article: NEWS_DATA[4].article,
+                vocabulary: NEWS_DATA[4].vocabulary,
+                quizVocab: NEWS_DATA[4].quizVocab,
+                quizReading: NEWS_DATA[4].quizReading
+            },
+            {
+                id: 'louvre',
+                title: 'Louvre Ticket Price Hike',
+                color: 'bg-purple-600',
+                article: NEWS_DATA[5].article,
+                vocabulary: NEWS_DATA[5].vocabulary,
+                quizVocab: NEWS_DATA[5].quizVocab,
+                quizReading: NEWS_DATA[5].quizReading
+            }
+        ];
+
+        let activeTopic = FINAL_NEWS_DATA[0].id;
+        let activeSubTab = 'words';
+
+        // --- Core Application Functions ---
+
+        // Helper to shuffle an array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // 1. Navigation Logic
+        function changeTopic(topicId) {
+            activeTopic = topicId;
+            activeSubTab = 'words'; // Reset to Word Bank when changing topics
+            renderTabs();
+            renderContent();
+        }
+
+        function changeSubTab(tab) {
+            activeSubTab = tab;
+            renderContent();
+        }
+
+        // 2. Rendering the Main Navigation Tabs (Topics)
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = FINAL_NEWS_DATA.map(topic => {
+                const isActive = topic.id === activeTopic;
+                const baseClasses = "flex-shrink-0 px-4 py-2 text-sm font-semibold rounded-lg transition duration-200 border border-gray-300 cursor-pointer";
+                const activeClasses = `text-white ${topic.color} main-tab-active`;
+                const inactiveClasses = "text-gray-700 bg-white hover:bg-gray-100";
+                
+                return `
+                    <div class="${baseClasses} ${isActive ? activeClasses : inactiveClasses}" 
+                         onclick="changeTopic('${topic.id}')">
+                        ${topic.title}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 3. Rendering the Sub Navigation Tabs (Word Bank, Quizzes)
+        function renderSubTabs(topic) {
+            const tabs = [
+                { id: 'words', label: '1. Word Bank & Phrases (單字本)' },
+                { id: 'vocab_quiz', label: '2. Vocabulary Quiz (單字測驗)' },
+                { id: 'reading_quiz', label: '3. Reading Quiz (閱讀測驗)' }
+            ];
+            
+            return `
+                <div class="flex border-b border-gray-200 mb-6 sticky top-0 bg-white pt-4 z-20">
+                    ${tabs.map(tab => `
+                        <div class="px-4 py-2 -mb-px text-lg cursor-pointer transition duration-150 ease-in-out hover:text-blue-500 
+                            ${activeSubTab === tab.id ? 'sub-tab-active' : 'text-gray-500'}"
+                            onclick="changeSubTab('${tab.id}')">
+                            ${tab.label}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // 4. Content Rendering (Based on activeTopic and activeSubTab)
+        function renderContent() {
+            const topic = FINAL_NEWS_DATA.find(t => t.id === activeTopic);
+            if (!topic) {
+                document.getElementById('app-content').innerHTML = '<div class="text-center text-red-500">Error: Topic not found.</div>';
+                return;
+            }
+
+            let contentHTML = `
+                <div class="text-gray-700">
+                    <h2 class="text-3xl font-bold mb-4">${topic.title}</h2>
+                    <p class="mb-6 text-gray-600 border-l-4 border-${topic.color.split('-')[1]}-400 pl-4 italic">${topic.article}</p>
+                    ${renderSubTabs(topic)}
+                    <div id="sub-content">
+                        ${getTabContent(topic, activeSubTab)}
+                    </div>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = contentHTML;
+
+            // Re-initialize quiz logic after rendering quiz content
+            if (activeSubTab === 'vocab_quiz') {
+                initQuiz(topic.quizVocab, 'vocab-quiz');
+            } else if (activeSubTab === 'reading_quiz') {
+                initQuiz(topic.quizReading, 'reading-quiz');
+            }
+        }
+
+        // 5. Getting Content for the specific Sub-Tab
+        function getTabContent(topic, tabId) {
+            switch (tabId) {
+                case 'words':
+                    return renderWordBank(topic);
+                case 'vocab_quiz':
+                    return renderQuizTemplate('vocab-quiz', topic.quizVocab.length);
+                case 'reading_quiz':
+                    return renderQuizTemplate('reading-quiz', topic.quizReading.length);
+                default:
+                    return '<div>Please select a study mode.</div>';
+            }
+        }
+
+        // 6. Rendering Word Bank
+        function renderWordBank(topic) {
+            return `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 custom-scrollbar max-h-[600px] overflow-y-auto">
+                    ${topic.vocabulary.map(item => `
+                        <div class="word-card bg-gray-50 p-4 rounded-lg border border-gray-200 cursor-pointer transition duration-150 hover:bg-gray-100"
+                            onclick="this.querySelector('.definition').classList.toggle('hidden')">
+                            <p class="text-xl font-bold text-gray-800">${item.word}</p>
+                            <p class="text-sm text-gray-500 definition hidden mt-2 pt-2 border-t border-gray-300">
+                                <strong>Definition (中文):</strong> ${item.definition}<br>
+                                <span class="text-xs italic text-gray-400">Example: ${item.example}</span>
+                            </p>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="mt-6 p-4 bg-yellow-50 rounded-lg text-yellow-700 border border-yellow-200">
+                    💡 **Tip:** Click on any word card to reveal the Chinese definition and example sentence!
+                </div>
+            `;
+        }
+
+        // 7. Rendering Quiz Template
+        function renderQuizTemplate(quizId, totalQuestions) {
+            return `
+                <!-- Quiz View -->
+                <div id="${quizId}-view" class="space-y-6">
+                    <div id="${quizId}-question-display" class="bg-white p-6 rounded-xl border border-blue-200 shadow-md">
+                        <p id="${quizId}-question-number" class="text-sm font-semibold text-blue-500 mb-2">Question 1 / ${totalQuestions}</p>
+                        <p id="${quizId}-question-text" class="text-xl font-medium text-gray-800">Loading question...</p>
+                    </div>
+                    
+                    <div id="${quizId}-options" class="space-y-3">
+                        <!-- Options will be dynamically inserted here -->
+                    </div>
+
+                    <div id="${quizId}-feedback" class="hidden p-3 rounded-lg text-sm font-medium transition duration-200"></div>
+
+                    <div class="flex justify-between items-center pt-4">
+                        <button id="${quizId}-submit" 
+                                class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200 shadow-md"
+                                onclick="submitQuizAnswer('${quizId}')">
+                            Check Answer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary View -->
+                <div id="${quizId}-summary" class="hidden text-center p-10 bg-blue-50 rounded-xl border-4 border-blue-400">
+                    <h3 class="text-3xl font-extrabold text-blue-700 mb-4">Quiz Complete! 🎉</h3>
+                    <p class="text-xl text-gray-700">Your final score is: <span id="${quizId}-final-score" class="text-4xl font-black">0</span> / <span id="${quizId}-total-questions" class="text-2xl font-bold">${totalQuestions}</span></p>
+                    <button class="mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-200 shadow-lg"
+                            onclick="initQuiz(FINAL_NEWS_DATA.find(t => t.id === activeTopic).${quizId.includes('vocab') ? 'quizVocab' : 'quizReading'}, '${quizId}')">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+        
+        // --- Quiz Logic ---
+        let currentQuiz = {};
+
+        function initQuiz(questions, quizId) {
+            currentQuiz[quizId] = {
+                questions: shuffleArray([...questions]), // Use a shuffled copy
+                currentQIndex: 0,
+                score: 0,
+                selectedOption: null
+            };
+            
+            // Setup DOM references
+            const quizState = currentQuiz[quizId];
+            quizState.view = document.getElementById(`${quizId}-view`);
+            quizState.summary = document.getElementById(`${quizId}-summary`);
+            quizState.questionNum = document.getElementById(`${quizId}-question-number`);
+            quizState.questionText = document.getElementById(`${quizId}-question-text`);
+            quizState.optionsContainer = document.getElementById(`${quizId}-options`);
+            quizState.feedback = document.getElementById(`${quizId}-feedback`);
+            quizState.submitButton = document.getElementById(`${quizId}-submit`);
+            quizState.finalScore = document.getElementById(`${quizId}-final-score`);
+            quizState.totalQuestions = document.getElementById(`${quizId}-total-questions`);
+
+            // Reset views and display first question
+            quizState.view.classList.remove('hidden');
+            quizState.summary.classList.add('hidden');
+            quizState.feedback.classList.add('hidden');
+            
+            displayQuestion(quizId);
+        }
+
+        function displayQuestion(quizId) {
+            const quizState = currentQuiz[quizId];
+            if (quizState.currentQIndex >= quizState.questions.length) {
+                showSummary(quizId);
+                return;
+            }
+
+            const currentQ = quizState.questions[quizState.currentQIndex];
+            
+            // Reset state
+            quizState.selectedOption = null;
+            quizState.feedback.classList.add('hidden');
+            quizState.submitButton.disabled = false;
+            
+            // Update question display
+            quizState.questionNum.textContent = `Question ${quizState.currentQIndex + 1} / ${quizState.questions.length}`;
+            quizState.questionText.textContent = currentQ.question;
+            
+            // Shuffle and display options
+            const shuffledOptions = shuffleArray([...currentQ.options]);
+            quizState.optionsContainer.innerHTML = shuffledOptions.map(option => `
+                <button class="option-btn w-full text-left p-4 rounded-lg border border-gray-300 bg-white hover:bg-blue-50 transition duration-150 text-gray-800"
+                        onclick="selectOption('${quizId}', this, '${option.replace(/'/g, "\\'")}')">
+                    ${option}
+                </button>
+            `).join('');
+
+            // Add selected visual effect
+            quizState.optionsContainer.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-200', 'border-blue-500');
+            });
+        }
+
+        function selectOption(quizId, element, optionText) {
+            const quizState = currentQuiz[quizId];
+            if (quizState.submitButton.disabled) return; // Prevent selection after submission
+
+            // Visual feedback for selection
+            quizState.optionsContainer.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-100', 'border-blue-500');
+            });
+            element.classList.add('bg-blue-100', 'border-blue-500');
+            
+            quizState.selectedOption = optionText;
+            quizState.feedback.classList.add('hidden'); // Hide feedback on new selection
+        }
+
+        function submitQuizAnswer(quizId) {
+            const quizState = currentQuiz[quizId];
+            if (quizState.selectedOption === null) {
+                quizState.feedback.textContent = 'Please select an option first.';
+                quizState.feedback.classList.remove('hidden', 'bg-red-100', 'bg-green-100');
+                quizState.feedback.classList.add('bg-yellow-100', 'text-yellow-700');
+                return;
+            }
+
+            quizState.submitButton.disabled = true;
+            const currentQ = quizState.questions[quizState.currentQIndex];
+            const isCorrect = quizState.selectedOption === currentQ.answer;
+
+            quizState.optionsContainer.querySelectorAll('.option-btn').forEach(btn => {
+                const isSelected = btn.textContent.trim() === quizState.selectedOption;
+                const isTheAnswer = btn.textContent.trim() === currentQ.answer;
+
+                btn.disabled = true; // Disable all options
+
+                if (isTheAnswer) {
+                    btn.classList.remove('bg-blue-100');
+                    btn.classList.add('bg-green-200', 'border-green-600', 'font-bold');
+                } else if (isSelected) {
+                    btn.classList.remove('bg-blue-100');
+                    btn.classList.add('bg-red-200', 'border-red-600', 'font-bold');
+                }
+            });
+
+            if (isCorrect) {
+                quizState.score++;
+                quizState.feedback.textContent = '✅ Correct! Well done.';
+                quizState.feedback.classList.remove('hidden', 'bg-red-100', 'bg-yellow-100');
+                quizState.feedback.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                quizState.feedback.textContent = `❌ Incorrect. The correct answer was: ${currentQ.answer}`;
+                quizState.feedback.classList.remove('hidden', 'bg-green-100', 'bg-yellow-100');
+                quizState.feedback.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            // Change button to 'Next Question'
+            quizState.submitButton.textContent = 'Next Question';
+            quizState.submitButton.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+            quizState.submitButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            quizState.submitButton.onclick = () => {
+                quizState.currentQIndex++;
+                quizState.submitButton.textContent = 'Check Answer';
+                quizState.submitButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                quizState.submitButton.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                quizState.submitButton.onclick = () => submitQuizAnswer(quizId); // Revert to check answer logic
+                displayQuestion(quizId);
+            };
+        }
+
+        function showSummary(quizId) {
+            const quizState = currentQuiz[quizId];
+            quizState.view.classList.add('hidden');
+            quizState.summary.classList.remove('hidden');
+            quizState.finalScore.textContent = quizState.score;
+            quizState.totalQuestions.textContent = quizState.questions.length;
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            
+            // Expose functions globally for use in HTML event handlers
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+            window.FINAL_NEWS_DATA = FINAL_NEWS_DATA;
+            window.activeTopic = activeTopic; 
+        });
+    </script>
+</body>
+</html>
