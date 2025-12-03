@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily English News Deep Dive: Funday Edition</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a clean, Notion-like interface */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f0f4f8; /* Light background */
+        }
+        .container-card {
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(17, 24, 39, 0.08); /* Stronger shadow for depth */
+        }
+        .main-tab-active {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+        .sub-tab-active {
+            color: #1d4ed8; /* Darker blue for active sub-tab */
+            border-bottom: 3px solid #1d4ed8;
+            font-weight: 700;
+        }
+        /* Custom scrollbar for content areas */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #9ca3af;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background-color: #f3f4f6;
+        }
+        /* Custom styling for click/touch feedback on word cards */
+        .word-card:active {
+            transform: scale(0.99);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Main Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-2">Daily English News Deep Dive 📰</h1>
+            <p class="text-xl text-gray-500">Vocabulary, Quizzes, and Comprehension Practice for Today's Headlines</p>
+        </header>
+
+        <!-- Main Navigation (News Topics) -->
+        <div class="mb-6 overflow-x-auto custom-scrollbar">
+            <div id="main-tabs" class="flex flex-nowrap space-x-2 pb-2">
+                <!-- Tabs will be generated here by JS -->
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="app-content" class="container-card rounded-xl p-4 sm:p-8">
+            <!-- Content will be loaded here -->
+        </div>
+
+    </div>
+
+    <!-- JavaScript Data and Logic -->
+    <script>
+        const NEWS_DATA = [
+            {
+                id: 'cpc_lng',
+                title: 'CPC LNG Project Corruption Probe (中油貪腐)',
+                color: 'bg-red-600',
+                article: `Taiwan's third liquefied natural gas (LNG) terminal project faces corruption allegations with claims that construction costs were inflated by over 10 billion NT dollars. Prosecutors raided 11 sites, including CPC Corporation and CECI. 13 people, including former CECI chairman Shih Hsiang-chung, were questioned as authorities investigate possible bribery and procurement violations.`,
+                vocabulary: [
+                    { word: "liquefied natural gas (LNG)", definition: "液化天然氣 (phr.)", example: "LNG is a cleaner fossil fuel." },
+                    { word: "terminal project", definition: "終端機/接收站計畫 (n.)", example: "The completion of the terminal project is delayed." },
+                    { word: "corruption allegations", definition: "貪腐指控 (phr.)", example: "The minister denied all corruption allegations." },
+                    { word: "construction costs", definition: "建設成本 (n.)", example: "The company inflated the construction costs." },
+                    { word: "inflated by", definition: "被誇大/虛增了 (phr.)", example: "The construction costs were inflated by over 10 billion NT dollars." },
+                    { word: "prosecutors", definition: "檢察官 (n.)", example: "Prosecutors led the raid on the offices." },
+                    { word: "raided", definition: "突襲搜查 (v.)", example: "The police raided 11 locations." },
+                    { word: "questioned", definition: "被訊問 (v.)", example: "The former chairman was questioned for hours." },
+                    { word: "bribery", definition: "賄賂 (n.)", example: "The case involves serious acts of bribery." },
+                    { word: "procurement violations", definition: "採購違規 (phr.)", example: "The firm was accused of procurement violations." },
+                    { word: "faces allegations", definition: "面臨指控 (phr.)", example: "The company faces allegations of illegal activities." },
+                    { word: "over 10 billion NT dollars", definition: "超過100億新台幣 (phr.)", example: "The loss exceeded over 10 billion NT dollars." },
+                    { word: "CECI", definition: "中興工程顧問社 (abbr.)", example: "CECI is one of the involved parties in the probe." },
+                    { word: "authorities investigate", definition: "當局調查 (phr.)", example: "Authorities investigate the source of the leak." },
+                    { word: "possible bribery", definition: "可能的賄賂行為 (phr.)", example: "The suspect is under investigation for possible bribery." },
+                    { word: "former chairman", definition: "前董事長 (n.)", example: "The former chairman resigned last year." },
+                    { word: "CPC Corporation", definition: "台灣中油公司 (n.)", example: "CPC Corporation is Taiwan's national petroleum company." },
+                    { word: "sites", definition: "地點，現場 (n.)", example: "The raid targeted multiple sites simultaneously." },
+                    { word: "violation", definition: "違規，違反 (n.)", example: "A serious violation of the company policy was reported." },
+                    { word: "wastage", definition: "浪費 (n.)", example: "The investigation focused on potential wastage of public funds." },
+                    { word: "third terminal", definition: "第三座接收站 (phr.)", example: "This is Taiwan's third LNG terminal project." }
+                ],
+                quizVocab: [
+                    { question: "Which word means 'the act of giving money or gifts to illegally influence someone's actions'?", options: ["Procurement", "Wastage", "Bribery", "Violation"], answer: "Bribery" },
+                    { question: "What is a common abbreviation for Liquefied Natural Gas?", options: ["NGL", "LGN", "LNG", "GTL"], answer: "LNG" },
+                    { question: "The word 'raided' in this context means:", options: ["Authorities issued a warning", "Authorities made a sudden, forceful search of a place", "Construction work was stopped", "The project was approved"], answer: "Authorities made a sudden, forceful search of a place" },
+                    { question: "Which phrase means 'accusations of illegal misconduct in public office'?", options: ["Terminal project", "Procurement violations", "Corruption allegations", "Construction costs"], answer: "Corruption allegations" },
+                    { question: "What are 'sites'?", options: ["Specific locations or premises", "Legal documents", "Financial reports", "Newly hired employees"], answer: "Specific locations or premises" },
+                    { question: "What is the role of a 'prosecutor'?", options: ["A person who manages construction", "A lawyer who conducts the case against a defendant in court", "A government spokesperson", "A financial auditor"], answer: "A lawyer who conducts the case against a defendant in court" },
+                    { question: "Which word describes something 'exaggerated or increased improperly'?", options: ["Questioned", "Inflated", "Violated", "Alleged"], answer: "Inflated" },
+                    { question: "'Procurement violations' refers to illegal activities related to:", options: ["Selling company stock", "Obtaining supplies or services", "Hiring staff", "Issuing official statements"], answer: "Obtaining supplies or services" },
+                    { question: "What does a 'terminal project' typically involve?", options: ["A final audit report", "A facility at the end of a transport line", "A new software launch", "A series of mergers"], answer: "A facility at the end of a transport line" },
+                    { question: "Which word means 'to ask questions of a person, often officially'?", options: ["To raid", "To allege", "To question", "To violate"], answer: "To question" },
+                    { question: "If a company 'faces allegations', it means they are:", options: ["Winning an award", "Paying a fine", "Dealing with unproven claims", "Closing down"], answer: "Dealing with unproven claims" },
+                    { question: "The term 'former chairman' refers to someone who:", options: ["Is the current head of the board", "Used to be the head of the board", "Is the founder of the company", "Is an entry-level manager"], answer: "Used to be the head of the board" },
+                    { question: "What is the primary function of a 'construction cost'?", options: ["To define profit margins", "To measure the expense of building", "To pay government taxes", "To market the project"], answer: "To measure the expense of building" },
+                    { question: "What is a 'violation'?", options: ["A successful negotiation", "An agreement reached", "An act that breaks a rule or law", "A formal request"], answer: "An act that breaks a rule or law" },
+                    { question: "The phrase 'over 10 billion' implies an amount that is:", options: ["Exactly 10 billion", "Less than 10 billion", "More than 10 billion", "Approximately 10 million"], answer: "More than 10 billion" }
+                ],
+                quizReading: [
+                    { question: "What kind of energy project is facing corruption allegations?", options: ["Solar farm", "Nuclear power plant", "Liquefied natural gas (LNG) terminal", "Oil refinery"], answer: "Liquefied natural gas (LNG) terminal" },
+                    { question: "What is the claimed amount of cost inflation?", options: ["Over 10 million NT dollars", "Over 10 billion NT dollars", "Exactly 13 billion NT dollars", "Over 100 billion NT dollars"], answer: "Over 10 billion NT dollars" },
+                    { question: "Which two major organizations were involved in the raids?", options: ["ASUS and Coupang", "NHS and CECI", "CPC Corporation and CECI", "Taiwan Water and CPC"], answer: "CPC Corporation and CECI" },
+                    { question: "What specifically are the authorities investigating?", options: ["Tax evasion", "Bribery and procurement violations", "Illegal construction", "Data breach"], answer: "Bribery and procurement violations" },
+                    { question: "Who was one of the people questioned by authorities?", options: ["Peter Kyle", "Anthony Albanese", "Qian Li", "Former CECI chairman Shih Hsiang-chung"], answer: "Former CECI chairman Shih Hsiang-chung" }
+                ]
+            },
+            {
+                id: 'asus_residency',
+                title: 'ASUS Employee Residency Revoked (華碩員工居留)',
+                color: 'bg-indigo-600',
+                article: `Taiwan has revoked the residency of Qian Li, a Chinese spouse employed by ASUS, after authorities ruled that her pro-PLA Facebook page promoting forceful unification posed risks to national security and social stability. Her household registration, residency, and related rights such as work and national health insurance have been cancelled. ASUS has not responded to questions about her employment status.`,
+                vocabulary: [
+                    { word: "revoked", definition: "撤銷 (v.)", example: "The permit was revoked due to safety concerns." },
+                    { word: "residency", definition: "居留權 (n.)", example: "She applied for permanent residency." },
+                    { word: "Chinese spouse", definition: "中國籍配偶 (n.)", example: "The new policy affects Chinese spouses." },
+                    { word: "pro-PLA", definition: "親解放軍的 (adj.)", example: "The article discussed a pro-PLA stance." },
+                    { word: "forceful unification", definition: "武力統一 (phr.)", example: "Taiwan opposes forceful unification." },
+                    { word: "posed risks", definition: "構成風險 (phr.)", example: "The outdated system posed risks to data security." },
+                    { word: "national security", definition: "國家安全 (n.)", example: "The action was taken to protect national security." },
+                    { word: "household registration", definition: "戶籍 (n.)", example: "Her household registration was cancelled." },
+                    { word: "cancelled", definition: "被取消 (v.)", example: "All related rights have been cancelled." },
+                    { word: "employment status", definition: "僱用狀態 (phr.)", example: "ASUS has not commented on her employment status." },
+                    { word: "ruled that", definition: "裁定... (phr.)", example: "The court ruled that the contract was invalid." },
+                    { word: "promoting", definition: "宣傳，推廣 (v.)", example: "The campaign is promoting healthy eating habits." },
+                    { word: "social stability", definition: "社會穩定 (phr.)", example: "The government seeks to maintain social stability." },
+                    { word: "related rights", definition: "相關權利 (phr.)", example: "Loss of residency includes loss of related rights." },
+                    { word: "national health insurance", definition: "國民健康保險 (n.)", example: "She is covered under the national health insurance." },
+                    { word: "ASUS", definition: "華碩 (abbr.)", example: "ASUS is a major Taiwanese tech company." },
+                    { word: "authorities", definition: "當局，官方 (n.)", example: "The authorities issued a travel warning." },
+                    { word: "residency of", definition: "的居留權 (phr.)", example: "The revocation targeted the residency of the foreign worker." },
+                    { word: "posed risks to", definition: "對...構成風險 (phr.)", example: "His actions posed risks to public safety." },
+                    { word: "not responded to", definition: "未回應 (phr.)", example: "The media requests were not responded to by the company." },
+                    { word: "revocation order", definition: "撤銷命令 (n.)", example: "The revocation order was issued immediately." }
+                ],
+                quizVocab: [
+                    { question: "To 'revoke' a right means to:", options: ["grant it", "officially cancel or withdraw it", "transfer it", "confirm it"], answer: "officially cancel or withdraw it" },
+                    { question: "What does 'residency' refer to?", options: ["citizenship", "the right to live in a place legally", "military service", "employment"], answer: "the right to live in a place legally" },
+                    { question: "A 'spouse' is a:", options: ["child", "relative", "parent", "husband or wife"], answer: "husband or wife" },
+                    { question: "What is 'national security'?", options: ["local police presence", "the safety and stability of a nation", "financial stability", "environmental protection"], answer: "the safety and stability of a nation" },
+                    { question: "The phrase 'posed risks' means it:", options: ["avoided dangers", "presented potential dangers", "solved problems", "received approval"], answer: "presented potential dangers" },
+                    { question: "To have one's 'residency' cancelled means they lose the right to:", options: ["Own a car", "Live legally in the country", "Change jobs", "Get a passport"], answer: "Live legally in the country" },
+                    { question: "Which abbreviation refers to the Chinese military?", options: ["ASUS", "CECI", "PLA", "CPC"], answer: "PLA" },
+                    { question: "The phrase 'forceful unification' implies a union achieved by:", options: ["Economic diplomacy", "Peaceful negotiation", "Military means or coercion", "Cultural exchange"], answer: "Military means or coercion" },
+                    { question: "What is the primary purpose of 'national health insurance'?", options: ["To fund the military", "To provide retirement savings", "To provide healthcare coverage for citizens", "To pay for housing subsidies"], answer: "To provide healthcare coverage for citizens" },
+                    { question: "What does 'revoked' mean?", options: ["Reissued", "Formally withdrawn or cancelled", "Temporarily suspended", "Confirmed and validated"], answer: "Formally withdrawn or cancelled" },
+                    { question: "A 'Chinese spouse' is a wife or husband who is a:", options: ["Long-term resident", "Chinese national", "Taiwanese citizen", "Foreign diplomat"], answer: "Chinese national" },
+                    { question: "What is 'household registration'?", options: ["A banking record", "An official record of a person's residence", "A driving license", "A social media profile"], answer: "An official record of a person's residence" },
+                    { question: "The term 'pro-PLA' indicates support for:", options: ["Pro-democracy movements", "The People's Liberation Army", "International trade", "Environmental regulation"], answer: "The People's Liberation Army" },
+                    { question: "What is 'employment status'?", options: ["A list of job requirements", "The state of being employed, self-employed, or unemployed", "A salary negotiation process", "A job title"], answer: "The state of being employed, self-employed, or unemployed" },
+                    { question: "The word 'promoting' in this context means:", options: ["Discouraging or preventing", "Officially criticizing", "Hiding or obscuring", "Advertising or encouraging a cause"], answer: "Advertising or encouraging a cause" }
+                ],
+                quizReading: [
+                    { question: "Who had her residency revoked?", options: ["Jodie Haydon", "Qian Li", "An unnamed CPC employee", "The Coupang CEO"], answer: "Qian Li" },
+                    { question: "What was the person's employment status at the time of the article?", options: ["She was a retired professor", "She was employed by ASUS", "She was working for the NHS", "She was a civil celebrant"], answer: "She was employed by ASUS" },
+                    { question: "The decision was made because her social media page promoted what?", options: ["Democracy and freedom", "Environmental protection", "Forceful unification", "US-UK trade deals"], answer: "Forceful unification" },
+                    { question: "Which rights were cancelled along with her residency?", options: ["Right to vote only", "Right to own property only", "Work and national health insurance", "Right to travel"], answer: "Work and national health insurance" },
+                    { question: "Did ASUS respond to questions about her employment status?", options: ["Yes, they confirmed she was fired", "Yes, they confirmed she was promoted", "No, they have not responded", "Yes, they issued a formal apology"], answer: "No, they have not responded" }
+                ]
+            },
+            {
+                id: 'us_uk_trade',
+                title: 'US-UK Zero Tariff Drug Deal (美英藥品關稅)',
+                color: 'bg-green-600',
+                article: `The UK and the US have agreed on a deal to keep tariffs on UK pharmaceutical shipments into America at zero. Under the agreement, the UK will pay more for medicine through the NHS in return for a guarantee that US import taxes on pharmaceuticals made in the UK will remain at zero for three years. This is the first time the amount the NHS pays for medicines is set to increase in more than 20 years. The deal comes after US President Donald Trump threatened to raise tariffs to as high as 100% on branded drug imports. Business and Trade Secretary Peter Kyle said the deal guarantees that UK pharmaceutical exports worth at least 5 billion pounds a year will enter the US tariff-free, protecting jobs, boosting investment, and paving the way for the UK to become a global hub for life sciences.`,
+                vocabulary: [
+                    { word: "tariffs", definition: "關稅 (n.)", example: "The country eliminated tariffs on imported vehicles." },
+                    { word: "pharmaceutical shipments", definition: "藥品運輸 (phr.)", example: "The company handles all pharmaceutical shipments." },
+                    { word: "National Health Service (NHS)", definition: "英國國民保健署 (n.)", example: "The NHS provides public healthcare in the UK." },
+                    { word: "import taxes", definition: "進口稅 (n.)", example: "The agreement eliminates import taxes." },
+                    { word: "branded drug imports", definition: "品牌藥品進口 (phr.)", example: "The threat was to raise tariffs on branded drug imports." },
+                    { word: "exports", definition: "出口品 (n.)", example: "The deal protects UK pharmaceutical exports." },
+                    { word: "tariff-free", definition: "免關稅的 (adj.)", example: "The goods entered the country tariff-free." },
+                    { word: "boosting investment", definition: "促進投資 (phr.)", example: "The new policy is aimed at boosting investment." },
+                    { word: "paving the way for", definition: "為...鋪路 (phr.)", example: "Innovation is paving the way for change." },
+                    { word: "global hub", definition: "全球樞紐 (n.)", example: "The city wants to become a global hub for finance." },
+                    { word: "agreed on a deal", definition: "達成協議 (phr.)", example: "The two countries finally agreed on a deal." },
+                    { word: "keep tariffs at zero", definition: "維持零關稅 (phr.)", example: "The goal is to keep tariffs at zero for key goods." },
+                    { word: "guarantee", definition: "保證 (n.)", example: "The warranty acts as a guarantee against defects." },
+                    { word: "import taxes on", definition: "對...的進口稅 (phr.)", example: "They lifted the import taxes on fresh produce." },
+                    { word: "set to increase", definition: "即將增加 (phr.)", example: "The price is set to increase next quarter." },
+                    { word: "threatened to raise", definition: "威脅要提高 (phr.)", example: "The union threatened to raise tariffs on luxury cars." },
+                    { word: "worth at least", definition: "價值至少 (phr.)", example: "The painting is worth at least one million dollars." },
+                    { word: "life sciences", definition: "生命科學 (n.)", example: "Biotechnology is a field within life sciences." },
+                    { word: "reliance on", definition: "對...的依賴 (phr.)", example: "The country's reliance on oil is decreasing." },
+                    { word: "overseas-made", definition: "海外製造的 (adj.)", example: "They prefer locally-made goods over overseas-made ones." },
+                    { word: "manufacturing", definition: "製造業 (n.)", example: "The deal aims to increase domestic manufacturing." }
+                ],
+                quizVocab: [
+                    { question: "What is the primary function of the 'NHS'?", options: ["South Korean retail", "Taiwanese construction", "UK public healthcare", "Australian government"], answer: "UK public healthcare" },
+                    { question: "If a product is shipped 'tariff-free', it means it enters without:", options: ["tax", "inspection", "insurance", "delivery"], answer: "tax" },
+                    { question: "What are 'pharmaceuticals'?", options: ["chemicals for cleaning", "agricultural goods", "medicines and drugs", "electronics"], answer: "medicines and drugs" },
+                    { question: "To 'boost investment' means to:", options: ["reduce investment", "encourage and increase investment", "block investment", "invest abroad"], answer: "encourage and increase investment" },
+                    { question: "The word 'exports' refers to goods that are:", options: ["bought locally", "manufactured in the US", "sent out to another country for sale", "consumed domestically"], answer: "sent out to another country for sale" },
+                    { question: "What is a 'tariff'?", options: ["A type of subsidy", "A tax or duty to be paid on imports or exports", "A foreign currency exchange rate", "A trade agreement"], answer: "A tax or duty to be paid on imports or exports" },
+                    { question: "What does 'NHS' stand for?", options: ["National Health Scheme", "New Hospital System", "National Health Service", "Northern Hemisphere Study"], answer: "National Health Service" },
+                    { question: "If a product is 'tariff-free', it means there are:", options: ["High import taxes applied", "Only temporary tariffs", "No import taxes applied", "Tariffs only on exports"], answer: "No import taxes applied" },
+                    { question: "'Paving the way for' means:", options: ["Blocking progress", "Creating an obstacle", "Creating the conditions for something to happen", "Ending a process"], answer: "Creating the conditions for something to happen" },
+                    { question: "What are 'pharmaceutical shipments'?", options: ["Deliveries of medical drugs", "Packages of electronic components", "Containers of raw materials", "Boxes of imported food"], answer: "Deliveries of medical drugs" },
+                    { question: "What is a 'global hub'?", options: ["A regional distribution center", "A central point of activity and connection worldwide", "A large, isolated warehouse", "A small local market"], answer: "A central point of activity and connection worldwide" },
+                    { question: "The term 'import taxes' refers to:", options: ["Duties levied on goods sent out of a country", "Duties levied on goods brought into a country", "Income tax deductions", "Sales tax on domestic products"], answer: "Duties levied on goods brought into a country" },
+                    { question: "'Branded drug imports' are:", options: ["Generic, unlabelled medicines", "Traditional herbal remedies", "Medicines brought in under a specific trademark", "Drugs manufactured only for domestic use"], answer: "Medicines brought in under a specific trademark" },
+                    { question: "What does 'boosting investment' achieve?", options: ["Decreasing capital spending", "Increasing capital spending", "Halting all economic activity", "Transferring debt"], answer: "Increasing capital spending" },
+                    { question: "The phrase 'set to increase' suggests the price is:", options: ["Stable and unchanging", "Expected to drop soon", "Scheduled to rise in the future", "Already at its peak"], answer: "Scheduled to rise in the future" }
+                ],
+                quizReading: [
+                    { question: "What is the main subject of the deal between the US and the UK?", options: ["Agricultural tariffs", "Zero tariffs on pharmaceutical shipments", "Immigration policies", "Financial services"], answer: "Zero tariffs on pharmaceutical shipments" },
+                    { question: "What will the UK have to do in return for the zero tariff guarantee?", options: ["Stop selling all US branded drugs", "Pay more for medicine through the NHS", "Allow US troops to be stationed there", "Increase its own import taxes"], answer: "Pay more for medicine through the NHS" },
+                    { question: "How long is the zero tariff guarantee set to last?", options: ["Five years", "Indefinitely", "One year", "Three years"], answer: "Three years" },
+                    { question: "What was the maximum tariff amount threatened by the US President?", options: ["10%", "50%", "100%", "200%"], answer: "100%" },
+                    { question: "The deal is expected to help the UK become a global hub for what?", options: ["Financial trading", "Life sciences", "Automotive manufacturing", "Art and culture"], answer: "Life sciences" }
+                ]
+            },
+            {
+                id: 'coupang_breach',
+                title: 'Coupang Data Breach Impacts Millions (酷澎個資外洩)',
+                color: 'bg-yellow-600',
+                article: `South Korea's largest online retailer Coupang has apologized for a massive data breach potentially involving nearly 34 million local customer accounts. The country's internet authorities said it is investigating the breach and that details from the millions of accounts have likely been exposed. The e-commerce platform is often described as South Korea's equivalent of Amazon. The breach marks the latest in the series of data leaks at major firms in the country. The exposed data was limited to names, email addresses, phone numbers, shipping addresses, and some order histories. No credit card information or login credentials were leaked.`,
+                vocabulary: [
+                    { word: "online retailer", definition: "線上零售商 (phr.)", example: "Amazon is the world's largest online retailer." },
+                    { word: "apologized for", definition: "為...道歉 (phr.)", example: "The company apologized for the service disruption." },
+                    { word: "massive data breach", definition: "大規模資料外洩 (phr.)", example: "A massive data breach affected the social platform." },
+                    { word: "potentially involving", definition: "潛在涉及 (phr.)", example: "The incident is potentially involving thousands of users." },
+                    { word: "customer accounts", definition: "客戶帳戶 (phr.)", example: "The breach exposed 34 million customer accounts." },
+                    { word: "exposed", definition: "被暴露 (v.)", example: "Personal data was exposed to the public." },
+                    { word: "e-commerce platform", definition: "電子商務平台 (phr.)", example: "Coupang is an e-commerce platform." },
+                    { word: "equivalent of", definition: "相當於 (phr.)", example: "This is the Korean equivalent of the US system." },
+                    { word: "series of", definition: "一連串的 (phr.)", example: "The firm has suffered a series of leaks." },
+                    { word: "limited to", definition: "僅限於 (phr.)", example: "The damage was limited to the ground floor." },
+                    { word: "shipping addresses", definition: "運送地址 (phr.)", example: "The thieves only gained access to shipping addresses." },
+                    { word: "login credentials", definition: "登入憑證 (phr.)", example: "It is important to protect your login credentials." },
+                    { word: "local customer accounts", definition: "當地客戶帳戶 (phr.)", example: "The breach only affected local customer accounts." },
+                    { word: "internet authorities", definition: "網際網路主管機關 (phr.)", example: "The internet authorities started an official inquiry." },
+                    { word: "investigating the breach", definition: "調查這次外洩事件 (phr.)", example: "Police are investigating the breach thoroughly." },
+                    { word: "likely been exposed", definition: "很可能被暴露 (phr.)", example: "Sensitive information has likely been exposed." },
+                    { word: "South Korea's largest", definition: "韓國最大的 (phr.)", example: "They are South Korea's largest manufacturer." },
+                    { word: "latest in the series", definition: "系列中的最新一起 (phr.)", example: "This is the latest in the series of unfortunate events." },
+                    { word: "order histories", definition: "訂單紀錄 (n.)", example: "The exposed data included some order histories." },
+                    { word: "no credit card information", definition: "沒有信用卡資訊 (phr.)", example: "Fortunately, no credit card information was leaked." },
+                    { word: "cybersecurity", definition: "網路安全 (n.)", example: "The company needs to improve its cybersecurity." }
+                ],
+                quizVocab: [
+                    { question: "What is an 'online retailer'?", options: ["A physical store", "A technology manufacturer", "A company that sells products via the internet", "A shipping company"], answer: "A company that sells products via the internet" },
+                    { question: "The word 'massive' is closest in meaning to:", options: ["small", "average", "huge", "temporary"], answer: "huge" },
+                    { question: "What does 'e-commerce' stand for?", options: ["Easy commerce", "Electronic commerce", "Excellent command", "Engaging community"], answer: "Electronic commerce" },
+                    { question: "If data was 'limited to' certain fields, it means it was:", options: ["restricted only to those fields", "available to everyone", "fully encrypted", "lost completely"], answer: "restricted only to those fields" },
+                    { question: "What are 'login credentials'?", options: ["delivery tracking numbers", "username and password", "product details", "customer names"], answer: "username and password" },
+                    { question: "Coupang is described as South Korea's 'equivalent of' which American company?", options: ["Target", "Walmart", "eBay", "Amazon"], answer: "Amazon" },
+                    { question: "What is the meaning of 'massive'?", options: ["Minor", "Extremely large or extensive", "Confidential", "Localized"], answer: "Extremely large or extensive" },
+                    { question: "A 'data breach' is an incident where:", options: ["A software update is released", "Unauthorized access to sensitive data occurs", "A server is upgraded", "A new customer is registered"], answer: "Unauthorized access to sensitive data occurs" },
+                    { question: "What information was NOT leaked?", options: ["Names", "Phone numbers", "Email addresses", "Credit card information or login credentials"], answer: "Credit card information or login credentials" },
+                    { question: "Which phrase means 'being restricted to only'?", options: ["Open to all", "Limited to", "Exceeding the limit", "Excluding from"], answer: "Limited to" },
+                    { question: "If data was 'exposed', it was:", options: ["Encrypted", "Made vulnerable or disclosed", "Deleted permanently", "Protected by a firewall"], answer: "Made vulnerable or disclosed" },
+                    { question: "What are 'customer accounts'?", options: ["Company financial statements", "Records of users held by a business", "Job application forms", "Employee expense reports"], answer: "Records of users held by a business" },
+                    { question: "The term 'e-commerce platform' refers to a system for:", options: ["Printing newspapers", "Managing logistics only", "Buying and selling goods electronically", "Manufacturing products"], answer: "Buying and selling goods electronically" },
+                    { question: "The company 'apologized for' the breach, meaning they expressed:", options: ["Relief", "Regret", "Excitement", "Confusion"], answer: "Regret" },
+                    { question: "The exposed data included 'order histories', which are:", options: ["Future purchases", "Past records of what customers bought", "Sales targets", "Product reviews"], answer: "Past records of what customers bought" }
+                ],
+                quizReading: [
+                    { question: "Which company experienced the massive data breach?", options: ["CPC Corporation", "ASUS", "Coupang", "NHS"], answer: "Coupang" },
+                    { question: "How many customer accounts were potentially involved in the breach?", options: ["Nearly 34 million", "Exactly 13 million", "5 billion", "124 million"], answer: "Nearly 34 million" },
+                    { question: "What is Coupang described as the equivalent of in South Korea?", options: ["The CPC", "The NHS", "Amazon", "The federal government"], answer: "Amazon" },
+                    { question: "Which piece of sensitive information was NOT leaked?", options: ["Names", "Email addresses", "Shipping addresses", "Credit card information"], answer: "Credit card information" },
+                    { question: "What were some of the pieces of data that WERE exposed?", options: ["Login credentials", "Credit card info and birth dates", "Names and phone numbers", "Home addresses of executives"], answer: "Names and phone numbers" }
+                ]
+            },
+            {
+                id: 'australian_pm',
+                title: 'Australian PM Albanese Gets Married (澳洲總理婚訊)',
+                color: 'bg-purple-600',
+                article: `Australian Prime Minister Anthony Albanese married his partner Jodie Haydon in a secretive and intimate ceremony on Saturday at his official residence in Canberra. Albanese is the first prime minister to marry while in office in the 124-year history of the Australian federal government. The couple were married by a civil celebrant before around 60 guests. There was no media reporting of the event until after it had occurred. The pair wrote their own vows. Their dog Toto was the ring bearer and Haydon's 5-year-old niece Ella was the flower girl. Albanese, who is divorced with an adult son, proposed to Haydon at the lodge on Valentine's Day last year.`,
+                vocabulary: [
+                    { word: "Prime Minister (PM)", definition: "總理，首相 (n.)", example: "The PM addressed the nation on TV." },
+                    { word: "intimate ceremony", definition: "私密的儀式 (phr.)", example: "They chose an intimate ceremony with close family." },
+                    { word: "official residence", definition: "官邸 (n.)", example: "The wedding was held at the official residence." },
+                    { word: "while in office", definition: "在任職期間 (phr.)", example: "He achieved this milestone while in office." },
+                    { word: "federal government", definition: "聯邦政府 (n.)", example: "The Australian federal government has a long history." },
+                    { word: "civil celebrant", definition: "民間證婚人 (n.)", example: "A civil celebrant performed the non-religious marriage." },
+                    { word: "media reporting", definition: "媒體報導 (phr.)", example: "There was a complete blackout of media reporting beforehand." },
+                    { word: "wrote their own vows", definition: "寫下自己的誓詞 (phr.)", example: "The couple wrote their own vows for the wedding." },
+                    { word: "ring bearer", definition: "戒童 (n.)", example: "The small boy served as the ring bearer." },
+                    { word: "flower girl", definition: "花童 (n.)", example: "The flower girl scattered petals down the aisle." },
+                    { word: "divorced", definition: "離婚的 (adj.)", example: "He is divorced with an adult son." },
+                    { word: "proposed to", definition: "向...求婚 (phr.)", example: "He proposed to her on Valentine's Day." },
+                    { word: "Anthony Albanese", definition: "安東尼·艾班尼斯 (n.)", example: "Anthony Albanese is the current Australian PM." },
+                    { word: "Jodie Haydon", definition: "茱蒂·海登 (n.)", example: "Jodie Haydon is the PM's new spouse." },
+                    { word: "secretive", definition: "秘密的 (adj.)", example: "The planning was very secretive." },
+                    { word: "in the 124-year history", definition: "在124年的歷史中 (phr.)", example: "This event is unique in the 124-year history of the league." },
+                    { word: "before around 60 guests", definition: "在大約60位賓客前 (phr.)", example: "The speech was given before around 60 guests." },
+                    { word: "occurred", definition: "發生 (v.)", example: "The wedding occurred on Saturday." },
+                    { word: "adult son", definition: "成年兒子 (n.)", example: "He attended the wedding with his adult son." },
+                    { word: "Valentine's Day", definition: "情人節 (n.)", example: "The proposal took place on Valentine's Day." },
+                    { word: "landmark occasion", definition: "具里程碑意義的場合 (phr.)", example: "The signing of the treaty was a landmark occasion." }
+                ],
+                quizVocab: [
+                    { question: "What is the head of the Australian federal government called?", options: ["President", "King", "Prime Minister", "Governor"], answer: "Prime Minister" },
+                    { question: "An 'intimate ceremony' is one that is:", options: ["Public and large", "Small, private, and personal", "Extremely formal", "Televised live"], answer: "Small, private, and personal" },
+                    { question: "What is an 'official residence'?", options: ["A temporary hotel", "The place where a government leader lives", "A wedding chapel", "A foreign embassy"], answer: "The place where a government leader lives" },
+                    { question: "'While in office' means:", options: ["after leaving the job", "during the time of holding a particular public position", "before starting the job", "on a personal vacation"], answer: "during the time of holding a particular public position" },
+                    { question: "A 'civil celebrant' is typically a person who:", options: ["is a priest or religious leader", "sings at the wedding", "is a non-religious official authorized to marry people", "is the maid of honor"], answer: "is a non-religious official authorized to marry people" },
+                    { question: "What are 'vows'?", options: ["gifts exchanged at a wedding", "solemn promises made in marriage", "wedding invitations", "traditional dances"], answer: "solemn promises made in marriage" },
+                    { question: "The 'ring bearer' and 'flower girl' are roles often performed by:", options: ["Senior politicians", "Adult family members", "Children", "Wedding planners"], answer: "Children" },
+                    { question: "To be 'divorced' means:", options: ["To be separated but still married", "To be legally ended a marriage", "To be engaged to be married", "To be single and never married"], answer: "To be legally ended a marriage" },
+                    { question: "What does 'proposed to' mean?", options: ["Gave a gift to someone", "Asked someone to marry them", "Introduced someone to family", "Traveled with someone"], answer: "Asked someone to marry them" },
+                    { question: "'Media reporting' refers to:", options: ["Coverage by news outlets", "Government internal memos", "Personal diary entries", "Academic journals"], answer: "Coverage by news outlets" },
+                    { question: "The word 'secretive' suggests the event was kept:", options: ["Loud and public", "Private and unannounced", "Highly formal", "Extremely disorganized"], answer: "Private and unannounced" },
+                    { question: "What is a 'landmark occasion'?", options: ["An ordinary, everyday event", "A temporary distraction", "A minor inconvenience", "A very important, historic event"], answer: "A very important, historic event" },
+                    { question: "The wedding 'occurred' on Saturday, meaning it:", options: ["Was canceled", "Was postponed", "Took place", "Was announced"], answer: "Took place" },
+                    { question: "An 'adult son' is a male offspring who is:", options: ["Very young", "Legally recognized as mature", "Still in school", "The youngest child"], answer: "Legally recognized as mature" },
+                    { question: "The term 'federal government' refers to the governing body of a:", options: ["Single city", "Small town council", "Country composed of states or provinces", "Private corporation"], answer: "Country composed of states or provinces" }
+                ],
+                quizReading: [
+                    { question: "Who is the Australian Prime Minister who got married?", options: ["Donald Trump", "Peter Kyle", "Shih Hsiang-chung", "Anthony Albanese"], answer: "Anthony Albanese" },
+                    { question: "Where did the wedding ceremony take place?", options: ["At a church in Sydney", "At his official residence in Canberra", "At the Coupang headquarters", "In the UK"], answer: "At his official residence in Canberra" },
+                    { question: "Why is this marriage historically significant for the Australian federal government?", options: ["It was the largest wedding ever held", "It was the first time a PM married while in office", "The bride was a foreign national", "The media covered it live"], answer: "It was the first time a PM married while in office" },
+                    { question: "Who served as the ring bearer?", options: ["The adult son", "A civil celebrant", "His dog Toto", "Jodie Haydon's niece"], answer: "His dog Toto" },
+                    { question: "How many guests attended the ceremony?", options: ["Over 1000", "Around 60", "Exactly 13", "Only the family"], answer: "Around 60" }
+                ]
+            }
+        ];
+
+        // --- Core Application Functions ---
+        // Ensure 5 distinct topics are used as requested.
+        const CPC_LNG_TOPIC = NEWS_DATA[0];
+
+        const FINAL_NEWS_DATA = [
+            {...CPC_LNG_TOPIC, title: '1. CPC LNG Project Corruption Probe'},
+            {...NEWS_DATA[1], title: '2. ASUS Employee Residency Revoked'},
+            {...NEWS_DATA[2], title: '3. US-UK Zero Tariff Drug Deal'},
+            {...NEWS_DATA[3], title: '4. Coupang Data Breach Impacts Millions'},
+            {...NEWS_DATA[4], title: '5. Australian PM Albanese Gets Married'}
+        ];
+
+        let activeTopic = FINAL_NEWS_DATA[0].id;
+        let activeSubTab = 'words';
+
+        // Helper to shuffle an array (needed for options in quiz)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // 1. Navigation Logic
+        function changeTopic(topicId) {
+            activeTopic = topicId;
+            activeSubTab = 'words'; // Reset to Word Bank when changing topics
+            renderTabs();
+            renderContent();
+        }
+
+        function changeSubTab(tab) {
+            activeSubTab = tab;
+            renderContent();
+        }
+
+        // 2. Rendering the Main Navigation Tabs (Topics)
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = FINAL_NEWS_DATA.map(topic => {
+                const isActive = topic.id === activeTopic;
+                const baseClasses = "flex-shrink-0 px-4 py-2 text-sm font-semibold rounded-lg transition duration-200 border border-gray-300 cursor-pointer whitespace-nowrap";
+                const activeClasses = `text-white ${topic.color} main-tab-active`;
+                const inactiveClasses = "text-gray-700 bg-white hover:bg-gray-100";
+                
+                return `
+                    <div class="${baseClasses} ${isActive ? activeClasses : inactiveClasses}" 
+                         onclick="changeTopic('${topic.id}')">
+                        ${topic.title}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 3. Rendering the Sub Navigation Tabs (Word Bank, Quizzes)
+        function renderSubTabs(topic) {
+            const tabs = [
+                { id: 'words', label: '1. Word Bank & Phrases (單字本)' },
+                { id: 'vocab_quiz', label: '2. Vocabulary Quiz (單字測驗)' },
+                { id: 'reading_quiz', label: '3. Reading Quiz (閱讀測驗)' }
+            ];
+            
+            return `
+                <div class="flex border-b border-gray-200 mb-6 sticky top-0 bg-white pt-4 z-20">
+                    ${tabs.map(tab => `
+                        <div class="px-4 py-2 -mb-px text-lg cursor-pointer transition duration-150 ease-in-out hover:text-blue-700 
+                            ${activeSubTab === tab.id ? 'sub-tab-active' : 'text-gray-500'}"
+                            onclick="changeSubTab('${tab.id}')">
+                            ${tab.label}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // 4. Content Rendering (Based on activeTopic and activeSubTab)
+        function renderContent() {
+            const topic = FINAL_NEWS_DATA.find(t => t.id === activeTopic);
+            if (!topic) {
+                document.getElementById('app-content').innerHTML = '<div class="text-center text-red-500">Error: Topic not found.</div>';
+                return;
+            }
+
+            // Extract primary color for article border
+            const articleBorderColor = topic.color.replace('bg-', 'border-').replace('-600', '-400');
+
+            let contentHTML = `
+                <div class="text-gray-700">
+                    <h2 class="text-3xl font-bold mb-4">${topic.title.split('. ')[1] || topic.title}</h2>
+                    <div class="mb-6 text-gray-700 border-l-4 ${articleBorderColor} pl-4 italic bg-gray-50 p-3 rounded-lg">
+                        <p class="font-medium mb-2 text-gray-800">News Article:</p>
+                        ${topic.article}
+                    </div>
+                    ${renderSubTabs(topic)}
+                    <div id="sub-content">
+                        ${getTabContent(topic, activeSubTab)}
+                    </div>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = contentHTML;
+
+            // Re-initialize quiz logic after rendering quiz content
+            if (activeSubTab === 'vocab_quiz') {
+                initQuiz(topic.quizVocab, 'vocab-quiz');
+            } else if (activeSubTab === 'reading_quiz') {
+                initQuiz(topic.quizReading, 'reading-quiz');
+            }
+        }
+
+        // 5. Getting Content for the specific Sub-Tab
+        function getTabContent(topic, tabId) {
+            switch (tabId) {
+                case 'words':
+                    return renderWordBank(topic);
+                case 'vocab_quiz':
+                    return renderQuizTemplate('vocab-quiz', topic.quizVocab.length);
+                case 'reading_quiz':
+                    return renderQuizTemplate('reading-quiz', topic.quizReading.length);
+                default:
+                    return '<div>Please select a study mode.</div>';
+            }
+        }
+
+        // 6. Rendering Word Bank
+        function renderWordBank(topic) {
+            return `
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 custom-scrollbar max-h-[600px] overflow-y-auto p-1">
+                    ${topic.vocabulary.map(item => `
+                        <div class="word-card bg-gray-50 p-4 rounded-xl border border-gray-200 cursor-pointer transition duration-150 hover:bg-blue-50 hover:border-blue-300"
+                            onclick="this.querySelector('.definition').classList.toggle('hidden')">
+                            <p class="text-xl font-bold text-gray-800">${item.word}</p>
+                            <p class="text-sm text-blue-600 font-semibold mt-1">${item.definition}</p>
+                            <p class="definition hidden mt-2 pt-2 border-t border-gray-300 text-sm text-gray-600">
+                                <span class="text-xs italic">Example: ${item.example}</span>
+                            </p>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="mt-6 p-4 bg-yellow-50 rounded-lg text-yellow-700 border border-yellow-200">
+                    💡 **Tip:** Click on any word card to reveal the example sentence!
+                </div>
+            `;
+        }
+
+        // 7. Rendering Quiz Template
+        function renderQuizTemplate(quizId, totalQuestions) {
+            return `
+                <!-- Quiz View -->
+                <div id="${quizId}-view" class="space-y-6">
+                    <div id="${quizId}-question-display" class="bg-white p-6 rounded-xl border-2 border-indigo-200 shadow-lg">
+                        <p id="${quizId}-question-number" class="text-sm font-semibold text-indigo-500 mb-2">Question 1 / ${totalQuestions}</p>
+                        <p id="${quizId}-question-text" class="text-xl font-medium text-gray-800">Loading question...</p>
+                    </div>
+                    
+                    <div id="${quizId}-options" class="space-y-3">
+                        <!-- Options will be dynamically inserted here -->
+                    </div>
+
+                    <div id="${quizId}-feedback" class="hidden p-3 rounded-lg text-sm font-medium transition duration-200 border-l-4"></div>
+
+                    <div class="flex justify-center items-center pt-4">
+                        <button id="${quizId}-submit" 
+                                class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition duration-200 shadow-md transform hover:scale-[1.01]"
+                                onclick="submitQuizAnswer('${quizId}')">
+                            Check Answer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary View -->
+                <div id="${quizId}-summary" class="hidden text-center p-10 bg-blue-50 rounded-xl border-4 border-blue-400">
+                    <h3 class="text-3xl font-extrabold text-blue-700 mb-4">Quiz Complete! 🎉</h3>
+                    <p class="text-xl text-gray-700">Your final score is: <span id="${quizId}-final-score" class="text-4xl font-black text-green-600">0</span> / <span id="${quizId}-total-questions" class="text-2xl font-bold">${totalQuestions}</span></p>
+                    <button class="mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-200 shadow-lg"
+                            onclick="initQuiz(FINAL_NEWS_DATA.find(t => t.id === activeTopic).${quizId.includes('vocab') ? 'quizVocab' : 'quizReading'}, '${quizId}')">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+        
+        // --- Quiz Logic (Shared State and Functions) ---
+        let currentQuiz = {};
+
+        function initQuiz(questions, quizId) {
+            currentQuiz[quizId] = {
+                questions: shuffleArray([...questions]), // Use a shuffled copy
+                currentQIndex: 0,
+                score: 0,
+                selectedOption: null
+            };
+            
+            // Setup DOM references (needs to be done every time the content is rendered)
+            const quizState = currentQuiz[quizId];
+            quizState.view = document.getElementById(`${quizId}-view`);
+            quizState.summary = document.getElementById(`${quizId}-summary`);
+            quizState.questionNum = document.getElementById(`${quizId}-question-number`);
+            quizState.questionText = document.getElementById(`${quizId}-question-text`);
+            quizState.optionsContainer = document.getElementById(`${quizId}-options`);
+            quizState.feedback = document.getElementById(`${quizId}-feedback`);
+            quizState.submitButton = document.getElementById(`${quizId}-submit`);
+            quizState.finalScore = document.getElementById(`${quizId}-final-score`);
+            quizState.totalQuestions = document.getElementById(`${quizId}-total-questions`);
+
+            // Reset views and display first question
+            quizState.view.classList.remove('hidden');
+            quizState.summary.classList.add('hidden');
+            quizState.feedback.classList.add('hidden');
+            
+            displayQuestion(quizId);
+        }
+
+        function displayQuestion(quizId) {
+            const quizState = currentQuiz[quizId];
+            if (!quizState.questions || quizState.currentQIndex >= quizState.questions.length) {
+                showSummary(quizId);
+                return;
+            }
+
+            const currentQ = quizState.questions[quizState.currentQIndex];
+            
+            // Reset state
+            quizState.selectedOption = null;
+            quizState.feedback.classList.add('hidden');
+            quizState.submitButton.disabled = false;
+            
+            // Update question display
+            quizState.questionNum.textContent = `Question ${quizState.currentQIndex + 1} / ${quizState.questions.length}`;
+            quizState.questionText.textContent = currentQ.question;
+            
+            // Shuffle and display options
+            const shuffledOptions = shuffleArray([...currentQ.options]);
+            quizState.optionsContainer.innerHTML = shuffledOptions.map(option => `
+                <button class="option-btn w-full text-left p-4 rounded-xl border border-gray-300 bg-white hover:bg-blue-50 transition duration-150 text-gray-800 transform hover:scale-[1.005]"
+                        onclick="selectOption('${quizId}', this, '${option.replace(/'/g, "\\'")}')">
+                    ${option}
+                </button>
+            `).join('');
+
+            // Reset button text
+            quizState.submitButton.textContent = 'Check Answer';
+            quizState.submitButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            quizState.submitButton.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+            quizState.submitButton.onclick = () => submitQuizAnswer(quizId);
+        }
+
+        function selectOption(quizId, element, optionText) {
+            const quizState = currentQuiz[quizId];
+            if (quizState.submitButton.disabled) return; 
+
+            // Visual feedback for selection
+            quizState.optionsContainer.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-100', 'border-blue-500');
+            });
+            element.classList.add('bg-blue-100', 'border-blue-500');
+            
+            quizState.selectedOption = optionText;
+            quizState.feedback.classList.add('hidden'); 
+        }
+
+        function submitQuizAnswer(quizId) {
+            const quizState = currentQuiz[quizId];
+            if (quizState.selectedOption === null) {
+                quizState.feedback.textContent = '⚠️ Please select an option first.';
+                quizState.feedback.classList.remove('hidden', 'bg-red-100', 'bg-green-100');
+                quizState.feedback.classList.add('bg-yellow-100', 'text-yellow-700', 'border-yellow-400');
+                return;
+            }
+
+            quizState.submitButton.disabled = true;
+            const currentQ = quizState.questions[quizState.currentQIndex];
+            const isCorrect = quizState.selectedOption === currentQ.answer;
+
+            quizState.optionsContainer.querySelectorAll('.option-btn').forEach(btn => {
+                const isSelected = btn.textContent.trim() === quizState.selectedOption;
+                const isTheAnswer = btn.textContent.trim() === currentQ.answer;
+
+                btn.disabled = true; 
+
+                if (isTheAnswer) {
+                    btn.classList.remove('bg-blue-100');
+                    btn.classList.add('bg-green-200', 'border-green-600', 'font-bold', 'shadow-inner');
+                } else if (isSelected) {
+                    btn.classList.remove('bg-blue-100');
+                    btn.classList.add('bg-red-200', 'border-red-600', 'font-bold', 'shadow-inner');
+                }
+            });
+
+            if (isCorrect) {
+                quizState.score++;
+                quizState.feedback.textContent = '✅ Correct! Well done.';
+                quizState.feedback.classList.remove('hidden', 'bg-red-100', 'bg-yellow-100', 'text-yellow-700', 'border-red-400', 'border-yellow-400');
+                quizState.feedback.classList.add('bg-green-100', 'text-green-700', 'border-green-400');
+            } else {
+                quizState.feedback.textContent = `❌ Incorrect. The correct answer was: ${currentQ.answer}`;
+                quizState.feedback.classList.remove('hidden', 'bg-green-100', 'bg-yellow-100', 'text-green-700', 'border-green-400', 'border-yellow-400');
+                quizState.feedback.classList.add('bg-red-100', 'text-red-700', 'border-red-400');
+            }
+
+            // Change button to 'Next Question'
+            quizState.submitButton.textContent = 'Next Question';
+            quizState.submitButton.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+            quizState.submitButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            quizState.submitButton.onclick = () => {
+                quizState.currentQIndex++;
+                displayQuestion(quizId);
+            };
+        }
+
+        function showSummary(quizId) {
+            const quizState = currentQuiz[quizId];
+            quizState.view.classList.add('hidden');
+            quizState.summary.classList.remove('hidden');
+            quizState.finalScore.textContent = quizState.score;
+            quizState.totalQuestions.textContent = quizState.questions.length;
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            
+            // Expose functions globally for use in HTML event handlers
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+            window.FINAL_NEWS_DATA = FINAL_NEWS_DATA;
+        });
+    </script>
+</body>
+</html>
