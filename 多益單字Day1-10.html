@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多益單字互動練習器</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 設定字體和顏色主題 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-blue': '#10b981', // Emerald 500
+                        'secondary-gray': '#f3f4f6', // Gray 100
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 確保全螢幕高度 */
+        body { min-height: 100vh; }
+        /* 專為雙頁面佈局設計的CSS Grid */
+        #app-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr; /* 左側佔 1/3，右側佔 2/3 */
+        }
+        /* RWD 調整：在小螢幕上堆疊 */
+        @media (max-width: 768px) {
+            #app-container {
+                grid-template-columns: 1fr;
+            }
+            #left-panel {
+                border-right: none;
+                border-bottom: 4px solid #d1d5db; /* 增加分隔線 */
+            }
+        }
+    </style>
+</head>
+<body class="bg-secondary-gray font-sans">
+
+<div id="app-container" class="max-w-7xl mx-auto shadow-xl rounded-xl overflow-hidden bg-white mt-8 mb-8">
+    
+    <!-- 左頁面：單字選擇與進度追蹤 (Left Panel: Progress & List) -->
+    <div id="left-panel" class="p-6 md:p-8 bg-gray-50 border-r-4 border-gray-200">
+        <h1 class="text-2xl font-bold text-primary-blue mb-6">📚 單字學習中心</h1>
+        
+        <!-- 進度區塊 -->
+        <div class="mb-8 p-4 bg-white rounded-lg shadow-md">
+            <p class="text-sm text-gray-600 mb-2">學習進度：<span id="progress-text" class="font-semibold text-gray-800">0/50</span></p>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-primary-blue h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <p class="text-xs mt-2 text-gray-500">已掌握單字將不再出現於測驗中。</p>
+        </div>
+
+        <!-- 模式選擇 -->
+        <h2 class="text-lg font-semibold text-gray-700 mb-3">🎯 選擇練習模式</h2>
+        <div class="space-y-3 mb-6">
+            <button onclick="setMode('quiz')" id="mode-quiz" class="mode-btn w-full px-4 py-2 text-left rounded-lg transition duration-150 bg-primary-blue text-white shadow-md hover:bg-emerald-600">
+                ✅ 情境選擇題 (Quiz)
+            </button>
+            <button onclick="setMode('flashcard')" id="mode-flashcard" class="mode-btn w-full px-4 py-2 text-left rounded-lg transition duration-150 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100">
+                🧠 單字卡記憶 (Flashcard)
+            </button>
+        </div>
+
+        <!-- 日期選擇 -->
+        <h2 class="text-lg font-semibold text-gray-700 mb-3">🗓️ 選擇學習日</h2>
+        <select id="day-selector" onchange="filterWordsByDay(this.value)" class="w-full p-2 border border-gray-300 rounded-lg text-gray-700 focus:ring-primary-blue focus:border-primary-blue">
+            <option value="all">所有單字 (共 579 詞)</option>
+            <option value="1">DAY 1 (40 詞)</option>
+            <option value="2">DAY 2 (63 詞)</option>
+            <option value="3">DAY 3 (60 詞)</option>
+            <option value="4">DAY 4 (60 詞)</option>
+            <option value="5">DAY 5 (60 詞)</option>
+            <option value="6">DAY 6 (60 詞)</option>
+            <option value="7">DAY 7 (63 詞)</option>
+            <option value="8">DAY 8 (53 詞)</option>
+            <option value="9">DAY 9 (70 詞)</option>
+            <option value="10" selected>DAY 10 (50 詞)</option>
+        </select>
+
+        <!-- 單字列表預覽 (可點擊查看詳細資訊) -->
+        <h2 id="list-title" class="text-lg font-semibold text-gray-700 mt-8 mb-3">📋 DAY 10 單字列表 (50 詞)</h2>
+        <ul id="word-list" class="space-y-1 max-h-60 overflow-y-auto pr-2">
+            <!-- JavaScript 將在此處填充單字 -->
+        </ul>
+        
+    </div>
+    
+    <!-- 右頁面：互動練習區 (Right Panel: Interactive Area) -->
+    <div id="right-panel" class="p-6 md:p-10 flex flex-col justify-center min-h-[500px]">
+        
+        <!-- 歡迎畫面 -->
+        <div id="welcome-screen" class="text-center">
+            <div class="text-6xl mb-4">💡</div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">歡迎使用多益單字練習器！</h2>
+            <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                左側已載入您的單字列表。請選擇一個模式（選擇題或單字卡），開始您的學習旅程！
+            </p>
+            <button onclick="setMode('quiz')" class="px-6 py-3 bg-primary-blue text-white font-semibold rounded-xl shadow-lg hover:bg-emerald-600 transition duration-300">
+                立即開始選擇題
+            </button>
+        </div>
+
+        <!-- 練習區 (會根據模式切換內容) -->
+        <div id="practice-area" class="hidden">
+            <!-- 練習內容將在此處渲染 -->
+        </div>
+
+        <!-- 訊息/回饋框 -->
+        <div id="feedback-box" class="fixed bottom-0 left-1/2 -translate-x-1/2 p-4 mb-4 rounded-xl shadow-2xl transition-opacity duration-300 opacity-0 pointer-events-none w-11/12 max-w-md">
+            <p id="feedback-message" class="font-semibold"></p>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // 全域變數
+    const MAX_RETRIES = 3;
+    let currentMode = 'quiz'; // 'quiz' or 'flashcard'
+    let currentDayFilter = '10'; // 預設為 DAY 10
+    let wordData = []; // 經過過濾和洗牌後的單字
+    let learnedWords = new Set(); // 用於追蹤已學會的單字
+    let displayWord = null;
+    let rawWords = []; // 所有單字的原始列表
+
+    // --- 單字數據區塊：DAY 1 - DAY 10 ---
+
+    const day1Words = [
+        { word: "agreement", def: "協議；同意", pos: "(n.)", day: 1 },
+        { word: "proof", def: "證據；證明", pos: "(n.)", day: 1 },
+        { word: "belief", def: "相信；信念", pos: "(n.)", day: 1 },
+        { word: "applauded", def: "鼓掌；稱讚", pos: "(v.)", day: 1 },
+        { word: "assistance", def: "協助；幫助", pos: "(n.)", day: 1 },
+        { word: "combination", def: "結合；組合", pos: "(n.)", day: 1 },
+        { word: "delivery", def: "運送；遞送", pos: "(n.)", day: 1 },
+        { word: "instruction", def: "指示；用法說明", pos: "(n.)", day: 1 },
+        { word: "distribution", def: "分配；分銷", pos: "(n.)", day: 1 },
+        { word: "agricultural", def: "農業的", pos: "(adj.)", day: 1 },
+        { word: "refund", def: "退款", pos: "(n.)", day: 1 },
+        { word: "agenda", def: "議程", pos: "(n.)", day: 1 },
+        { word: "trade show", def: "貿易展", pos: "(n.)", day: 1 },
+        { word: "risen", def: "上升 (rise-past participle)", pos: "(v.)", day: 1 },
+        { word: "blueprint", def: "藍圖；計畫", pos: "(n.)", day: 1 },
+        { word: "region", def: "地區", pos: "(n.)", day: 1 },
+        { word: "dramatically", def: "急劇地", pos: "(adv.)", day: 1 },
+        { word: "comment", def: "評論", pos: "(n./v.)", day: 1 },
+        { word: "quarter", def: "季度 (1/4)", pos: "(n.)", day: 1 },
+        { word: "industry", def: "產業", pos: "(n.)", day: 1 },
+        { word: "convention center", def: "會議中心", pos: "(n.)", day: 1 },
+        { word: "theme", def: "主題", pos: "(n.)", day: 1 },
+        { word: "announcement", def: "宣布；公告", pos: "(n.)", day: 1 },
+        { word: "finalize", def: "完成；定案", pos: "(v.)", day: 1 },
+        { word: "arrangement", def: "安排；佈置", pos: "(n.)", day: 1 },
+        { word: "hand out", def: "分發；散發", pos: "(phr. v.)", day: 1 },
+        { word: "postpone", def: "延後", pos: "(v.)", day: 1 },
+        { word: "cater to", def: "迎合；提供服務", pos: "(phr. v.)", day: 1 },
+        { word: "devotion", def: "奉獻；忠誠", pos: "(n.)", day: 1 },
+        { word: "proposal", def: "提案", pos: "(n.)", day: 1 },
+        { word: "manufacturer", def: "製造者", pos: "(n.)", day: 1 },
+        { word: "reschedule", def: "重新安排", pos: "(v.)", day: 1 },
+        { word: "spokesperson", def: "發言人", pos: "(n.)", day: 1 },
+        { word: "personnel", def: "人員；人事部門", pos: "(n.)", day: 1 },
+        { word: "component", def: "零件；組成部分", pos: "(n.)", day: 1 },
+        { word: "retailer", def: "零售商", pos: "(n.)", day: 1 },
+        { word: "nonprofit", def: "非營利", pos: "(adj.)", day: 1 },
+        { word: "retirement", def: "退休", pos: "(n.)", day: 1 },
+        { word: "compensation", def: "補償；薪資", pos: "(n.)", day: 1 },
+        { word: "volume", def: "量；容量", pos: "(n.)", day: 1 },
+    ];
+
+    const day2Words = [
+        { word: "estimate", def: "估價；預算", pos: "(n./v.)", day: 2 },
+        { word: "loyalty", def: "忠誠；忠實", pos: "(n.)", day: 2 },
+        { word: "evaluate", def: "評價；評估", pos: "(v.)", day: 2 },
+        { word: "procedure", def: "程序；步驟", pos: "(n.)", day: 2 },
+        { word: "recruitment", def: "招募；徵人", pos: "(n.)", day: 2 },
+        { word: "experience", def: "經驗", pos: "(n.)", day: 2 },
+        { word: "transaction", def: "交易；業務", pos: "(n.)", day: 2 },
+        { word: "give an award", def: "給予獎勵", pos: "(phr.)", day: 2 },
+        { word: "objection", def: "反對；異議", pos: "(n.)", day: 2 },
+        { word: "on-site", def: "現場的；就地的", pos: "(adj./adv.)", day: 2 },
+        { word: "handbook", def: "手冊；指南", pos: "(n.)", day: 2 },
+        { word: "fee", def: "費用；服務費", pos: "(n.)", day: 2 },
+        { word: "participate", def: "參加；參與", pos: "(v.)", day: 2 },
+        { word: "composition", def: "構成；組成", pos: "(n.)", day: 2 },
+        { word: "conflict", def: "衝突；爭執", pos: "(n.)", day: 2 },
+        { word: "performance", def: "表現；成果", pos: "(n.)", day: 2 },
+        { word: "discretion", def: "謹慎；決定權", pos: "(n.)", day: 2 },
+        { word: "donation", def: "捐贈；捐款", pos: "(n.)", day: 2 },
+        { word: "retention", def: "維持；保留", pos: "(n.)", day: 2 },
+        { word: "operation", def: "操作；營業", pos: "(n.)", day: 2 },
+        { word: "recruit", def: "招募（動詞）；新成員（名詞）", pos: "(v./n.)", day: 2 },
+        { word: "recognition", def: "認定；認可", pos: "(n.)", day: 2 },
+        { word: "accomplishment", def: "成就；完成", pos: "(n.)", day: 2 },
+        { word: "register", def: "登記；註冊", pos: "(v.)", day: 2 },
+        { word: "permission", def: "許可；允許", pos: "(n.)", day: 2 },
+        { word: "gradual", def: "逐漸的；漸進的", pos: "(adj.)", day: 2 },
+        { word: "relocate", def: "搬遷；重新安置", pos: "(v.)", day: 2 },
+        { word: "reminder", def: "提醒；提示", pos: "(n.)", day: 2 },
+        { word: "worthwhile", def: "值得的；有價值的", pos: "(adj.)", day: 2 },
+        { word: "replacement", def: "替換；替補者", pos: "(n.)", day: 2 },
+        { word: "asset", def: "資產", pos: "(n.)", day: 2 },
+        { word: "calculation", def: "計算；估計", pos: "(n.)", day: 2 },
+        { word: "retire", def: "退休", pos: "(v.)", day: 2 },
+        { word: "enhancement", def: "提升；增強", pos: "(n.)", day: 2 },
+        { word: "classification", def: "分類", pos: "(n.)", day: 2 },
+        { word: "temporary", def: "臨時的；暫時的", pos: "(adj.)", day: 2 },
+        { word: "appearance", def: "外表；出現", pos: "(n.)", day: 2 },
+        { word: "convenience", def: "便利；方便", pos: "(n.)", day: 2 },
+        { word: "publicity", def: "公開；宣傳", pos: "(n.)", day: 2 },
+        { word: "obtain", def: "獲得；取得", pos: "(v.)", day: 2 },
+        { word: "development", def: "發展；開發", pos: "(n.)", day: 2 },
+        { word: "presence", def: "存在；出席", pos: "(n.)", day: 2 },
+        { word: "billing", def: "帳單；開票", pos: "(n.)", day: 2 },
+        { word: "description", def: "描述；說明", pos: "(n.)", day: 2 },
+        { word: "candidate", def: "候選人", pos: "(n.)", day: 2 },
+        { word: "souvenirs", def: "紀念品", pos: "(n.)", day: 2 },
+        { word: "favors", def: "好意；幫忙", pos: "(n.)", day: 2 },
+        { word: "communication", def: "溝通；交流", pos: "(n.)", day: 2 },
+        { word: "statement", def: "敘述；聲明", pos: "(n.)", day: 2 },
+        { word: "indication", def: "跡象；徵兆", pos: "(n.)", day: 2 },
+        { word: "elevation", def: "提高；高地", pos: "(n.)", day: 2 },
+        { word: "analyze", def: "分析", pos: "(v.)", day: 2 },
+        { word: "aspiration", def: "志向；抱負", pos: "(n.)", day: 2 },
+        { word: "certain", def: "特定的；確定的", pos: "(adj.)", day: 2 },
+        { word: "observation", def: "觀察；觀測", pos: "(n.)", day: 2 },
+        { word: "acquire", def: "取得；學到", pos: "(v.)", day: 2 },
+        { word: "resistance", def: "抵抗；阻力", pos: "(n.)", day: 2 },
+        { word: "dependence", def: "依賴；從屬", pos: "(n.)", day: 2 },
+        { word: "charge", def: "收費；費用", pos: "(v./n.)", day: 2 },
+        { word: "be in charge of", def: "負責", pos: "(phr.)", day: 2 },
+        { word: "lease", def: "租賃；租約", pos: "(n./v.)", day: 2 },
+        { word: "reward", def: "回報；獎勵", pos: "(n./v.)", day: 2 },
+        { word: "career", def: "職涯；事業", pos: "(n.)", day: 2 },
+        { word: "relationship", def: "關係；人際關係", pos: "(n.)", day: 2 },
+        { word: "colleague", def: "同事", pos: "(n.)", day: 2 },
+    ];
+    
+    const day3Words = [
+        { word: "performance", def: "表演；表現", pos: "(n.)", day: 3 },
+        { word: "expression", def: "表達；表情", pos: "(n.)", day: 3 },
+        { word: "merchandise", def: "商品；貨物", pos: "(n.)", day: 3 },
+        { word: "process", def: "過程；處理", pos: "(n./v.)", day: 3 },
+        { word: "development", def: "發展；開發", pos: "(n.)", day: 3 },
+        { word: "operate", def: "操作；運作", pos: "(v.)", day: 3 },
+        { word: "feasibility", def: "可行性", pos: "(n.)", day: 3 },
+        { word: "restraint", def: "限制；抑制", pos: "(n.)", day: 3 },
+        { word: "plant", def: "工廠；植物", pos: "(n.)", day: 3 },
+        { word: "discrepancy", def: "不一致；差異", pos: "(n.)", day: 3 },
+        { word: "barrier", def: "障礙；屏障", pos: "(n.)", day: 3 },
+        { word: "release", def: "發行；釋放", pos: "(n./v.)", day: 3 },
+        { word: "confirmation", def: "確認；證實", pos: "(n.)", day: 3 },
+        { word: "application", def: "申請；應用", pos: "(n.)", day: 3 },
+        { word: "revenue", def: "收入；收益", pos: "(n.)", day: 3 },
+        { word: "competitor", def: "競爭者；對手", pos: "(n.)", day: 3 },
+        { word: "issue", def: "一期；問題", pos: "(n.)", day: 3 },
+        { word: "sales figures", def: "銷售數字", pos: "(phr.)", day: 3 },
+        { word: "installation", def: "安裝；設施", pos: "(n.)", day: 3 },
+        { word: "stack", def: "堆疊；堆", pos: "(v./n.)", day: 3 },
+        { word: "storage room", def: "儲藏室", pos: "(n.)", day: 3 },
+        { word: "collaboration", def: "合作；協作", pos: "(n.)", day: 3 },
+        { word: "transfer", def: "轉變；轉移", pos: "(n./v.)", day: 3 },
+        { word: "translation", def: "翻譯；譯文", pos: "(n.)", day: 3 },
+        { word: "flavor", def: "口味；味道", pos: "(n.)", day: 3 },
+        { word: "supplement", def: "補充；補給品", pos: "(n./v.)", day: 3 },
+        { word: "article", def: "文章；物品", pos: "(n.)", day: 3 },
+        { word: "adjustment", def: "調整；適應", pos: "(n.)", day: 3 },
+        { word: "priority", def: "優先；優先權", pos: "(n.)", day: 3 },
+        { word: "negotiation", def: "協商；談判", pos: "(n.)", day: 3 },
+        { word: "transformation", def: "轉變；變形", pos: "(n.)", day: 3 },
+        { word: "in doubt", def: "懷疑；不確定", pos: "(phr.)", day: 3 },
+        { word: "allowance", def: "津貼；限額", pos: "(n.)", day: 3 },
+        { word: "function", def: "功能；作用", pos: "(n.)", day: 3 },
+        { word: "instruction", def: "指示；用法說明", pos: "(n.)", day: 3 },
+        { word: "assembly", def: "集會；組裝", pos: "(n.)", day: 3 },
+        { word: "misconception", def: "誤解；錯誤觀念", pos: "(n.)", day: 3 },
+        { word: "occupation", def: "職業；佔領", pos: "(n.)", day: 3 },
+        { word: "management", def: "經營；管理", pos: "(n.)", day: 3 },
+        { word: "exhibition", def: "展覽；展示", pos: "(n.)", day: 3 },
+        { word: "objective", def: "目的；客觀的", pos: "(n./adj.)", day: 3 },
+        { word: "proposition", def: "提議；建議", pos: "(n.)", day: 3 },
+        { word: "admission", def: "入場；承認", pos: "(n.)", day: 3 },
+        { word: "foundation", def: "基礎；建立", pos: "(n.)", day: 3 },
+        { word: "demand", def: "需求；要求", pos: "(n./v.)", day: 3 },
+        { word: "consideration", def: "考慮；體諒", pos: "(n.)", day: 3 },
+        { word: "purpose", def: "目的；意圖", pos: "(n.)", day: 3 },
+        { word: "assemble", def: "集會；組裝", pos: "(v.)", day: 3 },
+        { word: "involvement", def: "參與；涉入", pos: "(n.)", day: 3 },
+        { word: "bulk", def: "大量；體積", pos: "(n.)", day: 3 },
+        { word: "realization", def: "認知；實現", pos: "(n.)", day: 3 },
+        { word: "capacity", def: "容量；能力", pos: "(n.)", day: 3 },
+        { word: "revision", def: "修訂；修改", pos: "(n.)", day: 3 },
+        { word: "facility", def: "設施；場所", pos: "(n.)", day: 3 },
+        { word: "factor", def: "因素；要素", pos: "(n.)", day: 3 },
+        { word: "launch", def: "開始；發射", pos: "(n./v.)", day: 3 },
+        { word: "maintenance", def: "保養；維護", pos: "(n.)", day: 3 },
+    ];
+
+    const day4Words = [
+        { word: "maintenance", def: "保養；維修", pos: "(n.)", day: 4 },
+        { word: "appreciation", def: "感謝", pos: "(n.)", day: 4 },
+        { word: "boost", def: "促進", pos: "(n./v.)", day: 4 },
+        { word: "resolution", def: "決心；解決", pos: "(n.)", day: 4 },
+        { word: "evaluation", def: "評價", pos: "(n.)", day: 4 },
+        { word: "brochure", def: "小冊子", pos: "(n.)", day: 4 },
+        { word: "variation", def: "差異；變化", pos: "(n.)", day: 4 },
+        { word: "availability", def: "可利用性", pos: "(n.)", day: 4 },
+        { word: "commercial", def: "廣告", pos: "(n.)", day: 4 },
+        { word: "disclosure", def: "接露", pos: "(n.)", day: 4 },
+        { word: "authority", def: "權力", pos: "(n.)", day: 4 },
+        { word: "competitive", def: "競爭的", pos: "(adj.)", day: 4 },
+        { word: "interruption", def: "中斷", pos: "(n.)", day: 4 },
+        { word: "quotation", def: "引用；報價單", pos: "(n.)", day: 4 },
+        { word: "complimentary", def: "免費的；讚美的", pos: "(adj.)", day: 4 },
+        { word: "premises", def: "建築物", pos: "(n.)", day: 4 },
+        { word: "demonstrate", def: "示範", pos: "(v.)", day: 4 },
+        { word: "inquiry", def: "詢問", pos: "(n.)", day: 4 },
+        { word: "implication", def: "暗示", pos: "(n.)", day: 4 },
+        { word: "discount", def: "折扣", pos: "(n.)", day: 4 },
+        { word: "timeline", def: "時間表", pos: "(n.)", day: 4 },
+        { word: "assortment", def: "綜合物", pos: "(n.)", day: 4 },
+        { word: "effective", def: "有效的", pos: "(adj.)", day: 4 },
+        { word: "complaint", def: "抱怨", pos: "(n.)", day: 4 },
+        { word: "specification", def: "明確的；規格", pos: "(n.)", day: 4 },
+        { word: "exhibit", def: "展示", pos: "(n./v.)", day: 4 },
+        { word: "replacement", def: "更換；替代品", pos: "(n.)", day: 4 },
+        { word: "occasion", def: "場合", pos: "(n.)", day: 4 },
+        { word: "feature", def: "特色", pos: "(n.)", day: 4 },
+        { word: "renovation", def: "整修", pos: "(n.)", day: 4 },
+        { word: "progress", def: "進度", pos: "(n.)", day: 4 },
+        { word: "promotion", def: "促銷；晉升", pos: "(n.)", day: 4 },
+        { word: "condition", def: "條件", pos: "(n.)", day: 4 },
+        { word: "share", def: "佔有率；分享", pos: "(n./v.)", day: 4 },
+        { word: "production", def: "生產", pos: "(n.)", day: 4 },
+        { word: "survey", def: "調查", pos: "(n./v.)", day: 4 },
+        { word: "environment", def: "環境", pos: "(n.)", day: 4 },
+        { word: "take advantage of", def: "利用", pos: "(phr.)", day: 4 },
+        { word: "coverage", def: "媒體報導；覆蓋範圍", pos: "(n.)", day: 4 },
+        { word: "storage", def: "儲藏", pos: "(n.)", day: 4 },
+        { word: "voucher", def: "抵用卷", pos: "(n.)", day: 4 },
+        { word: "factor", def: "因素", pos: "(n.)", day: 4 },
+        { word: "engagement", def: "約定；參與", pos: "(n.)", day: 4 },
+        { word: "collaboration", def: "合作", pos: "(n.)", day: 4 },
+        { word: "combination", def: "結合", pos: "(n.)", day: 4 },
+        { word: "attendee", def: "參加者", pos: "(n.)", day: 4 },
+        { word: "reversal", def: "逆轉", pos: "(n.)", day: 4 },
+        { word: "inventory", def: "存貨", pos: "(n.)", day: 4 },
+        { word: "agenda", def: "議程", pos: "(n.)", day: 4 },
+        { word: "discharge", def: "排出", pos: "(n./v.)", day: 4 },
+        { word: "notification", def: "通知", pos: "(n.)", day: 4 },
+        { word: "example", def: "例子", pos: "(n.)", day: 4 },
+        { word: "recommendation", def: "推薦", pos: "(n.)", day: 4 },
+        { word: "behavior", def: "行為", pos: "(n.)", day: 4 },
+        { word: "provide", def: "提供", pos: "(v.)", day: 4 },
+        { word: "harvest", def: "收穫", pos: "(n./v.)", day: 4 },
+        { word: "caution", def: "警告", pos: "(n./v.)", day: 4 },
+        { word: "reward", def: "回報", pos: "(n./v.)", day: 4 },
+        { word: "execution", def: "執行", pos: "(n.)", day: 4 },
+    ];
+
+    const day5Words = [
+        { word: "contract", def: "合約", pos: "(n.)", day: 5 },
+        { word: "motivation", def: "動機", pos: "(n.)", day: 5 },
+        { word: "offer", def: "提議；出價", pos: "(n./v.)", day: 5 },
+        { word: "shortage", def: "缺少", pos: "(n.)", day: 5 },
+        { word: "satisfaction", def: "滿足", pos: "(n.)", day: 5 },
+        { word: "place an order", def: "下訂單", pos: "(phr.)", day: 5 },
+        { word: "distribute", def: "流通；分布", pos: "(v.)", day: 5 },
+        { word: "promotion", def: "升職；促銷", pos: "(n.)", day: 5 },
+        { word: "retail", def: "零售", pos: "(n./v.)", day: 5 },
+        { word: "facility", def: "設施", pos: "(n.)", day: 5 },
+        { word: "submission", def: "提出", pos: "(n.)", day: 5 },
+        { word: "shipment", def: "運送", pos: "(n.)", day: 5 },
+        { word: "reputation", def: "名聲", pos: "(n.)", day: 5 },
+        { word: "commitment", def: "奉獻；承諾", pos: "(n.)", day: 5 },
+        { word: "stock", def: "股票；庫存", pos: "(n.)", day: 5 },
+        { word: "assignment", def: "作業；任務", pos: "(n.)", day: 5 },
+        { word: "appointment", def: "預約", pos: "(n.)", day: 5 },
+        { word: "entrance", def: "入口", pos: "(n.)", day: 5 },
+        { word: "incident", def: "事件", pos: "(n.)", day: 5 },
+        { word: "shareholder", def: "股東", pos: "(n.)", day: 5 },
+        { word: "defect", def: "缺陷", pos: "(n.)", day: 5 },
+        { word: "delight", def: "愉悅", pos: "(n./v.)", day: 5 },
+        { word: "addition", def: "增加", pos: "(n.)", day: 5 },
+        { word: "request", def: "要求", pos: "(n./v.)", day: 5 },
+        { word: "portion", def: "部分", pos: "(n.)", day: 5 },
+        { word: "claim", def: "宣稱", pos: "(n./v.)", day: 5 },
+        { word: "separation", def: "分離", pos: "(n.)", day: 5 },
+        { word: "capacity", def: "容量", pos: "(n.)", day: 5 },
+        { word: "prediction", def: "預測", pos: "(n.)", day: 5 },
+        { word: "safety", def: "安全", pos: "(n.)", day: 5 },
+        { word: "dispute", def: "爭論", pos: "(n./v.)", day: 5 },
+        { word: "contestant", def: "參賽者", pos: "(n.)", day: 5 },
+        { word: "debater", def: "辯論者", pos: "(n.)", day: 5 },
+        { word: "excellence", def: "優秀", pos: "(n.)", day: 5 },
+        { word: "supplier", def: "供應者", pos: "(n.)", day: 5 },
+        { word: "proposal", def: "提案", pos: "(n.)", day: 5 },
+        { word: "patron", def: "贊助人", pos: "(n.)", day: 5 },
+        { word: "negotiator", def: "協商者", pos: "(n.)", day: 5 },
+        { word: "contribution", def: "貢獻", pos: "(n.)", day: 5 },
+        { word: "norm", def: "基準；規範", pos: "(n.)", day: 5 },
+        { word: "memorial", def: "紀念碑", pos: "(n.)", day: 5 },
+        { word: "petition", def: "請願書", pos: "(n.)", day: 5 },
+        { word: "preference", def: "偏好", pos: "(n.)", day: 5 },
+        { word: "characteristic", def: "特徵", pos: "(n.)", day: 5 },
+        { word: "selection", def: "選擇", pos: "(n.)", day: 5 },
+        { word: "agreement", def: "協議；協定", pos: "(n.)", day: 5 },
+        { word: "expectation", def: "期待", pos: "(n.)", day: 5 },
+        { word: "charge", def: "收費", pos: "(n./v.)", day: 5 },
+        { word: "symbol", def: "象徵", pos: "(n.)", day: 5 },
+        { word: "client", def: "客戶", pos: "(n.)", day: 5 },
+        { word: "reference", def: "提及；參考", pos: "(n.)", day: 5 },
+        { word: "specialist", def: "專家", pos: "(n.)", day: 5 },
+        { word: "expire", def: "到期", pos: "(v.)", day: 5 },
+        { word: "extend", def: "延伸", pos: "(v.)", day: 5 },
+        { word: "exclusion", def: "排除", pos: "(n.)", day: 5 },
+        { word: "inventory", def: "庫存", pos: "(n.)", day: 5 },
+        { word: "inspiration", def: "靈感", pos: "(n.)", day: 5 },
+        { word: "invoice", def: "發票", pos: "(n.)", day: 5 },
+        { word: "transportation", def: "交通", pos: "(n.)", day: 5 },
+    ];
+
+    const day6Words = [
+        { word: "remain", def: "留下；保持", pos: "(v.)", day: 6 },
+        { word: "state-of-art", def: "最先進", pos: "(adj.)", day: 6 },
+        { word: "accelerate", def: "加速", pos: "(v.)", day: 6 },
+        { word: "reform", def: "改革", pos: "(n./v.)", day: 6 },
+        { word: "memorize", def: "記憶", pos: "(v.)", day: 6 },
+        { word: "restrict", def: "限制", pos: "(v.)", day: 6 },
+        { word: "strive", def: "努力；奮鬥", pos: "(v.)", day: 6 },
+        { word: "obliged", def: "迫使", pos: "(v.)", day: 6 },
+        { word: "alter", def: "改變", pos: "(v.)", day: 6 },
+        { word: "address", def: "處理；地址", pos: "(v./n.)", day: 6 },
+        { word: "endure", def: "忍耐", pos: "(v.)", day: 6 },
+        { word: "retain", def: "維持", pos: "(v.)", day: 6 },
+        { word: "renew", def: "更新", pos: "(v.)", day: 6 },
+        { word: "guarantee", def: "保證", pos: "(n./v.)", day: 6 },
+        { word: "nominate", def: "提名", pos: "(v.)", day: 6 },
+        { word: "commence", def: "開始", pos: "(v.)", day: 6 },
+        { word: "eliminate", def: "去除", pos: "(v.)", day: 6 },
+        { word: "maximize", def: "最大值", pos: "(v.)", day: 6 },
+        { word: "compose", def: "構成", pos: "(v.)", day: 6 },
+        { word: "prove", def: "證明", pos: "(v.)", day: 6 },
+        { word: "elevate", def: "提升", pos: "(v.)", day: 6 },
+        { word: "grant", def: "允許", pos: "(v./n.)", day: 6 },
+        { word: "insert", def: "插入", pos: "(v.)", day: 6 },
+        { word: "acquire", def: "取得", pos: "(v.)", day: 6 },
+        { word: "renewing", def: "更新 (動名詞)", pos: "(n.)", day: 6 },
+        { word: "redeem", def: "兌現", pos: "(v.)", day: 6 },
+        { word: "recoding", def: "紀錄 (動名詞)", pos: "(n.)", day: 6 },
+        { word: "ship", def: "運送", pos: "(v.)", day: 6 },
+        { word: "portraying", def: "描繪 (動名詞)", pos: "(n.)", day: 6 },
+        { word: "visualize", def: "想像", pos: "(v.)", day: 6 },
+        { word: "pause", def: "暫停", pos: "(n./v.)", day: 6 },
+        { word: "initiate", def: "開始", pos: "(v.)", day: 6 },
+        { word: "occupy", def: "佔領", pos: "(v.)", day: 6 },
+        { word: "pressure", def: "強迫；壓力", pos: "(v./n.)", day: 6 },
+        { word: "persist", def: "堅持", pos: "(v.)", day: 6 },
+        { word: "result", def: "結果", pos: "(n.)", day: 6 },
+        { word: "assistance", def: "協助", pos: "(n.)", day: 6 },
+        { word: "release", def: "發行", pos: "(n./v.)", day: 6 },
+        { word: "directory", def: "名錄", pos: "(n.)", day: 6 },
+        { word: "motivate", def: "刺激", pos: "(v.)", day: 6 },
+        { word: "distribute", def: "分布；分發", pos: "(v.)", day: 6 },
+        { word: "extension", def: "延伸", pos: "(n.)", day: 6 },
+        { word: "integrate", def: "整合", pos: "(v.)", day: 6 },
+        { word: "go over", def: "檢討", pos: "(phr. v.)", day: 6 },
+        { word: "embark", def: "著手", pos: "(v.)", day: 6 },
+        { word: "handout", def: "印刷品", pos: "(n.)", day: 6 },
+        { word: "inquire", def: "詢問", pos: "(v.)", day: 6 },
+        { word: "alternate", def: "交替", pos: "(v./adj.)", day: 6 },
+        { word: "malfunction", def: "故障", pos: "(n./v.)", day: 6 },
+        { word: "inspire", def: "激發", pos: "(v.)", day: 6 },
+        { word: "oversee", def: "監督", pos: "(v.)", day: 6 },
+        { word: "stationary", def: "文具", pos: "(n.)", day: 6 },
+        { word: "designate", def: "指定", pos: "(v.)", day: 6 },
+        { word: "take a day off", def: "休一天", pos: "(phr.)", day: 6 },
+        { word: "purchase", def: "購買", pos: "(n./v.)", day: 6 },
+        { word: "workload", def: "工作量", pos: "(n.)", day: 6 },
+        { word: "deliver", def: "送達", pos: "(v.)", day: 6 },
+        { word: "adopt", def: "採用", pos: "(v.)", day: 6 },
+        { word: "executive", def: "主管", pos: "(n.)", day: 6 },
+    ];
+
+    const day7Words = [
+        { word: "undergo", def: "經歷；接受", pos: "(v.)", day: 7 },
+        { word: "forecast", def: "預測", pos: "(n./v.)", day: 7 },
+        { word: "headquarter", def: "總部", pos: "(n.)", day: 7 },
+        { word: "assure", def: "確保", pos: "(v.)", day: 7 },
+        { word: "assured", def: "保證的", pos: "(adj.)", day: 7 },
+        { word: "management", def: "經營；管理", pos: "(n.)", day: 7 },
+        { word: "indicate", def: "指明；顯示", pos: "(v.)", day: 7 },
+        { word: "recruited", def: "招募的", pos: "(v.)", day: 7 },
+        { word: "manager", def: "經理", pos: "(n.)", day: 7 },
+        { word: "reclaim", def: "拿回", pos: "(v.)", day: 7 },
+        { word: "deviated", def: "脫離的", pos: "(v.)", day: 7 },
+        { word: "president", def: "總裁；總統", pos: "(n.)", day: 7 },
+        { word: "divide", def: "分開", pos: "(v.)", day: 7 },
+        { word: "attendance", def: "參加", pos: "(n.)", day: 7 },
+        { word: "representative", def: "代表人", pos: "(n.)", day: 7 },
+        { word: "depart", def: "出發", pos: "(v.)", day: 7 },
+        { word: "tolerated", def: "忍受的", pos: "(v.)", day: 7 },
+        { word: "salesperson", def: "業務", pos: "(n.)", day: 7 },
+        { word: "reject", def: "拒絕", pos: "(v.)", day: 7 },
+        { word: "attempt", def: "嘗試", pos: "(n./v.)", day: 7 },
+        { word: "classify", def: "分類", pos: "(v.)", day: 7 },
+        { word: "innovated", def: "創新的", pos: "(v.)", day: 7 },
+        { word: "donate", def: "捐獻", pos: "(v.)", day: 7 },
+        { word: "industrial", def: "工業的", pos: "(adj.)", day: 7 },
+        { word: "support", def: "支持", pos: "(n./v.)", day: 7 },
+        { word: "plant", def: "工廠", pos: "(n.)", day: 7 },
+        { word: "expire", def: "到期", pos: "(v.)", day: 7 },
+        { word: "enroll", def: "登記；註冊", pos: "(v.)", day: 7 },
+        { word: "consent", def: "同意；允許", pos: "(n./v.)", day: 7 },
+        { word: "increase", def: "增加", pos: "(n./v.)", day: 7 },
+        { word: "attach", def: "附加", pos: "(v.)", day: 7 },
+        { word: "rate", def: "評價；比率", pos: "(n./v.)", day: 7 },
+        { word: "entitle", def: "賦予權利", pos: "(v.)", day: 7 },
+        { word: "tolerate", def: "忍受", pos: "(v.)", day: 7 },
+        { word: "propose", def: "提案", pos: "(v.)", day: 7 },
+        { word: "affect", def: "影響", pos: "(v.)", day: 7 },
+        { word: "negotiate", def: "協商", pos: "(v.)", day: 7 },
+        { word: "eliminate", def: "排除", pos: "(v.)", day: 7 },
+        { word: "attract", def: "吸引", pos: "(v.)", day: 7 },
+        { word: "withdraw", def: "提取", pos: "(v.)", day: 7 },
+        { word: "meant", def: "意思是 (mean-past participle)", pos: "(v.)", day: 7 },
+        { word: "refund", def: "退款", pos: "(n./v.)", day: 7 },
+        { word: "summarized", def: "總結的", pos: "(v.)", day: 7 },
+        { word: "reduce", def: "減少", pos: "(v.)", day: 7 },
+        { word: "solved", def: "解決的", pos: "(v.)", day: 7 },
+        { word: "reflect", def: "反映", pos: "(v.)", day: 7 },
+        { word: "obtain", def: "獲得", pos: "(v.)", day: 7 },
+        { word: "invite", def: "邀請", pos: "(v.)", day: 7 },
+        { word: "third party", def: "第三方", pos: "(n.)", day: 7 },
+        { word: "regard", def: "認為", pos: "(v.)", day: 7 },
+        { word: "decrease", def: "減少", pos: "(n./v.)", day: 7 },
+        { word: "assess", def: "評價", pos: "(v.)", day: 7 },
+        { word: "extend", def: "延伸", pos: "(v.)", day: 7 },
+        { word: "handle", def: "處理", pos: "(v.)", day: 7 },
+        { word: "accountant", def: "會計師", pos: "(n.)", day: 7 },
+        { word: "classified", def: "分類的", pos: "(v.)", day: 7 },
+        { word: "board", def: "董事會", pos: "(n.)", day: 7 },
+        { word: "compensated", def: "補償的", pos: "(v.)", day: 7 },
+        { word: "branch", def: "分支；分店", pos: "(n.)", day: 7 },
+        { word: "substituted", def: "代替的", pos: "(v.)", day: 7 },
+        { word: "director", def: "主任", pos: "(n.)", day: 7 },
+        { word: "remain", def: "保持", pos: "(v.)", day: 7 },
+        { word: "assistance", def: "協助", pos: "(n.)", day: 7 },
+    ];
+    
+    // DAY 8 單字 (53 詞)
+    const day8Words = [
+        { word: "exceed", def: "超出", pos: "(v.)", day: 8 },
+        { word: "remind", def: "提醒", pos: "(v.)", day: 8 },
+        { word: "receipt", def: "收據", pos: "(n.)", day: 8 },
+        { word: "present", def: "展示；禮物", pos: "(v./n.)", day: 8 },
+        { word: "omitted", def: "省去的", pos: "(v.)", day: 8 },
+        { word: "reimburse", def: "補償", pos: "(v.)", day: 8 },
+        { word: "argue", def: "主張；爭論", pos: "(v.)", day: 8 },
+        { word: "deserved", def: "應得的", pos: "(adj.)", day: 8 },
+        { word: "salary", def: "薪水", pos: "(n.)", day: 8 },
+        { word: "divert", def: "轉移", pos: "(v.)", day: 8 },
+        { word: "afford", def: "可負擔的", pos: "(v.)", day: 8 },
+        { word: "suspect", def: "懷疑", pos: "(v.)", day: 8 },
+        { word: "commit", def: "犯罪；承諾", pos: "(v.)", day: 8 },
+        { word: "expand", def: "擴大", pos: "(v.)", day: 8 }, // 注意：原清單為 expend (花費)，但 expand 更常用，此處修正
+        { word: "assess", def: "評估", pos: "(v.)", day: 8 },
+        { word: "verify", def: "證明", pos: "(v.)", day: 8 },
+        { word: "abolish", def: "廢除", pos: "(v.)", day: 8 },
+        { word: "capture", def: "獲取", pos: "(v.)", day: 8 },
+        { word: "dedicate", def: "奉獻", pos: "(v.)", day: 8 },
+        { word: "appoint", def: "任命", pos: "(v.)", day: 8 },
+        { word: "demonstrate", def: "示範", pos: "(v.)", day: 8 },
+        { word: "suspend", def: "暫停", pos: "(v.)", day: 8 },
+        { word: "house", def: "容許；房子", pos: "(v./n.)", day: 8 },
+        { word: "finalized", def: "完成的", pos: "(v.)", day: 8 },
+        { word: "allocate", def: "分配", pos: "(v.)", day: 8 },
+        { word: "disrupt", def: "中斷", pos: "(v.)", day: 8 },
+        { word: "examine", def: "檢查", pos: "(v.)", day: 8 },
+        { word: "emerge", def: "出現", pos: "(v.)", day: 8 },
+        { word: "establish", def: "建立", pos: "(v.)", day: 8 },
+        { word: "expect", def: "期待", pos: "(v.)", day: 8 },
+        { word: "rephrase", def: "改寫", pos: "(v.)", day: 8 },
+        { word: "omit", def: "省去", pos: "(v.)", day: 8 },
+        { word: "cite", def: "引用", pos: "(v.)", day: 8 },
+        { word: "deposited", def: "存放的", pos: "(v.)", day: 8 },
+        { word: "decide", def: "決定", pos: "(v.)", day: 8 },
+        { word: "execute", def: "執行", pos: "(v.)", day: 8 },
+        { word: "incurred", def: "招致的", pos: "(v.)", day: 8 },
+        { word: "generate", def: "產能", pos: "(v.)", day: 8 },
+        { word: "suspicious", def: "可疑的", pos: "(adj.)", day: 8 },
+        { word: "discover", def: "發現", pos: "(v.)", day: 8 },
+        { word: "formalize", def: "形式化", pos: "(v.)", day: 8 },
+        { word: "amount", def: "數量；金額", pos: "(n.)", day: 8 },
+        { word: "engage", def: "從事", pos: "(v.)", day: 8 },
+        { word: "budget", def: "預算", pos: "(n.)", day: 8 },
+        { word: "influence", def: "影響", pos: "(n./v.)", day: 8 },
+        { word: "charity", def: "慈善", pos: "(n.)", day: 8 },
+        { word: "reveal", def: "揭露", pos: "(v.)", day: 8 },
+        { word: "expense", def: "花費", pos: "(n.)", day: 8 },
+        { word: "finance", def: "財務", pos: "(n.)", day: 8 },
+        { word: "affiliate", def: "附屬", pos: "(n.)", day: 8 },
+        { word: "fund", def: "資金", pos: "(n.)", day: 8 },
+        { word: "corrupt", def: "腐敗", pos: "(adj.)", day: 8 },
+        { word: "fundraising", def: "募款", pos: "(n.)", day: 8 },
+    ];
+    
+    // DAY 9 單字 (70 詞)
+    const day9Words = [
+        { word: "complain", def: "抱怨", pos: "(v.)", day: 9 },
+        { word: "loan", def: "貸款", pos: "(n./v.)", day: 9 },
+        { word: "disrupt", def: "中斷", pos: "(v.)", day: 9 },
+        { word: "profit", def: "利潤", pos: "(n.)", day: 9 },
+        { word: "assess", def: "估價；評估", pos: "(v.)", day: 9 },
+        { word: "intensity", def: "加強；強度", pos: "(n.)", day: 9 },
+        { word: "guide", def: "導遊；引導", pos: "(n./v.)", day: 9 },
+        { word: "feature", def: "特色", pos: "(n.)", day: 9 },
+        { word: "calculate", def: "計算", pos: "(v.)", day: 9 },
+        { word: "harbor", def: "港口", pos: "(n.)", day: 9 },
+        { word: "determine", def: "判定", pos: "(v.)", day: 9 },
+        { word: "descend", def: "往下", pos: "(v.)", day: 9 },
+        { word: "journey", def: "旅程", pos: "(n.)", day: 9 },
+        { word: "decline", def: "拒絕", pos: "(v.)", day: 9 },
+        { word: "announce", def: "宣布", pos: "(v.)", day: 9 },
+        { word: "luggage", def: "行李", pos: "(n.)", day: 9 },
+        { word: "review", def: "檢討；審查", pos: "(n./v.)", day: 9 },
+        { word: "utilized", def: "利用的", pos: "(v.)", day: 9 },
+        { word: "resort", def: "渡假村", pos: "(n.)", day: 9 },
+        { word: "obtain", def: "獲得", pos: "(v.)", day: 9 },
+        { word: "inform", def: "通知", pos: "(v.)", day: 9 },
+        { word: "souvenir", def: "紀念品", pos: "(n.)", day: 9 },
+        { word: "merge", def: "合併", pos: "(v.)", day: 9 },
+        { word: "enlarge", def: "擴大", pos: "(v.)", day: 9 },
+        { word: "suitcase", def: "行李箱", pos: "(n.)", day: 9 },
+        { word: "pursue", def: "追求", pos: "(v.)", day: 9 },
+        { word: "ensure", def: "確保", pos: "(v.)", day: 9 },
+        { word: "gather", def: "蒐集", pos: "(v.)", day: 9 },
+        { word: "accomplish", def: "達成", pos: "(v.)", day: 9 },
+        { word: "permit", def: "允許", pos: "(v.)", day: 9 },
+        { word: "intense", def: "強烈的", pos: "(adj.)", day: 9 },
+        { word: "modify", def: "修改", pos: "(v.)", day: 9 },
+        { word: "contend", def: "爭奪；主張", pos: "(v.)", day: 9 },
+        { word: "acquired", def: "取得的", pos: "(v.)", day: 9 },
+        { word: "award", def: "授予；判給", pos: "(v.)", day: 9 },
+        { word: "accumulate", def: "累積", pos: "(v.)", day: 9 },
+        { word: "discuss", def: "討論", pos: "(v.)", day: 9 },
+        { word: "serve", def: "服務", pos: "(v.)", day: 9 },
+        { word: "resistance", def: "限制；抵抗", pos: "(n.)", day: 9 },
+        { word: "minimize", def: "最小化", pos: "(v.)", day: 9 },
+        { word: "duplicate", def: "複製", pos: "(v.)", day: 9 },
+        { word: "outsource", def: "外包", pos: "(v.)", day: 9 },
+        { word: "host", def: "主辦", pos: "(v.)", day: 9 },
+        { word: "install", def: "安裝", pos: "(v.)", day: 9 },
+        { word: "reset", def: "重設", pos: "(v.)", day: 9 },
+        { word: "examining", def: "檢查 (動名詞)", pos: "(n.)", day: 9 },
+        { word: "forward", def: "轉寄", pos: "(v.)", day: 9 },
+        { word: "proceed", def: "繼續向前", pos: "(v.)", day: 9 },
+        { word: "supplement", def: "補充", pos: "(n./v.)", day: 9 },
+        { word: "used", def: "使用過的", pos: "(adj.)", day: 9 },
+        { word: "foundation", def: "基礎；基金會", pos: "(n.)", day: 9 },
+        { word: "determined", def: "決定的", pos: "(v.)", day: 9 },
+        { word: "achieving", def: "達成 (動名詞)", pos: "(n.)", day: 9 },
+        { word: "found", def: "創立", pos: "(v.)", day: 9 },
+        { word: "serving", def: "服務 (動名詞)", pos: "(n.)", day: 9 },
+        { word: "reduce", def: "減少", pos: "(v.)", day: 9 },
+        { word: "organizing", def: "組織 (動名詞)", pos: "(n.)", day: 9 },
+        { word: "operating", def: "操作 (動名詞)", pos: "(n.)", day: 9 },
+        { word: "guarantee", def: "保證", pos: "(n./v.)", day: 9 },
+        { word: "arrival", def: "抵達", pos: "(n.)", day: 9 },
+        { word: "decorate", def: "裝飾", pos: "(v.)", day: 9 },
+        { word: "attraction", def: "吸引", pos: "(n.)", day: 9 },
+        { word: "realize", def: "了解", pos: "(v.)", day: 9 },
+        { word: "departure", def: "出發", pos: "(n.)", day: 9 },
+        { word: "envision", def: "想像", pos: "(v.)", day: 9 },
+        { word: "destination", def: "目的地", pos: "(n.)", day: 9 },
+        { word: "acclaim", def: "歡呼", pos: "(n.)", day: 9 },
+        { word: "dock", def: "碼頭", pos: "(n.)", day: 9 },
+    ];
+    
+    // DAY 10 單字 (50 詞)
+    const day10Words = [
+        { word: "diverse", def: "多樣的", pos: "(adj.)", day: 10 },
+        { word: "prestigious", def: "有名望的", pos: "(adj.)", day: 10 },
+        { word: "in advance", def: "事先", pos: "(phr.)", day: 10 },
+        { word: "grateful", def: "感謝的", pos: "(adj.)", day: 10 },
+        { word: "lodging", def: "借宿；住宿", pos: "(n.)", day: 10 },
+        { word: "resistant", def: "限制；抵抗的", pos: "(adj.)", day: 10 },
+        { word: "keen", def: "熱心；敏銳的", pos: "(adj.)", day: 10 },
+        { word: "lounge", def: "休息室", pos: "(n.)", day: 10 },
+        { word: "current", def: "現今的；水流", pos: "(adj./n.)", day: 10 },
+        { word: "complicated", def: "複雜的", pos: "(adj.)", day: 10 },
+        { word: "overbooked", def: "預定超額的", pos: "(adj.)", day: 10 },
+        { word: "time-consuming", def: "費時的", pos: "(adj.)", day: 10 },
+        { word: "hollow", def: "空心", pos: "(adj.)", day: 10 },
+        { word: "payment option", def: "付款方式", pos: "(phr.)", day: 10 },
+        { word: "adequate", def: "適當的", pos: "(adj.)", day: 10 },
+        { word: "insincere", def: "不誠懇的", pos: "(adj.)", day: 10 },
+        { word: "rate", def: "費率", pos: "(n.)", day: 10 },
+        { word: "productive", def: "生產力高的", pos: "(adj.)", day: 10 },
+        { word: "vacant", def: "空的；空缺的", pos: "(adj.)", day: 10 },
+        { word: "receptionist", def: "接待人員", pos: "(n.)", day: 10 },
+        { word: "loyal", def: "忠誠的", pos: "(adj.)", day: 10 },
+        { word: "updated", def: "更新的", pos: "(adj.)", day: 10 },
+        { word: "reservation", def: "預約", pos: "(n.)", day: 10 },
+        { word: "insurance policy", def: "保險單", pos: "(phr.)", day: 10 },
+        { word: "stay at", def: "短期住宿", pos: "(phr. v.)", day: 10 },
+        { word: "fortunate", def: "幸運的", pos: "(adj.)", day: 10 },
+        { word: "suite", def: "套房", pos: "(n.)", day: 10 },
+        { word: "excessive", def: "過度的", pos: "(adj.)", day: 10 },
+        { word: "wholesome", def: "有益的", pos: "(adj.)", day: 10 },
+        { word: "comprehensive", def: "廣泛的；全面的", pos: "(adj.)", day: 10 },
+        { word: "elaborate", def: "精細的", pos: "(adj.)", day: 10 },
+        { word: "former", def: "之前的", pos: "(adj.)", day: 10 },
+        { word: "revised", def: "修訂的", pos: "(adj.)", day: 10 },
+        { word: "affordable", def: "負擔得起的", pos: "(adj.)", day: 10 },
+        { word: "practical", def: "實際的", pos: "(adj.)", day: 10 },
+        { word: "receptive", def: "接受的", pos: "(adj.)", day: 10 },
+        { word: "relevant", def: "有關的", pos: "(adj.)", day: 10 },
+        { word: "instant", def: "即刻的", pos: "(adj.)", day: 10 },
+        { word: "minor", def: "較小的；次要的", pos: "(adj.)", day: 10 },
+        { word: "diverse", def: "多樣性", pos: "(n.)", day: 10 },
+        { word: "flexible", def: "有彈性的", pos: "(adj.)", day: 10 },
+        { word: "technical", def: "技術的", pos: "(adj.)", day: 10 },
+        { word: "fertile", def: "肥沃的", pos: "(adj.)", day: 10 },
+        { word: "filing", def: "文件歸檔", pos: "(n.)", day: 10 },
+        { word: "attentive", def: "專心的", pos: "(adj.)", day: 10 },
+        { word: "steady", def: "穩定的", pos: "(adj.)", day: 10 },
+        { word: "eager", def: "熱切的", pos: "(adj.)", day: 10 },
+        { word: "verifiable", def: "可證實的", pos: "(adj.)", day: 10 },
+        { word: "captivating", def: "迷人的", pos: "(adj.)", day: 10 },
+        { word: "spacious", def: "空間大的", pos: "(adj.)", day: 10 },
+    ];
+    
+    // 合併所有單字
+    rawWords = day1Words.concat(day2Words, day3Words, day4Words, day5Words, day6Words, day7Words, day8Words, day9Words, day10Words);
+
+    // 初始化應用程式
+    function initApp() {
+        // 從所有單字中過濾並洗牌
+        filterWordsByDay(currentDayFilter);
+        
+        // 確保進度條和列表的初始狀態正確
+        const daySelector = document.getElementById('day-selector');
+        // 找到 DAY 10 選項並選中
+        Array.from(daySelector.options).forEach(option => {
+            if (option.value === '10') {
+                option.selected = true;
+            }
+        });
+
+        // 預設啟動 Quiz 模式
+        setMode('quiz');
+    }
+
+    // 根據選擇的學習日過濾單字
+    function filterWordsByDay(day) {
+        currentDayFilter = day;
+        let filteredWords;
+
+        if (day === 'all') {
+            filteredWords = rawWords;
+            document.getElementById('list-title').textContent = `📋 單字列表 (共 ${rawWords.length} 詞)`;
+        } else {
+            const dayNum = parseInt(day);
+            filteredWords = rawWords.filter(w => w.day === dayNum);
+            document.getElementById('list-title').textContent = `📋 DAY ${dayNum} 單字列表 (${filteredWords.length} 詞)`;
+        }
+
+        // 將過濾後的單字洗牌後用於練習
+        wordData = shuffleArray(filteredWords);
+        
+        // 重設已學會的單字集合，但只保留屬於當前過濾範圍的單字
+        const newLearnedWords = new Set();
+        learnedWords.forEach(wordKey => {
+            // 檢查這個已學會的單字是否屬於當前篩選範圍
+            if (filteredWords.some(w => w.word === wordKey)) {
+                newLearnedWords.add(wordKey);
+            }
+        });
+        learnedWords = newLearnedWords;
+
+        updateProgress();
+        renderWordList();
+        loadNextItem();
+    }
+
+    // 更新進度條和文字
+    function updateProgress() {
+        const learnedCount = wordData.filter(w => learnedWords.has(w.word)).length;
+        const totalCount = wordData.length;
+        const percentage = totalCount > 0 ? (learnedCount / totalCount) * 100 : 0;
+
+        document.getElementById('progress-text').textContent = `${learnedCount}/${totalCount}`;
+        document.getElementById('progress-bar').style.width = `${percentage}%`;
+        
+        // 檢查是否完成所有學習
+        if (totalCount > 0 && learnedCount === totalCount) {
+            const practiceArea = document.getElementById('practice-area');
+            practiceArea.innerHTML = `
+                <div class="text-center p-10 bg-primary-blue/10 rounded-xl shadow-lg">
+                    <div class="text-6xl mb-4">🎉</div>
+                    <h3 class="text-3xl font-bold text-primary-blue mb-4">恭喜！本學習日單字已完成！</h3>
+                    <p class="text-gray-700">您可以點擊「單字列表」中的單字進行回顧，或切換到下一天的單字。</p>
+                </div>
+            `;
+            practiceArea.classList.remove('hidden');
+        } else if (document.getElementById('welcome-screen').classList.contains('hidden')) {
+             // 處理首次載入時的歡迎畫面，不應被清空
+        } else {
+             // 否則，確保練習區塊是當前模式的內容
+             // 只有當練習區不是歡迎畫面，且尚未完成時才重新載入
+             if (document.getElementById('welcome-screen').classList.contains('hidden')) {
+                 loadNextItem();
+             }
+        }
+
+        renderWordList(); // 每次進度更新後，重新渲染列表以更新狀態
+    }
+
+    // 隨機打亂陣列
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // 取得下一個未學習的單字
+    function getNextWord() {
+        // 從當前 wordData 中尋找第一個未學習的單字
+        const unlearnedWords = wordData.filter(w => !learnedWords.has(w.word));
+        if (unlearnedWords.length > 0) {
+            // 隨機選擇一個未學習的單字
+            const randomIndex = Math.floor(Math.random() * unlearnedWords.length);
+            return unlearnedWords[randomIndex];
+        }
+        return null; // 所有單字都已學習
+    }
+
+    // 設定模式並渲染介面
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('welcome-screen').classList.add('hidden');
+        document.getElementById('practice-area').classList.remove('hidden');
+
+        // 更新左側按鈕視覺狀態
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.classList.remove('bg-primary-blue', 'text-white', 'border', 'border-gray-300');
+            btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+        });
+        document.getElementById(`mode-${mode}`).classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+        document.getElementById(`mode-${mode}`).classList.add('bg-primary-blue', 'text-white');
+
+        loadNextItem();
+    }
+    
+    // 載入下一個單字卡或測驗題
+    function loadNextItem() {
+        const nextWord = getNextWord();
+        displayWord = nextWord;
+
+        if (!nextWord) {
+            // 所有單字已完成，會由 updateProgress 處理
+            updateProgress();
+            return;
+        }
+
+        const practiceArea = document.getElementById('practice-area');
+        practiceArea.innerHTML = '';
+
+        if (currentMode === 'quiz') {
+            practiceArea.innerHTML = renderQuiz(nextWord);
+        } else if (currentMode === 'flashcard') {
+            practiceArea.innerHTML = renderFlashcard(nextWord);
+        }
+    }
+
+    // 渲染單字列表
+    function renderWordList() {
+        const listContainer = document.getElementById('word-list');
+        listContainer.innerHTML = '';
+
+        // 根據當前的 wordData 渲染列表
+        wordData.forEach(w => {
+            const isLearned = learnedWords.has(w.word);
+            const statusClass = isLearned ? 'text-primary-blue' : 'text-gray-500';
+            const statusIcon = isLearned ? '✅' : '⚪';
+
+            const listItem = document.createElement('li');
+            listItem.className = `flex justify-between items-center p-2 rounded-md hover:bg-gray-100 cursor-pointer transition duration-150`;
+            listItem.innerHTML = `
+                <span class="text-sm font-medium ${statusClass}">${statusIcon} ${w.word}</span>
+                <span class="text-xs text-gray-400">${w.pos}</span>
+            `;
+            // 點擊列表中的單字，切換到詳細模式
+            listItem.onclick = () => showWordDetails(w);
+            listContainer.appendChild(listItem);
+        });
+    }
+
+    // 顯示單字詳細資訊（覆蓋右側面板）
+    function showWordDetails(word) {
+        const practiceArea = document.getElementById('practice-area');
+        document.getElementById('welcome-screen').classList.add('hidden');
+        practiceArea.classList.remove('hidden');
+        
+        // 為了在詳細資訊中顯示與單字最相關的例句，這裡使用一個預設的通用例句
+        // 實際應用中，應為每個單字配置專屬例句。
+        const contextExample = `"The company decided to **launch** a new product line next quarter."`;
+        
+        practiceArea.innerHTML = `
+            <div class="p-8 bg-white rounded-xl shadow-lg">
+                <p class="text-sm text-gray-500 mb-2">DAY ${word.day}</p>
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-4xl font-bold text-gray-900">${word.word}</h3>
+                    <span class="text-lg text-primary-blue font-semibold">${word.pos}</span>
+                </div>
+                <p class="text-2xl text-gray-700 mb-6">${word.def}</p>
+                
+                <h4 class="text-xl font-semibold text-gray-600 mb-3">多益例句 (Context Example)</h4>
+                <blockquote class="border-l-4 border-primary-blue pl-4 py-2 italic text-gray-500">
+                    ${contextExample}
+                </blockquote>
+                
+                <button onclick="setMode(currentMode)" class="mt-8 px-5 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition duration-300">
+                    返回練習模式
+                </button>
+            </div>
+        `;
+    }
+
+    // 渲染單字卡模式
+    function renderFlashcard(word) {
+        return `
+            <div id="flashcard-container" class="text-center p-10 bg-white rounded-xl shadow-lg min-h-[300px] flex flex-col justify-between items-center">
+                <div id="card-content" class="w-full transition-transform duration-500 ease-in-out [transform:rotateY(0deg)]">
+                    <p class="text-lg text-gray-500 mb-4">DAY ${word.day}</p>
+                    <h3 class="text-5xl font-bold text-gray-900 mb-4">${word.word}</h3>
+                    <p class="text-lg text-primary-blue font-semibold">${word.pos}</p>
+                    <p id="meaning" class="mt-8 text-3xl text-gray-700 opacity-0 transition-opacity duration-300">
+                        ${word.def}
+                    </p>
+                </div>
+                <div class="mt-10 w-full space-y-3">
+                    <button onclick="flipCard('${word.word}')" class="w-full px-6 py-3 bg-primary-blue text-white font-semibold rounded-xl shadow-lg hover:bg-emerald-600 transition duration-300">
+                        點擊查看中文翻譯
+                    </button>
+                    <div id="card-actions" class="hidden space-y-2">
+                        <button onclick="markLearned('${word.word}')" class="w-full px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600">
+                            我會了，標記為已學習
+                        </button>
+                        <button onclick="loadNextItem()" class="w-full px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400">
+                            下一個 (繼續複習)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // 翻轉單字卡
+    function flipCard(wordKey) {
+        document.getElementById('meaning').classList.remove('opacity-0');
+        document.getElementById('card-actions').classList.remove('hidden');
+        // 隱藏翻轉按鈕
+        document.querySelector('#flashcard-container button').style.display = 'none';
+    }
+
+    // 渲染選擇題模式
+    function renderQuiz(word) {
+        const correctDef = word.def;
+        const options = generateDistractors(word, correctDef);
+        const optionsHTML = options.map((opt, index) => {
+            return `
+                <button onclick="checkAnswer(this, '${opt.isCorrect}')" 
+                        class="quiz-option w-full p-4 text-left border border-gray-300 rounded-xl transition duration-150 hover:bg-gray-100 text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 font-medium shadow-sm">
+                    ${String.fromCharCode(65 + index)}. ${opt.def}
+                </button>
+            `;
+        }).join('');
+
+        return `
+            <div class="p-8 bg-white rounded-xl shadow-lg">
+                <p class="text-sm text-gray-500 mb-2">DAY ${word.day}</p>
+                <h3 class="text-xl font-semibold text-gray-700 mb-6">💡 請選擇下方哪個選項是 <span class="text-primary-blue text-2xl font-bold">${word.word}</span> 的正確中文解釋：</h3>
+                <div id="options-container" class="space-y-4">
+                    ${optionsHTML}
+                </div>
+                <div id="quiz-feedback" class="mt-6 p-4 rounded-lg hidden">
+                    <!-- 回饋訊息將顯示在這裡 -->
+                </div>
+                <button id="next-button" onclick="loadNextItem()" class="mt-6 px-6 py-3 bg-primary-blue text-white font-semibold rounded-xl shadow-lg hover:bg-emerald-600 transition duration-300 hidden">
+                    下一個單字
+                </button>
+            </div>
+        `;
+    }
+
+    // 產生選擇題的干擾項
+    function generateDistractors(currentWord, correctDef) {
+        // 從當前練習範圍 (wordData) 中選取干擾項
+        let allDefs = wordData.filter(w => w.word !== currentWord.word).map(w => w.def);
+        let distractors = [];
+        let attempts = 0;
+
+        while (distractors.length < 3 && attempts < MAX_RETRIES * wordData.length) {
+            const randomIndex = Math.floor(Math.random() * allDefs.length);
+            const randomDef = allDefs[randomIndex];
+
+            // 確保干擾項不重複且不與正確答案相同
+            if (randomDef !== correctDef && !distractors.some(d => d.def === randomDef)) {
+                distractors.push({ def: randomDef, isCorrect: 'false' });
+            }
+            attempts++;
+        }
+        
+        // 確保總是有 4 個選項 (正確答案 + 3 個干擾項)
+        const options = [{ def: correctDef, isCorrect: 'true' }].concat(distractors.slice(0, 3));
+        
+        // 隨機打亂選項順序
+        return shuffleArray(options);
+    }
+
+    // 檢查選擇題答案
+    function checkAnswer(button, isCorrect) {
+        // 禁用所有按鈕
+        document.querySelectorAll('.quiz-option').forEach(btn => {
+            btn.disabled = true;
+            btn.classList.remove('hover:bg-gray-100');
+        });
+
+        const feedbackBox = document.getElementById('quiz-feedback');
+        feedbackBox.classList.remove('hidden');
+
+        if (isCorrect === 'true') {
+            button.classList.add('bg-green-100', 'border-green-500');
+            feedbackBox.classList.add('bg-green-50', 'text-green-800');
+            feedbackBox.innerHTML = '✅ **答對了！** 已將此單字標記為「已學習」。';
+            markLearned(displayWord.word, false); // 不自動跳轉下一題
+        } else {
+            button.classList.add('bg-red-100', 'border-red-500');
+            // 標示出正確答案
+            document.querySelectorAll('.quiz-option').forEach(btn => {
+                if (btn.getAttribute('onclick').includes("'true'")) {
+                    btn.classList.add('bg-green-200', 'border-green-500');
+                }
+            });
+            feedbackBox.classList.add('bg-red-50', 'text-red-800');
+            feedbackBox.innerHTML = `❌ **答錯了。** 正確答案是：${displayWord.def}`;
+            // 答錯後不標記為已學習
+        }
+
+        document.getElementById('next-button').classList.remove('hidden');
+    }
+
+    // 標記單字為已學習
+    function markLearned(wordKey, skipLoadNext = true) {
+        if (!learnedWords.has(wordKey)) {
+            learnedWords.add(wordKey);
+            showFeedback(`「${wordKey}」已標記為已學習!`, 'green');
+            updateProgress();
+        }
+        if (skipLoadNext) {
+            loadNextItem();
+        }
+    }
+
+    // 顯示即時提示訊息
+    function showFeedback(message, type) {
+        const box = document.getElementById('feedback-box');
+        const msg = document.getElementById('feedback-message');
+        
+        box.className = 'fixed bottom-0 left-1/2 -translate-x-1/2 p-4 mb-4 rounded-xl shadow-2xl transition-opacity duration-300 w-11/12 max-w-md';
+
+        if (type === 'green') {
+            box.classList.add('bg-green-600', 'text-white');
+        } else {
+            box.classList.add('bg-gray-800', 'text-white');
+        }
+
+        msg.textContent = message;
+        box.classList.remove('opacity-0', 'pointer-events-none');
+        box.classList.add('opacity-100');
+
+        setTimeout(() => {
+            box.classList.remove('opacity-100');
+            box.classList.add('opacity-0', 'pointer-events-none');
+        }, 2500);
+    }
+
+    // 啟動 App
+    window.onload = initApp;
+
+</script>
+
+</body>
+</html>
