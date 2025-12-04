@@ -229,19 +229,59 @@
                     </ul>
                 </div>
 
-                <!-- 2. 多益測驗 Content (等待內容) -->
+                <!-- 2. 多益測驗 Content (已上傳文件) -->
                 <div id="toeic" class="tab-content">
-                    <div class="fun-card p-8 text-center text-dark-primary">
-                        <div class="text-6xl mb-4">💯</div>
-                        <h3 class="text-2xl font-bold mb-4">多益測驗補給站</h3>
-                        <p class="text-dark-secondary mb-6">
-                            這裡將是你的多益（TOEIC）練習區！稍後會將最新的測驗題目放在這裡，
-                            讓你隨時都能準備應戰。讓我們一起把黃金證書拿到手！
-                        </p>
-                        <a href="#" class="inline-block bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition duration-150 transform hover:scale-105">
-                            👉 開始第一次測驗 (Coming Soon)
-                        </a>
-                    </div>
+                    <h2 class="text-xl font-semibold text-white mb-6 border-b border-gray-700 pb-3">
+                        多益單字學習資源 (已找到 <span class="font-bold accent-color">2</span> 份)
+                    </h2>
+                    
+                    <ul id="toeic-document-list" class="space-y-6">
+
+                        <!-- 檔案列表項 (使用 fun-card 樣式) - Day 1-10 -->
+                        <li class="fun-card">
+                            <!-- 確保 href 指向您上傳到 GitHub 的檔案名稱 -->
+                            <a href="多益單字Day1-10.html" class="block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">💡</span> Day 1-10 核心多益單字
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        初階
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        包含多益考試中最常見的 100 個基礎單字。
+                                    </p>
+                                    <!-- 互動指示箭頭 -->
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <!-- 檔案列表項 - Day 11-20 -->
+                        <li class="fun-card">
+                            <!-- 確保 href 指向您上傳到 GitHub 的檔案名稱 -->
+                            <a href="多益單字Day11-20.html" class="block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">💡</span> Day 11-20 核心多益單字
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        進階
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        挑戰更高頻率的職場與商務單字。
+                                    </p>
+                                    <!-- 互動指示箭頭 -->
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a>
+                        </li>
+                        
+                    </ul>
                 </div>
 
             </div>
@@ -278,9 +318,10 @@
             if (tabName === 'news') {
                 updateFileCount();
             }
+            // 由於 TOEIC 區塊的計數是固定的，所以不需要額外的 JS 邏輯來更新它
         }
 
-        // Function to update the file count
+        // Function to update the file count (專門針對新聞區塊)
         function updateFileCount() {
             const list = document.getElementById('document-list');
             // 只有在 document-list 元素存在且可見時才計算
@@ -306,8 +347,7 @@
             const day = now.getDate().toString().padStart(2, '0');
             document.getElementById('last-updated').textContent = `${year}/${month}/${day}`;
 
-            // 3. 預設開啟第一個分頁
-            // 這邊不需要額外點擊，因為在 HTML 中 'news' Tab 已經有 active 類別
+            // 3. 預設開啟第一個分頁 (已在 HTML 中設定)
         });
     </script>
 </body>
