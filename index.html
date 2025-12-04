@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 你的英文能量補給站！</title>
+    <title>🔥 你的英文能量補給站！ (優化版)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -18,34 +18,71 @@
         .fun-card {
             background-color: #f0fdf4; /* 淺薄荷綠，清新提神 */
             border-radius: 1.25rem; /* 更圓潤的邊角 */
-            box-shadow: 8px 8px 0px rgba(132, 204, 22, 0.7); /* 顯著的石灰綠色偏移陰影，營造「彈出」感 */
+            box-shadow: 8px 8px 0px rgba(132, 204, 22, 0.7); /* 顯著的石灰綠色偏移陰影 */
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 彈性懸停效果 */
             border: 2px solid #84cc16; /* 活潑的邊框 */
+            cursor: pointer;
         }
+        /* 互動性增強：滑鼠懸停效果 */
         .fun-card:hover {
-            transform: translate(-2px, -2px); /* 懸停時略微移回，強調陰影效果 */
-            box-shadow: 6px 6px 0px rgba(132, 204, 22, 0.7);
+            transform: translate(-4px, -4px) scale(1.01); /* 浮起感更明顯 */
+            box-shadow: 12px 12px 0px rgba(163, 230, 53, 0.8); /* 陰影更亮 */
+            background-color: #f0ffee; /* 輕微變色 */
         }
 
-        /* 標題區塊使用獨立樣式，與背景區隔 */
+        /* 標題區塊使用獨立樣式 */
         .header-card {
             background-color: #374151; /* 深灰色背景，穩重 */
             border-radius: 1.25rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.2); /* 柔和深色陰影 */
         }
 
-        /* 主色調：Lime-400 (石灰綠色，活潑、充滿能量) */
+        /* 主內容區的包裝器，用於統一圓角和背景 */
+        .content-wrapper {
+            background-color: #2c4a45; /* 與 Tab 活躍背景色接近的深綠色，創造連續感 */
+            border-radius: 1.5rem; /* 更大的圓角 */
+            padding: 1.5rem; /* 內部間距 */
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 顏色定義 */
         .accent-color {
-            color: #84cc16; 
+            color: #84cc16; /* Lime-500 */
         }
         .bg-accent-light {
             background-color: #ecfccb; /* Lime-100 */
         }
         .text-dark-primary {
-            color: #1f2937; /* 接近黑色的深灰，用於淺卡片上的主要文字 */
+            color: #1f2937;
         }
         .text-dark-secondary {
-            color: #6b7280; /* 淺卡片上的次要文字 */
+            color: #6b7280;
+        }
+
+        /* Tab 樣式 */
+        .tab-button {
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            border-top-left-radius: 0.75rem; /* 圓角 Tab */
+            border-top-right-radius: 0.75rem;
+        }
+        .tab-button.active {
+            border-bottom: 4px solid #a3e635; /* 活躍分頁的亮石灰綠色底線，更粗 */
+            color: #d1fae5;
+            font-weight: 800;
+            background-color: #2c4a45; 
+        }
+        .tab-button:hover:not(.active) {
+            color: #a3e635; /* 懸停時的顏色 */
+            background-color: rgba(60, 179, 113, 0.1); /* 半透明綠色背景 */
+        }
+
+        /* 內容區塊隱藏/顯示 */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
         }
 
     </style>
@@ -54,9 +91,9 @@
     <div class="max-w-4xl mx-auto">
         
         <!-- Header Section (主標題區塊) -->
-        <header class="header-card p-6 mb-10 border border-gray-600">
+        <header class="header-card p-6 mb-8 border border-gray-600">
             <h1 class="text-4xl font-extrabold text-white mb-2 flex items-center">
-                <span class="mr-3 text-4xl accent-color">🔥</span> 
+                <span class="mr-3 text-4xl accent-color">⚡</span> 
                 你的英文能量補給站！
             </h1>
             <p class="text-xl text-gray-300">
@@ -65,9 +102,9 @@
             <!-- Meta Info -->
             <div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-400">
                 <span class="flex items-center">
-                    <!-- Icon: Folder -->
+                    <!-- Icon: Instagram (User icon for social media) -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     主理人Instagram：Shiu_orz
                 </span>
@@ -82,107 +119,199 @@
             </div>
         </header>
 
-        <!-- Document List Section (文件列表) -->
-        <div class="p-6">
-            <h2 class="text-2xl font-semibold text-white mb-6 border-b border-gray-600 pb-3">
-                今日份知識點 (待征服 <span id="file-count" class="font-bold accent-color">4</span> 篇)
-            </h2>
-            
-            <ul id="document-list" class="space-y-6">
+        <!-- Main Content Wrapper (包含導航和內容) -->
+        <div class="content-wrapper">
+            <!-- Tab Navigation (分頁導航) -->
+            <nav class="flex -mt-6 -mx-6 mb-6 border-b border-gray-700/50">
+                <button id="tab-news-button" data-tab="news" class="tab-button active flex-1 py-3 text-lg focus:outline-none" onclick="openTab(event, 'news')">
+                    📚 英文新聞
+                </button>
+                <button id="tab-toeic-button" data-tab="toeic" class="tab-button flex-1 py-3 text-lg focus:outline-none" onclick="openTab(event, 'toeic')">
+                    📝 多益測驗
+                </button>
+            </nav>
 
-                <!-- 檔案列表項 (使用 fun-card 樣式) -->
-                <!-- 2025/12/05 -->
-                <li class="fun-card">
-                    <a href="2025.12.05英文新聞.html" class="block p-4 rounded-xl">
-                        <div class="flex items-center justify-between">
-                            <span class="text-lg font-bold text-dark-primary flex items-center">
-                                <span class="mr-2 text-2xl accent-color">📚</span> 2025/12/05 英文新聞
-                            </span>
-                            <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                2025/12/05
-                            </span>
-                        </div>
-                        <p class="text-sm text-dark-secondary mt-1">
-                            重點新聞_台灣中油液化天然氣（LNG）計畫遭貪腐調查
-                        </p>
-                    </a>
-                </li>
+            <!-- Tab Content Area (分頁內容區塊) -->
+            <div class="p-0">
                 
-                <!-- 2025/12/04 -->
-                <li class="fun-card">
-                    <a href="2025.12.04英文新聞.html" class="block p-4 rounded-xl">
-                        <div class="flex items-center justify-between">
-                            <span class="text-lg font-bold text-dark-primary flex items-center">
-                                <span class="mr-2 text-2xl accent-color">📚</span> 2025/12/04 英文新聞
-                            </span>
-                            <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                2525/12/04
-                            </span>
-                        </div>
-                        <p class="text-sm text-dark-secondary mt-1">
-                            重點新聞_全聯鯛魚排驗出禁藥
-                        </p>
-                    </a>
-                </li>
+                <!-- 1. 英文新聞 Content -->
+                <div id="news" class="tab-content active">
+                    <h2 class="text-xl font-semibold text-white mb-6 border-b border-gray-700 pb-3">
+                        今日份知識點 (已找到 <span id="file-count" class="font-bold accent-color">4</span> 篇)
+                    </h2>
+                    
+                    <ul id="document-list" class="space-y-6">
 
-                <!-- 2025/12/03 -->
-                <li class="fun-card">
-                    <a href="2025.12.03英文新聞.html" class="block p-4 rounded-xl">
-                        <div class="flex items-center justify-between">
-                            <span class="text-lg font-bold text-dark-primary flex items-center">
-                                <span class="mr-2 text-2xl accent-color">📚</span> 2025/12/03 英文新聞
-                            </span>
-                            <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                2025/12/03
-                            </span>
-                        </div>
-                        <p class="text-sm text-dark-secondary mt-1">
-                             重點新聞_淡水停水事件
-                        </p>
-                    </a>
-                </li>
+                        <!-- 檔案列表項 (使用 fun-card 樣式) - 2025/12/05 -->
+                        <li class="fun-card">
+                            <a href="2025.12.05英文新聞.html" class="block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/05 英文新聞
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        2025/12/05
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        重點新聞_台灣中油液化天然氣（LNG）計畫遭貪腐調查
+                                    </p>
+                                    <!-- 互動指示箭頭 -->
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <!-- 檔案列表項 - 2025/12/04 -->
+                        <li class="fun-card">
+                            <a href="2025.12.04英文新聞.html" class="block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/04 英文新聞
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        2525/12/04
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        重點新聞_全聯鯛魚排驗出禁藥
+                                    </p>
+                                    <!-- 互動指示箭頭 -->
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a>
+                        </li>
 
-                <!-- 2025/12/02 (保留原本的 href) -->
-                <li class="fun-card">
-                    <a href="Funday新聞20251202.html" class="block p-4 rounded-xl">
-                        <div class="flex items-center justify-between">
-                            <span class="text-lg font-bold text-dark-primary flex items-center">
-                                <span class="mr-2 text-2xl accent-color">📚</span> 2025/12/02 英文新聞
-                            </span>
-                            <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                2025/12/02
-                            </span>
-                        </div>
-                        <p class="text-sm text-dark-secondary mt-1">
-                            重點新聞_香港災難：高樓火警
+                        <!-- 檔案列表項 - 2025/12/03 -->
+                        <li class="fun-card">
+                            <a href="2025.12.03英文新聞.html" class="block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/03 英文新聞
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        2025/12/03
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        重點新聞_淡水停水事件
+                                    </p>
+                                    <!-- 互動指示箭頭 -->
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- 檔案列表項 - 2025/12/02 (保留原本的 href) -->
+                        <li class="fun-card">
+                            <a href="Funday新聞20251202.html" class="block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/02 英文新聞
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        2025/12/02
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        重點新聞_香港災難：高樓火警
+                                    </p>
+                                    <!-- 互動指示箭頭 -->
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a> 
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <!-- 2. 多益測驗 Content (等待內容) -->
+                <div id="toeic" class="tab-content">
+                    <div class="fun-card p-8 text-center text-dark-primary">
+                        <div class="text-6xl mb-4">💯</div>
+                        <h3 class="text-2xl font-bold mb-4">多益測驗補給站</h3>
+                        <p class="text-dark-secondary mb-6">
+                            這裡將是你的多益（TOEIC）練習區！稍後會將最新的測驗題目放在這裡，
+                            讓你隨時都能準備應戰。讓我們一起把黃金證書拿到手！
                         </p>
-                    </a> 
-                </li>
-                
-            </ul>
+                        <a href="#" class="inline-block bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition duration-150 transform hover:scale-105">
+                            👉 開始第一次測驗 (Coming Soon)
+                        </a>
+                    </div>
+                </div>
+
+            </div>
         </div>
         
     </div>
 
     <script>
-        // 腳本區塊：自動更新文件計數和日期
-        document.addEventListener('DOMContentLoaded', () => {
-            const list = document.getElementById('document-list');
-            const fileCount = list.getElementsByTagName('li').length;
-            document.getElementById('file-count').textContent = fileCount;
+        /**
+         * 腳本區塊：處理分頁切換邏輯、自動更新文件計數和日期
+         */
 
-            // 獲取當前日期並更新 "最後更新" 時間
+        // Function to handle tab switching
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+
+            // 隱藏所有分頁內容
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+
+            // 移除所有分頁按鈕的 active 樣式
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            // 顯示當前選定的分頁內容，並為按鈕添加 active 樣式
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+
+            // 如果切換到新聞分頁，則重新計算檔案數
+            if (tabName === 'news') {
+                updateFileCount();
+            }
+        }
+
+        // Function to update the file count
+        function updateFileCount() {
+            const list = document.getElementById('document-list');
+            // 只有在 document-list 元素存在且可見時才計算
+            if (list) {
+                const fileCount = list.getElementsByTagName('li').length;
+                const fileCountDisplay = document.getElementById('file-count');
+                if (fileCountDisplay) {
+                    fileCountDisplay.textContent = fileCount;
+                }
+            }
+        }
+
+
+        // 初始化設置
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. 更新文件計數
+            updateFileCount();
+
+            // 2. 獲取當前日期並更新 "最後更新" 時間
             const now = new Date();
             const year = now.getFullYear();
             const month = (now.getMonth() + 1).toString().padStart(2, '0');
             const day = now.getDate().toString().padStart(2, '0');
             document.getElementById('last-updated').textContent = `${year}/${month}/${day}`;
+
+            // 3. 預設開啟第一個分頁
+            // 這邊不需要額外點擊，因為在 HTML 中 'news' Tab 已經有 active 類別
         });
     </script>
 </body>
-
 </html>
-
 
 
 
