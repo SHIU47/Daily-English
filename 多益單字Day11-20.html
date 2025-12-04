@@ -1,1000 +1,733 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { BookOpenText, CheckCircle, Calendar, List, ChevronDown, Check, X, Volume2, RotateCcw } from 'lucide-react';
-
-// ------------------------------------------
-// 1. 單字資料 (Day 11 - 20)
-// ------------------------------------------
-const VOCABULARY_DAY_11 = [
-    { word: 'renowned', meaning: '有名的' },
-    { word: 'bright', meaning: '明亮' },
-    { word: 'frustrating', meaning: '令人沮喪的' },
-    { word: 'coordinated', meaning: '一致的' },
-    { word: 'proficient', meaning: '精通的' },
-    { word: 'alternative', meaning: '交替的' },
-    { word: 'economic', meaning: '經濟上的' },
-    { word: 'admirable', meaning: '令人欽佩的' },
-    { word: 'profitable', meaning: '有獲利的' },
-    { word: 'insistent', meaning: '堅持的' },
-    { word: 'respectful', meaning: '尊重的' },
-    { word: 'immediate', meaning: '立刻的' },
-    { word: 'disappointing', meaning: '令人沮喪' },
-    { word: 'modest', meaning: '過度的' },
-    { word: 'fair', meaning: '公正的' },
-    { word: 'parallel', meaning: '平行的' },
-    { word: 'original', meaning: '原本的' },
-    { word: 'advisable', meaning: '可取的' },
-    { word: 'introductory', meaning: '入門的' },
-    { word: 'solid', meaning: '堅固的' },
-    { word: 'valid', meaning: '有效的' },
-    { word: 'sole', meaning: '唯一的' },
-    { word: 'critics', meaning: '評論家' },
-    { word: 'lively', meaning: '熱烈的' },
-    { word: 'overwhelmingly', meaning: '壓倒性的' },
-    { word: 'relaxing', meaning: '放鬆的' },
-    { word: 'present', meaning: '現今的' },
-    { word: 'wasteful', meaning: '浪費的' },
-    { word: 'flawed', meaning: '有缺陷的' },
-    { word: 'domestic', meaning: '國內的' },
-    { word: 'remote', meaning: '遙遠的' },
-    { word: 'sizable', meaning: '相當大的' },
-    { word: 'obvious', meaning: '明顯的' },
-    { word: 'conventional', meaning: '習慣、傳統' },
-    { word: 'distinctive', meaning: '獨特的' },
-    { word: 'authentic', meaning: '真正的' },
-    { word: 'idle', meaning: '閒置的' },
-    { word: 'innovative', meaning: '創新的' },
-    { word: 'ample', meaning: '唯一的' },
-    { word: 'intense', meaning: '強烈的' },
-    { word: 'complex', meaning: '複雜的' },
-    { word: 'statistical', meaning: '統計的' },
-    { word: 'cashier', meaning: '收銀員' },
-    { word: 'hesitant', meaning: '猶豫' },
-    { word: 'display', meaning: '展示' },
-    { word: 'exchange', meaning: '交換' },
-    { word: 'flyer', meaning: '廣告傳單' },
-    { word: 'grand opening', meaning: '盛大開幕' },
-    { word: 'hopeful', meaning: '有希望的' },
-    { word: 'grocery', meaning: '食品雜物' },
-];
-
-const VOCABULARY_DAY_12 = [
-    { word: 'reliable', meaning: '可靠的' },
-    { word: 'deficient', meaning: '有缺陷的' },
-    { word: 'efficient', meaning: '有效率的' },
-    { word: 'punctual', meaning: '準時的' },
-    { word: 'prominent', meaning: '顯著的' },
-    { word: 'advance', meaning: '高級的' },
-    { word: 'appropriate', meaning: '適當的' },
-    { word: 'perceptive', meaning: '敏銳的' },
-    { word: 'equivalent', meaning: '相等的' },
-    { word: 'delicate', meaning: '精美的' },
-    { word: 'deliberate', meaning: '慎重的' },
-    { word: 'noble', meaning: '高貴的' },
-    { word: 'standard', meaning: '標準' },
-    { word: 'fragile', meaning: '易碎的' },
-    { word: 'commercial', meaning: '商業的' },
-    { word: 'sociable', meaning: '善於社交的' },
-    { word: 'cautious', meaning: '小心的' },
-    { word: 'pleasurable', meaning: '令人愉悅的' },
-    { word: 'potential', meaning: '潛力' },
-    { word: 'decent', meaning: '得體的' },
-    { word: 'unanticipated', meaning: '預料之外的' },
-    { word: 'hospitable', meaning: '好客的' },
-    { word: 'knowledgeable', meaning: '博學的' },
-    { word: 'reluctant', meaning: '不情願的' },
-    { word: 'combustible', meaning: '可燃的' },
-    { word: 'reliant', meaning: '依賴的' },
-    { word: 'residential', meaning: '居住的' },
-    { word: 'relative', meaning: '相對的' },
-    { word: 'frequent', meaning: '頻繁的' },
-    { word: 'insistent', meaning: '堅持的' },
-    { word: 'legitimate', meaning: '合法的' },
-    { word: 'average', meaning: '平均' },
-    { word: 'decisive', meaning: '果斷的' },
-    { word: 'advantageous', meaning: '有益的' },
-    { word: 'time frame', meaning: '時間範圍' },
-    { word: 'composed', meaning: '鎮定的' },
-    { word: 'esteemed', meaning: '受尊敬的' },
-    { word: 'accurate', meaning: '精確的' },
-    { word: 'advisory', meaning: '顧問的' },
-    { word: 'imaginary', meaning: '想像的' },
-    { word: 'identical', meaning: '相同的' },
-    { word: 'banquet', meaning: '宴會' },
-    { word: 'continuous', meaning: '連續的' },
-    { word: 'beverage', meaning: '飲料' },
-    { word: 'adverse', meaning: '不利的' },
-    { word: 'cater', meaning: '外燴服務' },
-    { word: 'container', meaning: '容器' },
-    { word: 'unconscious', meaning: '無意識的' },
-    { word: 'dessert', meaning: '點心' },
-    { word: 'valuable', meaning: '貴重的' },
-];
-
-const VOCABULARY_DAY_13 = [
-    { word: 'previous', meaning: '先前的' },
-    { word: 'cooperative', meaning: '合作的' },
-    { word: 'entertaining', meaning: '有趣的' },
-    { word: 'substantial', meaning: '結實、重大的' },
-    { word: 'productive', meaning: '生產的' },
-    { word: 'humid', meaning: '潮濕的' },
-    { word: 'diligent', meaning: '勤奮的' },
-    { word: 'durable', meaning: '耐用的' },
-    { word: 'landscape', meaning: '風景' },
-    { word: 'comfortable', meaning: '舒適的' },
-    { word: 'be subject to', meaning: '受到...的影響' },
-    { word: 'line up', meaning: '排隊' },
-    { word: 'credible', meaning: '可信的' },
-    { word: 'reasonable', meaning: '合理的' },
-    { word: 'recreational', meaning: '娛樂的' },
-    { word: 'prefer', meaning: '偏好' },
-    { word: 'medication', meaning: '藥物' },
-    { word: 'reflect', meaning: '反映' },
-    { word: 'mundane', meaning: '平凡的' },
-    { word: 'visible', meaning: '可見的' },
-    { word: 'scenery', meaning: '景色' },
-    { word: 'conclusive', meaning: '決定性的' },
-    { word: 'revolving', meaning: '旋轉的' },
-    { word: 'shade', meaning: '遮蔽處' },
-    { word: 'recent', meaning: '最近的' },
-    { word: 'promising', meaning: '有前景的' },
-    { word: 'stream', meaning: '小河' },
-    { word: 'sensitive', meaning: '敏感的' },
-    { word: 'preliminary', meaning: '初步的' },
-    { word: 'stroll', meaning: '散步' },
-    { word: 'convincing', meaning: '有說服力的' },
-    { word: 'certain', meaning: '特定的' },
-    { word: 'square', meaning: '廣場' },
-    { word: 'commodity', meaning: '商品' },
-    { word: 'tournament', meaning: '聯賽' },
-    { word: 'available', meaning: '可得到的' },
-    { word: 'crops', meaning: '作物' },
-    { word: 'direct', meaning: '直接' },
-    { word: 'coherent', meaning: '一致的' },
-    { word: 'lengthy', meaning: '冗長的' },
-    { word: 'applicable', meaning: '通用的' },
-    { word: 'rigorous', meaning: '嚴格的' },
-    { word: 'overpriced', meaning: '太貴的' },
-    { word: 'mature', meaning: '成熟的' },
-    { word: 'vague', meaning: '模糊的' },
-    { word: 'exceed', meaning: '超越' },
-    { word: 'imminent', meaning: '逼近的' },
-    { word: 'selective', meaning: '選擇的' },
-    { word: 'tender', meaning: '溫柔的' },
-    { word: 'massive', meaning: '巨大的' },
-];
-
-const VOCABULARY_DAY_14 = [
-    { word: 'accurately', meaning: '精確的' },
-    { word: 'accurately', meaning: '精確地' },
-    { word: 'injury', meaning: '受傷' },
-    { word: 'markedly', meaning: '明確地' },
-    { word: 'vastly', meaning: '廣大地' },
-    { word: 'inspection', meaning: '檢查' },
-    { word: 'closely', meaning: '仔細地' },
-    { word: 'monitor', meaning: '追蹤' },
-    { word: 'insurance', meaning: '保險' },
-    { word: 'merely', meaning: '只是' },
-    { word: 'fluctuation', meaning: '波動' },
-    { word: 'medical', meaning: '醫療的' },
-    { word: 'aboard', meaning: '登機' },
-    { word: 'accidentally', meaning: '意外地' },
-    { word: 'pharmaceutical', meaning: '製藥的' },
-    { word: 'completely', meaning: '完全地' },
-    { word: 'rightly', meaning: '正確地' },
-    { word: 'pharmacy', meaning: '藥局' },
-    { word: 'apparently', meaning: '明顯地' },
-    { word: 'briefly', meaning: '簡短地' },
-    { word: 'prescription', meaning: '處方簽' },
-    { word: 'immediately', meaning: '立刻' },
-    { word: 'seemingly', meaning: '似乎' },
-    { word: 'treat', meaning: '治療' },
-    { word: 'briefly', meaning: '簡短地' },
-    { word: 'weather forecaster', meaning: '天氣預報員' },
-    { word: 'routinely', meaning: '常規地' },
-    { word: 'knowingly', meaning: '知道地' },
-    { word: 'superbly', meaning: '出色地' },
-    { word: 'internally', meaning: '內部地' },
-    { word: 'intentionally', meaning: '有意地' },
-    { word: 'smoothly', meaning: '順利地' },
-    { word: 'acceptably', meaning: '可接受地' },
-    { word: 'gradually', meaning: '逐漸地' },
-    { word: 'gradually', meaning: '逐漸地' },
-    { word: 'markedly', meaning: '明顯地' },
-    { word: 'primarily', meaning: '主要地' },
-    { word: 'strictly', meaning: '嚴格地' },
-    { word: 'occasionally', meaning: '偶爾地' },
-    { word: 'densely', meaning: '密集地' },
-    { word: 'necessarily', meaning: '必須地' },
-    { word: 'independently', meaning: '獨立地' },
-    { word: 'fluently', meaning: '流暢地' },
-    { word: 'severely', meaning: '嚴重地' },
-    { word: 'incorrectly', meaning: '不正確地' },
-    { word: 'carefully', meaning: '小心地' },
-    { word: 'intentionally', meaning: '有意地' },
-    { word: 'securely', meaning: '安全地' },
-    { word: 'casually', meaning: '偶然地' },
-    { word: 'revealed', meaning: '接露' },
-    { word: 'recipient', meaning: '接受者' },
-    { word: 'activation', meaning: '啟動' },
-    { word: 'virtually', meaning: '實際上' },
-    { word: 'drill', meaning: '演習' },
-    { word: 'initially', meaning: '起初' },
-    { word: 'supremely', meaning: '極度' },
-    { word: 'publicly', meaning: '公開地' },
-    { word: 'merely', meaning: '只是' },
-    { word: 'vacantly', meaning: '空調' },
-    { word: 'openly', meaning: '公開地' },
-    { word: 'consequently', meaning: '結果' },
-    { word: 'solidly', meaning: '緊固地' },
-    { word: 'jealously', meaning: '忌妒地' },
-    { word: 'allergy', meaning: '過敏' },
-    { word: 'superbly', meaning: '出色地' },
-    { word: 'appointment', meaning: '預約' },
-    { word: 'inconclusively', meaning: '沒有結論地' },
-    { word: 'clinic', meaning: '診所' },
-    { word: 'predicted', meaning: '預測' },
-    { word: 'examine', meaning: '檢查' },
-    { word: 'commonly', meaning: '一般地' },
-    { word: 'injection', meaning: '注射' },
-];
-
-const VOCABULARY_DAY_15 = [
-    { word: 'exclusively', meaning: '獨佔' },
-    { word: 'reluctantly', meaning: '不情願地' },
-    { word: 'relatively', meaning: '相對地' },
-    { word: 'decently', meaning: '合適地' },
-    { word: 'elsewhere', meaning: '在別的地方' },
-    { word: 'purpose', meaning: '目的' },
-    { word: 'justly', meaning: '公正地' },
-    { word: 'studies have shown', meaning: '研究顯示' },
-    { word: 'largely', meaning: '大部分' },
-    { word: 'precisely', meaning: '嚴謹' },
-    { word: 'virtually', meaning: '實際上' },
-    { word: 'outwardly', meaning: '表面地' },
-    { word: 'evenly', meaning: '平均地' },
-    { word: 'tentatively', meaning: '暫時地' },
-    { word: 'consistently', meaning: '堅持地' },
-    { word: 'courteously', meaning: '有禮貌地' },
-    { word: 'initially', meaning: '最初' },
-    { word: 'gently', meaning: '溫柔地' },
-    { word: 'generally', meaning: '一般地' },
-    { word: 'slightly', meaning: '稍微' },
-    { word: 'totally', meaning: '完全地' },
-    { word: 'largely', meaning: '主要地' },
-    { word: 'promptly', meaning: '迅速地' },
-    { word: 'plentifully', meaning: '大量地' },
-    { word: 'periodically', meaning: '定期地' },
-    { word: 'promptly', meaning: '準時地' },
-    { word: 'inseparably', meaning: '不可分離的' },
-    { word: 'primarily', meaning: '主要地' },
-    { word: 'slightly', meaning: '稍微地' },
-    { word: 'temporary', meaning: '臨時的' },
-    { word: 'precisely', meaning: '恰好地' },
-    { word: 'priorities', meaning: '優先事項' },
-    { word: 'tediously', meaning: '單調地' },
-    { word: 'relatively', meaning: '相對地' },
-    { word: 'densely', meaning: '密集地' },
-    { word: 'expertly', meaning: '熟練地' },
-    { word: 'loosely', meaning: '鬆散地' },
-    { word: 'excessively', meaning: '過度地' },
-    { word: 'significantly', meaning: '顯然地' },
-    { word: 'elsewhere', meaning: '別的地方' },
-    { word: 'rigidly', meaning: '死板地' },
-    { word: 'considerably', meaning: '相當多地' },
-    { word: 'truthfully', meaning: '誠實地' },
-    { word: 'attendant', meaning: '服務員' },
-    { word: 'accidentally', meaning: '意外地' },
-    { word: 'baggage', meaning: '行李' },
-    { word: 'artificially', meaning: '人工地' },
-    { word: 'balance', meaning: '結餘、平衡' },
-    { word: 'repeatedly', meaning: '反覆地' },
-    { word: 'connecting flight', meaning: '轉機' },
-    { word: 'deliberately', meaning: '故意地' },
-    { word: 'due', meaning: '預計地、應支付地' },
-    { word: 'generally', meaning: '一般地' },
-    { word: 'fill out', meaning: '填好' },
-    { word: 'conditionally', meaning: '有條件地' },
-    { word: 'interest', meaning: '利息' },
-    { word: 'calmly', meaning: '平靜地' },
-    { word: 'teller', meaning: '出納員' },
-    { word: 'gratefully', meaning: '感謝地' },
-    { word: 'withdraw', meaning: '提取' },
-    { word: 'barely', meaning: '勉強地' },
-];
-
-const VOCABULARY_DAY_16 = [
-    { word: 'reasonably', meaning: '合理' },
-    { word: 'mostly', meaning: '大多' },
-    { word: 'nearly', meaning: '幾乎' },
-    { word: 'sharply', meaning: '突然地' },
-    { word: 'exactly', meaning: '正確' },
-    { word: 'utterly', meaning: '完全地' },
-    { word: 'immeasurably', meaning: '無法計算' },
-    { word: 'correctly', meaning: '正確' },
-    { word: 'regretfully', meaning: '遺憾' },
-    { word: 'typically', meaning: '通常、典型' },
-    { word: 'rapidly', meaning: '迅速' },
-    { word: 'potentially', meaning: '潛力' },
-    { word: 'typically', meaning: '典型' },
-    { word: 'seasoned', meaning: '經驗豐富的' },
-    { word: 'rightfully', meaning: '正當地' },
-    { word: 'bland', meaning: '太淡' },
-    { word: 'entirely', meaning: '完全' },
-    { word: 'secretly', meaning: '秘密地' },
-    { word: 'gently', meaning: '溫柔' },
-    { word: 'gladly', meaning: '樂意' },
-    { word: 'regularly', meaning: '一般地' },
-    { word: 'purposefully', meaning: '故意' },
-    { word: 'overly', meaning: '過度地' },
-    { word: 'overly', meaning: '過分、過於' },
-    { word: 'successfully', meaning: '成功地' },
-    { word: 'rapidly', meaning: '迅速' },
-    { word: 'formerly', meaning: '以前' },
-    { word: 'rarely', meaning: '很少' },
-    { word: 'considerably', meaning: '相當多地' },
-    { word: 'belatedly', meaning: '遲來地' },
-    { word: 'chiefly', meaning: '主要' },
-    { word: 'curiously', meaning: '好奇' },
-    { word: 'recently', meaning: '最近' },
-    { word: 'inclement', meaning: '惡劣' },
-    { word: 'continually', meaning: '繼續' },
-    { word: 'realistically', meaning: '實際' },
-    { word: 'distinctly', meaning: '清晰' },
-    { word: 'majorly', meaning: '主要' },
-    { word: 'strictly', meaning: '嚴格' },
-    { word: 'nearly', meaning: '幾乎' },
-    { word: 'strides', meaning: '進步' },
-    { word: 'airmail', meaning: '航空郵件' },
-    { word: 'applause', meaning: '鼓掌' },
-    { word: 'clothing', meaning: '衣服' },
-    { word: 'readily', meaning: '容易' },
-    { word: 'expedite', meaning: '加速' },
-    { word: 'carelessly', meaning: '粗心' },
-    { word: 'fitting room', meaning: '試衣間' },
-    { word: 'considerably', meaning: '相當多地' },
-    { word: 'garment', meaning: '服裝' },
-    { word: 'traditionally', meaning: '傳統' },
-    { word: 'label', meaning: '標籤' },
-    { word: 'deeply', meaning: '深深地' },
-    { word: 'laundry', meaning: '洗衣' },
-    { word: 'honestly', meaning: '誠實' },
-    { word: 'reasonably', meaning: '合理' },
-    { word: 'previously', meaning: '之前' },
-    { word: 'numerously', meaning: '許多地' },
-    { word: 'frankly', meaning: '老實說' },
-];
-
-const VOCABULARY_DAY_17 = [
-    { word: 'be subject to', meaning: '受到…的影響' },
-    { word: 'supposedly', meaning: '據稱' },
-    { word: 'route', meaning: '路線' },
-    { word: 'be pertinent to', meaning: '和…有關' },
-    { word: 'unanimous', meaning: '一致' },
-    { word: 'sidewalk', meaning: '人行道' },
-    { word: 'be likely to', meaning: '可能…' },
-    { word: 'absolute', meaning: '絕對' },
-    { word: 'be familiar with', meaning: '熟悉…' },
-    { word: 'negative', meaning: '負面、否定' },
-    { word: 'be intended for', meaning: '以...為目的' },
-    { word: 'unaware', meaning: '不知道' },
-    { word: 'be adequate for', meaning: '勝任…' },
-    { word: 'likely', meaning: '可能' },
-    { word: 'be suitable for', meaning: '適合…' },
-    { word: 'detail', meaning: '細節' },
-    { word: 'be willing to', meaning: '願意…' },
-    { word: 'slight', meaning: '些微' },
-    { word: 'be bound to', meaning: '一定會做…' },
-    { word: 'active', meaning: '活躍' },
-    { word: 'be pleased to', meaning: '很高興做…' },
-    { word: 'occasion', meaning: '偶爾' },
-    { word: 'be similar to', meaning: '和...類似' },
-    { word: 'lasting', meaning: '持久' },
-    { word: 'be unable to', meaning: '無法做…' },
-    { word: 'ongoing', meaning: '正在進行' },
-    { word: 'be popular with', meaning: '受...歡迎' },
-    { word: 'similar', meaning: '相似' },
-    { word: 'be eligible to', meaning: '有資格做…' },
-    { word: 'worthy', meaning: '有價值的' },
-    { word: 'be dedicated to', meaning: '專注於…' },
-    { word: 'questionable', meaning: '可疑' },
-    { word: 'be equipped with', meaning: '配備…' },
-    { word: 'impartial', meaning: '公正' },
-    { word: 'be skilled at', meaning: '熟練…' },
-    { word: 'absent', meaning: '缺席' },
-    { word: 'be unaware of', meaning: '不知道…' },
-    { word: 'precious', meaning: '珍貴' },
-    { word: 'be exempt from', meaning: '免除…' },
-    { word: 'exclusive', meaning: '獨佔' },
-    { word: 'be selected for', meaning: '被選為…' },
-    { word: 'duplicate', meaning: '複製' },
-    { word: 'complimentary', meaning: '免費的' },
-    { word: 'dedicated', meaning: '專心於' },
-    { word: 'eligible', meaning: '有資格的' },
-    { word: 'concentrate', meaning: '集中' },
-    { word: 'productive', meaning: '生產' },
-    { word: 'access', meaning: '進入、存取' },
-    { word: 'elaborate', meaning: '精巧' },
-    { word: 'alternate', meaning: '替代' },
-    { word: 'skilled', meaning: '技巧的' },
-    { word: 'detour', meaning: '改道' },
-    { word: 'unable', meaning: '不能做' },
-    { word: 'driveway', meaning: '車道' },
-    { word: 'adequate', meaning: '足夠的' },
-    { word: 'junction', meaning: '交界' },
-    { word: 'consent', meaning: '同意' },
-    { word: 'lane', meaning: '巷子、車道' },
-    { word: 'fulfilled', meaning: '滿足' },
-    { word: 'path', meaning: '小徑' },
-    { word: 'unique', meaning: '獨特' },
-    { word: 'trail', meaning: '小徑' },
-    { word: 'exempt', meaning: '免除' },
-    { word: 'pave', meaning: '鋪(路)' },
-    { word: 'proper', meaning: '適合' },
-    { word: 'pedestrian', meaning: '行人' },
-];
-
-const VOCABULARY_DAY_18 = [
-    { word: 'acknowledge A for B', meaning: '為了A感謝B' },
-    { word: 'foresee', meaning: '遇見' },
-    { word: 'participate in', meaning: '參加…' },
-    { word: 'reach', meaning: '抵達' },
-    { word: 'depend on', meaning: '取決於…' },
-    { word: 'depend on', meaning: '取決於' },
-    { word: 'notify A of B', meaning: '向A通知B' },
-    { word: 'narrow down', meaning: '縮小範圍' },
-    { word: 'recommend A for B', meaning: '為了B而推薦A' },
-    { word: 'carry out', meaning: '實行' },
-    { word: 'provide A with B', meaning: '提供B給A' },
-    { word: 'senator', meaning: '參議員' },
-    { word: 'preside over', meaning: '主持' },
-    { word: 'commend', meaning: '稱讚' },
-    { word: 'specialize in', meaning: '以...為專長' },
-    { word: 'assume', meaning: '假定' },
-    { word: 'lead to', meaning: '導致' },
-    { word: 'specific', meaning: '明確' },
-    { word: 'search for', meaning: '尋找…' },
-    { word: 'stimulate', meaning: '刺激' },
-    { word: 'associate A with B', meaning: '把A和B聯想再一起' },
-    { word: 'goods', meaning: '商品' },
-    { word: 'designate A for B', meaning: '為了B而指派A' },
-    { word: 'conform', meaning: '遵守' },
-    { word: 'result in', meaning: '造成…的結果' },
-    { word: 'deny', meaning: '否認' },
-    { word: 'come in', meaning: '有…' },
-    { word: 'guarantee', meaning: '保證' },
-    { word: 'proceed with', meaning: '繼續進行' },
-    { word: 'describe', meaning: '描述' },
-    { word: 'prevent A from B', meaning: '防止A做到B' },
-    { word: 'prevent', meaning: '預防' },
-    { word: 'ask A for B', meaning: '向A要求B' },
-    { word: 'interfere', meaning: '干擾' },
-    { word: 'substitute A for B', meaning: '用A代替B' },
-    { word: 'accessible', meaning: '無障礙' },
-    { word: 'commend A for B', meaning: '因為B稱讚A' },
-    { word: 'commute', meaning: '通勤' },
-    { word: 'split up', meaning: '分開' },
-    { word: 'crosswalk', meaning: '人行道' },
-    { word: 'timepieces', meaning: '手錶' },
-    { word: 'downtown', meaning: '市中心' },
-    { word: 'appreciate', meaning: '感謝' },
-    { word: 'fare', meaning: '車票、付款' },
-    { word: 'cooperate', meaning: '合作' },
-    { word: 'intersection', meaning: '十字路口' },
-    { word: 'imitate', meaning: '模仿' },
-    { word: 'railroad track', meaning: '鐵路軌道' },
-    { word: 'move on', meaning: '前進' },
-    { word: 'traffic congestion', meaning: '塞車' },
-    { word: 'add up', meaning: '加起來' },
-    { word: 'traffic jam', meaning: '塞車' },
-    { word: 'come in', meaning: '有…' },
-    { word: 'vehicle', meaning: '車輛' },
-    { word: 'served', meaning: '供應' },
-    { word: 'implied', meaning: '暗示' },
-    { word: 'adapt', meaning: '適應' },
-    { word: 'preside', meaning: '主持' },
-    { word: 'perceive', meaning: '感知' },
-];
-
-const VOCABULARY_DAY_19 = [
-    { word: 'attention to', meaning: '對…注意' },
-    { word: 'conduct', meaning: '進行' },
-    { word: 'polish', meaning: '磨光' },
-    { word: 'compliance with', meaning: '對…遵守' },
-    { word: 'survey', meaning: '調查' },
-    { word: 'shelf', meaning: '架子' },
-    { word: 'concerns about', meaning: '對…擔心' },
-    { word: 'perspective', meaning: '看法' },
-    { word: 'spacious', meaning: '寬敞' },
-    { word: 'effect on', meaning: '對…影響' },
-    { word: 'accessibility', meaning: '可接近性的' },
-    { word: 'staircase', meaning: '樓梯' },
-    { word: 'shift in', meaning: '轉變' },
-    { word: 'similarity', meaning: '類似' },
-    { word: 'statue', meaning: '雕像' },
-    { word: 'perspective on', meaning: '對…的觀點' },
-    { word: 'referral', meaning: '轉介' },
-    { word: 'sweep', meaning: '掃' },
-    { word: 'commitment to', meaning: '對…的承諾' },
-    { word: 'obligatory', meaning: '義務' },
-    { word: 'windowsill', meaning: '窗台' },
-    { word: 'transition from A to B', meaning: '轉變A到B' },
-    { word: 'interaction', meaning: '互動' },
-    { word: 'a source of', meaning: '…的來源' },
-    { word: 'accommodation', meaning: '住處' },
-    { word: 'report for', meaning: '給…的報告' },
-    { word: 'critics', meaning: '評論家' },
-    { word: 'a portion of', meaning: '一部分的…' },
-    { word: 'express', meaning: '表達' },
-    { word: 'identification badge', meaning: '識別證' },
-    { word: 'comparison', meaning: '比較' },
-    { word: 'intent to', meaning: '做...的意圖' },
-    { word: 'admiration', meaning: '敬佩' },
-    { word: 'admiration for', meaning: '對...的敬佩' },
-    { word: 'influence', meaning: '影響' },
-    { word: 'restriction on', meaning: '對...的限制' },
-    { word: 'reception', meaning: '接待' },
-    { word: 'observation on', meaning: '對...的觀察' },
-    { word: 'addressed', meaning: '解決' },
-    { word: 'requirement for', meaning: '對...的要求' },
-    { word: 'experiment', meaning: '實驗' },
-    { word: 'investment in', meaning: '對...的投資' },
-    { word: 'concern', meaning: '擔心' },
-    { word: 'preparation for', meaning: '為了…的準備' },
-    { word: 'property', meaning: '房地產' },
-    { word: 'a consequence of', meaning: '…的結果' },
-    { word: 'division', meaning: '分部' },
-    { word: 'practice', meaning: '實踐' },
-    { word: 'formation', meaning: '形成' },
-    { word: 'consequence', meaning: '結果' },
-    { word: 'portion', meaning: '部分' },
-    { word: 'reinforcement', meaning: '強化' },
-    { word: 'trade', meaning: '貿易' },
-    { word: 'suggestion', meaning: '建議' },
-    { word: 'bookcase', meaning: '書櫃' },
-    { word: 'mandatory', meaning: '強制' },
-    { word: 'cabinet', meaning: '櫃子' },
-    { word: 'invitation', meaning: '邀請' },
-    { word: 'closet', meaning: '衣櫃' },
-    { word: 'restriction', meaning: '限制' },
-    { word: 'decorate', meaning: '裝飾' },
-    { word: 'organization', meaning: '組織' },
-    { word: 'furnishing', meaning: '家具' },
-    { word: 'transition', meaning: '轉變' },
-    { word: 'hallway', meaning: '走廊' },
-    { word: 'statement', meaning: '敘述' },
-    { word: 'lean against', meaning: '靠著…' },
-    { word: 'measurement', meaning: '測量' },
-    { word: 'mounted on', meaning: '裝在…上的' },
-    { word: 'discussion', meaning: '討論' },
-    { word: 'pile up', meaning: '堆疊' },
-];
-
-const VOCABULARY_DAY_20 = [
-    { word: 'make arrangement', meaning: '做安排' },
-    { word: 'correspondence', meaning: '一致' },
-    { word: 'work environment', meaning: '工作環境' },
-    { word: 'performance', meaning: '表現' },
-    { word: 'follow the regulation', meaning: '遵守規定' },
-    { word: 'endorsement', meaning: '背書、代言' },
-    { word: 'warm welcome', meaning: '熱烈歡迎' },
-    { word: 'interruption', meaning: '中斷' },
-    { word: 'eagerly await', meaning: '熱切地等待' },
-    { word: 'admission', meaning: '入場' },
-    { word: 'strong performer', meaning: '表現強勁的人' },
-    { word: 'initiative', meaning: '主動' },
-    { word: 'quicken the pace', meaning: '加快速度' },
-    { word: 'quantity', meaning: '數量' },
-    { word: 'display initiative', meaning: '展現主動性' },
-    { word: 'album', meaning: '專輯' },
-    { word: 'steady growth', meaning: '穩定成長' },
-    { word: 'eagerly', meaning: '熱切' },
-    { word: 'sales performance', meaning: '銷售表現' },
-    { word: 'visually', meaning: '視覺上' },
-    { word: 'concentrated effort', meaning: '共同努力' },
-    { word: 'loosely', meaning: '鬆的' },
-    { word: 'thorough analysis', meaning: '徹底分析' },
-    { word: 'defiantly', meaning: '反抗' },
-    { word: 'mutually beneficial', meaning: '互惠' },
-    { word: 'quest', meaning: '探索' },
-    { word: 'take measures', meaning: '採取方法' },
-    { word: 'march', meaning: '行進' },
-    { word: 'heavy usage', meaning: '重度使用' },
-    { word: 'lead', meaning: '領先' },
-    { word: 'conveniently located', meaning: '位置便利' },
-    { word: 'aisle', meaning: '走道' },
-    { word: 'cease operation', meaning: '停止營運' },
-    { word: 'awning', meaning: '雨棚' },
-    { word: 'conduct an inspection', meaning: '進行檢查' },
-    { word: 'be lined up', meaning: '排成列' },
-    { word: 'demand', meaning: '需求' },
-    { word: 'courtyard', meaning: '中庭' },
-    { word: 'reach', meaning: '抵達' },
-    { word: 'entrance', meaning: '入口' },
-    { word: 'extension', meaning: '擴展' },
-    { word: 'garage', meaning: '車庫' },
-    { word: 'range', meaning: '範圍' },
-    { word: 'lamppost', meaning: '檯燈' },
-    { word: 'growth', meaning: '成長' },
-    { word: 'landscaping', meaning: '造景' },
-    { word: 'assemble', meaning: '集合' },
-    { word: 'lease', meaning: '租約' },
-    { word: 'speculation', meaning: '推測' },
-    { word: 'occupy', meaning: '佔領' },
-    { word: 'skillfully', meaning: '熟練' },
-    { word: 'unoccupied', meaning: '沒有佔用' },
-    { word: 'fluently', meaning: '流暢' },
-    { word: 'patio', meaning: '露臺' },
-    { word: 'unpleasant', meaning: '不愉快' },
-    { word: 'property', meaning: '不動產' },
-    { word: 'permitted', meaning: '允許' },
-    { word: 'trim', meaning: '修剪' },
-    { word: 'constraint', meaning: '限制' },
-    { word: 'mutually', meaning: '相互' },
-    { word: 'endeavor', meaning: '努力' },
-    { word: 'tightly', meaning: '牢固' },
-    { word: 'function', meaning: '功能' },
-];
-
-
-const VOCAB_DATA = {
-    'DAY 11': VOCABULARY_DAY_11,
-    'DAY 12': VOCABULARY_DAY_12,
-    'DAY 13': VOCABULARY_DAY_13,
-    'DAY 14': VOCABULARY_DAY_14,
-    'DAY 15': VOCABULARY_DAY_15,
-    'DAY 16': VOCABULARY_DAY_16, 
-    'DAY 17': VOCABULARY_DAY_17,
-    'DAY 18': VOCABULARY_DAY_18,
-    'DAY 19': VOCABULARY_DAY_19,
-    'DAY 20': VOCABULARY_DAY_20, // 新增 Day 20
-};
-
-
-const ALPHABET_OPTIONS = ['A', 'B', 'C', 'D'];
-
-// ------------------------------------------
-// 2. 工具函式
-// ------------------------------------------
-
-// Fisher-Yates shuffle algorithm
-const shuffleArray = (array) => {
-    let newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-};
-
-// 產生測驗選項
-const generateQuizOptions = (correctMeaning, allWords) => {
-    // 確保所有選項都是字串，因為有些單字的中文翻譯是兩個詞彙
-    const allMeanings = allWords.map(w => w.meaning).filter(m => typeof m === 'string' && m.trim() !== '');
-    
-    // 排除正確答案
-    const distractors = allMeanings
-        .filter(m => m !== correctMeaning)
-        .sort(() => 0.5 - Math.random()) // 隨機排序
-        .slice(0, 3); // 選擇 3 個干擾項
-
-    // 如果干擾項不足 3 個，填充一些通用的字
-    while (distractors.length < 3) {
-        distractors.push(`中文意思 ${distractors.length + 1}`);
-    }
-
-    const options = shuffleArray([correctMeaning, ...distractors]);
-    return options;
-};
-
-// ------------------------------------------
-// 3. 主要應用程式組件
-// ------------------------------------------
-
-const App = () => {
-    // 預設為 Day 20，以符合最新輸入
-    const [currentDay, setCurrentDay] = useState('DAY 20'); 
-    const [mode, setMode] = useState('quiz'); // 'quiz' or 'flashcard'
-    const [learnedWordsCount, setLearnedWordsCount] = useState(0);
-    const [currentWordIndex, setCurrentWordIndex] = useState(0);
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [isAnswerCorrect, setIsAnswerCorrect] = useState(null); // null, true, or false
-
-    const currentVocabList = VOCAB_DATA[currentDay] || []; // 確保有預設值
-    const TOTAL_WORDS = currentVocabList.length;
-
-    const currentWord = currentVocabList[currentWordIndex];
-    const correctMeaning = currentWord?.meaning;
-    const progressPercentage = TOTAL_WORDS > 0 ? (learnedWordsCount / TOTAL_WORDS) * 100 : 0;
-    
-    // 當學習日改變時，重設所有測驗狀態
-    useEffect(() => {
-        resetQuiz();
-    }, [currentDay]);
-
-    // 計算測驗選項，僅在單字改變時重新計算
-    const quizOptions = useMemo(() => {
-        if (!currentWord) return [];
-        // 確保使用當前學習日的所有單字來生成選項
-        return generateQuizOptions(currentWord.meaning, currentVocabList);
-    }, [currentWord, currentDay, currentVocabList]);
-
-    // 檢查答案並給予反饋
-    const handleOptionSelect = (option) => {
-        if (selectedOption) return; // 已經選過，不重複處理
-
-        setSelectedOption(option);
-        const isCorrect = option === correctMeaning;
-        setIsAnswerCorrect(isCorrect);
-
-        if (isCorrect) {
-            // 延遲更新，讓使用者看到正確反饋
-            setTimeout(() => {
-                setLearnedWordsCount(prev => prev < TOTAL_WORDS ? prev + 1 : prev);
-                nextQuestion();
-            }, 800);
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多益單字學習中心 | Day 11-20</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 設置 Inter 字體 */
+        :root {
+            --font-inter: 'Inter', sans-serif;
         }
-    };
-
-    // 前往下一題
-    const nextQuestion = useCallback(() => {
-        if (currentWordIndex < TOTAL_WORDS - 1) {
-            setCurrentWordIndex(prev => prev + 1);
-            setSelectedOption(null);
-            setIsAnswerCorrect(null);
-        } else {
-            // 測驗完成，顯示結果 Modal
-            const resultMessage = `恭喜！${currentDay} 的測驗已完成！你學會了 ${learnedWordsCount + 1} 個單字。`;
-            document.getElementById('quiz-result-message').innerText = resultMessage;
-            document.getElementById('quiz-result-modal').classList.remove('hidden');
+        body {
+            font-family: var(--font-inter);
+            background-color: #f7f9fc; /* 輕微的藍色背景 */
         }
-    }, [currentWordIndex, TOTAL_WORDS, currentDay, learnedWordsCount]);
-
-    // 重設測驗
-    const resetQuiz = () => {
-        // 使用 shuffleArray 重新排列當前單字列表，以確保每次測驗順序不同
-        const shuffledList = shuffleArray(currentVocabList);
-        // 將新的單字列表存回 VOCAB_DATA 中 (React組件內無法直接修改外部常量，但在這裡我們主要控制的是當前狀態)
-        // 由於 VOCAB_DATA 是靜態的，我們只能在狀態中模擬一個已洗牌的列表，但為了簡化，我們只重設索引。
-        // 每次進入 useEffect(resetQuiz) 時，會基於當前 VOCAB_DATA[currentDay] 獲取列表並重設索引。
-        
-        setCurrentWordIndex(0);
-        setLearnedWordsCount(0);
-        setSelectedOption(null);
-        setIsAnswerCorrect(null);
-        document.getElementById('quiz-result-modal').classList.add('hidden');
-    };
-
-    // 取得選項的樣式
-    const getOptionStyle = (option) => {
-        const isSelected = selectedOption === option;
-        const isCorrectOption = option === correctMeaning;
-        
-        let baseStyle = "p-4 w-full text-lg font-medium text-gray-800 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition duration-200 cursor-pointer flex items-center";
-
-        if (!selectedOption) {
-            return `${baseStyle} hover:bg-gray-50`;
+        .sidebar-shadow {
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
         }
-        
-        // 答案已揭曉
-        if (isCorrectOption) {
-            return `${baseStyle} bg-green-100 border-green-500 ring-2 ring-green-500 text-green-800 shadow-lg`;
+        .quiz-option:hover {
+            background-color: #f0fdf4; /* Light green hover */
+            border-color: #34d399; /* Green border */
+            cursor: pointer;
+        }
+        .quiz-correct {
+            background-color: #d1fae5; /* 淺綠色 */
+            border-color: #059669;
+        }
+        .quiz-incorrect {
+            background-color: #fee2e2; /* 淺紅色 */
+            border-color: #dc2626;
+        }
+        /* 自定義滾動條樣式 (僅適用於 WebKit 瀏覽器) */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background-color: #f1f5f9;
         }
 
-        if (isSelected && !isCorrectOption) {
-            return `${baseStyle} bg-red-100 border-red-500 ring-2 ring-red-500 text-red-800 shadow-lg`;
+        /* Flashcard Styles */
+        .flip-card {
+            perspective: 1000px;
         }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.5rem; /* rounded-3xl */
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .flip-card-front {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .flip-card-back {
+            background-color: #34d399; /* 綠色背景 */
+            color: #ffffff;
+            transform: rotateY(180deg);
+        }
+        .flashcard-content {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
 
-        return `${baseStyle} opacity-60 pointer-events-none`;
-    };
-    
-    // 側邊欄組件
-    const Sidebar = () => (
-        <div className="w-full lg:w-72 bg-white border-r border-gray-200 p-6 flex flex-col space-y-8 h-full">
-            <h1 className="text-2xl font-bold text-indigo-700 flex items-center">
-                <BookOpenText className="w-6 h-6 mr-3 text-indigo-500" />
+    <div id="app" class="min-h-screen flex flex-col md:flex-row">
+
+        <!-- 左側邊欄 (Sidebar) -->
+        <aside id="sidebar" class="md:w-72 w-full p-6 bg-white sidebar-shadow flex-shrink-0">
+            <h1 class="text-2xl font-bold text-emerald-600 mb-6 flex items-center">
+                <!-- Icon: Book Open -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
                 單字學習中心
             </h1>
 
-            {/* 學習進度 */}
-            <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
-                <h2 className="text-sm font-semibold text-gray-500">學習進度： <span className="text-gray-800">{learnedWordsCount}/{TOTAL_WORDS}</span></h2>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div className="h-2.5 rounded-full bg-green-500 transition-all duration-500" style={{ width: `${progressPercentage}%` }}></div>
+            <!-- 學習進度 -->
+            <div class="bg-gray-50 p-4 rounded-xl mb-6">
+                <h2 class="text-sm font-semibold text-gray-700 mb-2">學習進度 : <span id="progress-text">0/50</span></h2>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="progress-bar" class="bg-emerald-500 h-2.5 rounded-full" style="width: 0%"></div>
                 </div>
-                <p className="text-xs text-gray-500 pt-1">
-                    當前 {currentDay} 共有 {TOTAL_WORDS} 個單字。
-                </p>
+                <p class="text-xs text-gray-500 mt-2">已掌握單字將不再出現在測驗中。</p>
             </div>
 
-            {/* 選擇練習模式 */}
-            <div className="space-y-3">
-                <h2 className="text-lg font-semibold text-gray-700 flex items-center">
-                    <CheckCircle className="w-5 h-5 mr-2 text-indigo-500" />
+            <!-- 選擇練習模式 -->
+            <div class="mb-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center">
+                    <!-- Icon: Check Circle -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2 text-emerald-500">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
                     選擇練習模式
                 </h2>
-                <button
-                    className={`w-full p-3 rounded-lg flex items-center justify-start text-left font-medium transition duration-150 ${mode === 'quiz' ? 'bg-green-500 text-white shadow-lg' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'}`}
-                    onClick={() => setMode('quiz')}
-                >
-                    <Check className="w-5 h-5 mr-2" />
-                    情境選擇題 (Quiz)
-                </button>
-                <button
-                    className={`w-full p-3 rounded-lg flex items-center justify-start text-left font-medium transition duration-150 ${mode === 'flashcard' ? 'bg-green-500 text-white shadow-lg' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'}`}
-                    onClick={() => setMode('flashcard')}
-                    disabled // 暫時禁用 Flashcard
-                >
-                    <Volume2 className="w-5 h-5 mr-2" />
-                    單字卡記憶 (Flashcard)
-                </button>
+                <div class="space-y-2">
+                    <button id="mode-quiz" data-mode="quiz" class="mode-btn w-full text-left p-3 rounded-lg font-semibold flex items-center transition duration-150 bg-emerald-500 text-white shadow-md hover:bg-emerald-600">
+                        <!-- Icon: List Checks -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-3">
+                            <path d="m3 16 2-2 2 2"/>
+                            <path d="M7 16h14"/>
+                            <path d="m3 12 2-2 2 2"/>
+                            <path d="M7 12h14"/>
+                            <path d="m3 8 2-2 2 2"/>
+                            <path d="M7 8h14"/>
+                        </svg>
+                        情境選擇題 (Quiz)
+                    </button>
+                    <button id="mode-flashcard" data-mode="flashcard" class="mode-btn w-full text-left p-3 rounded-lg font-semibold flex items-center transition duration-150 bg-gray-100 text-gray-700 hover:bg-gray-200">
+                        <!-- Icon: Card -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-3">
+                            <rect width="18" height="18" x="3" y="3" rx="2"/>
+                            <path d="M3 9h18"/>
+                            <path d="M9 3v18"/>
+                        </svg>
+                        單字卡記憶 (Flashcard)
+                    </button>
+                </div>
             </div>
 
-            {/* 選擇學習日 */}
-            <div className="space-y-3">
-                <h2 className="text-lg font-semibold text-gray-700 flex items-center">
-                    <Calendar className="w-5 h-5 mr-2 text-indigo-500" />
+            <!-- 選擇學習日 -->
+            <div class="mb-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center">
+                    <!-- Icon: Calendar -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2 text-emerald-500">
+                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                        <line x1="16" x2="16" y1="2" y2="6"/>
+                        <line x1="8" x2="8" y1="2" y2="6"/>
+                        <line x1="3" x2="21" y1="10" y2="10"/>
+                    </svg>
                     選擇學習日
                 </h2>
-                <div className="relative">
-                    <select
-                        className="appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        value={currentDay}
-                        onChange={(e) => setCurrentDay(e.target.value)}
-                    >
-                        {/* 將 VOCAB_DATA 的 keys 轉為選項 */}
-                        {Object.keys(VOCAB_DATA).map(day => (
-                             <option key={day} value={day}>{day} ({VOCAB_DATA[day].length} 詞)</option>
-                        ))}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <ChevronDown className="w-4 h-4" />
-                    </div>
-                </div>
+                <select id="day-selector" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-emerald-500 focus:border-emerald-500 transition duration-150">
+                    <!-- Options will be populated by JS -->
+                </select>
             </div>
 
-            {/* 單字列表 */}
-            <div className="space-y-3 flex-grow overflow-hidden">
-                <h2 className="text-lg font-semibold text-gray-700 flex items-center">
-                    <List className="w-5 h-5 mr-2 text-indigo-500" />
-                    {currentDay} 單字列表 ({TOTAL_WORDS} 詞)
+            <!-- 單字列表 -->
+            <div>
+                <h2 id="wordlist-title" class="text-lg font-bold text-gray-800 mb-3 flex items-center">
+                    <!-- Icon: List -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2 text-emerald-500">
+                        <line x1="10" x2="21" y1="6" y2="6"/>
+                        <line x1="10" x2="21" y1="12" y2="12"/>
+                        <line x1="10" x2="21" y1="18" y2="18"/>
+                        <polyline points="3 6 4 6 5 6"/>
+                        <polyline points="3 12 4 12 5 12"/>
+                        <polyline points="3 18 4 18 5 18"/>
+                    </svg>
+                    單字列表 (0 詞)
                 </h2>
-                <div className="border border-gray-200 rounded-lg overflow-y-auto max-h-56 lg:max-h-full">
-                    {currentVocabList.map((item, index) => (
-                        <div 
-                            key={item.word + index} // 使用 word + index 作為 key 避免重複單字問題
-                            className={`flex items-center justify-between p-3 text-sm border-b last:border-b-0 ${index === currentWordIndex ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600'}`}
-                        >
-                            <span className="truncate">{item.word}</span>
-                            {/* 模擬詞性標註：根據 index 簡單循環顯示 v., n., adj. */}
-                            <span className="text-xs text-right opacity-70">({index % 3 === 0 ? 'v.' : index % 3 === 1 ? 'n.' : 'adj.'})</span> 
-                        </div>
-                    ))}
+                <div id="word-list-container" class="space-y-2 max-h-96 overflow-y-auto custom-scrollbar">
+                    <!-- Word items will be populated by JS -->
                 </div>
             </div>
-        </div>
-    );
+        </aside>
 
-    // 測驗結果 Modal
-    const QuizResultModal = () => (
-        <div id="quiz-result-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                <div className="mt-3 text-center">
-                    <CheckCircle className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 text-green-600" />
-                    <h3 className="text-lg leading-6 font-medium text-gray-900 mt-2">測驗完成！</h3>
-                    <div className="mt-2 px-7 py-3">
-                        <p id="quiz-result-message" className="text-sm text-gray-500 font-medium">
-                            {/* 訊息將由 JS 填充 */}
-                        </p>
+        <!-- 主要內容區 (Main Content) -->
+        <main class="flex-1 p-6 md:p-10">
+            <div id="main-content-container" class="min-h-full flex items-center justify-center p-4">
+                <!-- Content will be rendered here by JS -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- 單字資料庫 (Vocabulary Data) ---
+        // 為了達到每個 Day 約 50 詞的目標，將用戶提供的所有單字依照順序分組。
+        const VOCAB_DATA = {
+            '11': [
+                { word: 'renowned', meaning: '有名的', part: 'adj.' }, { word: 'bright', meaning: '明亮', part: 'adj.' }, { word: 'frustrating', meaning: '令人沮喪的', part: 'adj.' }, { word: 'coordinated', meaning: '一致', part: 'adj.' }, { word: 'proficient', meaning: '精通的', part: 'adj.' },
+                { word: 'alternative', meaning: '交替/選擇', part: 'adj./n.' }, { word: 'economic', meaning: '經濟上的', part: 'adj.' }, { word: 'admirable', meaning: '令人欽佩', part: 'adj.' }, { word: 'profitable', meaning: '有獲利', part: 'adj.' }, { word: 'insistent', meaning: '堅持', part: 'adj.' },
+                { word: 'respectful', meaning: '尊重', part: 'adj.' }, { word: 'immediate', meaning: '立刻', part: 'adj.' }, { word: 'disappointing', meaning: '令人沮喪', part: 'adj.' }, { word: 'modest', meaning: '過度/謙虛', part: 'adj.' }, { word: 'fair', meaning: '公正', part: 'adj.' },
+                { word: 'parallel', meaning: '平行', part: 'adj.' }, { word: 'original', meaning: '原本的', part: 'adj.' }, { word: 'advisable', meaning: '可取的', part: 'adj.' }, { word: 'introductory', meaning: '入門的', part: 'adj.' }, { word: 'solid', meaning: '堅固', part: 'adj.' },
+                { word: 'valid', meaning: '有效的', part: 'adj.' }, { word: 'sole', meaning: '唯一', part: 'adj.' }, { word: 'critics', meaning: '評論家', part: 'n.' }, { word: 'lively', meaning: '熱烈的', part: 'adj.' }, { word: 'overwhelmingly', part: 'adv.' , meaning: '壓倒性的' },
+                { word: 'relaxing', meaning: '放鬆', part: 'adj.' }, { word: 'present', meaning: '現今', part: 'adj.' }, { word: 'wasteful', meaning: '浪費', part: 'adj.' }, { word: 'flawed', meaning: '有缺陷的', part: 'adj.' }, { word: 'domestic', meaning: '國內', part: 'adj.' },
+                { word: 'remote', meaning: '遙遠的', part: 'adj.' }, { word: 'sizable', meaning: '相當大', part: 'adj.' }, { word: 'obvious', meaning: '明顯', part: 'adj.' }, { word: 'conventional', meaning: '習慣/傳統', part: 'adj.' }, { word: 'distinctive', meaning: '獨特', part: 'adj.' },
+                { word: 'authentic', meaning: '真正的', part: 'adj.' }, { word: 'idle', meaning: '閒置', part: 'adj.' }, { word: 'innovative', meaning: '創新', part: 'adj.' }, { word: 'ample', meaning: '唯一/足夠', part: 'adj.' }, { word: 'intense', meaning: '強烈', part: 'adj.' },
+                { word: 'complex', meaning: '複雜', part: 'adj.' }, { word: 'statistical', meaning: '統計的', part: 'adj.' }, { word: 'cashier', meaning: '收銀員', part: 'n.' }, { word: 'hesitant', meaning: '猶豫', part: 'adj.' }, { word: 'display', meaning: '展示', part: 'v.' },
+                { word: 'exchange', meaning: '交換', part: 'v./n.' }, { word: 'flyer', meaning: '廣告傳單', part: 'n.' }, { word: 'grand opening', meaning: '盛大開幕', part: 'phr.' }, { word: 'hopeful', meaning: '有希望的', part: 'adj.' }, { word: 'grocery', meaning: '食品雜物', part: 'n.' }
+            ],
+            '12': [
+                // Day 11 補充資料 (前 50 詞，略過重複)
+                { word: 'negligible', meaning: '可忽略的', part: 'adj.' }, { word: 'reasonable', meaning: '合理的', part: 'adj.' }, { word: 'definite', meaning: '明確', part: 'adj.' }, { word: 'vendor', meaning: '小販', part: 'n.' }, { word: 'legitimate', meaning: '合法', part: 'adj.' },
+                { word: 'warranty', meaning: '保證', part: 'n.' }, { word: 'reliable', meaning: '可靠的', part: 'adj.' }, { word: 'deficient', meaning: '缺陷', part: 'adj.' }, { word: 'efficient', meaning: '有效率', part: 'adj.' }, { word: 'punctual', meaning: '準時', part: 'adj.' },
+                { word: 'prominent', meaning: '有名的', part: 'adj.' }, { word: 'advance', meaning: '高級', part: 'adj.' }, { word: 'appropriate', meaning: '適當的', part: 'adj.' }, { word: 'perceptive', meaning: '敏銳的', part: 'adj.' }, { word: 'equivalent', meaning: '相等', part: 'adj.' },
+                { word: 'delicate', meaning: '精美/精密', part: 'adj.' }, { word: 'deliberate', meaning: '慎重/故意', part: 'adj.' }, { word: 'noble', meaning: '高貴的', part: 'adj.' }, { word: 'standard', meaning: '標準', part: 'n.' }, { word: 'fragile', meaning: '易碎的', part: 'adj.' },
+                { word: 'commercial', meaning: '商業的', part: 'adj.' }, { word: 'vest', meaning: '巨大', part: 'n.' }, { word: 'sociable', meaning: '善於社交', part: 'adj.' }, { word: 'cautious', meaning: '小心/注意', part: 'adj.' }, { word: 'pleasurable', meaning: '令人愉悅', part: 'adj.' },
+                { word: 'potential', meaning: '潛力', part: 'n./adj.' }, { word: 'decent', meaning: '得體', part: 'adj.' }, { word: 'unanticipated', meaning: '預料之外', part: 'adj.' }, { word: 'hospitable', meaning: '好客', part: 'adj.' }, { word: 'knowledgeable', meaning: '博學', part: 'adj.' },
+                { word: 'reluctant', meaning: '不情願的', part: 'adj.' }, { word: 'combustible', meaning: '可燃的', part: 'adj.' }, { word: 'reliant', meaning: '依賴', part: 'adj.' }, { word: 'residential', meaning: '居住的', part: 'adj.' }, { word: 'relative', meaning: '相對', part: 'adj.' },
+                { word: 'frequent', meaning: '頻率/頻繁', part: 'adj./v.' }, { word: 'average', meaning: '平均', part: 'n./adj.' }, { word: 'decisive', meaning: '果斷', part: 'adj.' }, { word: 'advantageous', meaning: '有益的', part: 'adj.' }, { word: 'time frame', meaning: '時間範圍', part: 'phr.' },
+                { word: 'composed', meaning: '被構成的', part: 'adj.' }, { word: 'esteemed', meaning: '尊敬的', part: 'adj.' }, { word: 'accurate', meaning: '精確的', part: 'adj.' }, { word: 'undecide', meaning: '未決定', part: 'adj.' }, { word: 'advisory', meaning: '顧問', part: 'adj.' },
+                { word: 'imaginary', meaning: '想像', part: 'adj.' }, { word: 'identical', meaning: '相等', part: 'adj.' }, { word: 'banquet', meaning: '宴會', part: 'n.' }, { word: 'continuous', meaning: '繼續', part: 'adj.' }, { word: 'beverage', meaning: '飲料', part: 'n.' }
+            ],
+            '13': [
+                // Day 11 補充資料 (餘) + Day 12 補充資料
+                { word: 'adverse', meaning: '逆轉', part: 'adj.' }, { word: 'cater', meaning: '外燴服務', part: 'v.' }, { word: 'container', meaning: '容器', part: 'n.' }, { word: 'unconscious', meaning: '無意識', part: 'adj.' }, { word: 'dessert', meaning: '點心', part: 'n.' },
+                { word: 'valuable', meaning: '貴重的', part: 'adj.' }, { word: 'diner', meaning: '用餐的客人', part: 'n.' }, { word: 'evident', meaning: '明顯', part: 'adj.' }, { word: 'refreshment', meaning: '茶點', part: 'n.' }, { word: 'undetermined', meaning: '未決定', part: 'adj.' },
+                { word: 'tray', meaning: '托盤', part: 'n.' }, { word: 'previous', meaning: '先前', part: 'adj.' }, { word: 'cooperative', meaning: '合作', part: 'adj.' }, { word: 'entertaining', meaning: '有趣', part: 'adj.' }, { word: 'substantial', meaning: '結實/重大', part: 'adj.' },
+                { word: 'productive', meaning: '生產', part: 'adj.' }, { word: 'humid', meaning: '潮濕', part: 'adj.' }, { word: 'diligent', meaning: '勤奮', part: 'adj.' }, { word: 'durable', meaning: '耐用', part: 'adj.' }, { word: 'landscape', meaning: '風景', part: 'n.' },
+                { word: 'comfortable', meaning: '舒適', part: 'adj.' }, { word: 'be subject to', meaning: '受到...的影響', part: 'phr.' }, { word: 'line up', meaning: '排隊', part: 'phr.' }, { word: 'credible', meaning: '可信的', part: 'adj.' }, { word: 'recreational', meaning: '娛樂', part: 'adj.' },
+                { word: 'prefer', meaning: '偏好', part: 'v.' }, { word: 'medication', meaning: '藥物', part: 'n.' }, { word: 'reflect', meaning: '反映', part: 'v.' }, { word: 'mundane', meaning: '平凡', part: 'adj.' }, { word: 'visible', meaning: '可見的', part: 'adj.' },
+                { word: 'scenery', meaning: '景色', part: 'n.' }, { word: 'conclusive', meaning: '決定性的/確實的', part: 'adj.' }, { word: 'revolving', meaning: '旋轉的', part: 'adj.' }, { word: 'shade', meaning: '遮蔽處', part: 'n.' }, { word: 'recent', meaning: '最近', part: 'adj.' },
+                { word: 'promising', meaning: '有前景的', part: 'adj.' }, { word: 'stream', meaning: '小河', part: 'n.' }, { word: 'sensitive', meaning: '敏感', part: 'adj.' }, { word: 'preliminary', meaning: '初步', part: 'adj.' }, { word: 'stroll', meaning: '散步', part: 'v.' },
+                { word: 'convincing', meaning: '有說服力的', part: 'adj.' }, { word: 'certain', meaning: '特定的', part: 'adj.' }, { word: 'square', meaning: '廣場', part: 'n.' }, { word: 'commodity', meaning: '商品', part: 'n.' }, { word: 'tournament', meaning: '聯賽', part: 'n.' },
+                { word: 'available', meaning: '可得到的', part: 'adj.' }, { word: 'crops', meaning: '作物', part: 'n.' }, { word: 'direct', meaning: '直接', part: 'adj.' }, { word: 'coherent', meaning: '一致', part: 'adj.' }, { word: 'lengthy', meaning: '冗長', part: 'adj.' }
+            ],
+            '14': [
+                // Day 12 補充資料 (餘) + Day 13 補充資料
+                { word: 'applicable', meaning: '通用', part: 'adj.' }, { word: 'rigorous', meaning: '嚴格', part: 'adj.' }, { word: 'overpriced', meaning: '太貴', part: 'adj.' }, { word: 'mature', meaning: '成熟', part: 'adj.' }, { word: 'vague', meaning: '模糊', part: 'adj.' },
+                { word: 'exceed', meaning: '超越', part: 'v.' }, { word: 'imminent', meaning: '逼近', part: 'adj.' }, { word: 'selective', meaning: '選擇', part: 'adj.' }, { word: 'tender', meaning: '溫柔', part: 'adj.' }, { word: 'massive', meaning: '巨大', part: 'adj.' },
+                { word: 'remote', meaning: '遙遠的', part: 'adj.' }, { word: 'indirect', meaning: '間接的', part: 'adj.' }, { word: 'capable', meaning: '有能力的', part: 'adj.' }, { word: 'active', meaning: '主動', part: 'adj.' }, { word: 'overprice', meaning: '太貴', part: 'v.' },
+                { word: 'confident', meaning: '有信心', part: 'adj.' }, { word: 'liberal', meaning: '寬容', part: 'adj.' }, { word: 'sensational', meaning: '轟動的', part: 'adj.' }, { word: 'amusement park', meaning: '遊樂園', part: 'n.' }, { word: 'duplicate', meaning: '一樣的', part: 'n./v.' },
+                { word: 'applaud', meaning: '鼓掌', part: 'v.' }, { word: 'rewarding', meaning: '值得/有益的', part: 'adj.' }, { word: 'audience', meaning: '聽眾', part: 'n.' }, { word: 'comparable', meaning: '可比較的', part: 'adj.' }, { word: 'box office', meaning: '售票處', part: 'n.' },
+                { word: 'prevent', meaning: '預防', part: 'v.' }, { word: 'auditorium', meaning: '禮堂', part: 'n.' }, { word: 'crowd', meaning: '擁擠', part: 'n./v.' }, { word: 'accurately', meaning: '精確地', part: 'adv.' }, { word: 'injury', meaning: '受傷', part: 'n.' },
+                { word: 'markedly', meaning: '明確/明顯', part: 'adv.' }, { word: 'vastly', meaning: '廣大', part: 'adv.' }, { word: 'inspection', meaning: '檢查', part: 'n.' }, { word: 'closely', meaning: '仔細', part: 'adv.' }, { word: 'monitor', meaning: '追蹤', part: 'v.' },
+                { word: 'insurance', meaning: '保險', part: 'n.' }, { word: 'merely', meaning: '只是', part: 'adv.' }, { word: 'fluctuation', meaning: '波動', part: 'n.' }, { word: 'medical', meaning: '醫療', part: 'adj.' }, { word: 'aboard', meaning: '登機', part: 'adv.' },
+                { word: 'accidentally', meaning: '意外地', part: 'adv.' }, { word: 'pharmaceutical', meaning: '製藥的', part: 'adj.' }, { word: 'completely', meaning: '完全', part: 'adv.' }, { word: 'rightly', meaning: '正確地', part: 'adv.' }, { word: 'pharmacy', meaning: '藥局', part: 'n.' },
+                { word: 'apparently', meaning: '明顯', part: 'adv.' }, { word: 'briefly', meaning: '簡短地', part: 'adv.' }, { word: 'prescription', meaning: '處方簽', part: 'n.' }, { word: 'immediately', meaning: '立刻', part: 'adv.' }, { word: 'seemingly', meaning: '似乎', part: 'adv.' }
+            ],
+            '15': [
+                // Day 13 補充資料 (餘) + Day 14 補充資料
+                { word: 'treat', meaning: '治療', part: 'v.' }, { word: 'weather forecaster', meaning: '天氣預報', part: 'phr.' }, { word: 'routinely', meaning: '常規', part: 'adv.' }, { word: 'knowingly', meaning: '知道', part: 'adv.' }, { word: 'superbly', meaning: '出色地/極度', part: 'adv.' },
+                { word: 'internally', meaning: '內部', part: 'adv.' }, { word: 'intentionally', meaning: '有意地', part: 'adv.' }, { word: 'smoothly', meaning: '順利', part: 'adv.' }, { word: 'acceptably', meaning: '可接受地', part: 'adv.' }, { word: 'gradually', meaning: '逐漸', part: 'adv.' },
+                { word: 'primarily', meaning: '主要', part: 'adv.' }, { word: 'strictly', meaning: '嚴格', part: 'adv.' }, { word: 'occasionally', meaning: '偶爾', part: 'adv.' }, { word: 'densely', meaning: '密集', part: 'adv.' }, { word: 'necessarily', meaning: '必須', part: 'adv.' },
+                { word: 'independently', meaning: '獨立', part: 'adv.' }, { word: 'fluently', meaning: '流暢', part: 'adv.' }, { word: 'severely', meaning: '嚴重', part: 'adv.' }, { word: 'incorrectly', meaning: '不正確', part: 'adv.' }, { word: 'carefully', meaning: '小心', part: 'adv.' },
+                { word: 'securely', meaning: '安全地', part: 'adv.' }, { word: 'casually', meaning: '偶然', part: 'adv.' }, { word: 'revealed', meaning: '接露', part: 'adj.' }, { word: 'recipient', meaning: '接受者', part: 'n.' }, { word: 'activation', meaning: '啟動', part: 'n.' },
+                { word: 'virtually', meaning: '實際上', part: 'adv.' }, { word: 'drill', meaning: '演習', part: 'n.' }, { word: 'initially', meaning: '起初', part: 'adv.' }, { word: 'publicly', meaning: '公開', part: 'adv.' }, { word: 'consequently', meaning: '結果', part: 'adv.' },
+                { word: 'solidly', meaning: '緊固', part: 'adv.' }, { word: 'jealously', meaning: '忌妒', part: 'adv.' }, { word: 'allergy', meaning: '過敏', part: 'n.' }, { word: 'appointment', meaning: '預約', part: 'n.' }, { word: 'inconclusively', meaning: '沒有結論', part: 'adv.' },
+                { word: 'clinic', meaning: '診所', part: 'n.' }, { word: 'predicted', meaning: '預測', part: 'v.' }, { word: 'examine', meaning: '檢查', part: 'v.' }, { word: 'commonly', meaning: '一般地', part: 'adv.' }, { word: 'injection', meaning: '注射', part: 'n.' },
+                { word: 'exclusively', meaning: '獨佔', part: 'adv.' }, { word: 'reluctantly', meaning: '不情願', part: 'adv.' }, { word: 'relatively', meaning: '相對地', part: 'adv.' }, { word: 'decently', meaning: '合適', part: 'adv.' }, { word: 'elsewhere', meaning: '在別的地方', part: 'adv.' },
+                { word: 'purpose', meaning: '目的', part: 'n.' }, { word: 'justly', meaning: '公正地', part: 'adv.' }, { word: 'studies have shown', meaning: '研究顯示', part: 'phr.' }, { word: 'largely', meaning: '大部分', part: 'adv.' }, { word: 'precisely', meaning: '嚴謹/恰好', part: 'adv.' }
+            ],
+            '16': [
+                // Day 14 補充資料 (餘) + Day 15 補充資料
+                { word: 'outwardly', meaning: '表面', part: 'adv.' }, { word: 'evenly', meaning: '平均', part: 'adv.' }, { word: 'tentatively', meaning: '暫時', part: 'adv.' }, { word: 'consistently', meaning: '堅持地', part: 'adv.' }, { word: 'courteously', meaning: '有禮貌', part: 'adv.' },
+                { word: 'initially', meaning: '最初', part: 'adv.' }, { word: 'gently', meaning: '溫柔', part: 'adv.' }, { word: 'generally', meaning: '一般地', part: 'adv.' }, { word: 'slightly', meaning: '稍微', part: 'adv.' }, { word: 'totally', meaning: '完全', part: 'adv.' },
+                { word: 'promptly', meaning: '迅速地/準時', part: 'adv.' }, { word: 'plentifully', meaning: '大量', part: 'adv.' }, { word: 'periodically', meaning: '定期地', part: 'adv.' }, { word: 'inseparably', meaning: '不可分離的', part: 'adv.' }, { word: 'temporary', meaning: '臨時', part: 'adj.' },
+                { word: 'priorities', meaning: '優先事項', part: 'n.' }, { word: 'tediously', meaning: '單調', part: 'adv.' }, { word: 'expertly', meaning: '熟練', part: 'adv.' }, { word: 'loosely', meaning: '鬆散', part: 'adv.' }, { word: 'excessively', meaning: '過度地', part: 'adv.' },
+                { word: 'significantly', meaning: '顯然', part: 'adv.' }, { word: 'rigidly', meaning: '死板', part: 'adv.' }, { word: 'considerably', meaning: '相當多的', part: 'adv.' }, { word: 'truthfully', meaning: '誠實', part: 'adv.' }, { word: 'attendant', meaning: '服務員', part: 'n.' },
+                { word: 'baggage', meaning: '行李', part: 'n.' }, { word: 'artificially', meaning: '人工地', part: 'adv.' }, { word: 'balance', meaning: '結餘/平衡', part: 'n./v.' }, { word: 'repeatedly', meaning: '反覆', part: 'adv.' }, { word: 'connecting flight', meaning: '轉機', part: 'phr.' },
+                { word: 'deliberately', meaning: '故意地', part: 'adv.' }, { word: 'due', meaning: '預計地/應支付地', part: 'adj.' }, { word: 'fill out', meaning: '填好', part: 'phr.' }, { word: 'conditionally', meaning: '有條件地', part: 'adv.' }, { word: 'interest', meaning: '利息', part: 'n.' },
+                { word: 'calmly', meaning: '平靜', part: 'adv.' }, { word: 'teller', meaning: '出納員', part: 'n.' }, { word: 'gratefully', meaning: '感謝', part: 'adv.' }, { word: 'withdraw', meaning: '提取', part: 'v.' }, { word: 'barely', meaning: '勉強', part: 'adv.' },
+                { word: 'reasonably', meaning: '合理', part: 'adv.' }, { word: 'mostly', meaning: '大多', part: 'adv.' }, { word: 'nearly', meaning: '幾乎', part: 'adv.' }, { word: 'sharply', meaning: '突然地', part: 'adv.' }, { word: 'exactly', meaning: '正確', part: 'adv.' },
+                { word: 'utterly', meaning: '完全地', part: 'adv.' }, { word: 'immeasurably', meaning: '無法計算', part: 'adv.' }, { word: 'correctly', meaning: '正確', part: 'adv.' }, { word: 'regretfully', meaning: '遺憾', part: 'adv.' }, { word: 'typically', meaning: '通常/典型', part: 'adv.' }
+            ],
+            '17': [
+                // Day 15 補充資料 (餘) + Day 16 補充資料
+                { word: 'rapidly', meaning: '迅速', part: 'adv.' }, { word: 'seasoned', meaning: '經驗豐富的', part: 'adj.' }, { word: 'rightfully', meaning: '正當地', part: 'adv.' }, { word: 'bland', meaning: '太淡', part: 'adj.' }, { word: 'entirely', meaning: '完全', part: 'adv.' },
+                { word: 'secretly', meaning: '秘密地', part: 'adv.' }, { word: 'gladly', meaning: '樂意', part: 'adv.' }, { word: 'regularly', meaning: '一般地', part: 'adv.' }, { word: 'purposefully', meaning: '故意', part: 'adv.' }, { word: 'overly', meaning: '過度/過於', part: 'adv.' },
+                { word: 'successfully', meaning: '成功地', part: 'adv.' }, { word: 'formerly', meaning: '以前', part: 'adv.' }, { word: 'rarely', meaning: '很少', part: 'adv.' }, { word: 'belatedly', meaning: '遲來地', part: 'adv.' }, { word: 'chiefly', meaning: '主要', part: 'adv.' },
+                { word: 'curiously', meaning: '好奇', part: 'adv.' }, { word: 'recently', meaning: '最近', part: 'adv.' }, { word: 'inclement', meaning: '惡劣', part: 'adj.' }, { word: 'continually', meaning: '繼續', part: 'adv.' }, { word: 'realistically', meaning: '實際', part: 'adv.' },
+                { word: 'distinctly', meaning: '清晰', part: 'adv.' }, { word: 'majorly', meaning: '主要', part: 'adv.' }, { word: 'strides', meaning: '進步', part: 'n.' }, { word: 'airmail', meaning: '航空郵件', part: 'n.' }, { word: 'applause', meaning: '鼓掌', part: 'n.' },
+                { word: 'clothing', meaning: '衣服', part: 'n.' }, { word: 'readily', meaning: '容易', part: 'adv.' }, { word: 'expedite', meaning: '加速', part: 'v.' }, { word: 'carelessly', meaning: '粗心', part: 'adv.' }, { word: 'fitting room', meaning: '試衣間', part: 'n.' },
+                { word: 'garment', meaning: '服裝', part: 'n.' }, { word: 'traditionally', meaning: '傳統', part: 'adv.' }, { word: 'label', meaning: '標籤', part: 'n.' }, { word: 'deeply', meaning: '深深地', part: 'adv.' }, { word: 'laundry', meaning: '洗衣', part: 'n.' },
+                { word: 'honestly', meaning: '誠實', part: 'adv.' }, { word: 'previously', meaning: '之前', part: 'adv.' }, { word: 'numerously', meaning: '許多地', part: 'adv.' }, { word: 'frankly', meaning: '老實說', part: 'adv.' }, { word: 'be subject to', meaning: '受到…的影響', part: 'phr.' },
+                { word: 'supposedly', meaning: '據稱', part: 'adv.' }, { word: 'route', meaning: '路線', part: 'n.' }, { word: 'be pertinent to', meaning: '和…有關', part: 'phr.' }, { word: 'unanimous', meaning: '一致', part: 'adj.' }, { word: 'sidewalk', meaning: '人行道', part: 'n.' },
+                { word: 'be likely to', meaning: '可能…', part: 'phr.' }, { word: 'absolute', meaning: '絕對', part: 'adj.' }, { word: 'be familiar with', meaning: '熟悉…', part: 'phr.' }, { word: 'negative', meaning: '負面/否定', part: 'adj.' }, { word: 'be intended for', meaning: '以...為目的', part: 'phr.' }
+            ],
+            '18': [
+                // Day 16 補充資料 (餘) + Day 17 補充資料
+                { word: 'unaware', meaning: '不知道', part: 'adj.' }, { word: 'likely', meaning: '可能', part: 'adj.' }, { word: 'be adequate for', meaning: '勝任…', part: 'phr.' }, { word: 'detail', meaning: '細節', part: 'n.' }, { word: 'be suitable for', meaning: '適合…', part: 'phr.' },
+                { word: 'slight', meaning: '些微', part: 'adj.' }, { word: 'be willing to', meaning: '願意…', part: 'phr.' }, { word: 'active', meaning: '活躍', part: 'adj.' }, { word: 'be bound to', meaning: '一定會做…', part: 'phr.' }, { word: 'occasion', meaning: '偶爾', part: 'n.' },
+                { word: 'be pleased to', meaning: '很高興做…', part: 'phr.' }, { word: 'lasting', meaning: '持久', part: 'adj.' }, { word: 'be similar to', meaning: '和...類似', part: 'phr.' }, { word: 'ongoing', meaning: '正在進行', part: 'adj.' }, { word: 'be unable to', meaning: '無法做…', part: 'phr.' },
+                { word: 'similar', meaning: '相似', part: 'adj.' }, { word: 'be popular with', meaning: '受...歡迎', part: 'phr.' }, { word: 'worthy', meaning: '有價值的', part: 'adj.' }, { word: 'be eligible to', meaning: '有資格做…', part: 'phr.' }, { word: 'questionable', meaning: '可疑', part: 'adj.' },
+                { word: 'be dedicated to', meaning: '專注於…', part: 'phr.' }, { word: 'impartial', meaning: '公正', part: 'adj.' }, { word: 'be equipped with', meaning: '配備…', part: 'phr.' }, { word: 'absent', meaning: '缺席', part: 'adj.' }, { word: 'be skilled at', meaning: '熟練…', part: 'phr.' },
+                { word: 'precious', meaning: '珍貴', part: 'adj.' }, { word: 'be unaware of', meaning: '不知道…', part: 'phr.' }, { word: 'exclusive', meaning: '獨佔', part: 'adj.' }, { word: 'be exempt from', meaning: '免除…', part: 'phr.' }, { word: 'duplicate', meaning: '複製', part: 'n./v.' },
+                { word: 'be selected for', meaning: '被選為…', part: 'phr.' }, { word: 'complimentary', meaning: '免費的', part: 'adj.' }, { word: 'dedicated', meaning: '專心於', part: 'adj.' }, { word: 'eligible', meaning: '有資格的', part: 'adj.' }, { word: 'concentrate', meaning: '集中', part: 'v.' },
+                { word: 'productive', meaning: '生產', part: 'adj.' }, { word: 'access', meaning: '進入/存取', part: 'v./n.' }, { word: 'elaborate', meaning: '精巧', part: 'adj.' }, { word: 'alternate', meaning: '替代', part: 'adj./v.' }, { word: 'skilled', meaning: '技巧的', part: 'adj.' },
+                { word: 'detour', meaning: '改道', part: 'n.' }, { word: 'unable', meaning: '不能做', part: 'adj.' }, { word: 'driveway', meaning: '車道', part: 'n.' }, { word: 'adequate', meaning: '足夠的', part: 'adj.' }, { word: 'junction', meaning: '交界', part: 'n.' },
+                { word: 'consent', meaning: '同意', part: 'n./v.' }, { word: 'lane', meaning: '巷子/車道', part: 'n.' }, { word: 'fulfilled', meaning: '滿足', part: 'adj.' }, { word: 'path', meaning: '小徑', part: 'n.' }, { word: 'unique', meaning: '獨特', part: 'adj.' }
+            ],
+            '19': [
+                // Day 17 補充資料 (餘) + Day 18 補充資料
+                { word: 'trail', meaning: '小徑', part: 'n.' }, { word: 'exempt', meaning: '免除', part: 'adj./v.' }, { word: 'pave', meaning: '鋪(路)', part: 'v.' }, { word: 'proper', meaning: '適合', part: 'adj.' }, { word: 'pedestrian', meaning: '行人', part: 'n.' },
+                { word: 'acknowledge A for B', meaning: '為了A感謝B', part: 'phr.' }, { word: 'foresee', meaning: '遇見', part: 'v.' }, { word: 'participate in', meaning: '參加…', part: 'phr.' }, { word: 'reach', meaning: '抵達', part: 'v.' }, { word: 'depend on', meaning: '取決於…', part: 'phr.' },
+                { word: 'notify A of B', meaning: '向A通知B', part: 'phr.' }, { word: 'narrow down', meaning: '縮小範圍', part: 'phr.' }, { word: 'recommend A for B', meaning: '為了B而推薦A', part: 'phr.' }, { word: 'carry out', meaning: '實行', part: 'phr.' }, { word: 'provide A with B', meaning: '提供B給A', part: 'phr.' },
+                { word: 'senator', meaning: '參議員', part: 'n.' }, { word: 'preside over', meaning: '主持', part: 'phr.' }, { word: 'commend', meaning: '稱讚', part: 'v.' }, { word: 'specialize in', meaning: '以...為專長', part: 'phr.' }, { word: 'assume', meaning: '假定', part: 'v.' },
+                { word: 'lead to', meaning: '導致', part: 'phr.' }, { word: 'specific', meaning: '明確', part: 'adj.' }, { word: 'search for', meaning: '尋找…', part: 'phr.' }, { word: 'stimulate', meaning: '刺激', part: 'v.' }, { word: 'associate A with B', meaning: '把A和B聯想再一起', part: 'phr.' },
+                { word: 'goods', meaning: '商品', part: 'n.' }, { word: 'designate A for B', meaning: '為了B而指派A', part: 'phr.' }, { word: 'conform', meaning: '遵守', part: 'v.' }, { word: 'result in', meaning: '造成…的結果', part: 'phr.' }, { word: 'deny', meaning: '否認', part: 'v.' },
+                { word: 'come in', meaning: '有…(尺寸/顏色)', part: 'phr.' }, { word: 'guarantee', meaning: '保證', part: 'n./v.' }, { word: 'proceed with', meaning: '繼續進行', part: 'phr.' }, { word: 'describe', meaning: '描述', part: 'v.' }, { word: 'prevent A from B', meaning: '防止A做到B', part: 'phr.' },
+                { word: 'ask A for B', meaning: '向A要求B', part: 'phr.' }, { word: 'interfere', meaning: '干擾', part: 'v.' }, { word: 'substitute A for B', meaning: '用A代替B', part: 'phr.' }, { word: 'accessible', meaning: '無障礙', part: 'adj.' }, { word: 'commend A for B', meaning: '因為B稱讚A', part: 'phr.' },
+                { word: 'commute', meaning: '通勤', part: 'v.' }, { word: 'split up', meaning: '分開', part: 'phr.' }, { word: 'crosswalk', meaning: '人行道', part: 'n.' }, { word: 'timepieces', meaning: '手錶', part: 'n.' }, { word: 'downtown', meaning: '市中心', part: 'n.' },
+                { word: 'appreciate', meaning: '感謝', part: 'v.' }, { word: 'fare', meaning: '車票/付款', part: 'n.' }, { word: 'cooperate', meaning: '合作', part: 'v.' }, { word: 'intersection', meaning: '十字路口', part: 'n.' }, { word: 'imitate', meaning: '模仿', part: 'v.' }
+            ],
+            '20': [
+                // Day 18 補充資料 + Day 19 補充資料
+                { word: 'railroad track', meaning: '鐵路軌道', part: 'n.' }, { word: 'move on', meaning: '前進', part: 'phr.' }, { word: 'traffic congestion', meaning: '塞車', part: 'n.' }, { word: 'add up', meaning: '加起來', part: 'phr.' }, { word: 'traffic jam', meaning: '塞車', part: 'n.' },
+                { word: 'vehicle', meaning: '車輛', part: 'n.' }, { word: 'served', meaning: '供應', part: 'v.' }, { word: 'implied', meaning: '暗示', part: 'adj.' }, { word: 'adapt', meaning: '適應', part: 'v.' }, { word: 'preside', meaning: '主持', part: 'v.' },
+                { word: 'perceive', meaning: '感知', part: 'v.' }, { word: 'attention to', meaning: '對…注意', part: 'phr.' }, { word: 'conduct', meaning: '進行', part: 'v.' }, { word: 'polish', meaning: '磨光', part: 'v.' }, { word: 'compliance with', meaning: '對…遵守', part: 'phr.' },
+                { word: 'survey', meaning: '調查', part: 'n./v.' }, { word: 'shelf', meaning: '架子', part: 'n.' }, { word: 'concerns about', meaning: '對…擔心', part: 'phr.' }, { word: 'perspective', meaning: '看法/觀點', part: 'n.' }, { word: 'spacious', meaning: '寬敞', part: 'adj.' },
+                { word: 'effect on', meaning: '對…影響', part: 'phr.' }, { word: 'accessibility', meaning: '可接近性', part: 'n.' }, { word: 'staircase', meaning: '樓梯', part: 'n.' }, { word: 'shift in', meaning: '轉變', part: 'phr.' }, { word: 'similarity', meaning: '類似', part: 'n.' },
+                { word: 'statue', meaning: '雕像', part: 'n.' }, { word: 'referral', meaning: '轉介', part: 'n.' }, { word: 'sweep', meaning: '掃', part: 'v.' }, { word: 'commitment to', meaning: '對…的承諾', part: 'phr.' }, { word: 'obligatory', meaning: '義務', part: 'adj.' },
+                { word: 'windowsill', meaning: '窗台', part: 'n.' }, { word: 'transition from A to B', meaning: '轉變A到B', part: 'phr.' }, { word: 'interaction', meaning: '互動', part: 'n.' }, { word: 'a source of', meaning: '…的來源', part: 'phr.' }, { word: 'accommodation', meaning: '住處', part: 'n.' },
+                { word: 'report for', meaning: '給…的報告', part: 'phr.' }, { word: 'critics', meaning: '評論家', part: 'n.' }, { word: 'a portion of', meaning: '一部分的…', part: 'phr.' }, { word: 'express', meaning: '表達', part: 'v.' }, { word: 'identification badge', meaning: '識別證', part: 'n.' },
+                { word: 'comparison', meaning: '比較', part: 'n.' }, { word: 'intent to', meaning: '做...的意圖', part: 'phr.' }, { word: 'admiration for', meaning: '對...的敬佩', part: 'phr.' }, { word: 'influence', meaning: '影響', part: 'n./v.' }, { word: 'restriction on', meaning: '對...的限制', part: 'phr.' },
+                { word: 'reception', meaning: '接待', part: 'n.' }, { word: 'observation on', meaning: '對...的觀察', part: 'phr.' }, { word: 'addressed', meaning: '解決', part: 'v.' }, { word: 'requirement for', meaning: '對...的要求', part: 'phr.' }, { word: 'experiment', meaning: '實驗', part: 'n.' }
+            ]
+        };
+
+        // --- 狀態管理 ---
+        let currentDay = '11';
+        let currentMode = 'quiz'; // 'quiz' or 'flashcard'
+        let currentWordIndex = 0;
+        let answeredWords = new Set();
+        let currentQuizData = null; // Stores word and options for the current quiz
+
+        // --- DOM 元素引用 ---
+        const $daySelector = document.getElementById('day-selector');
+        const $mainContentContainer = document.getElementById('main-content-container');
+        const $wordListContainer = document.getElementById('word-list-container');
+        const $wordlistTitle = document.getElementById('wordlist-title');
+        const $progressText = document.getElementById('progress-text');
+        const $progressBar = document.getElementById('progress-bar');
+        const $modeBtns = document.querySelectorAll('.mode-btn');
+
+        // --- 工具函數 ---
+
+        /**
+         * 從陣列中隨機取得 n 個不重複的元素
+         * @param {Array} arr 
+         * @param {number} n 
+         * @param {any} excludeItem 排除的元素
+         * @returns {Array}
+         */
+        function getRandomElements(arr, n, excludeItem = null) {
+            const shuffled = arr.filter(item => item !== excludeItem).sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, n);
+        }
+
+        /**
+         * 重新整理進度條和列表
+         */
+        function updateProgressAndList() {
+            const totalWords = VOCAB_DATA[currentDay].length;
+            const completedCount = answeredWords.size;
+
+            // 1. 更新進度條
+            $progressText.textContent = `${completedCount}/${totalWords}`;
+            const percentage = totalWords > 0 ? (completedCount / totalWords) * 100 : 0;
+            $progressBar.style.width = `${percentage}%`;
+
+            // 2. 更新單字列表
+            $wordlistTitle.textContent = `DAY ${currentDay} 單字列表 (${totalWords} 詞)`;
+            $wordListContainer.innerHTML = VOCAB_DATA[currentDay].map(wordObj => {
+                const isCompleted = answeredWords.has(wordObj.word);
+                const iconColor = isCompleted ? 'text-emerald-500' : 'text-gray-400';
+                const textColor = isCompleted ? 'text-gray-600 font-semibold' : 'text-gray-500';
+                return `
+                    <div class="flex justify-between items-center p-2 rounded-lg ${isCompleted ? 'bg-emerald-50' : 'hover:bg-gray-100'}">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${iconColor} w-4 h-4 mr-2">
+                                <path d="M4.5 16.5C5.1 17.6 6.3 18.5 7.5 18.5c1.3 0 2.4-.8 3.1-1.8"/>
+                                <path d="M12 20.5v-2h2"/>
+                                <path d="M14 16.5c-.7 1-1.8 1.8-3.1 1.8-1.2 0-2.4-.9-3-2"/>
+                                <path d="M7 6.5C7.7 5.4 8.9 4.5 10.1 4.5c1.3 0 2.4.8 3.1 1.8"/>
+                                <path d="M12 3.5v2h2"/>
+                                <path d="M14 6.5c-.7-1-1.8-1.8-3.1-1.8-1.2 0-2.4.9-3 2"/>
+                            </svg>
+                            <span class="${textColor} text-sm">${wordObj.word}</span>
+                        </div>
+                        <span class="text-xs text-gray-400">(${wordObj.part})</span>
                     </div>
-                    <div className="items-center px-4 py-3">
-                        <button
-                            id="reset-button"
-                            onClick={resetQuiz}
-                            className="px-4 py-2 bg-indigo-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                            重新開始 {currentDay} 測驗
+                `;
+            }).join('');
+        }
+
+        /**
+         * 選擇下一個單字進行測驗
+         * @returns {Object|null} 下一個單字物件，如果全部完成則為 null
+         */
+        function getNextWord() {
+            const words = VOCAB_DATA[currentDay];
+            const unAnswered = words.filter(word => !answeredWords.has(word.word));
+
+            if (unAnswered.length === 0) {
+                return null; // 全部完成
+            }
+
+            // 隨機選擇一個未完成的單字
+            const randomIndex = Math.floor(Math.random() * unAnswered.length);
+            return unAnswered[randomIndex];
+        }
+
+        /**
+         * 產生測驗內容
+         * @returns {Object} 包含問題單字和選項的物件
+         */
+        function generateQuizContent() {
+            const wordObj = getNextWord();
+            if (!wordObj) return null;
+
+            const allMeanings = VOCAB_DATA[currentDay].map(w => w.meaning);
+            const correctMeaning = wordObj.meaning;
+
+            // 取得 3 個不重複的錯誤選項
+            const incorrectMeanings = getRandomElements(allMeanings, 3, correctMeaning);
+
+            const options = [
+                { text: correctMeaning, isCorrect: true, id: 'A' },
+                { text: incorrectMeanings[0], isCorrect: false, id: 'B' },
+                { text: incorrectMeanings[1], isCorrect: false, id: 'C' },
+                { text: incorrectMeanings[2], isCorrect: false, id: 'D' }
+            ].sort(() => 0.5 - Math.random()).map((opt, index) => ({
+                ...opt,
+                label: String.fromCharCode(65 + index) // A, B, C, D
+            }));
+
+            return {
+                word: wordObj.word,
+                options: options
+            };
+        }
+
+        /**
+         * 渲染測驗模式介面
+         */
+        function renderQuiz() {
+            currentQuizData = generateQuizContent();
+            if (!currentQuizData) {
+                $mainContentContainer.innerHTML = `
+                    <div class="w-full max-w-2xl bg-white p-10 rounded-3xl shadow-2xl text-center">
+                        <h2 class="text-3xl font-bold text-emerald-600 mb-4">恭喜您！🎉</h2>
+                        <p class="text-xl text-gray-700">您已完成 Day ${currentDay} 的所有單字測驗！</p>
+                        <button onclick="changeDay(parseInt(currentDay) + 1)" class="mt-6 bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-600 transition duration-150">
+                            前往 Day ${parseInt(currentDay) + 1 > 20 ? 20 : parseInt(currentDay) + 1}
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const optionsHtml = currentQuizData.options.map(opt => `
+                <div data-answer="${opt.isCorrect}" data-label="${opt.label}" class="quiz-option p-4 md:p-5 bg-white border border-gray-200 rounded-xl mb-3 transition duration-150">
+                    <span class="font-bold text-gray-600">${opt.label}.</span> ${opt.text}
+                </div>
+            `).join('');
+
+            $mainContentContainer.innerHTML = `
+                <div id="quiz-card" class="w-full max-w-3xl bg-white p-6 md:p-10 rounded-3xl shadow-xl">
+                    <p class="text-lg font-semibold text-gray-500 mb-2">DAY ${currentDay}</p>
+                    <div class="text-2xl font-bold text-gray-700 mb-6 flex items-center">
+                        <!-- Icon: Lightbulb -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3 text-amber-500">
+                            <path d="M15 14c.2-.8.8-1.5 1.7-2 .5-.2 1-.5 1.3-.9.3-.4.4-.9.4-1.4 0-1.3-1.1-2.4-2.4-2.4C14.1 7.3 13 8.4 13 9.7"/>
+                            <path d="M12 22a4 4 0 0 0 4-4H8a4 4 0 0 0 4 4Z"/>
+                            <path d="M9 18h6"/>
+                            <path d="M10 12l-1 1"/>
+                            <path d="M14 12l1 1"/>
+                            <path d="M12 9V7"/>
+                        </svg>
+                        請選擇下方哪個選項是 <span class="text-emerald-600 ml-2">「${currentQuizData.word}」</span> 的正確中文解釋:
+                    </div>
+                    
+                    <div id="quiz-options-container" class="space-y-4">
+                        ${optionsHtml}
+                    </div>
+
+                    <div id="quiz-feedback" class="mt-6 p-4 rounded-xl hidden"></div>
+                    
+                    <button id="next-quiz-btn" onclick="checkAnswer(event)" class="w-full mt-6 bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-emerald-600 transition duration-150">
+                        確認答案
+                    </button>
+                </div>
+            `;
+            
+            // 綁定事件監聽器
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('click', selectOption);
+            });
+
+            document.getElementById('next-quiz-btn').onclick = checkAnswer;
+        }
+
+        /**
+         * 處理選項點擊
+         */
+        function selectOption(event) {
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.classList.remove('ring-4', 'ring-emerald-300');
+            });
+            event.currentTarget.classList.add('ring-4', 'ring-emerald-300');
+            document.getElementById('next-quiz-btn').textContent = '確認答案';
+        }
+
+        /**
+         * 檢查答案
+         */
+        function checkAnswer(event) {
+            const $selected = document.querySelector('.quiz-option.ring-4');
+            const $feedback = document.getElementById('quiz-feedback');
+            const $nextBtn = document.getElementById('next-quiz-btn');
+            
+            if ($nextBtn.dataset.state === 'next') {
+                renderQuiz();
+                return;
+            }
+
+            if (!$selected) {
+                $feedback.classList.remove('hidden');
+                $feedback.classList.add('bg-amber-100', 'text-amber-800');
+                $feedback.innerHTML = '<span class="font-bold">提示:</span> 請先選擇一個選項。';
+                return;
+            }
+
+            // 鎖定所有選項
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.removeEventListener('click', selectOption);
+                option.classList.remove('quiz-option:hover', 'ring-4');
+                option.style.cursor = 'default';
+            });
+
+            const isCorrect = $selected.dataset.answer === 'true';
+            
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                if (option.dataset.answer === 'true') {
+                    option.classList.add('quiz-correct', 'shadow-md');
+                } else if (option === $selected) {
+                    option.classList.add('quiz-incorrect', 'shadow-md');
+                }
+            });
+
+            $feedback.classList.remove('hidden', 'bg-amber-100', 'text-amber-800');
+            if (isCorrect) {
+                $feedback.classList.add('bg-green-100', 'text-green-800');
+                $feedback.innerHTML = '<span class="font-bold">👍 正確!</span> 答案是：' + currentQuizData.options.find(o => o.isCorrect).text;
+                answeredWords.add(currentQuizData.word);
+            } else {
+                $feedback.classList.add('bg-red-100', 'text-red-800');
+                $feedback.innerHTML = '<span class="font-bold">😢 錯誤!</span> 正確答案是：' + currentQuizData.options.find(o => o.isCorrect).text;
+            }
+
+            updateProgressAndList();
+            
+            $nextBtn.textContent = '下一題';
+            $nextBtn.dataset.state = 'next';
+            $nextBtn.onclick = () => {
+                 $nextBtn.dataset.state = 'check'; // 重置狀態
+                 renderQuiz();
+            };
+        }
+
+        /**
+         * 渲染單字卡模式介面
+         */
+        function renderFlashcard() {
+            const words = VOCAB_DATA[currentDay];
+            const wordObj = words[currentWordIndex];
+
+            if (!wordObj) {
+                 $mainContentContainer.innerHTML = `
+                    <div class="w-full max-w-2xl bg-white p-10 rounded-3xl shadow-2xl text-center">
+                        <h2 class="text-3xl font-bold text-emerald-600 mb-4">單字卡結束！</h2>
+                        <p class="text-xl text-gray-700">您已看完 Day ${currentDay} 的所有單字卡。</p>
+                        <button onclick="currentWordIndex=0; renderFlashcard();" class="mt-6 bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-600 transition duration-150">
+                            從頭開始
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            $mainContentContainer.innerHTML = `
+                <div class="w-full max-w-3xl">
+                    <p class="text-lg font-semibold text-gray-500 mb-4 text-center">單字卡 (${currentWordIndex + 1} / ${words.length})</p>
+                    <div id="flashcard" class="flip-card h-80 w-full mb-6" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div>
+                                    <p class="text-xl text-gray-500 mb-3">英文</p>
+                                    <h2 class="flashcard-content text-gray-800">${wordObj.word}</h2>
+                                    <p class="text-lg text-gray-400 mt-2">(${wordObj.part})</p>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div>
+                                    <p class="text-xl text-white mb-3">中文解釋</p>
+                                    <h2 class="flashcard-content text-white">${wordObj.meaning}</h2>
+                                    <p class="text-sm text-emerald-100 mt-4">點擊卡片翻面</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center space-x-4">
+                        <button onclick="prevWord()" class="flex items-center bg-gray-300 text-gray-800 px-6 py-3 rounded-xl font-semibold hover:bg-gray-400 transition duration-150 ${currentWordIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${currentWordIndex === 0 ? 'disabled' : ''}>
+                            <!-- Icon: Arrow Left -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2">
+                                <path d="m15 18-6-6 6-6"/>
+                            </svg>
+                            上一張
+                        </button>
+                        <button onclick="nextWord()" class="flex items-center bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:bg-emerald-600 transition duration-150">
+                            下一張
+                            <!-- Icon: Arrow Right -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ml-2">
+                                <path d="m9 18 6-6-6-6"/>
+                            </svg>
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>
-    );
+            `;
+            // 確保每次渲染新卡片時，卡片都是正面的
+            const $card = document.getElementById('flashcard');
+            if ($card && $card.classList.contains('flipped')) {
+                $card.classList.remove('flipped');
+            }
+        }
 
-    // 測驗主內容組件
-    const QuizContent = () => {
-        // 在測驗完成後，currentWord 可能會是 undefined
-        if (!currentWord && learnedWordsCount === TOTAL_WORDS) return <div className="text-center p-10 text-gray-500">恭喜！{currentDay} 測驗已完成。請重新開始或切換學習日。</div>;
-        if (!currentWord) return <div className="text-center p-10 text-gray-500">正在加載單字...</div>; // 處理初始加載或列表為空的情況
-
-        const { word } = currentWord;
-        
-        return (
-            <div className="p-6 md:p-12 lg:p-16 space-y-10">
-                <div className="text-sm font-semibold text-gray-500 border-b pb-2">
-                    {currentDay}
-                </div>
-
-                {/* 問題區塊 */}
-                <div className="bg-white p-8 md:p-12 rounded-2xl shadow-xl space-y-8">
-                    <div className="flex items-center space-x-4">
-                        <span className="text-3xl">💡</span>
-                        <h3 className="text-2xl md:text-3xl font-light text-gray-700 leading-relaxed">
-                            請選擇下方哪個選項是 <span className="font-bold text-indigo-600">{word}</span> 的正確中文解釋：
-                        </h3>
+        function nextWord() {
+            if (currentWordIndex < VOCAB_DATA[currentDay].length - 1) {
+                currentWordIndex++;
+                renderFlashcard();
+            } else {
+                // 已到達最後一張
+                $mainContentContainer.innerHTML = `
+                    <div class="w-full max-w-2xl bg-white p-10 rounded-3xl shadow-2xl text-center">
+                        <h2 class="text-3xl font-bold text-emerald-600 mb-4">單字卡結束！</h2>
+                        <p class="text-xl text-gray-700">您已看完 Day ${currentDay} 的所有單字卡。</p>
+                        <button onclick="currentWordIndex=0; renderFlashcard();" class="mt-6 bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-600 transition duration-150">
+                            從頭開始
+                        </button>
                     </div>
+                `;
+            }
+            // 在單字卡模式下，點擊下一張即視為已學會
+            answeredWords.add(VOCAB_DATA[currentDay][currentWordIndex].word);
+            updateProgressAndList();
+        }
 
-                    {/* 選項列表 */}
-                    <div className="grid gap-4">
-                        {quizOptions.map((option, index) => (
-                            <button
-                                key={index}
-                                className={getOptionStyle(option)}
-                                onClick={() => handleOptionSelect(option)}
-                                // 只有當前選項被選中且答錯時才禁用，讓使用者看到正確答案
-                                disabled={!!selectedOption && (selectedOption !== option && option !== correctMeaning)}
-                            >
-                                <div className="w-8 h-8 flex items-center justify-center bg-gray-100 text-indigo-600 font-bold rounded-full mr-4">
-                                    {ALPHABET_OPTIONS[index]}
-                                </div>
-                                <span>{option}</span>
-                                {selectedOption === option && (
-                                    isAnswerCorrect ? <Check className="w-6 h-6 ml-auto text-green-600" /> : <X className="w-6 h-6 ml-auto text-red-600" />
-                                )}
-                                {/* 顯示正確答案標記，即使選錯 */}
-                                {(selectedOption && option === correctMeaning && selectedOption !== correctMeaning) && (
-                                    <Check className="w-6 h-6 ml-auto text-green-600" />
-                                )}
-                            </button>
-                        ))}
-                    </div>
+        function prevWord() {
+            if (currentWordIndex > 0) {
+                currentWordIndex--;
+                renderFlashcard();
+            }
+        }
 
-                    {/* 反饋與下一題按鈕 */}
-                    {selectedOption && (
-                        <div className={`p-4 rounded-xl border-l-4 ${isAnswerCorrect ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'}`}>
-                            <p className={`font-semibold ${isAnswerCorrect ? 'text-green-700' : 'text-red-700'}`}>
-                                {isAnswerCorrect ? '答對了！' : '答錯了。'}
-                                {isAnswerCorrect === false && ` 正確答案是：${correctMeaning}`}
-                            </p>
-                            <button 
-                                onClick={nextQuestion}
-                                className="mt-3 px-6 py-2 bg-indigo-500 text-white font-semibold rounded-full shadow-md hover:bg-indigo-600 transition duration-200"
-                            >
-                                {currentWordIndex < TOTAL_WORDS - 1 ? '下一題' : '查看結果'}
-                            </button>
-                        </div>
-                    )}
-                </div>
-                
-                {/* 重新開始按鈕 */}
-                <button
-                    onClick={resetQuiz}
-                    className="flex items-center text-sm font-medium text-gray-500 hover:text-indigo-600 transition duration-150 mt-4"
-                >
-                    <RotateCcw className="w-4 h-4 mr-2" />
-                    重新開始 {currentDay} 測驗
-                </button>
-            </div>
-        );
-    };
+        /**
+         * 渲染主內容區
+         */
+        function renderContent() {
+            if (currentMode === 'quiz') {
+                renderQuiz();
+            } else if (currentMode === 'flashcard') {
+                currentWordIndex = 0; // 重設單字卡索引
+                renderFlashcard();
+            }
+        }
 
-    // ------------------------------------------
-    // 4. 渲染
-    // ------------------------------------------
+        /**
+         * 更改學習日
+         * @param {string} day 
+         */
+        function changeDay(day) {
+            // 檢查 Day 是否存在 (處理 Day 21 的情況)
+            if (!VOCAB_DATA[day]) {
+                day = '20'; // 預設回到 Day 20
+            }
 
-    return (
-        <div className="min-h-screen bg-gray-100 font-sans antialiased flex flex-col lg:flex-row">
-            {/* 側邊欄 */}
-            <Sidebar />
+            currentDay = day;
+            answeredWords = new Set();
+            currentWordIndex = 0;
+            updateProgressAndList();
+            renderContent();
+        }
 
-            {/* 主要內容區 */}
-            <main className="flex-1 overflow-y-auto">
-                <QuizContent />
-            </main>
+        /**
+         * 更改練習模式
+         * @param {string} mode 
+         */
+        function changeMode(mode) {
+            currentMode = mode;
+            $modeBtns.forEach(btn => {
+                btn.classList.remove('bg-emerald-500', 'text-white', 'shadow-md', 'hover:bg-emerald-600');
+                btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+            });
+            const $selectedBtn = document.getElementById(`mode-${mode}`);
+            $selectedBtn.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+            $selectedBtn.classList.add('bg-emerald-500', 'text-white', 'shadow-md', 'hover:bg-emerald-600');
             
-            {/* 測驗結果 Modal (取代 alert) */}
-            <QuizResultModal />
-        </div>
-    );
-};
+            renderContent();
+        }
 
-export default App;
+        // --- 初始化 ---
+        function init() {
+            // 1. 填充學習日選擇器
+            const days = Object.keys(VOCAB_DATA);
+            $daySelector.innerHTML = days.map(day => 
+                `<option value="${day}">DAY ${day} (${VOCAB_DATA[day].length} 詞)</option>`
+            ).join('');
+
+            // 2. 綁定事件
+            $daySelector.addEventListener('change', (e) => changeDay(e.target.value));
+            $modeBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => changeMode(e.currentTarget.dataset.mode));
+            });
+
+            // 3. 初始渲染 (Day 11, Quiz 模式)
+            changeDay('11');
+            changeMode('quiz'); // 確保初始模式設定正確
+        }
+
+        // 啟動應用程式
+        window.onload = init;
+    </script>
+
+</body>
+</html>
