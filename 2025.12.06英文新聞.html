@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily English News Deep Dive: New Headlines (Premium Learning Experience V2)</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a clean, professional interface */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; /* Soft light blue/grey background */
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* Larger border radius for softness */
+            box-shadow: 0 20px 40px rgba(45, 55, 72, 0.1); /* Deeper, softer shadow */
+        }
+        /* Main News Tabs Styling */
+        .main-tabs-container {
+            background-color: #f8fafc; /* Very light background for the tab bar */
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem;
+        }
+        .main-tab-button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            white-space: nowrap; 
+            flex-shrink: 0; /* Prevent buttons from shrinking too much */
+        }
+        .main-tab-active {
+            background-color: #4f46e5 !important; /* Indigo-600 */
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4); /* Subtle glow effect */
+            transform: translateY(-2px);
+        }
+        /* Sub-Tabs Styling */
+        .sub-tab-button {
+            padding: 1rem 1.5rem;
+            transition: color 0.2s, border-bottom 0.2s;
+            font-weight: 600;
+        }
+        .sub-tab-active {
+            color: #4f46e5; /* Indigo-600 */
+            border-bottom: 4px solid #4f46e5; /* Thicker active border */
+        }
+        /* Enhanced readability for article text */
+        .whitespace-pre-line-safe {
+            white-space: pre-line;
+            line-height: 1.75; 
+            font-size: 1.05rem; 
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+
+    <div id="app" class="max-w-5xl mx-auto">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-8 text-center tracking-tight">
+            🌟 每日英文新聞深度學習 (Premium Learning V2)
+        </h1>
+
+        <!-- Main Topic Tabs (News Selection) -->
+        <div id="main-tabs-container" class="flex flex-wrap gap-3 main-tabs-container container-card border-b border-gray-200">
+            <!-- Tabs will be rendered here by JavaScript -->
+        </div>
+
+        <!-- Main Content Card -->
+        <div class="container-card rounded-t-none p-5 sm:p-10 mb-8 border-t-0 min-h-[60vh]">
+            <div id="current-content">
+                <!-- Content will be rendered here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Data Structure for News Content
+        window.FINAL_NEWS_DATA = [
+            {
+                id: 'taiwan-assurance-act',
+                title: 'US Congress Passes Taiwan Assurance Implementation Act',
+                topic: 'US-Taiwan Relations & Diplomacy',
+                article: `The US Congress has passed the Taiwan Assurance Implementation Act, requiring the State Department to review and update guidelines on US-Taiwan interactions and proposed plans to remove remaining restrictions.
+The White House says President Donald Trump will sign it into law today. Introduced in February, the act seeks to end longstanding self-imposed red lines limiting official diplomatic and military exchanges since 1979.`,
+                translation: `美國國會通過《台灣保證實施法》，要求國務院審查並更新美台互動指南，並提出計畫以移除剩餘的限制。
+白宮表示，總統唐納德·川普將在今天簽署使其成為法律。該法案於二月提出，旨在終止自1979年以來限制官方外交和軍事交流的長期自我設限紅線。`,
+                vocabulary: [
+                    { word: 'passed', definition: '通過 (v.) successfully approved and enacted by a legislature.' },
+                    { word: 'Implementation Act', definition: '實施法 (n.) A law designed to put a policy or previous authorization into effect.' },
+                    { word: 'State Department', definition: '國務院 (n.) The US government department responsible for foreign affairs, diplomacy, and international relations.' },
+                    { word: 'review and update', definition: '審查並更新 (phr.) To formally examine and subsequently revise or modernize something.' },
+                    { word: 'guidelines', definition: '指南，準則 (n.) A set of rules or instructions that advise on how to conduct a process.' },
+                    { word: 'interactions', definition: '互動，交流 (n.) Reciprocal action or communication between two parties.' },
+                    { word: 'proposed plans', definition: '擬議計畫 (phr.) Suggestions or schemes put forward for consideration.' },
+                    { word: 'restrictions', definition: '限制 (n.) A limiting condition or measure, often official or legal.' },
+                    { word: 'sign it into law', definition: '簽署使其成為法律 (phr.) The final action by the head of state to officially approve a bill and make it an enforceable statute.' },
+                    { word: 'introduced', definition: '提出 (v.) Presented formally to a legislative body for consideration.' },
+                    { word: 'seeks to end', definition: '尋求終止 (phr.) Attempts or aims to bring something to a conclusion.' },
+                    { word: 'longstanding', definition: '長期的 (adj.) Having existed or been in effect for a long period of time.' },
+                    { word: 'self-imposed', definition: '自我設限的 (adj.) Restrictions or limits chosen by oneself rather than being forced by others.' },
+                    { word: 'red lines', definition: '紅線，禁區 (n.) A limit or boundary beyond which unacceptable consequences will ensue.' },
+                    { word: 'limiting', definition: '限制 (v.) Restricting the size or extent of something.' },
+                    { word: 'official diplomatic', definition: '官方外交的 (phr.) Relating to formal, recognized relations between governments.' },
+                    { word: 'military exchanges', definition: '軍事交流 (phr.) Mutual sharing of information, personnel, or training between armed forces.' },
+                    { word: 'assurance', definition: '保證，擔保 (n.) A positive declaration intended to give confidence.' },
+                    { word: 'implementation', definition: '實施，執行 (n.) The process of putting a decision or plan into effect.' },
+                    { word: 'proposed', definition: '建議的，提議的 (adj.) Suggested for consideration.' },
+                    { word: 'remaining', definition: '剩餘的，剩下的 (adj.) Still in existence; left over.' },
+                    { word: 'diplomatic', definition: '外交的 (adj.) Relating to the profession, activity, or skill of managing international relations.' },
+                    { word: 'exchanges', definition: '交換，交流活動 (n.) Instances of giving and receiving something in return.' },
+                    { word: 'consequently', definition: '因此，結果 (adv.) As a result; consequently.' },
+                    { word: 'statute', definition: '法規，法令 (n.) A written law passed by a legislative body.' },
+                    { word: 'enforceable', definition: '可執行的，可強制的 (adj.) Capable of being put into force.' },
+                    { word: 'protocol', definition: '協議，規範 (n.) The accepted or established code of procedure or behavior.' },
+                    { word: 'bilateral', definition: '雙邊的 (adj.) Involving two parties, especially countries.' },
+                    { word: 'cooperation', definition: '合作 (n.) The process of working together to the same end.' },
+                    { word: 'legislature', definition: '立法機關 (n.) The part of government responsible for making laws.' },
+                    { word: 'authority', definition: '權力，當局 (n.) The power or right to give orders, make decisions, and enforce obedience.' }
+                ],
+                quiz: [
+                    { q: 'The Taiwan Assurance Implementation Act requires the State Department to review and update what?', options: ['Trade tariffs', 'Visa application process', 'Guidelines on US-Taiwan interactions', 'Military aid budget'], answer: 'Guidelines on US-Taiwan interactions', hint: '這項法案的核心在於調整美台之間的溝通與合作方式。' },
+                    { q: 'Who is expected to sign the act into law?', options: ['The Speaker of the House', 'President Donald Trump', 'The Secretary of State', 'The Vice President'], answer: 'President Donald Trump', hint: '簽署法案是美國總統的行政權力。' },
+                    { q: 'The act seeks to remove which kind of restrictions?', options: ['Financial sanctions', 'Technology export limits', 'Longstanding self-imposed red lines', 'Travel warnings'], answer: 'Longstanding self-imposed red lines', hint: '這些限制是美國自己設定的界線，並非外部壓力。' },
+                    { q: 'Since what year have the limiting red lines been in effect?', options: ['1971', '1999', '1979', '2005'], answer: '1979', hint: '請回顧歷史背景，這個年份與美中建交有關。' },
+                    { q: 'What does the term "diplomatic exchanges" refer to in the context of the act?', options: ['Student exchange programs', 'Formal communication between governments', 'Trade negotiations only', 'Cultural visits'], answer: 'Formal communication between governments', hint: '「外交」一詞特指國家層面的官方往來。' },
+                    { q: 'What is the primary function of an "Implementation Act"?', options: ['To block foreign policy', 'To fund new programs', 'To put a previous policy or authorization into effect', 'To start a legislative debate'], answer: 'To put a previous policy or authorization into effect', hint: '它的目的是將既定政策轉化為具體行動。' },
+                    { q: 'What kind of interactions are being limited by the old restrictions?', options: ['Economic and cultural', 'Education and tourism', 'Official diplomatic and military', 'Scientific and artistic'], answer: 'Official diplomatic and military', hint: '這些限制涉及政府間最敏感的兩個領域。' },
+                    { q: 'What does the phrase "self-imposed" mean?', options: ['Forced by an outside entity', 'Chosen or decided by oneself', 'Mandated by international law', 'Created by popular vote'], answer: 'Chosen or decided by oneself', hint: '這個複合形容詞的字首是「自己」。' },
+                    { q: 'The bill was introduced in Congress in which month?', options: ['January', 'February', 'March', 'April'], answer: 'February', hint: '回顧文章開頭，找到法案被提出的時間。' },
+                    { q: 'The act proposes plans to remove which type of restrictions?', options: ['New restrictions', 'Financial restrictions', 'Remaining restrictions', 'Temporary restrictions'], answer: 'Remaining restrictions', hint: '重點在於解決尚未解除的那些限制。' },
+                    { q: 'Which term means "a set of rules or instructions that advise on how to conduct a process"?', options: ['Statutes', 'Regulations', 'Guidelines', 'Directives'], answer: 'Guidelines', hint: '國務院需要審查和更新的就是這些行為準則。' },
+                    { q: 'What is the literal translation of "red lines" in a diplomatic context?', options: ['Negotiating limits', 'Unacceptable boundaries', 'Trade boundaries', 'Military positions'], answer: 'Unacceptable boundaries', hint: '它代表一個不能跨越的禁區或底線。' },
+                    { q: 'The act aims to strengthen which aspect of US-Taiwan relations?', options: ['Trade tariffs', 'Cultural exchanges', 'Official communication and defense cooperation', 'Environmental policy'], answer: 'Official communication and defense cooperation', hint: '法案的核心是解除對官方往來和軍事合作的限制。' },
+                    { q: 'What does the word "longstanding" suggest about the restrictions?', options: ['They are recent', 'They are popular', 'They have been around for a long time', 'They are easily changed'], answer: 'They have been around for a long time', hint: '這個詞的意思是「長期的」。' },
+                    { q: 'Who is the current President mentioned in the article who will sign the law?', options: ['Joe Biden', 'Barack Obama', 'Donald Trump', 'George W. Bush'], answer: 'Donald Trump', hint: '請仔細閱讀文章中提到簽署者的名字。' }
+                ]
+            },
+            {
+                id: 'taiwan-live-fire-drill',
+                title: 'National Army Resumes Coastal Live-Fire Drills',
+                topic: 'Military & Defense',
+                article: `The Army's Hualian-Taitung Defense Command conducted live-fire drills at the Tai River estuary at 6:00 a.m. today, marking the first ground-based artillery firing in the area since the 1994 Hung-kuo exercise.
+The training aims to strengthen coastal defense against potential surprise attacks. Weapons included tank guns, mortars, grenade launchers, and machine guns, with troops practicing rapid responses to malfunctions.`,
+                translation: `國軍恢復海岸線實彈射擊演習。陸軍花東防衛指揮部於今日上午6點在太魯閣溪口進行了實彈射擊演習，這是自1994年「漢光演習」（Hung-kuo exercise）以來，該地區首次進行地面火砲射擊。
+此次訓練旨在加強海岸防禦，以應對潛在的突襲。使用的武器包括坦克砲、迫擊砲、榴彈發射器和機槍，部隊也練習了對故障的快速反應。`,
+                vocabulary: [
+                    { word: 'resumes', definition: '恢復，重新開始 (v.) To begin again or continue after a pause or interruption.' },
+                    { word: 'coastal', definition: '海岸的 (adj.) Relating to or situated on a coast.' },
+                    { word: 'Defense Command', definition: '防衛指揮部 (n.) A military unit responsible for the defense of a specific region or area.' },
+                    { word: 'conducted', definition: '進行，實施 (v.) Organized and carried out an activity.' },
+                    { word: 'live-fire drills', definition: '實彈射擊演習 (phr.) Training exercises using actual ammunition or explosives.' },
+                    { word: 'estuary', definition: '河口，江口 (n.) The tidal mouth of a large river, where the tide meets the stream.' },
+                    { word: 'marking', definition: '標誌著，表明 (v.) Indicating or symbolizing a specific event or point in time.' },
+                    { word: 'ground-based artillery', definition: '地面火砲 (n.) Large-caliber guns that are fired from fixed or mobile positions on the ground.' },
+                    { word: 'exercise', definition: '演習，操練 (n.) A military maneuver or practice war game.' },
+                    { word: 'aims to', definition: '旨在，目標是 (phr.) Has the specific intention or goal of.' },
+                    { word: 'strengthen', definition: '加強，鞏固 (v.) Make or become stronger or more robust.' },
+                    { word: 'coastal defense', definition: '海岸防禦 (phr.) Military measures and installations designed to protect a nation\'s coastline from attack.' },
+                    { word: 'potential', definition: '潛在的，可能的 (adj.) Having or showing the capacity to develop into something in the future.' },
+                    { word: 'surprise attacks', definition: '突襲 (n.) Sudden, unexpected military assaults intended to catch the enemy unprepared.' },
+                    { word: 'weapons', definition: '武器 (n.) Instruments or devices used to inflict damage or harm.' },
+                    { word: 'tank guns', definition: '坦克砲 (n.) The main large-caliber weapon mounted on an armored tank.' },
+                    { word: 'mortars', definition: '迫擊砲 (n.) Short, muzzle-loaded artillery weapons that fire projectiles in a high, arcing trajectory.' },
+                    { word: 'grenade launchers', definition: '榴彈發射器 (n.) Weapons designed to propel a grenade farther and more accurately than throwing it.' },
+                    { word: 'machine guns', definition: '機槍 (n.) Automatic firearms designed to fire continuous streams of bullets.' },
+                    { word: 'troops', definition: '部隊，軍隊 (n.) Soldiers or armed forces.' },
+                    { word: 'practicing', definition: '練習，演練 (v.) Performing an activity repeatedly to improve proficiency.' },
+                    { word: 'rapid responses', definition: '快速反應 (phr.) Swift, immediate reactions to an event or emergency.' },
+                    { word: 'malfunctions', definition: '故障，機能失常 (n.) Failures to function normally or satisfactorily.' },
+                    { word: 'artillery', definition: '火砲 (n.) Large guns used in land warfare.' },
+                    { word: 'estuary', definition: '河口 (n.) The place where a river meets the sea.' },
+                    { word: 'potential', definition: '潛在的 (adj.) Capable of becoming real.' },
+                    { word: 'unprepared', definition: '措手不及的 (adj.) Not ready or equipped.' },
+                    { word: 'trajectory', definition: '彈道，軌跡 (n.) The path followed by a projectile flying through the air.' },
+                    { word: 'muzzle-loaded', definition: '從槍口裝填的 (adj.) Loaded from the front end of the barrel.' },
+                    { word: 'proficency', definition: '熟練，精通 (n.) A high degree of competence or skill.' }
+                ],
+                quiz: [
+                    { q: 'Which military unit conducted the live-fire drills?', options: ['The Navy Fleet Command', 'The Army\'s Hualian-Taitung Defense Command', 'The Air Force Tactical Wing', 'The Coast Guard Patrol'], answer: 'The Army\'s Hualian-Taitung Defense Command', hint: '請查找文章中提到的特定陸軍指揮部名稱。' },
+                    { q: 'At what time did the drills begin?', options: ['Midnight', '6:00 a.m.', 'Noon', '6:00 p.m.'], answer: '6:00 a.m.', hint: '文章清楚記載了演習開始的確切時間。' },
+                    { q: 'The drills took place at the estuary of which river?', options: ['Tai River', 'Danshui River', 'Taipei River', 'Tai Gong River'], answer: 'Tai River', hint: '地點是位於花東地區的一條河流的入海口。' },
+                    { q: 'The exercise marks the first ground-based artillery firing in the area since which year?', options: ['1988', '1994', '2000', '2010'], answer: '1994', hint: '這次演習是時隔多年後的首次火砲射擊。' },
+                    { q: 'What is the specific name of the 1994 exercise mentioned?', options: ['Taipei Defense', 'Joint Forces', 'Hung-kuo', 'Coastal Watch'], answer: 'Hung-kuo', hint: '這是一次著名的軍事演習名稱。' },
+                    { q: 'The training primarily aims to strengthen what?', options: ['Air superiority', 'Naval power', 'Coastal defense', 'Cyber warfare capabilities'], answer: 'Coastal defense', hint: '由於地點在河口，防禦的重點在於海岸線。' },
+                    { q: 'Which type of attack are the troops guarding against?', options: ['Drone attacks', 'Submarine intrusions', 'Cyber assaults', 'Potential surprise attacks'], answer: 'Potential surprise attacks', hint: '訓練是為了應對最意想不到的軍事行動。' },
+                    { q: 'Which weapon is specifically designed to fire projectiles in a high arc?', options: ['Tank guns', 'Machine guns', 'Mortars', 'Grenade launchers'], answer: 'Mortars', hint: '迫擊砲（Mortar）的發射方式有其獨特性。' },
+                    { q: 'What kind of scenarios were the troops practicing rapid responses to?', options: ['Weather changes', 'Communication loss', 'Weapon malfunctions', 'Supply shortages'], answer: 'Weapon malfunctions', hint: '除了射擊本身，訓練也強調解決設備問題的能力。' },
+                    { q: 'What does the phrase "resumes" imply about the drills?', options: ['They are entirely new', 'They are starting for the first time', 'They have been stopped and are now restarting', 'They are only temporary'], answer: 'They have been stopped and are now restarting', hint: '這個動詞意味著中斷後的再次開始。' },
+                    { q: 'What does "estuary" mean?', options: ['A large lake', 'The mouth of a river where the tide meets the stream', 'A high mountain peak', 'A military trench'], answer: 'The mouth of a river where the tide meets the stream', hint: '這個地理術語指的是河流與海洋的交匯處。' },
+                    { q: 'What is "ground-based artillery"?', options: ['Guns fired from aircraft', 'Large guns fired from the ground', 'Small arms carried by soldiers', 'Naval missiles'], answer: 'Large guns fired from the ground', hint: '它指的是部署在地面上的重型火砲。' },
+                    { q: 'The use of actual ammunition in training is referred to as what?', options: ['Dry run', 'Simulated exercise', 'Live-fire drills', 'Maneuver practice'], answer: 'Live-fire drills', hint: '實彈演習的英文名稱。' },
+                    { q: 'Which weapon mentioned is an automatic firearm designed for continuous firing?', options: ['Mortar', 'Tank gun', 'Machine gun', 'Grenade launcher'], answer: 'Machine gun', hint: '機槍的特性是連續發射。' },
+                    { q: 'Which area of Taiwan is covered by the Defense Command mentioned?', options: ['Northern and Western Taiwan', 'Penghu and Kinmen Islands', 'Hualian and Taitung', 'Southern Taiwan'], answer: 'Hualian and Taitung', hint: '指揮部的名稱已揭示了其負責的地理範圍。' }
+                ]
+            },
+            {
+                id: 'shiang-tea-scandal',
+                title: 'Milk Tea Brand "Shiang Aged Milk Tea" Collapses After Labeling Scandal',
+                topic: 'Business & Consumer Issues',
+                article: `"Shiang Aged Milk Tea," founded in 2024 by influencers Tin and Xiao, once expanded to over 20 locations, but sales plunged after a milk origin mislabeling scandal last July.
+Stores have since shut down one after another, and the brand's social media pages quietly disappeared. Online users now lament that franchises are the ones suffering the most.`,
+                translation: `手搖飲品牌「嚮茶」因標籤爭議倒閉。「嚮茶」（Shiang Aged Milk Tea）由網紅 Tin 和 Xiao 於2024年創立，一度擴展至20多個據點，但去年七月因牛奶來源標示不實的醜聞導致銷量暴跌。
+此後店面一家接一家關閉，品牌社群媒體頁面也悄然消失。網路用戶現在感嘆，加盟商是受害最深的一群。`,
+                vocabulary: [
+                    { word: 'collapses', definition: '倒閉，崩潰 (v.) To suddenly fall down or fail; to discontinue operations.' },
+                    { word: 'founded', definition: '創立，成立 (v.) Established or originated an institution or organization.' },
+                    { word: 'influencers', definition: '網紅，影響者 (n.) People who use social media or other platforms to sway opinions or purchasing decisions.' },
+                    { word: 'expanded to', definition: '擴展到 (phr.) Increased in size, number, or scope to reach a certain level.' },
+                    { word: 'locations', definition: '據點，分店 (n.) Specific places where a store or business operates.' },
+                    { word: 'sales plunged', definition: '銷量暴跌 (phr.) Sales dropped rapidly and significantly, usually due to a negative event.' },
+                    { word: 'origin', definition: '來源，產地 (n.) The point or place where something begins or comes from.' },
+                    { word: 'mislabeling scandal', definition: '標示不實醜聞 (phr.) A public controversy involving incorrect or misleading claims on product labels.' },
+                    { word: 'shut down', definition: '關閉 (phr. v.) Ceased to operate or function permanently.' },
+                    { word: 'one after another', definition: '一家接一家地 (phr.) Occurring in sequence without interruption.' },
+                    { word: 'social media pages', definition: '社群媒體頁面 (phr.) The public profiles or accounts a brand maintains on platforms like Facebook or Instagram.' },
+                    { word: 'quietly disappeared', definition: '悄然消失 (phr.) Vanished without announcement, fanfare, or public notice.' },
+                    { word: 'lament', definition: '哀嘆，後悔 (v.) To express regret, disappointment, or grief over something.' },
+                    { word: 'franchises', definition: '加盟商 (n.) Businesses authorized to sell a company\'s goods or services in a particular area under the brand\'s name.' },
+                    { word: 'suffering the most', definition: '遭受最多痛苦 (phr.) Experiencing the greatest amount of distress, loss, or hardship.' },
+                    { word: 'controversy', definition: '爭議，爭論 (n.) Prolonged public disagreement or debate.' },
+                    { word: 'misleading', definition: '誤導性的 (adj.) Giving the wrong idea or impression.' },
+                    { word: 'reputation', definition: '聲譽，名聲 (n.) The beliefs or opinions generally held about someone or something.' },
+                    { word: 'allegation', definition: '指控 (n.) A claim or assertion that someone has done something illegal or wrong.' },
+                    { word: 'consequence', definition: '後果 (n.) A result or effect of an action or condition.' },
+                    { word: 'bankruptcy', definition: '破產 (n.) The state of being legally declared unable to pay debts.' },
+                    { word: 'consumer trust', definition: '消費者信任 (phr.) The confidence and belief consumers place in a brand or product.' },
+                    { word: 'financial loss', definition: '財務損失 (phr.) The state of money being spent or wasted, resulting in a deficit.' },
+                    { word: 'retail chain', definition: '零售連鎖店 (n.) A series of stores owned by the same company.' },
+                    { word: 'beverage brand', definition: '飲品品牌 (n.) A company specializing in the sale of drinks.' },
+                    { word: 'public perception', definition: '公眾觀感 (phr.) The way the public views or understands a company or issue.' },
+                    { word: 'distress', definition: '痛苦，苦惱 (n.) Extreme anxiety, sorrow, or pain.' },
+                    { word: 'rebranding', definition: '品牌重塑 (n.) The process of changing the corporate image of an organization.' },
+                    { word: 'sustainability', definition: '永續性 (n.) The ability to be maintained at a certain rate or level.' },
+                    { word: 'transparency', definition: '透明度 (n.) Operating in such a way that it is easy for others to see what actions are performed.' }
+                ],
+                quiz: [
+                    { q: 'What is the full name of the milk tea brand that collapsed?', options: ['Shiang Tea Co.', 'Aged Milk Tea', '"Shiang Aged Milk Tea,"', 'Tin & Xiao Tea'], answer: '"Shiang Aged Milk Tea,"', hint: '請注意文章中提到的品牌全名，它有引號。' },
+                    { q: 'Who were the founders of the brand?', options: ['Two businessmen', 'Influencers Tin and Xiao', 'A retired CEO', 'A large food corporation'], answer: 'Influencers Tin and Xiao', hint: '創辦人是兩位在網路上有影響力的人。' },
+                    { q: 'Approximately how many locations did the brand expand to at its peak?', options: ['Over 10', 'Over 5', 'Over 20', 'Over 50'], answer: 'Over 20', hint: '這是一個超過兩個十位數的數字。' },
+                    { q: 'In which month did the mislabeling scandal occur?', options: ['May', 'June', 'July', 'August'], answer: 'July', hint: '請查找事件發生的具體月份。' },
+                    { q: 'What was the core issue of the mislabeling scandal?', options: ['Sugar content inaccuracy', 'Expiration date manipulation', 'Milk origin mislabeling', 'Tea leaf sourcing'], answer: 'Milk origin mislabeling', hint: '醜聞與產品中一個關鍵成分的來源有關。' },
+                    { q: 'What happened to the brand\'s social media pages?', options: ['They posted an apology', 'They changed the name', 'They quietly disappeared', 'They were taken over by the founders'], answer: 'They quietly disappeared', hint: '消失的方式是靜悄悄的，沒有任何聲明。' },
+                    { q: 'What did the sales do immediately after the scandal?', options: ['Stabilized', 'Doubled', 'Plunged', 'Slightly decreased'], answer: 'Plunged', hint: '這個動詞表示銷量急劇且大幅度的下降。' },
+                    { q: 'Online users are primarily lamenting the suffering of which group?', options: ['The founders', 'The influencers', 'The suppliers', 'The franchises (加盟商)'], answer: 'The franchises (加盟商)', hint: '網民認為最無辜且受損最嚴重的是被授權經營分店的人。' },
+                    { q: 'What is the meaning of "lament" in this context?', options: ['To celebrate happily', 'To express sadness or regret', 'To ignore the situation', 'To sue the company'], answer: 'To express sadness or regret', hint: '這個詞的意思是「哀嘆」或「對...表示失望」。' },
+                    { q: 'The term "mislabeling" refers to what action?', options: ['Selling counterfeit goods', 'Using the wrong font on the packaging', 'Providing incorrect information on the product label', 'Failing to provide a label'], answer: 'Providing incorrect information on the product label', hint: '「誤標」即是在標籤上給予錯誤訊息。' },
+                    { q: 'What kind of business model does the term "franchises" refer to?', options: ['Government-owned stores', 'Directly-operated stores by the headquarters', 'Businesses authorized to sell under the main brand\'s name', 'Small independent coffee shops'], answer: 'Businesses authorized to sell under the main brand\'s name', hint: '加盟商是付費使用品牌名稱和營運模式的人。' },
+                    { q: 'When was "Shiang Aged Milk Tea" founded?', options: ['2023', '2024', '2020', '2019'], answer: '2024', hint: '回顧文章，找到創立的年份。' },
+                    { q: 'What does "plunged" mean when describing sales?', options: ['A gradual and small fall', 'A rapid and large fall', 'A small increase', 'No change'], answer: 'A rapid and large fall', hint: '這個動詞是「暴跌」的意思。' },
+                    { q: 'What is the opposite of "shut down" in a business context?', options: ['Merge', 'Launch', 'Acquire', 'Expand'], answer: 'Launch', hint: '「關閉」的反義詞是「開張」或「啟動」。' },
+                    { q: 'The decline of the brand primarily resulted from a loss of what?', options: ['Government funding', 'Employee loyalty', 'Consumer trust', 'Media coverage'], answer: 'Consumer trust', hint: '醜聞最直接的影響是消費者對品牌的信心崩塌。' }
+                ]
+            },
+            {
+                id: 'india-cyber-app-mandate',
+                title: 'Indian Government Mandates Pre-installation of Cybersecurity App on Phones',
+                topic: 'Technology, Policy & Privacy',
+                article: `India's telecom's ministry has directed smartphone manufacturers to pre-install a government-run cyber security app on all new devices, raising concerns about data privacy and user consent in one of the largest handset markets in the world.
+The Ministry of Communications issued an order on Monday instructing smartphone makers to pre-install the government's Sanchar Saathi app on all new devices within 90 days and to prevent users from deleting it.
+The order also requires manufacturers to push the app onto older models through a software update. The ministry said the app, which is available to India's 1.2 billion smartphone users, is essential for curbing misuse of telecom resources for cyber frauds and ensuring telecom cyber security.
+However, privacy advocates argue that the order undermines user privacy and consent. The Sanchar Saathi app, released in January, was designed to let users block and track lost or stolen phones and to identify and shut down fraudulent mobile connections.`,
+                translation: `印度政府要求手機預裝網路安全 App。印度電信部已指示智慧型手機製造商在新設備上預裝一款政府營運的網路安全應用程式，這在全球最大的手機市場之一引發了對數據隱私和用戶同意的擔憂。
+通訊部週一發布命令，指示智慧型手機製造商在90天內於所有新設備上預裝政府的 Sanchar Saathi 應用程式，並阻止用戶刪除它。
+該命令還要求製造商透過軟體更新將該應用程式推送到舊型號上。該部表示，這款應用程式對印度12億智慧型手機用戶來說至關重要，可以遏制電信資源被用於網路詐騙的濫用，並確保電信網路安全。
+然而，隱私權倡導者認為該命令損害了用戶隱私和同意權。Sanchar Saathi 應用程式於一月發布，旨在讓用戶能夠封鎖和追蹤遺失或被盜的手機，並識別和關閉欺詐性的行動連線。`,
+                vocabulary: [
+                    { word: 'mandates', definition: '強制要求，命令 (v.) To officially require or order the installation or adoption of something.' },
+                    { word: 'telecom\'s ministry', definition: '電信部 (n.) Government department responsible for telecommunications and mobile services.' },
+                    { word: 'directed', definition: '指示，命令 (v.) Issued an instruction or order to a specific group.' },
+                    { word: 'pre-install', definition: '預裝 (v.) To install software on a device before it is sold to the end-user.' },
+                    { word: 'government-run', definition: '政府營運的 (adj.) Managed or controlled by the government.' },
+                    { word: 'cyber security app', definition: '網路安全應用程式 (n.) Software designed to protect against digital threats and online fraud.' },
+                    { word: 'raising concerns', definition: '引起擔憂 (phr.) Causing worry or anxiety among the public or advocacy groups.' },
+                    { word: 'data privacy', definition: '數據隱私 (n.) The right to control how personal information is collected and used.' },
+                    { word: 'user consent', definition: '用戶同意 (n.) Permission voluntarily given by the user for an action or process.' },
+                    { word: 'handset markets', definition: '手機市場 (n.) The commercial area for mobile devices or smartphones.' },
+                    { word: 'Ministry of Communications', definition: '通訊部 (n.) The government body that oversees communication infrastructure and policy.' },
+                    { word: 'issued an order', definition: '發布命令 (phr.) Formally published an official command or directive.' },
+                    { word: 'prevent users from deleting', definition: '阻止用戶刪除 (phr.) To technically stop the end-user from removing the application.' },
+                    { word: 'software update', definition: '軟體更新 (n.) A replacement of software with a newer, often improved or corrected version.' },
+                    { word: 'essential for', definition: '對...至關重要 (phr.) Absolutely necessary or important for a specific purpose.' },
+                    { word: 'curbing misuse', definition: '遏制濫用 (phr.) Restricting or checking the improper or excessive use of resources.' },
+                    { word: 'telecom resources', definition: '電信資源 (n.) Services, networks, and infrastructure related to telecommunications.' },
+                    { word: 'cyber frauds', definition: '網路詐騙 (n.) Deceptive or illegal activities conducted using digital means.' },
+                    { word: 'privacy advocates', definition: '隱私權倡導者 (n.) Individuals or groups who publicly support and defend the rights to privacy.' },
+                    { word: 'undermines', definition: '損害，削弱 (v.) To lessen the effectiveness, power, or ability of something, often indirectly.' },
+                    { word: 'track lost or stolen phones', definition: '追蹤遺失或被盜的手機 (phr.) To use technology to find the location of a missing device.' },
+                    { word: 'identify and shut down', definition: '識別並關閉 (phr.) To recognize and subsequently terminate the operation of something.' },
+                    { word: 'fraudulent mobile connections', definition: '欺詐性行動連線 (phr.) Fake or unauthorized mobile phone subscriptions used for illegal activities.' },
+                    { word: 'directive', definition: '指令，命令 (n.) An official instruction or order.' },
+                    { word: 'compliance', definition: '遵守，服從 (n.) The state of conforming with rules or regulations.' },
+                    { word: 'precedence', definition: '優先權，重要性 (n.) The condition of being considered more important than others.' },
+                    { word: 'security concerns', definition: '安全疑慮 (phr.) Worries related to protection against unauthorized access.' },
+                    { word: 'transparency', definition: '透明度 (n.) The quality of being easily understood.' },
+                    { word: 'infrastructure', definition: '基礎設施 (n.) The basic physical and organizational structures needed for the operation of a society.' },
+                    { word: 'enforcement', definition: '執行，強制 (n.) The process of ensuring compliance with a law or rule.' },
+                    { word: 'controversial', definition: '有爭議的 (adj.) Giving rise or likely to give rise to controversy.' }
+                ],
+                quiz: [
+                    { q: 'Which Indian ministry issued the order for pre-installation?', options: ['Ministry of Finance', 'Ministry of Communications', 'Ministry of Defense', 'Ministry of Education'], answer: 'Ministry of Communications', hint: '這項命令與電信和通訊政策相關。' },
+                    { q: 'What is the name of the government-run app?', options: ['Bharat Secure', 'Mobile Raksha', 'Sanchar Saathi', 'Digital India'], answer: 'Sanchar Saathi', hint: '請記住這款應用程式的特殊名稱。' },
+                    { q: 'The order requires the app to be pre-installed on new devices within how many days?', options: ['30 days', '60 days', '90 days', '120 days'], answer: '90 days', hint: '製造商必須在三個月內完成預裝。' },
+                    { q: 'What is one of the main functions of the Sanchar Saathi app?', options: ['To provide weather forecasts', 'To offer online shopping discounts', 'To block and track lost or stolen phones', 'To stream live television'], answer: 'To block and track lost or stolen phones', hint: '該應用程式的主要功能與設備安全和找回有關。' },
+                    { q: 'What key concern have privacy advocates raised about the order?', options: ['High manufacturing costs', 'Data privacy and user consent', 'Slow app performance', 'Lack of features'], answer: 'Data privacy and user consent', hint: '倡導者擔心這項措施會侵犯用戶的自主權和個人資訊。' },
+                    { q: 'The order requires manufacturers to push the app onto older models through what means?', options: ['Manual installation', 'Sending physical CDs', 'A software update', 'Visiting a service center'], answer: 'A software update', hint: '對於舊款設備，應用程式將通過無線方式發送。' },
+                    { q: 'The app is said to be essential for curbing misuse of what resource?', options: ['Internet bandwidth', 'Electricity supply', 'Telecom resources', 'Smartphone batteries'], answer: 'Telecom resources', hint: '該部會認為這有助於控制電信服務的濫用。' },
+                    { q: 'How many smartphone users in India are potentially affected by this app?', options: ['12 million', '120 million', '1.2 billion', '12 billion'], answer: '1.2 billion', hint: '這個數字反映了印度龐大的手機用戶群體。' },
+                    { q: 'What is another function of the app, besides tracking stolen phones?', options: ['Translating languages', 'Identifying and shutting down fraudulent mobile connections', 'Creating backup files', 'Optimizing device storage'], answer: 'Identifying and shutting down fraudulent mobile connections', hint: '它旨在打擊用於非法目的的虛假手機號碼。' },
+                    { q: 'What does "pre-install" mean?', options: ['Installing after purchase', 'Installing before the device is sold', 'Installing a beta version', 'Installing temporarily'], answer: 'Installing before the device is sold', hint: '這個複合詞的意思是「預先安裝」。' },
+                    { q: 'India\'s smartphone market is described as one of the world\'s largest what?', options: ['Handset markets', 'Software development centers', 'Chip manufacturing hubs', 'E-commerce markets'], answer: 'Handset markets', hint: '文章中明確提到了該國在手機銷售領域的地位。' },
+                    { q: 'The app was initially released in which month?', options: ['October', 'November', 'December', 'January'], answer: 'January', hint: '請回顧文章結尾處提到應用程式發布的時間。' },
+                    { q: 'What does the order specifically prevent users from doing with the app?', options: ['Updating it', 'Using it', 'Deleting it', 'Sharing it'], answer: 'Deleting it', hint: '這是隱私權倡導者擔憂的關鍵點之一。' },
+                    { q: 'What does the term "cyber frauds" refer to?', options: ['Physical theft', 'Online scams or deceptive activities', 'Tax evasion', 'Software development errors'], answer: 'Online scams or deceptive activities', hint: '這個詞指的是利用網路進行的欺詐行為。' },
+                    { q: 'What is the opposite of "undermines" in this context?', options: ['Strengthens', 'Ignores', 'Creates', 'Confirms'], answer: 'Strengthens', hint: '這個詞的意思是「損害」，其反義詞是「加強」。' }
+                ]
+            },
+            {
+                id: 'lion-enclosure-attack',
+                title: 'Man Fatally Attacked by Lion After Climbing into Enclosure at Zoo',
+                topic: 'Wildlife & Safety',
+                article: `A man who climbed more than 18 ft to enter a lion's enclosure was fatally attacked in front of horrified zoo visitors.
+Machado climbed the side structure of the cage and lowered himself into the enclosure by sliding down a tree...
+The lioness pounced on Machado as he was descending. He appeared to try to escape from the animal before he was pulled to the ground.
+It said the lioness will not be euthanized as she is healthy and has not exhibited aggressive behavior outside of this incident. The zoo assured the public that the lioness will be observed and monitored as she has experienced a high level of stress.
+Machado had been diagnosed with schizophrenia and had been institutionalized several times. He dreamed of taming lions on a safari in Africa...`,
+                translation: `男子爬進動物園獅子圍欄被咬死。一名男子爬過超過18英尺（約5.5公尺）的高度進入獅子圍欄，在驚恐的動物園遊客面前被咬死。
+Machado 爬上圍欄的側邊結構，並滑下一棵樹進入圍欄... 當他下降時，母獅撲向了他。他似乎試圖逃離這隻動物，但在被拖到地面之前沒有成功。
+園方表示，這隻母獅將不會被安樂死，因為牠身體健康，且在此事件之外沒有表現出攻擊性行為。動物園向公眾保證，這隻母獅會被觀察和監控，因為牠經歷了高度的壓力。
+Machado 被診斷出患有精神分裂症，並曾多次被送進醫療機構。他夢想在非洲的狩獵之旅中馴服獅子...`,
+                vocabulary: [
+                    { word: 'fatally attacked', definition: '致命性地攻擊 (phr.) Attacked in a way that resulted in the person\'s death.' },
+                    { word: 'climbed', definition: '爬，攀登 (v.) Moved up or over something by using the hands and feet.' },
+                    { word: 'enclosure', definition: '圍欄，圍場 (n.) An area that is fenced off and kept separate from other areas, often for keeping animals.' },
+                    { word: 'horrified', definition: '驚恐的，震驚的 (adj.) Filled with horror or shock; appalled.' },
+                    { word: 'side structure', definition: '側邊結構 (phr.) The part of the cage or fence on the side.' },
+                    { word: 'lowered himself', definition: '讓自己下降 (phr. v.) Moved himself down from a higher position.' },
+                    { word: 'sliding down', definition: '滑下 (phr. v.) Moving downward smoothly over a surface.' },
+                    { word: 'lioness', definition: '母獅 (n.) A female lion.' },
+                    { word: 'pounced on', definition: '猛撲向 (phr. v.) Jumped on someone or something suddenly in order to seize them.' },
+                    { word: 'descending', definition: '正在下降 (v.) Moving or going down.' },
+                    { word: 'pulled to the ground', definition: '被拖到地面 (phr.) Forcibly dragged down onto the earth.' },
+                    { word: 'euthanized', definition: '安樂死 (v.) To kill a sick, injured, or distressed animal humanely.' },
+                    { word: 'exhibited', definition: '展現，表現出 (v.) Displayed or showed (a quality or behavior).' },
+                    { word: 'aggressive behavior', definition: '攻擊性行為 (phr.) Hostile or violent conduct or actions.' },
+                    { word: 'assured the public', definition: '向公眾保證 (phr.) Guaranteed the general community of something with confidence.' },
+                    { word: 'observed and monitored', definition: '觀察和監控 (phr.) Watched carefully and checked regularly for changes or events.' },
+                    { word: 'experienced', definition: '經歷，遭受 (v.) Encountered or undergone (an event or occurrence).' },
+                    { word: 'high level of stress', definition: '高度壓力 (phr.) A large amount of mental or emotional strain or tension.' },
+                    { word: 'diagnosed with', definition: '被診斷出患有 (phr. v.) Identified as having a specific illness or condition.' },
+                    { word: 'schizophrenia', definition: '精神分裂症 (n.) A severe, long-term mental disorder involving a breakdown in the relation between thought, emotion, and behavior.' },
+                    { word: 'institutionalized', definition: '被送進醫療機構 (v.) Placed in a specialized institution for long-term care, especially psychiatric.' },
+                    { word: 'dreamed of', definition: '夢想著 (phr. v.) Wished for or imagined something eagerly.' },
+                    { word: 'taming', definition: '馴服 (v.) Making a wild animal manageable or obedient.' },
+                    { word: 'safari', definition: '狩獵之旅，非洲探險 (n.) An expedition to observe or hunt animals in their natural habitat, especially in Africa.' },
+                    { word: 'fatally', definition: '致命地 (adv.) In a way that results in death.' },
+                    { word: 'appalled', definition: '驚駭的 (adj.) Greatly dismayed or horrified.' },
+                    { word: 'forcibly', definition: '強制地 (adv.) Using physical power or coercion.' },
+                    { word: 'conduct', definition: '行為，舉止 (n.) The manner in which a person behaves, especially on a particular occasion or in a particular context.' },
+                    { word: 'psychiatric', definition: '精神病學的 (adj.) Relating to the study and treatment of mental illness.' },
+                    { word: 'institution', definition: '機構，設施 (n.) An establishment, especially one providing residential care or medical treatment.' },
+                    { word: 'coercion', definition: '脅迫 (n.) The practice of persuading someone to do something by using force or threats.' }
+                ],
+                quiz: [
+                    { q: 'How high did the man climb to enter the lion\'s enclosure?', options: ['More than 10 ft', 'More than 18 ft', 'More than 25 ft', 'More than 8 ft'], answer: 'More than 18 ft', hint: '這個高度的數字是一個兩位數。' },
+                    { q: 'How did the man primarily enter the enclosure after climbing the structure?', options: ['He used a rope ladder', 'He jumped directly', 'He slid down a tree', 'He was lifted by someone else'], answer: 'He slid down a tree', hint: '進入的方式是沿著一種植物體滑下去的。' },
+                    { q: 'Which animal attacked the man?', options: ['A male lion', 'A lioness', 'A tiger', 'A bear'], answer: 'A lioness', hint: '請注意攻擊者是雌性的。' },
+                    { q: 'What happened to the man immediately before he was pulled to the ground?', options: ['He screamed for help', 'He appeared to try to escape from the animal', 'He successfully climbed back up', 'He attacked the lioness first'], answer: 'He appeared to try to escape from the animal', hint: '被拖倒之前，他曾試圖逃離。' },
+                    { q: 'Why will the lioness NOT be euthanized?', options: ['She is too valuable', 'The zoo has no authority to do so', 'She is healthy and has not exhibited aggressive behavior outside of this incident', 'It is against zoo policy'], answer: 'She is healthy and has not exhibited aggressive behavior outside of this incident', hint: '園方給出的理由是牠的健康狀況和歷史行為記錄。' },
+                    { q: 'The zoo assured the public that the lioness will be what due to the high level of stress she experienced?', options: ['Given a new enclosure', 'Retired from public view', 'Observed and monitored', 'Moved to a different country'], answer: 'Observed and monitored', hint: '園方將對牠進行持續的關注和記錄。' },
+                    { q: 'What mental health condition was the man, Machado, diagnosed with?', options: ['Bipolar disorder', 'Severe depression', 'Schizophrenia', 'Anxiety disorder'], answer: 'Schizophrenia', hint: '這是一種嚴重的精神障礙。' },
+                    { q: 'What did the man dream of doing in Africa?', options: ['Starting a farm', 'Writing a book', 'Taming lions on a safari', 'Opening a new zoo'], answer: 'Taming lions on a safari', hint: '他的夢想與非洲的野生動物探險有關。' },
+                    { q: 'The attack happened in front of which group of people?', options: ['Zoo staff', 'Horrified zoo visitors', 'Police officers', 'The man\'s family'], answer: 'Horrified zoo visitors', hint: '目擊者是當時在場參觀的公眾。' },
+                    { q: 'The man had been sent to a medical facility several times, a process known as being what?', options: ['Detained', 'Hospitalized', 'Institutionalized', 'Quarantined'], answer: 'Institutionalized', hint: '這個詞指的是被送進專門的長期護理機構。' },
+                    { q: 'What does the term "fatally" mean?', options: ['Slightly', 'Seriously', 'Not quite', 'In a way that results in death'], answer: 'In a way that results in death', hint: '這個副詞的意思是「致命地」。' },
+                    { q: 'What does "pounced on" mean?', options: ['Walked around', 'Shouted at', 'Jumped on suddenly to seize', 'Felt intimidated by'], answer: 'Jumped on suddenly to seize', hint: '這個動詞片語是「猛撲向」的意思。' },
+                    { q: 'What is an "enclosure"?', options: ['An open field', 'A fenced-off area for animals', 'A public pathway', 'A zoo office'], answer: 'A fenced-off area for animals', hint: '它是用來限制動物活動的區域。' },
+                    { q: 'Why was the man pulled to the ground?', options: ['He tripped', 'The lioness dragged him down', 'He decided to lie down', 'A zookeeper pulled him'], answer: 'The lioness dragged him down', hint: '動詞片語「pulled to the ground」是關鍵。' },
+                    { q: 'What is a "safari" typically associated with?', options: ['Ocean cruises', 'Arctic exploration', 'Hunting or observing animals in Africa', 'Mountain climbing expeditions'], answer: 'Hunting or observing animals in Africa', hint: '這個詞通常指在非洲的探險或狩獵之旅。' }
+                ]
+            },
+            {
+                id: 'faberge-egg-sale',
+                title: 'Rare Fabergé Egg Sells for Record High Price',
+                topic: 'Art & History',
+                article: `A diamond-studded crystal Fabergé egg that once belonged to Russia's imperial family has sold for a record 22.9 million pounds in London.
+The Winter Egg, considered one of the legendary jeweler's most beautiful creations, was bought by an anonymous bidder on Tuesday.
+It is decorated with 4,500 diamonds and was commissioned by Tsar Nicholas II in 1913 as a present for his mother.
+The enduring significance of this masterpiece is reaffirmed. It was carved from rock crystal and decorated with rose-cut diamonds as well as platinum snowflake motifs.
+The egg opens to reveal a tiny basket of white quartz flowers inside.
+The Faber House only ever made 50 eggs for Russia's Imperial Romanov family, and the Imperial Winter Egg is one of just seven left in private hands.`,
+                translation: `稀有法貝熱彩蛋拍出創紀錄高價。一顆鑲有鑽石的水晶法貝熱彩蛋，曾屬於俄羅斯皇室家族，在倫敦以創紀錄的2290萬英鎊售出。
+這枚「冬季彩蛋」（The Winter Egg）被認為是這位傳奇珠寶商最美麗的創作之一，於週二被一位匿名買家購得。
+它飾有4,500顆鑽石，由沙皇尼古拉二世於1913年委託製作，作為送給他母親的禮物。
+這件傑作的持久意義再次得到肯定。它是從水晶原石上雕刻出來的，並飾有玫瑰式切割鑽石以及鉑金雪花圖案。
+彩蛋可以打開，露出裡面一個微小的白色石英花籃。
+法貝熱工坊總共只為俄羅斯羅曼諾夫皇室家族製作了50枚彩蛋，而這枚帝國冬季彩蛋是僅存於私人手中的七枚之一。`,
+                vocabulary: [
+                    { word: 'diamond-studded', definition: '鑲滿鑽石的 (adj.) Decorated with many small diamonds set closely together.' },
+                    { word: 'crystal', definition: '水晶 (n.) A clear, transparent mineral or glass resembling ice.' },
+                    { word: 'Fabergé egg', definition: '法貝熱彩蛋 (n.) One of a limited number of elaborate, jeweled eggs created by the House of Fabergé for the Russian Tsars.' },
+                    { word: 'imperial family', definition: '皇室家族 (n.) The family of an emperor or empress that rules an empire.' },
+                    { word: 'record', definition: '創紀錄的 (adj.) Surpassing all previous similar figures or achievements.' },
+                    { word: 'legendary jeweler', definition: '傳奇珠寶商 (n.) A very famous and respected creator of expensive ornaments and jewelry.' },
+                    { word: 'creations', definition: '創作，作品 (n.) Things that are made or invented.' },
+                    { word: 'anonymous bidder', definition: '匿名買家 (n.) A person who offers a price for something without revealing their identity.' },
+                    { word: 'commissioned', definition: '委託製作 (v.) Ordered or authorized the production of something, often a work of art.' },
+                    { word: 'Tsar Nicholas II', definition: '沙皇尼古拉二世 (n.) The last Emperor of Russia.' },
+                    { word: 'present', definition: '禮物 (n.) A gift or something given to someone.' },
+                    { word: 'enduring significance', definition: '持久的重要性 (phr.) Lasting meaning, value, or importance over time.' },
+                    { word: 'masterpiece', definition: '傑作，代表作 (n.) A work of outstanding artistry, skill, or workmanship.' },
+                    { word: 'reaffirmed', definition: '再次肯定，重申 (v.) Stated again strongly; confirmed the truth of.' },
+                    { word: 'carved from', definition: '從...雕刻出來 (phr. v.) Cut and shaped an object from a solid material.' },
+                    { word: 'rock crystal', definition: '水晶原石 (n.) Natural quartz mineral in its clear, uncolored form.' },
+                    { word: 'decorated with', definition: '以...裝飾 (phr. v.) Enhanced the appearance of something by adding items or features.' },
+                    { word: 'rose-cut diamonds', definition: '玫瑰式切割鑽石 (phr.) A specific style of diamond cutting designed to resemble a rosebud.' },
+                    { word: 'platinum', definition: '鉑金 (n.) A dense, precious white metal used in jewelry.' },
+                    { word: 'snowflake motifs', definition: '雪花圖案 (phr.) Recurring decorative designs that represent snowflakes.' },
+                    { word: 'opens to reveal', definition: '打開後露出 (phr.) When opened, shows what is inside.' },
+                    { word: 'tiny basket', definition: '微小的籃子 (n.) A very small container made of woven material or shaped like one.' },
+                    { word: 'white quartz flowers', definition: '白色石英花朵 (phr.) Decorative flowers made from the white variety of quartz mineral.' },
+                    { word: 'Faber House', definition: '法貝熱工坊 (n.) The jeweler\'s workshop or company that created the eggs.' },
+                    { word: 'Imperial Romanov family', definition: '羅曼諾夫皇室家族 (n.) The ruling dynasty of Russia before the 1917 revolution.' },
+                    { word: 'private hands', definition: '私人手中 (phr.) Owned by an individual or a private collector, not a public institution.' },
+                    { word: 'auction', definition: '拍賣會 (n.) A public sale in which goods are sold to the highest bidder.' },
+                    { word: 'collector', definition: '收藏家 (n.) A person who collects things of a specified type, professionally or as a hobby.' },
+                    { word: 'commission', definition: '委託 (n.) An order for something to be produced.' },
+                    { word: 'dynasty', definition: '朝代，王朝 (n.) A line of hereditary rulers of a country.' },
+                    { word: 'masterpiece', definition: '傑作 (n.) A work of outstanding artistry.' }
+                ],
+                quiz: [
+                    { q: 'What is the record-breaking price, in pounds, for which the Fabergé egg was sold?', options: ['12.9 million', '22.9 million', '32.9 million', '42.9 million'], answer: '22.9 million', hint: '請注意文章中提到的確切數字和貨幣單位。' },
+                    { q: 'What is the name given to this specific Fabergé egg?', options: ['The Summer Egg', 'The Winter Egg', 'The Spring Egg', 'The Autumn Egg'], answer: 'The Winter Egg', hint: '這個彩蛋的名稱與一個季節有關。' },
+                    { q: 'The egg was purchased by whom?', options: ['A major museum', 'A former Imperial family member', 'An anonymous bidder', 'The Russian government'], answer: 'An anonymous bidder', hint: '買家的身份是未公開的。' },
+                    { q: 'Who commissioned the egg, and for whom?', options: ['Tsar Peter the Great for his wife', 'Tsar Nicholas II for his mother', 'Empress Catherine the Great for her son', 'Rasputin for the Tsar'], answer: 'Tsar Nicholas II for his mother', hint: '這是沙皇送給他親屬的一份禮物。' },
+                    { q: 'In what year was the egg commissioned?', options: ['1903', '1913', '1923', '1933'], answer: '1913', hint: '這個年份在20世紀初期。' },
+                    { q: 'How many diamonds is the Winter Egg decorated with?', options: ['450', '4,500', '45,000', '450,000'], answer: '4,500', hint: '這個數字是四位數。' },
+                    { q: 'What material was the Fabergé egg carved from?', options: ['Ivory', 'Gold', 'Rock crystal', 'Marble'], answer: 'Rock crystal', hint: '它的主要材質是一種透明的礦物。' },
+                    { q: 'The egg is decorated with platinum motifs shaped like what?', options: ['Stars', 'Crowns', 'Snowflakes', 'Eagles'], answer: 'Snowflakes', hint: '請回想彩蛋的名稱，它的圖案與冬季景觀有關。' },
+                    { q: 'What is revealed when the egg is opened?', options: ['A tiny gold bird', 'A miniature crown', 'A tiny basket of white quartz flowers', 'A small portrait'], answer: 'A tiny basket of white quartz flowers', hint: '裡面是一個裝滿白色礦物製成的小型花朵的容器。' },
+                    { q: 'The Faber House only made a total of how many eggs for the Imperial Romanov family?', options: ['10', '25', '50', '100'], answer: '50', hint: '這是法貝熱為皇室製作的總數。' },
+                    { q: 'The Imperial Winter Egg is one of how many left in private hands?', options: ['Five', 'Seven', 'Ten', 'Twelve'], answer: 'Seven', hint: '這是目前仍為私人收藏的彩蛋數量。' },
+                    { q: 'What does "diamond-studded" mean?', options: ['Decorated with a few large diamonds', 'Decorated with many small diamonds', 'Covered in diamond dust', 'Made entirely of diamonds'], answer: 'Decorated with many small diamonds', hint: '這個複合形容詞的意思是「鑲滿鑽石的」。' },
+                    { q: 'What is the primary characteristic of an "anonymous bidder"?', options: ['They are well-known', 'They bid the lowest price', 'They do not reveal their identity', 'They are professional art dealers'], answer: 'They do not reveal their identity', hint: '「匿名」的意思是不知道名字。' },
+                    { q: 'What historical family was the Winter Egg originally made for?', options: ['The Habsburg Family', 'The Imperial Romanov family', 'The Bourbon Family', 'The Windsor Family'], answer: 'The Imperial Romanov family', hint: '這個家族在1917年俄國革命前統治著俄羅斯。' },
+                    { q: 'What does "reaffirmed" mean in the context of the egg\'s significance?', options: ['Questioned the importance of', 'Stated again strongly as true', 'Made it less valuable', 'Destroyed the significance of'], answer: 'Stated again strongly as true', hint: '這個動詞表示「再次肯定」。' }
+                ]
+            }
+        ];
+
+        // --- State Management ---
+        let currentTopicId = FINAL_NEWS_DATA[0].id;
+        let currentSubTab = 'article'; // 'article', 'translation', 'vocabulary', 'quiz'
+        let currentQuiz = {}; 
+
+        // --- Core Rendering Functions ---
+
+        /**
+         * Renders the main topic tabs (the news headlines)
+         */
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs-container');
+            tabsContainer.innerHTML = FINAL_NEWS_DATA.map(news => {
+                const isActive = news.id === currentTopicId;
+                const activeClasses = isActive ? 'main-tab-active' : 'bg-white text-gray-700 hover:bg-indigo-50 border border-gray-100';
+                return `
+                    <button 
+                        class="main-tab-button text-base font-semibold flex-grow sm:flex-grow-0 text-left ${activeClasses}"
+                        onclick="changeTopic('${news.id}')"
+                        title="主題: ${news.topic}"
+                    >
+                        ${news.title}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Renders the content (Article, Translation, Vocabulary, or Quiz) for the selected topic
+         */
+        function renderContent() {
+            const newsItem = FINAL_NEWS_DATA.find(item => item.id === currentTopicId);
+            if (!newsItem) return;
+
+            const contentDiv = document.getElementById('current-content');
+            
+            // 1. Render Sub-Tabs (Article, Translation, Vocab, Quiz)
+            const subTabsHTML = `
+                <div class="flex flex-wrap border-b border-gray-200 mb-8 -mx-5 sm:-mx-10 px-5 sm:px-10">
+                    <button 
+                        class="sub-tab-button text-base text-gray-500 ${currentSubTab === 'article' ? 'sub-tab-active' : 'hover:text-indigo-600'}"
+                        onclick="changeSubTab('article')"
+                    >
+                        <span class="mr-1">📰</span> Article (原文)
+                    </button>
+                    <button 
+                        class="sub-tab-button text-base text-gray-500 ${currentSubTab === 'translation' ? 'sub-tab-active' : 'hover:text-indigo-600'}"
+                        onclick="changeSubTab('translation')"
+                    >
+                        <span class="mr-1">🇨🇳</span> Translation (翻譯)
+                    </button>
+                    <button 
+                        class="sub-tab-button text-base text-gray-500 ${currentSubTab === 'vocabulary' ? 'sub-tab-active' : 'hover:text-indigo-600'}"
+                        onclick="changeSubTab('vocabulary')"
+                    >
+                        <span class="mr-1">📚</span> Vocabulary (單字庫)
+                    </button>
+                    <button 
+                        class="sub-tab-button text-base text-gray-500 ${currentSubTab === 'quiz' ? 'sub-tab-active' : 'hover:text-indigo-600'}"
+                        onclick="changeSubTab('quiz')"
+                    >
+                        <span class="mr-1">🧠</span> Quiz (測驗)
+                    </button>
+                </div>
+            `;
+
+            // 2. Render Main Content based on currentSubTab
+            let mainContentHTML = '';
+
+            switch (currentSubTab) {
+                case 'article':
+                    mainContentHTML = renderEnglishArticle(newsItem);
+                    break;
+                case 'translation':
+                    mainContentHTML = renderChineseTranslation(newsItem);
+                    break;
+                case 'vocabulary':
+                    mainContentHTML = renderVocabulary(newsItem);
+                    break;
+                case 'quiz':
+                    mainContentHTML = `<div id="quiz-container-${newsItem.id}"></div>`;
+                    break;
+            }
+
+            contentDiv.innerHTML = subTabsHTML + mainContentHTML;
+
+            // 3. Special initialization for the Quiz tab
+            if (currentSubTab === 'quiz') {
+                initQuiz(newsItem.id);
+            }
+        }
+
+        function renderEnglishArticle(newsItem) {
+            return `
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-extrabold text-gray-900 flex items-center">
+                        <span class="mr-3 text-indigo-500">🌍</span> ${newsItem.title}
+                    </h2>
+                    <p class="text-base font-medium text-gray-500 flex items-center">
+                        <span class="mr-2 text-indigo-400">#</span> 主題: ${newsItem.topic}
+                    </p>
+                    
+                    <div class="p-8 rounded-2xl bg-gray-50 border-4 border-gray-100 shadow-inner">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-3 flex items-center">
+                            <span class="mr-2 text-gray-500">📖</span> English Original Text (英文原文)
+                        </h3>
+                        <p class="text-gray-700 whitespace-pre-line-safe">${newsItem.article}</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderChineseTranslation(newsItem) {
+            return `
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-extrabold text-gray-900 flex items-center">
+                        <span class="mr-3 text-indigo-500">🇨🇳</span> ${newsItem.title}
+                    </h2>
+                    <p class="text-base font-medium text-gray-500 flex items-center">
+                        <span class="mr-2 text-indigo-400">#</span> 主題: ${newsItem.topic}
+                    </p>
+                    
+                    <div class="p-8 rounded-2xl bg-indigo-50 border-4 border-indigo-200 shadow-inner">
+                        <h3 class="text-2xl font-bold mb-4 text-indigo-700 border-b pb-3 flex items-center">
+                            <span class="mr-2 text-indigo-500">🗣️</span> 中文翻譯 (Chinese Translation)
+                        </h3>
+                        <p class="text-gray-800 whitespace-pre-line-safe">${newsItem.translation}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+
+        function renderVocabulary(newsItem) {
+            const vocabListHTML = newsItem.vocabulary.map((v) => {
+                // Extracts Chinese translation and part of speech (POS) from the definition string
+                // Example format: "指控，斷言 (n.) A claim that someone has done something illegal or wrong."
+                const match = v.definition.match(/(.*)\s\((.*?)\)/); 
+                let chineseDef = v.definition;
+                let pos = 'N/A';
+                let englishDef = '';
+
+                if (match) {
+                    chineseDef = match[1].trim();
+                    pos = match[2].toUpperCase().trim();
+                    englishDef = v.definition.substring(v.definition.indexOf(`(${pos})`) + `(${pos})`.length).trim();
+                } else {
+                    // Fallback if the format is unexpected
+                    englishDef = v.definition;
+                    chineseDef = '未標註中文';
+                }
+
+                return `
+                    <div class="relative p-5 bg-white rounded-xl border border-gray-100 shadow-lg hover:shadow-xl hover:bg-indigo-50 transition transform duration-200 ease-in-out">
+                        <div class="flex items-baseline mb-2 border-b pb-2">
+                            <span class="text-2xl font-extrabold text-indigo-700 mr-3">${v.word}</span>
+                            <span class="text-sm font-semibold text-pink-500 bg-pink-100 px-2 py-0.5 rounded-full">${pos}</span>
+                        </div>
+                        
+                        <p class="text-base text-gray-800 mb-2">
+                            <span class="font-bold text-gray-600">中文:</span> ${chineseDef}
+                        </p>
+                        <p class="text-sm text-gray-500 italic">
+                            <span class="font-bold text-gray-400">定義:</span> ${englishDef}
+                        </p>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-8 flex items-center">
+                    <span class="mr-3 text-indigo-500">📚</span> 關鍵詞彙與片語庫 (Key Vocabulary & Phrases) - 共 ${newsItem.vocabulary.length} 組
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    ${vocabListHTML}
+                </div>
+                <p class="mt-10 text-base text-gray-500 text-center">本篇新聞共計 ${newsItem.vocabulary.length} 組單字與片語，請專心學習。</p>
+            `;
+        }
+
+        // --- Quiz Functions (Enhanced UX) ---
+
+        /**
+         * Initializes the quiz state and renders the first question for a given topic.
+         */
+        function initQuiz(quizId) {
+            const newsItem = FINAL_NEWS_DATA.find(item => item.id === quizId);
+            if (!newsItem) return;
+
+            // Initialize or reset quiz state
+            currentQuiz[quizId] = {
+                questions: newsItem.quiz,
+                currentQIndex: 0,
+                score: 0,
+                selectedOption: null,
+                container: document.getElementById(`quiz-container-${quizId}`),
+                view: null, 
+                summary: null, 
+                feedback: null, 
+                submitButton: null, 
+                isAnswered: false,
+            };
+
+            // Initial structure setup
+            currentQuiz[quizId].container.innerHTML = `
+                <div id="quiz-view-${quizId}"></div>
+                <div id="quiz-summary-${quizId}" class="hidden"></div>
+            `;
+            currentQuiz[quizId].view = document.getElementById(`quiz-view-${quizId}`);
+            currentQuiz[quizId].summary = document.getElementById(`quiz-summary-${quizId}`);
+            
+            displayQuestion(quizId);
+        }
+
+        /**
+         * Renders the current question or the summary page.
+         */
+        function displayQuestion(quizId) {
+            const quizState = currentQuiz[quizId];
+            const qData = quizState.questions[quizState.currentQIndex];
+
+            if (!qData) {
+                showSummary(quizId);
+                return;
+            }
+
+            const currentQNumber = quizState.currentQIndex + 1;
+            const totalQ = quizState.questions.length;
+            
+            // Generate options HTML
+            const optionsHTML = qData.options.map((option, index) => `
+                <button 
+                    class="option-button w-full text-left p-5 rounded-xl bg-white border border-gray-200 hover:bg-indigo-50 shadow-md transition duration-150 ease-in-out text-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:bg-indigo-50"
+                    data-option="${option}"
+                    onclick="selectOption('${quizId}', this, \`${option.replace(/`/g, '\\`')}\`)"
+                >
+                    <span class="font-bold text-indigo-500 mr-3 text-xl">${String.fromCharCode(65 + index)}.</span> ${option}
+                </button>
+            `).join('');
+
+            // Build the question view
+            quizState.view.innerHTML = `
+                <div class="space-y-8">
+                    <!-- Progress Bar -->
+                    <div class="mb-6">
+                        <p class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                            <span class="mr-2 text-indigo-500">🎯</span> 
+                            Question <span class="text-2xl font-extrabold text-indigo-600 mx-1">${currentQNumber}</span> of <span class="text-xl font-bold text-gray-500 mx-1">${totalQ}</span>
+                        </p>
+                        <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-indigo-600 transition-all duration-500 ease-out" style="width: ${(currentQNumber / totalQ) * 100}%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question Text -->
+                    <div class="p-6 bg-indigo-50 rounded-2xl border border-indigo-200">
+                        <p class="text-xl font-bold text-gray-900">${qData.q}</p>
+                    </div>
+
+                    <!-- Options -->
+                    <div id="options-container" class="space-y-3">
+                        ${optionsHTML}
+                    </div>
+
+                    <!-- Feedback and Submit -->
+                    <div id="quiz-feedback-${quizId}" class="p-4 mt-6 text-base font-medium rounded-xl border-l-4 hidden"></div>
+                    
+                    <button 
+                        id="quiz-submit-btn-${quizId}"
+                        class="w-full px-8 py-4 text-xl font-bold rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-300 hover:bg-indigo-700 hover:shadow-xl transition transform duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+                        onclick="submitQuizAnswer('${quizId}')"
+                        disabled
+                    >
+                        Submit Answer (提交答案)
+                    </button>
+                </div>
+            `;
+
+            // Store references to dynamically created elements
+            quizState.feedback = document.getElementById(`quiz-feedback-${quizId}`);
+            quizState.submitButton = document.getElementById(`quiz-submit-btn-${quizId}`);
+            quizState.isAnswered = false;
+            quizState.selectedOption = null;
+
+            // Clear previous selection highlight
+            document.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('bg-indigo-200', 'ring-2', 'ring-indigo-500');
+            });
+
+            // Re-check and enable/disable submit button on question load
+            checkSubmitButtonState(quizId);
+        }
+
+        /**
+         * Highlights the selected option and saves it to state.
+         */
+        function selectOption(quizId, element, option) {
+            const quizState = currentQuiz[quizId];
+            if (quizState.isAnswered) return; 
+
+            quizState.selectedOption = option;
+            
+            // Remove selection highlighting from all options
+            document.querySelectorAll(`#options-container .option-button`).forEach(btn => {
+                btn.classList.remove('bg-indigo-200', 'ring-4', 'ring-indigo-500', 'shadow-lg');
+            });
+
+            // Add selection highlighting to the clicked option
+            element.classList.add('bg-indigo-200', 'ring-4', 'ring-indigo-500', 'shadow-lg');
+
+            // Enable submit button
+            checkSubmitButtonState(quizId);
+        }
+
+        /**
+         * Checks if an option is selected and enables/disables the submit button.
+         */
+        function checkSubmitButtonState(quizId) {
+            const quizState = currentQuiz[quizId];
+            if (quizState.submitButton) {
+                quizState.submitButton.disabled = quizState.selectedOption === null;
+            }
+        }
+
+        /**
+         * Checks the selected answer, updates the score, and prepares for the next question.
+         */
+        function submitQuizAnswer(quizId) {
+            const quizState = currentQuiz[quizId];
+            if (quizState.isAnswered || quizState.selectedOption === null) return;
+
+            const qData = quizState.questions[quizState.currentQIndex];
+            const isCorrect = quizState.selectedOption === qData.answer;
+            quizState.isAnswered = true;
+
+            // Update Score
+            if (isCorrect) {
+                quizState.score++;
+            }
+
+            // Display Feedback and highlight correct/incorrect options
+            quizState.feedback.classList.remove('hidden');
+            document.querySelectorAll(`#options-container .option-button`).forEach(btn => {
+                const optionText = btn.getAttribute('data-option');
+                btn.disabled = true; // Disable all options after submission
+                btn.classList.remove('shadow-md', 'hover:bg-indigo-50', 'bg-indigo-200', 'ring-4', 'ring-indigo-500');
+
+                if (optionText === qData.answer) {
+                    // Correct Answer (Green)
+                    btn.classList.add('bg-green-100', 'text-green-800', 'border-green-400', 'font-bold', 'ring-2', 'ring-green-500');
+                } else if (optionText === quizState.selectedOption) {
+                    // Incorrect Selected Answer (Red)
+                    btn.classList.add('bg-red-100', 'text-red-800', 'border-red-400', 'ring-2', 'ring-red-500');
+                } else {
+                    // Unselected Incorrect Answer (Gray out a bit)
+                    btn.classList.add('text-gray-400');
+                }
+            });
+
+            // Display overall feedback message
+            if (isCorrect) {
+                quizState.feedback.innerHTML = '✅ **正確 (Correct)!** 恭喜您答對了！';
+                quizState.feedback.classList.remove('bg-red-100', 'text-red-700', 'border-red-400');
+                quizState.feedback.classList.add('bg-green-100', 'text-green-700', 'border-green-400');
+            } else {
+                quizState.feedback.innerHTML = `❌ **錯誤 (Incorrect).** 正確答案是: **${qData.answer}**`;
+                quizState.feedback.classList.remove('bg-green-100', 'text-green-700', 'border-green-400');
+                quizState.feedback.classList.add('bg-red-100', 'text-red-700', 'border-red-400');
+            }
+
+            // Change button to 'Next Question'
+            quizState.submitButton.textContent = 'Next Question →';
+            quizState.submitButton.classList.remove('bg-indigo-600', 'hover:bg-indigo-700', 'shadow-indigo-300', 'disabled:opacity-50');
+            quizState.submitButton.classList.add('bg-blue-600', 'hover:bg-blue-700', 'shadow-blue-300');
+            quizState.submitButton.disabled = false; // Enable for next question
+            
+            quizState.submitButton.onclick = () => {
+                quizState.currentQIndex++;
+                displayQuestion(quizId);
+            };
+        }
+
+        /**
+         * Renders the final quiz summary page.
+         */
+        function showSummary(quizId) {
+            const quizState = currentQuiz[quizId];
+            const totalQuestions = quizState.questions.length;
+            const percentage = ((quizState.score / totalQuestions) * 100).toFixed(0);
+            
+            // Hide quiz view and show summary view
+            quizState.view.classList.add('hidden');
+            quizState.summary.classList.remove('hidden');
+
+            let message = '';
+            let colorClass = '';
+
+            if (percentage >= 80) {
+                message = "恭喜！您的表現優異，對文章細節和詞彙掌握度很高。";
+                colorClass = 'text-green-700 bg-green-50 border-green-500';
+            } else if (percentage >= 50) {
+                message = "表現不錯！請再複習單字和關鍵要點，您就能拿到滿分！";
+                colorClass = 'text-yellow-700 bg-yellow-50 border-yellow-500';
+            } else {
+                message = "請加油！建議回到原文和單字庫重新閱讀，再挑戰一次。";
+                colorClass = 'text-red-700 bg-red-50 border-red-500';
+            }
+
+            quizState.summary.innerHTML = `
+                <div class="space-y-8 text-center py-6">
+                    <h2 class="text-4xl font-extrabold text-gray-900">🎉 測驗完成! (Quiz Complete!)</h2>
+                    
+                    <div class="p-8 rounded-2xl border-4 shadow-xl ${colorClass}">
+                        <p class="text-xl font-medium mb-3">您的最終分數 (Your Final Score)</p>
+                        <p class="text-7xl font-black">${percentage}%</p>
+                        <p class="text-2xl mt-4">${quizState.score} / ${totalQuestions} 題答對</p>
+                    </div>
+
+                    <p class="text-xl font-semibold text-gray-700">${message}</p>
+                    
+                    <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 pt-4">
+                        <button 
+                            class="px-8 py-3 text-lg font-bold rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-300 hover:bg-indigo-700 transition duration-200 ease-in-out"
+                            onclick="initQuiz('${quizId}')"
+                        >
+                            🔄 重新挑戰 (Try Again)
+                        </button>
+                        <button 
+                            class="px-8 py-3 text-lg font-bold rounded-xl bg-gray-300 text-gray-800 shadow-lg hover:bg-gray-400 transition duration-200 ease-in-out"
+                            onclick="changeSubTab('vocabulary')"
+                        >
+                            📖 前往單字庫複習 (Review Vocabulary)
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+
+        // --- Event Handlers (exposed globally) ---
+
+        /**
+         * Changes the main news topic displayed.
+         */
+        function changeTopic(newTopicId) {
+            if (currentTopicId === newTopicId) return;
+            currentTopicId = newTopicId;
+            currentSubTab = 'article'; // Reset to Article view on topic change
+            renderTabs();
+            renderContent();
+        }
+
+        /**
+         * Changes the sub-tab (Article, Translation, Vocabulary, Quiz) within the current topic.
+         */
+        function changeSubTab(newSubTab) {
+            currentSubTab = newSubTab;
+            renderContent();
+        }
+
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            
+            // Expose functions globally for use in HTML event handlers
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
