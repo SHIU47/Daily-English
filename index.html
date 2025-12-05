@@ -65,6 +65,7 @@
             transition: all 0.2s;
             border-top-left-radius: 0.75rem; /* 圓角 Tab */
             border-top-right-radius: 0.75rem;
+            white-space: nowrap; /* 防止中文名稱換行 */
         }
         .tab-button.active {
             border-bottom: 4px solid #a3e635; /* 活躍分頁的亮石灰綠色底線，更粗 */
@@ -132,11 +133,15 @@
         <!-- Main Content Wrapper (包含導航和內容) -->
         <div class="content-wrapper">
             <!-- Tab Navigation (分頁導航) -->
+            <!-- 使用 flex-auto 讓按鈕平均分配空間，確保新按鈕能裝下 -->
             <nav class="flex -mt-6 -mx-6 mb-6 border-b border-gray-700/50">
-                <button id="tab-news-button" data-tab="news" class="tab-button active flex-1 py-3 text-lg focus:outline-none" onclick="openTab(event, 'news')">
+                <button id="tab-news-button" data-tab="news" class="tab-button active flex-auto py-3 text-lg focus:outline-none" onclick="openTab(event, 'news')">
                     📚 英文新聞
                 </button>
-                <button id="tab-toeic-button" data-tab="toeic" class="tab-button flex-1 py-3 text-lg focus:outline-none" onclick="openTab(event, 'toeic')">
+                <button id="tab-reading-button" data-tab="reading" class="tab-button flex-auto py-3 text-lg focus:outline-none" onclick="openTab(event, 'reading')">
+                    📖 閱讀文章
+                </button>
+                <button id="tab-toeic-button" data-tab="toeic" class="tab-button flex-auto py-3 text-lg focus:outline-none" onclick="openTab(event, 'toeic')">
                     📝 20天多益測驗
                 </button>
             </nav>
@@ -144,13 +149,13 @@
             <!-- Tab Content Area (分頁內容區塊) -->
             <div class="p-0">
                 
-                <!-- 1. 英文新聞 Content -->
+                <!-- 1. 英文新聞 Content (初始為 Active) -->
                 <div id="news" class="tab-content active">
                     <h2 class="text-xl font-semibold text-white mb-4 border-b border-gray-700 pb-3">
                         今日份知識點 (已找到 <span id="file-count" class="font-bold accent-color">4</span> 篇)
                     </h2>
                     
-                    <!-- 檔案篩選與搜尋控制區塊 (新增) -->
+                    <!-- 檔案篩選與搜尋控制區塊 -->
                     <div class="flex flex-col sm:flex-row gap-3 mb-6">
                         <!-- 搜尋欄位 -->
                         <div class="relative flex-1">
@@ -178,7 +183,7 @@
                     <!-- 文件列表 -->
                     <ul id="document-list" class="space-y-6">
 
-<!-- 檔案列表項 (使用 fun-card 樣式) - 2025/12/06 -->
+                        <!-- 檔案列表項 (使用 fun-card 樣式) - 2025/12/06 -->
                         <li class="fun-card" data-date="2025/12/06" data-month="2025-12">
                             <a href="2025.12.06英文新聞.html" class="block p-4 rounded-xl group">
                                 <div class="flex items-center justify-between">
@@ -241,7 +246,7 @@
                             </a>
                         </li>
 
-              <!-- 檔案列表項 - 2025/12/03 (保留原本的 href) -->
+                    <!-- 檔案列表項 - 2025/12/03 (保留原本的 href) -->
                         <li class="fun-card" data-date="2025/12/02" data-month="2025-12">
                             <a href="2025.12.03英文新聞.html" class="block p-4 rounded-xl group">
                                 <div class="flex items-center justify-between">
@@ -259,7 +264,7 @@
                                     <!-- 互動指示箭頭 -->
                                     <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                 </div>
-                            </a>  
+                            </a> 
                         </li>
                         
                         <!-- 檔案列表項 - 2025/12/02 (保留原本的 href) -->
@@ -280,13 +285,84 @@
                                     <!-- 互動指示箭頭 -->
                                     <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                 </div>
-                            </a>  
+                            </a> 
                         </li>
                         
                     </ul>
                 </div>
 
-                <!-- 2. 多益測驗 Content (保持不變) -->
+                <!-- 2. 閱讀文章 Content (新增) -->
+                <div id="reading" class="tab-content">
+                    <h2 class="text-xl font-semibold text-white mb-6 border-b border-gray-700 pb-3">
+                        深度閱讀與主題文章 (已找到 <span id="reading-file-count" class="font-bold accent-color">3</span> 篇)
+                    </h2>
+
+                    <ul id="reading-document-list" class="space-y-6">
+
+                        <!-- 檔案列表項 - 科技趨勢 -->
+                        <li class="fun-card">
+                            <a href="AI_Future_Reading.html" class="block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">🤖</span> AI與人類的未來
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        Level B2
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        探討人工智慧在職場和日常生活中的影響。
+                                    </p>
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- 檔案列表項 - 文化觀察 -->
+                        <li class="fun-card">
+                            <a href="Coffee_Culture_Essay.html" class="block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">☕</span> 全球咖啡文化觀察
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        Level C1
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        從歷史到現代，咖啡如何改變了社會生活。
+                                    </p>
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <!-- 檔案列表項 - 科學新知 -->
+                        <li class="fun-card">
+                            <a href="Mars_Exploration.html" class="block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">🚀</span> 火星探索的最新進展
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        Level B1
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        了解無人探測器在紅色星球上的最新發現。
+                                    </p>
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <!-- 3. 多益測驗 Content -->
                 <div id="toeic" class="tab-content">
                     <h2 class="text-xl font-semibold text-white mb-6 border-b border-gray-700 pb-3">
                         多益想拿600分必背單字 (已找到 <span class="font-bold accent-color">2</span> 份)
@@ -369,17 +445,21 @@
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
 
-            // 如果切換到新聞分頁，則重新計算檔案數
+            // 如果切換到新聞分頁，則重新計算檔案數 (因為只有新聞分頁有篩選功能)
             if (tabName === 'news') {
-                updateFileCount();
+                updateNewsFileCount();
+            } else if (tabName === 'reading') {
+                updateGenericFileCount('reading-document-list', 'reading-file-count');
+            } else if (tabName === 'toeic') {
+                updateGenericFileCount('toeic-document-list', 'toeic-file-count'); // TOEIC也加上一個ID方便未來擴充
             }
         }
-
-        // Function to update the file count (專門針對新聞區塊)
-        function updateFileCount() {
+        
+        // Function to update the file count (專門針對新聞區塊 - 需考慮過濾結果)
+        function updateNewsFileCount() {
             const list = document.getElementById('document-list');
             if (list) {
-                // 只計算當前可見的 (display: 'block' 或非 'none') 文件
+                // 只計算當前可見的 (display: 'list-item') 文件
                 const visibleFileCount = Array.from(list.getElementsByTagName('li')).filter(li => li.style.display !== 'none').length;
                 const fileCountDisplay = document.getElementById('file-count');
                 if (fileCountDisplay) {
@@ -387,6 +467,19 @@
                 }
             }
         }
+
+        // Function to update file count for non-filtered tabs
+        function updateGenericFileCount(listId, countId) {
+            const list = document.getElementById(listId);
+            if (list) {
+                const totalFileCount = list.getElementsByTagName('li').length;
+                const fileCountDisplay = document.getElementById(countId);
+                if (fileCountDisplay) {
+                    fileCountDisplay.textContent = totalFileCount;
+                }
+            }
+        }
+
 
         // Function to dynamically populate the month filter
         function populateMonthFilter() {
@@ -415,14 +508,12 @@
             });
         }
         
-        // ** 文件篩選主邏輯 (新增) **
+        // ** 文件篩選主邏輯 **
         function filterDocuments() {
             const searchInput = document.getElementById('search-input').value.toLowerCase();
             const monthFilter = document.getElementById('month-filter').value;
             const list = document.getElementById('document-list');
             const listItems = list.getElementsByTagName('li');
-
-            let visibleCount = 0;
 
             for (let i = 0; i < listItems.length; i++) {
                 const item = listItems[i];
@@ -443,22 +534,24 @@
                 // 顯示或隱藏
                 if (isVisible) {
                     item.style.display = 'list-item'; // 使用 list-item 以確保垂直列表顯示正確
-                    visibleCount++;
                 } else {
                     item.style.display = 'none';
                 }
             }
             
             // 3. 更新文件計數顯示
-            document.getElementById('file-count').textContent = visibleCount;
+            updateNewsFileCount();
         }
 
 
         // 初始化設置
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. 更新文件計數 (初始時所有可見)
-            updateFileCount();
-
+            // 1. 更新新聞文件計數 (初始時所有可見)
+            updateNewsFileCount();
+            
+            // 由於 TOEIC 和 Reading 沒有篩選器，它們的計數可以固定在 DOMContentLoaded 時計算一次。
+            updateGenericFileCount('reading-document-list', 'reading-file-count');
+            
             // 2. 填充月份篩選器
             populateMonthFilter();
             
@@ -471,6 +564,15 @@
 
             // 4. 確保篩選器在載入後運行一次，以處理初始狀態
             filterDocuments();
+
+            // 5. 為 toeic 標題的 count span 設置 ID，確保未來擴充時可追蹤
+            const toeicTitle = document.querySelector('#toeic h2');
+            if (toeicTitle) {
+                const countSpan = toeicTitle.querySelector('.accent-color');
+                if (countSpan) {
+                    countSpan.id = 'toeic-file-count';
+                }
+            }
         });
     </script>
 </body>
