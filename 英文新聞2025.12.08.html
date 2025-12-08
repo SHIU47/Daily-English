@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily English News Deep Dive: Dec 2025 Headlines</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a clean, professional interface */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; /* Soft light blue/grey background */
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* Larger border radius for softness */
+            box-shadow: 0 20px 40px rgba(45, 55, 72, 0.1); /* Deeper, softer shadow */
+        }
+        /* Main News Tabs Styling */
+        .main-tabs-container {
+            background-color: #f8fafc; /* Very light background for the tab bar */
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; /* Overlap border with content area */
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; /* Gray text for inactive */
+            transition: all 0.2s ease-in-out;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; /* Blue text for active */
+            border-bottom-color: #3182ce; /* Active blue border */
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        /* Sub-Tabs Styling */
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; /* Indigo for active sub-tab */
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        /* Quiz specific styles */
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            background-color: #e2e8f0;
+        }
+        .quiz-option.selected {
+            border-color: #4c51bf;
+            background-color: #e0e7ff;
+        }
+        .quiz-option.correct {
+            background-color: #c6f6d5; /* Green */
+            border-color: #38a169;
+            font-weight: 700;
+        }
+        .quiz-option.incorrect {
+            background-color: #fed7d7; /* Red */
+            border-color: #e53e3e;
+            font-weight: 700;
+        }
+        /* Scrollbar styling for cleanliness */
+        ::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">Dec 2025 Headlinse - 沉浸式學習體驗</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200">
+                <!-- Tabs will be rendered here by JavaScript -->
+            </div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <!-- Content (Article, Translation, Vocab, Quiz) will be rendered here -->
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Data based on Dec 2025 reports.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'tilapia-scare': {
+                title: '台灣虱目魚檢驗烏龍事件',
+                english: `First up in Taiwan news: A food safety scare erupted after the Kaohsiung Health Bureau and a supplier reported conflicting test results for PX Mart's Taiwan tilapia filet. Officials held an emergency press conference and bowed an apology, blaming a former 29-year-old lab assistant for altering computer parameters and mistakenly amplifying data. She later turned herself in, admitting the error was accidental.`,
+                chinese: `首先是台灣新聞：高雄市衛生局與一家供應商對全聯（PX Mart）台灣鯛魚片（虱目魚）的檢驗結果出現衝突，引發了一場食品安全恐慌。官員們召開緊急記者會，鞠躬致歉，並將錯誤歸咎於一名前 29 歲的實驗室助理，指其篡改了電腦參數，錯誤地誇大了數據。她隨後自首，承認這項錯誤是意外造成。`,
+                vocabulary: [
+                    'food safety scare (n.phr.): 食品安全恐慌',
+                    'erupted (v.): 爆發，突然發生 (erupt)',
+                    'Kaohsiung Health Bureau (n.phr.): 高雄市衛生局',
+                    'supplier (n.): 供應商',
+                    'conflicting test results (n.phr.): 衝突的檢測結果',
+                    'PX Mart (n.): 全聯福利中心',
+                    'tilapia filet (n.): 鯛魚片',
+                    'emergency press conference (n.phr.): 緊急記者會',
+                    'bowed an apology (phr.): 鞠躬致歉',
+                    'blaming (v.ger.): 歸咎於 (blame)',
+                    'lab assistant (n.phr.): 實驗室助理',
+                    'altering (v.ger.): 改變，篡改 (alter)',
+                    'computer parameters (n.phr.): 電腦參數',
+                    'mistakenly (adv.): 錯誤地',
+                    'amplifying data (phr.): 誇大數據',
+                    'turned herself in (phr.): 自首',
+                    'admitting (v.ger.): 承認 (admit)',
+                    'accidental (adj.): 意外的，非故意的',
+                    'food safety (n.phr.): 食品安全',
+                    'health bureau (n.phr.): 衛生局',
+                    'filet (n.): 魚片，肉片',
+                    'press conference (n.): 記者會',
+                    'apology (n.): 道歉',
+                    'alleged error (n.phr.): 被指控的錯誤',
+                    'data manipulation (n.phr.): 數據篡改',
+                    'conflicting reports (n.phr.): 衝突的報告',
+                    'emergency (n.): 緊急情況',
+                    'scare (n.): 恐慌',
+                    'report (v.): 報告',
+                    'officials (n.): 官員',
+                    'lab (n.): 實驗室 (縮寫)',
+                    'accidental error (n.phr.): 意外錯誤',
+                    'investigation (n.): 調查',
+                    'consumer confidence (n.phr.): 消費者信心',
+                ],
+                quiz: [
+                    { q: 'What kind of food was at the center of the safety scare?', options: ['Salmon steak', 'Chicken breast', 'Tilapia filet', 'Pork chop'], answer: 'Tilapia filet' },
+                    { q: 'Which two parties reported conflicting test results?', options: ['The factory and the government', 'The Health Bureau and a supplier', 'PX Mart and the lab assistant', 'The media and the officials'], answer: 'The Health Bureau and a supplier' },
+                    { q: 'What did officials do at the emergency press conference?', options: ['Announced a recall', 'Filed a lawsuit', 'Bowed an apology', 'Held a lottery'], answer: 'Bowed an apology' },
+                    { q: 'Who was blamed for the error?', options: ['The CEO of PX Mart', 'The supplier’s manager', 'A 29-year-old lab assistant', 'The Kaohsiung Mayor'], answer: 'A 29-year-old lab assistant' },
+                    { q: 'What was the nature of the assistant’s mistake?', options: ['She contaminated the sample.', 'She lost the test results.', 'She altered computer parameters.', 'She misidentified the fish species.'], answer: 'She altered computer parameters.' },
+                    { q: 'The assistant claimed the error was:', options: ['Malicious', 'Accidental', 'For profit', 'A cover-up'], answer: 'Accidental' },
+                    { q: 'What does "erupted" mean in this context?', options: ['To slowly develop', 'To suddenly break out', 'To be ignored', 'To be solved'], answer: 'To suddenly break out' },
+                    { q: 'What major retailer was involved in the product testing?', options: ['Carrefour', 'PX Mart', 'Costco', 'RT-Mart'], answer: 'PX Mart' },
+                    { q: 'What did the assistant eventually do?', options: ['Fled the country', 'Denied everything', 'Turned herself in', 'Sued the Health Bureau'], answer: 'Turned herself in' },
+                    { q: 'The assistant "mistakenly" did what to the data?', options: ['Reduced it', 'Deleted it', 'Validated it', 'Amplified it'], answer: 'Amplified it' },
+                    { q: 'What is the closest meaning of "conflicting"?', options: ['Similar', 'In disagreement', 'Supportive', 'Identical'], answer: 'In disagreement' },
+                    { q: 'The event primarily concerns:', options: ['National security', 'Trade negotiations', 'Food safety', 'Military secrets'], answer: 'Food safety' },
+                    { q: 'Where did this incident take place?', options: ['Taipei', 'Tainan', 'Taichung', 'Kaohsiung'], answer: 'Kaohsiung' },
+                    { q: 'What is a "lab assistant" responsible for?', options: ['Selling products', 'Managing finances', 'Conducting and supporting experiments', 'Giving press conferences'], answer: 'Conducting and supporting experiments' },
+                    { q: 'The officials "bowed an apology" to show:', options: ['Disrespect', 'Humor', 'Sincerity and remorse', 'Aggression'], answer: 'Sincerity and remorse' },
+                ]
+            },
+            'military-drill-mishap': {
+                title: '國軍演習砲彈誤擊彰化民宅',
+                english: `An army live-fire drill in Xizhou, Changhua, went wrong on Thursday when a 155 mm howitzer round veered off course and struck three homes, damaging a canopy, aluminum doors and a wall before landing 250 m away. No one was injured. Army officials quickly located the shell, offered compensation, and apologized to residents who later accepted the explanation.`,
+                chinese: `週四在彰化溪州進行的一場國軍實彈演習發生了意外，一枚 155 毫米榴彈砲砲彈偏離了預定軌道，擊中了三間民宅，造成遮雨棚、鋁門和牆壁損壞，然後才落在 250 公尺外。無人受傷。軍方官員迅速找到了砲彈，提供了賠償，並向居民道歉，居民隨後接受了他們的解釋。`,
+                vocabulary: [
+                    'live-fire drill (n.phr.): 實彈演習',
+                    'went wrong (phr.): 出了差錯 (go wrong)',
+                    'howitzer round (n.phr.): 榴彈砲彈',
+                    'veered off course (phr.): 偏離航向/軌道 (veer)',
+                    'struck (v.): 擊中 (strike 的過去式)',
+                    'three homes (n.phr.): 三間民宅',
+                    'damaging (v.ger.): 損壞 (damage)',
+                    'canopy (n.): 遮雨棚，頂篷',
+                    'aluminum doors (n.phr.): 鋁門',
+                    'landing (v.ger.): 落地 (land)',
+                    'no one was injured (phr.): 無人受傷',
+                    'army officials (n.phr.): 軍方官員',
+                    'located the shell (phr.): 找到砲彈',
+                    'offered compensation (phr.): 提供賠償',
+                    'apologized (v.): 道歉 (apologize)',
+                    'residents (n.): 居民',
+                    'accepted the explanation (phr.): 接受了說明/解釋',
+                    'military mishap (n.phr.): 軍事意外',
+                    'Changhua (n.): 彰化 (地名)',
+                    'Xizhou (n.): 溪州 (地名)',
+                    'ammunition (n.): 彈藥',
+                    'drill (n.): 演習',
+                    'off course (phr.): 偏離軌道',
+                    'struck homes (phr.): 擊中房屋',
+                    'wall (n.): 牆壁',
+                    'located (v.): 定位，找到',
+                    'shell (n.): 砲彈',
+                    'accident (n.): 意外',
+                    'damage (n.): 損壞',
+                    'property damage (n.phr.): 財產損失',
+                    'injury (n.): 受傷',
+                    'apology (n.): 道歉',
+                    'explanation (n.): 解釋',
+                    'live fire (n.phr.): 實彈',
+                    'veered (v.): 轉向',
+                ],
+                quiz: [
+                    { q: 'What kind of event was the army conducting?', options: ['A parade', 'A live-fire drill', 'A rescue mission', 'An inspection'], answer: 'A live-fire drill' },
+                    { q: 'Where did the drill take place?', options: ['Taoyuan', 'Taipei', 'Tainan', 'Changhua'], answer: 'Changhua' },
+                    { q: 'What type of projectile caused the damage?', options: ['A rifle bullet', 'A grenade', 'A 155 mm howitzer round', 'A missile'], answer: 'A 155 mm howitzer round' },
+                    { q: 'The projectile struck how many homes?', options: ['One', 'Two', 'Three', 'Four'], answer: 'Three' },
+                    { q: 'What was NOT damaged by the round?', options: ['A canopy', 'Aluminum doors', 'A wall', 'The roof structure'], answer: 'The roof structure' },
+                    { q: 'How far did the shell land after striking the homes?', options: ['10 m away', '50 m away', '250 m away', '1 km away'], answer: '250 m away' },
+                    { q: 'What does "veered off course" mean?', options: ['It flew perfectly straight.', 'It exploded mid-air.', 'It landed exactly on target.', 'It changed direction unexpectedly.'], answer: 'It changed direction unexpectedly.' },
+                    { q: 'What was the immediate action taken by army officials towards the residents?', options: ['They ignored them.', 'They arrested them.', 'They offered compensation and apologized.', 'They rebuilt the homes immediately.'], answer: 'They offered compensation and apologized.' },
+                    { q: 'What was the outcome regarding injuries?', options: ['Many people were injured.', 'Only one person was slightly injured.', 'The residents were severely injured.', 'No one was injured.'], answer: 'No one was injured.' },
+                    { q: 'The residents eventually did what regarding the incident?', options: ['Filed a massive lawsuit.', 'Demanded a public inquiry.', 'Accepted the explanation.', 'Called the international media.'], answer: 'Accepted the explanation.' },
+                    { q: 'What is the opposite of "live-fire"?', options: ['Wet-fire', 'Dry-fire', 'Dead-fire', 'Simulated'], answer: 'Dry-fire' },
+                    { q: 'The incident occurred on which day?', options: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], answer: 'Thursday' },
+                    { q: 'What part of the structure is a "canopy"?', options: ['The foundation', 'A protective covering/awning', 'The basement', 'The central pillar'], answer: 'A protective covering/awning' },
+                    { q: 'The core problem was that the round was:', options: ['Too small', 'Too old', 'Off course', 'Silent'], answer: 'Off course' },
+                    { q: 'The round struck homes *before* doing what?', options: ['Exploding', 'Veering off course', 'Landing 250 m away', 'Compensating residents'], answer: 'Landing 250 m away' },
+                ]
+            },
+            'xiaohongshu-ban': {
+                title: '台灣擬禁用「小紅書」',
+                english: `Taiwan's National Police Agency said the mainland Chinese app Xiao Hong Shu has over 3 million users in Taiwan but failed all 15 cyber security checks and was linked to 1,760 fraud cases since last year. Authorities will block the app for one year. The Facebook page "Politicians Cool" mocked the move, noting Facebook-related fraud losses in Taiwan are far higher.`,
+                chinese: `台灣內政部警政署表示，中國大陸應用程式「小紅書」在台灣擁有超過 300 萬用戶，但未能通過所有 15 項網路安全檢查，且自去年以來與 1,760 起詐騙案件有關。當局將禁用該應用程式一年。「政客很酷」這個臉書專頁對此舉表示嘲諷，指出台灣與臉書相關的詐騙損失遠高於此。`,
+                vocabulary: [
+                    'National Police Agency (n.phr.): 警政署',
+                    'mainland Chinese app (n.phr.): 中國大陸應用程式',
+                    'Xiao Hong Shu (n.): 小紅書 (應用程式名稱)',
+                    'over 3 million users (phr.): 超過 300 萬用戶',
+                    'failed (v.): 未通過 (fail)',
+                    'cyber security checks (n.phr.): 網路安全檢查',
+                    'linked to (phr.): 與...有關聯',
+                    'fraud cases (n.phr.): 詐騙案件',
+                    'since last year (phr.): 自從去年以來',
+                    'authorities (n.): 當局，官方',
+                    'block the app (phr.): 禁用/封鎖該應用程式',
+                    'mocked the move (phr.): 嘲諷此舉 (mock)',
+                    'noting (v.ger.): 指出 (note)',
+                    'Facebook-related fraud (n.phr.): 與臉書相關的詐騙',
+                    'far higher (adj.phr.): 遠高得多',
+                    'cybersecurity (n.): 網路安全',
+                    'app (n.): 應用程式 (Application 的縮寫)',
+                    'fraud (n.): 詐騙',
+                    'case (n.): 案件',
+                    'ban (v/n.): 禁止',
+                    'user (n.): 用戶',
+                    'agency (n.): 機構',
+                    'security (n.): 安全',
+                    'move (n.): 行動，舉措',
+                    'losses (n.): 損失',
+                    'platform (n.): 平台',
+                    'transnational (adj.): 跨國的',
+                    'investigation (n.): 調查',
+                    'privacy concerns (n.phr.): 隱私顧慮',
+                    'data breach (n.phr.): 數據洩露',
+                    'regulation (n.): 監管',
+                    'compliance (n.): 合規性',
+                ],
+                quiz: [
+                    { q: 'Which agency issued the statement about Xiao Hong Shu?', options: ['Ministry of Education', 'Ministry of Finance', 'National Police Agency', 'Ministry of Health'], answer: 'National Police Agency' },
+                    { q: 'Approximately how many users does Xiao Hong Shu have in Taiwan?', options: ['Under 1 million', 'About 500,000', 'Over 3 million', 'Exactly 1.5 million'], answer: 'Over 3 million' },
+                    { q: 'How many cyber security checks did the app fail?', options: ['15', '5', '10', '0'], answer: '15' },
+                    { q: 'What criminal activity was the app linked to?', options: ['Drug trafficking', 'Murder cases', 'Fraud cases', 'Robbery'], answer: 'Fraud cases' },
+                    { q: 'How many fraud cases was the app linked to since last year?', options: ['176', '17,600', '1,760', '170'], answer: '1,760' },
+                    { q: 'For how long will authorities block the app?', options: ['Indefinitely', 'Six months', 'One year', 'Two years'], answer: 'One year' },
+                    { q: 'What does "mocked the move" suggest about the Facebook page "Politicians Cool"?', options: ['They strongly supported it.', 'They were indifferent.', 'They made fun of the decision.', 'They offered help.'], answer: 'They made fun of the decision.' },
+                    { q: 'The Facebook page argued that fraud losses related to which platform are far higher?', options: ['TikTok', 'Instagram', 'Twitter (X)', 'Facebook'], answer: 'Facebook' },
+                    { q: 'The app is described as being from where?', options: ['Hong Kong', 'Singapore', 'Mainland Chinese', 'Taiwanese'], answer: 'Mainland Chinese' },
+                    { q: 'What is the primary concern raised by the authorities?', options: ['Low user numbers', 'High advertising costs', 'Cyber security', 'Lack of entertainment'], answer: 'Cyber security' },
+                    { q: 'What does "linked to" mean in this context?', options: ['Completely innocent of', 'Has no connection to', 'Is associated with', 'Is identical to'], answer: 'Is associated with' },
+                    { q: 'The planned action against the app is a:', options: ['Promotion', 'Ban', 'Warning', 'Upgrade'], answer: 'Ban' },
+                    { q: 'The fraud cases mentioned occurred starting from:', options: ['This month', 'Next year', 'Last year', 'Two years ago'], answer: 'Last year' },
+                    { q: 'What is a "cyber security check"?', options: ['A review of product reviews', 'An assessment of the app\'s data protection and safety', 'A background check on its CEO', 'A marketing survey'], answer: 'An assessment of the app\'s data protection and safety' },
+                    { q: 'The term "authorities" refers to:', options: ['News reporters', 'General public', 'Government/official bodies', 'App developers'], answer: 'Government/official bodies' },
+                ]
+            },
+            'thailand-scam-crackdown': {
+                title: '泰國打擊網路詐騙，扣押逾 3 億美元資產',
+                english: `Thailand has seized assets worth more than $300 million, including shares in a major regional energy company, and issued arrest warrants for 42 people in a high-profile push against regional scam networks. Parts of Southeast Asia, including the border areas between Thailand, Myanmar, and Cambodia, have become hubs for online fraud, with criminal networks earning billions from illegal compounds where trafficking victims are often forced to work. The seizures and warrants involve Chinese-Cambodian tycoon Chen Zhi, who heads the US-sanctioned Prince Group, and Cambodian nationals Kok An and Yim Leak, whom authorities said were all linked to transnational online scam operations. Chen, who is also facing indictment by the US, could not be reached for comment. Last month, Prince Group denied that the company or Chen was involved in any illegal activity. Hundreds of people in the region have been detained for alleged involvement in scam centers that have defrauded people across the world, but law enforcement agencies have yet to arrest the suspected masterminds behind the lucrative networks.`,
+                chinese: `泰國在針對區域詐騙網絡的高調打擊行動中，扣押了價值超過 3 億美元的資產，其中包括一家主要區域能源公司的股份，並對 42 人發出了逮捕令。東南亞部分地區，包括泰國、緬甸和柬埔寨之間的邊境地區，已成為網路詐騙的中心，犯罪網絡從非法的園區賺取數十億美元，這些園區中，販運受害者往往被迫工作。這次的扣押和逮捕令涉及華裔柬埔寨籍大亨陳志（Chen Zhi），他領導著受美國制裁的太子集團（Prince Group），以及柬埔寨國民 Kok An 和 Yim Leak。當局稱這些人都與跨國線上詐騙活動有關。陳志也面臨美國的起訴，目前無法聯繫到他進行評論。上個月，太子集團否認該公司或陳志涉及任何非法活動。該地區已有數百人因涉嫌參與詐騙中心而被拘留，這些中心詐騙了世界各地的人，但執法機構尚未逮捕這些暴利網絡背後的嫌疑主謀。`,
+                vocabulary: [
+                    'seized assets (phr.): 扣押資產 (seize)',
+                    'worth more than $300 million (phr.): 價值超過 3 億美元',
+                    'shares (n.): 股份',
+                    'major regional energy company (n.phr.): 主要區域能源公司',
+                    'issued arrest warrants (phr.): 發出逮捕令 (issue)',
+                    'high-profile push (n.phr.): 高調打擊行動',
+                    'regional scam networks (n.phr.): 區域詐騙網絡',
+                    'hubs (n.): 中心，樞紐',
+                    'online fraud (n.phr.): 網路詐騙',
+                    'criminal networks (n.phr.): 犯罪網絡',
+                    'earning billions (phr.): 賺取數十億',
+                    'illegal compounds (n.phr.): 非法園區/大院',
+                    'trafficking victims (n.phr.): 販運受害者',
+                    'forced to work (phr.): 被迫工作',
+                    'Chinese-Cambodian tycoon (n.phr.): 華裔柬埔寨籍大亨',
+                    'US-sanctioned (adj.): 受美國制裁的',
+                    'transnational online scam operations (n.phr.): 跨國線上詐騙活動',
+                    'facing indictment (phr.): 面臨起訴 (indictment)',
+                    'denied (v.): 否認 (deny)',
+                    'illegal activity (n.phr.): 非法活動',
+                    'detained (v.): 拘留',
+                    'alleged involvement (n.phr.): 被指控的涉入',
+                    'defrauded (v.): 詐騙 (defraud)',
+                    'law enforcement agencies (n.phr.): 執法機構',
+                    'suspected masterminds (n.phr.): 嫌疑主謀',
+                    'lucrative networks (n.phr.): 暴利網絡',
+                    'border areas (n.phr.): 邊境地區',
+                    'seizures (n.): 扣押品',
+                    'warrants (n.): 逮捕令',
+                    'tycoon (n.): 大亨',
+                    'comment (n.): 評論',
+                ],
+                quiz: [
+                    { q: 'How much were the seized assets worth?', options: ['Over $30 million', 'Over $300 million', 'Under $30 million', 'Exactly $3 billion'], answer: 'Over $300 million' },
+                    { q: 'What major asset was included in the seizure?', options: ['Gold bars', 'Real estate in Bangkok', 'Shares in an energy company', 'Luxury cars'], answer: 'Shares in an energy company' },
+                    { q: 'How many people had arrest warrants issued against them?', options: ['42', '142', '24', '300'], answer: '42' },
+                    { q: 'The scam hubs are located in border areas between Thailand, Myanmar, and which other country?', options: ['Vietnam', 'Laos', 'Malaysia', 'Cambodia'], answer: 'Cambodia' },
+                    { q: 'What are trafficking victims often forced to do in these illegal compounds?', options: ['Attend school', 'Go on vacation', 'Work in scam centers', 'Volunteer'], answer: 'Work in scam centers' },
+                    { q: 'Which businessman, involved in the seizures, heads the US-sanctioned Prince Group?', options: ['Yim Leak', 'Kok An', 'Chen Zhi', 'The Thai Prime Minister'], answer: 'Chen Zhi' },
+                    { q: 'What is Chen Zhi also facing by the US?', options: ['A job offer', 'A medal of honor', 'Indictment', 'A travel ban'], answer: 'Indictment' },
+                    { q: 'What did Prince Group state last month?', options: ['They admitted guilt.', 'They denied involvement in illegal activity.', 'They announced bankruptcy.', 'They supported the crackdown.'], answer: 'They denied involvement in illegal activity.' },
+                    { q: 'What is the primary goal of the "high-profile push"?', options: ['To promote tourism', 'To fight inflation', 'To combat regional scam networks', 'To sign a trade deal'], answer: 'To combat regional scam networks' },
+                    { q: 'What does "lucrative" mean?', options: ['Not profitable', 'Low-risk', 'Generating a lot of profit', 'Illegal'], answer: 'Generating a lot of profit' },
+                    { q: 'What is a "tycoon"?', options: ['A small-business owner', 'A political figure', 'A person of great wealth and power', 'A law enforcement officer'], answer: 'A person of great wealth and power' },
+                    { q: 'The scam centers have defrauded people across:', options: ['Only Thailand', 'Only Southeast Asia', 'The world', 'Only China'], answer: 'The world' },
+                    { q: 'What does "transnational" mean?', options: ['Within one nation', 'Across nations', 'Local', 'Historical'], answer: 'Across nations' },
+                    { q: 'How many people in the region have been detained so far?', options: ['Hundreds', 'Dozens', 'Thousands', 'Millions'], answer: 'Hundreds' },
+                    { q: 'The core issue in the story is:', options: ['Energy crisis', 'Drug smuggling', 'Online fraud', 'Political corruption'], answer: 'Online fraud' },
+                ]
+            },
+            'china-sex-doll-factory': {
+                title: '中國工廠因「兒童樣貌性玩偶」被令停產',
+                english: `A factory in China that has been accused of making childlike sex dolls has been placed under investigation by local authorities and ordered to immediately halt production. The customizable dolls were reportedly being sold on major online shopping sites and social media platforms. Chinese state-owned news outlet The Paper said that local officials were attaching “great importance “ to the issue. Last month, online retailer Shein—which stated in China but is now headquartered in Singapore—banned the sale of all sex dolls globally after a public outcry over its selling dolls with a childlike appearance. The company said that at the time it had strengthened its keyword blacklist to further prevent attempted circumvention of product listing restrictions by sellers.`,
+                chinese: `中國一家被指控製造「兒童樣貌性玩偶」的工廠已受到地方當局的調查，並被勒令立即停產。據報導，這些可客製化的玩偶正在主要的網路購物網站和社交媒體平台上銷售。中國國有新聞媒體《澎湃新聞》（The Paper）表示，地方官員正在「高度重視」此問題。上個月，網路零售商 Shein（在中國起家，但現總部位於新加坡）因銷售具有兒童外觀的玩偶引發公眾強烈抗議後，已在全球範圍內禁止銷售所有性玩偶。該公司表示，當時已加強了關鍵詞黑名單，以進一步防止賣家試圖規避產品上架限制。`,
+                vocabulary: [
+                    'accused of (phr.): 被指控 (accuse)',
+                    'childlike sex dolls (n.phr.): 兒童樣貌的性玩偶',
+                    'placed under investigation (phr.): 被立案調查',
+                    'local authorities (n.phr.): 地方當局',
+                    'ordered to halt production (phr.): 被勒令停止生產',
+                    'immediately (adv.): 立即地',
+                    'customizable dolls (n.phr.): 可客製化的玩偶',
+                    'reportedly (adv.): 據報導',
+                    'major online shopping sites (n.phr.): 主要網路購物網站',
+                    'social media platforms (n.phr.): 社交媒體平台',
+                    'state-owned news outlet (n.phr.): 國有新聞媒體',
+                    'attaching “great importance” (phr.): 高度重視 (attach importance)',
+                    'public outcry (n.phr.): 公眾強烈抗議',
+                    'headquartered (v.pp.): 總部位於 (headquarter)',
+                    'banned the sale (phr.): 禁止銷售 (ban)',
+                    'globally (adv.): 在全球範圍內',
+                    'appearance (n.): 外觀',
+                    'strengthened (v.): 加強 (strengthen)',
+                    'keyword blacklist (n.phr.): 關鍵詞黑名單',
+                    'prevent attempted circumvention (phr.): 防止企圖規避',
+                    'product listing restrictions (n.phr.): 產品上架限制',
+                    'ethics (n.): 倫理，道德',
+                    'manufacturing (n.): 製造業',
+                    'controversy (n.): 爭議',
+                    'retailing (n.): 零售',
+                    'investigate (v.): 調查',
+                    'production halt (n.phr.): 停產',
+                ],
+                quiz: [
+                    { q: 'What product was the Chinese factory accused of making?', options: ['Illegal drugs', 'Childlike sex dolls', 'Counterfeit electronics', 'Dangerous toys'], answer: 'Childlike sex dolls' },
+                    { q: 'What action did local authorities take first?', options: ['Gave them an award', 'Ordered them to halt production', 'Increased their funding', 'Promoted their products'], answer: 'Ordered them to halt production' },
+                    { q: 'What is the factory currently undergoing?', options: ['A remodel', 'An expansion', 'An investigation', 'A celebration'], answer: 'An investigation' },
+                    { q: 'The dolls were being sold on online shopping sites and what other platforms?', options: ['Newspapers', 'Social media platforms', 'Local markets', 'Government websites'], answer: 'Social media platforms' },
+                    { q: 'Which news outlet reported that officials were attaching "great importance" to the issue?', options: ['The New York Times', 'The Paper (Chinese state-owned)', 'BBC', 'CNN'], answer: 'The Paper (Chinese state-owned)' },
+                    { q: 'Which online retailer banned the sale of all sex dolls globally last month?', options: ['Amazon', 'eBay', 'Shein', 'Alibaba'], answer: 'Shein' },
+                    { q: 'Shein’s action was a response to what?', options: ['A private complaint', 'A successful lawsuit', 'A public outcry', 'A stock market crash'], answer: 'A public outcry' },
+                    { q: 'Where is Shein currently headquartered?', options: ['China', 'United States', 'Singapore', 'Japan'], answer: 'Singapore' },
+                    { q: 'What did Shein strengthen to prevent sellers from getting around restrictions?', options: ['Its customer service team', 'Its keyword blacklist', 'Its delivery system', 'Its pricing model'], answer: 'Its keyword blacklist' },
+                    { q: 'What does "halt production" mean?', options: ['To speed up production', 'To slow down production', 'To stop making products', 'To relocate the factory'], answer: 'To stop making products' },
+                    { q: 'What does "circumvention" mean in this context?', options: ['Obeying rules', 'Following guidelines', 'Getting around restrictions', 'Reporting to the police'], answer: 'Getting around restrictions' },
+                    { q: 'What kind of news outlet is "The Paper"?', options: ['Independent', 'Foreign-owned', 'State-owned', 'Private blog'], answer: 'State-owned' },
+                    { q: 'The dolls were described as being:', options: ['Limited edition', 'Hand-made', 'Customizable', 'Vintage'], answer: 'Customizable' },
+                    { q: 'The issue primarily deals with:', options: ['Tax evasion', 'Ethical and safety concerns', 'Product efficiency', 'Trade tariffs'], answer: 'Ethical and safety concerns' },
+                    { q: 'The term "product listing restrictions" refers to rules about:', options: ['How products are delivered', 'What products can be sold online', 'Who can buy the products', 'How much the products cost'], answer: 'What products can be sold online' },
+                ]
+            },
+            'zootopia2-record': {
+                title: '《動物方城市 2》在中國打破紀錄',
+                english: `Disney's Zootopia 2 has become the highest-grossing animated foreign film ever in China, despite generally muted interest in overseas movies in the country. The film's performance suggests a return to form for Disney in China, noting that its themes of personal resilience and social harmony have resonated with local audiences. Its runaway success in China with a $275 million opening is particularly notable given the changing environment for foreign films in China over the 9 years since the first Zootopia film was released. In October, the US placed 20 Chinese film production companies on an export blacklist, a move analysts said would have only a limited impact given the waning influence of foreign films in the country.`,
+                chinese: `迪士尼的《動物方城市 2》已成為中國影史上票房最高的動畫外國電影，儘管整體而言，中國對海外電影的興趣普遍低迷。該片的表現暗示著迪士尼在中國的表現重回正軌，因為其關於個人韌性（personal resilience）和社會和諧（social harmony）的主題引起了當地觀眾的共鳴。考慮到自第一部《動物方城市》電影上映以來的九年間，中國外國電影環境的變化，該片在中國以 2.75 億美元的開畫票房取得的空前成功尤其值得關注。十月份，美國將 20 家中國電影製作公司列入了出口黑名單，分析師表示，鑑於外國電影在中國的影響力正在減弱，此舉的影響將是有限的。`,
+                vocabulary: [
+                    'highest-grossing (adj.): 票房最高的',
+                    'animated foreign film (n.phr.): 動畫外國電影',
+                    'despite (prep.): 儘管',
+                    'generally muted interest (n.phr.): 普遍低迷的興趣',
+                    'overseas movies (n.phr.): 海外電影',
+                    'performance (n.): 表現，業績',
+                    'suggests (v.): 暗示 (suggest)',
+                    'return to form (phr.): 重回正軌，恢復昔日水準',
+                    'themes (n.): 主題',
+                    'personal resilience (n.phr.): 個人韌性',
+                    'social harmony (n.phr.): 社會和諧',
+                    'resonated with (phr.): 與...產生共鳴 (resonate)',
+                    'local audiences (n.phr.): 當地觀眾',
+                    'runaway success (n.phr.): 空前/驚人的成功',
+                    'opening (n.): 開畫票房',
+                    'particularly notable (adv.phr.): 尤其值得注意',
+                    'changing environment (n.phr.): 變化的環境',
+                    'placed on an export blacklist (phr.): 被列入出口黑名單',
+                    'film production companies (n.phr.): 電影製作公司',
+                    'analysts (n.): 分析師',
+                    'limited impact (n.phr.): 有限的影響',
+                    'waning influence (n.phr.): 減弱的影響力',
+                    'box office (n.phr.): 票房',
+                    'success (n.): 成功',
+                    'animated (adj.): 動畫的',
+                    'foreign (adj.): 外國的',
+                    'muted (adj.): 沉默的，低沉的',
+                    'audience (n.): 觀眾',
+                    'release (v.): 發行',
+                    'blacklist (n.): 黑名單',
+                    'impact (n.): 影響',
+                    'influence (n.): 影響力',
+                    'film (n.): 電影',
+                ],
+                quiz: [
+                    { q: 'What record did Zootopia 2 break in China?', options: ['Highest-grossing superhero film', 'Highest-grossing horror film', 'Highest-grossing animated foreign film', 'Highest-grossing documentary'], answer: 'Highest-grossing animated foreign film' },
+                    { q: 'What is the general trend for overseas movies in China?', options: ['Strong interest', 'Growing popularity', 'Generally muted interest', 'Extremely high demand'], answer: 'Generally muted interest' },
+                    { q: 'The film’s success suggests a return to form for which company in China?', options: ['Warner Bros.', 'Paramount', 'Sony', 'Disney'], answer: 'Disney' },
+                    { q: 'Which two themes in the film resonated with local audiences?', options: ['War and conflict', 'Luxury and wealth', 'Personal resilience and social harmony', 'Crime and punishment'], answer: 'Personal resilience and social harmony' },
+                    { q: 'What was the approximate opening box office in China?', options: ['$27.5 million', '$275 million', '$2.75 billion', '$275,000'], answer: '$275 million' },
+                    { q: 'How long ago was the first Zootopia film released?', options: ['5 years', '9 years', '15 years', '2 years'], answer: '9 years' },
+                    { q: 'What did the US do in October?', options: ['Invested in Chinese studios', 'Opened a new theater chain', 'Placed Chinese film companies on an export blacklist', 'Co-produced a new film'], answer: 'Placed Chinese film companies on an export blacklist' },
+                    { q: 'How many Chinese film production companies were put on the blacklist?', options: ['10', '20', '50', '5'], answer: '20' },
+                    { q: 'Analysts believe the US move will have what kind of impact?', options: ['Massive impact', 'No impact', 'Limited impact', 'Immediate positive impact'], answer: 'Limited impact' },
+                    { q: 'What is the synonym for "waning"?', options: ['Increasing', 'Growing', 'Declining', 'Steady'], answer: 'Declining' },
+                    { q: 'What is a "runaway success"?', options: ['A small hit', 'A disappointing flop', 'An unexpectedly great success', 'A predictable outcome'], answer: 'An unexpectedly great success' },
+                    { q: 'The success is "particularly notable" given the what for foreign films?', options: ['Unchanging rules', 'Changing environment', 'Consistent policies', 'Growing subsidies'], answer: 'Changing environment' },
+                    { q: 'What does "resonated with" mean?', options: ['Was disliked by', 'Was confusing to', 'Was rejected by', 'Struck a chord with/Connected with'], answer: 'Struck a chord with/Connected with' },
+                    { q: 'Which term means a general lack of enthusiasm?', options: ['High demand', 'Muted interest', 'Runaway success', 'Return to form'], answer: 'Muted interest' },
+                    { q: 'What does "export blacklist" affect?', options: ['Importing goods', 'Selling goods abroad', 'Domestic sales', 'Local production'], answer: 'Selling goods abroad' },
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentTopicId = 'tilapia-scare'; // Default topic
+        let currentSubTab = 'article'; // Default view: article, translation, vocabulary, quiz
+        let quizState = {}; // Stores answers: { topicId: { questionIndex: selectedOption } }
+        let quizResult = {}; // Stores results: { topicId: { score: N, total: M } }
+
+
+        // --- CORE RENDERING FUNCTIONS ---
+
+        /**
+         * Renders the main topic tabs at the top of the page.
+         */
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                // Chinese title extraction from the English/Chinese summary line
+                const chineseTitle = data.title.split(' ')[0]; 
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `
+                    <button 
+                        class="main-tab-button ${isActive}" 
+                        onclick="changeTopic('${id}')"
+                    >
+                        ${chineseTitle}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Renders the content based on the current topic and sub-tab.
+         */
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            
+            // 1. Render Sub-Tabs Menu
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${data.quiz.length} 題)</button>
+                </div>
+            `;
+            
+            let contentHTML = '';
+
+            switch (currentSubTab) {
+                case 'article':
+                    contentHTML = renderArticle(data.english, data.title);
+                    break;
+                case 'translation':
+                    contentHTML = renderTranslation(data.chinese, data.title);
+                    break;
+                case 'vocabulary':
+                    contentHTML = renderVocabulary(data.vocabulary, data.title);
+                    break;
+                case 'quiz':
+                    contentHTML = renderQuiz(currentTopicId, data.quiz, data.title);
+                    break;
+            }
+
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+
+            // Ensure quiz answer state is maintained on re-render
+            if (currentSubTab === 'quiz') {
+                updateQuizDisplay(currentTopicId, data.quiz);
+            }
+        }
+
+        /**
+         * Renders the original English article.
+         */
+        function renderArticle(text, title) {
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2>
+                <div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-lg shadow-inner">
+                    <p class="whitespace-pre-wrap">${text.trim()}</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <div class="text-sm text-gray-500 mb-2">點擊下方按鈕，開始深度學習：</div>
+                    <button 
+                        class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition duration-200 ease-in-out"
+                        onclick="changeSubTab('translation')"
+                    >
+                        🇹🇼 前往中文翻譯 (See Translation)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the Chinese translation.
+         */
+        function renderTranslation(text, title) {
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2>
+                <div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-lg shadow-inner">
+                    <p class="whitespace-pre-wrap">${text.trim()}</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <div class="text-sm text-gray-500 mb-2">繼續強化詞彙與理解：</div>
+                    <button 
+                        class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition duration-200 ease-in-out"
+                        onclick="changeSubTab('vocabulary')"
+                    >
+                        📖 前往單字庫複習 (Review Vocabulary)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the vocabulary list.
+         */
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100">
+                    <span class="font-semibold text-indigo-700">${parts[0]}</span> 
+                    <span class="text-gray-500 text-sm italic">${parts[1]}</span>
+                </li>`;
+            }).join('');
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語 (共 ${vocabArray.length} 個)</h2>
+                <p class="text-gray-600 mb-6">掌握這些關鍵詞彙，將有助於您完全理解新聞內容。</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    ${listItems}
+                </ul>
+                <div class="mt-8 text-center">
+                    <div class="text-sm text-gray-500 mb-2">準備好測試您的理解力了嗎？</div>
+                    <button 
+                        class="px-6 py-3 bg-red-500 text-white font-semibold rounded-full shadow-lg hover:bg-red-600 transition duration-200 ease-in-out"
+                        onclick="initQuiz()"
+                    >
+                        📝 開始測驗 (Start Quiz)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the quiz interface.
+         */
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const correctAnswer = q.answer;
+                
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    let isCurrentSelected = selected === option;
+
+                    if (isSubmitted) {
+                        if (option === correctAnswer) {
+                            classes += ' correct'; // Correct answer
+                        } else if (isCurrentSelected && option !== correctAnswer) {
+                            classes += ' incorrect'; // User selected, but incorrect
+                        }
+                    } else if (isCurrentSelected) {
+                        classes += ' selected'; // User selected, but not submitted
+                    }
+
+                    return `
+                        <div 
+                            class="${classes}" 
+                            data-q-index="${index}" 
+                            data-option="${option}"
+                            onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"
+                        >
+                            <span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}
+                            ${isSubmitted && option === correctAnswer ? '<span class="ml-2 text-green-700 font-bold">(正確答案)</span>' : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500">
+                        <p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>
+                        ${optionsHTML}
+                    </div>
+                `;
+            }).join('');
+
+            const resultHTML = result ? `
+                <div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500">
+                    <h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3>
+                    <p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p>
+                    <p class="text-lg mt-3 text-indigo-800">您答對了 ${result.score} 題。請檢視下方標註的答案！</p>
+                    <button 
+                        class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full hover:bg-yellow-600 transition"
+                        onclick="initQuiz(true)"
+                    >
+                        🔄 重置測驗
+                    </button>
+                </div>
+            ` : '';
+
+            const submitButton = result === undefined ? `
+                <button 
+                    id="submit-quiz-button"
+                    class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition duration-300 disabled:opacity-50"
+                    onclick="submitQuizAnswer('${topicId}')"
+                    disabled
+                >
+                    送出答案並查看結果
+                </button>
+            ` : '';
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>
+                ${resultHTML}
+                <div id="quiz-questions">
+                    ${questionsHTML}
+                </div>
+                <div class="mt-8 text-center">
+                    ${submitButton}
+                    <p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p>
+                </div>
+            `;
+        }
+
+
+        // --- QUIZ LOGIC ---
+
+        /**
+         * Initializes or resets the quiz state for a topic.
+         * @param {boolean} forceReset - Whether to force a full reset.
+         */
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            // If we are already on the quiz tab and not forcing a reset, just ensure correct tab is selected
+            if (!forceReset && currentSubTab === 'quiz') {
+                return;
+            }
+            
+            // If the user manually clicks the tab, or requests a full reset, clear results
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        /**
+         * Selects an option for a question.
+         */
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return; // Cannot change after submission
+            
+            quizState[topicId] = quizState[topicId] || {};
+            const currentSelection = quizState[topicId][questionIndex];
+
+            // Toggle selection logic
+            if (currentSelection === selectedOption) {
+                delete quizState[topicId][questionIndex];
+            } else {
+                quizState[topicId][questionIndex] = selectedOption;
+            }
+            
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        /**
+         * Submits the quiz answers and displays the results.
+         */
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            const total = questions.length;
+
+            if (Object.keys(answers).length !== total) {
+                document.getElementById('quiz-message').textContent = `請回答所有 ${total} 題問題！`;
+                return;
+            }
+            document.getElementById('quiz-message').textContent = '';
+
+            questions.forEach((q, index) => {
+                const selected = answers[index];
+                if (selected === q.answer) {
+                    score++;
+                }
+            });
+
+            quizResult[topicId] = { score, total };
+            renderContent(); // Re-render to show results and correct/incorrect indicators
+        }
+        
+        /**
+         * Helper function to update the visual state of the quiz without full re-render.
+         */
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const totalQuestions = quizQuestions.length;
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== totalQuestions;
+                if (answeredCount === totalQuestions) {
+                    quizMessage.textContent = '所有問題已回答。';
+                } else {
+                    quizMessage.textContent = `請完成所有問題 (已完成: ${answeredCount}/${totalQuestions})`;
+                }
+            }
+
+            // Update classes for selection feedback if not submitted
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIndex = parseInt(element.getAttribute('data-q-index'));
+                    const option = element.getAttribute('data-option');
+                    
+                    element.classList.remove('selected');
+                    if (currentQuizState[qIndex] === option) {
+                        element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+
+        // --- Event Handlers (exposed globally) ---
+
+        /**
+         * Changes the main news topic displayed.
+         */
+        function changeTopic(newTopicId) {
+            if (currentTopicId === newTopicId) return;
+            currentTopicId = newTopicId;
+            currentSubTab = 'article'; // Reset to Article view on topic change
+            renderTabs();
+            renderContent();
+        }
+
+        /**
+         * Changes the sub-tab (Article, Translation, Vocabulary, Quiz) within the current topic.
+         */
+        function changeSubTab(newSubTab) {
+            currentSubTab = newSubTab;
+            renderContent();
+        }
+
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            
+            // Expose functions globally for use in HTML event handlers
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
