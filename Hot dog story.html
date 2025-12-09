@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英文閱讀練習：熱狗的歷史</title>
+    <!-- 載入 Tailwind CSS 框架，用於響應式設計和美觀排版 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 設置 Inter 字體作為預設，增加閱讀舒適度 */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* 淺灰色背景 */
+            transition: background-color 0.3s;
+        }
+        /* 確保內容區域有足夠的上下邊距 */
+        .content-area {
+            min-height: 90vh;
+        }
+        /* 針對中文翻譯區塊的樣式 - 使用 max-height 實現平滑的 CSS 過渡 */
+        #chinese-translation {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* 更流暢的動畫曲線 */
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            padding: 0 1.5rem; /* 保持左右邊距，但垂直邊距為 0 */
+        }
+        #chinese-translation.visible {
+            max-height: 1000px; /* 足夠大的高度以顯示所有內容 */
+            padding: 1.5rem 1.5rem; /* 顯示時增加垂直邊距 */
+            opacity: 1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* 顯示時增加柔和陰影 */
+        }
+        /* 按鈕自定義樣式，增加按下時的動畫效果 */
+        #toggle-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 0 0 0 rgba(109, 40, 217, 0); /* 按下時陰影消失 */
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="content-area max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl p-6 md:p-12 mt-8 mb-8 border border-gray-100">
+
+        <!-- 標題區塊 -->
+        <header class="text-center mb-10 border-b-2 border-violet-100 pb-6">
+            <h1 class="text-4xl md:text-5xl font-black text-gray-900 leading-snug">
+                The Unexpected History of the Hot Dog
+            </h1>
+            <p class="text-md text-gray-500 mt-3">
+                <span class="font-semibold">作者:</span> Funday 
+                <span class="mx-3 text-violet-400">•</span> 
+                <span class="font-semibold">日期:</span> 2024/11/05
+            </p>
+        </header>
+
+        <!-- 英文閱讀區塊 -->
+        <section class="mb-10 text-gray-800 space-y-7 text-lg md:text-xl leading-8">
+            <p>
+                When you bite into a hot dog at a baseball game, you probably aren't thinking about history. But the humble hot dog has a surprisingly rich and complex past that stretches back centuries.
+            </p>
+            <p>
+                While often associated with the US, the hot dog's origins are European, specifically Germany. The frankfurter sausage, a predecessor, dates back to the 15th century. It became popular in Frankfurt, giving it its name.
+            </p>
+            <p>
+                It wasn't until the 19th century that German immigrants brought these sausages to America. Street vendors quickly adopted them. The term 'dachshund sausage' was an early name used in the US, referring to its long, thin shape.
+            </p>
+            <p>
+                The name 'hot dog' itself is debated. A popular, though likely false, legend credits a cartoonist in 1901 who couldn't spell 'dachshund' and simply wrote 'hot dog!' instead. Regardless of the true origin, the name stuck, and the food became an American staple.
+            </p>
+        </section>
+
+        <!-- 中文翻譯切換按鈕 -->
+        <div class="text-center my-8">
+            <button id="toggle-button" onclick="toggleTranslation()" 
+                    class="px-10 py-4 
+                           bg-gradient-to-r from-violet-600 to-indigo-600 
+                           text-white font-extrabold text-lg 
+                           rounded-full shadow-xl hover:shadow-2xl 
+                           focus:outline-none focus:ring-4 focus:ring-violet-300 
+                           transition duration-300 ease-in-out transform hover:scale-105">
+                顯示中文翻譯與筆記
+            </button>
+        </div>
+
+        <!-- 中文翻譯區塊 (預設隱藏) -->
+        <div id="chinese-translation" class="bg-violet-50 border-l-8 border-violet-500 rounded-xl text-gray-700 mx-auto">
+            <h3 class="text-2xl font-bold text-violet-700 mb-4">中文翻譯與筆記</h3>
+            <div class="space-y-4 text-base leading-relaxed">
+                <p>
+                    當你在棒球比賽中咬下一口熱狗時，你可能不會想到歷史。但這不起眼的熱狗卻有著令人驚訝的豐富而複雜的歷史，可以追溯到幾個世紀前。
+                </p>
+                <p>
+                    雖然熱狗通常與美國聯繫在一起，但它的起源卻在歐洲，特別是德國。法蘭克福香腸是它的前身，可以追溯到 15 世紀。它在法蘭克福流行起來，因此得名。
+                </p>
+                <p>
+                    直到 19 世紀，德國移民才將這些香腸帶到美國。街頭小販很快就採用了它們。 「臘腸香腸」（dachshund sausage）是美國早期使用的名稱，指的是它又長又細的形狀。
+                </p>
+                <p>
+                    「熱狗」（hot dog）這個名字本身仍有爭議。一個流行的、儘管可能是錯誤的傳說，歸功於一位漫畫家在 1901 年因為拼不出「臘腸犬」（dachshund）這個詞，而直接寫下「熱狗！」（hot dog!）。無論真正的起源如何，這個名字都沿用了下來，這種食物也成為美國的主食。
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /**
+         * 切換中文翻譯區塊的顯示/隱藏狀態
+         */
+        function toggleTranslation() {
+            const translationDiv = document.getElementById('chinese-translation');
+            const button = document.getElementById('toggle-button');
+            
+            // 切換 'visible' class 來控制 CSS 過渡效果
+            const isVisible = translationDiv.classList.toggle('visible');
+
+            // 根據當前狀態更新按鈕文字
+            if (isVisible) {
+                button.textContent = '隱藏中文翻譯與筆記';
+                // 為了避免 Cumulative Layout Shift (CLS) 影響，這裡使用 setTimeout 確保視覺效果平穩
+                setTimeout(() => {
+                    // 平滑滾動到翻譯區塊
+                    translationDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 400); 
+            } else {
+                button.textContent = '顯示中文翻譯與筆記';
+            }
+        }
+    </script>
+
+</body>
+</html>
