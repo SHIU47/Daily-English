@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 9 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a clean, professional interface */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; /* Soft light blue/grey background */
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* Larger border radius for softness */
+            box-shadow: 0 20px 40px rgba(45, 55, 72, 0.1); /* Deeper, softer shadow */
+        }
+        /* Main News Tabs Styling */
+        .main-tabs-container {
+            background-color: #f8fafc; /* Very light background for the tab bar */
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; /* Overlap border with content area */
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; /* Gray text for inactive */
+            transition: all 0.2s ease-in-out;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; /* Blue text for active */
+            border-bottom-color: #3182ce; /* Active blue border */
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        /* Sub-Tabs Styling */
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; /* Indigo for active sub-tab */
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        /* Quiz specific styles */
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            background-color: #e2e8f0;
+        }
+        .quiz-option.selected {
+            border-color: #4c51bf;
+            background-color: #e0e7ff;
+        }
+        .quiz-option.correct {
+            background-color: #c6f6d5; /* Green */
+            border-color: #38a169;
+            font-weight: 700;
+        }
+        .quiz-option.incorrect {
+            background-color: #fed7d7; /* Red */
+            border-color: #e53e3e;
+            font-weight: 700;
+        }
+        /* Scrollbar styling for cleanliness */
+        ::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 9 日頭條新聞 - 沉浸式學習體驗</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200">
+                <!-- Tabs will be rendered here by JavaScript -->
+            </div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <!-- Content (Article, Translation, Vocab, Quiz) will be rendered here -->
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT ---
+        const NEWS_DATA = {
+            'taiwan-society-economy': {
+                title: '台灣社會與經濟新聞：氣爆、房市與 GDP', 
+                english: `A powerful gas explosion hit a Teishoku 8 restaurant on Chongqing Road in Banqiao just after midnight on December 8th. Four women and one man was injured as the blast blew out the second floor decor and signage. Firefighters found four leaking gas cylinders. The cause remains under investigation. Taichung's real estate market is cooling with all three major indicators falling in the third quarter. Construction starts and floor area have nearly been halved as developers face tighter credit controls and rising costs. Property transfers reached 11,010 units, driven mainly by seasonal handovers. Building permits dropped 23% to 6,679 units. Taiwan's economy surged in the third quarter with GDP growth above 8%, fueled by the AI boom but traditional manufacturers are not benefiting. A New Taipei machinery engineer told the Financial Times that rising costs, customer bankruptcies, US tariffs, low-cost Chinese competition, and an appreciating NT dollar are squeezing profits.`,
+                chinese: `12 月 8 日午夜剛過，板橋區重慶路一間定食 8 餐廳發生猛烈的瓦斯氣爆。爆炸炸毀了二樓的裝潢和招牌，造成四女一男受傷。消防隊員發現四個洩漏的瓦斯鋼瓶。事故原因仍在調查中。台中房地產市場正在降溫，第三季所有三個主要指標均下降。由於開發商面臨更嚴格的信貸管制和不斷上漲的成本，開工建設和樓地板面積幾乎減半。房產轉移達到 11,010 戶，主要受季節性交屋的推動。建築許可證下降了 23%，至 6,679 戶。台灣經濟在第三季度飆升，GDP 增長超過 8%，這得益於人工智慧的蓬勃發展，但傳統製造商並未從中受益。一位新北的機械工程師告訴《金融時報》，不斷上漲的成本、客戶破產、美國關稅、低成本的中國競爭以及新台幣升值正在壓縮他們的利潤。`,
+                vocabulary: [
+                    'powerful gas explosion (n.phr.): 猛烈的瓦斯氣爆',
+                    'just after midnight (phr.): 剛過午夜',
+                    'blew out (phr.v.): 炸毀 (blow out)',
+                    'decor (n.): 裝潢，裝飾',
+                    'signage (n.): 招牌',
+                    'leaking gas cylinders (n.phr.): 洩漏的瓦斯鋼瓶',
+                    'remains under investigation (phr.): 仍在調查中',
+                    'real estate market (n.phr.): 房地產市場',
+                    'is cooling (v.phr.): 正在降溫',
+                    'major indicators (n.phr.): 主要指標',
+                    'construction starts (n.phr.): 開工建設',
+                    'floor area (n.phr.): 樓地板面積',
+                    'nearly been halved (phr.): 幾乎減半',
+                    'developers (n.): 開發商',
+                    'tighter credit controls (n.phr.): 更嚴格的信貸管制',
+                    'rising costs (n.phr.): 不斷上漲的成本',
+                    'property transfers (n.phr.): 房產轉移 (交易)',
+                    'seasonal handovers (n.phr.): 季節性交屋',
+                    'building permits (n.phr.): 建築許可證',
+                    'surged (v.): 飆升，急遽上升',
+                    'GDP growth (n.phr.): 國內生產總值增長',
+                    'fueled by (phr.v.): 受...推動',
+                    'AI boom (n.phr.): 人工智慧蓬勃發展',
+                    'traditional manufacturers (n.phr.): 傳統製造商',
+                    'machinery engineer (n.phr.): 機械工程師',
+                    'customer bankruptcies (n.phr.): 客戶破產',
+                    'US tariffs (n.phr.): 美國關稅',
+                    'low-cost Chinese competition (n.phr.): 低成本的中國競爭',
+                    'appreciating NT dollar (n.phr.): 新台幣升值',
+                    'squeezing profits (phr.): 擠壓利潤',
+                    'Banqiao (n. proper): 板橋 (地名)',
+                    'mitigating (v.ger.): 減輕',
+                    'quarter (n.): 季度',
+                    'economy (n.): 經濟'
+                ],
+                quiz: [
+                    { q: 'Where did the gas explosion occur?', options: ['Taichung City', 'Chongqing Road in Banqiao', 'Taipei 101 Tower', 'Kaohsiung Harbor'], answer: 'Chongqing Road in Banqiao' },
+                    { q: 'What was injured in the Banqiao blast?', options: ['Four men and one woman', 'Five security guards', 'Four women and one man', 'The restaurant owner only'], answer: 'Four women and one man' },
+                    { q: 'What did firefighters find at the explosion site?', options: ['A faulty electrical circuit', 'Four leaking gas cylinders', 'Illegal fireworks', 'A hidden storage facility'], answer: 'Four leaking gas cylinders' },
+                    { q: 'Which city\'s real estate market is cooling?', options: ['Tainan', 'Taichung', 'New Taipei', 'Taipei'], answer: 'Taichung' },
+                    { q: 'How did construction starts and floor area change in Taichung?', options: ['Nearly doubled', 'Remained stable', 'Nearly been halved', 'Dropped slightly'], answer: 'Nearly been halved' },
+                    { q: 'Why are developers facing challenges in Taichung?', options: ['Too much government support', 'Tighter credit controls and rising costs', 'Lack of seasonal handovers', 'Low customer demand for housing'], answer: 'Tighter credit controls and rising costs' },
+                    { q: 'What mainly drove property transfers in Taichung?', options: ['Foreign investment', 'Seasonal handovers', 'Government subsidies', 'New tax laws'], answer: 'Seasonal handovers' },
+                    { q: 'What was Taiwan\'s GDP growth in the third quarter?', options: ['Below 1%', 'Around 5%', 'Above 8%', 'Exactly 7.5%'], answer: 'Above 8%' },
+                    { q: 'What primarily fueled Taiwan\'s GDP surge?', options: ['The tourism boom', 'The AI boom', 'Traditional manufacturing exports', 'Agricultural output'], answer: 'The AI boom' },
+                    { q: 'Which sector is *not* benefiting from the economic surge?', options: ['Semiconductor manufacturers', 'Traditional manufacturers', 'Cloud computing companies', 'Food and beverage retailers'], answer: 'Traditional manufacturers' },
+                    { q: 'What did the machinery engineer cite as a challenge?', options: ['Rising costs', 'US tariffs', 'Appreciating NT dollar', 'All of the above'], answer: 'All of the above' },
+                    { q: 'Which publication did the engineer speak to?', options: ['The Economist', 'Wall Street Journal', 'The Financial Times', 'Reuters'], answer: 'The Financial Times' },
+                    { q: 'What effect is the appreciating NT dollar having?', options: ['Boosting exports', 'Squeezing profits', 'Lowering production costs', 'Stabilizing the market'], answer: 'Squeezing profits' },
+                    { q: 'The cause of the gas explosion is currently...', options: ['Determined to be negligence', 'Closed by police', 'Remains under investigation', 'Blamed on a customer'], answer: 'Remains under investigation' },
+                    { q: 'What dropped by 23% in Taichung?', options: ['Property transfers', 'Building permits', 'Floor area', 'Unemployment rates'], answer: 'Building permits' }
+                ]
+            },
+            'netflix-warner-merger': {
+                title: 'Netflix 擬收購 Warner Bros. Discovery：影視巨頭合併',
+                english: `Netflix struck a deal to buy Warner Bros. Discovery, the Hollywood giant behind Harry Potter and HBO Max, in a $72 billion deal that would bring together two of the biggest players in television and film and potentially reshape the entertainment industry. If approved by regulators, the merger would place two of the world's biggest streaming services under the same ownership and combine Warner's television and motion picture division including DC Studios with Netflix's vast library and production arm. The proposal could draw intense antitrust scrutiny, particularly for its effects on movie making and streaming subscriptions. Mike Pru, vice president and research director at Forester, said: "Netflix is the top streaming service today. Now, combined with HBO Max, it will absolutely cement itself as the Goliath in the streaming industry." The cash and stock deal is valued at $27.75 per Warner share, giving it a total enterprise value of $82.7 billion including debt. The transaction is expected to close in the next 12 to 18 months after Warner completes its previously announced separation of its cable operations.`,
+                chinese: `Netflix 達成協議，以 720 億美元收購好萊塢巨頭 Warner Bros. Discovery，該公司是《哈利波特》和 HBO Max 的幕後推手。這項交易將結合電視和電影領域的兩大巨頭，並可能重塑整個娛樂產業。如果獲得監管機構批准，這次合併將使全球最大的兩個串流媒體服務歸於同一所有權之下，並將華納的電視和電影部門（包括 DC Studios）與 Netflix 龐大的片庫和製作部門結合起來。該提案可能會引起嚴格的反壟斷審查，特別是對電影製作和串流媒體訂閱的影響。Forrester 副總裁兼研究總監 Mike Pru 表示：「Netflix 是當今頂級的串流媒體服務。現在，與 HBO Max 結合後，它將絕對鞏固自己在串流媒體產業中的巨頭地位 (Goliath)。」這項現金加股票交易對華納每股估價為 27.75 美元，包括債務在內的總企業價值為 827 億美元。預計在華納完成先前宣布的有線電視業務分拆後，該交易將在未來 12 到 18 個月內完成。`,
+                vocabulary: [
+                    'struck a deal (phr.): 達成協議 (strike a deal)',
+                    'Hollywood giant (n.phr.): 好萊塢巨頭',
+                    '$72 billion deal (n.phr.): 720 億美元的交易',
+                    'potentially reshape (v.phr.): 可能重塑',
+                    'entertainment industry (n.phr.): 娛樂產業',
+                    'approved by regulators (phr.): 獲得監管機構批准',
+                    'the merger (n.): 合併',
+                    'streaming services (n.phr.): 串流媒體服務',
+                    'under the same ownership (phr.): 歸於同一所有權之下',
+                    'motion picture division (n.phr.): 電影部門',
+                    'DC Studios (n. proper): DC 工作室',
+                    'vast library (n.phr.): 龐大的片庫',
+                    'production arm (n.phr.): 製作部門',
+                    'draw intense antitrust scrutiny (phr.): 引起嚴格的反壟斷審查 (antitrust)',
+                    'streaming subscriptions (n.phr.): 串流媒體訂閱',
+                    'cement itself as the Goliath (phr.): 鞏固其作為巨頭的地位',
+                    'cash and stock deal (n.phr.): 現金加股票交易',
+                    'valued at (phr.): 估價為',
+                    'enterprise value (n.phr.): 企業價值',
+                    'including debt (phr.): 包括債務在內',
+                    'the transaction (n.): 交易，業務',
+                    'expected to close (phr.): 預計完成',
+                    'previously announced separation (n.phr.): 先前宣布的分拆',
+                    'cable operations (n.phr.): 有線電視業務',
+                    'television (n.): 電視',
+                    'film (n.): 電影',
+                    'vice president (n.phr.): 副總裁',
+                    'research director (n.phr.): 研究總監',
+                    'HBO Max (n. proper): HBO Max (串流平台名)',
+                    'acquisition (n.): 收購',
+                    'competitor (n.): 競爭者',
+                    'antitrust (adj.): 反壟斷的',
+                    'scrutiny (n.): 審查',
+                    'reshape (v.): 重塑',
+                    'billion (n.): 十億'
+                ],
+                quiz: [
+                    { q: 'What is the reported value of the deal for Netflix to buy Warner Bros. Discovery?', options: ['$7.2 billion', '$72 billion', '$82.7 billion', '$27.75 billion'], answer: '$72 billion' },
+                    { q: 'What major film franchise is Warner Bros. Discovery behind?', options: ['Star Wars', 'Harry Potter', 'The Fast and the Furious', 'James Bond'], answer: 'Harry Potter' },
+                    { q: 'If approved, the merger would combine two of the biggest players in which industries?', options: ['Music and Radio', 'Television and film', 'Gaming and E-commerce', 'Print Media and Publishing'], answer: 'Television and film' },
+                    { q: 'What must approve the merger before it can proceed?', options: ['Shareholders', 'The US President', 'Regulators', 'The Board of Directors'], answer: 'Regulators' },
+                    { q: 'What is the proposal expected to draw from authorities?', options: ['Minimal attention', 'Intense antitrust scrutiny', 'Immediate approval', 'Financial aid'], answer: 'Intense antitrust scrutiny' },
+                    { q: 'Mike Pru, a VP at Forrester, compared the combined entity to what figure?', options: ['David', 'Achilles', 'Goliath', 'Hercules'], answer: 'Goliath' },
+                    { q: 'What is the nature of the deal (payment)?', options: ['Pure cash deal', 'Cash and stock deal', 'Stock swap only', 'Bond sale'], answer: 'Cash and stock deal' },
+                    { q: 'What is the total enterprise value of the deal, including debt?', options: ['$72 billion', '$82.7 billion', '$27.75 billion', '$100 billion'], answer: '$82.7 billion' },
+                    { q: 'What is the expected time frame for the transaction to close?', options: ['Next 6 months', 'Next 12 to 18 months', 'Within 5 years', 'It is already closed'], answer: 'Next 12 to 18 months' },
+                    { q: 'What must Warner complete before the transaction can close?', options: ['A new film release', 'The separation of its cable operations', 'Hiring a new CEO', 'Acquiring another studio'], answer: 'The separation of its cable operations' },
+                    { q: 'What is Netflix described as being today?', options: ['The fastest-growing service', 'The most expensive service', 'The smallest competitor', 'The top streaming service'], answer: 'The top streaming service' },
+                    { q: 'What does the merger potentially reshape?', options: ['The sports league', 'The entertainment industry', 'The political landscape', 'The banking sector'], answer: 'The entertainment industry' },
+                    { q: 'Which specific studio is part of Warner\'s division mentioned?', options: ['Marvel Studios', 'DC Studios', 'Pixar', 'Universal Pictures'], answer: 'DC Studios' },
+                    { q: 'The scrutiny is particularly focused on its effects on what two things?', options: ['Advertising and retail', 'Movie making and streaming subscriptions', 'Gaming and music downloads', 'Broadcasting and print media'], answer: 'Movie making and streaming subscriptions' },
+                    { q: 'What does "production arm" refer to?', options: ['The financial department', 'The distribution network', 'The manufacturing division', 'The filmmaking and content creation unit'], answer: 'The filmmaking and content creation unit' }
+                ]
+            },
+            'london-tower-protest': {
+                title: '英國倫敦塔皇冠珠寶抗議事件：帝國皇冠展示櫃遭塗抹',
+                english: `The Tower of London was closed after a video appeared to show activists smearing food on a display case containing one of Britain's crown jewels, the State Crown. Police said four protesters were arrested following the incident just before 10:00 a.m. local time on Saturday. London's Metropolitan Police said officers worked closely with City of London police and security officers and four people were arrested on suspicion of criminal damage. They were taken into custody. Historic Royal Palaces said the crown jewels were not damaged during the incident and confirmed the site had reopened after closing temporarily as police investigated. Footage posted on X showed a group gathered around the display case before hurling food and dousing one side of the case with yellow liquid. One of the protesters said, "Britain is broken. We come here to the jewels of the nation to take back power." "Take Back Power," which describes itself as a civil resistance group, posted the video on X and claimed responsibility for the protest.`,
+                chinese: `在一段影片似乎顯示有激進分子在一個展示英國皇冠珠寶之一——帝國皇冠（State Crown）的陳列櫃上塗抹食物後，倫敦塔被關閉。警方表示，四名抗議者在週六當地時間上午 10 點前發生的事件後被逮捕。倫敦警察廳表示，警員與倫敦市警察和保安人員密切合作，四人因涉嫌刑事毀壞被捕，並已被拘留。歷史皇家宮殿 (Historic Royal Palaces) 表示，皇冠珠寶在事件中並未受損，並證實該地點在警方調查後已暫時關閉並重新開放。在 X (前 Twitter) 上發布的影片顯示，一群人聚集在陳列櫃周圍，然後投擲食物並向陳列櫃的一側潑灑黃色液體。其中一名抗議者說：「英國已崩潰。我們來到這裡，國家的珠寶面前，奪回權力。」自稱公民抵抗組織的「奪回權力」（Take Back Power）在 X 上發布了這段影片並聲稱對此次抗議活動負責。`,
+                vocabulary: [
+                    'The Tower of London (n. proper): 倫敦塔 (地標)',
+                    'appeared to show (phr.): 似乎顯示',
+                    'activists (n.): 激進分子，活動家',
+                    'smearing food (v.phr.): 塗抹食物',
+                    'display case (n.phr.): 陳列櫃',
+                    'crown jewels (n.phr.): 皇冠珠寶',
+                    'State Crown (n. proper): 帝國皇冠',
+                    'protesters (n.): 抗議者',
+                    'arrested (v.): 被逮捕',
+                    'Metropolitan Police (n. proper): 倫敦警察廳',
+                    'security officers (n.phr.): 保安人員',
+                    'on suspicion of (phr.): 涉嫌',
+                    'criminal damage (n.phr.): 刑事毀壞',
+                    'taken into custody (phr.): 被拘留',
+                    'Historic Royal Palaces (n. proper): 歷史皇家宮殿 (管理機構)',
+                    'were not damaged (phr.): 並未受損',
+                    'reopened (v.): 重新開放',
+                    'closing temporarily (phr.): 暫時關閉',
+                    'investigated (v.): 調查',
+                    'Footage (n.): 影片，片段',
+                    'hurling food (v.phr.): 投擲食物 (hurl)',
+                    'dousing (v.ger.): 潑灑，澆灌 (douse)',
+                    'yellow liquid (n.phr.): 黃色液體',
+                    'Britain is broken (phr.): 英國已崩潰',
+                    'jewels of the nation (n.phr.): 國家的珠寶',
+                    'civil resistance group (n.phr.): 公民抵抗組織',
+                    'claimed responsibility (phr.): 聲稱對...負責',
+                    'protest (n.): 抗議',
+                    'incident (n.): 事件',
+                    'gathered around (phr.v.): 聚集在周圍',
+                    'demonstration (n.): 示威',
+                    'property (n.): 財產',
+                    'temporary (adj.): 暫時的',
+                    'arrest (n.): 逮捕',
+                    'damage (n.): 損壞'
+                ],
+                quiz: [
+                    { q: 'What famous landmark was closed due to the incident?', options: ['Buckingham Palace', 'Tower of London', 'Westminster Abbey', 'British Museum'], answer: 'Tower of London' },
+                    { q: 'What specific item was targeted in the display case?', options: ['The Coronation Sceptre', 'The Imperial Sword', 'The State Crown', 'Queen Victoria\'s Orb'], answer: 'The State Crown' },
+                    { q: 'What did the activists use to smear the case?', options: ['Paint', 'Mud', 'Food', 'Glue'], answer: 'Food' },
+                    { q: 'How many protesters were arrested?', options: ['Two', 'Three', 'Four', 'Five'], answer: 'Four' },
+                    { q: 'On suspicion of what crime were the protesters arrested?', options: ['Theft', 'Assault', 'Criminal damage', 'Treason'], answer: 'Criminal damage' },
+                    { q: 'What organization manages the historic site?', options: ['The British Government', 'The Crown Estate', 'Historic Royal Palaces', 'The National Trust'], answer: 'Historic Royal Palaces' },
+                    { q: 'Were the crown jewels damaged during the incident?', options: ['Yes, severely', 'Yes, slightly', 'No, they were not damaged', 'The report is inconclusive'], answer: 'No, they were not damaged' },
+                    { q: 'What platform was the footage of the protest posted on?', options: ['Instagram', 'Facebook', 'TikTok', 'X'], answer: 'X' },
+                    { q: 'Besides hurling food, what else did the footage show the group doing?', options: ['Chanting slogans loudly', 'Breaking the glass', 'Dousing one side with yellow liquid', 'Trying to open the case'], answer: 'Dousing one side with yellow liquid' },
+                    { q: 'What specific phrase did one of the protesters use to describe Britain?', options: ['"Britain is great"', '"Britain is broken"', '"Britain needs change"', '"Britain is free"'], answer: '"Britain is broken"' },
+                    { q: 'What is the name of the group that claimed responsibility?', options: ['Greenpeace', 'Just Stop Oil', 'Take Back Power', 'Extinction Rebellion'], answer: 'Take Back Power' },
+                    { q: 'The group "Take Back Power" describes itself as what type of group?', options: ['A political party', 'A civil resistance group', 'A humanitarian aid organization', 'A cultural society'], answer: 'A civil resistance group' },
+                    { q: 'What time did the incident occur on Saturday?', options: ['Just after 5:00 p.m.', 'Just before 10:00 a.m.', 'Around noon', 'Late at night'], answer: 'Just before 10:00 a.m.' },
+                    { q: 'What does "taken into custody" mean?', options: ['Released with a warning', 'Taken to a hospital', 'Taken to a police station (arrested)', 'Given a fine'], answer: 'Taken to a police station (arrested)' },
+                    { q: 'Why did the site close temporarily?', options: ['Due to a power outage', 'As police investigated', 'For a scheduled event', 'To clean the jewels'], answer: 'As police investigated' }
+                ]
+            },
+            'celebrity-romance': {
+                title: 'Katy Perry 與 Justin Trudeau 官宣戀情：日本之旅照片曝光',
+                english: `Katy Perry and former Canadian Prime Minister Justin Trudeau have gone Instagram official after the singer posted a series of photographs and videos from their trip to Japan. In one picture, Perry and Trudeau were seen smiling for a selfie with their faces touching. In another video, the pair are seen trying sushi. Neither Perry nor Trudeau has publicly commented on their relationship, but speculation has been growing for months with multiple pictures of the two together. Trudeau was seen attending Perry's concert earlier this year, fueling rumors of a romance with the pop star. Perry was visiting Japan as part of her Global Lifetimes tour. She accompanied her Instagram carousel with the caption, "Tokyo Times on tour and more." Earlier this week, Trudeau also reposted a photograph of the pair together alongside the former Prime Minister of Japan, Fumio Kishida, and his wife, Yuko. Last month, the pair appeared to confirm their relationship after being photographed holding hands at an event in Paris. The appearance in Paris coincided with Perry's 41st birthday and appeared to mark their first public outing as a couple.`,
+                chinese: `歌手凱蒂·佩芮 (Katy Perry) 在 Instagram 上發布了一系列他們日本之旅的照片和影片後，與加拿大前總理賈斯汀·杜魯道 (Justin Trudeau) 正式公開了戀情。在一張照片中，佩芮和杜魯道微笑著拍自拍，臉頰貼在一起。在另一段影片中，兩人正在嘗試壽司。佩芮和杜魯道都沒有公開評論他們的關係，但數月以來，隨著兩人多張合影的出現，外界的猜測不斷增加。杜魯道今年早些時候曾被看到出席佩芮的演唱會，這加劇了有關這位流行歌星戀情的傳言。佩芮此次訪問日本是她「全球時光之旅」（Global Lifetimes tour）的一部分。她在 Instagram 輪播貼文中附上的標題是「巡演中的東京時光等等」。本週早些時候，杜魯道還轉發了一張兩人和日本前首相岸田文雄及其夫人裕子 (Yuko) 的合影。上個月，兩人在巴黎的一次活動中被拍到手牽手，似乎證實了他們的關係。這次在巴黎的露面恰逢佩芮的 41 歲生日，似乎標誌著他們作為一對情侶首次公開露面。`,
+                vocabulary: [
+                    'former Canadian Prime Minister (n.phr.): 加拿大前總理',
+                    'gone Instagram official (phr.): 透過 Instagram 正式公開戀情',
+                    'posted a series of (phr.): 發布了一系列',
+                    'trip to Japan (n.phr.): 日本之旅',
+                    'smiling for a selfie (phr.): 微笑著拍自拍',
+                    'faces touching (phr.): 臉頰貼在一起',
+                    'trying sushi (phr.): 嘗試壽司',
+                    'publicly commented on (phr.): 公開評論 (comment on)',
+                    'speculation has been growing (phr.): 猜測不斷增加',
+                    'fueling rumors (v.phr.): 加劇傳言',
+                    'romance with the pop star (n.phr.): 與這位流行歌星的戀情',
+                    'Global Lifetimes tour (n. proper): 「全球時光之旅」（演唱會名稱）',
+                    'accompanied (v.): 伴隨，附上',
+                    'Instagram carousel (n.phr.): Instagram 輪播貼文',
+                    'reposted a photograph (phr.): 轉發了一張照片',
+                    'former Prime Minister of Japan (n.phr.): 日本前首相',
+                    'appeared to confirm (phr.): 似乎證實',
+                    'holding hands (phr.): 手牽手',
+                    'coincided with (phr.v.): 恰逢',
+                    'public outing (n.phr.): 公開露面',
+                    'as a couple (phr.): 作為一對情侶',
+                    'singer (n.): 歌手',
+                    'pop star (n.phr.): 流行歌星',
+                    'concert (n.): 演唱會',
+                    'speculation (n.): 猜測',
+                    'rumors (n.): 傳言',
+                    'caption (n.): 標題，說明文字',
+                    'attendance (n.): 出席',
+                    'event (n.): 活動',
+                    'birthday (n.): 生日',
+                    'together (adv.): 一起',
+                    'relationship (n.): 關係',
+                    'official (adj.): 官方的，正式的',
+                    'selfie (n.): 自拍'
+                ],
+                quiz: [
+                    { q: 'Who is the male figure in the reported relationship?', options: ['Former US President', 'Former Canadian Prime Minister', 'Current Japanese PM', 'A famous actor'], answer: 'Former Canadian Prime Minister' },
+                    { q: 'What platform did they use to "go official"?', options: ['Twitter (X)', 'Facebook', 'TikTok', 'Instagram'], answer: 'Instagram' },
+                    { q: 'Where did the series of photographs and videos primarily take place?', options: ['Paris', 'London', 'Japan', 'Los Angeles'], answer: 'Japan' },
+                    { q: 'What action were they seen doing in one video?', options: ['Singing karaoke', 'Trying sushi', 'Shopping for clothes', 'Visiting a museum'], answer: 'Trying sushi' },
+                    { q: 'How long has speculation about their relationship been growing?', options: ['For weeks', 'For months', 'For years', 'Since last week'], answer: 'For months' },
+                    { q: 'What action of Trudeau\'s earlier this year fueled the rumors?', options: ['Attending Perry\'s concert', 'Appearing on her TV show', 'Releasing a joint statement', 'Collaborating on a song'], answer: 'Attending Perry\'s concert' },
+                    { q: 'What is the name of Katy Perry\'s tour mentioned?', options: ['The Prism Tour', 'Teenage Dream Tour', 'Witness Tour', 'Global Lifetimes tour'], answer: 'Global Lifetimes tour' },
+                    { q: 'What did Perry accompany her Instagram carousel with?', options: ['A love poem', 'The lyrics to a song', 'The caption, "Tokyo Times on tour and more."', 'An engagement announcement'], answer: 'The caption, "Tokyo Times on tour and more."' },
+                    { q: 'Who else did Trudeau repost a photo with, besides Perry?', options: ['The Current US President', 'The Former PM of Japan', 'The King of England', 'A famous chef'], answer: 'The Former PM of Japan' },
+                    { q: 'Where were they photographed holding hands last month?', options: ['New York', 'Paris', 'Tokyo', 'Ottawa'], answer: 'Paris' },
+                    { q: 'What occasion did the Paris appearance coincide with?', options: ['Trudeau\'s birthday', 'Perry\'s 41st birthday', 'The New Year', 'A political summit'], answer: 'Perry\'s 41st birthday' },
+                    { q: 'What did the Paris appearance mark for them?', options: ['Their engagement', 'Their breakup', 'Their first public outing as a couple', 'The start of their tour'], answer: 'Their first public outing as a couple' },
+                    { q: 'What does "gone Instagram official" mean?', options: ['They started following each other', 'They posted a picture of themselves together to confirm the relationship', 'They officially signed a contract', 'They joined a new app'], answer: 'They posted a picture of themselves together to confirm the relationship' },
+                    { q: 'The selfie showed them doing what with their faces?', options: ['Kissing', 'Touching', 'Looking away', 'Wearing masks'], answer: 'Touching' },
+                    { q: 'Have either Perry or Trudeau publicly commented on their relationship?', options: ['Yes, only Perry has', 'Yes, both have commented extensively', 'No, neither has publicly commented', 'Trudeau commented, but Perry hasn\'t'], answer: 'No, neither has publicly commented' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        // Sets the default state to the first item in the NEWS_DATA object
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; // Default view: article, translation, vocabulary, quiz
+        let quizState = {}; // Stores answers: { topicId: { questionIndex: selectedOption } }
+        let quizResult = {}; // Stores results: { topicId: { score: N, total: M } }
+
+
+        // --- CORE RENDERING FUNCTIONS ---
+
+        /**
+         * Renders the main topic tabs at the top of the page.
+         */
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            // If no data, show a message
+            if (Object.keys(NEWS_DATA).length === 0) {
+                tabsContainer.innerHTML = '<p class="p-4 text-center text-red-500 font-semibold">無新聞資料可顯示，請更新 NEWS_DATA 變數。</p>';
+                return;
+            }
+
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                // Chinese title extraction from the English/Chinese summary line (or just use the title field)
+                const tabTitle = data.title.split('：')[0]; 
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `
+                    <button 
+                        class="main-tab-button ${isActive}" 
+                        onclick="changeTopic('${id}')"
+                    >
+                        ${tabTitle}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Renders the content based on the current topic and sub-tab.
+         */
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            
+            if (!data) {
+                contentArea.innerHTML = '<h2 class="text-3xl font-bold text-gray-800 mb-6">錯誤：找不到新聞內容</h2><p>請檢查您的新聞 ID 設定。</p>';
+                return;
+            }
+            
+            // 1. Render Sub-Tabs Menu
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            
+            let contentHTML = '';
+
+            switch (currentSubTab) {
+                case 'article':
+                    contentHTML = renderArticle(data.english, data.title);
+                    break;
+                case 'translation':
+                    contentHTML = renderTranslation(data.chinese, data.title);
+                    break;
+                case 'vocabulary':
+                    contentHTML = renderVocabulary(data.vocabulary, data.title);
+                    break;
+                case 'quiz':
+                    contentHTML = renderQuiz(currentTopicId, data.quiz, data.title);
+                    break;
+            }
+
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+
+            // Ensure quiz answer state is maintained on re-render
+            if (currentSubTab === 'quiz') {
+                updateQuizDisplay(currentTopicId, data.quiz);
+            }
+        }
+
+        /**
+         * Renders the original English article.
+         */
+        function renderArticle(text, title) {
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2>
+                <div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-lg shadow-inner">
+                    <p class="whitespace-pre-wrap">${text.trim()}</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <div class="text-sm text-gray-500 mb-2">點擊下方按鈕，開始深度學習：</div>
+                    <button 
+                        class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition duration-200 ease-in-out"
+                        onclick="changeSubTab('translation')"
+                    >
+                        🇹🇼 前往中文翻譯 (See Translation)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the Chinese translation.
+         */
+        function renderTranslation(text, title) {
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2>
+                <div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-lg shadow-inner">
+                    <p class="whitespace-pre-wrap">${text.trim()}</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <div class="text-sm text-gray-500 mb-2">繼續強化詞彙與理解：</div>
+                    <button 
+                        class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition duration-200 ease-in-out"
+                        onclick="changeSubTab('vocabulary')"
+                    >
+                        📖 前往單字庫複習 (Review Vocabulary)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the vocabulary list.
+         */
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100">
+                    <span class="font-semibold text-indigo-700">${parts[0]}</span> 
+                    <span class="text-gray-500 text-sm italic">${parts[1]}</span>
+                </li>`;
+            }).join('');
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語 (共 ${vocabArray.length} 個)</h2>
+                <p class="text-gray-600 mb-6">掌握這些關鍵詞彙，將有助於您完全理解新聞內容。</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    ${listItems}
+                </ul>
+                <div class="mt-8 text-center">
+                    <div class="text-sm text-gray-500 mb-2">準備好測試您的理解力了嗎？</div>
+                    <button 
+                        class="px-6 py-3 bg-red-500 text-white font-semibold rounded-full shadow-lg hover:bg-red-600 transition duration-200 ease-in-out"
+                        onclick="initQuiz()"
+                    >
+                        📝 開始測驗 (Start Quiz)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the quiz interface.
+         */
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            
+            if (!quizQuestions || quizQuestions.length === 0) {
+                return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>
+                        <div class="text-center p-8 bg-yellow-100 rounded-xl mb-8 border-4 border-yellow-500">
+                            <p class="text-xl font-extrabold text-yellow-800">❗ 測驗題庫尚未建立 ❗</p>
+                            <p class="text-lg mt-2 text-yellow-700">請確保 NEWS_DATA 中包含至少 15 題測驗題。</p>
+                        </div>`;
+            }
+
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const correctAnswer = q.answer;
+                
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    let isCurrentSelected = selected === option;
+
+                    if (isSubmitted) {
+                        if (option === correctAnswer) {
+                            classes += ' correct'; // Correct answer
+                        } else if (isCurrentSelected && option !== correctAnswer) {
+                            classes += ' incorrect'; // User selected, but incorrect
+                        }
+                    } else if (isCurrentSelected) {
+                        classes += ' selected'; // User selected, but not submitted
+                    }
+
+                    // Escape single quotes in option text for selectOption function call
+                    const escapedOption = option.replace(/'/g, "\\'");
+
+                    return `
+                        <div 
+                            class="${classes}" 
+                            data-q-index="${index}" 
+                            data-option="${option}"
+                            onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"
+                        >
+                            <span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}
+                            ${isSubmitted && option === correctAnswer ? '<span class="ml-2 text-green-700 font-bold">(正確答案)</span>' : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500">
+                        <p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>
+                        ${optionsHTML}
+                    </div>
+                `;
+            }).join('');
+
+            const resultHTML = result ? `
+                <div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500">
+                    <h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3>
+                    <p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p>
+                    <p class="text-lg mt-3 text-indigo-800">您答對了 ${result.score} 題。請檢視下方標註的答案！</p>
+                    <button 
+                        class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full hover:bg-yellow-600 transition"
+                        onclick="initQuiz(true)"
+                    >
+                        🔄 重置測驗
+                    </button>
+                </div>
+            ` : '';
+
+            const submitButton = result === undefined ? `
+                <button 
+                    id="submit-quiz-button"
+                    class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition duration-300 disabled:opacity-50"
+                    onclick="submitQuizAnswer('${topicId}')"
+                    disabled
+                >
+                    送出答案並查看結果
+                </button>
+            ` : '';
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>
+                ${resultHTML}
+                <div id="quiz-questions">
+                    ${questionsHTML}
+                </div>
+                <div class="mt-8 text-center">
+                    ${submitButton}
+                    <p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p>
+                </div>
+            `;
+        }
+
+
+        // --- QUIZ LOGIC ---
+
+        /**
+         * Initializes or resets the quiz state for a topic.
+         * @param {boolean} forceReset - Whether to force a full reset.
+         */
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            const data = NEWS_DATA[topicId];
+            if (!data || !data.quiz || data.quiz.length === 0) {
+                 currentSubTab = 'quiz';
+                 renderContent();
+                 return;
+            }
+
+            // If we are already on the quiz tab and not forcing a reset, just ensure correct tab is selected
+            if (!forceReset && currentSubTab === 'quiz') {
+                return;
+            }
+            
+            // If the user manually clicks the tab, or requests a full reset, clear results
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        /**
+         * Selects an option for a question.
+         */
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return; // Cannot change after submission
+            
+            quizState[topicId] = quizState[topicId] || {};
+            const currentSelection = quizState[topicId][questionIndex];
+
+            // Toggle selection logic
+            if (currentSelection === selectedOption) {
+                delete quizState[topicId][questionIndex];
+            } else {
+                quizState[topicId][questionIndex] = selectedOption;
+            }
+            
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        /**
+         * Submits the quiz answers and displays the results.
+         */
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            const total = questions.length;
+
+            if (Object.keys(answers).length !== total) {
+                document.getElementById('quiz-message').textContent = `請回答所有 ${total} 題問題！`;
+                return;
+            }
+            document.getElementById('quiz-message').textContent = '';
+
+            questions.forEach((q, index) => {
+                const selected = answers[index];
+                if (selected === q.answer) {
+                    score++;
+                }
+            });
+
+            quizResult[topicId] = { score, total };
+            renderContent(); // Re-render to show results and correct/incorrect indicators
+        }
+        
+        /**
+         * Helper function to update the visual state of the quiz without full re-render.
+         */
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const totalQuestions = quizQuestions.length;
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== totalQuestions;
+                if (answeredCount === totalQuestions) {
+                    quizMessage.textContent = '所有問題已回答。';
+                } else {
+                    quizMessage.textContent = `請完成所有問題 (已完成: ${answeredCount}/${totalQuestions})`;
+                }
+            }
+
+            // Update classes for selection feedback if not submitted
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIndex = parseInt(element.getAttribute('data-q-index'));
+                    const option = element.getAttribute('data-option');
+                    
+                    element.classList.remove('selected');
+                    if (currentQuizState[qIndex] === option) {
+                        element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+
+        // --- Event Handlers (exposed globally) ---
+
+        /**
+         * Changes the main news topic displayed.
+         */
+        function changeTopic(newTopicId) {
+            if (currentTopicId === newTopicId) return;
+            currentTopicId = newTopicId;
+            currentSubTab = 'article'; // Reset to Article view on topic change
+            renderTabs();
+            renderContent();
+        }
+
+        /**
+         * Changes the sub-tab (Article, Translation, Vocabulary, Quiz) within the current topic.
+         */
+        function changeSubTab(newSubTab) {
+            currentSubTab = newSubTab;
+            renderContent();
+        }
+
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if there is any data to load
+            if (Object.keys(NEWS_DATA).length > 0) {
+                // Ensure the current topic is valid if data exists
+                if (!NEWS_DATA[currentTopicId]) {
+                    currentTopicId = Object.keys(NEWS_DATA)[0];
+                }
+                renderTabs();
+                renderContent();
+            } else {
+                 // No data, show only the default message (already in HTML)
+                 document.getElementById('content-area').innerHTML = '<div class="text-center p-12 text-gray-500"><p class="text-2xl font-bold mb-4">歡迎使用英文新聞學習模板！</p><p class="text-lg">請提供最新的英文新聞，我會將內容替換至下方的 <code class="bg-gray-200 p-1 rounded">NEWS_DATA</code> 變數中。</p><p class="text-sm mt-4 text-red-500">當前 <code class="bg-gray-200 p-1 rounded">NEWS_DATA</code> 僅包含模板範例。</p></div>';
+            }
+            
+            // Expose functions globally for use in HTML event handlers
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
