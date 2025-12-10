@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 10 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a clean, professional interface */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; /* Soft light blue/grey background */
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* Larger border radius for softness */
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); /* Deeper, softer shadow */
+        }
+        /* Main News Tabs Styling */
+        .main-tabs-container {
+            background-color: #f8fafc; /* Very light background for the tab bar */
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; /* Overlap border with content area */
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; /* Gray text for inactive */
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; /* Blue text for active */
+            border-bottom-color: #3182ce; /* Active blue border */
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        /* Sub-Tabs Styling */
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; /* Indigo for active sub-tab */
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        /* Quiz specific styles */
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            background-color: #e2e8f0;
+        }
+        .quiz-option.selected {
+            border-color: #4c51bf;
+            background-color: #e0e7ff;
+        }
+        .quiz-option.correct {
+            background-color: #c6f6d5; /* Green */
+            border-color: #38a169;
+            font-weight: 700;
+        }
+        .quiz-option.incorrect {
+            background-color: #fed7d7; /* Red */
+            border-color: #e53e3e;
+            font-weight: 700;
+        }
+        /* Scrollbar styling for cleanliness */
+        ::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 10 日頭條新聞 - 沉浸式學習體驗</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200">
+                <!-- Tabs will be rendered here by JavaScript -->
+            </div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <!-- Content (Article, Translation, Vocab, Quiz) will be rendered here -->
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT ---
+        const NEWS_DATA = {
+            'taiwan-local-politics-travel': {
+                title: '台灣本地新聞：KMT 領袖會晤、嘉義燈會與旅遊警告',
+                english: `Taiwan's KMT chairwoman, Chang Li-wan, has expressed interest in meeting Chinese leader Xi Jinping. According to reliable party and Beijing sources, the two sides have reached a preliminary consensus for a possible meeting around Lunar New Year. However, Beijing is demanding three highly sensitive preconditions, seeking stronger trust after recent elections and dense DPP background. Chiayi County's Cultural and Tourism Bureau announced plans to showcase its tourism brand on the international stage during the 2026 Taiwan Lantern Festival. County Magistrate Wong Chang-lang said the event is both a national highlight and a key moment for Chiayi's tourism transformation. Centered on light, travel, fun, and style, the festival will blend local culture with family-friendly interactive experiences to attract global visitors. Taiwan's National Immigration Agency warned travelers after past cases of Taiwanese tourists in China being misled by local agencies into applying for a one-time Chinese border travel passport while joining Russian tour packages. The agency reiterated that under the Cross-Strait Act, citizens are prohibited from holding a Chinese passport or household registration. Violators will lose their legal status as Taiwan residents.`,
+                chinese: `台灣國民黨 (KMT) 主席張麗婉已表達與中國領導人習近平會面的意願。據可靠的黨內和北京消息人士透露，雙方已就農曆新年期間可能舉行的會面達成初步共識。然而，北京方面提出了三個高度敏感的先決條件，旨在近期選舉和民進黨 (DPP) 密切背景下，尋求更強的信任。嘉義縣文化觀光局宣布計劃在 2026 年台灣燈會期間，在國際舞台上展示其觀光品牌。縣長翁章樑表示，這項活動既是國家級的盛事，也是嘉義觀光轉型的關鍵時刻。燈會將以光、旅行、樂趣和風格為中心，融合在地文化與家庭友好的互動體驗，以吸引全球遊客。台灣內政部移民署 (NIA) 警告旅客，此前曾發生台灣遊客在中國參加俄羅斯旅遊團時，被當地機構誤導申請一次性中國邊境旅遊護照的案件。移民署重申，根據《兩岸人民關係條例》，公民被禁止持有中國護照或戶籍登記。違規者將喪失其台灣居民的合法身份。`,
+                vocabulary: [
+                    'KMT chairwoman (n.phr.): 國民黨主席',
+                    'expressed interest in (phr.): 表達對...的興趣',
+                    'Chinese leader (n.phr.): 中國領導人',
+                    'reached a preliminary consensus (phr.): 達成初步共識',
+                    'Lunar New Year (n.phr.): 農曆新年',
+                    'highly sensitive preconditions (n.phr.): 高度敏感的先決條件',
+                    'dense DPP background (n.phr.): 密切的民進黨背景',
+                    'Cultural and Tourism Bureau (n.phr.): 文化觀光局',
+                    'showcase its tourism brand (phr.): 展示其觀光品牌',
+                    'international stage (n.phr.): 國際舞台',
+                    'County Magistrate (n.): 縣長',
+                    'national highlight (n.phr.): 國家級盛事',
+                    'tourism transformation (n.phr.): 觀光轉型',
+                    'blend local culture with (v.phr.): 融合在地文化與',
+                    'family-friendly interactive experiences (n.phr.): 家庭友好的互動體驗',
+                    'attract global visitors (v.phr.): 吸引全球遊客',
+                    'National Immigration Agency (NIA) (n. proper): 內政部移民署',
+                    'misled by local agencies (phr.): 被當地機構誤導',
+                    'one-time Chinese border travel passport (n.phr.): 一次性中國邊境旅遊護照',
+                    'Russian tour packages (n.phr.): 俄羅斯旅遊團',
+                    'reiterated (v.): 重申',
+                    'Cross-Strait Act (n. proper): 兩岸人民關係條例',
+                    'citizens are prohibited from (phr.): 公民被禁止',
+                    'household registration (n.phr.): 戶籍登記',
+                    'Violators will lose (phr.): 違規者將喪失',
+                    'legal status (n.phr.): 合法身份',
+                    'Taiwan residents (n.phr.): 台灣居民'
+                ],
+                quiz: [
+                    { q: 'Who is the KMT chairwoman interested in meeting?', options: ['The US President', 'The Japanese Prime Minister', 'Xi Jinping', 'The DPP Chairwoman'], answer: 'Xi Jinping' },
+                    { q: 'What is the expected timeframe for the possible meeting?', options: ['Next month', 'Around Lunar New Year', 'In the summer', 'After the KMT meeting'], answer: 'Around Lunar New Year' },
+                    { q: 'How many preconditions is Beijing reportedly demanding?', options: ['One', 'Two', 'Three', 'Four'], answer: 'Three' },
+                    { q: 'Which political party\'s background is mentioned as a factor in Beijing\'s demands?', options: ['PFP', 'TSU', 'DPP', 'NPP'], answer: 'DPP' },
+                    { q: 'Which county is hosting the 2026 Taiwan Lantern Festival?', options: ['Taipei County', 'Kaohsiung County', 'Chiayi County', 'Taichung County'], answer: 'Chiayi County' },
+                    { q: 'What does County Magistrate Wong Chang-lang view the event as?', options: ['A national disaster', 'A key moment for tourism transformation', 'A small local gathering', 'A budget drain'], answer: 'A key moment for tourism transformation' },
+                    { q: 'What are the four central themes of the Chiayi Lantern Festival?', options: ['Food, history, art, and music', 'Light, travel, fun, and style', 'Nature, science, health, and education', 'Water, fire, earth, and air'], answer: 'Light, travel, fun, and style' },
+                    { q: 'What government agency issued a travel warning?', options: ['Ministry of Foreign Affairs', 'Ministry of National Defense', 'National Immigration Agency (NIA)', 'Tourism Bureau'], answer: 'National Immigration Agency (NIA)' },
+                    { q: 'What kind of passport were Taiwanese tourists misled into applying for in China?', options: ['A Chinese citizenship passport', 'A one-time Chinese border travel passport', 'A Hong Kong SAR passport', 'A diplomatic passport'], answer: 'A one-time Chinese border travel passport' },
+                    { q: 'Which country\'s tour package was involved in the incidents?', options: ['Vietnam', 'Russia', 'North Korea', 'Mongolia'], answer: 'Russia' },
+                    { q: 'What act prohibits Taiwan citizens from holding a Chinese passport or household registration?', options: ['The National Security Act', 'The Cross-Strait Act', 'The Immigration Law', 'The Tourism Safety Act'], answer: 'The Cross-Strait Act' },
+                    { q: 'What is the consequence for violators under the Cross-Strait Act?', options: ['A small fine', 'A travel ban to China', 'They will lose their legal status as Taiwan residents', 'A short prison sentence'], answer: 'They will lose their legal status as Taiwan residents' },
+                    { q: 'What were the two sides (KMT and Beijing) reported to have reached?', options: ['A final agreement', 'A binding contract', 'A preliminary consensus', 'A temporary truce'], answer: 'A preliminary consensus' },
+                    { q: 'The festival will blend local culture with what kind of experiences?', options: ['Academic research programs', 'Family-friendly interactive experiences', 'High-end luxury dining', 'Military parades'], answer: 'Family-friendly interactive experiences' },
+                    { q: 'The NIA warns that citizens are prohibited from holding which two things from China?', options: ['A travel visa and a bank account', 'A driver\'s license and a health card', 'A passport or household registration', 'A business license and property ownership'], answer: 'A passport or household registration' }
+                ]
+            },
+            'china-japan-radar-incident': {
+                title: '中國戰機對日本軍機照射雷達：東海緊張局勢升級',
+                english: `And in global news, on Sunday, Japan said that Chinese fighter jets had aimed their radar at Japanese military aircraft in two dangerous incidents near the Okinawa Islands, an account Beijing disputed. Prime Minister Sonai Takaii told reporters, "This radar illuminations are a dangerous act that goes beyond what is necessary for the safe flight of aircraft," adding that Japan had launched a protest with China over Saturday's extremely regrettable incident. Defense Minister Shinjiro Koisumi, meeting with his Australian counterpart Richard Marles in Tokyo, said Japan would respond resolutely and calmly to China's conduct in order to maintain regional peace and stability. But a Chinese Navy spokesperson, Colonel Wang Schweiming, said Japanese aircraft had repeatedly approached and disrupted the Chinese Navy as it was conducting previously announced carrier-based flight training east of the Miyako Strait. The encounters near islands claimed by both Japan and China are the most serious run-ins between the two militaries in years and are likely to further escalate tension between the two East Asian powers.`,
+                chinese: `在國際新聞方面，日本週日表示，中國戰機在沖繩群島附近發生兩起危險事件中，對日本軍機進行了雷達照射（瞄準），但北京否認了這一說法。首相園井隆一 (Sonai Takaii) 告訴記者：「這種雷達照射是超越飛機安全飛行所需範圍的危險行為。」他補充說，日本已就週六這起極其令人遺憾的事件向中國提出抗議。防衛大臣小泉慎次郎 (Shinjiro Koisumi) 在東京會見澳洲防長馬爾斯 (Richard Marles) 時表示，為了維護地區和平與穩定，日本將堅決而冷靜地應對中國的行為。但中國海軍發言人王帥明上校表示，日本飛機在中國海軍於宮古海峽以東進行先前宣布的航母艦載機飛行訓練時，曾多次靠近並干擾中方。發生在兩國皆聲稱擁有主權的島嶼附近的這些遭遇，是兩國軍方多年來最嚴重的衝突事件，並可能進一步加劇這兩個東亞大國之間的緊張關係。`,
+                vocabulary: [
+                    'Chinese fighter jets (n.phr.): 中國戰機',
+                    'aimed their radar at (v.phr.): 對...進行雷達照射（瞄準）',
+                    'military aircraft (n.phr.): 軍用飛機',
+                    'an account Beijing disputed (n.phr.): 北京否認的說法',
+                    'radar illuminations (n.phr.): 雷達照射',
+                    'dangerous act (n.phr.): 危險行為',
+                    'goes beyond what is necessary (phr.): 超越了必要範圍',
+                    'safe flight of aircraft (n.phr.): 飛機的安全飛行',
+                    'launched a protest with (v.phr.): 向...提出抗議',
+                    'extremely regrettable incident (n.phr.): 極其令人遺憾的事件',
+                    'Defense Minister (n.phr.): 防衛大臣',
+                    'Australian counterpart (n.phr.): 澳洲對應官員 (防長)',
+                    'respond resolutely and calmly (v.phr.): 堅決而冷靜地應對',
+                    'conduct (n.): 行為',
+                    'maintain regional peace and stability (v.phr.): 維護地區和平與穩定',
+                    'Navy spokesperson (n.phr.): 海軍發言人',
+                    'repeatedly approached and disrupted (v.phr.): 曾多次靠近並干擾',
+                    'carrier-based flight training (n.phr.): 航母艦載機飛行訓練',
+                    'Miyako Strait (n. proper): 宮古海峽',
+                    'islands claimed by both (n.phr.): 兩國皆聲稱擁有主權的島嶼',
+                    'serious run-ins (n.phr.): 最嚴重的衝突事件',
+                    'further escalate tension (v.phr.): 進一步加劇緊張關係',
+                    'East Asian powers (n.phr.): 東亞大國',
+                    'Okinawa Islands (n. proper): 沖繩群島',
+                    'Colonel (n.): 上校',
+                    'regional (adj.): 地區的',
+                    'stability (n.): 穩定',
+                    'encounters (n.): 遭遇'
+                ],
+                quiz: [
+                    { q: 'What did Chinese fighter jets aim at Japanese military aircraft?', options: ['Their missiles', 'Their cameras', 'Their radar', 'Their landing lights'], answer: 'Their radar' },
+                    { q: 'Where did these dangerous incidents occur?', options: ['Near the Senkaku Islands', 'Near the Okinawa Islands', 'Near the Kuril Islands', 'Near Taiwan Strait'], answer: 'Near the Okinawa Islands' },
+                    { q: 'How did the Japanese PM describe the radar illuminations?', options: ['A friendly gesture', 'An unavoidable action', 'A dangerous act', 'A technical malfunction'], answer: 'A dangerous act' },
+                    { q: 'What action did Japan take in response to the incident?', options: ['Launched a counter-attack', 'Cancelled diplomatic ties', 'Launched a protest with China', 'Appealed to the UN'], answer: 'Launched a protest with China' },
+                    { q: 'The Japanese Defense Minister met with his counterpart from which country?', options: ['The United States', 'South Korea', 'Australia', 'The Philippines'], answer: 'Australia' },
+                    { q: 'What did the Japanese Defense Minister promise to maintain?', options: ['Economic growth', 'Regional peace and stability', 'Military superiority', 'Political neutrality'], answer: 'Regional peace and stability' },
+                    { q: 'What did the Chinese spokesperson claim the Japanese aircraft were doing?', options: ['Providing assistance', 'Observing from a distance', 'Repeatedly approached and disrupted the Chinese Navy', 'Flying in unauthorized airspace'], answer: 'Repeatedly approached and disrupted the Chinese Navy' },
+                    { q: 'What kind of training was the Chinese Navy conducting?', options: ['Submarine combat drills', 'Amphibious landing exercises', 'Carrier-based flight training', 'Coastal patrol missions'], answer: 'Carrier-based flight training' },
+                    { q: 'Where was the Chinese training taking place?', options: ['In the Taiwan Strait', 'East of the Miyako Strait', 'Near the Korean Peninsula', 'In the South China Sea'], answer: 'East of the Miyako Strait' },
+                    { q: 'How are the encounters described in terms of severity?', options: ['Minor skirmishes', 'Routine interactions', 'The most serious run-ins between the two militaries in years', 'A standard exchange of words'], answer: 'The most serious run-ins between the two militaries in years' },
+                    { q: 'What is the goal of the Japanese response to China\'s conduct?', options: ['To start a war', 'To provoke an incident', 'To maintain regional peace and stability', 'To halt all trade with China'], answer: 'To maintain regional peace and stability' },
+                    { q: 'The tension is likely to escalate between which two powers?', options: ['Japan and Australia', 'China and Australia', 'Japan and the US', 'The two East Asian powers (China and Japan)'], answer: 'The two East Asian powers (China and Japan)' },
+                    { q: 'What is the Chinese Navy spokesperson\'s rank?', options: ['Admiral', 'Captain', 'General', 'Colonel'], answer: 'Colonel' },
+                    { q: 'The radar illumination happened on which day?', options: ['Sunday', 'Saturday', 'Friday', 'Thursday'], answer: 'Saturday' },
+                    { q: 'What did the Chinese side do regarding Japan\'s account?', options: ['Confirmed it', 'Ignored it', 'Disputed it', 'Agreed partially'], answer: 'Disputed it' }
+                ]
+            },
+            'louvre-water-leak': {
+                title: '羅浮宮水管漏水事件：損壞埃及古物圖書館藏書',
+                english: `A water leak at the Louvre in Paris has damaged hundreds of books, exposing further issues at the world's largest museum after a spectacular heist in October. The leak happened when a valve that forms part of a now defunct plumbing system was opened in error. The flooding damaged at least 300 to 400 books in one of the Egyptian antiquities libraries in the museum. The books will be returned to the shelves after they have dried out and been repaired. The deputy general administrator described the books as several hundred years old and dating to the late 19th century. He said that some of the books were wet and that work is underway to dry them, including dehumidifying them page by page with the help of buffered paper and modified plants. Some of the works are visual periodicals and archaeology journals that are consulted by Egyptologists, Louvre staff members, and researchers. He noted that the area of the pipe break is part of the museum spaces that will undergo a major renovation of the ventilation and heating system starting in September. It's the latest setback for the most visited museum in the world, which was the site of a daring jewelry heist nearly two months ago.`,
+                chinese: `巴黎羅浮宮發生水管漏水事件，損壞了數百本書籍。這起事件暴露了這座世界最大博物館在十月份發生了一起驚人的搶劫案之後，內部存在的進一步問題。這次洩漏發生在一個屬於現已廢棄的管道系統的閥門被錯誤打開時。洪水損壞了博物館內其中一間埃及古物圖書館中至少 300 到 400 本書籍。這些書籍將在乾燥和修復後被送回書架。副總行政官員形容這些書籍有數百年歷史，可以追溯到 19 世紀末期。他說有些書已經濕了，目前正在進行乾燥工作，包括在緩衝紙和改良植物的幫助下，逐頁進行除濕。部分作品是視覺期刊和考古學期刊，供埃及古物學家、羅浮宮工作人員和研究人員查閱。他指出，水管破裂的區域是博物館空間的一部分，該空間將從九月開始進行通風和供暖系統的重大翻新。這是世界上參觀人數最多的博物館最近遭遇的挫折，該博物館在近兩個月前曾發生過一起大膽的珠寶搶劫案。`,
+                vocabulary: [
+                    'water leak (n.phr.): 水管漏水',
+                    'damaged hundreds of books (v.phr.): 損壞了數百本書籍',
+                    'exposing further issues (v.phr.): 暴露了進一步的問題',
+                    'spectacular heist (n.phr.): 驚人的搶劫案',
+                    'defunct plumbing system (n.phr.): 現已廢棄的管道系統',
+                    'opened in error (phr.): 被錯誤打開',
+                    'Egyptian antiquities libraries (n.phr.): 埃及古物圖書館',
+                    'dried out and been repaired (phr.): 乾燥並得到修復',
+                    'deputy general administrator (n.phr.): 副總行政官員',
+                    'dating to the late 19th century (phr.): 可追溯到 19 世紀末期',
+                    'work is underway (phr.): 工作正在進行中',
+                    'dehumidifying them page by page (v.phr.): 逐頁進行除濕',
+                    'buffered paper (n.phr.): 緩衝紙',
+                    'modified plants (n.phr.): 改良植物',
+                    'visual periodicals (n.phr.): 視覺期刊',
+                    'archaeology journals (n.phr.): 考古學期刊',
+                    'consulted by Egyptologists (phr.): 供埃及古物學家查閱',
+                    'pipe break (n.phr.): 水管破裂',
+                    'undergo a major renovation (v.phr.): 進行重大翻新',
+                    'ventilation and heating system (n.phr.): 通風和供暖系統',
+                    'latest setback (n.phr.): 最新的挫折',
+                    'daring jewelry heist (n.phr.): 大膽的珠寶搶劫案',
+                    'flooding (n.): 洪水',
+                    'shelves (n.): 書架',
+                    'consulted (v.): 查閱',
+                    'museum (n.): 博物館',
+                    'damage (v.): 損壞',
+                    'valve (n.): 閥門',
+                    'error (n.): 錯誤'
+                ],
+                quiz: [
+                    { q: 'Where did the water leak occur?', options: ['The British Museum', 'The Louvre in Paris', 'The Met in New York', 'The Hermitage in St. Petersburg'], answer: 'The Louvre in Paris' },
+                    { q: 'What kind of recent issue does the leak expose further problems from?', options: ['A massive protest', 'A spectacular heist in October', 'A staff strike', 'A power outage'], answer: 'A spectacular heist in October' },
+                    { q: 'What caused the leak?', options: ['A burst outdoor pipe', 'Heavy rain', 'A valve in a defunct plumbing system was opened in error', 'Vandalism'], answer: 'A valve in a defunct plumbing system was opened in error' },
+                    { q: 'Approximately how many books were damaged by the flooding?', options: ['Fewer than 100 books', 'At least 300 to 400 books', 'Over 1000 books', 'Exactly 500 books'], answer: 'At least 300 to 400 books' },
+                    { q: 'Which specific library section was affected?', options: ['The Renaissance Art Library', 'The Asian Art Archives', 'One of the Egyptian antiquities libraries', 'The Modern History collection'], answer: 'One of the Egyptian antiquities libraries' },
+                    { q: 'How old are the damaged books described as being?', options: ['Dating to the 20th century', 'Less than 50 years old', 'Several hundred years old', 'Dating to the early 18th century'], answer: 'Several hundred years old' },
+                    { q: 'The books date back to which period?', options: ['The 15th century', 'The late 19th century', 'The early 20th century', 'The Roman era'], answer: 'The late 19th century' },
+                    { q: 'What technique is being used to dry the books page by page?', options: ['Microwave drying', 'Vacuum sealing', 'Dehumidifying them with buffered paper and modified plants', 'Solar exposure'], answer: 'Dehumidifying them with buffered paper and modified plants' },
+                    { q: 'Which professionals consult some of these works?', options: ['Architects and Engineers', 'Chefs and Bakers', 'Egyptologists, Louvre staff, and researchers', 'Doctors and Nurses'], answer: 'Egyptologists, Louvre staff, and researchers' },
+                    { q: 'What type of publications are some of the damaged works?', options: ['Fiction novels and poetry', 'Visual periodicals and archaeology journals', 'Philosophy texts and history books', 'Children\'s literature'], answer: 'Visual periodicals and archaeology journals' },
+                    { q: 'What major project is the area of the pipe break scheduled to undergo starting in September?', options: ['A major expansion of the building', 'A new exhibit installation', 'A major renovation of the ventilation and heating system', 'A structural reinforcement project'], answer: 'A major renovation of the ventilation and heating system' },
+                    { q: 'What title does the article give the Louvre?', options: ['The oldest museum in Europe', 'The most visited museum in the world', 'The smallest museum in Paris', 'The newest museum in France'], answer: 'The most visited museum in the world' },
+                    { q: 'How long ago did the "daring jewelry heist" occur?', options: ['Nearly two months ago', 'Over a year ago', 'Just last week', 'Six months ago'], answer: 'Nearly two months ago' },
+                    { q: 'Who described the age of the books?', options: ['The Head Curator', 'The Mayor of Paris', 'The deputy general administrator', 'A library intern'], answer: 'The deputy general administrator' },
+                    { q: 'What is the fate of the damaged books?', options: ['They will be destroyed immediately', 'They will be sold at auction', 'They will be dried out and repaired', 'They will be moved to a different country'], answer: 'They will be dried out and repaired' }
+                ]
+            },
+            'india-goa-fire': {
+                title: '印度果阿邦夜店大火：瓦斯爆炸致 25 人死亡',
+                english: `On Sunday, a fire ripped through a popular nightclub in India's Goa state, killing 25 people, including tourists. The blaze occurred just past midnight in the party club in Arpora village in North Goa. The Goa chief minister said most of the dead were the club's kitchen workers, as well as three or four tourists. Six people were injured and are in stable condition. All the bodies have been recovered. The fire was caused by a gas cylinder blast and has since been extinguished. However, witnesses told the agency that the fire began on the club's first floor where nearly 100 tourists were on the dance floor. Several rushed to the kitchen below in the chaos and became trapped along with staff. The nightclub, along the Arpora River backwaters, had a narrow entry and exit that forced firefighters to park their tankers about 1,300 feet away, delaying the efforts. The chief minister said the club had violated fire safety regulations. The state government ordered an inquiry to determine the exact cause of the fire and responsibility, he said, adding that authorities would act against the club management and officials who allowed it to operate despite the violations.`,
+                chinese: `週日，印度果阿邦一家受歡迎的夜店發生大火，造成 25 人死亡，其中包括遊客。這場大火發生在午夜剛過，地點是北果阿邦 Arpora 村的派對俱樂部。果阿首席部長表示，死者大多是俱樂部的廚房工作人員，以及三到四名遊客。有六人受傷，目前情況穩定。所有屍體都已尋回。火災是由瓦斯鋼瓶爆炸引起的，現已撲滅。然而，目擊者告訴通訊社，火災始於俱樂部一樓，當時有近 100 名遊客在舞池裡。在混亂中，幾人衝到下方的廚房，結果與工作人員一同被困。這家夜店位於 Arpora 河的迴水區旁，其狹窄的進出口迫使消防員將水車停在約 1,300 英尺外，延遲了救援工作。首席部長表示，該俱樂部違反了消防安全規定。他說，州政府已下令進行調查，以確定火災的確切原因和責任，並補充說，當局將對俱樂部管理層和允許其在違規情況下營運的官員採取行動。`,
+                vocabulary: [
+                    'fire ripped through (v.phr.): 大火迅速蔓延',
+                    'popular nightclub (n.phr.): 受歡迎的夜店',
+                    'Goa state (n. proper): 果阿邦 (印度邦名)',
+                    'killing 25 people (v.phr.): 造成 25 人死亡',
+                    'the blaze (n.): 大火',
+                    'just past midnight (phr.): 剛過午夜',
+                    'chief minister (n.phr.): 首席部長',
+                    'kitchen workers (n.phr.): 廚房工作人員',
+                    'in stable condition (phr.): 情況穩定',
+                    'bodies have been recovered (phr.): 屍體已尋回',
+                    'gas cylinder blast (n.phr.): 瓦斯鋼瓶爆炸',
+                    'since been extinguished (phr.): 此後已被撲滅',
+                    'dance floor (n.phr.): 舞池',
+                    'rushed to the kitchen (v.phr.): 衝到廚房',
+                    'in the chaos (phr.): 在混亂中',
+                    'became trapped (phr.): 被困住',
+                    'backwaters (n.): 迴水區 (河流或水道的安靜部分)',
+                    'narrow entry and exit (n.phr.): 狹窄的進出口',
+                    'firefighters to park their tankers (phr.): 消防員將水車停放',
+                    'delaying the efforts (phr.): 延遲了救援工作',
+                    'violated fire safety regulations (v.phr.): 違反了消防安全規定',
+                    'ordered an inquiry (v.phr.): 下令進行調查',
+                    'determine the exact cause (v.phr.): 確定確切原因',
+                    'act against the club management (v.phr.): 對俱樂部管理層採取行動',
+                    'operate despite the violations (v.phr.): 儘管違規仍允許其營運',
+                    'Arpora village (n. proper): Arpora 村',
+                    'injured (adj.): 受傷的',
+                    'recovered (v.): 尋回',
+                    'witnesses (n.): 目擊者',
+                    'trapped (adj.): 被困住的',
+                    'violations (n.): 違規行為'
+                ],
+                quiz: [
+                    { q: 'In which Indian state did the nightclub fire occur?', options: ['Kerala', 'Maharashtra', 'Goa', 'Tamil Nadu'], answer: 'Goa' },
+                    { q: 'How many people were killed in the fire?', options: ['15 people', '25 people', '35 people', '45 people'], answer: '25 people' },
+                    { q: 'When did the blaze occur?', options: ['Sunday afternoon', 'Just past midnight on Sunday', 'Saturday morning', 'Friday evening'], answer: 'Just past midnight on Sunday' },
+                    { q: 'Where were most of the dead victims identified as working?', options: ['The bar staff', 'The security personnel', 'The club\'s kitchen workers', 'The management team'], answer: 'The club\'s kitchen workers' },
+                    { q: 'How many people were injured and reported to be in stable condition?', options: ['Four people', 'Six people', 'Ten people', 'Zero people'], answer: 'Six people' },
+                    { q: 'What was the reported cause of the fire?', options: ['An electrical short circuit', 'Arson', 'A gas cylinder blast', 'A dropped cigarette'], answer: 'A gas cylinder blast' },
+                    { q: 'Where did witnesses say the fire began?', options: ['In the basement', 'On the club\'s first floor', 'Near the entrance', 'In the manager\'s office'], answer: 'On the club\'s first floor' },
+                    { q: 'Approximately how many tourists were on the dance floor when the fire began?', options: ['About 50 tourists', 'Nearly 100 tourists', 'Around 200 tourists', 'Only a few tourists'], answer: 'Nearly 100 tourists' },
+                    { q: 'Why did some people rush to the kitchen below?', options: ['To get a drink', 'To look for the manager', 'They rushed there in the chaos and became trapped', 'To help the workers'], answer: 'They rushed there in the chaos and became trapped' },
+                    { q: 'What structural issue delayed the efforts of the firefighters?', options: ['A collapse of the roof', 'Heavy traffic outside', 'A narrow entry and exit', 'Lack of water supply'], answer: 'A narrow entry and exit' },
+                    { q: 'How far away were firefighters forced to park their tankers?', options: ['About 100 feet away', 'About 500 feet away', 'About 1,300 feet away', 'Right next to the club'], answer: 'About 1,300 feet away' },
+                    { q: 'What did the Chief Minister accuse the club of violating?', options: ['Noise pollution standards', 'Tax regulations', 'Fire safety regulations', 'Alcohol licensing laws'], answer: 'Fire safety regulations' },
+                    { q: 'What action did the state government order?', options: ['A public apology', 'A complete rebuild of the club', 'An inquiry to determine the exact cause and responsibility', 'An immediate arrest of all staff'], answer: 'An inquiry to determine the exact cause and responsibility' },
+                    { q: 'The club is located along which river feature?', options: ['The Arpora River estuary', 'The Arpora River backwaters', 'The Arpora River waterfall', 'The Arpora River reservoir'], answer: 'The Arpora River backwaters' },
+                    { q: 'Who will authorities act against, besides the club management?', options: ['The injured victims', 'The witnesses', 'Tourists who were present', 'Officials who allowed it to operate despite the violations'], answer: 'Officials who allowed it to operate despite the violations' }
+                ]
+            },
+            'lando-norris-f1-win': {
+                title: 'F1 阿布達比大獎賽：Lando Norris 奪得生涯首個 F1 總冠軍',
+                english: `McLaren driver Lando Norris held his nerve but could not hold back the tears after clinching his first Formula 1 title at the season-ending Abu Dhabi Grand Prix on Sunday. Red Bull driver and defending champion Max Verstappen won the race with Norris placing third, which allowed Norris to finish two points ahead of him in the season-long standings. Norris became Britain's 11th F1 champion, a racing journey that began with kart racing when he was 8 years old. Piastri was also in contention for his first F1 title, placing second in front of his McLaren teammate Norris and finished third in the standings, 13 points behind him. Norris became the first British champion since Lewis Hamilton won his record-equaling seventh title in 2020 and also denied Verstappen a fifth straight championship. After crossing the line, Norris stayed in his car for a few moments, visibly emotional. His parents were on the side of the track and he went over to hug them before celebrating with his McLaren engineers and mechanics. Charles Leclerc finished fourth for Ferrari ahead of George Russell (Mercedes) and Fernando Alonso (Aston Martin) in sixth.`,
+                chinese: `麥拉倫 (McLaren) 車手蘭多·諾里斯 (Lando Norris) 在週日賽季收官的阿布達比大獎賽上奪得他生涯首個 F1 總冠軍後，他保持了鎮定，但仍忍不住淚水。紅牛 (Red Bull) 車手、衛冕冠軍馬克斯·維斯塔潘 (Max Verstappen) 贏得了比賽，而諾里斯獲得第三名，這讓諾里斯在賽季總積分榜上領先維斯塔潘兩分。諾里斯成為英國第 11 位 F1 冠軍，他的賽車生涯始於 8 歲時的卡丁車比賽。皮亞斯特里 (Piastri) 也有機會爭奪他的首個 F1 總冠軍，他在比賽中名列第二，領先他的麥拉倫隊友諾里斯，並在總積分榜上排名第三，落後諾里斯 13 分。諾里斯成為自路易斯·漢米爾頓 (Lewis Hamilton) 於 2020 年贏得追平紀錄的第七個冠軍以來，首位英國 F1 冠軍，他也阻止了維斯塔潘贏得連續第五個總冠軍。衝過終點線後，諾里斯在車裡待了幾分鐘，情緒明顯激動。他的父母在賽道旁，他在與麥拉倫工程師和技師慶祝之前，先過去擁抱了他們。查爾斯·勒克萊爾 (Charles Leclerc) 為法拉利 (Ferrari) 獲得第四名，領先喬治·羅素 (George Russell)（梅賽德斯）和費爾南多·阿隆索 (Fernando Alonso)（阿斯頓·馬丁）的第六名。`,
+                vocabulary: [
+                    'McLaren driver (n.phr.): 麥拉倫車手',
+                    'held his nerve (v.phr.): 保持鎮定',
+                    'could not hold back the tears (phr.): 忍不住淚水',
+                    'clinching his first Formula 1 title (v.phr.): 奪得他生涯首個 F1 總冠軍 (clinch)',
+                    'season-ending Abu Dhabi Grand Prix (n.phr.): 賽季收官的阿布達比大獎賽',
+                    'defending champion (n.phr.): 衛冕冠軍',
+                    'placing third (v.phr.): 獲得第三名',
+                    'season-long standings (n.phr.): 賽季總積分榜',
+                    'Britain\'s 11th F1 champion (n.phr.): 英國第 11 位 F1 冠軍',
+                    'kart racing (n.phr.): 卡丁車比賽',
+                    'in contention for (phr.): 爭奪...的機會',
+                    'teammate (n.): 隊友',
+                    'record-equaling seventh title (n.phr.): 追平紀錄的第七個冠軍',
+                    'denied Verstappen a fifth straight championship (v.phr.): 阻止了維斯塔潘贏得連續第五個總冠軍',
+                    'crossing the line (v.phr.): 衝過終點線 (完賽)',
+                    'visibly emotional (adj.phr.): 情緒明顯激動',
+                    'engineers and mechanics (n.phr.): 工程師和技師',
+                    'finished fourth for Ferrari (v.phr.): 為法拉利獲得第四名',
+                    'ahead of (prep.phr.): 領先於',
+                    'Red Bull (n. proper): 紅牛 (車隊名)',
+                    'Verstappen (n. proper): 維斯塔潘 (人名)',
+                    'Piastri (n. proper): 皮亞斯特里 (人名)',
+                    'Hamilton (n. proper): 漢米爾頓 (人名)',
+                    'straight (adj.): 連續的',
+                    'championship (n.): 總冠軍'
+                ],
+                quiz: [
+                    { q: 'Which driver won his first Formula 1 title?', options: ['Max Verstappen', 'Oscar Piastri', 'Charles Leclerc', 'Lando Norris'], answer: 'Lando Norris' },
+                    { q: 'Which team does Lando Norris drive for?', options: ['Red Bull', 'Ferrari', 'Mercedes', 'McLaren'], answer: 'McLaren' },
+                    { q: 'What was the name of the season-ending race?', options: ['Monaco Grand Prix', 'British Grand Prix', 'Abu Dhabi Grand Prix', 'Japanese Grand Prix'], answer: 'Abu Dhabi Grand Prix' },
+                    { q: 'Who won the actual race?', options: ['Max Verstappen', 'Lando Norris', 'Oscar Piastri', 'Lewis Hamilton'], answer: 'Max Verstappen' },
+                    { q: 'What position did Lando Norris place in the race?', options: ['First', 'Second', 'Third', 'Fourth'], answer: 'Third' },
+                    { q: 'By how many points did Norris finish ahead of the defending champion in the season-long standings?', options: ['Two points', 'Ten points', 'One point', 'Thirteen points'], answer: 'Two points' },
+                    { q: 'Norris became Britain\'s how many F1 champion?', options: ['5th', '7th', '10th', '11th'], answer: '11th' },
+                    { q: 'What kind of racing did Norris begin with at age 8?', options: ['Rally racing', 'Kart racing', 'Stock car racing', 'Motorcycle racing'], answer: 'Kart racing' },
+                    { q: 'What was the race position of Norris\'s McLaren teammate, Piastri?', options: ['First', 'Second', 'Third', 'Fifth'], answer: 'Second' },
+                    { q: 'What was Piastri\'s final position in the season standings?', options: ['Second', 'Third', 'Fourth', 'Fifth'], answer: 'Third' },
+                    { q: 'Who was the last British champion before Norris?', options: ['Nigel Mansell', 'Jenson Button', 'Damon Hill', 'Lewis Hamilton'], answer: 'Lewis Hamilton' },
+                    { q: 'How many straight championships did Norris deny Verstappen?', options: ['A second straight', 'A third straight', 'A fourth straight', 'A fifth straight championship'], answer: 'A fifth straight championship' },
+                    { q: 'After crossing the line, who did Norris first hug?', options: ['His teammate', 'His parents', 'His team principal', 'The trophy presenter'], answer: 'His parents' },
+                    { q: 'Which team finished fourth with Charles Leclerc?', options: ['Mercedes', 'Red Bull', 'Aston Martin', 'Ferrari'], answer: 'Ferrari' },
+                    { q: 'Lando Norris held his nerve but could not hold back what?', options: ['His speed', 'His applause', 'The tears', 'His celebration'], answer: 'The tears' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        // Sets the default state to the first item in the NEWS_DATA object
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; // Default view: article, translation, vocabulary, quiz
+        let quizState = {}; // Stores answers: { topicId: { questionIndex: selectedOption } }
+        let quizResult = {}; // Stores results: { topicId: { score: N, total: M } }
+
+
+        // --- CORE RENDERING FUNCTIONS ---
+
+        /**
+         * Renders the main topic tabs at the top of the page.
+         */
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            // If no data, show a message
+            if (Object.keys(NEWS_DATA).length === 0) {
+                tabsContainer.innerHTML = '<p class="p-4 text-center text-red-500 font-semibold">無新聞資料可顯示，請更新 NEWS_DATA 變數。</p>';
+                return;
+            }
+
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                // Chinese title extraction from the English/Chinese summary line (or just use the title field)
+                const tabTitle = data.title.split('：')[0]; 
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `
+                    <button 
+                        class="main-tab-button ${isActive}" 
+                        onclick="changeTopic('${id}')"
+                    >
+                        ${tabTitle}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Renders the content based on the current topic and sub-tab.
+         */
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            
+            if (!data) {
+                contentArea.innerHTML = '<h2 class="text-3xl font-bold text-gray-800 mb-6">錯誤：找不到新聞內容</h2><p>請檢查您的新聞 ID 設定。</p>';
+                return;
+            }
+            
+            // 1. Render Sub-Tabs Menu
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            
+            let contentHTML = '';
+
+            switch (currentSubTab) {
+                case 'article':
+                    contentHTML = renderArticle(data.english, data.title);
+                    break;
+                case 'translation':
+                    contentHTML = renderTranslation(data.chinese, data.title);
+                    break;
+                case 'vocabulary':
+                    contentHTML = renderVocabulary(data.vocabulary, data.title);
+                    break;
+                case 'quiz':
+                    contentHTML = renderQuiz(currentTopicId, data.quiz, data.title);
+                    break;
+            }
+
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+
+            // Ensure quiz answer state is maintained on re-render
+            if (currentSubTab === 'quiz') {
+                updateQuizDisplay(currentTopicId, data.quiz);
+            }
+        }
+
+        /**
+         * Renders the original English article.
+         */
+        function renderArticle(text, title) {
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2>
+                <div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100">
+                    <p class="whitespace-pre-wrap">${text.trim()}</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <div class="text-sm text-gray-500 mb-2">點擊下方按鈕，開始深度學習：</div>
+                    <button 
+                        class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition duration-200 ease-in-out"
+                        onclick="changeSubTab('translation')"
+                    >
+                        🇹🇼 前往中文翻譯 (See Translation)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the Chinese translation.
+         */
+        function renderTranslation(text, title) {
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2>
+                <div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner">
+                    <p class="whitespace-pre-wrap">${text.trim()}</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <div class="text-sm text-gray-500 mb-2">繼續強化詞彙與理解：</div>
+                    <button 
+                        class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition duration-200 ease-in-out"
+                        onclick="changeSubTab('vocabulary')"
+                    >
+                        📖 前往單字庫複習 (Review Vocabulary)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the vocabulary list.
+         */
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100">
+                    <span class="font-semibold text-indigo-700">${parts[0]}</span> 
+                    <span class="text-gray-500 text-sm italic">${parts[1]}</span>
+                </li>`;
+            }).join('');
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語 (共 ${vocabArray.length} 個)</h2>
+                <p class="text-gray-600 mb-6">掌握這些關鍵詞彙，將有助於您完全理解新聞內容。</p>
+                <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    ${listItems}
+                </ul>
+                <div class="mt-8 text-center">
+                    <div class="text-sm text-gray-500 mb-2">準備好測試您的理解力了嗎？</div>
+                    <button 
+                        class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition duration-200 ease-in-out"
+                        onclick="initQuiz()"
+                    >
+                        📝 開始測驗 (Start Quiz)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the quiz interface.
+         */
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            
+            if (!quizQuestions || quizQuestions.length === 0) {
+                return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>
+                        <div class="text-center p-8 bg-yellow-100 rounded-xl mb-8 border-4 border-yellow-500">
+                            <p class="text-xl font-extrabold text-yellow-800">❗ 測驗題庫尚未建立 ❗</p>
+                            <p class="text-lg mt-2 text-yellow-700">請確保 NEWS_DATA 中包含至少 15 題測驗題。</p>
+                        </div>`;
+            }
+
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const correctAnswer = q.answer;
+                
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    let isCurrentSelected = selected === option;
+
+                    if (isSubmitted) {
+                        if (option === correctAnswer) {
+                            classes += ' correct'; // Correct answer
+                        } else if (isCurrentSelected && option !== correctAnswer) {
+                            classes += ' incorrect'; // User selected, but incorrect
+                        }
+                    } else if (isCurrentSelected) {
+                        classes += ' selected'; // User selected, but not submitted
+                    }
+
+                    // Escape single quotes in option text for selectOption function call
+                    const escapedOption = option.replace(/'/g, "\\'");
+
+                    return `
+                        <div 
+                            class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" 
+                            data-q-index="${index}" 
+                            data-option="${option}"
+                            onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"
+                        >
+                            <span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}
+                            ${isSubmitted && option === correctAnswer ? '<span class="ml-2 text-green-700 font-bold"> (正確答案)</span>' : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500">
+                        <p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>
+                        ${optionsHTML}
+                    </div>
+                `;
+            }).join('');
+
+            const resultHTML = result ? `
+                <div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500">
+                    <h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3>
+                    <p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p>
+                    <p class="text-lg mt-3 text-indigo-800">您答對了 ${result.score} 題。請檢視下方標註的答案！</p>
+                    <button 
+                        class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full hover:bg-yellow-600 transition"
+                        onclick="initQuiz(true)"
+                    >
+                        🔄 重置測驗
+                    </button>
+                </div>
+            ` : '';
+
+            const submitButton = result === undefined ? `
+                <button 
+                    id="submit-quiz-button"
+                    class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition duration-300 disabled:opacity-50"
+                    onclick="submitQuizAnswer('${topicId}')"
+                    disabled
+                >
+                    送出答案並查看結果
+                </button>
+            ` : '';
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>
+                ${resultHTML}
+                <div id="quiz-questions">
+                    ${questionsHTML}
+                </div>
+                <div class="mt-8 text-center">
+                    ${submitButton}
+                    <p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p>
+                </div>
+            `;
+        }
+
+
+        // --- QUIZ LOGIC ---
+
+        /**
+         * Initializes or resets the quiz state for a topic.
+         * @param {boolean} forceReset - Whether to force a full reset.
+         */
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            const data = NEWS_DATA[topicId];
+            if (!data || !data.quiz || data.quiz.length === 0) {
+                 currentSubTab = 'quiz';
+                 renderContent();
+                 return;
+            }
+
+            // If we are already on the quiz tab and not forcing a reset, just ensure correct tab is selected
+            if (!forceReset && currentSubTab === 'quiz') {
+                return;
+            }
+            
+            // If the user manually clicks the tab, or requests a full reset, clear results
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        /**
+         * Selects an option for a question.
+         */
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return; // Cannot change after submission
+            
+            quizState[topicId] = quizState[topicId] || {};
+            const currentSelection = quizState[topicId][questionIndex];
+
+            // Toggle selection logic
+            if (currentSelection === selectedOption) {
+                delete quizState[topicId][questionIndex];
+            } else {
+                quizState[topicId][questionIndex] = selectedOption;
+            }
+            
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        /**
+         * Submits the quiz answers and displays the results.
+         */
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            const total = questions.length;
+
+            if (Object.keys(answers).length !== total) {
+                document.getElementById('quiz-message').textContent = `請回答所有 ${total} 題問題！`;
+                return;
+            }
+            document.getElementById('quiz-message').textContent = '';
+
+            questions.forEach((q, index) => {
+                const selected = answers[index];
+                if (selected === q.answer) {
+                    score++;
+                }
+            });
+
+            quizResult[topicId] = { score, total };
+            renderContent(); // Re-render to show results and correct/incorrect indicators
+        }
+        
+        /**
+         * Helper function to update the visual state of the quiz without full re-render.
+         */
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const totalQuestions = quizQuestions.length;
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== totalQuestions;
+                if (answeredCount === totalQuestions) {
+                    quizMessage.textContent = '所有問題已回答。';
+                } else {
+                    quizMessage.textContent = `請完成所有問題 (已完成: ${answeredCount}/${totalQuestions})`;
+                }
+            }
+
+            // Update classes for selection feedback if not submitted
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIndex = parseInt(element.getAttribute('data-q-index'));
+                    const option = element.getAttribute('data-option');
+                    
+                    element.classList.remove('selected');
+                    if (currentQuizState[qIndex] === option) {
+                        element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+
+        // --- Event Handlers (exposed globally) ---
+
+        /**
+         * Changes the main news topic displayed.
+         */
+        function changeTopic(newTopicId) {
+            if (currentTopicId === newTopicId) return;
+            currentTopicId = newTopicId;
+            currentSubTab = 'article'; // Reset to Article view on topic change
+            renderTabs();
+            renderContent();
+        }
+
+        /**
+         * Changes the sub-tab (Article, Translation, Vocabulary, Quiz) within the current topic.
+         */
+        function changeSubTab(newSubTab) {
+            currentSubTab = newSubTab;
+            renderContent();
+        }
+
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if there is any data to load
+            if (Object.keys(NEWS_DATA).length > 0) {
+                // Ensure the current topic is valid if data exists
+                if (!NEWS_DATA[currentTopicId]) {
+                    currentTopicId = Object.keys(NEWS_DATA)[0];
+                }
+                renderTabs();
+                renderContent();
+            } else {
+                 // No data, show only the default message (already in HTML)
+                 document.getElementById('content-area').innerHTML = '<div class="text-center p-12 text-gray-500"><p class="text-2xl font-bold mb-4">歡迎使用英文新聞學習模板！</p><p class="text-lg">請提供最新的英文新聞，我會將內容替換至下方的 <code class="bg-gray-200 p-1 rounded">NEWS_DATA</code> 變數中。</p><p class="text-sm mt-4 text-red-500">當前 <code class="bg-gray-200 p-1 rounded">NEWS_DATA</code> 僅包含模板範例。</p></div>';
+            }
+            
+            // Expose functions globally for use in HTML event handlers
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
