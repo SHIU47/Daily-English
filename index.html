@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 你的英文能量補給站！ </title>
+    <title>🔥 你的英文能量補給站！ (圖片卡片網格優化)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -112,37 +112,7 @@
             color: #9ca3af; /* 預留文字顏色 */
         }
 
-        /* NEW: Cover Gallery (封面畫廊) 樣式 - 雖然已移除，但保留相關 CSS 以防萬一 */
-        .cover-card {
-            border-radius: 0.75rem;
-            height: 150px;
-            background-size: cover;
-            background-position: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            position: relative;
-            border: 2px solid transparent;
-        }
-        .cover-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-            border: 2px solid #84cc16; /* 懸停時的亮色邊框 */
-        }
-        .cover-card-overlay {
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2));
-            padding: 1rem;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: flex-end;
-            color: white;
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
+        /* Cover Gallery 相關 CSS 已移除 */
         
     </style>
 </head>
@@ -177,12 +147,10 @@
                 </span>
             </div>
         </header>
-
-        <!-- NEW: Cover Gallery (封面畫廊) - 已移除，保留分頁導航在下方 -->
         
         <!-- Main Content Wrapper (包含導航和內容) -->
         <div class="content-wrapper">
-            <!-- Tab Navigation (分頁導航) -->
+            <!-- Tab Navigation (分頁導航) - 保留 -->
             <nav class="flex -mt-6 -mx-6 mb-6 border-b border-gray-700/50">
                 <button id="tab-news-button" data-tab="news" class="tab-button active flex-auto py-3 text-lg focus:outline-none" onclick="openTab(event, 'news')">
                     📚 英文新聞
@@ -514,13 +482,51 @@
                             </a>
                         </li>
 
+                        <!-- 檔案列表項 - 文化觀察 -->
+                        <li>
+                            <a href="Reading/Coffee_Culture_Essay.html" class="fun-card block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">☕</span> 全球咖啡文化觀察
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        Level C1
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        從歷史到現代，咖啡如何改變了社會生活。
+                                    </p>
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a>
+                        </li>
                         
+                        <!-- 檔案列表項 - 科學新知 -->
+                        <li>
+                            <a href="Reading/Mars_Exploration.html" class="fun-card block p-4 rounded-xl group">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-dark-primary flex items-center">
+                                        <span class="mr-2 text-2xl accent-color">🚀</span> 火星探索的最新進展
+                                    </span>
+                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
+                                        Level B1
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <p class="text-sm text-dark-secondary">
+                                        了解無人探測器在紅色星球上的最新發現。
+                                    </p>
+                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </a>
+                        </li>
 
                     </ul>
                 </div>
 
                 <!-- 3. 多益測驗 Content -->
-                <div id="TOEIC" class="tab-content">
+                <div id="toeic" class="tab-content">
                     <h2 class="text-xl font-semibold text-white mb-6 border-b border-gray-700 pb-3">
                         多益想拿600分必背單字 (已找到 <span class="font-bold accent-color" id="toeic-file-count">2</span> 份)
                     </h2>
@@ -601,7 +607,7 @@
             // 顯示當前選定的分頁內容，並為按鈕添加 active 樣式
             document.getElementById(tabName).classList.add("active");
             
-            // 找到對應的 Tab 按鈕並激活它 (處理來自封面點擊的情況)
+            // 找到對應的 Tab 按鈕並激活它
             const correspondingTabButton = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
             if (correspondingTabButton) {
                  correspondingTabButton.classList.add("active");
@@ -747,5 +753,3 @@
     </script>
 </body>
 </html>
-
-
