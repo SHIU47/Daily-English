@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 12 日頭條</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a clean, professional interface */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; /* Soft light blue/grey background */
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* Larger border radius for softness */
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); /* Deeper, softer shadow */
+        }
+        /* Main News Tabs Styling (Primary Navigation) */
+        .main-tabs-container {
+            background-color: #f8fafc; /* Very light background for the tab bar */
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; /* Overlap border with content area */
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; /* Gray text for inactive */
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; /* Blue text for active */
+            border-bottom-color: #3182ce; /* Active blue border */
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        /* Sub-Tabs Styling (Secondary Navigation) */
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; /* Indigo for active sub-tab */
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        /* Quiz specific styles */
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            background-color: #e2e8f0;
+        }
+        .quiz-option.selected {
+            border-color: #4c51bf;
+            background-color: #e0e7ff;
+        }
+        .quiz-option.correct {
+            background-color: #c6f6d5; /* Green */
+            border-color: #38a169;
+            font-weight: 700;
+        }
+        .quiz-option.incorrect {
+            background-color: #fed7d7; /* Red */
+            border-color: #e53e3e;
+            font-weight: 700;
+        }
+        /* Article text formatting for readability */
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        /* Scrollbar styling for cleanliness */
+        ::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 12 日頭條新聞 - 沉浸式學習體驗</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics (主分頁) -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200">
+                <!-- Tabs will be rendered here by JavaScript -->
+            </div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <!-- Content (Article, Translation, Vocab, Quiz) will be rendered here -->
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT (請在這裡更新您的新聞內容) ---
+        const NEWS_DATA = {
+            'taiwan-local-news': {
+                title: '台灣本地新聞：國安戰略、寵物晶片與都更糾紛', 
+                english: `The latest US national security strategy stresses deterring conflict in the Taiwan Strait. However, the New York Times reported that the Pentagon’s Overmatch brief warns the US is far behind China in preparing for new forms of warfare. Recent war games show repeated US losses, as China now has enough missiles to destroy advanced American weapons before they reach Taiwan. New Taipei’s Animal Protection Office reminds residents that starting January 1st, 2026, all household cats must be microchipped and officially registered. Owners who fail to comply will face fines ranging from NT$3,000 to NT$15,000. Officials urge owners to use the final one-month grace period and to double-check registration details after any medical treatment to keep their pets safe. In New Taipei’s Xizhi District, residents of an older 50-unit community say their urban renewal plan has become a nightmare. Five years after signing with Sanhua Construction, the company collapsed and allegedly transferred their land to Lii Construction without consent. Lii is now suing the original owners for unauthorized occupancy, leaving residents angry and stunned as promised upgrades never came.`,
+                chinese: `美國最新的國家安全戰略強調威懾台灣海峽的衝突。然而，《紐約時報》報導稱，五角大樓的「超越」（Overmatch）簡報警告，美國在準備應對新形式戰爭方面遠遠落後於中國。最近的戰爭演習顯示美國屢次失敗，因為中國現在擁有足夠的導彈，可以在先進美國武器抵達台灣之前將其摧毀。新北市動物保護處提醒居民，從 2026 年 1 月 1 日起，所有家貓都必須植入晶片並正式登記。不遵守規定的飼主將面臨新台幣 3,000 元至 15,000 元的罰款。官員敦促飼主利用最後一個月的寬限期，並在任何醫療處理後仔細檢查登記細節，以確保寵物安全。在新北市汐止區，一個有 50 戶的老舊社區居民表示，他們的都市更新計劃已成為一場噩夢。在與三華建設簽約五年後，該公司倒閉，並據稱未經同意將他們的土地轉讓給了力億建設。力億現在正以未經授權佔用為由起訴原業主，這讓居民感到憤怒和震驚，因為承諾的升級從未兌現。`,
+                vocabulary: [
+                    'national security strategy (n.phr.): 國家安全戰略', 'stresses deterring conflict (phr.): 強調威懾衝突', 'Taiwan Strait (n.phr.): 台灣海峽', 
+                    'Pentagon’s Overmatch brief (n.phr.): 五角大樓的「超越」簡報', 'far behind (phr.): 遠遠落後', 'new forms of warfare (n.phr.): 新形式的戰爭', 
+                    'war games (n.phr.): 戰爭演習', 'repeated US losses (n.phr.): 美國屢次失敗', 'destroy advanced American weapons (phr.): 摧毀先進美國武器', 
+                    'Animal Protection Office (n.phr.): 動物保護處', 'microchipped (v.): 植入晶片', 'officially registered (phr.): 正式登記', 
+                    'fail to comply (phr.): 不遵守規定', 'face fines (phr.): 面臨罰款', 'grace period (n.phr.): 寬限期', 
+                    'double-check registration details (phr.): 仔細檢查登記細節', 'urban renewal plan (n.phr.): 都市更新計劃', 'become a nightmare (phr.): 成為一場噩夢', 
+                    'company collapsed (phr.): 公司倒閉', 'allegedly transferred (phr.): 據稱轉讓', 'without consent (phr.): 未經同意', 
+                    'suing the original owners (phr.): 起訴原業主', 'unauthorized occupancy (n.phr.): 未經授權佔用', 'angry and stunned (phr.): 憤怒和震驚', 
+                    'promised upgrades (n.phr.): 承諾的升級', 'deterring (v.ger.): 威懾', 'missiles (n.): 導彈', 'household cats (n.phr.): 家貓',
+                    'medical treatment (n.phr.): 醫療處理', 'Xizhi District (n. proper): 汐止區', 'occupancy (n.): 佔用', 'Pentagon (n.): 五角大樓'
+                ],
+                quiz: [
+                    { q: 'What does the US national security strategy stress deterring?', options: ['Economic competition', 'Cyber attacks', 'Conflict in the Taiwan Strait', 'Political instability'], answer: 'Conflict in the Taiwan Strait' },
+                    { q: 'According to the New York Times report, what is the US warned to be far behind China in?', options: ['Missile production', 'Naval deployment', 'Preparing for new forms of warfare', 'Cyber defense'], answer: 'Preparing for new forms of warfare' },
+                    { q: 'Recent war games show repeated losses for which military force?', options: ['Chinese Navy', 'US forces', 'Taiwanese Army', 'Japanese Coast Guard'], answer: 'US forces' },
+                    { q: 'What is China now reportedly able to do with its missiles?', options: ['Intercept US aircraft carriers', 'Destroy advanced American weapons before they reach Taiwan', 'Strike the US mainland', 'Target European allies'], answer: 'Destroy advanced American weapons before they reach Taiwan' },
+                    { q: 'Starting Jan 1st, 2026, what must all household cats in New Taipei do?', options: ['Be vaccinated annually', 'Be microchipped and officially registered', 'Be kept indoors only', 'Wear a GPS tracker'], answer: 'Be microchipped and officially registered' },
+                    { q: 'What is the maximum fine for owners who fail to comply with the new cat regulation?', options: ['NT$3,000', 'NT$5,000', 'NT$10,000', 'NT$15,000'], answer: 'NT$15,000' },
+                    { q: 'What did officials urge owners to use in the final month?', options: ['A discount period', 'The grace period', 'The training period', 'The testing period'], answer: 'The grace period' },
+                    { q: 'In which district did the urban renewal dispute occur?', options: ['Banqiao District', 'Tamsui District', 'Xizhi District', 'Yonghe District'], answer: 'Xizhi District' },
+                    { q: 'The residents signed with which company five years ago?', options: ['Lii Construction', 'Jiaxing Development', 'Sanhua Construction', 'Evergreen Builders'], answer: 'Sanhua Construction' },
+                    { q: 'What happened to Sanhua Construction after signing?', options: ['It completed the project', 'It won an award', 'The company collapsed', 'It signed a new deal'], answer: 'The company collapsed' },
+                    { q: 'What is Lii Construction now suing the original owners for?', options: ['Damaged property', 'Unpaid fees', 'Unauthorized occupancy', 'Breach of contract'], answer: 'Unauthorized occupancy' },
+                    { q: 'What is the name of the Pentagon’s report mentioned?', options: ['Ironclad', 'Overmatch', 'Dominance', 'Guardian'], answer: 'Overmatch' },
+                    { q: 'What action did Sanhua Construction allegedly take without residents’ consent?', options: ['Raised the price', 'Changed the design', 'Transferred their land to Lii Construction', 'Delayed construction'], answer: 'Transferred their land to Lii Construction' },
+                    { q: 'What emotion are the residents experiencing?', options: ['Excited and hopeful', 'Neutral and cautious', 'Angry and stunned', 'Calm and accepting'], answer: 'Angry and stunned' },
+                    { q: 'The registration details need to be double-checked after what?', options: ['A change of address', 'Any medical treatment', 'A new purchase of cat food', 'The cat turns one year old'], answer: 'Any medical treatment' }
+                ]
+            },
+            'us-japan-china-dispute': {
+                title: '美國支持日本就雷達事件與中國的爭端', 
+                english: `For the first time, the United States has criticized China for aiming radar at Japanese military aircraft during a training exercise last week, an incident over which the Asian neighbors have given conflicting accounts amid escalating tensions. The run-in near Okinawa Island comes after Japanese Prime Minister Sen Takai triggered a dispute with Beijing last month with remarks on how Tokyo might respond to a hypothetical Chinese attack on Taiwan. Speaking in Beijing, Chinese Foreign Ministry spokesperson Guo Jaken avoided direct criticism of the US remarks, reiterating that China’s training and exercise activities were in line with international law, and conducted safely and in a restrained manner. Japan later on Tuesday scrambled jets to monitor Russian and Chinese air forces conducting joint patrols around the country. On Wednesday, Japan’s Coast Guard said its ships had spotted four Chinese Coast Guard vessels near the disputed, but Japan-administered, Senkaku Islands in the East China Sea. China’s Coast Guard said it was carrying out a legal operation to safeguard the country’s rights and interests. China calls the uninhabited islands the Diaoyu Islands.`,
+                chinese: `美國首次批評中國在上週的訓練演習中對日本軍機進行雷達瞄準，這起事件發生在緊張局勢不斷升級之際，兩個亞洲鄰國對此各執一詞。這次在沖繩島附近的衝突，發生在日本首相 Sen Takai 上個月就東京將如何應對假設性的中國攻擊台灣的言論引發與北京的爭端之後。中國外交部發言人郭家康（Guo Jaken）在北京發言時，避免直接批評美國的言論，重申中國的訓練和演習活動符合國際法，並且是安全、克制地進行。日本隨後在週二緊急出動噴射機，監測俄羅斯和中國空軍在該國周邊進行的聯合巡邏。週三，日本海上保安廳表示，其船隻在東海有爭議但由日本管轄的尖閣諸島（Senkaku Islands）附近發現了四艘中國海警船。中國海警表示，他們正在執行一項合法行動，以維護國家權利和利益。中國稱這些無人居住的島嶼為釣魚島。`,
+                vocabulary: [
+                    'criticized China (phr.): 批評中國', 'aiming radar at (phr.): 對...進行雷達瞄準', 'military aircraft (n.phr.): 軍用飛機', 
+                    'conflicting accounts (n.phr.): 相互矛盾的說法', 'escalating tensions (n.phr.): 不斷升級的緊張局勢', 'run-in (n.): 衝突，糾紛', 
+                    'Okinawa Island (n. proper): 沖繩島', 'triggered a dispute (phr.): 引發爭端', 'hypothetical Chinese attack (n.phr.): 假設性的中國攻擊', 
+                    'Foreign Ministry spokesperson (n.phr.): 外交部發言人', 'avoided direct criticism (phr.): 避免直接批評', 'reiterating (v.ger.): 重申', 
+                    'in line with international law (phr.): 符合國際法', 'conducted safely (phr.): 安全地進行', 'in a restrained manner (phr.): 以克制的方式', 
+                    'scrambled jets (phr.): 緊急出動噴射機', 'monitor (v.): 監測', 'joint patrols (n.phr.): 聯合巡邏', 
+                    'Coast Guard (n.phr.): 海上保安廳/海警', 'spotted (v.): 發現', 'disputed (adj.): 有爭議的', 
+                    'Japan-administered (adj.): 由日本管轄的', 'Senkaku Islands (n. proper): 尖閣諸島 (日稱)', 'East China Sea (n.phr.): 東海', 
+                    'safeguard the country’s rights (phr.): 維護國家權利', 'uninhabited islands (n.phr.): 無人居住的島嶼', 'Diaoyu Islands (n. proper): 釣魚島 (中稱)',
+                    'training exercise (n.phr.): 訓練演習', 'conflicting (adj.): 相互矛盾的', 'hypothetical (adj.): 假設性的',
+                    'restrained (adj.): 克制的', 'vessels (n.): 船隻'
+                ],
+                quiz: [
+                    { q: 'What US report criticized China for aiming radar at Japanese military aircraft?', options: ['The New York Times', 'The Pentagon', 'The State Department', 'The US did not criticize China'], answer: 'The US did not criticize China' },
+                    { q: 'The military run-in occurred near which island?', options: ['Taiwan Island', 'Hainan Island', 'Okinawa Island', 'Kuril Islands'], answer: 'Okinawa Island' },
+                    { q: 'What sparked the initial dispute last month with Beijing?', options: ['A trade war announcement', 'Remarks on a hypothetical Chinese attack on Taiwan', 'A change in US foreign policy', 'A joint military drill with South Korea'], answer: 'Remarks on a hypothetical Chinese attack on Taiwan' },
+                    { q: 'What did the Chinese Foreign Ministry spokesperson avoid doing?', options: ['Answering questions', 'Direct criticism of the US remarks', 'Speaking in public', 'Meeting the Japanese ambassador'], answer: 'Direct criticism of the US remarks' },
+                    { q: 'China reiterated that its activities were in line with what?', options: ['Their national interests', 'International law', 'Bilateral agreements', 'Historical treaties'], answer: 'International law' },
+                    { q: 'Japan scrambled jets to monitor joint patrols by which two air forces?', options: ['US and South Korean', 'Russian and Chinese', 'Indian and Chinese', 'Australian and US'], answer: 'Russian and Chinese' },
+                    { q: 'Japan’s Coast Guard spotted four Chinese Coast Guard vessels near which islands?', options: ['Kuril Islands', 'Disputed Spratly Islands', 'Senkaku Islands', 'Ryukyu Islands'], answer: 'Senkaku Islands' },
+                    { q: 'China calls the uninhabited Senkaku Islands by what name?', options: ['Penglai Islands', 'Qingdao Islands', 'Diaoyu Islands', 'Taiwan Islands'], answer: 'Diaoyu Islands' },
+                    { q: 'What body reported spotting the Chinese Coast Guard vessels?', options: ['Japan’s Navy', 'Japan’s Coast Guard', 'Japan’s Air Force', 'Okinawa Prefectural Police'], answer: 'Japan’s Coast Guard' },
+                    { q: 'The conflict is described as occurring "amid escalating what"?', options: ['Trade wars', 'Tourism decline', 'Tensions', 'Diplomatic progress'], answer: 'Tensions' },
+                    { q: 'The Chinese Coast Guard stated its operation was legal and intended to safeguard what?', options: ['Fishing rights', 'Regional security', 'The country’s rights and interests', 'The marine environment'], answer: 'The country’s rights and interests' },
+                    { q: 'The US criticized China for aiming what at the Japanese military aircraft?', options: ['Lasers', 'Missiles', 'Radar', 'Cameras'], answer: 'Radar' },
+                    { q: 'The Chinese spokesperson said their conduct was safe and in what manner?', options: ['Aggressive', 'Expeditious', 'Restrained', 'Flexible'], answer: 'Restrained' },
+                    { q: 'The Japanese Coast Guard sighting of the vessels occurred on which day of the week?', options: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], answer: 'Wednesday' },
+                    { q: 'The run-in between the militaries occurred during what Chinese activity?', options: ['A naval parade', 'A training exercise', 'A search and rescue mission', 'A diplomatic visit'], answer: 'A training exercise' }
+                ]
+            },
+            'trump-social-media-history': {
+                title: '川普政府計劃要求遊客提供五年社群媒體歷史', 
+                english: `The Trump administration plans to require travelers from more than 40 countries to provide their social media histories from the last five years to enter the US. According to a notice published Tuesday in the Federal Register, the data would be mandatory for travelers from 42 visa waiver countries. A notice from Customs and Border Protection states that providing social media histories will now be part of the requirements to complete ESTA. Under the proposal, residents of the United Kingdom, Germany, and other visa-waiver countries—who currently do not need visas to visit the US—would face an additional hurdle. Travelers from these countries can currently complete the Electronic System for Travel Authorization (ESTA) instead of obtaining visas. The Trump administration has increased restrictions on people entering the US, and Trump ran a campaign focused on border and immigration crackdowns. In addition to social media histories, Customs and Border Protection would add other new data-collection fields, including: email addresses used in the last five years, telephone numbers used in the last five years, addresses and names of family members.`,
+                chinese: `川普政府計劃要求來自 40 多個國家的遊客提供過去五年的社群媒體歷史記錄才能進入美國。根據週二在《聯邦公報》（Federal Register）上發布的通知，這些數據對於來自 42 個免簽證國家的旅客將是強制性的。美國海關與邊境保護局（Customs and Border Protection）的一份通知指出，提供社群媒體歷史記錄現在將成為完成 ESTA（電子旅行授權系統）的要求之一。根據該提案，目前無需簽證即可訪問美國的英國、德國和其他免簽證國家/地區的居民將面臨額外的障礙。來自這些國家的旅客目前可以完成 ESTA，而不是申請簽證。川普政府加大了對入境美國人員的限制，川普的競選活動重點是邊境和移民鎮壓。除了社群媒體歷史記錄外，海關與邊境保護局還將添加其他新的數據收集欄位，包括：過去五年使用的電子郵件地址、過去五年使用的電話號碼、家庭成員的地址和姓名。`,
+                vocabulary: [
+                    'Trump administration (n.phr.): 川普政府', 'require travelers (phr.): 要求旅客', 'social media histories (n.phr.): 社群媒體歷史記錄', 
+                    'Federal Register (n. proper): 聯邦公報 (美國政府法規公佈刊物)', 'mandatory (adj.): 強制性的', 'visa waiver countries (n.phr.): 免簽證國家', 
+                    'Customs and Border Protection (n.phr.): 美國海關與邊境保護局 (CBP)', 'requirements (n.): 要求', 'complete ESTA (phr.): 完成電子旅行授權系統 (ESTA)', 
+                    'proposal (n.): 提案', 'additional hurdle (n.phr.): 額外的障礙', 'Electronic System for Travel Authorization (n.phr.): 電子旅行授權系統 (ESTA)', 
+                    'obtaining visas (phr.): 獲得簽證', 'increased restrictions (phr.): 增加了限制', 'immigration crackdowns (n.phr.): 移民鎮壓', 
+                    'data-collection fields (n.phr.): 數據收集欄位', 'email addresses (n.phr.): 電子郵件地址', 'telephone numbers (n.phr.): 電話號碼', 
+                    'names of family members (n.phr.): 家庭成員的姓名', 'residence (n.): 居住地', 'travelers (n.): 旅客', 
+                    'enter the US (phr.): 進入美國', 'residents (n.): 居民', 'campaign (n.): 競選活動', 'border (n.): 邊境',
+                    'notice (n.): 通知', 'published (v.): 發布', 'currently (adv.): 目前'
+                ],
+                quiz: [
+                    { q: 'The Trump administration plans to require social media history from the last how many years?', options: ['One year', 'Three years', 'Five years', 'Ten years'], answer: 'Five years' },
+                    { q: 'The notice for the new requirement was published in which government document?', options: ['The White House Brief', 'The New York Times', 'The Federal Register', 'The Congressional Record'], answer: 'The Federal Register' },
+                    { q: 'The new data requirement would be mandatory for travelers from how many visa waiver countries?', options: ['25', '32', '42', '50'], answer: '42' },
+                    { q: 'Which US government agency issued the notice regarding ESTA?', options: ['Department of State', 'Customs and Border Protection', 'Department of Justice', 'Federal Bureau of Investigation'], answer: 'Customs and Border Protection' },
+                    { q: 'What is the full name of ESTA?', options: ['Electronic Security Travel Application', 'Emergency Stop Travel Authorization', 'Electronic System for Travel Authorization', 'Entry Standard Travel Approval'], answer: 'Electronic System for Travel Authorization' },
+                    { q: 'The proposal means residents of visa-waiver countries will face what kind of barrier?', options: ['A large fee increase', 'An additional hurdle', 'Mandatory interviews', 'An absolute travel ban'], answer: 'An additional hurdle' },
+                    { q: 'What is the key focus of the Trump administration\'s campaign mentioned?', options: ['Tax reform', 'Trade negotiations', 'Border and immigration crackdowns', 'Healthcare reform'], answer: 'Border and immigration crackdowns' },
+                    { q: 'Which country is listed as a visa-waiver country whose residents would be affected?', options: ['China', 'Russia', 'United Kingdom', 'India'], answer: 'United Kingdom' },
+                    { q: 'Besides social media history, which of the following is a new data-collection field?', options: ['Credit scores', 'Employment history for the last 10 years', 'Addresses and names of family members', 'Medical records'], answer: 'Addresses and names of family members' },
+                    { q: 'The new requirements apply to email addresses and telephone numbers used in the last how many years?', options: ['One year', 'Three years', 'Five years', 'Ten years'], answer: 'Five years' },
+                    { q: 'What does the term "visa waiver countries" mean?', options: ['Countries whose residents must always get visas', 'Countries whose residents can enter the US without a visa', 'Countries with a high crime rate', 'Countries that are US allies only'], answer: 'Countries whose residents can enter the US without a visa' },
+                    { q: 'When was the notice published in the Federal Register?', options: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], answer: 'Tuesday' },
+                    { q: 'The requirement affects travelers from more than how many countries?', options: ['20', '30', '40', '50'], answer: '40' },
+                    { q: 'What does the acronym CBP stand for?', options: ['Central Border Patrol', 'Customs and Border Protection', 'Citizen Background Program', 'Cross-Border Planning'], answer: 'Customs and Border Protection' },
+                    { q: 'The new proposal would primarily affect people who currently use which system to enter the US?', options: ['H-1B Visas', 'Green Cards', 'ESTA', 'Student Visas'], answer: 'ESTA' }
+                ]
+            },
+            'silver-price-record': {
+                title: '白銀價格創歷史新高：受聯準會降息預期推動', 
+                english: `The price of silver has hit a record high ahead of an expected US Federal Reserve interest rate cut, and as demand from the technology industry for the precious metal remains high. Silver crossed $60 an ounce on the spot market, where the metal is bought and sold for immediate delivery, for the first time on Tuesday. Gold, which hit a record high earlier this year as concerns grew about the impact of US tariffs and the global economic outlook, also made gains this week. Investors tend to move money into gold and silver as interest rates fall and the US dollar weakens. The US central bank is widely expected to cut its main interest rate by a quarter percentage point. The move into safe-haven assets has also contributed to gold hitting new record highs in recent months, surpassing $4,000 an ounce for the first time. Silver's rally is also seen as a spillover effect from gold’s surge, as investors look for cheaper alternatives. Gold has gained more than 50% this year, partly due to major purchases by central banks. Prices of platinum and palladium have also climbed this year.`,
+                chinese: `在美國聯邦儲備理事會（Fed）預期降息之前，以及科技產業對這種貴金屬的需求依然強勁之際，白銀價格創下了歷史新高。白銀價格週二在現貨市場上首次突破每盎司 60 美元，現貨市場是金屬進行即時交割買賣的地方。黃金今年早些時候因人們對美國關稅和全球經濟前景的影響日益擔憂而創下歷史新高，本週也實現了上漲。隨著利率下降和美元走弱，投資者傾向於將資金轉移到黃金和白銀上。美國中央銀行普遍預計將其主要利率下調四分之一個百分點。這種轉向避險資產的舉動也促使黃金在最近幾個月創下了新的歷史新高，首次突破每盎司 4,000 美元。白銀的反彈也被視為黃金飆升的溢出效應（spillover effect），因為投資者正在尋找更便宜的替代品。今年，黃金價格上漲了 50% 以上，部分原因是各國中央銀行的大量購買。鉑金和鈀金的價格今年也有所上漲。`,
+                vocabulary: [
+                    'record high (n.phr.): 歷史新高', 'US Federal Reserve (n. proper): 美國聯邦儲備理事會 (Fed)', 'interest rate cut (n.phr.): 降息', 
+                    'demand (n.): 需求', 'precious metal (n.phr.): 貴金屬', 'spot market (n.phr.): 現貨市場', 
+                    'immediate delivery (n.phr.): 即時交割', 'made gains (phr.): 實現上漲', 'global economic outlook (n.phr.): 全球經濟前景', 
+                    'interest rates fall (phr.): 利率下降', 'US dollar weakens (phr.): 美元走弱', 'central bank (n.phr.): 中央銀行', 
+                    'widely expected (phr.): 普遍預計', 'quarter percentage point (n.phr.): 四分之一個百分點 (0.25%)', 'safe-haven assets (n.phr.): 避險資產', 
+                    'contributed to (phr.v.): 促成，貢獻於', 'surpassing (v.ger.): 超過', 'silver\'s rally (n.phr.): 白銀的反彈', 
+                    'spillover effect (n.phr.): 溢出效應', 'gold’s surge (n.phr.): 黃金的飆升', 'cheaper alternatives (n.phr.): 更便宜的替代品', 
+                    'major purchases (n.phr.): 大量購買', 'central banks (n.phr.): 中央銀行', 'platinum (n.): 鉑金', 
+                    'palladium (n.): 鈀金', 'climbed (v.): 上漲', 'investors (n.): 投資者', 'ounce (n.): 盎司',
+                    'technology industry (n.phr.): 科技產業'
+                ],
+                quiz: [
+                    { q: 'Ahead of what event did the price of silver hit a record high?', options: ['US Presidential election', 'US Federal Reserve interest rate cut', 'The opening of a new silver mine', 'A new trade deal with China'], answer: 'US Federal Reserve interest rate cut' },
+                    { q: 'What is keeping the demand for silver high?', options: ['Jewelry collectors', 'A new coin released by the Treasury', 'Demand from the technology industry', 'Increased demand for luxury cars'], answer: 'Demand from the technology industry' },
+                    { q: 'Silver crossed what price per ounce on the spot market for the first time?', options: ['$30', '$40', '$50', '$60'], answer: '$60' },
+                    { q: 'The spot market is where the metal is bought and sold for what kind of delivery?', options: ['Future delivery', 'Forward contract', 'Immediate delivery', 'Bulk delivery only'], answer: 'Immediate delivery' },
+                    { q: 'When do investors typically move money into gold and silver?', options: ['When interest rates rise', 'When the US dollar strengthens', 'As interest rates fall and the US dollar weakens', 'During high inflation'], answer: 'As interest rates fall and the US dollar weakens' },
+                    { q: 'By what percentage point is the US central bank expected to cut its main interest rate?', options: ['Half a percentage point', 'A full percentage point', 'A quarter percentage point', 'No change is expected'], answer: 'A quarter percentage point' },
+                    { q: 'The move into what kind of assets has contributed to gold hitting new record highs?', options: ['Risky stocks', 'Real estate', 'Safe-haven assets', 'Commodity funds'], answer: 'Safe-haven assets' },
+                    { q: 'Gold surpassed what price per ounce for the first time in recent months?', options: ['$1,000', '$2,000', '$3,000', '$4,000'], answer: '$4,000' },
+                    { q: 'Silver’s rally is seen as a spillover effect from whose surge?', options: ['Platinum’s surge', 'Gold’s surge', 'Palladium’s surge', 'Copper’s surge'], answer: 'Gold’s surge' },
+                    { q: 'Why are investors looking at silver as an alternative?', options: ['It is more beautiful', 'It is cheaper', 'It has more industrial uses', 'It is easier to transport'], answer: 'It is cheaper' },
+                    { q: 'Gold has gained more than what percentage this year?', options: ['25%', '50%', '75%', '100%'], answer: '50%' },
+                    { q: 'Major purchases by what institution contributed to gold’s gain?', options: ['Private hedge funds', 'Insurance companies', 'Central banks', 'Investment trusts'], answer: 'Central banks' },
+                    { q: 'Besides silver and gold, which other metals have climbed this year?', options: ['Copper and Iron', 'Platinum and Palladium', 'Nickel and Zinc', 'Aluminum and Lead'], answer: 'Platinum and Palladium' },
+                    { q: 'The earlier record high for gold was due to concerns about US tariffs and what else?', options: ['Political corruption', 'Global economic outlook', 'Social unrest', 'Technological obsolescence'], answer: 'Global economic outlook' },
+                    { q: 'What is the full name of the US central bank?', options: ['US National Bank', 'Federal Reserve', 'US Treasury Department', 'The White House Bank'], answer: 'Federal Reserve' }
+                ]
+            },
+            'porsche-formosa-edition': {
+                title: '保時捷台灣推出 911 Carrera T Formosa 致敬台灣', 
+                english: `The 911 Carrera T Formosa pays homage to Taiwan’s natural landscapes with a design narrative deeply rooted in the island’s scenery. The name Formosa, meaning “beautiful island,” was bestowed by 16th-century Portuguese sailors captivated by the island’s verdant terrain. Taiwan’s geography offers an extraordinary diversity of landscapes within a compact area—from the soaring Central Mountain Range, home to some of the world’s most scenic driving roads, to the dramatic rock formations of the east coast and the vibrant Pacific waters. Christian Nater, CEO of Porsche Taiwan, said: “The 911 Carrera T Formosa is a statement of individuality and a celebration of Taiwan. Through the Sonderwunsch program, we have brought a distinct vision to life that captures the essence of the island.” Porsche is reinterpreting the legendary Sonderwunsch program of the late 1970s, enabling personalized one-offs co-created by the customer and professionally realized by Porsche. The offering for new vehicles includes the installation of tailor-made special-request options directly in the production run. Customers can access Paint to Sample Plus when ordering a car, allowing Porsche to create an individual exterior color based on the customer’s personal wishes.`,
+                chinese: `911 Carrera T Formosa 致敬台灣的自然景觀，其設計理念深植於島嶼風光之中。「福爾摩沙」（Formosa）這個名字意為「美麗之島」，由 16 世紀被島上翠綠地形迷住的葡萄牙水手所賦予。台灣的地理環境在一個緊湊的區域內提供了非凡多樣的景觀—從高聳的中央山脈（擁有世界上一些最風景優美的駕駛道路），到東海岸戲劇性的岩石構造，以及充滿活力的太平洋水域。Porsche 台灣執行長 Christian Nater 表示：「911 Carrera T Formosa 是一種個性化的宣言，也是對台灣的慶祝。透過 Sonderwunsch 計劃，我們實現了一個獨特的願景，捕捉了這個島嶼的精髓。」Porsche 正在重新詮釋 1970 年代末期的傳奇 Sonderwunsch 計劃，該計劃可實現由客戶共同創造、並由 Porsche 專業實現的個性化單一訂製車。新車的服務包括在生產過程中直接安裝量身定制的特殊要求選項。客戶在訂購汽車時可以選擇「Paint to Sample Plus」（按樣板塗漆附加服務），允許 Porsche 根據客戶的個人意願創建個性化的外部顏色。`,
+                vocabulary: [
+                    'pays homage to (phr.): 向...致敬', 'natural landscapes (n.phr.): 自然景觀', 'design narrative (n.phr.): 設計理念', 
+                    'deeply rooted in (phr.): 深植於', 'scenery (n.): 風光，風景', 'bestowed by (phr.v.): 由...賦予', 
+                    'Portuguese sailors (n.phr.): 葡萄牙水手', 'captivated by (phr.): 被...迷住', 'verdant terrain (n.phr.): 翠綠的地形', 
+                    'geography (n.): 地理環境', 'extraordinary diversity (n.phr.): 非凡的多樣性', 'compact area (n.phr.): 緊湊的區域', 
+                    'soaring Central Mountain Range (n.phr.): 高聳的中央山脈', 'scenic driving roads (n.phr.): 風景優美的駕駛道路', 'dramatic rock formations (n.phr.): 戲劇性的岩石構造', 
+                    'vibrant Pacific waters (n.phr.): 充滿活力的太平洋水域', 'statement of individuality (n.phr.): 個性化的宣言', 'celebration of (phr.): 對...的慶祝', 
+                    'Sonderwunsch program (n. proper): Sonderwunsch 計劃 (保時捷客製化服務)', 'distinct vision (n.phr.): 獨特的願景', 'captures the essence of (phr.): 捕捉...的精髓', 
+                    'reinterpreting (v.ger.): 重新詮釋', 'personalized one-offs (n.phr.): 個性化單一訂製車', 'co-created by the customer (phr.): 由客戶共同創造', 
+                    'professionally realized (phr.): 專業實現', 'tailor-made special-request options (n.phr.): 量身定制的特殊要求選項', 'production run (n.phr.): 生產過程', 
+                    'Paint to Sample Plus (n. proper): 按樣板塗漆附加服務', 'individual exterior color (n.phr.): 個性化的外部顏色', 'Christian Nater (n. proper): Porsche 台灣執行長'
+                ],
+                quiz: [
+                    { q: 'The 911 Carrera T Formosa pays homage to what aspect of Taiwan?', options: ['Its political history', 'Its natural landscapes', 'Its technology industry', 'Its manufacturing success'], answer: 'Its natural landscapes' },
+                    { q: 'What does the name Formosa mean?', options: ['The Land of Dragons', 'Island of the Gods', 'Beautiful Island', 'The Green Coast'], answer: 'Beautiful Island' },
+                    { q: 'Which group of people bestowed the name Formosa?', options: ['Dutch traders', 'Japanese governors', '16th-century Portuguese sailors', 'Spanish missionaries'], answer: '16th-century Portuguese sailors' },
+                    { q: 'What feature of Taiwan’s geography offers scenic driving roads?', options: ['The western plains', 'The bustling cities', 'The soaring Central Mountain Range', 'The northern lakes'], answer: 'The soaring Central Mountain Range' },
+                    { q: 'Which body of water is mentioned alongside the east coast rock formations?', options: ['The South China Sea', 'The Taiwan Strait', 'The Pacific waters', 'The Philippine Sea'], answer: 'The Pacific waters' },
+                    { q: 'What is Christian Nater’s title?', options: ['Head Designer of Porsche Global', 'CEO of Porsche Taiwan', 'Chief Engineer of the 911 Series', 'Marketing Director of Porsche Asia'], answer: 'CEO of Porsche Taiwan' },
+                    { q: 'The car is described as a statement of individuality and what else?', options: ['A commercial success', 'A nod to history', 'A celebration of Taiwan', 'An engineering breakthrough'], answer: 'A celebration of Taiwan' },
+                    { q: 'The unique vision was brought to life through which program?', options: ['GT Program', 'Personalization Hub', 'Sonderwunsch program', 'Exclusive Manufaktur'], answer: 'Sonderwunsch program' },
+                    { q: 'When was the original legendary Sonderwunsch program from?', options: ['Early 1990s', 'Late 1970s', 'Mid 1980s', 'Early 2000s'], answer: 'Late 1970s' },
+                    { q: 'What does the program enable to be co-created by the customer?', options: ['A new engine model', 'Mass-produced vehicles', 'Personalized one-offs', 'New factory colors'], answer: 'Personalized one-offs' },
+                    { q: 'The offering includes the installation of special-request options directly during what phase?', options: ['The initial design stage', 'The production run', 'The final inspection', 'The aftermarket stage'], answer: 'The production run' },
+                    { q: 'What service allows the creation of an individual exterior color?', options: ['Color Match Pro', 'Personal Hue Service', 'Paint to Sample Plus', 'Exclusive Color Line'], answer: 'Paint to Sample Plus' },
+                    { q: 'What does the name Formosa literally mean in English?', options: ['Green Land', 'Fragrant Island', 'Beautiful Island', 'Mountainous Land'], answer: 'Beautiful Island' },
+                    { q: 'The sailors were captivated by which aspect of the island?', options: ['Its bustling cities', 'Its unique cuisine', 'Its verdant terrain', 'Its trade potential'], answer: 'Its verdant terrain' },
+                    { q: 'The car captures the what of the island?', options: ['Demographics', 'Industry', 'Geography', 'Essence'], answer: 'Essence' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        // Sets the default state to the first item in the NEWS_DATA object
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; // Default view: article, translation, vocabulary, quiz
+        let quizState = {}; // Stores answers: { topicId: { questionIndex: selectedOption } }
+        let quizResult = {}; // Stores results: { topicId: { score: N, total: M } }
+
+
+        // --- CORE RENDERING FUNCTIONS ---
+
+        /**
+         * Renders the main topic tabs at the top of the page.
+         */
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            // If no data, show a message
+            if (Object.keys(NEWS_DATA).length === 0) {
+                tabsContainer.innerHTML = '<p class="p-4 text-center text-red-500 font-semibold">無新聞資料可顯示，請更新 NEWS_DATA 變數。</p>';
+                return;
+            }
+
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                // Chinese title extraction from the English/Chinese summary line (or just use the title field)
+                const tabTitle = data.title.split('：')[0]; 
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `
+                    <button 
+                        class="main-tab-button ${isActive}" 
+                        onclick="changeTopic('${id}')"
+                    >
+                        ${tabTitle}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Renders the content based on the current topic and sub-tab.
+         */
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            
+            if (!data) {
+                contentArea.innerHTML = '<h2 class="text-3xl font-bold text-gray-800 mb-6">錯誤：找不到新聞內容</h2><p>請檢查您的新聞 ID 設定。</p>';
+                return;
+            }
+            
+            // 1. Render Sub-Tabs Menu (次分頁)
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            
+            let contentHTML = '';
+
+            switch (currentSubTab) {
+                case 'article':
+                    contentHTML = renderArticle(data.english, data.title);
+                    break;
+                case 'translation':
+                    contentHTML = renderTranslation(data.chinese, data.title);
+                    break;
+                case 'vocabulary':
+                    contentHTML = renderVocabulary(data.vocabulary, data.title);
+                    break;
+                case 'quiz':
+                    contentHTML = renderQuiz(currentTopicId, data.quiz, data.title);
+                    break;
+            }
+
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+
+            // Ensure quiz answer state is maintained on re-render
+            if (currentSubTab === 'quiz') {
+                updateQuizDisplay(currentTopicId, data.quiz);
+            }
+        }
+
+        /**
+         * Renders the original English article.
+         */
+        function renderArticle(text, title) {
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2>
+                <div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100">
+                    <p>${text.trim()}</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <div class="text-sm text-gray-500 mb-2">點擊下方按鈕，開始深度學習：</div>
+                    <button 
+                        class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition duration-200 ease-in-out"
+                        onclick="changeSubTab('translation')"
+                    >
+                        🇹🇼 前往中文翻譯 (See Translation)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the Chinese translation.
+         */
+        function renderTranslation(text, title) {
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2>
+                <div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner">
+                    <p>${text.trim()}</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <div class="text-sm text-gray-500 mb-2">繼續強化詞彙與理解：</div>
+                    <button 
+                        class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition duration-200 ease-in-out"
+                        onclick="changeSubTab('vocabulary')"
+                    >
+                        📖 前往單字庫複習 (Review Vocabulary)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the vocabulary list.
+         */
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100">
+                    <span class="font-semibold text-indigo-700">${parts[0]}</span> 
+                    <span class="text-gray-500 text-sm italic">${parts[1]}</span>
+                </li>`;
+            }).join('');
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語 (共 ${vocabArray.length} 個)</h2>
+                <p class="text-gray-600 mb-6">掌握這些關鍵詞彙，將有助於您完全理解新聞內容。</p>
+                <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    ${listItems}
+                </ul>
+                <div class="mt-8 text-center">
+                    <div class="text-sm text-gray-500 mb-2">準備好測試您的理解力了嗎？</div>
+                    <button 
+                        class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition duration-200 ease-in-out"
+                        onclick="initQuiz()"
+                    >
+                        📝 開始測驗 (Start Quiz)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the quiz interface.
+         */
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            
+            if (!quizQuestions || quizQuestions.length === 0) {
+                return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>
+                        <div class="text-center p-8 bg-yellow-100 rounded-xl mb-8 border-4 border-yellow-500">
+                            <p class="text-xl font-extrabold text-yellow-800">❗ 測驗題庫尚未建立 ❗</p>
+                            <p class="text-lg mt-2 text-yellow-700">請確保 NEWS_DATA 中包含至少 15 題測驗題。</p>
+                        </div>`;
+            }
+
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const correctAnswer = q.answer;
+                
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    let isCurrentSelected = selected === option;
+
+                    if (isSubmitted) {
+                        if (option === correctAnswer) {
+                            classes += ' correct'; // Correct answer
+                        } else if (isCurrentSelected && option !== correctAnswer) {
+                            classes += ' incorrect'; // User selected, but incorrect
+                        }
+                    } else if (isCurrentSelected) {
+                        classes += ' selected'; // User selected, but not submitted
+                    }
+
+                    // Escape single quotes in option text for selectOption function call
+                    const escapedOption = option.replace(/'/g, "\\'");
+
+                    return `
+                        <div 
+                            class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" 
+                            data-q-index="${index}" 
+                            data-option="${option}"
+                            onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"
+                        >
+                            <span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}
+                            ${isSubmitted && option === correctAnswer ? '<span class="ml-2 text-green-700 font-bold"> (正確答案)</span>' : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500">
+                        <p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>
+                        ${optionsHTML}
+                    </div>
+                `;
+            }).join('');
+
+            const resultHTML = result ? `
+                <div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500">
+                    <h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3>
+                    <p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p>
+                    <p class="text-lg mt-3 text-indigo-800">您答對了 ${result.score} 題。請檢視下方標註的答案！</p>
+                    <button 
+                        class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full hover:bg-yellow-600 transition"
+                        onclick="initQuiz(true)"
+                    >
+                        🔄 重置測驗
+                    </button>
+                </div>
+            ` : '';
+
+            const submitButton = result === undefined ? `
+                <button 
+                    id="submit-quiz-button"
+                    class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition duration-300 disabled:opacity-50"
+                    onclick="submitQuizAnswer('${topicId}')"
+                    disabled
+                >
+                    送出答案並查看結果
+                </button>
+            ` : '';
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>
+                ${resultHTML}
+                <div id="quiz-questions">
+                    ${questionsHTML}
+                </div>
+                <div class="mt-8 text-center">
+                    ${submitButton}
+                    <p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p>
+                </div>
+            `;
+        }
+
+
+        // --- QUIZ LOGIC ---
+
+        /**
+         * Initializes or resets the quiz state for a topic.
+         * @param {boolean} forceReset - Whether to force a full reset.
+         */
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            const data = NEWS_DATA[topicId];
+            if (!data || !data.quiz || data.quiz.length === 0) {
+                 currentSubTab = 'quiz';
+                 renderContent();
+                 return;
+            }
+
+            // If we are already on the quiz tab and not forcing a reset, just ensure correct tab is selected
+            if (!forceReset && currentSubTab === 'quiz') {
+                return;
+            }
+            
+            // If the user manually clicks the tab, or requests a full reset, clear results
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        /**
+         * Selects an option for a question.
+         */
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return; // Cannot change after submission
+            
+            quizState[topicId] = quizState[topicId] || {};
+            const currentSelection = quizState[topicId][questionIndex];
+
+            // Toggle selection logic
+            if (currentSelection === selectedOption) {
+                delete quizState[topicId][questionIndex];
+            } else {
+                quizState[topicId][questionIndex] = selectedOption;
+            }
+            
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        /**
+         * Submits the quiz answers and displays the results.
+         */
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            const total = questions.length;
+
+            if (Object.keys(answers).length !== total) {
+                document.getElementById('quiz-message').textContent = `請回答所有 ${total} 題問題！`;
+                return;
+            }
+            document.getElementById('quiz-message').textContent = '';
+
+            questions.forEach((q, index) => {
+                const selected = answers[index];
+                if (selected === q.answer) {
+                    score++;
+                }
+            });
+
+            quizResult[topicId] = { score, total };
+            renderContent(); // Re-render to show results and correct/incorrect indicators
+        }
+        
+        /**
+         * Helper function to update the visual state of the quiz without full re-render.
+         */
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const totalQuestions = quizQuestions.length;
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== totalQuestions;
+                if (answeredCount === totalQuestions) {
+                    quizMessage.textContent = '所有問題已回答。';
+                } else {
+                    quizMessage.textContent = `請完成所有問題 (已完成: ${answeredCount}/${totalQuestions})`;
+                }
+            }
+
+            // Update classes for selection feedback if not submitted
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIndex = parseInt(element.getAttribute('data-q-index'));
+                    const option = element.getAttribute('data-option');
+                    
+                    element.classList.remove('selected');
+                    if (currentQuizState[qIndex] === option) {
+                        element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+
+        // --- Event Handlers (exposed globally) ---
+
+        /**
+         * Changes the main news topic displayed.
+         */
+        function changeTopic(newTopicId) {
+            if (currentTopicId === newTopicId) return;
+            currentTopicId = newTopicId;
+            currentSubTab = 'article'; // Reset to Article view on topic change
+            renderTabs();
+            renderContent();
+        }
+
+        /**
+         * Changes the sub-tab (Article, Translation, Vocabulary, Quiz) within the current topic.
+         */
+        function changeSubTab(newSubTab) {
+            currentSubTab = newSubTab;
+            renderContent();
+        }
+
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if there is any data to load
+            if (Object.keys(NEWS_DATA).length > 0) {
+                // Ensure the current topic is valid if data exists
+                if (!NEWS_DATA[currentTopicId]) {
+                    currentTopicId = Object.keys(NEWS_DATA)[0];
+                }
+                renderTabs();
+                renderContent();
+            } else {
+                 // No data, show only the default message (already in HTML)
+                 document.getElementById('content-area').innerHTML = '<div class="text-center p-12 text-gray-500"><p class="text-2xl font-bold mb-4">歡迎使用英文新聞學習模板！</p><p class="text-lg">請提供最新的英文新聞，我會將內容替換至下方的 <code class="bg-gray-200 p-1 rounded">NEWS_DATA</code> 變數中。</p><p class="text-sm mt-4 text-red-500">當前 <code class="bg-gray-200 p-1 rounded">NEWS_DATA</code> 僅包含模板範例。</p></div>';
+            }
+            
+            // Expose functions globally for use in HTML event handlers
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
