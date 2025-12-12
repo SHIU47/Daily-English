@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 你的英文能量補給站！ (優化版)</title>
+    <title>🔥 你的英文能量補給站！ (圖片卡片網格優化)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -28,6 +28,22 @@
             transform: translate(-4px, -4px) scale(1.01); /* 浮起感更明顯 */
             box-shadow: 12px 12px 0px rgba(163, 230, 53, 0.8); /* 陰影更亮 */
             background-color: #f0ffee; /* 輕微變色 */
+        }
+
+        /* 新增：圖片網格卡片樣式 */
+        .grid-card {
+            display: flex;
+            flex-direction: column;
+            background-color: #1f2937; /* 深色背景，與圖片更好搭配 */
+            border-radius: 0.75rem; /* 較小的圓角 */
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border: 1px solid #4b5563;
+        }
+        .grid-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.4), 0 0 0 2px #84cc16;
         }
 
         /* 標題區塊使用獨立樣式 */
@@ -95,7 +111,7 @@
         .search-input::placeholder {
             color: #9ca3af; /* 預留文字顏色 */
         }
-
+        
     </style>
 </head>
 <body class="min-h-screen p-4 sm:p-8">
@@ -152,7 +168,7 @@
                 <!-- 1. 英文新聞 Content (初始為 Active) -->
                 <div id="news" class="tab-content active">
                     <h2 class="text-xl font-semibold text-white mb-4 border-b border-gray-700 pb-3">
-                        今日份知識點 (已找到 <span id="file-count" class="font-bold accent-color">4</span> 篇)
+                        今日份知識點 (已找到 <span id="file-count" class="font-bold accent-color">10</span> 篇)
                     </h2>
                     
                     <!-- 檔案篩選與搜尋控制區塊 -->
@@ -180,217 +196,257 @@
                         </select>
                     </div>
 
-                    <!-- 文件列表 -->
-                    <ul id="document-list" class="space-y-6">
+                    <!-- 文件列表 - 改為網格佈局 -->
+                    <ul id="document-list" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
-<!-- 檔案列表項 (使用 fun-card 樣式) - 2025/12/12 -->
-                        <li class="fun-card" data-date="2025/12/06" data-month="2025-12">
-                            <a href="2025.12.12英文新聞.html" class="block p-4 rounded-xl group">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-dark-primary flex items-center">
-                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/12 英文新聞
-                                    </span>
-                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                        2025/12/12
-                                    </span>
+                        <!-- 檔案列表項 (使用 grid-card 樣式) - 2025/12/12 -->
+                        <li data-date="2025/12/12" data-month="2025-12">
+                            <a href="news/2025.12.12英文新聞.html" class="grid-card">
+                                <div class="w-full aspect-video bg-gray-600 overflow-hidden">
+                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=XAG/USD" 
+                                         alt="白銀價格創歷史新高" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
                                 </div>
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="text-sm text-dark-secondary">
-                                        重點新聞_白銀價格創歷史新高：受聯準會降息預期推動
-                                    </p>
-                                    <!-- 互動指示箭頭 -->
-                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                </div>
-                            </a>
-                        </li>
-                        
-<!-- 檔案列表項 (使用 fun-card 樣式) - 2025/12/11 -->
-                        <li class="fun-card" data-date="2025/12/06" data-month="2025-12">
-                            <a href="2025.12.11英文新聞.html" class="block p-4 rounded-xl group">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-dark-primary flex items-center">
-                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/11 英文新聞
-                                    </span>
-                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                        2025/12/11
-                                    </span>
-                                </div>
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="text-sm text-dark-secondary">
-                                        重點新聞_日本近海發生 7.6 級地震：引發海嘯警報
-                                    </p>
-                                    <!-- 互動指示箭頭 -->
-                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                <div class="p-4 text-white flex flex-col justify-between flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-2">
+                                        白銀價格創歷史新高：受聯準會降息預期推動
+                                    </h3>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-xs font-semibold text-lime-400">
+                                            2025/12/12
+                                        </span>
+                                        <span class="text-sm text-gray-400">
+                                            <svg class="w-5 h-5 inline-block transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </a>
                         </li>
                         
-<!-- 檔案列表項 (使用 fun-card 樣式) - 2025/12/10 -->
-                        <li class="fun-card" data-date="2025/12/06" data-month="2025-12">
-                            <a href="2025.12.10英文新聞.html" class="block p-4 rounded-xl group">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-dark-primary flex items-center">
-                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/10 英文新聞
-                                    </span>
-                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                        2025/12/10
-                                    </span>
+                        <!-- 檔案列表項 (使用 grid-card 樣式) - 2025/12/11 -->
+                        <li data-date="2025/12/11" data-month="2025-12">
+                            <a href="news/2025.12.11英文新聞.html" class="grid-card">
+                                <div class="w-full aspect-video bg-gray-600 overflow-hidden">
+                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Earthquake+7.6M" 
+                                         alt="日本近海地震" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
                                 </div>
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="text-sm text-dark-secondary">
-                                        重點新聞_中國戰機對日本軍機照射雷達
-                                    </p>
-                                    <!-- 互動指示箭頭 -->
-                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                </div>
-                            </a>
-                        </li>
-                        
-<!-- 檔案列表項 (使用 fun-card 樣式) - 2025/12/09 -->
-                        <li class="fun-card" data-date="2025/12/06" data-month="2025-12">
-                            <a href="2025.12.09英文新聞.html" class="block p-4 rounded-xl group">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-dark-primary flex items-center">
-                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/09 英文新聞
-                                    </span>
-                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                        2025/12/09
-                                    </span>
-                                </div>
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="text-sm text-dark-secondary">
-                                        重點新聞_Netflix 擬收購 Warner Bros. Discovery：影視巨頭合併
-                                    </p>
-                                    <!-- 互動指示箭頭 -->
-                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                <div class="p-4 text-white flex flex-col justify-between flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-2">
+                                        日本近海發生 7.6 級地震：引發海嘯警報
+                                    </h3>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-xs font-semibold text-lime-400">
+                                            2025/12/11
+                                        </span>
+                                        <span class="text-sm text-gray-400">
+                                            <svg class="w-5 h-5 inline-block transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </a>
                         </li>
                         
-<!-- 檔案列表項 (使用 fun-card 樣式) - 2025/12/08 -->
-                        <li class="fun-card" data-date="2025/12/06" data-month="2025-12">
-                            <a href="英文新聞2025.12.08.html" class="block p-4 rounded-xl group">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-dark-primary flex items-center">
-                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/08 英文新聞
-                                    </span>
-                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                        2025/12/08
-                                    </span>
+                        <!-- 檔案列表項 (使用 grid-card 樣式) - 2025/12/10 -->
+                        <li data-date="2025/12/10" data-month="2025-12">
+                            <a href="news/2025.12.10英文新聞.html" class="grid-card">
+                                <div class="w-full aspect-video bg-gray-600 overflow-hidden">
+                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Fighter+Jet" 
+                                         alt="戰機照射雷達" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
                                 </div>
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="text-sm text-dark-secondary">
+                                <div class="p-4 text-white flex flex-col justify-between flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-2">
+                                        中國戰機對日本軍機照射雷達
+                                    </h3>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-xs font-semibold text-lime-400">
+                                            2025/12/10
+                                        </span>
+                                        <span class="text-sm text-gray-400">
+                                            <svg class="w-5 h-5 inline-block transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <!-- 檔案列表項 (使用 grid-card 樣式) - 2025/12/09 -->
+                        <li data-date="2025/12/09" data-month="2025-12">
+                            <a href="news/2025.12.09英文新聞.html" class="grid-card">
+                                <div class="w-full aspect-video bg-gray-600 overflow-hidden">
+                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Netflix+WBD" 
+                                         alt="Netflix WBD 合併" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
+                                </div>
+                                <div class="p-4 text-white flex flex-col justify-between flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-2">
+                                        Netflix 擬收購 Warner Bros. Discovery：影視巨頭合併
+                                    </h3>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-xs font-semibold text-lime-400">
+                                            2025/12/09
+                                        </span>
+                                        <span class="text-sm text-gray-400">
+                                            <svg class="w-5 h-5 inline-block transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <!-- 檔案列表項 (使用 grid-card 樣式) - 2025/12/08 -->
+                        <li data-date="2025/12/08" data-month="2025-12">
+                            <a href="news/英文新聞2025.12.08.html" class="grid-card">
+                                <div class="w-full aspect-video bg-gray-600 overflow-hidden">
+                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Military+Accident" 
+                                         alt="國軍演習誤擊" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
+                                </div>
+                                <div class="p-4 text-white flex flex-col justify-between flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-2">
                                         重點新聞_國軍演習砲彈誤擊彰化民宅
-                                    </p>
-                                    <!-- 互動指示箭頭 -->
-                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    </h3>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-xs font-semibold text-lime-400">
+                                            2025/12/08
+                                        </span>
+                                        <span class="text-sm text-gray-400">
+                                            <svg class="w-5 h-5 inline-block transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </a>
                         </li>
                         
-                        <!-- 檔案列表項 (使用 fun-card 樣式) - 2025/12/06 -->
-                        <li class="fun-card" data-date="2025/12/06" data-month="2025-12">
-                            <a href="2025.12.06英文新聞.html" class="block p-4 rounded-xl group">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-dark-primary flex items-center">
-                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/06 英文新聞
-                                    </span>
-                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                        2025/12/06
-                                    </span>
+                        <!-- 檔案列表項 (使用 grid-card 樣式) - 2025/12/06 -->
+                        <li data-date="2025/12/06" data-month="2025-12">
+                            <a href="news/2025.12.06英文新聞.html" class="grid-card">
+                                <div class="w-full aspect-video bg-gray-600 overflow-hidden">
+                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Lion+Attack" 
+                                         alt="獅子攻擊事件" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
                                 </div>
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="text-sm text-dark-secondary">
+                                <div class="p-4 text-white flex flex-col justify-between flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-2">
                                         重點新聞_男爬進動物園獅子圍欄被咬死
-                                    </p>
-                                    <!-- 互動指示箭頭 -->
-                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    </h3>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-xs font-semibold text-lime-400">
+                                            2025/12/06
+                                        </span>
+                                        <span class="text-sm text-gray-400">
+                                            <svg class="w-5 h-5 inline-block transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </a>
                         </li>
                         
-                        <!-- 檔案列表項 (使用 fun-card 樣式) - 2025/12/05 -->
-                        <li class="fun-card" data-date="2025/12/05" data-month="2025-12">
-                            <a href="2025.12.05英文新聞.html" class="block p-4 rounded-xl group">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-dark-primary flex items-center">
-                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/05 英文新聞
-                                    </span>
-                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                        2025/12/05
-                                    </span>
+                        <!-- 檔案列表項 (使用 grid-card 樣式) - 2025/12/05 -->
+                        <li data-date="2025/12/05" data-month="2025-12">
+                            <a href="news/2025.12.05英文新聞.html" class="grid-card">
+                                <div class="w-full aspect-video bg-gray-600 overflow-hidden">
+                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=CPC+Corruption" 
+                                         alt="中油貪腐調查" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
                                 </div>
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="text-sm text-dark-secondary">
+                                <div class="p-4 text-white flex flex-col justify-between flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-2">
                                         重點新聞_台灣中油液化天然氣（LNG）計畫遭貪腐調查
-                                    </p>
-                                    <!-- 互動指示箭頭 -->
-                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    </h3>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-xs font-semibold text-lime-400">
+                                            2025/12/05
+                                        </span>
+                                        <span class="text-sm text-gray-400">
+                                            <svg class="w-5 h-5 inline-block transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </a>
                         </li>
                         
                         <!-- 檔案列表項 - 2025/12/04 -->
-                        <li class="fun-card" data-date="2025/12/04" data-month="2025-12">
-                            <a href="2025.12.04英文新聞.html" class="block p-4 rounded-xl group">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-dark-primary flex items-center">
-                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/04 英文新聞
-                                    </span>
-                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                        2525/12/04
-                                    </span>
+                        <li data-date="2025/12/04" data-month="2025-12">
+                            <a href="news/2025.12.04英文新聞.html" class="grid-card">
+                                <div class="w-full aspect-video bg-gray-600 overflow-hidden">
+                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Tilapia+Ban" 
+                                         alt="吳郭魚排禁藥" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
                                 </div>
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="text-sm text-dark-secondary">
+                                <div class="p-4 text-white flex flex-col justify-between flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-2">
                                         重點新聞_全聯吳郭魚排驗出禁藥
-                                    </p>
-                                    <!-- 互動指示箭頭 -->
-                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    </h3>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-xs font-semibold text-lime-400">
+                                            2025/12/04
+                                        </span>
+                                        <span class="text-sm text-gray-400">
+                                            <svg class="w-5 h-5 inline-block transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </span>
+                                    </div>
                                 </div>
                             </a>
                         </li>
 
-                    <!-- 檔案列表項 - 2025/12/03 (保留原本的 href) -->
-                        <li class="fun-card" data-date="2025/12/02" data-month="2025-12">
-                            <a href="2025.12.03英文新聞.html" class="block p-4 rounded-xl group">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-dark-primary flex items-center">
-                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/03 英文新聞
-                                    </span>
-                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                        2025/12/03
-                                    </span>
+                        <!-- 檔案列表項 - 2025/12/03 (保留原本的 href) -->
+                        <li data-date="2025/12/03" data-month="2025-12">
+                            <a href="news/2025.12.03英文新聞.html" class="grid-card">
+                                <div class="w-full aspect-video bg-gray-600 overflow-hidden">
+                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Water+Outage" 
+                                         alt="淡水停水事件" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
                                 </div>
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="text-sm text-dark-secondary">
+                                <div class="p-4 text-white flex flex-col justify-between flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-2">
                                         重點新聞_淡水停水事件
-                                    </p>
-                                    <!-- 互動指示箭頭 -->
-                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    </h3>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-xs font-semibold text-lime-400">
+                                            2025/12/03
+                                        </span>
+                                        <span class="text-sm text-gray-400">
+                                            <svg class="w-5 h-5 inline-block transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </span>
+                                    </div>
                                 </div>
-                            </a> 
+                            </a>
                         </li>
                         
                         <!-- 檔案列表項 - 2025/12/02 (保留原本的 href) -->
-                        <li class="fun-card" data-date="2025/12/02" data-month="2025-12">
-                            <a href="Funday新聞20251202.html" class="block p-4 rounded-xl group">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-lg font-bold text-dark-primary flex items-center">
-                                        <span class="mr-2 text-2xl accent-color">🗞️</span> 2025/12/02 英文新聞
-                                    </span>
-                                    <span class="text-xs font-bold text-dark-primary bg-accent-light px-3 py-1 rounded-full tracking-wider border border-lime-400">
-                                        2025/12/02
-                                    </span>
+                        <li data-date="2025/12/02" data-month="2025-12">
+                            <a href="news/Funday新聞20251202.html" class="grid-card">
+                                <div class="w-full aspect-video bg-gray-600 overflow-hidden">
+                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=HK+Fire" 
+                                         alt="香港高樓火警" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
                                 </div>
-                                <div class="flex items-center justify-between mt-1">
-                                    <p class="text-sm text-dark-secondary">
+                                <div class="p-4 text-white flex flex-col justify-between flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-2">
                                         重點新聞_香港災難高樓火警
-                                    </p>
-                                    <!-- 互動指示箭頭 -->
-                                    <svg class="w-5 h-5 text-lime-500 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    </h3>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-xs font-semibold text-lime-400">
+                                            2025/12/02
+                                        </span>
+                                        <span class="text-sm text-gray-400">
+                                            <svg class="w-5 h-5 inline-block transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </span>
+                                    </div>
                                 </div>
-                            </a> 
+                            </a>
                         </li>
                         
                     </ul>
@@ -402,11 +458,12 @@
                         深度閱讀與主題文章 (已找到 <span id="reading-file-count" class="font-bold accent-color">3</span> 篇)
                     </h2>
 
+                    <!-- 閱讀文章列表 - 保持原來的列表樣式，不需要圖片網格 -->
                     <ul id="reading-document-list" class="space-y-6">
 
                         <!-- 檔案列表項 - 科技趨勢 -->
-                        <li class="fun-card">
-                            <a href="Hot dog story.html" class="block p-4 rounded-xl group">
+                        <li>
+                            <a href="reading/Hot dog story.html" class="fun-card block p-4 rounded-xl group">
                                 <div class="flex items-center justify-between">
                                     <span class="text-lg font-bold text-dark-primary flex items-center">
                                         <span class="mr-2 text-2xl accent-color">🤖</span> 熱狗的小故事
@@ -425,8 +482,8 @@
                         </li>
 
                         <!-- 檔案列表項 - 文化觀察 -->
-                        <li class="fun-card">
-                            <a href="Coffee_Culture_Essay.html" class="block p-4 rounded-xl group">
+                        <li>
+                            <a href="reading/Coffee_Culture_Essay.html" class="fun-card block p-4 rounded-xl group">
                                 <div class="flex items-center justify-between">
                                     <span class="text-lg font-bold text-dark-primary flex items-center">
                                         <span class="mr-2 text-2xl accent-color">☕</span> 全球咖啡文化觀察
@@ -445,8 +502,8 @@
                         </li>
                         
                         <!-- 檔案列表項 - 科學新知 -->
-                        <li class="fun-card">
-                            <a href="Mars_Exploration.html" class="block p-4 rounded-xl group">
+                        <li>
+                            <a href="reading/Mars_Exploration.html" class="fun-card block p-4 rounded-xl group">
                                 <div class="flex items-center justify-between">
                                     <span class="text-lg font-bold text-dark-primary flex items-center">
                                         <span class="mr-2 text-2xl accent-color">🚀</span> 火星探索的最新進展
@@ -470,14 +527,14 @@
                 <!-- 3. 多益測驗 Content -->
                 <div id="toeic" class="tab-content">
                     <h2 class="text-xl font-semibold text-white mb-6 border-b border-gray-700 pb-3">
-                        多益想拿600分必背單字 (已找到 <span class="font-bold accent-color">2</span> 份)
+                        多益想拿600分必背單字 (已找到 <span class="font-bold accent-color" id="toeic-file-count">2</span> 份)
                     </h2>
                     
                     <ul id="toeic-document-list" class="space-y-6">
 
                         <!-- 檔案列表項 (使用 fun-card 樣式) - Day 1-10 -->
-                        <li class="fun-card">
-                            <a href="多益單字Day1-10.html" class="block p-4 rounded-xl group">
+                        <li>
+                            <a href="toeic/多益單字Day1-10.html" class="fun-card block p-4 rounded-xl group">
                                 <div class="flex items-center justify-between">
                                     <span class="text-lg font-bold text-dark-primary flex items-center">
                                         <span class="mr-2 text-2xl accent-color">💡</span> Day 1-10 核心多益單字
@@ -497,8 +554,8 @@
                         </li>
                         
                         <!-- 檔案列表項 - Day 11-20 -->
-                        <li class="fun-card">
-                            <a href="多益單字Day11-20.html" class="block p-4 rounded-xl group">
+                        <li>
+                            <a href="toeic/多益單字Day11-20.html" class="fun-card block p-4 rounded-xl group">
                                 <div class="flex items-center justify-between">
                                     <span class="text-lg font-bold text-dark-primary flex items-center">
                                         <span class="mr-2 text-2xl accent-color">💡</span> Day 11-20 核心多益單字
@@ -553,10 +610,12 @@
             // 如果切換到新聞分頁，則重新計算檔案數 (因為只有新聞分頁有篩選功能)
             if (tabName === 'news') {
                 updateNewsFileCount();
+                // 確保新聞區塊的篩選器在切換回來時仍然適用
+                filterDocuments(); 
             } else if (tabName === 'reading') {
                 updateGenericFileCount('reading-document-list', 'reading-file-count');
             } else if (tabName === 'toeic') {
-                updateGenericFileCount('toeic-document-list', 'toeic-file-count'); // TOEIC也加上一個ID方便未來擴充
+                updateGenericFileCount('toeic-document-list', 'toeic-file-count'); 
             }
         }
         
@@ -622,7 +681,13 @@
 
             for (let i = 0; i < listItems.length; i++) {
                 const item = listItems[i];
-                const itemText = item.textContent.toLowerCase();
+                // 尋找 H3 標籤內容（新聞標題）和日期文字
+                const titleElement = item.querySelector('h3');
+                const dateElement = item.querySelector('.text-xs');
+                
+                const itemText = (titleElement ? titleElement.textContent.toLowerCase() : '') + 
+                                 (dateElement ? dateElement.textContent.toLowerCase() : ''); 
+
                 const itemMonth = item.getAttribute('data-month');
                 let isVisible = true;
 
@@ -638,7 +703,7 @@
 
                 // 顯示或隱藏
                 if (isVisible) {
-                    item.style.display = 'list-item'; // 使用 list-item 以確保垂直列表顯示正確
+                    item.style.display = 'block'; 
                 } else {
                     item.style.display = 'none';
                 }
@@ -682,9 +747,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
