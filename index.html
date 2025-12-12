@@ -30,7 +30,7 @@
             background-color: #f0ffee; /* 輕微變色 */
         }
 
-        /* 新增：圖片網格卡片樣式 */
+        /* 新增：圖片網格卡片樣式 (用於新聞列表) */
         .grid-card {
             display: flex;
             flex-direction: column;
@@ -111,6 +111,38 @@
         .search-input::placeholder {
             color: #9ca3af; /* 預留文字顏色 */
         }
+
+        /* NEW: Cover Gallery (封面畫廊) 樣式 - 雖然已移除，但保留相關 CSS 以防萬一 */
+        .cover-card {
+            border-radius: 0.75rem;
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
+        }
+        .cover-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            border: 2px solid #84cc16; /* 懸停時的亮色邊框 */
+        }
+        .cover-card-overlay {
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2));
+            padding: 1rem;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: flex-end;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
         
     </style>
 </head>
@@ -146,10 +178,11 @@
             </div>
         </header>
 
+        <!-- NEW: Cover Gallery (封面畫廊) - 已移除，保留分頁導航在下方 -->
+        
         <!-- Main Content Wrapper (包含導航和內容) -->
         <div class="content-wrapper">
             <!-- Tab Navigation (分頁導航) -->
-            <!-- 使用 flex-auto 讓按鈕平均分配空間，確保新按鈕能裝下 -->
             <nav class="flex -mt-6 -mx-6 mb-6 border-b border-gray-700/50">
                 <button id="tab-news-button" data-tab="news" class="tab-button active flex-auto py-3 text-lg focus:outline-none" onclick="openTab(event, 'news')">
                     📚 英文新聞
@@ -203,7 +236,7 @@
                         <li data-date="2025/12/12" data-month="2025-12">
                             <a href="news/2025.12.12英文新聞.html" class="grid-card">
                                 <div class="w-full aspect-video bg-gray-600 overflow-hidden">
-                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=XAG/USD" 
+                                    <img src="covers/news_20251212.jpg" 
                                          alt="白銀價格創歷史新高" 
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
@@ -228,7 +261,7 @@
                         <li data-date="2025/12/11" data-month="2025-12">
                             <a href="news/2025.12.11英文新聞.html" class="grid-card">
                                 <div class="w-full aspect-video bg-gray-600 overflow-hidden">
-                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Earthquake+7.6M" 
+                                    <img src="covers/news_20251211.jpg" 
                                          alt="日本近海地震" 
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
@@ -253,7 +286,7 @@
                         <li data-date="2025/12/10" data-month="2025-12">
                             <a href="news/2025.12.10英文新聞.html" class="grid-card">
                                 <div class="w-full aspect-video bg-gray-600 overflow-hidden">
-                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Fighter+Jet" 
+                                    <img src="covers/news_20251210.jpg" 
                                          alt="戰機照射雷達" 
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
@@ -278,7 +311,7 @@
                         <li data-date="2025/12/09" data-month="2025-12">
                             <a href="news/2025.12.09英文新聞.html" class="grid-card">
                                 <div class="w-full aspect-video bg-gray-600 overflow-hidden">
-                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Netflix+WBD" 
+                                    <img src="covers/news_20251209.jpg" 
                                          alt="Netflix WBD 合併" 
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
@@ -303,7 +336,7 @@
                         <li data-date="2025/12/08" data-month="2025-12">
                             <a href="news/英文新聞2025.12.08.html" class="grid-card">
                                 <div class="w-full aspect-video bg-gray-600 overflow-hidden">
-                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Military+Accident" 
+                                    <img src="covers/news_20251208.jpg" 
                                          alt="國軍演習誤擊" 
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
@@ -328,7 +361,7 @@
                         <li data-date="2025/12/06" data-month="2025-12">
                             <a href="news/2025.12.06英文新聞.html" class="grid-card">
                                 <div class="w-full aspect-video bg-gray-600 overflow-hidden">
-                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Lion+Attack" 
+                                    <img src="covers/news_20251206.jpg" 
                                          alt="獅子攻擊事件" 
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
@@ -353,7 +386,7 @@
                         <li data-date="2025/12/05" data-month="2025-12">
                             <a href="news/2025.12.05英文新聞.html" class="grid-card">
                                 <div class="w-full aspect-video bg-gray-600 overflow-hidden">
-                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=CPC+Corruption" 
+                                    <img src="covers/news_20251205.jpg" 
                                          alt="中油貪腐調查" 
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
@@ -378,7 +411,7 @@
                         <li data-date="2025/12/04" data-month="2025-12">
                             <a href="news/2025.12.04英文新聞.html" class="grid-card">
                                 <div class="w-full aspect-video bg-gray-600 overflow-hidden">
-                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Tilapia+Ban" 
+                                    <img src="covers/news_20251204.jpg" 
                                          alt="吳郭魚排禁藥" 
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
@@ -403,7 +436,7 @@
                         <li data-date="2025/12/03" data-month="2025-12">
                             <a href="news/2025.12.03英文新聞.html" class="grid-card">
                                 <div class="w-full aspect-video bg-gray-600 overflow-hidden">
-                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=Water+Outage" 
+                                    <img src="covers/news_20251203.jpg" 
                                          alt="淡水停水事件" 
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
@@ -428,7 +461,7 @@
                         <li data-date="2025/12/02" data-month="2025-12">
                             <a href="news/Funday新聞20251202.html" class="grid-card">
                                 <div class="w-full aspect-video bg-gray-600 overflow-hidden">
-                                    <img src="https://placehold.co/600x400/1E3A35/84cc16?text=HK+Fire" 
+                                    <img src="covers/news_20251202.jpg" 
                                          alt="香港高樓火警" 
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null;this.src='https://placehold.co/600x400/374151/d1fae5?text=圖片載入失敗'">
@@ -605,7 +638,12 @@
 
             // 顯示當前選定的分頁內容，並為按鈕添加 active 樣式
             document.getElementById(tabName).classList.add("active");
-            evt.currentTarget.classList.add("active");
+            
+            // 找到對應的 Tab 按鈕並激活它 (處理來自封面點擊的情況)
+            const correspondingTabButton = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
+            if (correspondingTabButton) {
+                 correspondingTabButton.classList.add("active");
+            }
 
             // 如果切換到新聞分頁，則重新計算檔案數 (因為只有新聞分頁有篩選功能)
             if (tabName === 'news') {
