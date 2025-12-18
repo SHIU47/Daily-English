@@ -27,7 +27,7 @@
             z-index: -1;
         }
 
-        /* 磨砂玻璃面板特效 */
+        /* 磨砂玻璃面板特效 - 圓角升級 */
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
@@ -48,12 +48,12 @@
             border-radius: 9999px; 
         }
 
-        /* LIVE 勳章 */
+        /* LIVE 勳章 - 深色底、紅色字 */
         .live-badge {
             position: relative;
             z-index: 20;
-            background: #ef4444;
-            color: white;
+            background: #0f172a; 
+            color: #ef4444; 
             padding: 0 1.5rem;
             height: 100%;
             display: flex;
@@ -61,9 +61,10 @@
             font-weight: 900;
             font-size: 0.8rem;
             letter-spacing: 0.15em;
-            box-shadow: 12px 0 20px -5px rgba(0,0,0,0.6);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
             white-space: nowrap;
             border-radius: 9999px 0 0 9999px;
+            border-right: 1px solid rgba(239, 68, 68, 0.2);
         }
 
         /* 跑馬燈軌道 - 左右邊緣淡出效果 */
@@ -75,7 +76,7 @@
             -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
         }
 
-        /* 跑馬燈動畫設定 (25秒 */
+        /* 跑馬燈核心動畫設定 (30秒3 */
         @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -84,19 +85,25 @@
             display: flex;
             white-space: nowrap;
             width: max-content;
-            animation: marquee 25s linear infinite;
+            animation: marquee 30s linear infinite;
         }
         .marquee-content:hover {
             animation-play-state: paused;
         }
 
+        /* 跑馬燈連結 */
         .marquee-item {
             padding: 0 2rem;
             display: flex;
             align-items: center;
             color: rgba(255, 255, 255, 0.95);
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 600;
+            transition: color 0.2s ease;
+            text-decoration: none;
+        }
+        .marquee-item:hover {
+            color: #84cc16; 
         }
 
         .marquee-separator {
@@ -105,20 +112,22 @@
             opacity: 0.6;
         }
 
+        /* 紅色呼吸燈 */
         .live-dot {
             width: 8px;
             height: 8px;
-            background: white;
+            background: #ef4444;
             border-radius: 50%;
             margin-right: 0.7rem;
-            animation: pulse-white 1.5s infinite ease-in-out;
+            animation: pulse-red 1.5s infinite ease-in-out;
+            box-shadow: 0 0 8px #ef4444;
         }
-        @keyframes pulse-white {
+        @keyframes pulse-red {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.3; transform: scale(1.3); }
+            50% { opacity: 0.4; transform: scale(1.3); }
         }
 
-        /* 新聞卡片圓角與動畫 */
+        /* 卡片設計 */
         .grid-card {
             background: #1e293b;
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -135,7 +144,7 @@
             box-shadow: 0 25px 50px -15px rgba(132, 204, 22, 0.2);
         }
 
-        /* 分頁按鈕 */
+        /* Tab 控制 */
         .tab-button {
             position: relative;
             transition: all 0.3s;
@@ -158,18 +167,12 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        /* 搜尋欄位 */
         .search-input {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
             backdrop-filter: blur(10px);
             border-radius: 1.25rem;
-        }
-        .search-input:focus {
-            border-color: #84cc16;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(132, 204, 22, 0.2);
         }
     </style>
 </head>
@@ -192,7 +195,7 @@
             </div>
         </header>
 
-        <!-- 現代化跑馬燈區塊：匯入所有新聞 -->
+        <!-- 跑馬燈區塊 (點擊跳轉版) -->
         <div class="marquee-wrapper mb-10 overflow-hidden">
             <div class="live-badge">
                 <span class="live-dot"></span>
@@ -201,39 +204,39 @@
             
             <div class="marquee-track">
                 <div class="marquee-content items-center h-full">
-                    <!-- 第一組內容 (日後更新請修改下方內容) -->
+                    <!-- 第一組 -->
                     <div class="flex shrink-0">
-                        <div class="marquee-item">韓國戒嚴令調查最新進展</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">WWE 明星 John Cena 動情謝幕演出</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">澳洲邦代海灘槍擊案傷亡更新</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">川普百萬美元黃金簽證計劃引熱議</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">白銀價格創歷史新高：受聯準會降息預期推動</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">日本近海發生 7.6 級強震引發海嘯警報</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">中國戰機對日本軍機照射雷達事件</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">Netflix 擬收購 Warner Bros. Discovery：影視巨頭合併</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">國軍演習砲彈誤擊彰化民宅事件更新</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">男爬進動物園獅子圍欄不幸遭咬死</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">中油液化天然氣（LNG）計畫遭貪腐調查</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">全聯吳郭魚排驗出禁藥引發食安疑慮</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">淡水地區大規模停水事件追蹤</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">香港災難性高樓火警最新消息</div><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.18英文新聞.html" class="marquee-item">韓國戒嚴令調查最新進展</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.17英文新聞.html" class="marquee-item">WWE 明星 John Cena 動情謝幕演出</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.16英文新聞.html" class="marquee-item">澳洲邦代海灘槍擊案傷亡更新</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.15英文新聞.html" class="marquee-item">川普百萬美元黃金簽證計劃引熱議</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.12英文新聞.html" class="marquee-item">白銀價格創歷史新高：受聯準會降息預期推動</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.11英文新聞.html" class="marquee-item">日本近海發生 7.6 級強震引發海嘯警報</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.10英文新聞.html" class="marquee-item">中國戰機對日本軍機照射雷達事件</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.09英文新聞.html" class="marquee-item">Netflix 擬收購 Warner Bros. Discovery：影視巨頭合併</a><span class="marquee-separator">•</span>
+                        <a href="News/英文新聞2025.12.08.html" class="marquee-item">國軍演習砲彈誤擊彰化民宅事件更新</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.06英文新聞.html" class="marquee-item">男爬進動物園獅子圍欄不幸遭咬死</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.05英文新聞.html" class="marquee-item">中油液化天然氣（LNG）計畫遭貪腐調查</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.04英文新聞.html" class="marquee-item">全聯吳郭魚排驗出禁藥引發食安疑慮</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.03英文新聞.html" class="marquee-item">淡水地區大規模停水事件追蹤</a><span class="marquee-separator">•</span>
+                        <a href="News/Funday新聞20251202.html" class="marquee-item">香港災難性高樓火警最新消息</a><span class="marquee-separator">•</span>
                     </div>
-                    <!-- 第二組內容 (必須與第一組完全相同，確保無縫滾動) -->
+                    <!-- 重複組 -->
                     <div class="flex shrink-0">
-                        <div class="marquee-item">韓國戒嚴令調查最新進展</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">WWE 明星 John Cena 動情謝幕演出</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">澳洲邦代海灘槍擊案傷亡更新</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">川普百萬美元黃金簽證計劃引熱議</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">白銀價格創歷史新高：受聯準會降息預期推動</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">日本近海發生 7.6 級強震引發海嘯警報</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">中國戰機對日本軍機照射雷達事件</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">Netflix 擬收購 Warner Bros. Discovery：影視巨層合併</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">國軍演習砲彈誤擊彰化民宅事件更新</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">男爬進動物園獅子圍欄不幸遭咬死</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">中油液化天然氣（LNG）計畫遭貪腐調查</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">全聯吳郭魚排驗出禁藥引發食安疑慮</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">淡水地區大規模停水事件追蹤</div><span class="marquee-separator">•</span>
-                        <div class="marquee-item">香港災難性高樓火警最新消息</div><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.18英文新聞.html" class="marquee-item">韓國戒嚴令調查最新進展</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.17英文新聞.html" class="marquee-item">WWE 明星 John Cena 動情謝幕演出</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.16英文新聞.html" class="marquee-item">澳洲邦代海灘槍擊案傷亡更新</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.15英文新聞.html" class="marquee-item">川普百萬美元黃金簽證計劃引熱議</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.12英文新聞.html" class="marquee-item">白銀價格創歷史新高：受聯準會降息預期推動</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.11英文新聞.html" class="marquee-item">日本近海發生 7.6 級強震引發海嘯警報</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.10英文新聞.html" class="marquee-item">中國戰機對日本軍機照射雷達事件</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.09英文新聞.html" class="marquee-item">Netflix 擬收購 Warner Bros. Discovery：影視巨頭合併</a><span class="marquee-separator">•</span>
+                        <a href="News/英文新聞2025.12.08.html" class="marquee-item">國軍演習砲彈誤擊彰化民宅事件更新</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.06英文新聞.html" class="marquee-item">男爬進動物園獅子圍欄不幸遭咬死</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.05英文新聞.html" class="marquee-item">中油液化天然氣（LNG）計畫遭貪腐調查</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.04英文新聞.html" class="marquee-item">全聯吳郭魚排驗出禁藥引發食安疑慮</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.03英文新聞.html" class="marquee-item">淡水地區大規模停水事件追蹤</a><span class="marquee-separator">•</span>
+                        <a href="News/Funday新聞20251202.html" class="marquee-item">香港災難性高樓火警最新消息</a><span class="marquee-separator">•</span>
                     </div>
                 </div>
             </div>
@@ -241,7 +244,6 @@
         
         <!-- Main Content Area -->
         <div class="glass-panel overflow-hidden shadow-2xl">
-            <!-- Tab Navigation -->
             <nav class="flex border-b border-white/10 bg-black/20">
                 <button id="tab-news-button" data-tab="news" class="tab-button active flex-1 py-4 text-sm font-black tracking-widest uppercase" onclick="openTab(event, 'news')">News Feed</button>
                 <button id="tab-reading-button" data-tab="reading" class="tab-button flex-1 py-4 text-sm font-black tracking-widest uppercase" onclick="openTab(event, 'reading')">Reading</button>
@@ -267,12 +269,13 @@
                     </div>
 
                     <ul id="document-list" class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <!-- 所有 14 篇新聞 -->
                         <li data-date="2025/12/18" data-month="2025-12">
                             <a href="News/2025.12.18英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251218.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
                                     <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_韓國戒嚴令調查</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-4"><span>DEC 18, 2025</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>DEC 18, 2025</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
                                 </div>
                             </a>
                         </li>
@@ -281,7 +284,7 @@
                                 <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251217.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=STARS'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
                                     <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_WWE 明星 John Cena 動情謝幕</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase"><span>DEC 17, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>DEC 17, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
@@ -298,7 +301,7 @@
                             <a href="News/2025.12.15英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251215.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=VISA'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_川普推出黃金簽證計劃</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_川普推出百萬美元黃金簽證移民計劃</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 15, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -308,7 +311,7 @@
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251212.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=SILVER'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
                                     <h3 class="text-white font-bold text-lg mb-4">重點新聞_白銀價格創歷史新高</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black"><span>DEC 12, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 12, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
@@ -317,7 +320,7 @@
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251211.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=EARTHQUAKE'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
                                     <h3 class="text-white font-bold text-lg mb-4">重點新聞_日本近海發生 7.6 級地震</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black"><span>DEC 11, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 11, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
@@ -326,7 +329,7 @@
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251210.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=RADAR'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
                                     <h3 class="text-white font-bold text-lg mb-4">重點新聞_中國戰機對日本軍機照射雷達</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black"><span>DEC 10, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 10, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
@@ -335,7 +338,7 @@
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251209.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=MERGER'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
                                     <h3 class="text-white font-bold text-lg mb-4">重點新聞_Netflix 擬收購 Warner Bros. Discovery</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black"><span>DEC 09, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 09, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
@@ -344,7 +347,7 @@
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251208.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=ARMY'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
                                     <h3 class="text-white font-bold text-lg mb-4">重點新聞_國軍演習砲彈誤擊彰化民宅</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black"><span>DEC 08, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 08, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
@@ -353,7 +356,7 @@
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251206.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LION'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
                                     <h3 class="text-white font-bold text-lg mb-4">重點新聞_男爬進動物園獅子圍欄被咬死</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black"><span>DEC 06, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 06, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
@@ -433,7 +436,7 @@
                     </ul>
                 </div>
 
-                <!-- 3. 多益測驗 Content -->
+                <!-- 3. 多益測驗 Content (已移除進度條) -->
                 <div id="toeic" class="tab-content">
                     <h2 class="text-xl font-bold text-white mb-6 flex items-center">
                         <span class="w-1.5 h-6 bg-lime-500 mr-3 rounded-full"></span>
@@ -442,24 +445,20 @@
                     <ul id="toeic-document-list" class="space-y-6">
                         <li>
                             <a href="TOEIC/多益單字Day1-10.html" class="glass-panel block p-8 rounded-[2rem] group hover:border-lime-500 transition-all">
-                                <div class="flex items-center justify-between mb-6">
-                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400">💡 Day 1-10 核心多益單字</h3>
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">💡 Day 1-10 核心多益單字</h3>
                                     <span class="text-xs font-black bg-orange-500/10 text-orange-500 border border-orange-500/20 px-3 py-1.5 rounded-full uppercase tracking-widest">Score 300+</span>
                                 </div>
-                                <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                                    <div class="h-full bg-lime-500 w-[45%] shadow-[0_0_15px_rgba(132,204,22,0.5)]"></div>
-                                </div>
-                                <p class="text-gray-400 text-xs mt-3 font-bold tracking-wider uppercase opacity-60">Progress: 45% Completed / 100 Words</p>
+                                <p class="text-gray-300 text-base mt-4 leading-relaxed opacity-80">包含多益考試中 600 個最常見的基礎單字，打好職場英文基本功。</p>
                             </a>
                         </li>
                         <li>
                             <a href="TOEIC/多益單字Day11-20.html" class="glass-panel block p-8 rounded-[2rem] group hover:border-lime-500 transition-all">
-                                <div class="flex items-center justify-between mb-6">
-                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400">💡 Day 11-20 核心多益單字</h3>
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">💡 Day 11-20 核心多益單字</h3>
                                     <span class="text-xs font-black bg-orange-500/10 text-orange-500 border border-orange-500/20 px-3 py-1.5 rounded-full uppercase tracking-widest">Score 600+</span>
                                 </div>
-                                <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-lime-500 w-[20%] shadow-[0_0_15px_rgba(132,204,22,0.5)]"></div></div>
-                                <p class="text-gray-400 text-xs mt-3 font-bold tracking-wider uppercase opacity-60">Progress: 20% Completed / High Frequency</p>
+                                <p class="text-gray-300 text-base mt-4 leading-relaxed opacity-80">挑戰進階高頻單字，專為希望在商務情境中流暢溝通的學習者設計。</p>
                             </a>
                         </li>
                     </ul>
@@ -511,7 +510,6 @@
             const search = document.getElementById('search-input').value.toLowerCase();
             const month = document.getElementById('month-filter').value;
             const items = document.querySelectorAll('#document-list li');
-
             items.forEach(item => {
                 const title = item.querySelector('h3').textContent.toLowerCase();
                 const date = item.getAttribute('data-date').toLowerCase();
@@ -527,11 +525,9 @@
             updateCount('reading-document-list', 'reading-file-count');
             updateCount('toeic-document-list', 'toeic-file-count');
             populateMonthFilter();
-            
             const now = new Date();
             document.getElementById('last-updated').textContent = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')}`;
         });
     </script>
 </body>
 </html>
-
