@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 1. 搜尋引擎顯示的標題 (SEO) -->
     <title>Daily English - 🔥東旭的每日英文補給站 | 英文單字、多益測驗與英文新聞練習</title> 
-    <meta name="description" content="Daily English 是一個專為英文學習者設計的網站，提供每日國際新聞導讀、多益核心單字（TOEIC）練習、以及深度閱讀文章。幫助你利用碎片時間提升英文能力，累積單字量。">
+    
+    <!-- 2. 網站簡介與關鍵字 -->
+    <meta name="description" content="Daily English 是一個專為英文學習者設計的網站，由東旭維護。提供每日國際新聞導讀、多益核心單字（TOEIC）練習、以及深度閱讀文章。幫助你利用碎片時間提升英文能力。">
+    <meta name="keywords" content="英文學習, Daily English, 每日英文, 英文單字, 多益單字, TOEIC, 英文新聞, 東旭, Shiu_orz">
+    <meta name="author" content="Shiu_orz">
 
-<meta name="keywords" content="英文學習, Daily English, 每日英文, 英文單字">
+    <!-- 3. Open Graph (分享到 Line/FB/Discord 時的漂亮名片) -->
+    <meta property="og:title" content="🔥 Daily English - 東旭的英文能量補給站！">
+    <meta property="og:description" content="每天進步一點點！提供最新英文新聞導讀與多益單字練習，點擊開始學習。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shiu47.github.io/Daily-English/">
+    <meta property="og:image" content="https://shiu47.github.io/Daily-English/covers/news_20251219.jpg">
+    <meta property="og:site_name" content="Daily English 補給站">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 基礎樣式與動態背景 */
         body { 
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
             background-color: #0d1a18; 
@@ -18,8 +30,6 @@
             color: #e2e8f0; 
             min-height: 100vh;
         }
-        
-        /* 網格裝飾背景 */
         body::before {
             content: "";
             position: fixed;
@@ -29,8 +39,6 @@
             background-size: 30px 30px;
             z-index: -1;
         }
-
-        /* 磨砂玻璃面板特效 - 圓角升級 */
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
@@ -38,8 +46,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 2rem; 
         }
-
-        /* 跑馬燈封裝容器 - 全圓角設計 */
         .marquee-wrapper {
             display: flex;
             align-items: center;
@@ -50,8 +56,6 @@
             position: relative;
             border-radius: 9999px; 
         }
-
-        /* LIVE 勳章 - 深色底、紅色字 */
         .live-badge {
             position: relative;
             z-index: 20;
@@ -69,8 +73,6 @@
             border-radius: 9999px 0 0 9999px;
             border-right: 1px solid rgba(239, 68, 68, 0.2);
         }
-
-        /* 跑馬燈軌道 - 左右邊緣淡出效果 */
         .marquee-track {
             flex-grow: 1;
             overflow: hidden;
@@ -78,8 +80,6 @@
             mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
             -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
         }
-
-        /* 跑馬燈核心動畫設定 (30秒3 */
         @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -88,13 +88,9 @@
             display: flex;
             white-space: nowrap;
             width: max-content;
-            animation: marquee 40s linear infinite;
+            animation: marquee 60s linear infinite;
         }
-        .marquee-content:hover {
-            animation-play-state: paused;
-        }
-
-        /* 跑馬燈連結 */
+        .marquee-content:hover { animation-play-state: paused; }
         .marquee-item {
             padding: 0 2rem;
             display: flex;
@@ -105,23 +101,10 @@
             transition: color 0.2s ease;
             text-decoration: none;
         }
-        .marquee-item:hover {
-            color: #84cc16; 
-        }
-
-        .marquee-separator {
-            color: #84cc16;
-            font-weight: 900;
-            opacity: 0.6;
-        }
-
-        /* 紅色呼吸燈 */
+        .marquee-item:hover { color: #84cc16; }
+        .marquee-separator { color: #84cc16; font-weight: 900; opacity: 0.6; }
         .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #ef4444;
-            border-radius: 50%;
-            margin-right: 0.7rem;
+            width: 8px; height: 8px; background: #ef4444; border-radius: 50%; margin-right: 0.7rem;
             animation: pulse-red 1.5s infinite ease-in-out;
             box-shadow: 0 0 8px #ef4444;
         }
@@ -129,8 +112,6 @@
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.4; transform: scale(1.3); }
         }
-
-        /* 卡片設計 */
         .grid-card {
             background: #1e293b;
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -146,8 +127,6 @@
             border-color: #84cc16;
             box-shadow: 0 25px 50px -15px rgba(132, 204, 22, 0.2);
         }
-
-        /* Tab 控制 */
         .tab-button {
             position: relative;
             transition: all 0.3s;
@@ -166,10 +145,8 @@
             border-radius: 99px;
             box-shadow: 0 0 12px #84cc16;
         }
-
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
         .search-input {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -193,12 +170,12 @@
                     <p class="text-gray-300 mt-2 font-medium italic opacity-90 text-lg">Empower Your English Brain Daily.</p>
                 </div>
                 <div class="text-xs text-gray-500 font-mono tracking-widest uppercase bg-white/5 px-3 py-1 rounded-full border border-white/10">
-                    Last Update / <span id="last-updated" class="text-lime-500 font-bold">2025-12-18</span>
+                    Last Update / <span id="last-updated" class="text-lime-500 font-bold">2025-12-19</span>
                 </div>
             </div>
         </header>
 
-        <!-- 跑馬燈區塊 (點擊跳轉版) -->
+        <!-- 跑馬燈區塊 (點擊跳轉版 - 全部恢復) -->
         <div class="marquee-wrapper mb-10 overflow-hidden">
             <div class="live-badge">
                 <span class="live-dot"></span>
@@ -209,7 +186,7 @@
                 <div class="marquee-content items-center h-full">
                     <!-- 第一組 -->
                     <div class="flex shrink-0">
-                         <a href="News/2025.12.19英文新聞.html" class="marquee-item">北極再次創下 125 年來最高溫紀錄</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.19英文新聞.html" class="marquee-item">北極再次創下 125 年來最高溫紀錄</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.18英文新聞.html" class="marquee-item">韓國戒嚴令調查最新進展</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.17英文新聞.html" class="marquee-item">WWE 明星 John Cena 動情謝幕演出</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.16英文新聞.html" class="marquee-item">澳洲邦代海灘槍擊案傷亡更新</a><span class="marquee-separator">•</span>
@@ -217,7 +194,7 @@
                         <a href="News/2025.12.12英文新聞.html" class="marquee-item">白銀價格創歷史新高：受聯準會降息預期推動</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.11英文新聞.html" class="marquee-item">日本近海發生 7.6 級強震引發海嘯警報</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.10英文新聞.html" class="marquee-item">中國戰機對日本軍機照射雷達事件</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.09英文新聞.html" class="marquee-item">Netflix 擬收購 Warner Bros. Discovery：影視巨頭合併</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.09英文新聞.html" class="marquee-item">Netflix 擬收購 Warner Bros. Discovery</a><span class="marquee-separator">•</span>
                         <a href="News/英文新聞2025.12.08.html" class="marquee-item">國軍演習砲彈誤擊彰化民宅事件更新</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.06英文新聞.html" class="marquee-item">男爬進動物園獅子圍欄不幸遭咬死</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.05英文新聞.html" class="marquee-item">中油液化天然氣（LNG）計畫遭貪腐調查</a><span class="marquee-separator">•</span>
@@ -227,7 +204,7 @@
                     </div>
                     <!-- 重複組 -->
                     <div class="flex shrink-0">
-                         <a href="News/2025.12.19英文新聞.html" class="marquee-item">北極再次創下 125 年來最高溫紀錄</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.19英文新聞.html" class="marquee-item">北極再次創下 125 年來最高溫紀錄</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.18英文新聞.html" class="marquee-item">韓國戒嚴令調查最新進展</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.17英文新聞.html" class="marquee-item">WWE 明星 John Cena 動情謝幕演出</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.16英文新聞.html" class="marquee-item">澳洲邦代海灘槍擊案傷亡更新</a><span class="marquee-separator">•</span>
@@ -235,7 +212,7 @@
                         <a href="News/2025.12.12英文新聞.html" class="marquee-item">白銀價格創歷史新高：受聯準會降息預期推動</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.11英文新聞.html" class="marquee-item">日本近海發生 7.6 級強震引發海嘯警報</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.10英文新聞.html" class="marquee-item">中國戰機對日本軍機照射雷達事件</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.09英文新聞.html" class="marquee-item">Netflix 擬收購 Warner Bros. Discovery：影視巨頭合併</a><span class="marquee-separator">•</span>
+                        <a href="News/2025.12.09英文新聞.html" class="marquee-item">Netflix 擬收購 Warner Bros. Discovery</a><span class="marquee-separator">•</span>
                         <a href="News/英文新聞2025.12.08.html" class="marquee-item">國軍演習砲彈誤擊彰化民宅事件更新</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.06英文新聞.html" class="marquee-item">男爬進動物園獅子圍欄不幸遭咬死</a><span class="marquee-separator">•</span>
                         <a href="News/2025.12.05英文新聞.html" class="marquee-item">中油液化天然氣（LNG）計畫遭貪腐調查</a><span class="marquee-separator">•</span>
@@ -256,7 +233,7 @@
             </nav>
 
             <div class="p-6 sm:p-8">
-                <!-- 1. 英文新聞 Content -->
+                <!-- 1. 英文新聞 Content (全部 15 篇恢復) -->
                 <div id="news" class="tab-content active">
                     <div class="flex items-center justify-between mb-6 px-1">
                         <h2 class="text-xl font-bold text-white flex items-center">
@@ -274,8 +251,6 @@
                     </div>
 
                     <ul id="document-list" class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                        <!-- 所有 14 篇新聞 -->
-
                         <li data-date="2025/12/19" data-month="2025-12">
                             <a href="News/2025.12.19英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251219.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
@@ -289,34 +264,34 @@
                             <a href="News/2025.12.18英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251218.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_韓國戒嚴令調查</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>DEC 18, 2025</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_韓國戒嚴令調查最新進展</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 18, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
                         <li data-date="2025/12/17" data-month="2025-12">
                             <a href="News/2025.12.17英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251217.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=STARS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251217.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=STARS'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_WWE 明星 John Cena 動情謝幕</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>DEC 17, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_WWE 明星 John Cena 動情謝幕演出</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 17, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
                         <li data-date="2025/12/16" data-month="2025-12">
                             <a href="News/2025.12.16英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251216.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251216.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=NEWS'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_澳洲邦代海灘槍擊案</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_澳洲邦代海灘槍擊案傷亡更新</h3>
                                     <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 16, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
                         <li data-date="2025/12/15" data-month="2025-12">
                             <a href="News/2025.12.15英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251215.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=VISA'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251215.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=VISA'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_川普推出百萬美元黃金簽證移民計劃</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_川普百萬美元黃金簽證計劃引熱議</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 15, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -325,7 +300,7 @@
                             <a href="News/2025.12.12英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251212.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=SILVER'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_白銀價格創歷史新高</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_白銀價格創歷史新高：受聯準會降息推動</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 12, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -334,7 +309,7 @@
                             <a href="News/2025.12.11英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251211.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=EARTHQUAKE'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_日本近海發生 7.6 級地震</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_日本近海發生 7.6 級強震引發海嘯警報</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 11, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -343,7 +318,7 @@
                             <a href="News/2025.12.10英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251210.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=RADAR'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_中國戰機對日本軍機照射雷達</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_中國戰機對日本軍機照射雷達事件</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 10, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -361,7 +336,7 @@
                             <a href="News/英文新聞2025.12.08.html" class="grid-card group block">
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251208.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=ARMY'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_國軍演習砲彈誤擊彰化民宅</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_國軍演習砲彈誤擊彰化民宅事件更新</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 08, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -370,7 +345,7 @@
                             <a href="News/2025.12.06英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251206.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LION'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_男爬進動物園獅子圍欄被咬死</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_男爬進動物園獅子圍欄不幸遭咬死</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 06, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -379,7 +354,7 @@
                             <a href="News/2025.12.05英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251205.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LNG'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_中油液化天然氣計畫遭貪腐調查</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_中油液化天然氣（LNG）計畫遭貪腐調查</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 05, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -388,7 +363,7 @@
                             <a href="News/2025.12.04英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251204.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=FISH'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_全聯吳郭魚排驗出禁藥</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_全聯吳郭魚排驗出禁藥引發食安疑慮</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 04, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -397,7 +372,7 @@
                             <a href="News/2025.12.03英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251203.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=WATER'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_淡水停水事件</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_淡水地區大規模停水事件追蹤</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 03, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -406,7 +381,7 @@
                             <a href="News/Funday新聞20251202.html" class="grid-card group block">
                                 <div class="aspect-video bg-slate-800"><img src="covers/news_20251202.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=FIRE'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_香港災難高樓火警</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_香港災難性高樓火警最新消息</h3>
                                     <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 02, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
@@ -424,34 +399,34 @@
                         <li>
                             <a href="Reading/Hot dog story.html" class="glass-panel block p-8 rounded-[2rem] group hover:border-lime-500 transition-all">
                                 <div class="flex items-center justify-between">
-                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">🤖 熱狗的小故事</h3>
-                                    <span class="text-xs font-black bg-lime-500/10 text-lime-500 border border-lime-500/20 px-3 py-1.5 rounded-full uppercase tracking-widest">B1 Intermediate</span>
+                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400">🤖 熱狗的小故事</h3>
+                                    <span class="text-xs font-black bg-lime-500/10 text-lime-500 border border-lime-500/20 px-3 py-1.5 rounded-full uppercase">B1 Intermediate</span>
                                 </div>
-                                <p class="text-gray-300 text-base mt-4 leading-relaxed opacity-80">從街頭小吃到全球經典的進化史，探索熱狗背後有趣的文化由來。</p>
+                                <p class="text-gray-300 text-base mt-4 opacity-80">從街頭小吃到全球經典的進化史，探索熱狗背後有趣的文化由來。</p>
                             </a>
                         </li>
                         <li>
                             <a href="Reading/Coffee_Culture_Essay.html" class="glass-panel block p-8 rounded-[2rem] group hover:border-lime-500 transition-all">
                                 <div class="flex items-center justify-between">
-                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">☕ 全球咖啡文化觀察</h3>
-                                    <span class="text-xs font-black bg-lime-500/10 text-lime-500 border border-lime-500/20 px-3 py-1.5 rounded-full uppercase tracking-widest">C1 Advanced</span>
+                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400">☕ 全球咖啡文化觀察</h3>
+                                    <span class="text-xs font-black bg-lime-500/10 text-lime-500 border border-lime-500/20 px-3 py-1.5 rounded-full uppercase">C1 Advanced</span>
                                 </div>
-                                <p class="text-gray-300 text-base mt-4 leading-relaxed opacity-80">從歷史到現代，咖啡如何改變了全球的社會生活與社交方式。</p>
+                                <p class="text-gray-300 text-base mt-4 opacity-80">從歷史到現代，咖啡如何改變了全球的社會生活與社交方式。</p>
                             </a>
                         </li>
                         <li>
                             <a href="Reading/Mars_Exploration.html" class="glass-panel block p-8 rounded-[2rem] group hover:border-lime-500 transition-all">
                                 <div class="flex items-center justify-between">
-                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">🚀 火星探索的最新進展</h3>
-                                    <span class="text-xs font-black bg-lime-500/10 text-lime-500 border border-lime-500/20 px-3 py-1.5 rounded-full uppercase tracking-widest">B1 Intermediate</span>
+                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400">🚀 火星探索的最新進展</h3>
+                                    <span class="text-xs font-black bg-lime-500/10 text-lime-500 border border-lime-500/20 px-3 py-1.5 rounded-full uppercase">B1 Intermediate</span>
                                 </div>
-                                <p class="text-gray-300 text-base mt-4 leading-relaxed opacity-80">了解無人探測器在紅色星球上的最新科學發現與挑戰。</p>
+                                <p class="text-gray-300 text-base mt-4 opacity-80">了解無人探測器在紅色星球上的最新科學發現與挑戰。</p>
                             </a>
                         </li>
                     </ul>
                 </div>
 
-                <!-- 3. 多益測驗 Content (已移除進度條) -->
+                <!-- 3. 多益測驗 Content -->
                 <div id="toeic" class="tab-content">
                     <h2 class="text-xl font-bold text-white mb-6 flex items-center">
                         <span class="w-1.5 h-6 bg-lime-500 mr-3 rounded-full"></span>
@@ -461,19 +436,19 @@
                         <li>
                             <a href="TOEIC/多益單字Day1-10.html" class="glass-panel block p-8 rounded-[2rem] group hover:border-lime-500 transition-all">
                                 <div class="flex items-center justify-between">
-                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">💡 Day 1-10 核心多益單字</h3>
-                                    <span class="text-xs font-black bg-orange-500/10 text-orange-500 border border-orange-500/20 px-3 py-1.5 rounded-full uppercase tracking-widest">Score 300+</span>
+                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400">💡 Day 1-10 核心多益單字</h3>
+                                    <span class="text-xs font-black bg-orange-500/10 text-orange-500 border border-orange-500/20 px-3 py-1.5 rounded-full uppercase">Score 300+</span>
                                 </div>
-                                <p class="text-gray-300 text-base mt-4 leading-relaxed opacity-80">包含多益考試中 600 個最常見的基礎單字，打好職場英文基本功。</p>
+                                <p class="text-gray-300 text-base mt-4 opacity-80">包含多益考試中 600 個最常見的基礎單字，打好職場英文基本功。</p>
                             </a>
                         </li>
                         <li>
                             <a href="TOEIC/多益單字Day11-20.html" class="glass-panel block p-8 rounded-[2rem] group hover:border-lime-500 transition-all">
                                 <div class="flex items-center justify-between">
-                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">💡 Day 11-20 核心多益單字</h3>
-                                    <span class="text-xs font-black bg-orange-500/10 text-orange-500 border border-orange-500/20 px-3 py-1.5 rounded-full uppercase tracking-widest">Score 600+</span>
+                                    <h3 class="text-white font-bold text-xl group-hover:text-lime-400">💡 Day 11-20 核心多益單字</h3>
+                                    <span class="text-xs font-black bg-orange-500/10 text-orange-500 border border-orange-500/20 px-3 py-1.5 rounded-full uppercase">Score 600+</span>
                                 </div>
-                                <p class="text-gray-300 text-base mt-4 leading-relaxed opacity-80">挑戰進階高頻單字，專為希望在商務情境中流暢溝通的學習者設計。</p>
+                                <p class="text-gray-300 text-base mt-4 opacity-80">挑戰進階高頻單字，專為希望在商務情境中流暢溝通的學習者設計。</p>
                             </a>
                         </li>
                     </ul>
@@ -526,8 +501,9 @@
             const month = document.getElementById('month-filter').value;
             const items = document.querySelectorAll('#document-list li');
             items.forEach(item => {
-                const title = item.querySelector('h3').textContent.toLowerCase();
-                const date = item.getAttribute('data-date').toLowerCase();
+                const h3 = item.querySelector('h3');
+                const title = h3 ? h3.textContent.toLowerCase() : "";
+                const date = item.getAttribute('data-date') ? item.getAttribute('data-date').toLowerCase() : "";
                 const m = item.getAttribute('data-month');
                 const visible = (title.includes(search) || date.includes(search)) && (month === 'all' || m === month);
                 item.style.display = visible ? 'block' : 'none';
@@ -546,7 +522,3 @@
     </script>
 </body>
 </html>
-
-
-
-
