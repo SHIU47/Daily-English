@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 19 日頭條</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a clean, professional interface */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; /* Soft light blue/grey background */
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* Larger border radius for softness */
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); /* Deeper, softer shadow */
+        }
+        /* Main News Tabs Styling (Primary Navigation) */
+        .main-tabs-container {
+            background-color: #f8fafc; /* Very light background for the tab bar */
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; /* Overlap border with content area */
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; /* Gray text for inactive */
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; /* Blue text for active */
+            border-bottom-color: #3182ce; /* Active blue border */
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        /* Sub-Tabs Styling (Secondary Navigation) */
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; /* Indigo for active sub-tab */
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        /* Quiz specific styles */
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            background-color: #e2e8f0;
+        }
+        .quiz-option.selected {
+            border-color: #4c51bf;
+            background-color: #e0e7ff;
+        }
+        .quiz-option.correct {
+            background-color: #c6f6d5; /* Green */
+            border-color: #38a169;
+            font-weight: 700;
+        }
+        .quiz-option.incorrect {
+            background-color: #fed7d7; /* Red */
+            border-color: #e53e3e;
+            font-weight: 700;
+        }
+        /* Article text formatting for readability */
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        /* Scrollbar styling for cleanliness */
+        ::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 19 日頭條新聞 - 沉浸式學習體驗</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics (主分頁) -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200">
+                <!-- Tabs will be rendered here by JavaScript -->
+            </div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <!-- Content (Article, Translation, Vocab, Quiz) will be rendered here -->
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT ---
+        const NEWS_DATA = {
+            'taiwan-local-news-dec19': {
+                title: '台灣本地新聞：水泥傾銷、巴黎茶獎干擾與叛國罪修法', 
+                english: `Imported Low-Cost Cement Poses Threat to Taiwan's Industry. In local news, the issue of imported cement dumping is raising concerns in Taiwan. TCC Chairman Chang An-ping warned that chasing unfair low-priced imports could turn Taiwan into a dumping ground for foreign excess capacity, threatening local cement jobs. He called on the government to decide whether it still values domestic industries, rather than focusing solely on semiconductors and artificial intelligence. Chinese Embassy Staff Interfere with Tea Awards in Paris. Taiwanese tea has received international recognition, winning a special prize at a tea competition in Paris. However, the awards ceremony was interrupted by Chinese embassy staff shouting political slogans. When the organizers clearly displayed "Taiwanese nationality" on the screen, guests at the venue stood up to voice their support for Taiwan. Taiwan Plans to Increase Penalties for Military Treason. The Executive Yuan is set to review four amendments to national security laws to counter threats of foreign infiltration. The proposed amendment to the "Military Criminal Code" will increase penalties for defecting to the enemy or pledging allegiance to the enemy while in service. This move is in response to President Lai Ching-te's call for national unity to face growing security and influence threats.`,
+                chinese: `進口低價水泥威脅台灣產業。在本地新聞中，進口水泥傾銷問題正引起台灣關注。台泥董事長張安平警告，追求不公平的低價進口產品可能使台灣成為外國過剩產能的傾銷場，威脅本地水泥業工作。他呼籲政府決定是否仍重視國內產業，而非僅僅專注於半導體和人工智慧。中國大使館工作人員干擾巴黎茶葉獎。台灣茶葉獲得國際認可，在巴黎的一場茶葉競賽中獲得特別獎。然而，頒獎典禮遭到中國大使館工作人員大喊政治口號的干擾。當主辦方在螢幕上清晰顯示「台灣籍」時，會場嘉賓紛紛起立表達對台灣的支持。台灣計劃加重軍事叛國罪處罰。行政院將審議四項國安法修正案，以應對外國滲透威脅。擬議的「陸海空軍刑法」修正案將加重服役期間投敵或向敵人效忠的處罰。此舉是為了響應賴清德總統呼籲全民團結，以面對日益嚴峻的安全與影響力威脅。`,
+                vocabulary: [
+                    'Imported (adj.): 進口的', 'Low-Cost (adj.): 低成本的', 'Cement (n.): 水泥', 'Poses Threat (phr.): 構成威脅', 'Industry (n.): 產業', 
+                    'Dumping (n.): 傾銷', 'Raising concerns (phr.): 引起關注', 'TCC (n. proper): 台灣水泥公司', 'Chairman (n.): 董事長/主席', 
+                    'Excess capacity (n.phr.): 過剩產能', 'Domestic industries (n.phr.): 國內產業', 'Solely (adv.): 僅僅，唯一', 'Semiconductors (n.): 半導體', 
+                    'Artificial intelligence (n.): 人工智慧', 'Embassy staff (n.phr.): 大使館工作人員', 'Interfere (v.): 干擾', 'Recognition (n.): 認可/承認', 
+                    'Special prize (n.phr.): 特別獎', 'Awards ceremony (n.phr.): 頒獎典禮', 'Interrupted (v.): 中斷', 'Political slogans (n.phr.): 政治口號', 
+                    'Nationality (n.): 國籍', 'Voice support (phr.): 表達支持', 'Penalties (n.): 處罰', 'Military Treason (n.phr.): 軍事叛國', 
+                    'Executive Yuan (n. proper): 行政院', 'Amendments (n.): 修正案', 'Infiltration (n.): 滲透', 'Defecting (v.ger.): 投敵/叛逃', 
+                    'Pledging allegiance (phr.): 宣誓效忠', 'In response to (phr.): 響應/回應', 'National unity (n.phr.): 全民團結', 
+                    'Influence threats (n.phr.): 影響力威脅', 'Unfair (adj.): 不公平的', 'Capacity (n.): 產能/容量'
+                ],
+                quiz: [
+                    { q: 'Who warned about Taiwan becoming a "dumping ground" for cement?', options: ['President Lai', 'Chairman Chang An-ping', 'TCC Employees', 'The French Embassy'], answer: 'Chairman Chang An-ping' },
+                    { q: 'What industries does Chang An-ping suggest the government focuses too much on?', options: ['Cement and Steel', 'Semiconductors and AI', 'Tea and Agriculture', 'Tourism and Shipping'], answer: 'Semiconductors and AI' },
+                    { q: 'Where did the tea competition take place?', options: ['Taipei', 'Beijing', 'Paris', 'London'], answer: 'Paris' },
+                    { q: 'What did Chinese embassy staff do at the tea awards?', options: ['They won the first prize.', 'They shouted political slogans.', 'They displayed the Taiwanese flag.', 'They congratulated the winners.'], answer: 'shouted political slogans.' },
+                    { q: 'What was displayed on the screen that led to guest support?', options: ['Chinese tea history', 'The French flag', '"Taiwanese nationality"', 'The price of cement'], answer: '"Taiwanese nationality"' },
+                    { q: 'What is the goal of the four amendments to national security laws?', options: ['To lower taxes', 'To counter foreign infiltration', 'To increase tea exports', 'To build more AI centers'], answer: 'To counter foreign infiltration' },
+                    { q: 'Which specific code will be amended to increase penalties for military treason?', options: ['Civil Code', 'Criminal Code', 'Military Criminal Code', 'National Security Act'], answer: 'Military Criminal Code' },
+                    { q: 'The term "defecting to the enemy" refers to what?', options: ['Fighting the enemy', 'Joining or escaping to the enemy side', 'Capturing an enemy soldier', 'Negotiating a peace treaty'], answer: 'Joining or escaping to the enemy side' },
+                    { q: 'Why is the government increasing penalties for pledging allegiance to the enemy?', options: ['To save money', 'To respond to threats and President Lai\'s call for unity', 'To encourage foreign investment', 'To comply with French law'], answer: 'To respond to threats and President Lai\'s call for unity' },
+                    { q: 'What does TCC stand for in the context of the article?', options: ['Taiwan Cement Corporation', 'Taiwan Construction Company', 'Tea Competition Committee', 'Treason Control Center'], answer: 'Taiwan Cement Corporation' },
+                    { q: 'The term "excess capacity" in the text refers to what?', options: ['High demand for cement', 'Foreign countries producing more cement than they need', 'Lack of factory workers', 'Empty shipping containers'], answer: 'Foreign countries producing more cement than they need' },
+                    { q: 'What action did guests at the tea awards take?', options: ['They walked out.', 'They stood up to voice support for Taiwan.', 'They joined the Chinese staff.', 'They complained about the tea.'], answer: 'They stood up to voice support for Taiwan.' },
+                    { q: 'The Executive Yuan is part of which government?', options: ['French', 'Chinese', 'Taiwanese', 'International'], answer: 'Taiwanese' },
+                    { q: 'The term "infiltration" implies what kind of activity?', options: ['Open trade', 'Secretly entering or influencing an organization', 'Building new infrastructure', 'Translating laws'], answer: 'Secretly entering or influencing an organization' },
+                    { q: 'Chang An-ping warned against "chasing unfair" what?', options: ['Political power', 'Low-priced imports', 'National recognition', 'High-tech jobs'], answer: 'Low-priced imports' }
+                ]
+            },
+            'sudan-crisis-row': {
+                title: '蘇丹連續第三年位居全球人道危機之首', 
+                english: `Sudan tops the International Rescue Committee’s (IRC) global humanitarian crisis “Emergency Watchlist” for the third year in a row, as the country remains trapped in a devastating war. The list covers 20 countries at risk of worsening humanitarian crises in 2026. The IRC called for expanded global humanitarian funding, noting that aid funding dropped by 50% over the past year, and current trends could make this the deadliest year for humanitarian workers. The Occupied Palestinian Territory and South Sudan ranked second and third, respectively, due to extreme humanitarian conditions. Other countries on the list include Ethiopia, Haiti, the DRC, Lebanon, Ukraine, Syria, and Yemen. The organization predicts that by 2029, these countries will house over half of the world’s extreme poor, describing the situation as a “New World Disorder” replacing the post–World War II rules-based system.`,
+                chinese: `蘇丹連續第三年位居國際救援委員會 (IRC) 全球人道危機「緊急觀察名單」之首，該國仍深陷毀滅性的戰爭之中。該名單涵蓋了 2026 年人道危機面臨惡化風險的 20 個國家。IRC 呼籲擴大全球人道主義資金，指出過去一年援助資金下降了 50%，而目前的趨勢可能使今年成為人道主義工作者死亡人數最多的一年。巴勒斯坦被佔領土和南蘇丹分別位居第二和第三，原因是極端的人道主義狀況。名單上的其他國家包括衣索比亞、海地、剛果民主共和國、黎巴嫩、烏克蘭、敘利亞和葉門。該組織預測，到 2029 年，這些國家將容納全球一半以上的極端貧困人口，並將這種情況描述為一種取代二戰後基於規則系統的「新世界混亂」。`,
+                vocabulary: [
+                    'Sudan (n. proper): 蘇丹', 'Tops (v.): 位居...之首', 'International Rescue Committee (IRC) (n. proper): 國際救援委員會', 'Humanitarian crisis (n.phr.): 人道危機', 
+                    'Emergency Watchlist (n.phr.): 緊急觀察名單', 'In a row (phr.): 連續', 'Trapped (adj.): 受困的', 'Devastating (adj.): 毀滅性的', 
+                    'Worsening (adj.): 惡化的', 'Funding (n.): 資金', 'Deadliest (adj.): 最致命的', 'Humanitarian workers (n.phr.): 人道工作者', 
+                    'Occupied Palestinian Territory (n. proper): 巴勒斯坦被佔領土', 'Respectively (adv.): 分別地', 'Extreme poor (n.phr.): 極端貧困人口', 
+                    'New World Disorder (n.phr.): 新世界混亂', 'Post–World War II (adj.): 二戰後的', 'Rules-based system (n.phr.): 基於規則的系統', 
+                    'Shortfall (n.): 短缺', 'Aid (n.): 援助', 'Trends (n.): 趨勢', 'Worsening (v.ger.): 惡化', 'Predicts (v.): 預測', 
+                    'House (v.): 容納/居住', 'Condition (n.): 狀況', 'Devastating war (n.phr.): 毀滅性戰爭', 'Global (adj.): 全球的', 
+                    'Expand (v.): 擴展', 'Significant (adj.): 重大的', 'Situation (n.): 情況', 'Ranked (v.): 排名', 'Risk (n.): 風險'
+                ],
+                quiz: [
+                    { q: 'For how many years has Sudan topped the IRC\'s Emergency Watchlist?', options: ['One year', 'Two years', 'Three years', 'Five years'], answer: 'Three years' },
+                    { q: 'Which organization released the "Emergency Watchlist"?', options: ['United Nations', 'Red Cross', 'International Rescue Committee (IRC)', 'World Health Organization'], answer: 'International Rescue Committee (IRC)' },
+                    { q: 'The list covers how many countries at risk of worsening crises in 2026?', options: ['10', '20', '50', '100'], answer: '20' },
+                    { q: 'By what percentage did aid funding drop over the past year?', options: ['10%', '25%', '50%', '75%'], answer: '50%' },
+                    { q: 'Which region ranked second on the 2026 list?', options: ['Ukraine', 'South Sudan', 'Occupied Palestinian Territory', 'Haiti'], answer: 'Occupied Palestinian Territory' },
+                    { q: 'Which country ranked third on the list?', options: ['Syria', 'Yemen', 'South Sudan', 'Lebanon'], answer: 'South Sudan' },
+                    { q: 'By which year does the IRC predict these countries will house half of the world\'s extreme poor?', options: ['2026', '2027', '2029', '2035'], answer: '2029' },
+                    { q: 'The phrase "New World Disorder" is used to describe a replacement of what?', options: ['The internet', 'Post–World War II rules-based system', 'Global currency', 'Modern technology'], answer: 'Post–World War II rules-based system' },
+                    { q: 'What is the current primary cause of the crisis in Sudan?', options: ['Earthquake', 'Devastating war', 'Oil shortage', 'Economic boom'], answer: 'Devastating war' },
+                    { q: 'What did the IRC call for globally?', options: ['Increased taxes', 'Expanded global humanitarian funding', 'New military alliances', 'Closing borders'], answer: 'Expanded global humanitarian funding' },
+                    { q: 'Which of the following countries is NOT mentioned as being on the list?', options: ['Ukraine', 'Haiti', 'Japan', 'Syria'], answer: 'Japan' },
+                    { q: 'The current trends could make this the deadliest year for whom?', options: ['Soldiers', 'Humanitarian workers', 'Politicians', 'Bankers'], answer: 'Humanitarian workers' },
+                    { q: 'The situation in Sudan is described as being "trapped" in what?', options: ['A legal battle', 'A financial debt', 'A devastating war', 'A traffic jam'], answer: 'A devastating war' },
+                    { q: 'What type of crises does the IRC list focus on?', options: ['Financial', 'Environmental', 'Humanitarian', 'Technological'], answer: 'Humanitarian' },
+                    { q: 'What does "respectively" mean in the sentence about rankings?', options: ['With great respect', 'In the order mentioned', 'Very quickly', 'Repeatedly'], answer: 'In the order mentioned' }
+                ]
+            },
+            'british-man-sentenced': {
+                title: '男子駕車衝撞英國足球迷遭判入獄：21 年半重刑', 
+                english: `A British man has been sentenced to 21 and a half years in prison for driving a car into a crowd of Liverpool football fans during Premier League title celebrations in May, injuring over 130 people. Paul Doyle pleaded guilty to 31 criminal charges related to the incident. He drove into the crowd, striking adults and children—some were thrown into the air, while others were trapped under the vehicle—simply because he “lost his temper.” He admitted to 9 counts of wounding with intent and 17 counts of attempting to cause grievous bodily harm. Prosecutors said Doyle was “consumed by rage” and acted like someone who had “lost his mind.” Victims described the long-term impact, including the inability to work or attend crowded events.`,
+                chinese: `一名英國男子因在 5 月的英超冠軍慶祝活動期間，開車衝撞利物浦足球迷人群，造成 130 多人受傷，被判處 21 年半監禁。保羅·多伊爾 (Paul Doyle) 對與該事件有關的 31 項刑事指控表示認罪。他開車衝進人群，撞擊大人和小孩——有些人被拋到空中，而另一些人則被困在車底——原因竟然只是因為他「發脾氣」。他承認 9 項蓄意傷人罪和 17 項企圖造成嚴重身體傷害罪。檢察官表示，多伊爾被「憤怒吞噬」，表現得就像一個「失去理智」的人。受害者描述了長期影響，包括無法工作或參加擁擠的活動。`,
+                vocabulary: [
+                    'British man (n.phr.): 英國男子', 'Sentenced to (phr.): 被判處', 'Prison (n.): 監獄', 'Crowd (n.): 人群', 'Liverpool (n. proper): 利物浦', 
+                    'Premier League (n. proper): 英超聯賽', 'Title celebrations (n.phr.): 奪冠慶祝活動', 'Injuring (v.ger.): 使受傷', 'Pleaded guilty (phr.): 認罪', 
+                    'Criminal charges (n.phr.): 刑事指控', 'Related to (phr.): 與...有關', 'Incident (n.): 事件', 'Striking (v.ger.): 撞擊', 
+                    'Adults and children (n.phr.): 成人與孩童', 'Thrown into the air (phr.): 被拋向空中', 'Trapped under the vehicle (phr.): 被困在車底', 
+                    'Lost his temper (phr.): 發脾氣', 'Counts (n.): (法律指控的) 項數', 'Wounding with intent (n.phr.): 蓄意傷人', 
+                    'Attempting to (phr.): 企圖', 'Grievous bodily harm (n.phr.): 嚴重身體傷害', 'Prosecutors (n.): 檢察官', 'Consumed by rage (phr.): 被憤怒吞噬', 
+                    'Lost his mind (phr.): 失去理智', 'Victims (n.): 受害者', 'Long-term impact (n.phr.): 長期影響', 'Inability (n.): 無法/無能力', 
+                    'Attend (v.): 參加', 'Crowded events (n.phr.): 擁擠的活動', 'May (n. proper): 五月', 'Criminal (adj.): 犯罪的', 'Bodily (adj.): 身體的'
+                ],
+                quiz: [
+                    { q: 'What was Paul Doyle’s sentence?', options: ['10 years', '15 years', '21 and a half years', 'Life in prison'], answer: '21 and a half years' },
+                    { q: 'Why was he sentenced?', options: ['For stealing a car', 'For drug possession', 'For driving a car into a crowd of football fans', 'For a financial scam'], answer: 'For driving a car into a crowd of football fans' },
+                    { q: 'Which football team’s fans were targeted?', options: ['Manchester United', 'Liverpool', 'Chelsea', 'Arsenal'], answer: 'Liverpool' },
+                    { q: 'When did the incident occur?', options: ['January', 'March', 'May', 'December'], answer: 'May' },
+                    { q: 'Over how many people were injured?', options: ['30', '100', '130', '200'], answer: '130' },
+                    { q: 'To how many criminal charges did Doyle plead guilty?', options: ['9', '17', '31', '50'], answer: '31' },
+                    { q: 'What reason did Doyle give for his actions?', options: ['He was drunk.', 'He was late for work.', 'He lost his temper.', 'The car brakes failed.'], answer: 'He lost his temper.' },
+                    { q: 'How many counts of "wounding with intent" did he admit to?', options: ['5', '9', '17', '31'], answer: '9' },
+                    { q: 'What did prosecutors say Doyle was "consumed by"?', options: ['Grief', 'Rage', 'Guilt', 'Fear'], answer: 'Rage' },
+                    { q: 'How did victims describe the impact of the incident?', options: ['A minor setback', 'Long-term impact, including inability to work', 'A lucky escape', 'Completely recovered'], answer: 'Long-term impact, including inability to work' },
+                    { q: 'What specific league title were the fans celebrating?', options: ['Champions League', 'World Cup', 'Premier League', 'FA Cup'], answer: 'Premier League' },
+                    { q: 'Some victims were trapped where?', options: ['Inside a building', 'In a tree', 'Under the vehicle', 'In a shop'], answer: 'Under the vehicle' },
+                    { q: 'What does "pleaded guilty" mean?', options: ['To claim innocence', 'To admit to a crime in court', 'To pay a fine', 'To hire a lawyer'], answer: 'To admit to a crime in court' },
+                    { q: 'The term "grievous bodily harm" refers to what level of injury?', options: ['Very minor', 'Temporary', 'Serious', 'No injury'], answer: 'Serious' },
+                    { q: 'What kind of events are some victims now unable to attend?', options: ['Small dinners', 'Crowded events', 'Online meetings', 'Family gatherings'], answer: 'Crowded events' }
+                ]
+            },
+            'arctic-record-high': {
+                title: '北極再次創下 125 年來最高溫紀錄：NOAA 年度報告', 
+                english: `The Arctic recorded its highest temperatures in 125 years last season. Sea ice extent, which usually peaks in March, dropped to its lowest level in 47 years of satellite records. Vegetation greening in the North American tundra reached its most significant level on record. These findings were released in NOAA’s annual “Arctic Report Card,” showing the region is transforming rapidly and profoundly due to global warming. As temperatures rise, thawing permafrost is altering ecosystems. Iron and other elements are released into rivers, turning over 200 watersheds in Arctic Alaska orange, with higher acidity and toxic metal concentrations.`,
+                chinese: `北極上一季記錄了 125 年來的最高溫。海冰範圍（通常在 3 月達到峰值）下降到 47 年衛星紀錄以來的最低水準。北美苔原的植被綠化達到了有紀錄以來的最顯著水準。這些發現發佈在美國國家海洋暨大氣總署 (NOAA) 的年度「北極報告卡」中，顯示該地區由於全球變暖正在發生迅速而深刻的變化。隨著氣溫升高，凍土融化正在改變生態系統。鐵和其他元素被釋放到河流中，使阿拉斯加北極地區 200 多個流域變成橘色，且具有更高的酸度和有毒金屬濃度。`,
+                vocabulary: [
+                    'The Arctic (n. proper): 北極', 'Highest temperatures (n.phr.): 最高溫', 'Season (n.): 季節', 'Sea ice extent (n.phr.): 海冰範圍', 
+                    'Peaks (v.): 達到峰值', 'Satellite records (n.phr.): 衛星紀錄', 'Vegetation greening (n.phr.): 植被綠化', 
+                    'North American tundra (n. proper): 北美苔原', 'On record (phr.): 有紀錄以來', 'Findings (n.): 發現/研究結果', 
+                    'Released (v.): 發佈', 'NOAA (n. proper): 美國國家海洋暨大氣總署', 'Arctic Report Card (n. proper): 北極報告卡', 
+                    'Transforming (v.ger.): 轉化/變革', 'Rapidly and profoundly (adv.phr.): 迅速而深刻地', 'Global warming (n.phr.): 全球變暖', 
+                    'Thawing (v.ger.): 融化', 'Permafrost (n.): 凍土 (永久凍土)', 'Altering ecosystems (phr.): 改變生態系統', 'Iron (n.): 鐵', 
+                    'Elements (n.): 元素', 'Watersheds (n.): 流域', 'Orange (adj.): 橘色的', 'Acidity (n.): 酸度', 
+                    'Toxic metal concentrations (n.phr.): 有毒金屬濃度', 'Extent (n.): 範圍', 'Profoundly (adv.): 深刻地', 
+                    'Thawing (adj.): 融化的', 'Acidity (n.): 酸度', 'Element (n.): 元素', 'Release (v.): 釋放', 'Annual (adj.): 年度的'
+                ],
+                quiz: [
+                    { q: 'What was recorded as the highest in 125 years in the Arctic?', options: ['Snowfall', 'Temperatures', 'Animal population', 'Tourist numbers'], answer: 'Temperatures' },
+                    { q: 'In which month does sea ice extent usually peak?', options: ['January', 'March', 'June', 'September'], answer: 'March' },
+                    { q: 'Sea ice dropped to its lowest level in how many years of satellite records?', options: ['10', '25', '47', '125'], answer: '47' },
+                    { q: 'What kind of vegetation change was noted in the North American tundra?', options: ['Dying out', 'Vegetation greening', 'Turning brown', 'No change'], answer: 'Vegetation greening' },
+                    { q: 'What is the name of the annual report mentioned?', options: ['Global Warming Update', 'Arctic Report Card', 'Nature Review', 'Climate Crisis News'], answer: 'Arctic Report Card' },
+                    { q: 'Which agency released the report?', options: ['NASA', 'UN', 'NOAA', 'Greenpeace'], answer: 'NOAA' },
+                    { q: 'The region is transforming profoundly due to what?', options: ['Economic development', 'Global warming', 'New shipping routes', 'Volcanic activity'], answer: 'Global warming' },
+                    { q: 'What is "permafrost"?', options: ['A new kind of ice', 'Ground that remains frozen', 'A type of plant', 'Artificial snow'], answer: 'Ground that remains frozen' },
+                    { q: 'What happens to permafrost as temperatures rise?', options: ['It gets thicker.', 'It turns into stone.', 'It thaws (melts).', 'It disappears into the sky.'], answer: 'It thaws (melts).' },
+                    { q: 'What color are the watersheds turning in Arctic Alaska?', options: ['Blue', 'Green', 'Orange', 'Black'], answer: 'Orange' },
+                    { q: 'How many watersheds have turned this color?', options: ['Over 10', 'Over 50', 'Over 100', 'Over 200'], answer: 'Over 200' },
+                    { q: 'The change in river color is accompanied by higher levels of what?', options: ['Oxygen', 'Acidity and toxic metal concentrations', 'Sugar', 'Clean water'], answer: 'Acidity and toxic metal concentrations' },
+                    { q: 'What element specifically is mentioned as being released into rivers?', options: ['Gold', 'Iron', 'Silver', 'Carbon'], answer: 'Iron' },
+                    { q: 'Vegetation greening occurred in the tundra of which continent?', options: ['Asia', 'Europe', 'North America', 'Africa'], answer: 'North America' },
+                    { q: 'The report describes the transformation as "rapid and" what?', options: ['Slow', 'Boring', 'Profound', 'Invisible'], answer: 'Profound' }
+                ]
+            },
+            'dinosaur-footprints-italy': {
+                title: '攝影師偶然發現數千個恐龍腳印：義大利三疊紀遺跡', 
+                english: `A wildlife photographer has accidentally discovered one of the oldest and largest sets of dinosaur footprints known to date near Bormio, in northern Italy. Dating back to the Triassic period around 210 million years ago, the discovery in Stelvio National Park includes up to 20,000 footprints spread over 5 kilometers. The tracks are believed to have been left by long-necked, bipedal herbivores, similar to Plateosaurus, measuring up to 10 meters long and weighing about 4 tons. Some footprints are up to 40 centimeters wide with clear claw marks. The tracks suggest the animals moved in herds and sometimes stopped in circular formations, possibly for defense. The discovery was made by photographer Della Ferrera in September while photographing wildlife, finding the tracks on a vertical rock face about 600 meters from the nearest road.`,
+                chinese: `一位野生動物攝影師在義大利北部的博爾米奧 (Bormio) 附近，意外發現了迄今為止已知最古老、規模最大的恐龍腳印群之一。這項發現在斯泰爾維奧國家公園 (Stelvio National Park)，可追溯到約 2.1 億年前的三疊紀時期，包含分佈在 5 公里範圍內的 2 萬多個腳印。這些足跡被認為是由類似於板龍 (Plateosaurus) 的長頸雙足草食性恐龍留下的，牠們體長可達 10 公尺，體重約 4 噸。有些腳印寬達 40 公分，帶有清晰的爪痕。足跡顯示這些動物成群移動，有時會停下來排成圓形陣型，可能是為了防禦。這項發現是由攝影師德拉·費雷拉 (Della Ferrera) 於 9 月在拍攝野生動物時發現的，他在距離最近道路約 600 公尺處的一面垂直岩壁上發現了這些足跡。`,
+                vocabulary: [
+                    'Wildlife photographer (n.phr.): 野生動物攝影師', 'Accidentally (adv.): 意外地/偶然地', 'Discovered (v.): 發現', 'Dinosaur footprints (n.phr.): 恐龍腳印', 
+                    'Known to date (phr.): 迄今已知', 'Northern Italy (n. proper): 義大利北部', 'Dating back to (phr.v.): 追溯到', 'Triassic period (n. proper): 三疊紀時期', 
+                    '210 million years ago (phr.): 2.1 億年前', 'National Park (n. proper): 國家公園', 'Spread over (phr.v.): 分佈於', 'Tracks (n.): 足跡/軌跡', 
+                    'Long-necked (adj.): 長頸的', 'Bipedal (adj.): 雙足的', 'Herbivores (n.): 草食性動物', 'Plateosaurus (n. proper): 板龍', 
+                    'Measuring (v.ger.): 測量/長度為', 'Weighing (v.ger.): 重量為', 'Claw marks (n.phr.): 爪痕', 'Herds (n.): 獸群', 
+                    'Circular formations (n.phr.): 圓形陣型', 'Defense (n.): 防禦', 'Vertical rock face (n.phr.): 垂直岩壁', 'Nearest road (n.phr.): 最近的道路', 
+                    'Discovery (n.): 發現', 'Accidental (adj.): 意外的', 'Bipedal (adj.): 雙足步行的', 'Known (adj.): 已知的', 'Large (adj.): 大型的', 
+                    'Distance (n.): 距離', 'Ancient (adj.): 古老的', 'Formation (n.): 形成/陣型'
+                ],
+                quiz: [
+                    { q: 'Who discovered the dinosaur footprints?', options: ['A geologist', 'A wildlife photographer', 'A construction worker', 'A tourist'], answer: 'A wildlife photographer' },
+                    { q: 'Where were the footprints discovered?', options: ['Southern France', 'Northern Italy', 'Western Spain', 'Central Greece'], answer: 'Northern Italy' },
+                    { q: 'To which geological period do the footprints date back?', options: ['Jurassic', 'Cretaceous', 'Triassic', 'Permian'], answer: 'Triassic' },
+                    { q: 'Approximately how many years ago was the Triassic period mentioned?', options: ['65 million', '150 million', '210 million', '500 million'], answer: '210 million' },
+                    { q: 'How many footprints are estimated to be in the set?', options: ['2,000', '10,000', '20,000', '100,000'], answer: '20,000' },
+                    { q: 'Over what distance are the footprints spread?', options: ['500 meters', '1 kilometer', '5 kilometers', '10 kilometers'], answer: '5 kilometers' },
+                    { q: 'What type of animals left the tracks?', options: ['Meat-eating birds', 'Long-necked herbivores', 'Sea monsters', 'Flying insects'], answer: 'Long-necked herbivores' },
+                    { q: 'What dinosaur is mentioned as being similar to the track-makers?', options: ['T-Rex', 'Velociraptor', 'Plateosaurus', 'Stegosaurus'], answer: 'Plateosaurus' },
+                    { q: 'How wide are some of the footprints?', options: ['10 cm', '20 cm', '40 cm', '100 cm'], answer: '40 cm' },
+                    { q: 'What marks were visible in the footprints?', options: ['Feather marks', 'Claw marks', 'Tail marks', 'Egg marks'], answer: 'Claw marks' },
+                    { q: 'The tracks suggest the animals moved in what kind of groups?', options: ['Alone', 'Pairs', 'Herds', 'Families'], answer: 'Herds' },
+                    { q: 'The animals sometimes stopped in what shape, possibly for defense?', options: ['Square', 'Line', 'Circular formation', 'Triangle'], answer: 'Circular formation' },
+                    { q: 'What was the photographer doing when he found the footprints?', options: ['Mining for gold', 'Building a road', 'Photographing wildlife', 'Camping'], answer: 'Photographing wildlife' },
+                    { q: 'Where exactly were the tracks found?', options: ['In a cave', 'Under a lake', 'On a vertical rock face', 'In a forest'], answer: 'On a vertical rock face' },
+                    { q: 'How far was the discovery from the nearest road?', options: ['100 meters', '600 meters', '5 kilometers', 'Across the country'], answer: '600 meters' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+
+        // --- CORE RENDERING FUNCTIONS ---
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            if (Object.keys(NEWS_DATA).length === 0) {
+                tabsContainer.innerHTML = '<p class="p-4 text-center text-red-500 font-semibold">無新聞資料可顯示。</p>';
+                return;
+            }
+
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const tabTitle = data.title.split('：')[0]; 
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `
+                    <button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">
+                        ${tabTitle}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            
+            if (!data) {
+                contentArea.innerHTML = '<h2 class="text-3xl font-bold text-gray-800 mb-6">錯誤：找不到新聞內容</h2>';
+                return;
+            }
+            
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2>
+                <div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100">
+                    <p>${text.trim()}</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">
+                        🇹🇼 前往中文翻譯
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderTranslation(text, title) {
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2>
+                <div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner">
+                    <p>${text.trim()}</p>
+                </div>
+                <div class="mt-6 text-center">
+                    <button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">
+                        📖 前往單字庫複習
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100">
+                    <span class="font-semibold text-indigo-700">${parts[0]}</span> 
+                    <span class="text-gray-500 text-sm italic">${parts[1]}</span>
+                </li>`;
+            }).join('');
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2>
+                <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    ${listItems}
+                </ul>
+                <div class="mt-8 text-center">
+                    <button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">
+                        📝 開始測驗
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            if (!quizQuestions) return '無測驗。';
+
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const correctAnswer = q.answer;
+                
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === correctAnswer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `
+                        <div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" 
+                             onclick="selectOption('${topicId}', ${index}, '${escapedOption}')">
+                            <span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}
+                            ${isSubmitted && option === correctAnswer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500">
+                        <p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>
+                        ${optionsHTML}
+                    </div>
+                `;
+            }).join('');
+
+            const resultHTML = result ? `
+                <div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500">
+                    <h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3>
+                    <p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p>
+                    <button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button>
+                </div>
+            ` : '';
+
+            const submitButton = result === undefined ? `
+                <button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50"
+                        onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>
+            ` : '';
+
+            return `
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>
+                ${resultHTML}
+                <div id="quiz-questions">${questionsHTML}</div>
+                <div class="mt-8 text-center">${submitButton}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>
+            `;
+        }
+
+        // --- QUIZ LOGIC ---
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (Object.keys(NEWS_DATA).length > 0) {
+                renderTabs();
+                renderContent();
+            }
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
