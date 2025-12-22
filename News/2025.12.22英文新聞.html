@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 19 日頭條</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a clean, professional interface */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        /* Main News Tabs Styling (Primary Navigation) */
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        /* Sub-Tabs Styling (Secondary Navigation) */
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        /* Quiz specific styles */
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 19 日焦點新聞</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200">
+                <!-- 標題分頁將由 JS 動態生成 -->
+            </div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT ---
+        const NEWS_DATA = {
+            'impeachment': {
+                title: '立法院表決彈劾卓榮泰',
+                english: `Legislature Votes to Impeach Premier Cho Jung-tai. In local news, the Taiwan Legislative Yuan has voted to send Premier Cho Jung-tai to the Control Yuan for impeachment. The reason cited is his refusal to countersign amendments to the "Fiscal Allocation Act." Premier Cho stated that this move shows that all constitutional mechanisms can be activated. He emphasized that no one can rule arbitrarily and called on all parties to resolve disputes within the framework of the Republic of China's Constitution.`,
+                chinese: `立法院表決彈劾行政院長卓榮泰。在本地新聞中，台灣立法院已投票決定將行政院長卓榮泰送交監察院彈劾。引用的理由是他拒絕副署《財政收支劃分法》修正案。卓院長表示，此舉顯示所有憲法機制都可以啟動。他強調沒有人可以專斷獨行，並呼籲各方在中華民國憲法框架內解決爭端。`,
+                vocabulary: [
+                    'Legislature (n.): 立法機關/立法院', 'Votes (v.): 投票/表決', 'Impeach (v.): 彈劾', 'Premier (n.): 首相/院長', 'Control Yuan (n. proper): 監察院',
+                    'Reason cited (phr.): 引用的理由', 'Refusal (n.): 拒絕', 'Countersign (v.): 副署/連署', 'Amendments (n.): 修正案', 'Fiscal Allocation Act (n. proper): 財政收支劃分法',
+                    'Stated (v.): 陳述/表示', 'Constitutional (adj.): 憲法的', 'Mechanisms (n.): 機制', 'Activated (v.pp.): 啟動的', 'Emphasized (v.): 強調',
+                    'Rule (v.): 統治/裁定', 'Arbitrarily (adv.): 專斷地/任意地', 'Called on (phr.v.): 呼籲', 'Parties (n.): 各方/政黨', 'Resolve (v.): 解決',
+                    'Disputes (n.): 爭端', 'Framework (n.): 框架', 'Constitution (n.): 憲法', 'Republic of China (n. proper): 中華民國', 'Legal basis (n.phr.): 法律依據',
+                    'Impeachment process (n.phr.): 彈劾程序', 'Deterrence (n.): 威懾', 'Formal relations (n.phr.): 正式關係', 'Official (n.): 官員', 'Government (n.): 政府',
+                    'Disbursements (n.): 支出/分配'
+                ],
+                quiz: [
+                    { q: 'Who did the Legislative Yuan vote to impeach?', options: ['The President', 'The Premier', 'The Mayor', 'The Speaker'], answer: 'The Premier' },
+                    { q: 'To which body is the Premier being sent for impeachment?', options: ['Executive Yuan', 'Control Yuan', 'Judicial Yuan', 'Examination Yuan'], answer: 'Control Yuan' },
+                    { q: 'What is the specific reason for the impeachment vote?', options: ['Corruption', 'Refusal to countersign a bill', 'Illegal travel', 'Election fraud'], answer: 'Refusal to countersign a bill' },
+                    { q: 'What is the name of the act mentioned in the dispute?', options: ['The Land Act', 'The Fiscal Allocation Act', 'The Labor Act', 'The Security Act'], answer: 'The Fiscal Allocation Act' },
+                    { q: 'How did Premier Cho describe the move?', options: ['An illegal act', 'A show of constitutional mechanisms', 'A personal attack', 'A waste of time'], answer: 'A show of constitutional mechanisms' },
+                    { q: 'What did Premier Cho emphasize about ruling?', options: ['It must be fast.', 'No one can rule arbitrarily.', 'It is easy to do.', 'Only he can rule.'], answer: 'No one can rule arbitrarily.' },
+                    { q: 'Where did Cho call on parties to resolve disputes?', options: ['In court', 'In the streets', 'Within the framework of the Constitution', 'In a secret meeting'], answer: 'Within the framework of the Constitution' },
+                    { q: 'Which country\'s Constitution was mentioned?', options: ['USA', 'Japan', 'Republic of China', 'UK'], answer: 'Republic of China' },
+                    { q: 'The term "countersign" means what in this context?', options: ['To cancel', 'To sign in addition to another signature', 'To lose a document', 'To rewrite a law'], answer: 'To sign in addition to another signature' },
+                    { q: 'The impeachment is related to which aspect of government?', options: ['Educational', 'Fiscal/Legal', 'Environmental', 'Technological'], answer: 'Fiscal/Legal' },
+                    { q: 'The move to impeach is described as showing what can be "activated"?', options: ['The military', 'The economy', 'Constitutional mechanisms', 'New elections'], answer: 'Constitutional mechanisms' },
+                    { q: 'What kind of news is this categorized as in the context?', options: ['International', 'Sports', 'Local news', 'Entertainment'], answer: 'Local news' },
+                    { q: 'The Premier\'s name is...', options: ['Lai Ching-te', 'Cho Jung-tai', 'Chen Shih-kai', 'Neal Mohan'], answer: 'Cho Jung-tai' },
+                    { q: 'The Legislative Yuan is Taiwan\'s...', options: ['Court', 'Parliament/Legislature', 'Police force', 'Newspaper'], answer: 'Parliament/Legislature' },
+                    { q: 'What does "resolve disputes" mean?', options: ['Start a fight', 'Ignore a problem', 'Find a solution to a disagreement', 'Make things more confusing'], answer: 'Find a solution to a disagreement' }
+                ]
+            },
+            'terminal-3': {
+                title: '桃機三航廈北廳 12/25 啟用',
+                english: `Taoyuan Airport Terminal 3 North Concourse Opens Dec 25. The North Concourse of Taoyuan Airport's Terminal 3 will officially open on December 25th, following a trial run of approximately three weeks. Transportation Minister Chen Shih-kai stated that feedback from travelers and flight crews has been quite positive. He added that if any issues with passenger flow arise, adjustments will be made to ensure the facilities are in optimal condition before the official opening.`,
+                chinese: `桃園機場第三航廈北側大廳 12 月 25 日啟用。桃園機場第三航廈北側大廳在經過約三週的試運行後，將於 12 月 25 日正式啟用。交通部長陳世凱表示，旅客和機組人員的反饋相當正面。他補充說，如果出現任何人流問題，將進行調整，以確保設施在正式啟用前處於最佳狀態。`,
+                vocabulary: [
+                    'Terminal (n.): 航廈/終端', 'North Concourse (n.phr.): 北側大廳', 'Officially open (phr.): 正式啟用', 'Trial run (n.phr.): 試運行/試營運',
+                    'Approximately (adv.): 大約', 'Transportation Minister (n.phr.): 交通部長', 'Stated (v.): 表示/陳述', 'Feedback (n.): 反饋/意見',
+                    'Travelers (n.): 旅客', 'Flight crews (n.phr.): 機組人員', 'Positive (adj.): 正面的/積極的', 'Issues (n.): 問題',
+                    'Passenger flow (n.phr.): 人流/客流', 'Arise (v.): 出現/產生', 'Adjustments (n.): 調整', 'Ensure (v.): 確保',
+                    'Facilities (n.): 設施', 'Optimal condition (n.phr.): 最佳狀態', 'Opening date (n.phr.): 啟用日期', 'Airport (n.): 機場',
+                    'Trial (n.): 試驗', 'Approximately (adv.): 大約', 'Optimal (adj.): 最佳的/最優的', 'Flow (n.): 流動',
+                    'Crews (n.): 全體工作人員', 'Feedback from (phr.): 來自...的反饋', 'Condition (n.): 狀態/條件', 'Before (prep.): 在...之前',
+                    'Make adjustments (phr.): 進行調整', 'Following (prep.): 在...之後', 'Service (n.): 服務', 'Hub (n.): 樞紐/中心',
+                    'Aviation (n.): 航空', 'Progress (n.): 進度'
+                ],
+                quiz: [
+                    { q: 'Which terminal of Taoyuan Airport is mentioned?', options: ['Terminal 1', 'Terminal 2', 'Terminal 3', 'Terminal 4'], answer: 'Terminal 3' },
+                    { q: 'Which part of the terminal will open?', options: ['South Concourse', 'North Concourse', 'Main Hall', 'Parking lot'], answer: 'North Concourse' },
+                    { q: 'On what date will it officially open?', options: ['December 1st', 'December 10th', 'December 25th', 'January 1st'], answer: 'December 25th' },
+                    { q: 'How long was the trial run?', options: ['One week', 'Two weeks', 'Approximately three weeks', 'One month'], answer: 'Approximately three weeks' },
+                    { q: 'Who is the Transportation Minister?', options: ['Cho Jung-tai', 'Chen Shih-kai', 'Lai Ching-te', 'Neal Mohan'], answer: 'Chen Shih-kai' },
+                    { q: 'What kind of feedback did the minister receive?', options: ['Negative', 'Quite positive', 'Neutral', 'No feedback'], answer: 'Quite positive' },
+                    { q: 'Feedback was collected from travelers and who else?', options: ['Shop owners', 'Taxi drivers', 'Flight crews', 'Customs officers'], answer: 'Flight crews' },
+                    { q: 'What might happen if issues with "passenger flow" arise?', options: ['The opening will be canceled.', 'Adjustments will be made.', 'A new terminal will be built.', 'Prices will increase.'], answer: 'Adjustments will be made.' },
+                    { q: 'The adjustments aim to ensure the facilities are in what condition?', options: ['Average condition', 'Working condition', 'Optimal condition', 'Temporary condition'], answer: 'Optimal condition' },
+                    { q: 'Is the terminal already fully open now?', options: ['Yes', 'No, it opens on Dec 25', 'It is only for cargo', 'It is under repair'], answer: 'No, it opens on Dec 25' },
+                    { q: 'What is the main purpose of a "trial run"?', options: ['To make money', 'To test facilities before official use', 'To celebrate an event', 'To hide mistakes'], answer: 'To test facilities before official use' },
+                    { q: 'What does "arise" mean in the text?', options: ['To wake up', 'To occur/happen', 'To end', 'To fall'], answer: 'To occur/happen' },
+                    { q: 'The opening is related to what industry?', options: ['Tourism', 'Transportation/Aviation', 'Fashion', 'Sports'], answer: 'Transportation/Aviation' },
+                    { q: 'Approximately how many weeks of testing were there?', options: ['1', '2', '3', '4'], answer: '3' },
+                    { q: 'The North Concourse is part of...', options: ['Taoyuan Airport', 'Taipei Main Station', 'Keelung Port', 'Hsinchu Station'], answer: 'Taoyuan Airport' }
+                ]
+            },
+            'hotai-investment': {
+                title: '和泰汽車百億投資日本',
+                english: `Hotai Motor Invests NT10 Billion in Japan. Taiwan's leading auto seller, Hotai Motor, has announced an investment of NT$10 billion in Japan to acquire an 80% stake in five dealerships under Hino Motors. This transaction is not only Hotai's largest overseas investment to date but also opens a new chapter in Taiwan–Japan automotive cooperation. This achievement was made possible by the strong support of its key technical partner, Toyota Motor Corporation.`,
+                chinese: `和泰汽車投資日本千億日圓。台灣領先的汽車銷售商和泰汽車宣布將在日本投資 100 億新台幣，收購日野汽車旗下五家經銷商 80% 的股份。這項交易不僅是和泰迄今為止最大的海外投資，也開啟了台日汽車合作的新篇章。這一成就在其關鍵技術合作夥伴豐田汽車的大力支持下得以實現。`,
+                vocabulary: [
+                    'Auto seller (n.phr.): 汽車銷售商', 'Leading (adj.): 領先的/龍頭的', 'Investment (n.): 投資', 'Acquire (v.): 收購/獲得',
+                    'Stake (n.): 股份/利害關係', 'Dealerships (n.): 經銷商/代理商', 'Hino Motors (n. proper): 日野汽車', 'Transaction (n.): 交易',
+                    'Overseas investment (n.phr.): 海外投資', 'To date (phr.): 迄今為止', 'New chapter (n.phr.): 新篇章', 'Automotive cooperation (n.phr.): 汽車合作',
+                    'Achievement (n.): 成就', 'Technical partner (n.phr.): 技術合作夥伴', 'Toyota Motor Corporation (n. proper): 豐田汽車公司', 'Strong support (n.phr.): 大力支持',
+                    'Announced (v.): 宣布', 'Acquisition (n.): 收購', 'Industry (n.): 行業/產業', 'Expansion (n.): 擴張', 'Technical (adj.): 技術的',
+                    'Billion (n.): 十億', 'NT dollars (n.phr.): 新台幣', 'Japanese market (n.phr.): 日本市場', 'Collaboration (n.): 協作/合作',
+                    'Deal (n.): 交易', 'Scale (n.): 規模', 'Growth (n.): 增長', 'Strategy (n.): 策略', 'Key (adj.): 關鍵的', 'Global (adj.): 全球的'
+                ],
+                quiz: [
+                    { q: 'Which company is making the investment?', options: ['Toyota', 'Hotai Motor', 'Hino Motors', 'ABC Motors'], answer: 'Hotai Motor' },
+                    { q: 'In which country is Hotai Motor investing?', options: ['USA', 'China', 'Japan', 'Germany'], answer: 'Japan' },
+                    { q: 'How much is the investment worth in NT dollars?', options: ['NT$1 billion', 'NT$5 billion', 'NT$10 billion', 'NT$100 billion'], answer: 'NT$10 billion' },
+                    { q: 'What percentage stake is Hotai acquiring?', options: ['20%', '50%', '80%', '100%'], answer: '80%' },
+                    { q: 'How many dealerships is Hotai acquiring a stake in?', options: ['One', 'Three', 'Five', 'Ten'], answer: 'Five' },
+                    { q: 'The dealerships are under which brand?', options: ['Toyota', 'Hino Motors', 'Lexus', 'Nissan'], answer: 'Hino Motors' },
+                    { q: 'Is this Hotai\'s largest overseas investment to date?', options: ['Yes', 'No', 'It is their first', 'The text does not say'], answer: 'Yes' },
+                    { q: 'What does this investment open in Taiwan–Japan relations?', options: ['A new chapter in cooperation', 'A trade war', 'A legal dispute', 'A cultural exchange'], answer: 'A new chapter in cooperation' },
+                    { q: 'Who is Hotai\'s key technical partner?', options: ['Hino', 'Toyota Motor Corporation', 'Honda', 'Ford'], answer: 'Toyota Motor Corporation' },
+                    { q: 'What role did Toyota play in this achievement?', options: ['They opposed it.', 'They provided strong support.', 'They bought the shares.', 'They managed the dealerships.'], answer: 'They provided strong support.' },
+                    { q: 'What is Hotai Motor\'s status in Taiwan?', options: ['A small dealer', 'Leading auto seller', 'A motorcycle maker', 'A parts supplier'], answer: 'Leading auto seller' },
+                    { q: 'What does "acquire" mean?', options: ['To sell', 'To buy/obtain', 'To fix', 'To close'], answer: 'To buy/obtain' },
+                    { q: 'The transaction is related to which industry?', options: ['Food', 'Automotive', 'Technology', 'Banking'], answer: 'Automotive' },
+                    { q: 'What is a "stake" in a company?', options: ['A wooden pole', 'A type of meat', 'Ownership share', 'A high debt'], answer: 'Ownership share' },
+                    { q: 'Hotai Motor is based in which country?', options: ['Japan', 'USA', 'Taiwan', 'China'], answer: 'Taiwan' }
+                ]
+            },
+            'arms-sale': {
+                title: '美對台 110 億美元軍售',
+                english: `US Announces $11 Billion Arms Sale to Taiwan. The Trump administration has announced a massive arms sale to Taiwan worth approximately $11 billion, which includes advanced rocket launchers, self-propelled artillery, and various missiles. This sale, which still requires US Congress approval, marks the second arms sale to Taiwan by Trump since his return to the White House in January. Taiwan's Ministry of National Defense thanked the US on Thursday, stating that this sale will help Taiwan "quickly build robust deterrence capabilities." While the US maintains formal diplomatic relations with Beijing rather than Taiwan and has been diplomatically cautious for decades, it remains Taiwan's most important ally and largest arms supplier. Although China has not yet responded to this specific sale, its Foreign Ministry warned last month that a separate November sale of $330 million in fighter jets and aircraft parts "seriously infringed" on China's sovereignty and security. The latest package includes $4 billion in High Mobility Artillery Rocket Systems (HIMARS) and $4 billion in self-propelled artillery. If completed, the scale of this sale will far exceed the total of $8.38 billion across 19 batches approved during the previous Biden administration.`,
+                chinese: `美國宣布對台 110 億美元軍售案。川普政府宣布了一項價值約 110 億美元的大規模對台軍售，其中包括先進的火箭發射器、自走砲和各式導彈。此次軍售仍需美國國會批准，標誌著川普自 1 月重返白宮以來第二次對台軍售。台灣國防部週四對美國表示感謝，稱此次軍售將幫助台灣「快速建立強大的威懾能力」。雖然美國與北京而非台灣保持正式外交關係，且數十年來在外交上一直保持謹慎，但美國仍是台灣最重要的盟友和最大的武器供應商。最新的一攬子計劃包括價值 40 億美元的高移動性多管火箭系統 (HIMARS) 和 40 億美元的自走砲。如果完成，此次軍售規模將遠超前拜登政府時期批准的 19 批總計 83.8 億美元的軍售。`,
+                vocabulary: [
+                    'Arms Sale (n.phr.): 軍售/武器銷售', 'Massive (adj.): 大規模的', 'Worth (adj.): 價值', 'Approximately (adv.): 大約',
+                    'Advanced (adj.): 先進的', 'Rocket launchers (n.phr.): 火箭發射器', 'Self-propelled artillery (n.phr.): 自走砲', 'Missiles (n.): 導彈',
+                    'Congress approval (n.phr.): 國會批准', 'Marks (v.): 標誌著', 'White House (n. proper): 白宮', 'Ministry of National Defense (n. proper): 國防部',
+                    'Thanked (v.): 感謝', 'Robust (adj.): 強大的/堅實的', 'Deterrence capabilities (n.phr.): 威懾能力', 'Diplomatic relations (n.phr.): 外交關係',
+                    'Cautious (adj.): 謹慎的', 'Decades (n.): 數十年', 'Ally (n.): 盟友', 'Supplier (n.): 供應商',
+                    'Responded (v.): 回應', 'Sovereignty (n.): 主權', 'Security (n.): 安全', 'Package (n.): 方案/一攬子計劃',
+                    'High Mobility Artillery Rocket Systems (HIMARS) (n. proper): 高移動性多管火箭系統', 'Completed (v.pp.): 完成的', 'Scale (n.): 規模', 'Batches (n.): 批次',
+                    'Approved (v.pp.): 批准的', 'Biden administration (n. proper): 拜登政府', 'Trump administration (n. proper): 川普政府', 'Infringed (v.): 侵犯',
+                    'Deterrence (n.): 威懾', 'Capability (n.): 能力', 'Fighter jets (n.phr.): 戰鬥機'
+                ],
+                quiz: [
+                    { q: 'How much is the total arms sale worth approximately?', options: ['$4 billion', '$8.38 billion', '$11 billion', '$19 billion'], answer: '$11 billion' },
+                    { q: 'Which US administration announced the sale?', options: ['Biden', 'Trump', 'Obama', 'Clinton'], answer: 'Trump' },
+                    { q: 'What items are included in the arms sale?', options: ['Tanks and submarines', 'Rocket launchers and artillery', 'Rifles and grenades', 'Computers and software'], answer: 'Rocket launchers and artillery' },
+                    { q: 'Whose approval is still required for the sale to proceed?', options: ['The President only', 'US Congress', 'The UN', 'The Taiwan Legislature'], answer: 'US Congress' },
+                    { q: 'This is Trump\'s ______ arms sale to Taiwan since January.', options: ['First', 'Second', 'Third', 'Fourth'], answer: 'Second' },
+                    { q: 'How did Taiwan\'s Ministry of National Defense react?', options: ['They criticized it.', 'They thanked the US.', 'They rejected it.', 'They didn\'t respond.'], answer: 'They thanked the US.' },
+                    { q: 'What will the sale help Taiwan build?', options: ['New parks', 'Robust deterrence capabilities', 'More hospitals', 'Better schools'], answer: 'Robust deterrence capabilities' },
+                    { q: 'The US maintains formal diplomatic relations with...', options: ['Taiwan', 'Beijing (China)', 'Both', 'Neither'], answer: 'Beijing (China)' },
+                    { q: 'Who is Taiwan\'s largest arms supplier?', options: ['Japan', 'France', 'The US', 'Germany'], answer: 'The US' },
+                    { q: 'What did China\'s Foreign Ministry say about a previous sale?', options: ['It was helpful.', 'It seriously infringed on sovereignty.', 'It was too small.', 'It was fair.'], answer: 'It seriously infringed on sovereignty.' },
+                    { q: 'How much of the package is for HIMARS?', options: ['$1 billion', '$2 billion', '$4 billion', '$11 billion'], answer: '$4 billion' },
+                    { q: 'What does HIMARS stand for?', options: ['High Impact Missiles', 'High Mobility Artillery Rocket Systems', 'Heavy Infantry Mobile Systems', 'Hidden Marine Artillery'], answer: 'High Mobility Artillery Rocket Systems' },
+                    { q: 'The current sale scale is compared to which previous administration?', options: ['Obama', 'Bush', 'Biden', 'Trump (first term)'], answer: 'Biden' },
+                    { q: 'How many batches were approved during the Biden administration?', options: ['2', '11', '19', '110'], answer: '19' },
+                    { q: 'Which body warned that the sale infringes on security?', options: ['US Congress', 'Taiwan Ministry', 'China Foreign Ministry', 'World Bank'], answer: 'China Foreign Ministry' }
+                ]
+            },
+            'oscars': {
+                title: '奧斯卡轉 YouTube 直播',
+                english: `Oscars to Move to YouTube from 2029. The Academy Awards will switch to streaming exclusively on YouTube starting in 2029, marking a major shift in Hollywood. The Academy of Motion Picture Arts and Sciences announced a multi-year deal granting YouTube exclusive global broadcasting rights until 2033. The ceremony, long broadcast by ABC, will be available live and for free on YouTube. Oscar ratings have been declining for decades, though they saw a slight recovery in 2025, driven by younger viewers. YouTube CEO Neal Mohan stated that the Oscars are "one of our important cultural institutions", while ABC said it looks forward to hosting its remaining broadcasts.`,
+                chinese: `奧斯卡頒獎典禮 2029 年起轉至 YouTube 直播。奧斯卡金像獎將從 2029 年開始改為僅在 YouTube 上進行串流直播，這標誌著好萊塢的一次重大轉變。美國電影藝術與科學學院宣布了一項多年期協議，授予 YouTube 直到 2033 年的獨家全球轉播權。該典禮長期由 ABC 廣播，屆時將在 YouTube 上免費直播。奧斯卡收視率數十年來一直在下降，儘管在年輕觀眾的推動下， 2025 年有所輕微回升。YouTube 執行長 Neal Mohan 表示，奧斯卡是「我們重要的文化機構之一」，而 ABC 則表示期待主辦剩下的轉播。`,
+                vocabulary: [
+                    'Academy Awards (n. proper): 奧斯卡金像獎', 'Switch to (v.phr.): 切換到/轉為', 'Streaming (n./v.ger.): 串流', 'Exclusively (adv.): 獨家地',
+                    'Major shift (n.phr.): 重大轉變', 'Hollywood (n. proper): 好萊塢', 'Academy of Motion Picture Arts and Sciences (n. proper): 美國電影藝術與科學學院', 'Multi-year deal (n.phr.): 多年期協議',
+                    'Granting (v.ger.): 授予/准予', 'Global broadcasting rights (n.phr.): 全球轉播權', 'Ceremony (n.): 典禮', 'Broadcast (v./n.): 廣播/轉播',
+                    'Live (adj./adv.): 現場直播的', 'Free (adj.): 免費的', 'Ratings (n.): 收視率', 'Declining (v.ger./adj.): 下降/衰落',
+                    'Slight recovery (n.phr.): 輕微回升/復甦', 'Driven by (phr.): 由...驅動/推動', 'Younger viewers (n.phr.): 年輕觀眾', 'CEO (n.): 執行長',
+                    'Cultural institutions (n.phr.): 文化機構', 'Hosting (v.ger.): 主辦', 'Remaining (adj.): 剩下的/剩餘的', 'Exclusive (adj.): 獨家的',
+                    'Global (adj.): 全球的', 'Decades (n.): 數十年', 'Recovery (n.): 恢復', 'Viewers (n.): 觀眾', 'Institution (n.): 機構'
+                ],
+                quiz: [
+                    { q: 'In which year will the Oscars start streaming exclusively on YouTube?', options: ['2025', '2027', '2029', '2033'], answer: '2029' },
+                    { q: 'The deal grants YouTube exclusive broadcasting rights until when?', options: ['2029', '2030', '2033', '2040'], answer: '2033' },
+                    { q: 'Which network has long broadcast the Oscars?', options: ['NBC', 'CBS', 'ABC', 'FOX'], answer: 'ABC' },
+                    { q: 'Will the ceremony be free on YouTube?', options: ['Yes, it will be free.', 'No, it will be pay-per-view.', 'Only for members.', 'Only in the US.'], answer: 'Yes, it will be free.' },
+                    { q: 'What has been happening to Oscar ratings for decades?', options: ['They are increasing.', 'They are declining.', 'They are stable.', 'They are not measured.'], answer: 'They are declining.' },
+                    { q: 'What happened to ratings in 2025?', options: ['They hit zero.', 'They saw a slight recovery.', 'They stayed the same.', 'They were not reported.'], answer: 'They saw a slight recovery.' },
+                    { q: 'Who drove the slight recovery in 2025 ratings?', options: ['Older viewers', 'Younger viewers', 'International critics', 'Actors'], answer: 'Younger viewers' },
+                    { q: 'Who is the CEO of YouTube?', options: ['Neal Mohan', 'Cho Jung-tai', 'James Cameron', 'Bill Gates'], answer: 'Neal Mohan' },
+                    { q: 'What did Neal Mohan call the Oscars?', options: ['A fun party', 'A boring show', 'One of our important cultural institutions', 'A dying tradition'], answer: 'One of our important cultural institutions' },
+                    { q: 'What will the ceremony be available "live and for free" on?', options: ['Television only', 'YouTube', 'Facebook', 'TikTok'], answer: 'YouTube' },
+                    { q: 'The move to YouTube marks a major shift in...', options: ['Silicon Valley', 'Hollywood', 'Washington', 'London'], answer: 'Hollywood' },
+                    { q: 'The organization that hosts the Oscars is called...', options: ['The Actors Guild', 'The Academy of Motion Picture Arts and Sciences', 'The Film Institute', 'The Hollywood Press'], answer: 'The Academy of Motion Picture Arts and Sciences' },
+                    { q: 'How long is the broadcasting rights deal described?', options: ['One year', 'Three years', 'Multi-year', 'Permanent'], answer: 'Multi-year' },
+                    { q: 'What is ABC\'s reaction to the news?', options: ['They are angry.', 'They look forward to hosting remaining broadcasts.', 'They are closing down.', 'They are suing YouTube.'], answer: 'They look forward to hosting remaining broadcasts.' },
+                    { q: 'The Oscars are also known as the...', options: ['Golden Globes', 'Grammys', 'Academy Awards', 'Emmys'], answer: 'Academy Awards' }
+                ]
+            },
+            'thunder': {
+                title: '雷霆行動救出三萬動物',
+                english: `30,000 Animals Rescued in Operation Thunder 2025. Within just four weeks, law enforcement agencies worldwide uncovered one of the most secretive criminal economies on Earth. In Operation Thunder 2025, nearly 30,000 live animals were rescued, including birds, reptiles, primates, and big cats. The scale shows that wildlife trafficking has evolved into a highly organized, transnational industry that threatens ecosystems, fuels corruption, and puts human health at risk. The operation involved authorities from 134 countries, led by INTERPOL and the World Customs Organization. The effort resulted in 4,640 seizures and identified approximately 1,100 suspects.`,
+                chinese: `雷霆行動 2025：全球救出三萬隻野生動物。在短短四週內，全球執法機構揭露了地球上最神秘的犯罪經濟之一。在「2025 雷霆行動」中，近 3 萬隻活體動物獲救，包括鳥類、爬行動物、靈長類動物和大型貓科動物。這顯示野生動物非法販運已演變成一個高度組織化的跨國產業，威脅生態系統、助長腐敗並威脅人類健康。該行動涉及來自 134 個國家的當局，由國際刑警組織和世界海關組織領導。這次努力促成了 4,640 次扣押，並確認了約 1,100 名嫌疑人。`,
+                vocabulary: [
+                    'Rescued (v.): 獲救/營救', 'Operation Thunder (n. proper): 雷霆行動', 'Law enforcement agencies (n.phr.): 執法機構', 'Worldwide (adv./adj.): 全球範圍內',
+                    'Uncovered (v.): 揭露/發現', 'Secretive (adj.): 神秘的/秘密的', 'Criminal economies (n.phr.): 犯罪經濟', 'Live animals (n.phr.): 活體動物',
+                    'Birds (n.): 鳥類', 'Reptiles (n.): 爬行動物', 'Primates (n.): 靈長類動物', 'Big cats (n.phr.): 大型貓科動物',
+                    'Scale (n.): 規模', 'Wildlife trafficking (n.phr.): 野生動物非法販運', 'Evolved (v.): 演變/進化', 'Highly organized (adj.phr.): 高度組織化的',
+                    'Transnational (adj.): 跨國的', 'Industry (n.): 產業/行業', 'Threatens (v.): 威脅', 'Ecosystems (n.): 生態系統',
+                    'Fuels corruption (phr.): 助長腐敗', 'Human health (n.phr.): 人類健康', 'At risk (phr.): 處於危險中', 'Authorities (n.): 當局/權威',
+                    'INTERPOL (n. proper): 國際刑警組織', 'World Customs Organization (n. proper): 世界海關組織', 'Effort (n.): 努力/嘗試', 'Seizures (n.): 扣押/沒收',
+                    'Identified (v.): 確認/識別', 'Suspects (n.): 嫌疑人', 'Transnational industry (n.phr.): 跨國產業'
+                ],
+                quiz: [
+                    { q: 'How many live animals were rescued in Operation Thunder 2025?', options: ['1,100', '4,640', '30,000', '134,000'], answer: '30,000' },
+                    { q: 'How long did the operation last?', options: ['One week', 'Four weeks', 'Six months', 'One year'], answer: 'Four weeks' },
+                    { q: 'What has wildlife trafficking evolved into?', options: ['A small hobby', 'A local business', 'A highly organized transnational industry', 'A dying trade'], answer: 'A highly organized transnational industry' },
+                    { q: 'Which of the following animal groups was NOT mentioned as being rescued?', options: ['Birds', 'Reptiles', 'Insects', 'Big cats'], answer: 'Insects' },
+                    { q: 'How many countries were involved in the operation?', options: ['10', '50', '100', '134'], answer: '134' },
+                    { q: 'Which organization led the operation alongside the World Customs Organization?', options: ['UN', 'INTERPOL', 'WHO', 'Greenpeace'], answer: 'INTERPOL' },
+                    { q: 'How many suspects were identified?', options: ['100', '1,100', '4,640', '30,000'], answer: '1,100' },
+                    { q: 'How many seizures resulted from the effort?', options: ['1,100', '4,640', '30,000', '134'], answer: '4,640' },
+                    { q: 'Wildlife trafficking is said to fuel what?', options: ['Economic growth', 'Education', 'Corruption', 'Tourism'], answer: 'Corruption' },
+                    { q: 'What does trafficking threaten besides human health?', options: ['Space travel', 'Ecosystems', 'Internet speed', 'Fashion trends'], answer: 'Ecosystems' },
+                    { q: 'What does "secretive criminal economies" imply?', options: ['Open markets', 'Illegal financial activities hidden from the public', 'Small street crimes', 'Government taxes'], answer: 'Illegal financial activities hidden from the public' },
+                    { q: 'The term "primates" includes which animals?', options: ['Monkeys and apes', 'Snakes', 'Lions', 'Parrots'], answer: 'Monkeys and apes' },
+                    { q: 'Is wildlife trafficking considered a transnational problem?', options: ['Yes', 'No', 'Only in Africa', 'Only in Asia'], answer: 'Yes' },
+                    { q: 'What does "seizure" mean in this context?', options: ['A medical condition', 'The act of taking illegal items by authorities', 'A long wait', 'An animal cage'], answer: 'The act of taking illegal items by authorities' },
+                    { q: 'What led the operation?', options: ['A local police station', 'INTERPOL and the World Customs Organization', 'A group of volunteers', 'A single country'], answer: 'INTERPOL and the World Customs Organization' }
+                ]
+            }
+        };
+
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdx = element.closest('.mb-8').querySelector('p').innerText.split(':')[0].substring(1) - 1;
+                    const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                    element.classList.remove('selected');
+                    if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
