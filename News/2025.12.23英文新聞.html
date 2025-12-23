@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 19 日頭條</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a clean, professional interface */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        /* Main News Tabs Styling (Primary Navigation) */
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        /* Sub-Tabs Styling (Secondary Navigation) */
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        /* Quiz specific styles */
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 19 日焦點新聞</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200">
+                <!-- 標題分頁將由 JS 動態生成 -->
+            </div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT ---
+        const NEWS_DATA = {
+            'taiwan-news-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Taipei Random Attack Investigation\nTaipei police reported that the random attack on December 19th resulted in multiple injuries and several deaths. Police stated that the 27-year-old suspect, Chang Wen, had been planning the case for over a year. He used smoke bombs and weapons in the MRT walkway and near the Eslite Nanxi store. Investigators found no connection between him and any Chinese individuals. Police confirmed the attack was premeditated, with relevant equipment purchased as early as the beginning of 2024.\n\n[2] Taichung Concert Ticket Scams\nTaichung is set to host a New Year's Eve concert at Shuinan Central Park on December 31st, inviting Jam Hsiao to perform in Taiwan for the first time in five years. Police have warned that scams on the Threads platform are increasing rapidly, involving fake or low-priced tickets. In November alone, there were 44 online shopping scam cases related to concert tickets.\n\n[3] Political Confrontation Against President Lai\nOpposition lawmakers are heightening political tensions due to President Lai Ching-te's refusal to sign and execute amendments to the "Fiscal Allocation Act." The KMT and TPP caucuses plan to launch impeachment procedures this week. Public hearings and explanations are expected to prolong this political confrontation.`,
+                chinese: `【1】台北12/19隨機攻擊事件調查\n台北警方報告稱，12月19日的隨機攻擊事件造成多人受傷及數人死亡。27歲嫌犯張文已策劃此案超過一年。他在捷運連通道及誠品南西店附近使用煙霧彈和武器。調查顯示他與中國籍人士無關。警方證實攻擊屬預謀，相關設備於2024年初即購入。\n\n【2】台中跨年晚會門票詐騙警示\n台中將於12月31日在水湳中央公園舉辦跨年晚會，邀請蕭敬騰演出。警方警告，Threads平台上的門票詐騙正迅速增加。僅11月就有44起與音樂會門票相關的網購詐騙案。\n\n【3】針對賴總統的政治對抗\n因賴清德總統拒絕簽署並執行《財政收支劃分法》修正案，在野黨立委正加劇政壇緊張。國民黨與民眾黨黨團計畫在本週啟動彈劾程序，預計公聽會與說明會將延長這場政治對峙。`,
+                vocabulary: [
+                    'random attack (n.phr.): 隨機攻擊', 'premeditated (adj.): 預謀的', 'smoke bombs (n.phr.): 煙霧彈', 'investigators (n.): 調查人員',
+                    'no connection (phr.): 沒有關聯', 'suspect (n.): 嫌疑人', 'planning (v.ger.): 策劃', 'equipment (n.): 設備/裝備',
+                    'Ticket Scams (n.phr.): 門票詐騙', 'Threads platform (n.phr.): Threads 平台', 'increasing rapidly (phr.): 迅速增加',
+                    'online shopping scam (n.phr.): 網購詐騙', 'celebrity merchandise (n.phr.): 明星周邊商品', 'merchandise (n.): 商品',
+                    'Opposition (n.): 在野黨', 'Impeachment Process (n.phr.): 彈劾程序', 'heightening (v.ger.): 加劇/提高', 'tensions (n.): 緊張局勢',
+                    'Legislative Yuan (n. proper): 立法院', 'Fiscal Allocation Act (n. proper): 財政收支劃分法', 'caucuses (n.): 黨團',
+                    'public hearings (n.phr.): 公聽會', 'prolong (v.): 延長', 'political confrontation (n.phr.): 政治對抗',
+                    'resulted in (phr.v.): 導致', 'walkway (n.): 走道/人行道', 'inviting (v.ger.): 邀請', 'performing (v.ger.): 演出',
+                    'refusal (n.): 拒絕', 'amendments (n.): 修正案', 'execute (v.): 執行', 'allegiance (n.): 效忠'
+                ],
+                quiz: [
+                    { q: 'How long had the Taipei attack suspect been planning his crime?', options: ['One week', 'One month', 'Six months', 'Over a year'], answer: 'Over a year' },
+                    { q: 'What kind of weapons were used in the MRT walkway?', options: ['Water guns', 'Smoke bombs and weapons', 'Drones', 'Paintballs'], answer: 'Smoke bombs and weapons' },
+                    { q: 'Which singer is invited to the Taichung New Year\'s Eve concert?', options: ['Jay Chou', 'Jam Hsiao', 'JJ Lin', 'Eason Chan'], answer: 'Jam Hsiao' },
+                    { q: 'Where are ticket scams increasing rapidly according to Taichung police?', options: ['Facebook', 'Instagram', 'Threads', 'TikTok'], answer: 'Threads' },
+                    { q: 'Why are opposition lawmakers launching impeachment against President Lai?', options: ['Economic policy', 'Refusal to sign "Fiscal Allocation Act" amendments', 'Foreign travel', 'Healthcare issues'], answer: 'Refusal to sign "Fiscal Allocation Act" amendments' },
+                    { q: 'What is expected to prolong the political confrontation?', options: ['New elections', 'Public hearings and explanations', 'International aid', 'A holiday'], answer: 'Public hearings and explanations' },
+                    { q: 'Which two parties plan to launch the impeachment procedures?', options: ['DPP and KMT', 'KMT and TPP', 'TPP and DPP', 'NPP and KMT'], answer: 'KMT and TPP' },
+                    { q: 'How many online shopping scam cases were recorded in November in Taichung?', options: ['10', '24', '44', '100'], answer: '44' },
+                    { q: 'When was the relevant equipment for the Taipei attack purchased?', options: ['December 2025', 'Early 2024', 'Late 2024', 'January 2025'], answer: 'Early 2024' },
+                    { q: 'The term "premeditated" means the attack was...', options: ['Accidental', 'Planned in advance', 'Very quick', 'Forgotten'], answer: 'Planned in advance' },
+                    { q: 'The "Fiscal Allocation Act" is primarily about...', options: ['National defense', 'Education', 'Financial distribution', 'Environmental laws'], answer: 'Financial distribution' },
+                    { q: 'Which social platform is mentioned as a major site for recent scams?', options: ['Threads', 'X', 'LinkedIn', 'YouTube'], answer: 'Threads' },
+                    { q: 'Where is the concert in Taichung being held?', options: ['Taipei Dome', 'Shuinan Central Park', 'Taichung Port', 'The National Theater'], answer: 'Shuinan Central Park' },
+                    { q: 'Is the suspect Chang Wen connected to individuals from China?', options: ['Yes, a strong connection', 'Only a business connection', 'No connection found', 'Under investigation'], answer: 'No connection found' },
+                    { q: 'What does "prolong" mean in the text?', options: ['To shorten', 'To make something last longer', 'To cancel', 'To speed up'], answer: 'To make something last longer' }
+                ]
+            },
+            'venezuela-tanker': {
+                title: '美扣押委國第二艘油輪',
+                english: `US Seizes Second Tanker Near Venezuela. According to the US Department of Homeland Security, the US has seized a tanker that recently departed from Venezuela. This is the second seizure of an oil tanker near the country's coast this month. The move follows President Donald Trump's statement that he had ordered a "blockade" on sanctioned tankers entering or leaving Venezuela. Venezuela described the latest US action as "theft and kidnapping", accusing the Trump administration of attempting to steal its resources. The operation was led by the US Coast Guard. A specialized tactical team boarded the vessel while it was in international waters. Homeland Security Secretary Kristi Noem shared a video on X, showing a US helicopter landing on a ship named "Centuries". The ship flies a Panama flag but has also sailed under Greek and Liberian flags in recent years.`,
+                chinese: `美國在委內瑞拉外海扣押第二艘油輪。根據美國國土安全部，美國扣押了一艘最近剛離開委內瑞拉的油輪。這是本月在該國海岸附近扣押的第二艘油輪。此舉是在唐納德·川普總統發表聲明後進行的，他表示已下令對進入或離開委內瑞拉的受制裁油輪實施「封鎖」。委內瑞拉將美國的最新行動描述為「盜竊和綁架」，指責川普政府試圖竊取其資源。此次行動由美國海岸警衛隊領導。一支專門的戰術小組在該船位於國際水域時登船。國土安全部長克里斯蒂·諾姆 (Kristi Noem) 在 X 上分享了一段影片，顯示一架美國直升機降落在名為「世紀號」（Centuries）的船上。該船懸掛巴拿馬國旗，但近年來也曾懸掛希臘和賴比瑞亞國旗。`,
+                vocabulary: [
+                    'Seizes (v.): 扣押/沒收', 'Second Tanker (n.phr.): 第二艘油輪', 'Homeland Security (n. proper): 國土安全', 'Departed (v.): 出發/離開',
+                    'Seizure (n.): 扣押/奪取', 'Coast (n.): 海岸', 'Blockade (n.): 封鎖', 'Sanctioned (adj.): 受制裁的', 'Sanctions (n.): 制裁',
+                    'Theft (n.): 盜竊', 'Kidnapping (n.): 綁架', 'Accusing (v.ger.): 指控', 'Attempting to (v.phr.): 企圖', 'Steal (v.): 偷竊',
+                    'Resources (n.): 資源', 'Operation (n.): 行動', 'Coast Guard (n. proper): 海岸警衛隊', 'Specialized (adj.): 專門的',
+                    'Tactical team (n.phr.): 戰術小組', 'Boarded (v.): 登船', 'Vessel (n.): 船隻', 'International waters (n.phr.): 國際水域',
+                    'Secretary (n.): 部長', 'Kristi Noem (n. proper): 克里斯蒂·諾姆', 'Helicopter (n.): 直升機', 'Landing (v.ger.): 降落',
+                    'Flies a flag (phr.): 懸掛國旗', 'Panama flag (n.phr.): 巴拿馬國旗', 'Sailed (v.): 航行', 'Recent years (phr.): 近年來'
+                ],
+                quiz: [
+                    { q: 'How many tankers has the US seized near Venezuela this month?', options: ['One', 'Two', 'Three', 'Ten'], answer: 'Two' },
+                    { q: 'Which US department provided the information?', options: ['Defense', 'Justice', 'Homeland Security', 'State'], answer: 'Homeland Security' },
+                    { q: 'President Trump ordered a ______ on sanctioned tankers.', options: ['Tax', 'Blockade', 'Party', 'New route'], answer: 'Blockade' },
+                    { q: 'How did Venezuela describe the action?', options: ['Friendly', 'Trade deal', 'Theft and kidnapping', 'Legal protection'], answer: 'Theft and kidnapping' },
+                    { q: 'Which agency led the operation?', options: ['FBI', 'CIA', 'Coast Guard', 'Air Force'], answer: 'Coast Guard' },
+                    { q: 'What kind of team boarded the vessel?', options: ['Medical', 'Specialized tactical team', 'Cleaning', 'Tourism'], answer: 'Specialized tactical team' },
+                    { q: 'Where was the vessel when it was boarded?', options: ['Harbor', 'US coast', 'International waters', 'Canal'], answer: 'International waters' },
+                    { q: 'Who is the Homeland Security Secretary?', options: ['Donald Trump', 'Kristi Noem', 'Jam Hsiao', 'Anthony Albanese'], answer: 'Kristi Noem' },
+                    { q: 'What is the name of the seized ship?', options: ['Titanic', 'Centuries', 'Liberty', 'Panama'], answer: 'Centuries' },
+                    { q: 'What flag was the ship flying?', options: ['US', 'Panama', 'Greek', 'Liberian'], answer: 'Panama' },
+                    { q: 'The action was shared as a video on which platform?', options: ['Facebook', 'Threads', 'X (Twitter)', 'YouTube'], answer: 'X (Twitter)' },
+                    { q: 'What aircraft was shown landing on the ship?', options: ['Jet', 'Drone', 'Helicopter', 'Seaplane'], answer: 'Helicopter' },
+                    { q: 'Venezuela accused the US of trying to steal its ______.', options: ['People', 'Resources', 'Technology', 'Culture'], answer: 'Resources' },
+                    { q: 'Has the ship sailed under other flags before?', options: ['No', 'Yes, Greek and Liberian', 'Only US', 'No flag'], answer: 'Yes, Greek and Liberian' },
+                    { q: 'What does "vessel" mean?', options: ['Bowl', 'Large ship', 'Airplane', 'Truck'], answer: 'Large ship' }
+                ]
+            },
+            'korea-crypto-theft': {
+                title: '北韓 2025 竊取鉅額加密幣',
+                english: `North Korea Steals Billions in Crypto in 2025. For the second consecutive year, North Korea's cryptocurrency hacking operations have set a new record, stealing $2.02 billion in 2025, according to a report by blockchain monitoring firm Chainalysis. The figure surpasses the previous record of $1.3 billion, with stolen assets including Bitcoin and Ether. North Korea's cumulative total of stolen cryptocurrency now stands at approximately $6.75 billion. Globally, cryptocurrency theft rose to $3.4 billion, with a significant portion linked to a hack on Dubai-based exchange Bybit. The hackers are believed to be part of North Korea's elite government hacking units. The UN and private researchers have long accused North Korea of using hacking to fund nuclear and missile programs while under international sanctions.`,
+                chinese: `北韓 2025 年竊取逾 20 億美元加密貨幣。根據區塊鏈監測公司 Chainalysis 的報告，北韓的加密貨幣駭客行動連續第二年創下新紀錄，在 2025 年竊取了 20.2 億美元。這一數字超過了此前 13 億美元的紀錄，失竊資產包括比特幣（Bitcoin）和以太幣（Ether）。北韓竊取的加密貨幣累計總額目前約為 67.5 億美元。在全球範圍內，加密貨幣竊取金額升至 34 億美元，其中很大一部分與杜拜交易所 Bybit 遭駭客攻擊有關。駭客被認為是北韓精英政府駭客部隊的一員。聯合國和民間研究人員長期以來一直指責北韓在受到國際制裁的情況下，利用駭客手段為核子和飛機計畫籌措資金。`,
+                vocabulary: [
+                    'Steals (v.): 竊取', 'Billions (n.): 數十億', 'Crypto (n.): 加密貨幣', 'Consecutive (adj.): 連續的',
+                    'Hacking operations (n.phr.): 駭客行動', 'Set a record (phr.): 創紀錄', 'Blockchain monitoring (n.phr.): 區塊鏈監測',
+                    'Firm (n.): 公司', 'Chainalysis (n. proper): Chainalysis', 'Surpasses (v.): 超過',
+                    'Assets (n.): 資產', 'Bitcoin (n. proper): 比特幣', 'Ether (n. proper): 以太幣',
+                    'Cumulative total (n.phr.): 累計總額', 'Globally (adv.): 全球性地', 'Theft (n.): 竊盜',
+                    'Linked to (phr.): 與...有關聯', 'Dubai-based (adj.): 總部位於杜拜的',
+                    'Exchange (n.): 交易所', 'Bybit (n. proper): Bybit', 'Elite (adj.): 精英的', 'Hacking units (n.phr.): 駭客部隊',
+                    'Accused (v.): 指控', 'Fund (v.): 籌資/資助', 'Nuclear (adj.): 核子的', 'Missile programs (n.phr.): 導彈計畫'
+                ],
+                quiz: [
+                    { q: 'How much cryptocurrency did North Korea steal in 2025?', options: ['$1.3 billion', '$2.02 billion', '$3.4 billion', '$6.75 billion'], answer: '$2.02 billion' },
+                    { q: 'Which firm released the report?', options: ['Bybit', 'Chainalysis', 'UN', 'Homeland Security'], answer: 'Chainalysis' },
+                    { q: 'What was the previous record for North Korean theft?', options: ['$1.0 billion', '$1.3 billion', '$2.0 billion', '$5.0 billion'], answer: '$1.3 billion' },
+                    { q: 'What is the cumulative total of stolen crypto by North Korea?', options: ['$2.02 billion', '$3.4 billion', '$6.75 billion', '$10 billion'], answer: '$6.75 billion' },
+                    { q: 'Which two cryptocurrencies were mentioned?', options: ['Bitcoin/Dogecoin', 'Ether/Ripple', 'Bitcoin/Ether', 'Solana/Bitcoin'], answer: 'Bitcoin/Ether' },
+                    { q: 'What was the global total of crypto theft?', options: ['$1.3B', '$2.02B', '$3.4B', '$6.75B'], answer: '$3.4B' },
+                    { q: 'A significant portion was linked to a hack on which exchange?', options: ['Binance', 'Coinbase', 'Bybit', 'FTX'], answer: 'Bybit' },
+                    { q: 'Where is Bybit based?', options: ['Seoul', 'New York', 'Dubai', 'London'], answer: 'Dubai' },
+                    { q: 'The hackers are part of what unit?', options: ['Private', 'University', 'Elite government units', 'Volunteers'], answer: 'Elite government units' },
+                    { q: 'What programs are funded with stolen money?', options: ['Health', 'Nuclear/missile', 'Tourism', 'Internet'], answer: 'Nuclear/missile' },
+                    { q: 'Is North Korea under international sanctions?', options: ['No', 'Yes', 'Only trade', 'Maybe'], answer: 'Yes' },
+                    { q: '"Consecutive" means what?', options: ['Random', 'One after another', 'Old', 'Future'], answer: 'One after another' },
+                    { q: 'Which body has accused North Korea?', options: ['EU', 'UN', 'ASEAN', 'NATO'], answer: 'UN' },
+                    { q: '"Cumulative" means what?', options: ['Total added together', 'Small part', 'Decreasing', 'Hidden'], answer: 'Total added together' },
+                    { q: 'Did the theft amount increase?', options: ['Yes', 'No', 'Same', 'Decreased'], answer: 'Yes' }
+                ]
+            },
+            'australia-gun-buyback': {
+                title: '澳洲啟動大規模槍枝回購',
+                english: `Australia Announces Massive Gun Buyback. Australian Prime Minister Anthony Albanese announced that Australia will launch a national gun buyback program following a mass shooting in Sydney. Hundreds gathered at Bondi Beach to mourn the victims. The program mirrors reforms after the 1996 Port Arthur massacre, which led to one of the world's strictest gun laws. The Bondi shooting occurred during Hanukkah celebrations, leaving 15 dead and dozens injured. One gunman held a gun license and owned six registered firearms, prompting criticism that gun laws require urgent review. The government will buy back surplus, newly banned, and illegal firearms, with costs shared by federal and state governments. After Port Arthur, Australia recovered 640,000 firearms and paid $201 million in compensation.`,
+                chinese: `澳洲宣布大規模槍枝回購計畫。澳洲總理安東尼·艾班尼斯宣布，在雪梨發生群體槍擊案後，澳洲將啟動一項全國性的槍枝回購計畫。數百人聚集在邦代海灘哀悼受害者。該計畫效仿了 1996 年亞瑟港大屠殺後的改革，那次改革促成了世界上最嚴格的槍枝法之一。邦代槍擊案發生在光明節慶祝活動期間，造成 15 人死亡，數十人受傷。其中一名槍手持有槍枝執照並擁有六支註冊槍枝，引發了對槍枝法需要緊急審查的批評。政府將回購多餘的、新禁用的和非法的槍枝，費用由聯邦和州政府分擔。在亞瑟港事件後，澳洲回收了 64 萬支槍枝，並支付了 2.01 億美元的補償金。`,
+                vocabulary: [
+                    'Gun Buyback (n.phr.): 槍枝回購', 'Massive (adj.): 大規模的', 'Program (n.): 計畫', 'National (adj.): 全國性的',
+                    'Mass shooting (n.phr.): 群體槍擊案', 'Mourn (v.): 哀悼', 'Victims (n.): 受害者',
+                    'Mirrors (v.): 效法', 'Reforms (n.): 改革', 'Massacre (n.): 大屠殺',
+                    'Strictest (adj.): 最嚴格的', 'Gun laws (n.phr.): 槍枝法', 'Hanukkah (n. proper): 光明節',
+                    'Gun license (n.phr.): 槍枝執照', 'Registered firearms (n.phr.): 註冊槍枝', 'Urgent review (n.phr.): 緊急審查',
+                    'Illegal (adj.): 非法的', 'Federal and state (adj.phr.): 聯邦與州的', 'Compensation (n.): 補償金'
+                ],
+                quiz: [
+                    { q: 'Who announced the program?', options: ['Noem', 'Albanese', 'Trump', 'Hsiao'], answer: 'Albanese' },
+                    { q: 'What event triggered the announcement?', options: ['Trade', 'Mass shooting', 'Holiday', 'Crisis'], answer: 'Mass shooting' },
+                    { q: 'Where did people gather to mourn?', options: ['Opera House', 'Bondi Beach', 'Port Arthur', 'Park'], answer: 'Bondi Beach' },
+                    { q: 'The program mirrors which 1996 event?', options: ['Port Arthur massacre', 'Olympics', 'Fire', 'Gold Rush'], answer: 'Port Arthur massacre' },
+                    { q: 'How many died in Bondi?', options: ['5', '10', '15', '44'], answer: '15' },
+                    { q: 'When did the shooting occur?', options: ['Christmas', 'New Year', 'Hanukkah', 'Easter'], answer: 'Hanukkah' },
+                    { q: 'How many registered guns did one gunman own?', options: ['1', '3', '6', '10'], answer: '6' },
+                    { q: 'What will the government buy back?', options: ['Illegal only', 'Banned only', 'Surplus/banned/illegal', 'Metal'], answer: 'Surplus/banned/illegal' },
+                    { q: 'Who shares the costs?', options: ['UN', 'Federal/state', 'Private', 'Victims'], answer: 'Federal/state' },
+                    { q: 'How many guns were recovered after Port Arthur?', options: ['10K', '100K', '640K', '1M'], answer: '640K' },
+                    { q: 'How much compensation was paid after Port Arthur?', options: ['$1M', '$50M', '$201M', '$1B'], answer: '$201M' },
+                    { q: 'Gun laws require what according to critics?', options: ['Ban', 'Urgent review', 'No change', 'Lower fees'], answer: 'Urgent review' },
+                    { q: 'Did the gunman have a license?', options: ['Yes', 'No', 'One only', 'Maybe'], answer: 'Yes' },
+                    { q: 'What is a "massacre"?', options: ['Party', 'Brutal killing of many', 'Law', 'Sports'], answer: 'Brutal killing of many' },
+                    { q: '"Mourn" means what?', options: ['Celebrate', 'Show deep sorrow', 'Shout', 'Buy'], answer: 'Show deep sorrow' }
+                ]
+            },
+            'china-gold-deposit': {
+                title: '中國發現亞洲最大海底金礦',
+                english: `China Discovers Asia's Largest Undersea Gold Deposit. China has discovered a major undersea gold deposit off the coast of Laizhou, Shandong province, marking the largest undersea gold reserves in Asia. The discovery raises Laizhou's total proven gold reserves to over 3,900 metric tons, accounting for 26% of China's national total. Laizhou ranks first nationwide in both gold reserves and production. Authorities have not disclosed the exact size of this deposit. Officials noted the find suggests China's gold reserves may be far higher than previously estimated. China is the world's largest producer of gold ore, with output of 377 metric tons last year.`,
+                chinese: `中國發現亞洲最大海底金礦。中國在山東省萊州海岸附近發現了一個大型海底金礦，標誌著亞洲最大的海底黃金儲量。這一發現使萊州的探明黃金總儲量提高到 3,900 多公噸，佔中國全國總量的 26%。萊州的黃金儲量和產量均居全國第一。當局尚未透露該礦床的確切規模。官員指出，這一發現表明中國的黃金儲量可能遠高於此前的估計。中國是全球最大的金礦石生產國，去年產量為 377 公噸。`,
+                vocabulary: [
+                    'Undersea (adj.): 海底的', 'Gold Deposit (n.phr.): 金礦藏', 'Off the coast (phr.): 在海岸附近', 'Laizhou (n. proper): 萊州',
+                    'Shandong (n. proper): 山東', 'Reserves (n.): 儲量', 'Discovery (n.): 發現',
+                    'Proven (adj.): 探明的', 'Metric tons (n.phr.): 公噸', 'Accounting for (phr.v.): 佔...',
+                    'National total (n.phr.): 全國總量', 'Nationwide (adv.): 全國範圍內', 'Production (n.): 生產/產量',
+                    'Authorities (n.): 當局', 'Disclosed (v.): 透露', 'Estimated (v.pp.): 估計的', 'Producer (n.): 生產國'
+                ],
+                quiz: [
+                    { q: 'Where was the deposit discovered?', options: ['Shanghai', 'Laizhou, Shandong', 'Great Wall', 'Gobi'], answer: 'Laizhou, Shandong' },
+                    { q: 'The deposit is largest in which region?', options: ['World', 'Asia', 'Europe', 'America'], answer: 'Asia' },
+                    { q: 'What are Laizhou\'s total proven reserves?', options: ['377', '1,000', '3,900+', '26%'], answer: '3,900+' },
+                    { q: 'What % of China\'s total is Laizhou?', options: ['10%', '26%', '50%', '75%'], answer: '26%' },
+                    { q: 'Where does Laizhou rank nationwide?', options: ['First', 'Second', 'Third', 'Tenth'], answer: 'First' },
+                    { q: 'Have authorities disclosed the exact size?', options: ['Yes', 'No', 'Maybe', 'Soon'], answer: 'No' },
+                    { q: 'Gold reserves are ______ than estimated.', options: ['Lower', 'Far higher', 'Same', 'Dangerous'], answer: 'Far higher' },
+                    { q: 'China is the world\'s largest producer of what?', options: ['Coins', 'Gold ore', 'Silver', 'Diamonds'], answer: 'Gold ore' },
+                    { q: 'What was output last year?', options: ['100', '377', '3,900', '1,100'], answer: '377' },
+                    { q: '"Undersea" means what?', options: ['Mountain', 'Below sea surface', 'City', 'River'], answer: 'Below sea surface' },
+                    { q: '"Proven reserves" refers to what?', options: ['Money', 'Recoverable amount', 'Medal', 'Law'], answer: 'Recoverable amount' },
+                    { q: '"Output" means what?', options: ['Power', 'Amount produced', 'Way out', 'Noise'], answer: 'Amount produced' },
+                    { q: 'Shandong is a ______.', options: ['City', 'Province', 'Mountain', 'River'], answer: 'Province' },
+                    { q: '"Disclosed" means what?', options: ['Hidden', 'Revealed', 'Forgotten', 'Closed'], answer: 'Revealed' },
+                    { q: 'What metal is this find about?', options: ['Silver', 'Copper', 'Gold', 'Iron'], answer: 'Gold' }
+                ]
+            }
+        };
+
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                    const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                    element.classList.remove('selected');
+                    if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
