@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 19 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 19 日頭條：五大核心議題</p>
+        </header>
+
+        <div class="container-card">
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for English learners. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        const NEWS_DATA = {
+            'taiwan-focus': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Taiwan Court Strikes Down Constitutional Amendments\nTaiwan's Constitutional Court ruled on December 19th that amendments to the "Constitutional Court Procedure Act" were unconstitutional, citing major flaws in the legislative procedure. The decision sparked heated debate online. A poll with over 150,000 participants showed that 96% criticized the ruling, arguing that only five justices participated in the judgment and accusing them of violating the law themselves.\n\n[2] Youth Housing Loans Hit Post-Summer High\nTaiwan's Ministry of Finance stated that the number of approved applications and the total amount for the "New Youth Housing Loan" program rebounded in November, reaching their highest levels since August this year. Public banks issued a total of 4,097 loans, amounting to NT$33.123 billion. Officials noted that this rebound was mainly due to the relaxation of regulatory restrictions, which eased the crowding-out effect on mortgages and expanded lending capacity.\n\n[3] Taipei to Hold Massive Security Drill\nTaipei Mayor Chiang Wan-an announced that the city government will hold a large-scale emergency response drill on December 26th in response to the fatal random attack near Taipei Main Station and Zhongshan Station. Modeled after New Year's Eve crowd control measures, the drill will take place at MRT Taipei City Hall Station and the adjacent bus terminal, mobilizing multiple city departments and relevant units.`,
+                chinese: `【1】台灣憲法法庭裁定修法違憲\n台灣憲法法庭於12月19日裁定，《憲法訴訟法》修正案因立法程序存在重大瑕疵而被判違憲。此決定在網上引發激烈辯論。一項超過15萬人參與的民調顯示，96%的人批評該裁定，認為僅有5名大法官參與審判，並指責他們自身違反了法律。\n\n【2】青年購屋貸款創夏季後新高\n台灣財政部表示，「新青年安心成家房貸」方案的核貸件數與總額在11月回升，創下今年8月以來的新高。公股銀行共核貸4,097件，金額達331.23億新台幣。官員指出，回升主因是法規限制放寬，緩解了房貸擠兌效應並擴大了放款量能。\n\n【3】台北市將舉行大型維安演練\n台北市長蔣萬安宣布，針對台北車站及中山站附近的致命隨機攻擊事件，市府將於12月26日舉行大型緊急應變演練。此次演練將模仿跨年人流管制措施，在捷運市政府站及鄰近轉運站舉行，動員多個局處及相關單位。`,
+                vocabulary: [
+                    'Constitutional Court (n. proper): 憲法法庭', 'Strikes down (phr.v.): 廢除/判定無效', 'Unconstitutional (adj.): 違憲的', 'Major flaws (n.phr.): 重大瑕疵',
+                    'Legislative procedure (n.phr.): 立法程序', 'Heated debate (n.phr.): 激烈辯論', 'Justices (n.): 大法官', 'Violating the law (phr.): 違法',
+                    'Ministry of Finance (n. proper): 財政部', 'Approved applications (n.phr.): 核准申請件數', 'Rebounded (v.): 回升/反彈', 'Public banks (n.phr.): 公營銀行',
+                    'Regulatory restrictions (n.phr.): 法規限制', 'Mortgages (n.): 房貸', 'Lending capacity (n.phr.): 放款量能', 'Massive security drill (n.phr.): 大型維安演練',
+                    'Emergency response (n.phr.): 緊急應變', 'Fatal random attack (n.phr.): 致命隨機攻擊', 'Modeled after (phr.): 模仿.../以...為榜樣', 'Crowd control (n.phr.): 人流管制',
+                    'Adjacent (adj.): 鄰近的', 'Bus terminal (n.phr.): 轉運站/客運總站', 'Mobilizing (v.ger.): 動員', 'Heated (adj.): 激烈的', 'Participants (n.): 參與者',
+                    'Accusing (v.ger.): 指控', 'Amounting to (phr.): 總計為', 'Rebound (n.): 回升', 'Crowding-out effect (n.phr.): 擠兌效應/排擠效應', 'Relaxation (n.): 放寬/放鬆',
+                    'Approved (adj.): 核准的', 'Relevance (n.): 相關性', 'Multiple (adj.): 多個的'
+                ],
+                quiz: [
+                    { q: 'Why did the Constitutional Court rule the amendments unconstitutional?', options: ['Political pressure', 'Major flaws in legislative procedure', 'Lack of funding', 'Public protest'], answer: 'Major flaws in legislative procedure' },
+                    { q: 'What percentage of poll participants criticized the court ruling?', options: ['5%', '50%', '75%', '96%'], answer: '96%' },
+                    { q: 'How many justices participated in the judgment according to critics?', options: ['3', '5', '12', '15'], answer: '5' },
+                    { q: 'The Youth Housing Loan program hit a high in which month?', options: ['August', 'September', 'October', 'November'], answer: 'November' },
+                    { q: 'How much was the total loan amount issued by public banks in November?', options: ['NT$10 billion', 'NT$33.123 billion', 'NT$150 billion', 'NT$3.3 billion'], answer: 'NT$33.123 billion' },
+                    { q: 'What was the main reason for the rebound in youth housing loans?', options: ['Lower prices', 'Higher salaries', 'Relaxation of regulatory restrictions', 'New taxes'], answer: 'Relaxation of regulatory restrictions' },
+                    { q: 'When will Taipei hold the massive security drill?', options: ['Dec 19', 'Dec 25', 'Dec 26', 'Jan 1'], answer: 'Dec 26' },
+                    { q: 'Where will the Taipei security drill take place?', options: ['Taipei 101', 'MRT Taipei City Hall Station', 'Xinyi District Shopping Center', 'The National Museum'], answer: 'MRT Taipei City Hall Station' },
+                    { q: 'The security drill is modeled after which annual measure?', options: ['Typhoon safety', 'New Year\'s Eve crowd control', 'Election security', 'Earthquake response'], answer: 'New Year\'s Eve crowd control' },
+                    { q: 'Who announced the security drill?', options: ['The Premier', 'President Lai', 'Mayor Chiang Wan-an', 'The Police Chief'], answer: 'Mayor Chiang Wan-an' },
+                    { q: 'The "New Youth Housing Loan" program is managed by which ministry?', options: ['Ministry of Interior', 'Ministry of Finance', 'Ministry of Justice', 'Ministry of Transportation'], answer: 'Ministry of Finance' },
+                    { q: 'What term means "planned or intentional in advance"?', options: ['Accidental', 'Premeditated', 'Random', 'Temporary'], answer: 'Premeditated' },
+                    { q: 'The term "adjacent" means what?', options: ['Far away', 'Very tall', 'Next to or nearby', 'Very old'], answer: 'Next to or nearby' },
+                    { q: 'What did the poll participants accuse the justices of?', options: ['Being too old', 'Violating the law themselves', 'Working too slowly', 'Spending too much money'], answer: 'Violating the law themselves' },
+                    { q: 'What did the relaxation of restrictions ease?', options: ['Traffic jams', 'Crowding-out effect on mortgages', 'Unemployment', 'High taxes'], answer: 'Crowding-out effect on mortgages' }
+                ]
+            },
+            'thai-cambodia': {
+                title: '泰柬同意恢復停火',
+                english: `Thailand and Cambodia agreed on Monday to hold a meeting of defense officials on December 24th, aiming to restore a ceasefire agreement that has been broken for months. Fierce clashes along the border have entered their third week, leaving at least 80 people dead so far. This decision was made during a special meeting of Southeast Asian foreign ministers in Kuala Lumpur. Participants attempted to salvage the ceasefire previously brokered by Malaysia and US President Trump. Since the collapse of the ceasefire, Thailand and Cambodia have exchanged rocket and artillery fire almost daily along their 817-kilometer land border. Diplomats from the 11 ASEAN member states urged both sides to exercise maximum restraint and take immediate action to stop the fighting. They also welcomed the upcoming "General Border Committee" meeting on Wednesday, an existing mechanism for bilateral talks. ASEAN foreign ministers expressed hope that the conflict would de-escalate quickly and stated that discussions would include the implementation and verification of the ceasefire.`,
+                chinese: `泰國與柬埔寨週一達成協議，將於 12 月 24 日舉行國防官員會議，旨在恢復已中斷數月的停火協議。沿邊境發生的激烈衝突已進入第三週，至今造成至少 80 人死亡。這項決定是在吉隆坡舉行的東南亞外長特別會議上做出的。與會者試圖挽救先前由馬來西亞和美國總統川普促成的停火。自停火協議破裂以來，泰國和柬埔寨幾乎每天都在其 817 公里的陸地邊境沿線互射火箭和砲彈。東協 11 個成員國的外交官敦促雙方保持最大克制，並立即採取行動停止戰鬥。他們也對即將於週三舉行的「將軍邊境委員會」會議表示歡迎，這是現有的雙邊談判機制。東協外長表示希望衝突能迅速降溫，並表示討論將包括停火的執行與驗證。`,
+                vocabulary: [
+                    'Ceasefire agreement (n.phr.): 停火協議', 'Defense officials (n.phr.): 國防官員', 'Restore (v.): 恢復', 'Fierce clashes (n.phr.): 激烈衝突',
+                    'Border (n.): 邊境', 'Foreign ministers (n.phr.): 外長', 'Kuala Lumpur (n. proper): 吉隆坡', 'Salvage (v.): 挽救',
+                    'Brokered (v.): 促成/居間協調', 'Rocket and artillery fire (n.phr.): 火箭與砲火', 'Maximum restraint (n.phr.): 最大克制', 'Bilateral talks (n.phr.): 雙邊談判',
+                    'De-escalate (v.): 降溫/減緩', 'Implementation (n.): 執行', 'Verification (n.): 驗證', 'ASEAN (n. proper): 東協',
+                    'Collapse (n.): 瓦解/崩潰', 'Land border (n.phr.): 陸地邊界', 'Exercise (v.): 行使/採取', 'Mechanism (n.): 機制',
+                    'Bilateral (adj.): 雙邊的', 'Restraint (n.): 克制', 'Diplomats (n.): 外交官', 'Upcoming (adj.): 即將到來的',
+                    'Forest areas (n.phr.): 森林地區', 'Stretching (v.): 延伸', 'Provinces (n.): 省份', 'Coast (n.): 海岸',
+                    'Exercise maximum restraint (phr.): 保持最大程度的克制', 'Verification of the ceasefire (phr.): 停火驗證', 'Rocket (n.): 火箭', 'Artillery (n.): 砲火'
+                ],
+                quiz: [
+                    { q: 'On what date is the meeting of defense officials scheduled?', options: ['Dec 19', 'Dec 24', 'Dec 31', 'Jan 1'], answer: 'Dec 24' },
+                    { q: 'How many people have died in the clashes so far?', options: ['11', '15', '80', '134'], answer: '80' },
+                    { q: 'Where was the special meeting of foreign ministers held?', options: ['Bangkok', 'Phnom Penh', 'Kuala Lumpur', 'Washington'], answer: 'Kuala Lumpur' },
+                    { q: 'Who previously brokered the ceasefire besides Malaysia?', options: ['The UN', 'China', 'US President Trump', 'Russia'], answer: 'US President Trump' },
+                    { q: 'How long is the land border between Thailand and Cambodia?', options: ['100 km', '500 km', '817 km', '1,000 km'], answer: '817 km' },
+                    { q: 'Which regional organization urged both sides to exercise restraint?', options: ['EU', 'ASEAN', 'NATO', 'WHO'], answer: 'ASEAN' },
+                    { q: 'What is the name of the upcoming border committee meeting?', options: ['General Border Committee', 'Peace Council', 'Ceasefire Office', 'Defense Union'], answer: 'General Border Committee' },
+                    { q: 'The clashes have entered which week?', options: ['First', 'Second', 'Third', 'Fourth'], answer: 'Third' },
+                    { q: 'Foreign ministers want the conflict to "______" quickly.', options: ['Intensify', 'Collapse', 'De-escalate', 'Repeat'], answer: 'De-escalate' },
+                    { q: 'What kind of weapons have been exchanged almost daily?', options: ['Swords', 'Smoke bombs', 'Rocket and artillery', 'Nuclear missiles'], answer: 'Rocket and artillery' },
+                    { q: 'The term "salvage" means what in this context?', options: ['To destroy', 'To save or rescue', 'To ignore', 'To clean'], answer: 'To save or rescue' },
+                    { q: 'What does "restraint" mean?', options: ['Fighting back', 'Self-control', 'Giving up', 'Speeding up'], answer: 'Self-control' },
+                    { q: 'The ceasefire had been broken for how long?', options: ['Days', 'Weeks', 'Months', 'Years'], answer: 'Months' },
+                    { q: 'ASEAN consists of how many member states mentioned?', options: ['5', '11', '20', '27'], answer: '11' },
+                    { q: 'What will the discussions include besides implementation?', options: ['Taxes', 'Verification of the ceasefire', 'Tourist visas', 'New roads'], answer: 'Verification of the ceasefire' }
+                ]
+            },
+            'japan-nuclear': {
+                title: '日本重啟世界最大核電廠',
+                english: `Japan completed the final procedural step on Monday to restart the world's largest nuclear power plant through a local vote. This is seen as a significant milestone nearly 15 years after the Fukushima nuclear disaster. The Kashiwazaki-Kariwa Nuclear Power Plant, located northwest of Tokyo, was one of the 54 reactors shut down after the 2011 earthquake and tsunami. Since then, Japan has restarted 14 of the 33 reactors that remain operational, attempting to reduce reliance on imported fossil fuels. The Kashiwazaki-Kariwa plant will be the first restarted nuclear plant operated by TEPCO, the operator of the accident-prone Fukushima plant. On Monday, the Niigata Prefectural Assembly passed a vote of confidence in Governor Hideyo Hanazumi, allowing the plant to resume operations. Although lawmakers ultimately voted in favor, the session exposed deep division within the local community, despite official promises of new jobs and potentially lower electricity bills. TEPCO is considering restarting the first of the plant's seven reactors on January 20th.`,
+                chinese: `日本準備重啟全球最大核電廠。日本週一通過地方投票完成了重啟全球最大核電廠的最後程序步驟。這被視為福島核災發生近 15 年後的一個重要里程碑。位於東京西北部的柏崎刈羽核電廠，是 2011 年地震和海嘯後關閉的 54 座反應爐之一。自那時起，日本已重啟 33 座仍可運作反應爐中的 14 座，試圖減少對進口化石燃料的依賴。柏崎刈羽核電廠將是東京電力公司（TEPCO）營運的第一座重啟核電廠，該公司也是事故頻發的福島核電廠的營運商。週一，新潟縣議會通過了對知事花角英世的信任投票，允許該工廠恢復運作。儘管立法者最終投票贊成，但這次議會會議暴露了當地社區內部的深刻分歧，儘管官方承諾提供新工作並可能降低電費。東京電力公司正考慮在 1 月 20 日重啟該電廠七座反應爐中的第一座。`,
+                vocabulary: [
+                    'Procedural step (n.phr.): 程序步驟', 'Restart (v.): 重啟', 'Nuclear power plant (n.phr.): 核電廠', 'Significant milestone (n.phr.): 重要里程碑',
+                    'Fukushima nuclear disaster (n. proper): 福島核災', 'Reactors (n.): 反應爐', 'Shut down (phr.v.): 關閉/停機', 'Tsunami (n.): 海嘯',
+                    'Operational (adj.): 可運作的', 'Reliance (n.): 依賴', 'Fossil fuels (n.phr.): 化石燃料', 'TEPCO (n. proper): 東京電力公司',
+                    'Accident-prone (adj.): 事故頻發的', 'Prefectural Assembly (n.phr.): 縣議會', 'Vote of confidence (n.phr.): 信任投票', 'Governor (n.): 知事/省長',
+                    'Resume operations (phr.): 恢復運作', 'Ultimately (adv.): 最終', 'Voted in favor (phr.): 投票贊成', 'Exposed deep division (phr.): 暴露深層分歧',
+                    'Electricity bills (n.phr.): 電費單', 'Kashiwazaki-Kariwa (n. proper): 柏崎刈羽', 'Milestone (n.): 里程碑', 'Division (n.): 分歧/劃分',
+                    'Assembly (n.): 議會', 'Fossil (n.): 化石', 'Reliance on (phr.): 對...的依賴', 'Bill (n.): 帳單/法案',
+                    'Division within (phr.): 內部分歧', 'In favor of (phr.): 贊成', 'Confidence (n.): 信心', 'Procedural (adj.): 程序上的'
+                ],
+                quiz: [
+                    { q: 'What is the name of the world\'s largest nuclear plant being restarted?', options: ['Fukushima', 'Chernobyl', 'Kashiwazaki-Kariwa', 'Niigata Central'], answer: 'Kashiwazaki-Kariwa' },
+                    { q: 'How long has it been since the Fukushima nuclear disaster?', options: ['5 years', '10 years', 'Nearly 15 years', '25 years'], answer: 'Nearly 15 years' },
+                    { q: 'Where is the Kashiwazaki-Kariwa plant located?', options: ['Southeast of Tokyo', 'Northwest of Tokyo', 'In Osaka', 'In Hokkaido'], answer: 'Northwest of Tokyo' },
+                    { q: 'How many reactors in Japan were shut down after the 2011 disaster?', options: ['14', '33', '54', '100'], answer: '54' },
+                    { q: 'How many reactors have been restarted so far out of the remaining 33?', options: ['5', '14', '21', '33'], answer: '14' },
+                    { q: 'Japan wants to reduce its reliance on what?', options: ['Nuclear energy', 'Solar power', 'Imported fossil fuels', 'Wind energy'], answer: 'Imported fossil fuels' },
+                    { q: 'Who is the operator of the plant?', options: ['Sony', 'Toyota', 'TEPCO', 'Mitsubishi'], answer: 'TEPCO' },
+                    { q: 'Which assembly passed the vote of confidence in the governor?', options: ['Tokyo Assembly', 'Niigata Prefectural Assembly', 'Fukushima Council', 'National Diet'], answer: 'Niigata Prefectural Assembly' },
+                    { q: 'TEPCO is described as the operator of which "accident-prone" plant?', options: ['Kashiwazaki', 'Fukushima', 'Chernobyl', 'Three Mile Island'], answer: 'Fukushima' },
+                    { q: 'What date is TEPCO considering for restarting the first reactor?', options: ['Dec 25', 'Jan 1', 'Jan 20', 'March 11'], answer: 'Jan 20' },
+                    { q: 'What benefit did officials promise the local community?', options: ['Free housing', 'New jobs and lower electricity bills', 'Free cars', 'Tax-free shopping'], answer: 'New jobs and lower electricity bills' },
+                    { q: 'The term "milestone" refers to what?', options: ['A heavy rock', 'A significant event or stage', 'A mistake', 'A new law'], answer: 'A significant event or stage' },
+                    { q: 'What did the assembly session "expose"?', options: ['A secret plan', 'Deep division within the community', 'Financial fraud', 'A new technology'], answer: 'Deep division within the community' },
+                    { q: 'How many reactors does the Kashiwazaki-Kariwa plant have in total?', options: ['One', 'Three', 'Five', 'Seven'], answer: 'Seven' },
+                    { q: 'What natural disaster occurred in 2011 besides an earthquake?', options: ['Tornado', 'Tsunami', 'Hurricane', 'Volcano eruption'], answer: 'Tsunami' }
+                ]
+            },
+            'tiktok-deal': {
+                title: 'TikTok 母公司簽署協議避禁令',
+                english: `TikTok's Chinese parent company, ByteDance, has signed a legally binding agreement with US and international investors to operate its business in the US. CEO Shou Zi Chew stated half of the joint venture will be owned by an investor group including Oracle, Silver Lake, and MGX. The deal is expected to close on January 22nd, potentially ending the standoff in Washington over national security concerns. This aligns with an agreement in September, when US President Trump delayed the enforcement of a bill that would ban TikTok unless it was sold. TikTok stated this deal will allow over 170 million Americans to continue being part of a vibrant global community. ByteDance will retain a 19.9% stake, while Oracle, Silver Lake, and MGX will each hold 15%. Oracle will also obtain a license for TikTok's recommendation algorithm. This deal was reached after a series of delays.`,
+                chinese: `TikTok 母公司簽署協議避免美國禁令。TikTok 的中國母公司字節跳動已與美國及國際投資者簽署了一項具有法律約束力的協議，以便在美國營運業務。執行長周受資表示，合資公司的一半將由包括甲骨文（Oracle）、銀湖（Silver Lake）和 MGX 在內的投資者集團擁有。該交易預計於 1 月 22 日完成，可能結束華盛頓因國家安全擔憂而產生的多年對峙。這與 9 月份達成的一項協議一致，當時美國總統川普推遲了除非出售否則將禁止 TikTok 的法案執行。TikTok 在備忘錄中表示，這筆交易將讓「超過 1.7 億美國人」繼續成為充滿活力的全球社群的一部分。根據協議，字節跳動將保留 19.9% 的股份，而甲骨文、銀湖和阿布達比投資公司 MGX 將各持股 15%。根據協議，甲骨文還將獲得 TikTok 推薦演算法的授權。這筆交易是在一系列延遲後達成的。`,
+                vocabulary: [
+                    'Parent company (n.phr.): 母公司', 'ByteDance (n. proper): 字節跳動', 'Legally binding (adj.phr.): 具有法律約束力的', 'Investors (n.): 投資者',
+                    'Operate (v.): 營運', 'Joint venture (n.phr.): 合資企業', 'Standoff (n.): 對峙/僵持', 'National security (n.phr.): 國家安全',
+                    'Aligns with (v.phr.): 與...一致', 'Enforcement (n.): 執行/實施', 'Retain a stake (phr.): 保留股份', 'License (n.): 許可/授權',
+                    'Algorithm (n.): 演算法', 'Standoff (n.): 僵持', 'National security (n.phr.): 國家安全', 'Vibrant (adj.): 充滿活力的',
+                    'Affiliates (n.): 關聯公司', 'Recommendation algorithm (n.phr.): 推薦演算法', 'Series of delays (n.phr.): 一系列延遲', 'Abu Dhabi (n. proper): 阿布達比',
+                    'Stake (n.): 股份', 'Agreement (n.): 協議', 'Enforcement (n.): 強制執行', 'Standoff (n.): 僵持',
+                    'Infinite possibilities (n.phr.): 無限可能性', 'Vibrant community (n.phr.): 充滿活力的社群', 'Legally (adv.): 法律上', 'Binding (adj.): 有約束力的',
+                    'Retain (v.): 保留', 'Obtain (v.): 獲得', 'Algorithm (n.): 演算法', 'Investors (n.): 投資者'
+                ],
+                quiz: [
+                    { q: 'What is TikTok\'s parent company?', options: ['Oracle', 'ByteDance', 'Silver Lake', 'MGX'], answer: 'ByteDance' },
+                    { q: 'When is the TikTok deal expected to close?', options: ['Dec 19', 'Dec 24', 'Jan 22', 'Sept 1'], answer: 'Jan 22' },
+                    { q: 'Which US company is part of the investor group holding 15%?', options: ['Apple', 'Microsoft', 'Oracle', 'Facebook'], answer: 'Oracle' },
+                    { q: 'What percentage of stake will ByteDance retain?', options: ['15%', '19.9%', '30.1%', '50%'], answer: '19.9%' },
+                    { q: 'How many Americans are estimated to use TikTok according to the text?', options: ['10 million', '50 million', '100 million', 'Over 170 million'], answer: 'Over 170 million' },
+                    { q: 'What did President Trump delay in September?', options: ['Taxes on China', 'The enforcement of a bill banning TikTok', 'His retirement', 'A meeting with ByteDance'], answer: 'The enforcement of a bill banning TikTok' },
+                    { q: 'What will Oracle obtain a license for?', options: ['TikTok\'s logo', 'The recommendation algorithm', 'The user\'s emails', 'TikTok\'s office space'], answer: 'The recommendation algorithm' },
+                    { q: 'The investment firm MGX is from where?', options: ['USA', 'UK', 'Abu Dhabi (UAE)', 'China'], answer: 'Abu Dhabi (UAE)' },
+                    { q: 'The deal aims to end a "standoff" in which city?', options: ['Beijing', 'Washington', 'London', 'Dubai'], answer: 'Washington' },
+                    { q: 'Who is the CEO of TikTok mentioned?', options: ['Neal Mohan', 'Shou Zi Chew', 'James Cameron', 'Matt Navarra'], answer: 'Shou Zi Chew' },
+                    { q: 'The standoff in Washington was over what concerns?', options: ['Economic concerns', 'National security concerns', 'Environmental concerns', 'Healthcare concerns'], answer: 'National security concerns' },
+                    { q: 'The agreement is described as being "legally" what?', options: ['Free', 'Binding', 'Optional', 'Hidden'], answer: 'Binding' },
+                    { q: 'What percentage will MGX hold?', options: ['10%', '15%', '19.9%', '30.1%'], answer: '15%' },
+                    { q: 'The term "joint venture" refers to what?', options: ['A solo company', 'A business arrangement with shared ownership', 'A new product', 'A type of tax'], answer: 'A business arrangement with shared ownership' },
+                    { q: 'Has the deal faced any delays?', options: ['No, it was very fast.', 'Yes, a series of delays.', 'Only one small delay.', 'The text doesn\'t say.'], answer: 'Yes, a series of delays.' }
+                ]
+            },
+            'facebook-fee': {
+                title: 'Facebook 測試連結分享月費',
+                english: `Facebook is testing limits on the number of links some users can share. Some users in the UK and US received notifications stating that unless they subscribe to a service, they can only share a certain number of links in posts, with a fee of 9.99 pounds per month. Meta stated this is a "limited test" to understand if subscribers posting more links generates additional value. Social media expert Matt Navarra stated this marks an attempt to monetize more features. Meta Verified currently offers a blue verification badge and protection against impersonation. Now, the company appears to be extending the same model to basic content distribution. Navarra, who received the notification, said he was prompted that he could only share two links per month. Meta has encouraged users to verify identities to unlock features or boost engagement and visibility.`,
+                chinese: `Facebook 測試月費制限制分享連結。Facebook 正在測試限制部分用戶分享連結的數量。英國和美國的一些用戶收到通知稱，除非訂閱該服務，否則他們在貼文中只能分享一定數量的連結，訂閱費用定為每月 9.99 英鎊。Meta 表示，這是一項「有限測試」，旨在了解允許訂閱者發布更多帶有連結的內容是否會產生額外價值。社群媒體專家 Matt Navarra 表示，這標誌著該公司嘗試將平台上的更多功能貨幣化。Meta Verified 目前為 Facebook 和 Instagram 用戶提供藍色驗證徽章、增強型帳戶支援以及防止冒用的保護。現在，該公司似乎正在將相同的商業模式擴展到分發內容和引導用戶前往網路其他地方的基本能力上。Navarra 是收到測試通知的人之一，他表示自己被提示每月只能分享兩個連結。與 LinkedIn 等平台一樣，Meta 近年來一直鼓勵用戶驗證身份，以解鎖更多功能或提高互動度和曝光率。`,
+                vocabulary: [
+                    'Subscription fee (n.phr.): 訂閱費', 'Monetize (v.): 貨幣化/變現', 'Verification badge (n.phr.): 驗證徽章', 'Impersonation (n.): 冒用/假冒',
+                    'Visibility (n.): 曝光率/能見度', 'Limited test (n.phr.): 有限測試', 'Additional value (n.phr.): 額外價值', 'Account support (n.phr.): 帳戶支援',
+                    'Basic ability (n.phr.): 基本能力', 'Content distribution (n.phr.): 內容分發', 'Prompted (v.pp.): 提示', 'Engagement (n.): 互動/參與度',
+                    'Meta Verified (n. proper): Meta 驗證', 'Social media expert (n.phr.): 社群媒體專家', 'Monetization (n.): 貨幣化', 'Badge (n.): 徽章',
+                    'Notification (n.): 通知', 'Limit (n.): 限制', 'Expert (n.): 專家', 'Impersonation (n.): 身份竊取/冒用',
+                    'Feature (n.): 功能/特色', 'Visibility (n.): 能見度', 'Subscription (n.): 訂閱', 'Monetize (v.): 變現',
+                    'Blue checkmark (n.phr.): 藍勾勾', 'Monetize features (phr.): 將功能貨幣化', 'Identify verification (n.phr.): 身份驗證', 'Unlock (v.): 解鎖',
+                    'Boost visibility (phr.): 提高曝光率', 'Direct users (phr.): 引導用戶', 'Limited (adj.): 有限的', 'Generates (v.): 產生'
+                ],
+                quiz: [
+                    { q: 'In which countries is Facebook testing the link sharing limit?', options: ['China and Japan', 'UK and US', 'Germany and France', 'Canada and Australia'], answer: 'UK and US' },
+                    { q: 'How much is the monthly subscription fee for the test?', options: ['4.99 pounds', '9.99 pounds', '19.99 pounds', 'It is free'], answer: '9.99 pounds' },
+                    { q: 'According to Meta, what is the goal of this "limited test"?', options: ['To stop spam', 'To understand if sharing more links generates value', 'To shut down Facebook', 'To change their logo'], answer: 'To understand if sharing more links generates value' },
+                    { q: 'Who is the social media expert mentioned in the article?', options: ['Neal Mohan', 'Matt Navarra', 'Shou Zi Chew', 'Mark Zuckerberg'], answer: 'Matt Navarra' },
+                    { q: 'What does Meta Verified currently offer users?', options: ['Free food', 'A blue verification badge', 'A new phone', 'Unlimited links'], answer: 'A blue verification badge' },
+                    { q: 'How many links per month was Matt Navarra prompted he could share?', options: ['Two', 'Ten', 'Fifty', 'None'], answer: 'Two' },
+                    { q: 'What business model is Meta extending to basic content distribution?', options: ['Advertising', 'Free access', 'Monthly subscription/Monetization', 'Government grants'], answer: 'Monthly subscription/Monetization' },
+                    { q: 'Meta has encouraged users to verify their identities to boost what?', options: ['Speed', 'Engagement and visibility', 'Privacy', 'Battery life'], answer: 'Engagement and visibility' },
+                    { q: 'Which other platform is mentioned as encouraging user verification?', options: ['Threads', 'TikTok', 'LinkedIn', 'Snapchat'], answer: 'LinkedIn' },
+                    { q: 'The subscription fee is tested on the ability to share what?', options: ['Photos', 'Videos', 'Links', 'Messages'], answer: 'Links' },
+                    { q: 'The term "monetize" means to turn something into what?', options: ['Art', 'History', 'Money/Profit', 'A joke'], answer: 'Money/Profit' },
+                    { q: 'What does "impersonation" mean?', options: ['Being very famous', 'Pretending to be another person', 'Taking a photo', 'Moving to another city'], answer: 'Pretending to be another person' },
+                    { q: 'The test notifications were sent to users where?', options: ['Everywhere', 'UK and US', 'Only London', 'Only New York'], answer: 'UK and US' },
+                    { q: 'Meta Verified also provides "enhanced" what?', options: ['Account support', 'Internet speed', 'Graphics', 'Battery'], answer: 'Account support' },
+                    { q: 'What does the word "prompted" mean in this context?', options: ['Helped', 'Reminded or informed by a message', 'Angry', 'Deleted'], answer: 'Reminded or informed by a message' }
+                ]
+            }
+        };
+
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                    const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                    element.classList.remove('selected');
+                    if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
