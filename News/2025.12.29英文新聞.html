@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 25 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 25 日頭條：全球與本地要聞</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT ---
+        const NEWS_DATA = {
+            'taiwan-focus': {
+                title: '台灣本地焦點新聞',
+                english: `[1] MRT Passengers Flee After Panic Episode at Beimen Station\nAround 8:32 p.m. on the 25th, a disturbance occurred on a Songshan–Xindian Line train heading towards Songshan at Beimen Station. A man in his 40s, traveling with his mother, had a sudden panic attack triggered by a minor collision. He hit the train glass with an umbrella, causing passengers to flee in panic. Authorities confirmed it was a panic attack, not an assault.\n\n[2] Cheng Yi-lin Indicted for Bribery\nFormer Deputy CEO of the Green Energy Technology Industry Promotion Center, Cheng Yi-lin, has been indicted for accepting 1.98 million NT dollars in bribes and possessing over 6 million NT dollars in unaccounted property. The Taipei District Prosecutor's Office is seeking a prison sentence of over 14 years. Cheng refused bail during the investigation and will be transferred to the Taipei District Court for trial.\n\n[3] Asfura Elected President of Honduras\nThe Electoral Commission of Honduras announced on the 24th that National Party candidate Nasry Asfura won the presidential election. Asfura previously stated he would restore diplomatic relations with Taiwan. The Chinese Ministry of Foreign Affairs reiterated the "One China" principle on the 25th. The international community is watching Beijing's stance on a possible shift in Honduras' diplomatic relations.`,
+                chinese: `【1】北門站驚傳恐慌事件 乘客緊急逃離\n25日晚上8點32分左右，松山新店線一列開往松山的列車在北門站發生騷動。一名與母親同行的40多歲男子，因輕微碰撞引發突然的恐慌症發作。他用雨傘敲擊車窗玻璃，導致乘客驚慌逃離。當局證實這是一起恐慌症發作，而非攻擊事件。\n\n【2】程義林涉貪遭起訴 檢方求刑逾14年\n綠能科技產業推動中心前副執行長程義林，因收受198萬新台幣賄賂及持有超過600萬新台幣來源不明財產而被起訴。台北地檢署求處14年以上有期徒刑。程義林在調查期間拒絕保釋，將移送台北地方法院審理。\n\n【3】宏都拉斯總統大選結果出爐 阿斯富拉當選\n宏都拉斯選舉委員會24日宣布，國民黨候選人阿斯富拉贏得總統大選。阿斯富拉先前曾表示將恢復與台灣的外交關係。中國外交部25日重申「一個中國」原則。國際社會正關注北京對宏都拉斯外交關係可能轉變的立場。`,
+                vocabulary: [
+                    'disturbance (n.): 騷動/干擾', 'panic attack (n.phr.): 恐慌症發作', 'triggered by (phr.): 由...引發', 'minor collision (n.phr.): 輕微碰撞',
+                    'umbrella (n.): 雨傘', 'flee (v.): 逃離', 'assault (n.): 攻擊', 'authorities (n.): 當局', 'indicted (v.pp.): 被起訴', 'bribery (n.): 賄賂',
+                    'unaccounted property (n.phr.): 來源不明財產', 'prosecutor (n.): 檢察官', 'seeking (v.ger.): 尋求/求處', 'prison sentence (n.phr.): 刑期',
+                    'refused bail (phr.): 拒絕保釋', 'investigation (n.): 調查', 'transferred (v.pp.): 移送', 'trial (n.): 審判/審理',
+                    'electoral commission (n.phr.): 選舉委員會', 'candidate (n.): 候選人', 'presidential election (n.phr.): 總統大選', 'restore (v.): 恢復',
+                    'diplomatic relations (n.phr.): 外交關係', 'reiterated (v.): 重申', 'One China principle (n.phr.): 一個中國原則', 'international community (n.phr.): 國際社會',
+                    'stance (n.): 立場', 'possible shift (n.phr.): 可能的轉變', 'heading towards (phr.): 朝向...前進', 'confirmed (v.): 證實',
+                    'unaccounted (adj.): 未說明的/不明的', 'reiterate (v.): 重複/反覆說', 'possession (n.): 持有/擁有'
+                ],
+                quiz: [
+                    { q: 'What caused the disturbance at Beimen Station?', options: ['A planned bomb attack', 'A man having a panic attack', 'A technical train failure', 'A protest on the platform'], answer: 'A man having a panic attack' },
+                    { q: 'What object did the man use to hit the train glass?', options: ['A hammer', 'A chair', 'An umbrella', 'A backpack'], answer: 'An umbrella' },
+                    { q: 'Who was the man traveling with during the episode?', options: ['His wife', 'His son', 'His mother', 'His friend'], answer: 'His mother' },
+                    { q: 'How much money in bribes is Cheng Yi-lin accused of accepting?', options: ['NT$1 million', 'NT$1.98 million', 'NT$6 million', 'NT$14 million'], answer: 'NT$1.98 million' },
+                    { q: 'What is the prison sentence sought by prosecutors for Cheng Yi-lin?', options: ['Over 5 years', 'Over 10 years', 'Over 14 years', 'Life sentence'], answer: 'Over 14 years' },
+                    { q: 'Cheng Yi-lin was the former Deputy CEO of which organization?', options: ['Taipei District Court', 'Green Energy Technology Industry Promotion Center', 'Ministry of Finance', 'National Party'], answer: 'Green Energy Technology Industry Promotion Center' },
+                    { q: 'Who won the presidential election in Honduras?', options: ['Nasry Asfura', 'Cheng Yi-lin', 'Maher Nicola', 'Shou Zi Chew'], answer: 'Nasry Asfura' },
+                    { q: 'What did the winning candidate in Honduras say about Taiwan?', options: ['He would break relations.', 'He would ignore Taiwan.', 'He would restore diplomatic relations.', 'He would visit Taiwan next week.'], answer: 'He would restore diplomatic relations.' },
+                    { q: 'What principle did the Chinese Ministry of Foreign Affairs reiterate?', options: ['Free Trade', 'Global Security', '"One China" principle', 'Maritime Sovereignty'], answer: '"One China" principle' },
+                    { q: 'The term "indicted" means what?', options: ['To be set free', 'To be formally charged with a crime', 'To be elected', 'To be hospitalized'], answer: 'To be formally charged with a crime' },
+                    { q: 'The term "reiterated" is used to describe doing what with a statement?', options: ['Changing it', 'Repeating it for emphasis', 'Forgetting it', 'Denying it'], answer: 'Repeating it for emphasis' },
+                    { q: 'What triggered the man\'s panic attack at the MRT station?', options: ['A loud noise', 'A minor collision', 'A dark tunnel', 'Seeing a police officer'], answer: 'A minor collision' },
+                    { q: 'Where will Cheng Yi-lin be transferred for his trial?', options: ['A hospital', 'Taipei District Court', 'Honduras', 'The Green Energy Center'], answer: 'Taipei District Court' },
+                    { q: 'When did the Honduras Electoral Commission announce the results?', options: ['Dec 19', 'Dec 24', 'Dec 25', 'Jan 1'], answer: 'Dec 24' },
+                    { q: 'What is the international community watching regarding Honduras?', options: ['Their economy', 'Beijing\'s stance on possible shift in relations', 'The new subway system', 'Their tourism rates'], answer: 'Beijing\'s stance on possible shift in relations' }
+                ]
+            },
+            'north-korea-sub': {
+                title: '北韓公開新型核動力潛艦',
+                english: `North Korea has shown clear progress in the construction of a nuclear-powered submarine. Photos released by state media show the hull is largely complete. Leader Kim Jong Un criticized South Korea for its push to acquire related technology and personally visited the shipyard to inspect the construction of this 8,700-ton-class nuclear-powered submarine. North Korea says it plans to equip the submarine with nuclear weapons, calling it a "strategic missile submarine" or "strategic nuclear attack submarine." During the inspection, Kim described South Korea's move to acquire nuclear-powered submarines with support from US President Donald Trump as an "offensive act" that seriously infringes on North Korea's security and maritime sovereignty. He stated that once completed, the submarine will be an "epoch-making" milestone in strengthening nuclear war deterrence against so-called enemy threats.`,
+                chinese: `北韓公開新型核動力潛艦建造進展。北韓展示了在核動力潛艦建造方面的明顯進展。官媒發布的照片顯示船殼已大致完工。領導人金正恩批評南韓推動獲取相關技術，並親自視察了這艘8700噸級核動力潛艦的建造工廠。北韓表示計畫為潛艦配備核武，稱其為「戰略導彈潛艦」或「戰略核攻擊潛艦」。視察期間，金正恩將南韓在美國總統川普支持下獲取核動力潛艦的舉動描述為「挑釁行為」，嚴重侵犯北韓的安全與海洋主權。他表示，一旦完工，潛艦將成為加強對所謂敵方威脅的核戰爭威懾力的「劃時代」里程碑。`,
+                vocabulary: [
+                    'nuclear-powered (adj.): 核動力的', 'submarine (n.): 潛艦/潛水艇', 'construction (n.): 建造/施工', 'progress (n.): 進展',
+                    'state media (n.phr.): 官方媒體', 'hull (n.): 船殼/船身', 'largely complete (phr.): 大致完成', 'acquire (v.): 獲得/取得',
+                    'inspect (v.): 視察/檢查', 'shipyard (n.): 造船廠', '8,700-ton-class (adj.phr.): 8700噸級', 'equip (v.): 配備/裝備',
+                    'strategic (adj.): 戰略的', 'missile (n.): 導彈', 'attack (n./v.): 攻擊', 'offensive act (n.phr.): 挑釁行為/進攻行為',
+                    'infringes on (phr.v.): 侵犯', 'maritime sovereignty (n.phr.): 海洋主權', 'epoch-making (adj.): 劃時代的', 'milestone (n.): 里程碑',
+                    'strengthening (v.ger.): 加強', 'war deterrence (n.phr.): 戰爭威懾', 'threats (n.): 威脅', 'security (n.): 安全',
+                    'inspection (n.): 檢查', 'sovereignty (n.): 主權', 'deterrence (n.): 威懾', 'enemy (n.): 敵人',
+                    'acquire technology (phr.): 獲得技術', 'maritime (adj.): 海洋的', 'infringement (n.): 侵權/侵犯', 'push (n./v.): 推動'
+                ],
+                quiz: [
+                    { q: 'What kind of submarine is North Korea constructing?', options: ['Diesel-powered', 'Nuclear-powered', 'Solar-powered', 'Unmanned'], answer: 'Nuclear-powered' },
+                    { q: 'According to state media, how much of the hull is complete?', options: ['Just started', 'Halfway', 'Largely complete', 'Fully functional'], answer: 'Largely complete' },
+                    { q: 'What is the tonnage class of the new submarine?', options: ['3,000-ton', '5,500-ton', '8,700-ton', '10,000-ton'], answer: '8,700-ton' },
+                    { q: 'Who personally visited the shipyard to inspect the construction?', options: ['Donald Trump', 'Kim Jong Un', 'Nasry Asfura', 'Shou Zi Chew'], answer: 'Kim Jong Un' },
+                    { q: 'What does North Korea plan to equip the submarine with?', options: ['Medical supplies', 'Nuclear weapons', 'Scientific sensors', 'New engines'], answer: 'Nuclear weapons' },
+                    { q: 'What term did Kim use to describe South Korea\'s move to acquire submarines?', options: ['A friendly step', 'An offensive act', 'A technical milestone', 'A trade agreement'], answer: 'An offensive act' },
+                    { q: 'South Korea is reportedly supported by which world leader in its submarine push?', options: ['Joe Biden', 'Xi Jinping', 'Donald Trump', 'Vladimir Putin'], answer: 'Donald Trump' },
+                    { q: 'Kim stated the submarine would be an "______" milestone.', options: ['Average', 'Epoch-making', 'Expensive', 'Impossible'], answer: 'Epoch-making' },
+                    { q: 'The submarine aims to strengthen what against enemy threats?', options: ['Trade relations', 'Nuclear war deterrence', 'Tourism', 'Internet speed'], answer: 'Nuclear war deterrence' },
+                    { q: 'The term "maritime sovereignty" refers to control over what?', options: ['The sky', 'The land', 'The sea', 'Outer space'], answer: 'The sea' },
+                    { q: 'What are the two terms North Korea uses to call this submarine?', options: ['Luxury boat', 'Scientific vessel', 'Strategic missile or nuclear attack submarine', 'Fishing boat'], answer: 'Strategic missile or nuclear attack submarine' },
+                    { q: 'The photos of the submarine were released by which entity?', options: ['US satellites', 'South Korean intelligence', 'North Korean state media', 'Independent researchers'], answer: 'North Korean state media' },
+                    { q: 'The term "hull" refers to which part of a ship?', options: ['The engine', 'The main body or frame', 'The flag', 'The weapons system'], answer: 'The main body or frame' },
+                    { q: 'Kim said the move "seriously infringes on" which two things?', options: ['Economy and education', 'Security and maritime sovereignty', 'Food supply and energy', 'Tourism and sports'], answer: 'Security and maritime sovereignty' },
+                    { q: 'Is the submarine currently operational according to the text?', options: ['Yes', 'No, it is under construction', 'It has been destroyed', 'The text does not say'], answer: 'No, it is under construction' }
+                ]
+            },
+            'iss-anniversary': {
+                title: '國際太空站 25 週年',
+                english: `The International Space Station (ISS), the most expensive structure built by humanity, has been in orbit for 25 years. Flying about 400 kilometers above Earth, the ISS represents one of humanity's most ambitious engineering projects. Since "Expedition 1", over 280 astronauts and cosmonauts have visited, and it has been continuously inhabited. ISS astronauts travel at 28,000 kilometers per hour, experiencing 16 sunrises and 16 sunsets each day. The station's orbit covers about 80% of the Earth, making it one of the brightest objects in the night sky. While the total cost may never be known, NASA alone spends 3 to 4 billion US dollars annually to operate the station.`,
+                chinese: `國際太空站運作滿25週年。國際太空站（ISS）是人類建造最昂貴的結構體，已在軌道上運行了25年。ISS在地球上方約400公里處飛行，代表了人類最宏大的工程項目之一。自「遠征1號」以來，已有超過280名太空人造訪，且一直有人類居住。ISS上的太空人以每小時28,000公里的速度旅行，每天經歷16次日出和16次日落。太空站的軌道覆蓋了地球約80%的面積，使其成為夜空中最亮的天體之一。雖然總成本可能永遠無法確知，但僅美國國家航空暨太空總署（NASA）每年就花費30至40億美元來維護太空站運行。`,
+                vocabulary: [
+                    'International Space Station (ISS) (n. proper): 國際太空站', 'expensive (adj.): 昂貴的', 'structure (n.): 結構/結構體',
+                    'built by humanity (phr.): 人類建造的', 'in orbit (phr.): 在軌道上', 'above Earth (phr.): 在地球上方',
+                    'represents (v.): 代表', 'ambitious (adj.): 宏大的/有野心的', 'engineering projects (n.phr.): 工程項目', 'Expedition 1 (n. proper): 遠征1號',
+                    'astronauts (n.): 太空人 (通常指美、歐、加、日等國)', 'cosmonauts (n.): 太空人 (通常指俄羅斯)', 'continuously (adv.): 持續地',
+                    'inhabited (adj./v.pp.): 有人居住的', 'travel at (phr.): 以...的速度移動', 'per hour (phr.): 每小時', 'sunrises (n.): 日出',
+                    'sunsets (n.): 日落', 'covers (v.): 覆蓋', 'brightest objects (n.phr.): 最亮的物體/天體', 'night sky (n.phr.): 夜空',
+                    'total cost (n.phr.): 總成本', 'NASA (n. proper): 美國國家航空暨太空總署', 'annually (adv.): 每年地', 'operate (v.): 運作/操作',
+                    'structure (n.): 結構', 'ambitious (adj.): 雄心勃勃的', 'expedition (n.): 遠征/探險', 'kilometer (n.): 公里'
+                ],
+                quiz: [
+                    { q: 'How many years has the ISS been in orbit?', options: ['10 years', '15 years', '25 years', '50 years'], answer: '25 years' },
+                    { q: 'How far above the Earth does the ISS fly?', options: ['100 km', '400 km', '1,000 km', '28,000 km'], answer: '400 km' },
+                    { q: 'What was the name of the first human mission to live on the ISS?', options: ['Apollo 11', 'Expedition 1', 'Mars One', 'ISS Start'], answer: 'Expedition 1' },
+                    { q: 'Over how many astronauts and cosmonauts have visited the station?', options: ['50', '100', '280', '1,000'], answer: '280' },
+                    { q: 'What is the travel speed of the ISS?', options: ['400 km/h', '1,000 km/h', '28,000 km/h', '300,000 km/h'], answer: '28,000 km/h' },
+                    { q: 'How many sunrises and sunsets do astronauts experience each day?', options: ['1', '8', '16', '24'], answer: '16' },
+                    { q: 'What percentage of the Earth does the station\'s orbit cover?', options: ['25%', '50%', '80%', '100%'], answer: '80%' },
+                    { q: 'How much does NASA spend annually to operate the station?', options: ['$1 billion', '$2 billion', '$3 to $4 billion', '$25 billion'], answer: '$3 to $4 billion' },
+                    { q: 'The ISS is described as the most ______ structure built by humanity.', options: ['Dangerous', 'Beautiful', 'Expensive', 'Secretive'], answer: 'Expensive' },
+                    { q: 'Has the ISS been empty at any point since Expedition 1?', options: ['Yes, many times', 'No, it has been continuously inhabited', 'Only on weekends', 'It is currently empty'], answer: 'No, it has been continuously inhabited' },
+                    { q: 'The word "annually" means what?', options: ['Every month', 'Every week', 'Every year', 'Every day'], answer: 'Every year' },
+                    { q: 'Why is the ISS one of the brightest objects in the night sky?', options: ['It has large lights', 'Its orbit and size reflect sunlight', 'It uses laser beams', 'It is made of gold'], answer: 'Its orbit and size reflect sunlight' },
+                    { q: 'The ISS is an example of an "ambitious ______ project".', options: ['Cooking', 'Art', 'Engineering', 'Medical'], answer: 'Engineering' },
+                    { q: 'What does "cosmonaut" typically refer to?', options: ['A chef in space', 'A Russian astronaut', 'An alien', 'A robot'], answer: 'A Russian astronaut' },
+                    { q: 'Is the total cost of the ISS confirmed and well-known?', options: ['Yes, exactly', 'No, it may never be known', 'Only NASA knows', 'It was free'], answer: 'No, it may never be known' }
+                ]
+            },
+            'bethlehem-christmas': {
+                title: '伯利恆迎回聖誕氣氛',
+                english: `Christmas originated in Bethlehem over two thousand years ago, and celebrations are now bringing long-lost joy back to its birthplace. In past years, events were canceled due to the war in Gaza, but a fragile ceasefire has brought a glimmer of hope. On Christmas Eve, bands played under a large tree in Manger Square, while the traditional procession led by the Patriarch from Jerusalem entered the city. He called for a "Christmas full of light", conveying greetings from the Christian community in Gaza. Bethlehem Mayor Maher Nicola Canawati said the ceasefire has reignited the "Christmas spirit," symbolizing resilience, hope, and meaning for the Palestinian people.`,
+                chinese: `伯利恆迎回久違的聖誕氣氛。聖誕節源於兩千多年前的伯利恆，現在的慶祝活動正將久違的歡樂帶回它的發源地。在過去幾年裡，由於加薩戰爭，慶祝活動被迫取消，但脆弱的停火協議帶來了一絲希望。在聖誕夜，樂團在馬槽廣場的大樹下演奏，而由耶路撒冷宗主教率領的傳統遊行隊伍進入了城市。他呼籲迎接一個「充滿光明的聖誕節」，並轉達了加薩基督徒社群的問候。伯利恆市長馬赫·尼古拉·卡納瓦蒂表示，停火重新點燃了「聖誕精神」，象徵著巴勒斯坦人民的韌性、希望與生命意義。`,
+                vocabulary: [
+                    'originated (v.): 起源於/發源於', 'Bethlehem (n. proper): 伯利恆', 'long-lost (adj.): 久違的/失散已久的', 'birthplace (n.): 發源地/出生地',
+                    'canceled (v.pp.): 取消的', 'due to (prep.): 由於', 'war (n.): 戰爭', 'fragile (adj.): 脆弱的', 'ceasefire (n.): 停火',
+                    'glimmer of hope (n.phr.): 一絲希望', 'Christmas Eve (n.phr.): 聖誕夜', 'bands (n.): 樂團/帶子', 'Manger Square (n. proper): 馬槽廣場',
+                    'traditional (adj.): 傳統的', 'procession (n.): 遊行隊伍', 'led by (phr.): 由...帶領', 'Patriarch (n.): 宗主教/首領',
+                    'Jerusalem (n. proper): 耶路撒冷', 'conveying (v.ger.): 轉達/傳達', 'greetings (n.): 問候', 'Christian community (n.phr.): 基督徒社群',
+                    'Gaza (n. proper): 加薩', 'Mayor (n.): 市長', 'reignited (v.pp.): 重新點燃', 'symbolizing (v.ger.): 象徵',
+                    'resilience (n.): 韌性/彈性', 'hope (n.): 希望', 'Palestinian people (n.phr.): 巴勒斯坦人民', 'originated in (phr.): 起源於',
+                    'glimmer (n.): 閃光/微光', 'reignite (v.): 重燃', 'spirit (n.): 精神'
+                ],
+                quiz: [
+                    { q: 'Where did Christmas originate over two thousand years ago?', options: ['Jerusalem', 'Nazareth', 'Bethlehem', 'Gaza'], answer: 'Bethlehem' },
+                    { q: 'Why were events canceled in past years?', options: ['Due to heavy snow', 'Due to the war in Gaza', 'Due to lack of funds', 'Due to a pandemic'], answer: 'Due to the war in Gaza' },
+                    { q: 'What has brought a "glimmer of hope" to the celebrations this year?', options: ['A large donation', 'A fragile ceasefire', 'A new mayor', 'A bigger Christmas tree'], answer: 'A fragile ceasefire' },
+                    { q: 'Where did the bands play on Christmas Eve?', options: ['In a church', 'At the airport', 'Under a large tree in Manger Square', 'In the Gaza Strip'], answer: 'Under a large tree in Manger Square' },
+                    { q: 'Who led the traditional procession into the city?', options: ['The Mayor', 'The President', 'The Patriarch from Jerusalem', 'The Prime Minister'], answer: 'The Patriarch from Jerusalem' },
+                    { q: 'What did the Patriarch call for?', options: ['A Christmas full of gifts', 'A Christmas full of light', 'A quick end to winter', 'A new building project'], answer: 'A Christmas full of light' },
+                    { q: 'Whose greetings did the Patriarch convey?', options: ['The Jewish community in Paris', 'The Christian community in Gaza', 'The tourists from USA', 'The astronauts on ISS'], answer: 'The Christian community in Gaza' },
+                    { q: 'Who is the Mayor of Bethlehem mentioned in the text?', options: ['Nasry Asfura', 'Maher Nicola Canawati', 'Cho Jung-tai', 'Kim Jong Un'], answer: 'Maher Nicola Canawati' },
+                    { q: 'What has the ceasefire "reignited" according to the Mayor?', options: ['The city lights', 'A small fire', 'The "Christmas spirit"', 'A political debate'], answer: 'The "Christmas spirit"' },
+                    { q: 'What does the Christmas spirit symbolize for the Palestinian people?', options: ['Resilience, hope, and meaning', 'Wealth and power', 'War and anger', 'History and rules'], answer: 'Resilience, hope, and meaning' },
+                    { q: 'The term "fragile" describes something that is what?', options: ['Strong and heavy', 'Easy to break or destroy', 'Very expensive', 'Old and wise'], answer: 'Easy to break or destroy' },
+                    { q: 'The term "procession" refers to what?', options: ['A group of people moving in an orderly line', 'A type of food', 'A religious building', 'A decision by a judge'], answer: 'A group of people moving in an orderly line' },
+                    { q: 'What does "reignited" mean?', options: ['Started again after being off', 'Put out a fire', 'Bought a new lamp', 'Shouted loudly'], answer: 'Started again after being off' },
+                    { q: 'Manger Square is located in which city?', options: ['Jerusalem', 'Gaza', 'Bethlehem', 'Cairo'], answer: 'Bethlehem' },
+                    { q: 'When did the bands play in the square?', options: ['Christmas Day', 'Christmas Eve', 'New Year\'s Eve', 'Every Sunday'], answer: 'Christmas Eve' }
+                ]
+            }
+        };
+
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
