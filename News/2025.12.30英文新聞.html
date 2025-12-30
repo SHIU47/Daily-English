@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 30 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 30 日頭條：軍演、天災與國際局勢</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] PLA Launches Large-Scale Drills Around Taiwan\nIn local news, the PLA Eastern Theater Command announced that it will hold "Justice Mission-2025" exercises in the waters around Taiwan starting December 29th. The scope covers the Taiwan Strait and waters north, southwest, southeast, and east of the island. Live-fire drills are scheduled for December 30th from 8 am to 6 pm. The Presidential Office stated that given the high tension across the strait, the military is closely monitoring the situation to maintain national security.\n\n[2] Earthquake Shakes Taiwan Chip Plants\nA magnitude 7.0 earthquake occurred off the coast of Yilan late on the 27th, causing damage to some semiconductor plants in Hsinchu. Quartz furnace components and wafers were affected, forcing equipment shutdowns and recalibration. Losses could reach tens of billions of NT dollars, but industry insiders expect production to resume within days. Since insurance claims are available, the losses are considered controllable.\n\n[3] Lai Rejects Legislature Q&A\nPresident Lai Ching-te stated that he is willing to deliver a state of the nation report at the Legislative Yuan in accordance with the Constitution, but cannot accept a Q&A session, citing the Constitutional Court's ruling. He warned that forcibly breaking this precedent would undermine Taiwan's constitutional system. Lai also refuted the opposition's impeachment calls and stated that society will judge them.`,
+                chinese: `【1】解放軍在台灣周邊發動大規模軍演\n在本地新聞中，解放軍東部戰區宣布將從12月29日開始在台灣周邊海域舉行「正義使命-2025」演習。範圍涵蓋台灣海峽及島嶼北部、西南、東南和以東海域。實彈演習預計於12月30日上午8點至下午6點舉行。總統府表示，鑑於海峽兩岸局勢高度緊張，國軍正嚴密監控情勢以維護國家安全。\n\n【2】地震撼動台灣晶片工廠\n27日深夜宜蘭近海發生規模7.0地震，導致新竹部分半導體廠受損。石英爐管組件及晶圓受到影響，迫使設備停機並重新校準。損失可能達數百億新台幣，但業內人士預計生產將在數日內恢復。由於有保險理賠，損失被認為是可控的。\n\n【3】賴清德拒絕立法院即問即答\n賴清德總統表示，他願意依照憲法赴立法院進行國情報告，但引用憲法法庭裁定，表示無法接受質詢（即問即答）環節。他警告，強行打破這一先例將破壞台灣的憲政體制。賴清德也駁斥了在野黨的彈劾呼籲，並表示社會將對此做出評判。`,
+                vocabulary: [
+                    'PLA (People\'s Liberation Army) (n. proper): 解放軍', 'Large-Scale Drills (n.phr.): 大規模演習', 'Eastern Theater Command (n. proper): 東部戰區', 'Justice Mission (n. proper): 正義使命',
+                    'waters around (n.phr.): 周邊海域', 'scope (n.): 範圍', 'Taiwan Strait (n. proper): 台灣海峽', 'Live-fire drills (n.phr.): 實彈演習',
+                    'scheduled (v.pp.): 預定的', 'monitoring (v.ger.): 監控', 'national security (n.phr.): 國家安全', 'magnitude 7.0 (n.phr.): 規模7.0',
+                    'off the coast (phr.): 近海', 'semiconductor plants (n.phr.): 半導體工廠', 'Quartz furnace (n.phr.): 石英爐管', 'wafers (n.): 晶圓',
+                    'recalibration (n.): 重新校準', 'tens of billions (n.phr.): 數百億', 'insiders (n.): 業內人士', 'resume (v.): 恢復',
+                    'insurance claims (n.phr.): 保險理賠', 'controllable (adj.): 可控的', 'deliver a report (phr.): 進行報告', 'in accordance with (prep.): 依照/根據',
+                    'Q&A session (n.phr.): 質詢環節/問答環節', 'Constitutional Court (n. proper): 憲法法庭', 'ruling (n.): 裁定', 'forcibly (adv.): 強行地',
+                    'undermine (v.): 破壞/削弱', 'refuted (v.): 駁斥', 'impeachment (n.): 彈劾', 'judge (v.): 評判/審判'
+                ],
+                quiz: [
+                    { q: 'When do the PLA "Justice Mission-2025" exercises begin?', options: ['December 19th', 'December 27th', 'December 29th', 'January 1st'], answer: 'December 29th' },
+                    { q: 'The scope of the military drills covers all EXCEPT which area?', options: ['Taiwan Strait', 'Waters north of the island', 'Hainan Island', 'Waters east of the island'], answer: 'Hainan Island' },
+                    { q: 'What time are the live-fire drills scheduled for on December 30th?', options: ['8 am to 8 pm', '8 am to 6 pm', '10 am to 4 pm', 'All day long'], answer: '8 am to 6 pm' },
+                    { q: 'What was the magnitude of the earthquake off Yilan?', options: ['6.0', '7.0', '7.5', '8.0'], answer: '7.0' },
+                    { q: 'Which components in semiconductor plants were specifically mentioned as damaged?', options: ['Computers', 'Quartz furnace components and wafers', 'Office furniture', 'Shipping trucks'], answer: 'Quartz furnace components and wafers' },
+                    { q: 'How long do industry insiders expect it will take for production to resume?', options: ['Months', 'Weeks', 'Within days', 'Immediately'], answer: 'Within days' },
+                    { q: 'Why are the earthquake losses considered "controllable"?', options: ['They were very small.', 'The government will pay for everything.', 'Insurance claims are available.', 'No equipment was broken.'], answer: 'Insurance claims are available.' },
+                    { q: 'President Lai is willing to deliver what type of report at the Legislative Yuan?', options: ['A budget report', 'A state of the nation report', 'A personal diary', 'A military plan'], answer: 'A state of the nation report' },
+                    { q: 'Why does President Lai reject a Q&A session?', options: ['He is too busy.', 'He cited the Constitutional Court\'s ruling.', 'He doesn\'t like the opposition.', 'The Constitution forbids speaking.'], answer: 'He cited the Constitutional Court\'s ruling.' },
+                    { q: 'What did Lai warn would happen if the precedent was forcibly broken?', options: ['It would help the economy.', 'It would undermine the constitutional system.', 'It would lead to new elections.', 'It would stop the military drills.'], answer: 'It would undermine the constitutional system.' },
+                    { q: 'The term "premeditated" (from earlier news) applies to the Taipei attack, what term describes the earthquake?', options: ['Premeditated', 'Scheduled', 'Natural occurrence', 'Drill'], answer: 'Natural occurrence' },
+                    { q: 'Which city has the semiconductor plants that were affected?', options: ['Taipei', 'Hsinchu', 'Kaohsiung', 'Tainan'], answer: 'Hsinchu' },
+                    { q: 'The Presidential Office says the military is doing what regarding the drills?', options: ['Ignoring them', 'Closely monitoring the situation', 'Joining the exercises', 'Launching a counter-attack'], answer: 'Closely monitoring the situation' },
+                    { q: 'The word "refuted" means what?', options: ['Agreed with', 'Ignored', 'Proved wrong or denied', 'Supported'], answer: 'Proved wrong or denied' },
+                    { q: 'The total losses from the earthquake could reach how much?', options: ['NT$1 million', 'NT$100 million', 'Tens of billions of NT dollars', 'Nothing'], answer: 'Tens of billions of NT dollars' }
+                ]
+            },
+            'japan-factory-attack': {
+                title: '日本工廠隨機持刀攻擊',
+                english: `Knife Attack at Japanese Factory. A random attack occurred at a tire factory in central Japan on Friday. A man stabbed eight people, and seven others were reportedly injured by splashed bleach. Police have arrested the suspect, and the motive is currently unclear. The incident took place at a Yokohama Rubber factory in Mishima City, Shizuoka Prefecture, west of Tokyo. The fire department stated that five of the stabbed victims were seriously injured, while all injured were conscious when sent to the hospital. Shizuoka police said the suspect is a 38-year-old man arrested for attempted murder. Kyodo News, citing investigative sources, reported that the suspect is believed to be a former employee. Investigators said he was carrying a survival knife and wearing equipment resembling a gas mask.`,
+                chinese: `日本工廠隨機持刀攻擊事件。週五，日本中部的一家輪胎工廠發生隨機攻擊事件。一名男子刺傷了 8 人，據報導另有 7 人被濺出的漂白水弄傷。警方已逮捕嫌犯，目前動機尚不清楚。這起事件發生在東京以西靜岡縣三島市的橫濱橡膠工廠。消防部門表示，被刺傷的受害者中有 5 人重傷，所有傷者在送醫時意識清醒。靜岡警方表示，嫌犯是一名 38 歲男子，因涉嫌謀殺未遂被捕。共同社引述調查消息人士的話報導稱，嫌犯被認為是該工廠的前員工。調查人員表示，他當時帶著一把求生刀，並穿戴著類似防毒面具的裝備。`,
+                vocabulary: [
+                    'Knife Attack (n.phr.): 持刀攻擊', 'random attack (n.phr.): 隨機攻擊', 'tire factory (n.phr.): 輪胎工廠', 'central Japan (n. proper): 日本中部',
+                    'stabbed (v.): 刺傷', 'splashed (v.): 噴濺', 'bleach (n.): 漂白水', 'suspect (n.): 嫌疑人', 'motive (n.): 動機',
+                    'unclear (adj.): 不清楚的', 'Yokohama Rubber (n. proper): 橫濱橡膠', 'Shizuoka Prefecture (n. proper): 靜岡縣', 'Mishima City (n. proper): 三島市',
+                    'seriously injured (adj.phr.): 重傷', 'conscious (adj.): 意識清醒的', 'attempted murder (n.phr.): 謀殺未遂', 'Kyodo News (n. proper): 共同社',
+                    'citing (v.ger.): 引用', 'investigative sources (n.phr.): 調查消息來源', 'former employee (n.phr.): 前員工', 'survival knife (n.phr.): 求生刀',
+                    'resembling (v.ger.): 類似於', 'gas mask (n.phr.): 防毒面具', 'arrested (v.pp.): 被捕的', 'incident (n.): 事件', 'attacker (n.): 攻擊者'
+                ],
+                quiz: [
+                    { q: 'Where did the knife attack occur?', options: ['A car factory', 'A tire factory', 'A food market', 'A school'], answer: 'A tire factory' },
+                    { q: 'How many people were stabbed in total?', options: ['5', '7', '8', '15'], answer: '8' },
+                    { q: 'How were seven other people injured besides being stabbed?', options: ['By a fire', 'By splashed bleach', 'By a car crash', 'By smoke bombs'], answer: 'By splashed bleach' },
+                    { q: 'Which company owns the factory where the attack happened?', options: ['Toyota', 'Sony', 'Yokohama Rubber', 'Mitsubishi'], answer: 'Yokohama Rubber' },
+                    { q: 'In which prefecture is Mishima City located?', options: ['Tokyo', 'Osaka', 'Shizuoka', 'Hokkaido'], answer: 'Shuizuoka' },
+                    { q: 'What is the age of the suspect?', options: ['27', '38', '45', '50'], answer: '38' },
+                    { q: 'The suspect was arrested for what specific charge?', options: ['Theft', 'Trespassing', 'Attempted murder', 'Vandalism'], answer: 'Attempted murder' },
+                    { q: 'Who is the suspect believed to be?', options: ['A current manager', 'A tourist', 'A former employee', 'A delivery driver'], answer: 'A former employee' },
+                    { q: 'What kind of equipment was the suspect wearing?', options: ['A military uniform', 'A gas mask-like equipment', 'A clown costume', 'Heavy armor'], answer: 'A gas mask-like equipment' },
+                    { q: 'What kind of knife did the attacker carry?', options: ['A kitchen knife', 'A pocket knife', 'A survival knife', 'A pair of scissors'], answer: 'A survival knife' },
+                    { q: 'Were the victims conscious when sent to the hospital?', options: ['No, all were unconscious.', 'Only the suspect was.', 'Yes, all were conscious.', 'The text doesn\'t say.'], answer: 'Yes, all were conscious.' },
+                    { q: 'Which news agency reported the details about the suspect being a former employee?', options: ['BBC', 'CNN', 'Kyodo News', 'Reuters'], answer: 'Kyodo News' },
+                    { q: 'The attack occurred in which part of Japan?', options: ['Northern', 'Central', 'Southern', 'Western'], answer: 'Central' },
+                    { q: 'What does "motive" mean?', options: ['A type of car', 'The reason for doing something', 'A large building', 'A tool for cutting'], answer: 'The reason for doing something' },
+                    { q: 'What does "attempted" mean in "attempted murder"?', options: ['Successfully finished', 'Tried but didn\'t succeed', 'Refused to do', 'Planned but never started'], answer: 'Tried but didn\'t succeed' }
+                ]
+            },
+            'thai-cambodia-ceasefire': {
+                title: '泰柬簽署停火協議',
+                english: `Thailand and Cambodia Sign Ceasefire. Thailand and Cambodia signed a ceasefire agreement on Saturday, ending weeks of armed conflict along the border over territorial sovereignty disputes. The agreement requires both sides to cease military movements and prohibits infringing on each other's airspace for military purposes. According to the Thai Defense Ministry, only Thailand used airstrikes, with the latest attack occurring on Saturday morning. Another key provision requires Thailand to repatriate 18 Cambodian soldiers detained since July, 72 hours after the ceasefire holds. The initial ceasefire was brokered by Malaysia under pressure from US President Trump, who threatened to withdraw trade preferences. Despite the agreement, both countries continued propaganda wars, and sporadic cross-border violence escalated into large-scale fighting in early December.`,
+                chinese: `泰國與柬埔寨簽署停火協議。泰國和柬埔寨於週六簽署了停火協議，結束了沿邊境因領土主權爭端而持續數週的武裝衝突。協議要求雙方停止軍事行動，並禁止出於軍事目的侵犯彼此領空。根據泰國國防部說法，只有泰國使用了空襲，最近一次攻擊發生在週六上午。另一項關鍵條款要求泰國在停火生效後 72 小時內，遣返自 7 月以來扣留的 18 名柬埔寨士兵。最初的停火協議是由馬來西亞在美國總統川普的壓力下促成的，川普威脅要取消貿易優惠待遇。儘管達成了協議，兩國仍繼續進行宣傳戰，零星的跨境暴力在 12 月初升級為大規模戰鬥。`,
+                vocabulary: [
+                    'ceasefire agreement (n.phr.): 停火協議', 'armed conflict (n.phr.): 武裝衝突', 'territorial sovereignty (n.phr.): 領土主權',
+                    'disputes (n.): 爭端', 'prohibits (v.): 禁止', 'infringing (v.ger.): 侵犯', 'airspace (n.): 領空', 'airstrikes (n.): 空襲',
+                    'provision (n.): 條款/規定', 'repatriate (v.): 遣返', 'detained (v.pp.): 扣留/拘留', 'ceasefire holds (phr.): 停火生效/維持',
+                    'brokered (v.pp.): 促成/居間協調', 'under pressure (phr.): 在壓力下', 'trade preferences (n.phr.): 貿易優惠',
+                    'propaganda wars (n.phr.): 宣傳戰', 'sporadic (adj.): 零星的', 'cross-border (adj.): 跨境的', 'escalated (v.): 升級',
+                    'large-scale fighting (n.phr.): 大規模戰鬥', 'sovereignty (n.): 主權', 'repatriation (n.): 遣返', 'military movements (n.phr.): 軍事行動',
+                    'prohibit (v.): 禁止', 'withdraw (v.): 撤回/取消', 'initial (adj.): 最初的', 'sporadic violence (n.phr.): 零星暴力'
+                ],
+                quiz: [
+                    { q: 'When was the ceasefire agreement signed?', options: ['Friday', 'Saturday', 'Sunday', 'Monday'], answer: 'Saturday' },
+                    { q: 'What is the main cause of the conflict between Thailand and Cambodia?', options: ['Trade taxes', 'Territorial sovereignty disputes', 'Water supply', 'Election results'], answer: 'Territorial sovereignty disputes' },
+                    { q: 'The agreement prohibits both sides from infringing on each other\'s what?', options: ['Waters', 'Markets', 'Airspace', 'Schools'], answer: 'Airspace' },
+                    { q: 'Which country admitted to using airstrikes?', options: ['Only Cambodia', 'Only Thailand', 'Both countries', 'Neither country'], answer: 'Only Thailand' },
+                    { q: 'How many Cambodian soldiers is Thailand required to repatriate?', options: ['8', '11', '18', '72'], answer: '18' },
+                    { q: 'How soon after the ceasefire holds must the soldiers be repatriated?', options: ['24 hours', '48 hours', '72 hours', 'One week'], answer: '72 hours' },
+                    { q: 'Which country originally brokered the ceasefire?', options: ['USA', 'China', 'Malaysia', 'Japan'], answer: 'Malaysia' },
+                    { q: 'What did US President Trump threaten to withdraw to put pressure on the sides?', options: ['Military aid', 'Medical supplies', 'Trade preferences', 'Internet access'], answer: 'Trade preferences' },
+                    { q: 'When did the violence escalate into large-scale fighting?', options: ['July', 'October', 'Early December', 'Saturday morning'], answer: 'Early December' },
+                    { q: 'What does "repatriate" mean?', options: ['To arrest someone', 'To send someone back to their own country', 'To give someone a medal', 'To teach someone a new language'], answer: 'To send someone back to their own country' },
+                    { q: 'The term "ceasefire" means an agreement to stop what?', options: ['Trading', 'Talking', 'Fighting/War', 'Traveling'], answer: 'Fighting/War' },
+                    { q: 'What does "sporadic" mean?', options: ['Continuous', 'Occurring at irregular intervals; scattered', 'Very loud', 'Extremely fast'], answer: 'Occurring at irregular intervals; scattered' },
+                    { q: 'Who confirmed that the latest airstrike occurred on Saturday morning?', options: ['Cambodian Media', 'The UN', 'Thai Defense Ministry', 'US President'], answer: 'Thai Defense Ministry' },
+                    { q: 'Despite the agreement, what kind of "wars" continued?', options: ['Propaganda wars', 'Cyber wars', 'Tank wars', 'Economic wars'], answer: 'Propaganda wars' },
+                    { q: 'The term "infringing" is similar to which word?', options: ['Helping', 'Violating/Trespassing', 'Building', 'Fixing'], answer: 'Violating/Trespassing' }
+                ]
+            },
+            'japan-defense-budget': {
+                title: '日本通過史上最高國防預算',
+                english: `Japan Approves Record Defense Budget. The Japanese cabinet approved a record defense budget exceeding 9 trillion yen for the next fiscal year, aimed at strengthening counterstrike capabilities and the coast guard. This represents a 9.4% increase year-on-year and marks the fourth year of Japan’s plan to raise military spending to 2% of GDP. Prime Minister Sanae Takaichi said that if China takes action against Taiwan, Japanese forces might intervene. Japan plans to deploy cruise missiles, unmanned weapon systems, and long-range strike capabilities, a major shift from its post-WWII self-defense-only policy.`,
+                chinese: `日本通過史上最高國防預算。日本內閣批准了下一財政年度超過 9 兆日圓的創紀錄國防預算，旨在加強反擊能力和海上保安廳。這代表預算年增 9.4%，並標誌著日本將軍費開支提高到 GDP 2% 計畫的第四年。首相高市早苗表示，如果中國對台灣採取行動，日本軍隊可能會介入。日本計劃部署巡弋飛彈、無人武器系統和遠程打擊能力，這是對其二戰後「僅限自衛」政策的重大轉變。`,
+                vocabulary: [
+                    'record defense budget (n.phr.): 創紀錄國防預算', 'exceeding (v.ger.): 超過', '9 trillion yen (n.phr.): 9 兆日圓', 'fiscal year (n.phr.): 財政年度',
+                    'strengthening (v.ger.): 加強', 'counterstrike capabilities (n.phr.): 反擊能力', 'coast guard (n. proper): 海上保安廳', 'represents (v.): 代表',
+                    'year-on-year (adj.): 年增/年比', 'GDP (Gross Domestic Product) (n.): 國內生產總值', 'Prime Minister (n.): 首相', 'Sanae Takaichi (n. proper): 高市早苗',
+                    'intervene (v.): 介入/干預', 'deploy (v.): 部署', 'cruise missiles (n.phr.): 巡弋飛彈', 'unmanned weapon systems (n.phr.): 無人武器系統',
+                    'long-range strike (n.phr.): 遠程打擊', 'major shift (n.phr.): 重大轉變', 'post-WWII (adj.): 二戰後的', 'self-defense-only policy (n.phr.): 專守防衛政策',
+                    'cabinet (n.): 內閣', 'military spending (n.phr.): 軍費開支', 'capabilities (n.): 能力', 'intervene (v.): 介入'
+                ],
+                quiz: [
+                    { q: 'How much does the record Japanese defense budget exceed?', options: ['5 trillion yen', '7 trillion yen', '9 trillion yen', '10 trillion yen'], answer: '9 trillion yen' },
+                    { q: 'What is the percentage increase year-on-year for this budget?', options: ['5.5%', '9.4%', '12%', '20%'], answer: '9.4%' },
+                    { q: 'Japan plans to raise military spending to what percentage of its GDP?', options: ['1%', '2%', '5%', '10%'], answer: '2%' },
+                    { q: 'Who is the Prime Minister of Japan mentioned?', options: ['Fumio Kishida', 'Shinzo Abe', 'Sanae Takaichi', 'Yoshihide Suga'], answer: 'Sanae Takaichi' },
+                    { q: 'If China takes action against Taiwan, what did the PM say Japanese forces might do?', options: ['Remain neutral', 'Provide only food aid', 'Intervene', 'Retreat'], answer: 'Intervene' },
+                    { q: 'Which of the following is NOT part of Japan\'s deployment plan?', options: ['Cruise missiles', 'Unmanned weapon systems', 'Long-range strike capabilities', 'Nuclear submarines'], answer: 'Nuclear submarines' },
+                    { q: 'The new budget represents a major shift from which policy?', options: ['Economic expansion', 'Post-WWII self-defense-only policy', 'Zero-tax policy', 'Closed-border policy'], answer: 'Post-WWII self-defense-only policy' },
+                    { q: 'The budget also aims to strengthen which coastal body?', options: ['The Navy', 'The Coast Guard', 'The Fishing Union', 'The Tourist Police'], answer: 'The Coast Guard' },
+                    { q: 'Which year of the plan to raise spending is this current budget?', options: ['First', 'Second', 'Third', 'Fourth'], answer: 'Fourth' },
+                    { q: 'What does "fiscal year" mean?', options: ['The calendar year', 'The financial year used by government/business', 'The holiday season', 'The year of an election'], answer: 'The financial year used by government/business' },
+                    { q: 'The word "intervene" means to do what in a situation?', options: ['Ignore it', 'Help secretly', 'Get involved to change or stop it', 'Take a picture of it'], answer: 'Get involved to change or stop it' },
+                    { q: 'What does "unmanned" mean?', options: ['Operated by many people', 'Operated without a human on board', 'Old and broken', 'Very heavy'], answer: 'Operated without a human on board' },
+                    { q: 'The budget was approved by which Japanese government body?', options: ['The Emperor', 'The Cabinet', 'The Supreme Court', 'The Public'], answer: 'The Cabinet' },
+                    { q: 'What kind of missiles does Japan plan to deploy?', options: ['Short-range only', 'Cruise missiles', 'Water missiles', 'Toy missiles'], answer: 'Cruise missiles' },
+                    { q: 'What is the target percentage of GDP for military spending in Japan\'s plan?', options: ['1%', '2%', '3%', '4%'], answer: '2%' }
+                ]
+            }
+        };
+
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
