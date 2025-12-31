@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 31 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 31 日頭條：全球趨勢與在地動態</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT ---
+        const NEWS_DATA = {
+            'taiwan-focus': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Trump Plays Down China’s Taiwan Drills\nIn local news, China has announced a new round of military exercises around Taiwan, including live-fire drills. US President Donald Trump stated that he is aware of the situation but is not worried, noting that China has been conducting naval exercises in the region for decades. Trump added that Xi Jinping has not discussed the matter with him.\n\n[2] Luckin Coffee’s Entry into Taiwan Faces Fierce Competition\nChina's Luckin Coffee, known as the “Starbucks Killer,” is reportedly entering Taiwan in December, with its first store opening in Taipei. Louisa Coffee Chairman Huang Ming-hsien stated that Luckin's business model reflects the Taiwan market of twenty years ago. He added that fierce competition, especially from convenience store coffee, will make Luckin's expansion in Taiwan challenging.\n\n[3] Taichung Beefs Up Security for New Year’s Eve\nTaichung City will host a New Year's Eve concert at Central Park on December 31st. Mayor Lu Shiow-yen inspected large-scale evacuation and response drills and urged relevant units to ensure traffic safety, medical access, and public safety. The city government has heightened security measures to provide a safe New Year's Eve environment for citizens and visitors.`,
+                chinese: `【1】川普淡化中國對台軍演\n在本地新聞方面，中國宣布在台灣周邊舉行新一輪軍事演習，包括實彈演習。美國總統川普表示他了解情況但並不擔心，並指出中國在該地區進行海軍演習已有數十年。川普補充說，習近平尚未與他討論此事。\n\n【2】瑞幸咖啡進軍台灣面臨激烈競爭\n被稱為「星巴克殺手」的中國瑞幸咖啡據傳將於 12 月進軍台灣，首店設於台北。路易莎咖啡董事長黃銘賢表示，瑞幸的商業模式反映的是 20 年前的台灣市場。他補充，面對激烈的競爭，尤其是便利商店咖啡，瑞幸在台灣的擴張將充滿挑戰。\n\n【3】台中跨年活動全面加強維安\n台中市將於 12 月 31 日在中央公園舉辦跨年晚會。市長盧秀燕視察了大規模疏散與應變演練，並敦促相關單位確保交通安全、醫療救護管道及公共安全。市府已加強維安措施，為市民與遊客提供安全的跨年環境。`,
+                vocabulary: [
+                    'plays down (phr.v.): 淡化/輕視', 'military exercises (n.phr.): 軍事演習', 'live-fire drills (n.phr.): 實彈演習', 'aware of (adj.phr.): 意識到/了解',
+                    'naval (adj.): 海軍的', 'decades (n.): 數十年', 'Starbucks Killer (n.phr.): 星巴克殺手', 'reportedly (adv.): 據報導',
+                    'business model (n.phr.): 商業模式', 'reflects (v.): 反映', 'fierce competition (n.phr.): 激烈競爭', 'convenience store (n.phr.): 便利商店',
+                    'expansion (n.): 擴張', 'challenging (adj.): 充滿挑戰的', 'beefs up (phr.v.): 加強', 'Central Park (n. proper): 中央公園',
+                    'inspected (v.): 視察/檢查', 'evacuation (n.): 疏散/撤離', 'response drills (n.phr.): 應變演練', 'urged (v.): 敦促',
+                    'relevant units (n.phr.): 相關單位', 'medical access (n.phr.): 醫療管道/途徑', 'heightened (v.pp.): 加強的/提高的', 'security measures (n.phr.): 維安措施',
+                    'environment (n.): 環境', 'citizens (n.): 市民', 'visitors (n.): 遊客', 'naval exercises (n.phr.): 海軍演習', 'Chairman (n.): 董事長',
+                    'strait (n.): 海峽', 'situation (n.): 情況', 'noting (v.ger.): 指出', 'expansion (n.): 擴展'
+                ],
+                quiz: [
+                    { q: 'How did President Trump describe his feelings about the China drills?', options: ['Very worried', 'Terrified', 'Not worried', 'Angry'], answer: 'Not worried' },
+                    { q: 'What kind of drills did China announce around Taiwan?', options: ['Medical drills', 'Live-fire drills', 'Cyber drills', 'Trade drills'], answer: 'Live-fire drills' },
+                    { q: 'What is Luckin Coffee\'s nickname mentioned in the text?', options: ['Coffee King', 'Starbucks Killer', 'Bean Expert', 'Fast Cafe'], answer: 'Starbucks Killer' },
+                    { q: 'Where is Luckin Coffee\'s first store in Taiwan reportedly opening?', options: ['Taichung', 'Kaohsiung', 'Taipei', 'Tainan'], answer: 'Taipei' },
+                    { q: 'What comparison did the Louisa Coffee Chairman make about Luckin’s model?', options: ['It is futuristic', 'It reflects the Taiwan market of 20 years ago', 'It is unique', 'It is exactly like Louisa'], answer: 'It reflects the Taiwan market of 20 years ago' },
+                    { q: 'What is cited as a major source of competition for Luckin in Taiwan?', options: ['Convenience store coffee', 'Tea shops', 'Home brewing', 'Imported beans'], answer: 'Convenience store coffee' },
+                    { q: 'Where will the Taichung New Year\'s Eve concert be held?', options: ['Shuinan Airport', 'Central Park', 'Taipei Dome', 'Taichung Port'], answer: 'Central Park' },
+                    { q: 'Who inspected the evacuation drills in Taichung?', options: ['President Lai', 'Mayor Lu Shiow-yen', 'Donald Trump', 'Chairman Huang'], answer: 'Mayor Lu Shiow-yen' },
+                    { q: 'What did the mayor urge units to ensure besides public safety?', options: ['Free coffee', 'Traffic safety and medical access', 'Music quality', 'Fast internet'], answer: 'Traffic safety and medical access' },
+                    { q: 'The term "beef up" means to do what?', options: ['Eat more meat', 'Cancel', 'Strengthen or increase', 'Slow down'], answer: 'Strengthen or increase' },
+                    { q: 'Trump noted that China has been conducting naval exercises for how long?', options: ['Days', 'Weeks', 'Months', 'Decades'], answer: 'Decades' },
+                    { q: 'Which month is Luckin Coffee entering the Taiwan market?', options: ['November', 'December', 'January', 'March'], answer: 'December' },
+                    { q: 'What is the goal of the heightened security measures in Taichung?', options: ['To charge more for tickets', 'To provide a safe environment', 'To attract more media', 'To stop the concert'], answer: 'To provide a safe environment' },
+                    { q: 'Has Xi Jinping discussed the drills with Trump?', options: ['Yes, many times', 'Once', 'No', 'In a secret letter'], answer: 'No' },
+                    { q: 'What does "evacuation" mean?', options: ['Inviting people in', 'Moving people out of a dangerous area', 'Buying tickets', 'Singing songs'], answer: 'Moving people out of a dangerous area' }
+                ]
+            },
+            'trump-zelensky': {
+                title: '川普與澤倫斯基佛州會談',
+                english: `On Sunday, US President Donald Trump and Ukrainian President Volodymyr Zelensky returned to the negotiating table, once again attempting to find a path to end Russia's war on Ukraine. Since Trump took office for his second term in January, the two leaders have met three times, each with high expectations but limited results. As Kiev urges Trump to provide security guarantees, outsiders remain skeptical whether this Florida summit will be a turning point or just another round of high-stakes diplomacy. A White House meeting in February ended unhappily, and an August visit involving European leaders also failed to break the deadlock. Currently, the Ukrainian side appears to have signaled that Kiev may be prepared to make compromises in negotiations with Moscow.`,
+                chinese: `週日，美國總統川普與烏克蘭總統澤倫斯基重回談判桌，再次嘗試尋找結束俄烏戰爭的路徑。自川普於 1 月就任第二任期以來，兩位領導人已會面三次，每次都抱有高度期待，但成果有限。隨著基輔敦促川普提供安全保障，外界對於這次佛州峰會究竟會成為轉折點，還只是另一輪高風險的外交博弈，仍持懷疑態度。2 月的白宮會議不歡而散，8 月有歐洲領導人參與的訪問也未能打破僵局。目前，烏克蘭方面似乎已釋出訊號，基輔可能準備在與莫斯科的談判中做出妥協。`,
+                vocabulary: [
+                    'negotiating table (n.phr.): 談判桌', 'attempting (v.ger.): 嘗試', 'took office (phr.): 就職', 'second term (n.phr.): 第二任期',
+                    'expectations (n.): 期待/期望', 'limited results (n.phr.): 有限的成果', 'urges (v.): 敦促', 'security guarantees (n.phr.): 安全保障',
+                    'skeptical (adj.): 懷疑的', 'summit (n.): 峰會', 'turning point (n.phr.): 轉折點', 'high-stakes (adj.): 高風險的/攸關成敗的',
+                    'diplomacy (n.): 外交', 'ended unhappily (phr.): 不歡而散', 'deadlock (n.): 僵局', 'break the deadlock (phr.): 打破僵局',
+                    'signaled (v.): 釋出訊號/表明', 'make compromises (phr.): 做出妥協', 'negotiations (n.): 談判', 'Moscow (n. proper): 莫斯科 (俄國政府)',
+                    'Kiev (n. proper): 基輔 (烏克蘭政府)', 'stark (adj.): 明顯的/嚴峻的', 'standoff (n.): 對峙', 'high expectations (n.phr.): 高度期待',
+                    'provided (v.): 提供', 'compromise (n.): 妥協', 'involved (v.pp.): 涉及的/參與的', 'failed (v.): 失敗', 'current (adj.): 目前的'
+                ],
+                quiz: [
+                    { q: 'Where did the meeting between Trump and Zelensky take place?', options: ['Washington D.C.', 'New York', 'Florida', 'Kiev'], answer: 'Florida' },
+                    { q: 'How many times have the two leaders met since Trump’s second term began?', options: ['Once', 'Twice', 'Three times', 'Five times'], answer: 'Three times' },
+                    { q: 'What is Kiev urging Trump to provide?', options: ['Financial loans only', 'Security guarantees', 'New buildings', 'A golf course'], answer: 'Security guarantees' },
+                    { q: 'Which meeting was described as ending "unhappily"?', options: ['The Florida summit', 'The August visit', 'The February White House meeting', 'The January inauguration'], answer: 'The February White House meeting' },
+                    { q: 'What happened during the August visit involving European leaders?', options: ['A peace treaty was signed.', 'It failed to break the deadlock.', 'Trump didn\'t attend.', 'Russia surrendered.'], answer: 'It failed to break the deadlock.' },
+                    { q: 'What signal has the Ukrainian side recently given?', options: ['They will never talk.', 'They may be prepared to make compromises.', 'They want to start a new war.', 'They are moving the capital.'], answer: 'They may be prepared to make compromises.' },
+                    { q: 'The term "high-stakes" describes a situation that involves what?', options: ['No risk', 'Low interest', 'Large risks or important consequences', 'Cooking terms'], answer: 'Large risks or important consequences' },
+                    { q: 'Waiters and outsiders remain ______ about the results.', options: ['Happy', 'Skeptical', 'Certain', 'Confused'], answer: 'Skeptical' },
+                    { q: 'What is the main goal of the negotiating table?', options: ['To start a new business', 'To find a path to end the war', 'To buy land in Florida', 'To organize a party'], answer: 'To find a path to end the war' },
+                    { q: 'When did Trump take office for his second term?', options: ['December', 'January', 'August', 'February'], answer: 'January' },
+                    { q: 'What does "deadlock" mean in a negotiation?', options: ['A type of door lock', 'A complete progress', 'A situation where no progress can be made', 'A fast agreement'], answer: 'A situation where no progress can be made' },
+                    { q: 'Who is the president of Ukraine?', options: ['Vladimir Putin', 'Volodymyr Zelensky', 'Emmanuel Macron', 'Shou Zi Chew'], answer: 'Volodymyr Zelensky' },
+                    { q: 'Outsiders are wondering if the summit will be a ______.', options: ['Boring day', 'Turning point', 'Waste of money', 'Secret'], answer: 'Turning point' },
+                    { q: 'What does "compromise" involve?', options: ['Winning everything', 'Both sides giving up something to reach an agreement', 'Refusing to talk', 'Asking for more money'], answer: 'Both sides giving up something to reach an agreement' },
+                    { q: 'Which city represents the Russian government in the text?', options: ['Kiev', 'Washington', 'Moscow', 'London'], answer: 'Moscow' }
+                ]
+            },
+            'nk-missiles': {
+                title: '北韓宣稱試射長程巡弋飛彈',
+                english: `North Korea stated that it launched long-range strategic cruise missiles to test the country's nuclear deterrence capabilities. This came just days after progress was shown on its first nuclear-powered submarine. Sunday's launch was the latest show of force ahead of a Workers' Party plenary session planned for early next year. Kim Jong Un expressed “great satisfaction”, calling the test a “responsible exercise of the right to self-defense and war deterrence.” South Korea's Joint Chiefs of Staff said they detected multiple cruise missiles launched from the Pyongyang area, adding they will maintain readiness through the US alliance.`,
+                chinese: `北韓表示，它發射了長程戰略巡弋飛彈，以測試該國的核威懾能力。就在幾天前，北韓才展示了其首艘核動力潛艦的進展。週日的發射是明年年初計畫舉行的勞動黨全體會議前的最新武力示威。金正恩表示「非常滿意」，並稱這次測試是「行使自衛權和戰爭威懾力的負責任表現」。南韓參謀長聯席會議表示，他們偵測到從平壤地區發射的多枚巡弋飛彈，並補充說他們將透過韓美同盟維持戒備狀態。`,
+                vocabulary: [
+                    'long-range (adj.): 長程的', 'strategic (adj.): 戰略的', 'cruise missiles (n.phr.): 巡弋飛彈', 'nuclear deterrence (n.phr.): 核威懾',
+                    'capabilities (n.): 能力', 'progress (n.): 進展', 'nuclear-powered submarine (n.phr.): 核動力潛艦', 'show of force (phr.): 武力示威',
+                    'Workers\' Party (n. proper): 勞動黨', 'plenary session (n.phr.): 全體會議', 'great satisfaction (n.phr.): 非常滿意', 'responsible exercise (phr.): 負責任的行使',
+                    'right to self-defense (n.phr.): 自衛權', 'war deterrence (n.phr.): 戰爭威懾力', 'Joint Chiefs of Staff (n. proper): 參謀長聯席會議', 'detected (v.): 偵測到',
+                    'multiple (adj.): 多個的', 'Pyongyang area (n. proper): 平壤地區', 'maintain readiness (phr.): 維持戒備狀態', 'alliance (n.): 同盟/聯盟',
+                    'launched (v.): 發射/發動', 'strategic (adj.): 戰略性的', 'deterrence (n.): 威懾', 'exercise (v.): 行使', 'strategic cruise missiles (n.phr.): 戰略巡弋飛彈'
+                ],
+                quiz: [
+                    { q: 'What did North Korea launch on Sunday?', options: ['Satellites', 'Long-range strategic cruise missiles', 'Nuclear submarines', 'Drones'], answer: 'Long-range strategic cruise missiles' },
+                    { q: 'What was the purpose of the test according to North Korea?', options: ['To start a war', 'To test nuclear deterrence capabilities', 'To celebrate a holiday', 'To sell weapons'], answer: 'To test nuclear deterrence capabilities' },
+                    { q: 'This launch happened just days after progress in what other military area?', options: ['Cyber warfare', 'Nuclear-powered submarine', 'Air force training', 'Space rockets'], answer: 'Nuclear-powered submarine' },
+                    { q: 'The launch is ahead of what event planned for early next year?', options: ['An Olympic game', 'A Workers\' Party plenary session', 'A presidential election', 'A peace summit'], answer: 'A Workers\' Party plenary session' },
+                    { q: 'How did Kim Jong Un describe his feelings about the test?', options: ['Worried', '“Great satisfaction”', 'Angry at the results', 'Neutral'], answer: '“Great satisfaction”' },
+                    { q: 'Kim called the test a "responsible exercise" of which right?', options: ['Right to vote', 'Right to travel', 'Right to self-defense', 'Right to trade'], answer: 'Right to self-defense' },
+                    { q: 'From which area were the missiles launched?', options: ['Seoul', 'Tokyo', 'Pyongyang area', 'The sea'], answer: 'Pyongyang area' },
+                    { q: 'Who detected the missile launches?', options: ['US Coast Guard', 'South Korea\'s Joint Chiefs of Staff', 'A Japanese ship', 'A private satellite'], answer: 'South Korea\'s Joint Chiefs of Staff' },
+                    { q: 'How will South Korea maintain readiness?', options: ['By building a wall', 'Through the US alliance', 'By launching their own missiles', 'By leaving the area'], answer: 'Through the US alliance' },
+                    { q: 'What kind of "deterrence" is mentioned in the text?', options: ['Financial', 'Nuclear and war deterrence', 'Environmental', 'Educational'], answer: 'Nuclear and war deterrence' },
+                    { q: 'The term "plenary session" refers to what?', options: ['A small secret meeting', 'A meeting attended by all qualified members', 'A musical performance', 'A military drill'], answer: 'A meeting attended by all qualified members' },
+                    { q: 'What does "readiness" mean?', options: ['Being fast', 'The state of being prepared', 'The state of being tired', 'The state of being old'], answer: 'The state of being prepared' },
+                    { q: 'The missiles are described as "strategic." This usually means they are linked to what?', options: ['Small street fights', 'Long-term military goals or nuclear use', 'Short-range target practice', 'Only for show'], answer: 'Long-term military goals or nuclear use' },
+                    { q: 'What does "detect" mean?', options: ['To build', 'To discover or identify the presence of something', 'To hide', 'To ignore'], answer: 'To discover or identify the presence of something' },
+                    { q: 'The word "exercise" in "exercise of the right" means what?', options: ['Physical workout', 'The use or application of a right', 'A test paper', 'A long walk'], answer: 'The use or application of a right' }
+                ]
+            },
+            'brigitte-bardot': {
+                title: '法國銀幕女神碧姬芭杜辭世',
+                english: `Screen goddess Brigitte Bardot has passed away at the age of 91. She rose to fame as a free-spirited young woman, becoming an international sex symbol and a symbol of French pride. In 1973, she left the film industry and devoted herself to animal rights activism. French President Emmanuel Macron said Bardot “embodied a life of freedom.” Her foundation paid tribute to her lifelong efforts, from saving seal pups in Arctic ice floes to pushing for animal welfare legislation. Bardot once stated that her Legion of Honour recognized her work for animals, not her film career.`,
+                chinese: `銀幕女神碧姬芭杜 (Brigitte Bardot) 辭世，享耆壽 91 歲。她以自由奔放的年輕女性形象成名，成為國際性的性感象徵與法國人的驕傲。1973 年，她離開電影界，投身於動物權利活動。法國總統馬克宏表示，芭杜「體現了自由的生活」。她的基金會對她的一生努力表示敬意，從在北極浮冰中拯救海豹幼崽，到推動動物福利立法。芭杜曾表示，她的榮譽軍團勳章是認可她對動物的貢獻，而非她的演藝生涯。`,
+                vocabulary: [
+                    'screen goddess (n.phr.): 銀幕女神', 'passed away (phr.v.): 辭世/去世', 'rose to fame (phr.): 成名', 'free-spirited (adj.): 自由奔放的',
+                    'international sex symbol (n.phr.): 國際性感象徵', 'French pride (n.phr.): 法國人的驕傲', 'film industry (n.phr.): 電影界', 'devoted herself to (phr.): 投身於/致力於',
+                    'animal rights activism (n.phr.): 動物權利活動', 'embodied (v.): 體現/象徵', 'life of freedom (n.phr.): 自由的生活', 'foundation (n.): 基金會',
+                    'paid tribute to (phr.): 向...表示敬意', 'lifelong efforts (n.phr.): 一生的努力', 'seal pups (n.phr.): 海豹幼崽', 'Arctic (n./adj.): 北極',
+                    'ice floes (n.phr.): 浮冰', 'animal welfare legislation (n.phr.): 動物福利立法', 'Legion of Honour (n. proper): 榮譽軍團勳章', 'recognized (v.): 認可',
+                    'film career (n.phr.): 演藝生涯', 'pride (n.): 驕傲', 'activism (n.): 活動/行動主義', 'embodiment (n.): 化身/體現', 'legislation (n.): 立法'
+                ],
+                quiz: [
+                    { q: 'How old was Brigitte Bardot when she passed away?', options: ['71', '81', '91', '101'], answer: '91' },
+                    { q: 'What kind of symbol did she become during her acting years?', options: ['Political symbol', 'International sex symbol', 'Scientific symbol', 'Religious symbol'], answer: 'International sex symbol' },
+                    { q: 'In which year did she leave the film industry?', options: ['1963', '1973', '1983', '1993'], answer: '1973' },
+                    { q: 'What cause did she devote herself to after acting?', options: ['Environmental protection', 'Animal rights activism', 'Space exploration', 'Human rights'], answer: 'Animal rights activism' },
+                    { q: 'Who said that Bardot "embodied a life of freedom"?', options: ['Donald Trump', 'Emmanuel Macron', 'Kim Jong Un', 'Dwayne Johnson'], answer: 'Emmanuel Macron' },
+                    { q: 'What specific animal was mentioned as being saved by her efforts in the Arctic?', options: ['Polar bears', 'Seal pups', 'Whales', 'Penguins'], answer: 'Seal pups' },
+                    { q: 'Where were the seal pups being saved from?', options: ['Zoos', 'Circuses', 'Arctic ice floes', 'Forests'], answer: 'Arctic ice floes' },
+                    { q: 'What kind of legislation did she push for?', options: ['Film tax laws', 'Animal welfare legislation', 'Travel laws', 'Military laws'], answer: 'Animal welfare legislation' },
+                    { q: 'Bardot stated her Legion of Honour recognized what?', options: ['Her film awards', 'Her beauty', 'Her work for animals', 'Her wealth'], answer: 'Her work for animals' },
+                    { q: 'The term "free-spirited" means what?', options: ['Always angry', 'Independent and uninhibited', 'Scared of everything', 'Very expensive'], answer: 'Independent and uninhibited' },
+                    { q: 'The word "embodied" is similar to which word?', options: ['Avoided', 'Represented or personified', 'Destroyed', 'Forgot'], answer: 'Represented or personified' },
+                    { q: 'What is the "Legion of Honour"?', options: ['A French film company', 'A highest French order of merit/medal', 'An animal park', 'A fashion brand'], answer: 'A highest French order of merit/medal' },
+                    { q: 'How does the text describe Bardot\'s relationship with France?', options: ['She was a symbol of French pride', 'She was hated in France', 'She left France and never returned', 'She never spoke French'], answer: 'She was a symbol of French pride' },
+                    { q: 'The term "activism" means the use of ______ to achieve a goal.', options: ['Silence', 'Direct action or involvement', 'Sleep', 'Money only'], answer: 'Direct action or involvement' },
+                    { q: 'Was her career as an actress longer than her career as an activist?', options: ['Yes', 'No (She left in 1973 and died at 91)', 'Exactly the same', 'The text doesn\'t say'], answer: 'No (She left in 1973 and died at 91)' }
+                ]
+            },
+            'gene-edited-sheep': {
+                title: '印度首隻基因編輯綿羊滿一歲',
+                english: `India's first gene-edited sheep has turned one and is reported to be in good condition. The sheep, named Tarmeem (meaning “modification” or “edit” in Arabic), was born in Kashmir and developed using CRISPR technology. Researchers explained that CRISPR works like genetic scissors, allowing scientists to remove genes linked to weaknesses or diseases. The embryos are cultured in a controlled laboratory environment before being implanted into a surrogate mother. Professor Riaz Shah stated that experiments are ongoing to assess Tarmeem’s health and survival, and the sheep is kept in a closely monitored, safe environment. The team has also submitted a funding proposal to the government.`,
+                chinese: `印度首隻基因編輯綿羊滿一歲，據報導狀況良好。這隻綿羊名叫塔爾米姆（Tarmeem，在阿拉伯語中意為「修改」或「編輯」），出生於喀什米爾，是利用 CRISPR 技術培育而成的。研究人員解釋說，CRISPR 就像基因剪刀，讓科學家能夠移除與弱點或疾病相關的基因。胚胎在受控的實驗室環境中培養，然後植入代理孕母體內。里亞茲·沙阿 (Riaz Shah) 教授表示，目前正在進行實驗以評估塔爾米姆的健康和存活情況，這隻綿羊被安置在一個嚴密監控且安全的環境中。該團隊也向政府提交了資金申請計畫書。`,
+                vocabulary: [
+                    'gene-edited (adj.): 基因編輯的', 'good condition (n.phr.): 良好的狀況', 'modification (n.): 修改/變更', 'CRISPR technology (n. proper): CRISPR 技術 (基因編輯技術)',
+                    'genetic scissors (n.phr.): 基因剪刀', 'remove genes (phr.): 移除基因', 'weaknesses (n.): 弱點', 'diseases (n.): 疾病',
+                    'embryos (n.): 胚胎', 'cultured (v.pp.): 培養的', 'controlled environment (n.phr.): 受控環境', 'implanted (v.pp.): 植入的',
+                    'surrogate mother (n.phr.): 代理孕母', 'ongoing (adj.): 進行中的', 'assess (v.): 評估', 'survival (n.): 存活/生存',
+                    'closely monitored (phr.): 嚴密監控', 'funding proposal (n.phr.): 資金申請計畫書', 'genetic (adj.): 基因的', 'scissors (n.): 剪刀',
+                    'modification (n.): 修正', 'Arabic (n. proper): 阿拉伯語', 'Kashmir (n. proper): 喀什米爾', 'Professor (n.): 教授', 'assess (v.): 評定/考核'
+                ],
+                quiz: [
+                    { q: 'How old is India\'s first gene-edited sheep?', options: ['Six months', 'One year', 'Two years', 'Five years'], answer: 'One year' },
+                    { q: 'What is the name of the sheep?', options: ['CRISPR', 'Tarmeem', 'Riaz', 'Dolly'], answer: 'Tarmeem' },
+                    { q: 'What does the name "Tarmeem" mean in Arabic?', options: ['Sheep', 'Modification or edit', 'Fast runner', 'Indian hero'], answer: 'Modification or edit' },
+                    { q: 'Where was the sheep born?', options: ['New Delhi', 'Mumbai', 'Kashmir', 'Paris'], answer: 'Kashmir' },
+                    { q: 'What technology was used to develop the sheep?', options: ['Traditional breeding', 'Cloning only', 'CRISPR technology', 'Natural selection'], answer: 'CRISPR technology' },
+                    { q: 'How did researchers describe CRISPR in the text?', options: ['As a magic wand', 'As genetic scissors', 'As a powerful microscope', 'As a medical drug'], answer: 'As genetic scissors' },
+                    { q: 'Scientists use the technology to remove genes linked to what?', options: ['Color', 'Size', 'Weaknesses or diseases', 'Intelligence'], answer: 'Weaknesses or diseases' },
+                    { q: 'Where are the embryos cultured?', options: ['In a farm', 'In a controlled laboratory environment', 'In the sea', 'In a public park'], answer: 'In a controlled laboratory environment' },
+                    { q: 'Where is the embryo implanted after being cultured?', options: ['In a robot', 'In a surrogate mother', 'Back in the laboratory', 'In a hospital'], answer: 'In a surrogate mother' },
+                    { q: 'Who is the professor leading the project?', options: ['Riaz Shah', 'Shou Zi Chew', 'Donald Trump', 'James Cameron'], answer: 'Riaz Shah' },
+                    { q: 'What are the ongoing experiments assessing?', options: ['The sheep\'s wool quality', 'Health and survival', 'How fast it runs', 'The sheep\'s color'], answer: 'Health and survival' },
+                    { q: 'The sheep is kept in a ______ and safe environment.', options: ['Dark', 'Public', 'Closely monitored', 'Forgotten'], answer: 'Closely monitored' },
+                    { q: 'The team has submitted what to the government?', options: ['A report on failure', 'A resignation letter', 'A funding proposal', 'A protest letter'], answer: 'A funding proposal' },
+                    { q: 'What does the word "embryo" refer to?', options: ['An adult sheep', 'A baby sheep after birth', 'An unborn offspring in the process of development', 'A type of tool'], answer: 'An unborn offspring in the process of development' },
+                    { q: 'What does "implanted" mean?', options: ['To throw away', 'To insert or fix in a person’s body or an animal’s', 'To find in the wild', 'To feed'], answer: 'To insert or fix in a person’s body or an animal’s' }
+                ]
+            }
+        };
+
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
