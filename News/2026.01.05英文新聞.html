@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2025 年 12 月 31 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2025 年 12 月 31 日：年終焦點學習系統</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] PLA Drills Move Closer to Taiwan, Disrupt Civil Aviation\nIn local news, China's military exercises surrounding Taiwan entered their second day. Taiwan's Ministry of National Defense stated that China fired 27 multiple rocket launcher rounds into waters north and southwest of Taiwan. The impact points were as close as 24 nautical miles from Taiwan's main island. The drills also involved 71 Chinese military aircraft, affecting 941 civil aviation flights and posing a serious threat to international aviation safety.\n\n[2] Taichung Subsidizes Food Waste Processors\nTaiwan’s central government will ban feeding food waste to pigs starting in 2027. In response, Taichung City announced it will provide subsidies next year to assist households in purchasing food waste processors. Each household can receive a maximum subsidy of NT$5,000. The city government plans to handle food waste primarily through incineration and other disposal methods.\n\n[3] Opposition Blocks Taiwan Defense Budget Again\nThe Procedure Committee of Taiwan's Legislative Yuan has blocked the Executive Yuan's NT$1.25 trillion special defense budget proposal for the fifth time. KMT and TPP legislators used their majority advantage to exclude the budget bill from the agenda. DPP legislators criticized the move, stating that even basic discussion of the defense budget is being systematically blocked.`,
+                chinese: `【1】解放軍軍演逼近台灣 衝擊民航安全\n在本地新聞中，中國在台灣周邊的軍事演習進入第二天。台灣國防部表示，中國向台灣北部及西南海域發射了 27 枚多管火箭炮。落點距離台灣本島最近僅 24 海浬。演習還涉及 71 架中國軍機，影響 941 架民航航班，對國際航空安全構成嚴重威脅。\n\n【2】台中補助家戶廚餘處理設備\n台灣中央政府將從 2027 年起禁止用廚餘餵豬。為此，台中市政府宣布將於明年提供補貼，協助家戶購買廚餘處理機。每戶最高可獲得 5,000 新台幣的補助。市府計畫主要透過焚化及其他處理方式來處置廚餘。\n\n【3】在野黨再度封殺國防特別預算\n立法院程序委員會第五度封殺行政院提出的 1.25 兆新台幣國防特別預算案。國民黨與民眾黨立委利用多數優勢，將預算案排除在議程之外。民進黨立委批評此舉，稱連國防預算的基本討論都遭到系統性封殺。`,
+                vocabulary: [
+                    'surrounding (adj.): 周圍的/環繞的', 'multiple rocket launcher (n.phr.): 多管火箭炮', 'impact points (n.phr.): 落點/撞擊點', 'nautical miles (n.phr.): 海浬',
+                    'civil aviation (n.phr.): 民用航空', 'disrupt (v.): 中斷/擾亂', 'posing a threat (phr.): 構成威脅', 'aviation safety (n.phr.): 航空安全',
+                    'food waste (n.phr.): 廚餘', 'processors (n.): 處理機', 'subsidies (n.): 補貼', 'assist (v.): 協助',
+                    'incineration (n.): 焚化', 'disposal methods (n.phr.): 處置方式', 'blocked (v.pp.): 封殺/阻擋', 'special budget (n.phr.): 特別預算',
+                    'majority advantage (n.phr.): 多數優勢', 'exclude (v.): 排除', 'agenda (n.): 議程', 'systematically (adv.): 系統性地',
+                    'Procedure Committee (n. proper): 程序委員會', 'Executive Yuan (n. proper): 行政院', 'Legislative Yuan (n. proper): 立法院', 'impact (n.): 影響/撞擊',
+                    'subsidy (n.): 補助金', 'primarily (adv.): 主要地', 'proposal (n.): 提案', 'trillion (n.): 兆',
+                    'opposition (n.): 在野黨', 'legislator (n.): 立法委員', 'advantage (n.): 優勢', 'criticize (v.): 批評',
+                    'entering the second day (phr.): 進入第二天', 'feeding to pigs (phr.): 餵豬'
+                ],
+                quiz: [
+                    { q: 'How many multiple rocket launcher rounds did China fire on the second day?', options: ['12', '24', '27', '71'], answer: '27' },
+                    { q: 'What was the closest distance of the impact points from Taiwan\'s main island?', options: ['12 nautical miles', '24 nautical miles', '71 nautical miles', '941 nautical miles'], answer: '24 nautical miles' },
+                    { q: 'How many civil aviation flights were affected by the drills?', options: ['27', '71', '500', '941'], answer: '941' },
+                    { q: 'When will feeding food waste to pigs be banned in Taiwan?', options: ['2025', '2026', '2027', '2030'], answer: '2027' },
+                    { q: 'What is the maximum subsidy Taichung City offers for food waste processors?', options: ['NT$1,000', 'NT$3,000', 'NT$5,000', 'NT$10,000'], answer: 'NT$5,000' },
+                    { q: 'How does Taichung plan to primarily handle food waste?', options: ['Exporting it', 'Feeding it to pigs', 'Incineration', 'Burying it in parks'], answer: 'Incineration' },
+                    { q: 'How many times has the special defense budget been blocked?', options: ['One time', 'Three times', 'Five times', 'Ten times'], answer: 'Five times' },
+                    { q: 'What is the total value of the special defense budget proposal?', options: ['NT$1.25 billion', 'NT$1.25 trillion', 'NT$5,000', 'NT$941 billion'], answer: 'NT$1.25 trillion' },
+                    { q: 'Which committee blocked the budget proposal?', options: ['Finance Committee', 'National Defense Committee', 'Procedure Committee', 'Education Committee'], answer: 'Procedure Committee' },
+                    { q: 'Which political parties used their majority to exclude the budget bill?', options: ['DPP and KMT', 'DPP and TPP', 'KMT and TPP', 'Only KMT'], answer: 'KMT and TPP' },
+                    { q: 'The term "incineration" means what?', options: ['Recycling', 'Burning waste', 'Freezing', 'Sorting'], answer: 'Burning waste' },
+                    { q: 'The word "agenda" refers to which of the following?', options: ['A list of people', 'A travel map', 'A list of items to be discussed at a meeting', 'A type of money'], answer: 'A list of items to be discussed at a meeting' },
+                    { q: 'What does "nautical miles" measure?', options: ['Speed', 'Weight', 'Distance at sea', 'Acidity'], answer: 'Distance at sea' },
+                    { q: 'Why is the defense budget being blocked according to DPP legislators?', options: ['Lack of money', 'Systematic blocking', 'Technical errors', 'Holiday delay'], answer: 'Systematic blocking' },
+                    { q: 'What is the main goal of the Taichung subsidy?', options: ['To sell machines', 'To assist households and respond to the ban', 'To increase taxes', 'To feed more pigs'], answer: 'To assist households and respond to the ban' }
+                ]
+            },
+            'china-sanctions': {
+                title: '中國制裁美軍工企業',
+                english: `China has imposed sanctions on 20 US defense-related companies and 10 senior executives, one week after Washington announced a large-scale arms sale to Taiwan. China’s Foreign Ministry said the measures include freezing assets in China and banning business dealings with Chinese individuals and organizations. The ministry emphasized that the Taiwan question is China's core interest and the first red line in China–US relations, warning that any company involved in arms sales to Taiwan will pay the price. Sanctioned firms include Northrop Grumman, L3Harris, and Boeing, while Anduril Industries founder Palmer Luckey was also sanctioned. The arms sale, worth over $10 billion, would become the largest US weapons sale to Taiwan if approved by Congress.`,
+                chinese: `制裁美國軍工企業，回應對台軍售。在華盛頓宣布大規模對台軍售一週後，中國對 20 家美國國防相關企業和 10 名高階主管實施了制裁。中國外交部表示，措施包括凍結在華資產，並禁止與中國個人及組織進行業務往來。外交部強調，台灣問題是中國的核心利益，是中美關係的第一條紅線，並警告任何參與對台軍售的公司都將付出代價。受制裁的公司包括諾斯洛普·格魯曼、L3Harris 和波音，安杜里爾工業公司創始人帕爾默·拉奇也受到制裁。這項價值超過 100 億美元的軍售案若獲國會批准，將成為美國對台最大的武器銷售。`,
+                vocabulary: [
+                    'imposed sanctions (phr.): 實施制裁', 'defense-related (adj.): 國防相關的', 'senior executives (n.phr.): 高階主管', 'large-scale (adj.): 大規模的',
+                    'arms sale (n.phr.): 軍售', 'Foreign Ministry (n. proper): 外交部', 'freezing assets (phr.): 凍結資產', 'business dealings (n.phr.): 業務往來',
+                    'core interest (n.phr.): 核心利益', 'red line (n.phr.): 紅線', 'pay the price (phr.): 付出代價', 'Northrop Grumman (n. proper): 諾斯洛普·格魯曼',
+                    'L3Harris (n. proper): L3Harris (軍工企業名)', 'Boeing (n. proper): 波音', 'founder (n.): 創始人', 'approved by Congress (phr.): 經國會批准',
+                    'weapons (n.): 武器', 'executives (n.): 主管', 'dealings (n.): 往來/交易', 'assets (n.): 資產', 'sanctioned (adj.): 受制裁的',
+                    'interest (n.): 利益', 'relation (n.): 關係', 'warning (n.): 警告', 'involved (v.pp.): 參與的/涉及的', 'scale (n.): 規模',
+                    'weaponry (n.): 武器', 'dealing with (phr.): 與...往來', 'freeze (v.): 凍結', 'pay for (phr.): 為...付代價'
+                ],
+                quiz: [
+                    { q: 'How many US companies did China sanction?', options: ['10', '20', '30', '100'], answer: '20' },
+                    { q: 'What triggered these sanctions?', options: ['A trade war', 'A large-scale arms sale to Taiwan', 'Cyber attacks', 'Climate change'], answer: 'A large-scale arms sale to Taiwan' },
+                    { q: 'What is one of the measures included in the sanctions?', options: ['Increasing taxes', 'Freezing assets in China', 'Sending a letter', 'Buying more planes'], answer: 'Freezing assets in China' },
+                    { q: 'How does the Foreign Ministry describe the Taiwan question?', options: ['A minor issue', 'A core interest and the first red line', 'A financial problem', 'A shared goal'], answer: 'A core interest and the first red line' },
+                    { q: 'Which of these companies was NOT mentioned as being sanctioned?', options: ['Northrop Grumman', 'Boeing', 'Apple', 'L3Harris'], answer: 'Apple' },
+                    { q: 'Who is the founder of Anduril Industries mentioned in the text?', options: ['Palmer Luckey', 'Donald Trump', 'Shou Zi Chew', 'Bill Gates'], answer: 'Palmer Luckey' },
+                    { q: 'What is the estimated value of the arms sale?', options: ['$1 million', '$100 million', 'Over $10 billion', '$1 trillion'], answer: 'Over $10 billion' },
+                    { q: 'If approved, the sale would be the ______ US weapons sale to Taiwan.', options: ['Smallest', 'First', 'Largest', 'Final'], answer: 'Largest' },
+                    { q: 'Whose approval is needed for the arms sale to proceed?', options: ['The UN', 'The Chinese government', 'The US Congress', 'The European Union'], answer: 'The US Congress' },
+                    { q: 'The word "imposed" means what?', options: ['Removed', 'Suggested', 'Applied or established forcibly', 'Forgotten'], answer: 'Applied or established forcibly' },
+                    { q: 'What are "senior executives"?', options: ['Entry-level workers', 'Top-level managers', 'Retired soldiers', 'Students'], answer: 'Top-level managers' },
+                    { q: 'What does "freezing assets" mean?', options: ['Putting money in a refrigerator', 'Legally preventing the use or movement of wealth', 'Giving money away', 'Losing a wallet'], answer: 'Legally preventing the use or movement of wealth' },
+                    { q: 'Which country\'s Foreign Ministry issued the warning?', options: ['USA', 'Taiwan', 'China', 'Russia'], answer: 'China' },
+                    { q: 'What does it mean to "pay the price"?', options: ['To buy something cheap', 'To suffer the consequences of an action', 'To get a reward', 'To go to the bank'], answer: 'To suffer the consequences of an action' },
+                    { q: 'The term "defense-related" refers to items used for what?', options: ['Cooking', 'Military and protection', 'Education', 'Farming'], answer: 'Military and protection' }
+                ]
+            },
+            'iran-protests': {
+                title: '伊朗貨幣暴跌引發大抗議',
+                english: `Iran has seen its largest protests in three years, triggered by the collapse of the rial and the resignation of the Central Bank governor. Traders and shopkeepers protested in central Tehran, particularly around Saadi Street and the Grand Bazaar, areas historically linked to the 1979 Islamic Revolution. On Sunday, the rial fell to 1.42 million per US dollar, before recovering slightly to 1.38 million on Monday. Demonstrators chanted anti-government slogans, and many merchants closed their shops in protest.`,
+                chinese: `伊朗貨幣暴跌引發三年來最大抗議。伊朗爆發了三年的最大規模抗議，起因是貨幣里亞爾 (rial) 崩盤以及中央銀行行長辭職。商人及店主在德黑蘭市中心抗議，特別是在薩迪街和遺址大巴扎 (Grand Bazaar) 附近，這些地區在歷史上與 1979 年的伊斯蘭革命有關。週日，里亞爾跌至 142 萬兌 1 美元，週一稍回升至 138 萬。示威者大喊反政府口號，許多商人關門停業以示抗議。`,
+                vocabulary: [
+                    'protests (n.): 抗議', 'triggered by (phr.): 由...引發', 'collapse (n.): 崩盤/瓦解', 'rial (n. proper): 里亞爾 (伊朗貨幣)',
+                    'resignation (n.): 辭職', 'Central Bank (n. proper): 中央銀行', 'governor (n.): 行長/州長', 'Tehran (n. proper): 德黑蘭 (伊朗首都)',
+                    'Grand Bazaar (n. proper): 大巴扎 (大型市場)', 'Islamic Revolution (n. proper): 伊斯蘭革命', 'recovering slightly (phr.): 輕微回升',
+                    'demonstrators (n.): 示威者', 'chanted (v.): 喊叫/吟唱', 'anti-government (adj.): 反政府的', 'slogans (n.): 口號',
+                    'merchants (n.): 商人', 'currency (n.): 貨幣', 'plummet (v.): 暴跌', 'sparking (v.ger.): 引發',
+                    'linked to (phr.): 與...有關聯', 'historically (adv.): 歷史上地', 'merchants (n.): 批發商', 'market (n.): 市場',
+                    'protest (v.): 抗議', 'exchange rate (n.phr.): 匯率', 'inflation (n.): 通貨膨脹'
+                ],
+                quiz: [
+                    { q: 'How many years has it been since Iran last saw protests of this scale?', options: ['One year', 'Two years', 'Three years', 'Ten years'], answer: 'Three years' },
+                    { q: 'What is the name of the Iranian currency?', options: ['Dinar', 'Rial', 'Lira', 'Yuan'], answer: 'Rial' },
+                    { q: 'What event involving the Central Bank triggered the protests?', options: ['The opening of a new branch', 'The resignation of the governor', 'A large profit', 'A new computer system'], answer: 'The resignation of the governor' },
+                    { q: 'In which city did the main protests take place?', options: ['Baghdad', 'Dubai', 'Tehran', 'Cairo'], answer: 'Tehran' },
+                    { q: 'The Grand Bazaar is historically linked to which major event?', options: ['WWII', 'The 1979 Islamic Revolution', 'The Industrial Revolution', 'A large fire'], answer: 'The 1979 Islamic Revolution' },
+                    { q: 'What was the rial\'s exchange rate per US dollar on Sunday?', options: ['1,000', '1.38 million', '1.42 million', '10 million'], answer: '1.42 million' },
+                    { q: 'What action did many merchants take in protest?', options: ['They gave free food.', 'They closed their shops.', 'They moved to another country.', 'They bought more dollars.'], answer: 'They closed their shops.' },
+                    { q: 'What did the demonstrators chant?', options: ['Pro-government songs', 'Anti-government slogans', 'National anthems', 'Quiet prayers'], answer: 'Anti-government slogans' },
+                    { q: 'Did the currency recover at all on Monday?', options: ['No, it fell more.', 'Yes, it recovered slightly to 1.38 million.', 'It stayed the same.', 'It became stronger than the dollar.'], answer: 'Yes, it recovered slightly to 1.38 million.' },
+                    { q: 'The word "resignation" means the act of doing what?', options: ['Getting a promotion', 'Starting a new job', 'Giving up or quitting a position', 'Moving to a new house'], answer: 'Giving up or quitting a position' },
+                    { q: 'What does "plummet" mean?', options: ['To rise slowly', 'To fall or drop straight down at high speed', 'To stay stable', 'To grow big'], answer: 'To fall or drop straight down at high speed' },
+                    { q: 'The "Grand Bazaar" is a type of what?', options: ['Hospital', 'Palace', 'Market', 'School'], answer: 'Market' },
+                    { q: 'What is a "Central Bank governor"?', options: ['A regular clerk', 'The person in charge of a nation\'s central bank', 'A politician in the city hall', 'A wealthy trader'], answer: 'The person in charge of a nation\'s central bank' },
+                    { q: 'Tehran is the ______ of Iran.', options: ['Province', 'Capital', 'Border', 'Island'], answer: 'Capital' },
+                    { q: 'What kind of slogans were chanted?', options: ['Funny', 'Quiet', 'Anti-government', 'Educational'], answer: 'Anti-government' }
+                ]
+            },
+            'china-ai-reg': {
+                title: '中國擬嚴管 AI 防止危害',
+                english: `China has proposed strict artificial intelligence regulations aimed at protecting children and preventing chatbots from giving advice related to self-harm or violence. Under the draft rules by the Cyberspace Administration of China (CAC), AI companies must provide usage time limits, obtain guardian consent, and apply human intervention in conversations involving suicide or self-harm. AI services are also banned from generating content that endangers national security, promotes gambling, or undermines national unity.`,
+                chinese: `中國擬嚴管 AI，防止自殘與暴力內容。中國提出嚴格的人工智慧法規，旨在保護兒童並防止聊天機器人提供與自殘或暴力相關的建議。根據中國國家互聯網信息辦公室（CAC）的草案規則，AI 公司必須提供使用時長限制、獲得監護人同意，並在涉及自殺或自殘的對話中實施人工干預。AI 服務也被禁止生成危害國家安全、宣揚賭博或破壞國家統一的內容。`,
+                vocabulary: [
+                    'proposed (v.): 提議/擬定', 'strict (adj.): 嚴格的', 'regulations (n.): 法規/規定', 'aimed at (phr.): 旨在',
+                    'protecting (v.ger.): 保護', 'chatbots (n.): 聊天機器人', 'advice (n.): 建議', 'self-harm (n.): 自殘',
+                    'violence (n.): 暴力', 'draft rules (n.phr.): 草案規則', 'Cyberspace Administration (n. proper): 網信辦', 'guardian consent (n.phr.): 監護人同意',
+                    'human intervention (n.phr.): 人工干預', 'conversations (n.): 對話', 'suicide (n.): 自殺', 'generating content (phr.): 生成內容',
+                    'endangers (v.): 危害', 'national security (n.phr.): 國家安全', 'promotes (v.): 宣揚/促進', 'gambling (n.): 賭博',
+                    'undermines (v.): 破壞/削弱', 'national unity (n.phr.): 國家統一', 'intervention (n.): 干預', 'limit (n.): 限制',
+                    'Artificial Intelligence (n. proper): 人工智慧', 'usage time (n.phr.): 使用時間', 'obtain (v.): 獲得', 'banned (v.pp.): 禁止的'
+                ],
+                quiz: [
+                    { q: 'What is the main goal of the proposed AI regulations in China?', options: ['To increase AI speed', 'To protect children and prevent dangerous advice', 'To make AI cheaper', 'To ban AI entirely'], answer: 'To protect children and prevent dangerous advice' },
+                    { q: 'Which Chinese agency created the draft rules?', options: ['Ministry of Health', 'Cyberspace Administration of China (CAC)', 'Bank of China', 'Ministry of Education'], answer: 'Cyberspace Administration of China (CAC)' },
+                    { q: 'What must AI companies provide under these new rules?', options: ['Free food', 'Usage time limits', 'Free phones', 'Unlimited data'], answer: 'Usage time limits' },
+                    { q: 'Whose consent must be obtained before children use AI?', options: ['The teacher\'s', 'The government\'s', 'A guardian\'s (parent\'s)', 'A friend\'s'], answer: 'A guardian\'s (parent\'s)' },
+                    { q: 'What must companies apply in conversations involving self-harm?', options: ['More AI', 'Human intervention', 'A robot voice', 'Music'], answer: 'Human intervention' },
+                    { q: 'AI services are banned from promoting what?', options: ['Reading', 'Gambling', 'Sports', 'Cooking'], answer: 'Gambling' },
+                    { q: 'The regulations prevent chatbots from giving advice related to which two things?', options: ['Math and Science', 'Cooking and Travel', 'Self-harm or violence', 'Gaming and Movies'], answer: 'Self-harm or violence' },
+                    { q: 'AI is also banned from generating content that endangers ______.', options: ['The weather', 'National security', 'Small animals', 'Old movies'], answer: 'National security' },
+                    { q: 'What does "undermines" mean?', options: ['Supports', 'Weakens or destroys gradually', 'Builds', 'Creates'], answer: 'Weakens or destroys gradually' },
+                    { q: 'The term "intervention" means the act of doing what?', options: ['Ignoring', 'Getting involved to change an outcome', 'Sleeping', 'Shouting'], answer: 'Getting involved to change an outcome' },
+                    { q: 'What are "chatbots"?', options: ['Small physical robots', 'Computer programs designed to simulate conversation', 'Types of shoes', 'Newspapers'], answer: 'Computer programs designed to simulate conversation' },
+                    { q: 'What does "consent" mean?', options: ['Permission or agreement', 'A type of money', 'An argument', 'A mistake'], answer: 'Permission or agreement' },
+                    { q: 'AI services must not undermine national ______.', options: ['Parks', 'Unity', 'Museums', 'Anthems'], answer: 'Unity' },
+                    { q: 'Are these rules final or still in draft?', options: ['Final', 'Still in draft', 'Already canceled', 'Only for adults'], answer: 'Still in draft' },
+                    { q: 'What is a "guardian"?', options: ['A police officer', 'A person legally responsible for another (e.g., a child)', 'A school principal', 'A store owner'], answer: 'A person legally responsible for another (e.g., a child)' }
+                ]
+            },
+            'oral-obesity-drug': {
+                title: '美國核准首款口服減重藥',
+                english: `On Monday, US regulators approved the first daily oral medication to treat obesity, an oral version of Wegovy developed by Novo Nordisk. The drug belongs to the GLP-1 class, mimicking hormones that control appetite and satiety, similar to injectable treatments like Zepbound. Experts say oral drugs could expand access, lower costs, and accelerate the obesity treatment market, especially since many patients cannot afford injections. About one in eight Americans has used GLP-1 injections, according to KFF.`,
+                chinese: `美國核准首款口服減重藥。週一，美國監管機構核准了首款用於治療肥胖症的每日口服藥物，這是由諾和諾德（Novo Nordisk）開發的 Wegovy 口服版本。該藥物屬於 GLP-1 類別，模仿控制食慾和飽足感的荷爾蒙，類似於 Zepbound 等注射療法。專家表示，口服藥物可以擴大普及率、降低成本並加速肥胖治療市場，特別是考慮到許多患者負擔不起注射費用。根據 KFF 的數據，約有八分之一的美國人使用過 GLP-1 注射劑。`,
+                vocabulary: [
+                    'regulators (n.): 監管機構', 'approved (v.): 核准', 'daily (adj.): 每日的', 'oral medication (n.phr.): 口服藥物',
+                    'obesity (n.): 肥胖/肥胖症', 'Novo Nordisk (n. proper): 諾和諾德 (藥廠名)', 'GLP-1 class (n.phr.): GLP-1 類別 (藥物)',
+                    'mimicking (v.ger.): 模仿', 'hormones (n.): 荷爾蒙', 'appetite (n.): 食慾', 'satiety (n.): 飽足感',
+                    'injectable treatments (n.phr.): 注射療法', 'expand access (phr.): 擴大獲取渠道/普及率', 'lower costs (phr.): 降低成本',
+                    'accelerate (v.): 加速', 'treatment (n.): 治療', 'afford (v.): 負擔得起', 'injections (n.): 注射',
+                    'one in eight (phr.): 八分之一', 'hormone (n.): 激素', 'appetite (n.): 胃口', 'affordable (adj.): 負擔得起的',
+                    'medication (n.): 藥物', 'market (n.): 市場', 'obese (adj.): 肥胖的'
+                ],
+                quiz: [
+                    { q: 'When did US regulators approve the first daily oral obesity drug?', options: ['Sunday', 'Monday', 'Tuesday', 'Last month'], answer: 'Monday' },
+                    { q: 'Which company developed the oral version of Wegovy?', options: ['Pfizer', 'Novo Nordisk', 'Moderna', 'Johnson & Johnson'], answer: 'Novo Nordisk' },
+                    { q: 'What class of drug does this new medication belong to?', options: ['Antibiotics', 'GLP-1 class', 'Vitamin supplement', 'Aspirin'], answer: 'GLP-1 class' },
+                    { q: 'The drug mimics hormones that control which two things?', options: ['Sleep and mood', 'Appetite and satiety', 'Speed and strength', 'Hearing and sight'], answer: 'Appetite and satiety' },
+                    { q: 'Zepbound is an example of what kind of treatment?', options: ['Oral medication', 'Injectable treatment', 'Surgery', 'Exercise program'], answer: 'Injectable treatment' },
+                    { q: 'What is one major benefit of oral drugs over injections according to experts?', options: ['They work faster.', 'They could lower costs and expand access.', 'They are colorful.', 'They are only for children.'], answer: 'They could lower costs and expand access.' },
+                    { q: 'According to KFF, how many Americans have used GLP-1 injections?', options: ['One in two', 'One in five', 'One in eight', 'None'], answer: 'One in eight' },
+                    { q: 'The term "satiety" refers to the feeling of being ______.', options: ['Hungry', 'Full/Satisfied after eating', 'Tired', 'Angry'], answer: 'Full/Satisfied after eating' },
+                    { q: 'Why is there a need for oral obesity drugs?', options: ['People like eating pills.', 'Many patients cannot afford injections.', 'Injecting is illegal.', 'There are no other drugs.'], answer: 'Many patients cannot afford injections.' },
+                    { q: 'What does "mimicking" mean?', options: ['Killing', 'Ignoring', 'Imitating or copying the action of', 'Improving'], answer: 'Imitating or copying the action of' },
+                    { q: 'What does it mean to "afford" something?', options: ['To like it', 'To have enough money to pay for it', 'To find it in a store', 'To throw it away'], answer: 'To have enough money to pay for it' },
+                    { q: 'The medication is for treating which condition?', options: ['Headache', 'Obesity', 'Fever', 'Broken bones'], answer: 'Obesity' },
+                    { q: 'The word "medication" is a synonym for what?', options: ['Food', 'Drug/Medicine', 'Water', 'Clothing'], answer: 'Drug/Medicine' },
+                    { q: 'Is this drug taken once a month or daily?', options: ['Monthly', 'Weekly', 'Daily', 'Only once'], answer: 'Daily' },
+                    { q: 'Which country\'s regulators approved the drug?', options: ['UK', 'China', 'USA', 'Japan'], answer: 'USA' }
+                ]
+            }
+        };
+
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
