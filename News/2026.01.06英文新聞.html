@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 6 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 6 日：台股里程碑與委國局勢</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE: NEWS CONTENT ---
+        const NEWS_DATA = {
+            'taiwan-focus': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Taiwan Stocks Surmount Historic 30,000-Point Threshold\nDespite the lingering shadows of recent regional military maneuvers, the Taiwan Stock Exchange (TWSE) witnessed an extraordinary rally today, with the TAIEX officially closing at an unprecedented 30,576 points. This landmark achievement was largely propelled by a surge in semiconductor heavyweights, as global investors continue to bet on Taiwan’s indispensable role in the AI-driven industrial revolution.\n\n[2] European Parliament Delegation Condemns Provocative Drills\nA high-level delegation from the European Parliament arrived in Taipei on Tuesday, led by MP Michael Gahler. During a meeting with President Lai Ching-te, the delegation voiced stern criticism of Beijing’s recent military exercises, labeling them as "belligerent posturing" that undermines peaceful co-existence. The visit underscores a growing international consensus against unilateral attempts to sabotage the rules-based order.\n\n[3] CWA Issues Cold Surge Advisories for 18 Cities\nThe Central Weather Administration (CWA) has issued urgent cold surge warnings across 18 cities, as the most formidable winter front of the season descends upon the island. Temperatures in northern Taiwan are projected to plummet below 10 degrees Celsius. The sudden drop has placed strain on agricultural sectors, while mountainous regions brace for potential frost.`,
+                chinese: `【1】台股無懼風險 首度攻上三萬點里程碑\n儘管近期區域軍事演習的陰影揮之不去，台灣證券交易所今天見證了一場非凡的漲勢，台股加權指數正式收於史無前例的 30,576 點。這一里程碑式的成就主要由半導體權重股的飆升所推動，因為全球投資者繼續押注台灣在 AI 驅動的工業革命中不可或缺的角色。\n\n【2】歐洲議會代表團訪台 強烈譴責中國軍演\n歐洲議會高層代表團週二抵達台北，由議員麥可·嘉勒（Michael Gahler）率領。在會見賴清德總統時，代表團對北京近期的軍事演習表示嚴厲批評，稱其為破壞和平共處的「挑釁姿態」。此次訪問強調了國際社會日益增長的共識，即反對任何單方面破壞基於規則秩序的企圖。\n\n【3】入冬最強寒流襲台 氣象局發布 18 縣市低溫特報\n中央氣象署（CWA）針對 18 個縣市發布了緊急低溫特報，因為本季最強勁的冬型鋒面正南下襲台。台灣北部氣溫預計將暴跌至 10 度以下。突然的降溫已對中部農業部門造成壓力，而山區則在為可能影響交通與觀光活動的霜害做準備。`,
+                vocabulary: [
+                    'Defy (v.): 挑戰/無視', 'Surmount (v.): 越過/克服', 'Threshold (n.): 門檻/起點', 'Lingering (adj.): 揮之不去的',
+                    'Maneuvers (n.): 演習/策略', 'Extraordinary (adj.): 非凡的', 'Propelled (v.pp.): 推動', 'Semiconductor (n.): 半導體',
+                    'Heavyweight (n.): 權重股/重量級人物', 'Indispensable (adj.): 不可或缺的', 'Exuberant (adj.): 繁茂的/生氣勃勃的', 'Resilience (n.): 韌性',
+                    'Delegation (n.): 代表團', 'Solidarity (n.): 團結', 'Belligerent (adj.): 好戰的/挑釁的', 'Posturing (n.): 姿態',
+                    'Consensus (n.): 共識', 'Unilateral (adj.): 單方面的', 'Sabotage (v.): 破壞', 'Pushback (n.): 反擊/推回',
+                    'Formidable (adj.): 強大的/令人畏懼的', 'Descend (v.): 下降/南下', 'Plummet (v.): 暴跌', 'Vulnerable (adj.): 脆弱的',
+                    'Precautions (n.): 預防措施', 'Agricultural sector (n.phr.): 農業部門', 'Brace for (phr.v.): 為...做準備', 'Frost (n.): 霜害',
+                    'Advisory (n.): 特報/公告', 'Unprecedented (adj.): 史無前例的', 'Industrial revolution (n.phr.): 工業革命', 'Economic resilience (n.phr.): 經濟韌性'
+                ],
+                quiz: [
+                    { q: 'At what point level did the TAIEX close today?', options: ['20,000', '25,000', '30,576', '35,000'], answer: '30,576' },
+                    { q: 'What industry was the primary driver of the stock market surge?', options: ['Tourism', 'Agriculture', 'Semiconductor', 'Textiles'], answer: 'Semiconductor' },
+                    { q: 'Who led the European Parliament delegation to Taipei?', options: ['Michael Gahler', 'Donald Trump', 'Nicolas Maduro', 'Antonio Guterres'], answer: 'Michael Gahler' },
+                    { q: 'How did the EU delegation label Beijing\'s military drills?', options: ['Peaceful training', 'Belligerent posturing', 'Necessary defense', 'Economic exercises'], answer: 'Belligerent posturing' },
+                    { q: 'How many cities and counties were issued cold surge warnings?', options: ['5', '10', '15', '18'], answer: '18' },
+                    { q: 'What is the projected low temperature for northern Taiwan on Wednesday?', options: ['Below 20°C', 'Below 15°C', 'Below 10°C', 'Below 0°C'], answer: 'Below 10°C' },
+                    { q: 'The term "unprecedented" means what?', options: ['Common', 'Never done or known before', 'Planned early', 'Illegal'], answer: 'Never done or known before' },
+                    { q: 'What does "indispensable" mean in the context of Taiwan’s AI role?', options: ['Very cheap', 'Absolutely necessary', 'Easy to replace', 'Old-fashioned'], answer: 'Absolutely necessary' },
+                    { q: 'What does "belligerent" mean in descriptions of military drills?', options: ['Friendly', 'Helpful', 'Hostile and aggressive', 'Quiet'], answer: 'Hostile and aggressive' },
+                    { q: 'The cold surge is expected to cause strain on which sector?', options: ['Education', 'Agriculture', 'Fashion', 'Space'], answer: 'Agriculture' },
+                    { q: 'What is the full name of the CWA?', options: ['Central Water Agency', 'Central Weather Administration', 'China Weather Association', 'Coalition of Weather Affairs'], answer: 'Central Weather Administration' },
+                    { q: 'What kind of international feeling is growing regarding the Indo-Pacific order?', options: ['Confusion', 'Indifference', 'Consensus', 'Anger'], answer: 'Consensus' },
+                    { q: 'The word "plummet" is a synonym for which word?', options: ['Rise', 'Drop sharply', 'Stay level', 'Fly'], answer: 'Drop sharply' },
+                    { q: 'The term "solidarity" means what?', options: ['Loneliness', 'Unity or agreement of feeling', 'Wealth', 'Scientific study'], answer: 'Unity or agreement of feeling' },
+                    { q: 'Mountainous regions are "bracing" for what?', options: ['Heatwaves', 'Potential frost', 'Sunsets', 'Tourists'], answer: 'Potential frost' }
+                ]
+            },
+            'maduro-court': {
+                title: '馬杜羅紐約出庭',
+                english: `In a courtroom atmosphere thick with tension and heavy security, deposed Venezuelan President Nicolas Maduro appeared before a New York federal judge on Monday to formally respond to grave charges of narco-terrorism and illicit weapons trafficking. Maduro, who was captured during a stunning and controversial U.S. military operation over the weekend, remained steadfast and defiant, asserting through an interpreter that his detention constitutes a flagrant violation of international law. He repeatedly declared, "I am still the president," while his legal counsel argued that the U.S. judicial system has no jurisdiction over a sovereign head of state, characterizing the episode as an "illegal abduction" designed to facilitate regime change. Outside the courthouse, the event sparked polarized reactions.`,
+                chinese: `在緊張氣氛與重重安保包圍下的法庭中，被廢黜的委內瑞拉總統馬杜羅週一出現在紐約聯邦法官面前，正式回應販毒恐怖主義和非法武器販運的嚴重指控。馬杜羅是在上週末一次令人震驚且頗具爭議的美軍行動中被抓獲的，他表現得堅定且具有挑釁性，透過翻譯人員堅稱，對他的拘留構成了對國際法的公然違反。他反覆宣稱：「我仍然是總統。」而他的法律顧問則辯稱，美國司法系統對一個國家的主權元首沒有管轄權，並將此事件描述為旨在促成政權更迭的「非法綁架」。在法院外，該事件引發了兩極反應。`,
+                vocabulary: [
+                    'Deposed (adj.): 被廢黜的/下台的', 'Grave charges (n.phr.): 嚴重指控', 'Narco-terrorism (n.): 販毒恐怖主義', 'Illicit (adj.): 非法的',
+                    'Stunning (adj.): 震驚的', 'Steadfast (adj.): 堅定的', 'Defiant (adj.): 挑釁的/不服權威的', 'Interpreter (n.): 翻譯(口譯)',
+                    'Constitutes (v.): 構成', 'Flagrant (adj.): 公然的/惡名昭彰的', 'Violation (n.): 違反', 'Legal counsel (n.phr.): 法律顧問',
+                    'Jurisdiction (n.): 管轄權', 'Sovereign (adj.): 主權的', 'Abduction (n.): 綁架', 'Facilitate (v.): 促進/促成',
+                    'Regime change (n.phr.): 政權更迭', 'Polarized (adj.): 兩極化的', 'Immunity (n.): 豁免權', 'Erosion (n.): 侵蝕/削弱',
+                    'Protocols (n.): 協議/規章', 'Illicit (adj.): 違法的', 'Abduction (n.): 誘拐', 'Defiant (adj.): 挑戰的', 'Stunning (adj.): 驚人的'
+                ],
+                quiz: [
+                    { q: 'Where did Nicolas Maduro appear in court?', options: ['Caracas', 'New York', 'London', 'Moscow'], answer: 'New York' },
+                    { q: 'What are the main charges against Maduro?', options: ['Tax fraud', 'Narco-terrorism and illicit weapons trafficking', 'Speeding', 'Illegal immigration'], answer: 'Narco-terrorism and illicit weapons trafficking' },
+                    { q: 'How was Maduro captured according to the text?', options: ['He surrendered.', 'He was arrested by Interpol.', 'During a controversial U.S. military operation.', 'He was turned in by his guards.'], answer: 'During a controversial U.S. military operation.' },
+                    { q: 'What was Maduro\'s defense in court?', options: ['He admitted guilt.', 'He claimed his detention was a violation of international law.', 'He asked for a fine.', 'He remained silent.'], answer: 'He claimed his detention was a violation of international law.' },
+                    { q: 'What does his legal counsel argue regarding the U.S. judicial system?', options: ['It is too slow.', 'It has no jurisdiction over a sovereign head of state.', 'It is the best in the world.', 'It needs more judges.'], answer: 'It has no jurisdiction over a sovereign head of state.' },
+                    { q: 'How did Maduro describe himself repeatedly in court?', options: ['"I am a victim."', '"I am still the president."', '"I want to go home."', '"I am innocent."'], answer: '"I am still the president."' },
+                    { q: 'What term was used to characterize his capture by his defense?', options: ['Rescue', 'Legal arrest', 'Illegal abduction', 'Travel mission'], answer: 'Illegal abduction' },
+                    { q: 'The phrase "regime change" refers to what?', options: ['Changing a lightbulb', 'Replacing a government with another', 'Changing a court date', 'Moving to another city'], answer: 'Replacing a government with another' },
+                    { q: 'The reactions outside the courthouse were "polarized," meaning what?', options: ['Everyone agreed.', 'People were very cold.', 'Reactions were divided into two extreme opposites.', 'People were happy.'], answer: 'Reactions were divided into two extreme opposites.' },
+                    { q: 'What kind of charges are "grave charges"?', options: ['Small charges', 'Serious charges', 'Free charges', 'Secret charges'], answer: 'Serious charges' },
+                    { q: 'What is the role of an "interpreter"?', options: ['A judge', 'A person who translates speech from one language to another', 'A lawyer', 'A security guard'], answer: 'A person who translates speech from one language to another' },
+                    { q: 'The term "illicit" is a synonym for what?', options: ['Legal', 'Famous', 'Illegal', 'Cheap'], answer: 'Illegal' },
+                    { q: 'Human rights organizations raised concerns about the erosion of diplomatic ______.', options: ['Relations', 'Immunity', 'Visas', 'Borders'], answer: 'Immunity' },
+                    { q: 'The capture of Maduro occurred when?', options: ['Monday morning', 'Over the weekend', 'A year ago', 'In 2024'], answer: 'Over the weekend' },
+                    { q: 'What does "jurisdiction" mean?', options: ['The legal power to make judgments', 'A type of prison', 'A set of laws', 'A foreign country'], answer: 'The legal power to make judgments' }
+                ]
+            },
+            'un-backlash': {
+                title: '安理會譴責美軍行動',
+                english: `The United Nations Security Council convened an emergency session on Monday as international backlash intensified following the U.S. military’s incursions into Venezuelan territory. Representatives from a diverse coalition of nations, including Mexico, Brazil, and South Africa, delivered scathing rebukes, describing the operation as a perilous departure from the UN Charter and a direct assault on national sovereignty and territorial integrity. While U.S. officials defended the strikes as essential to dismantle "narcoterrorist" networks, the absence of a formal UN mandate has alienated even some traditional allies, raising fears about the precedent such unilateralism sets for global order. UN Secretary-General Antonio Guterres expressed grave concern over potential regional destabilization.`,
+                chinese: `聯合國安理會週一召開緊急會議，隨著美軍入侵委內瑞拉領土，國際反對聲浪加劇。來自包括墨西哥、巴西和南非在內的多國代表團發表了嚴厲指責，將此次行動描述為對《聯合國憲章》的危險背離，也是對國家主權和領土完整的直接攻擊。儘管美國官員辯稱，這些打擊對於拆除「販毒恐怖分子」網路至關重要，但由於缺乏正式的聯合國授權，甚至疏遠了一些傳統盟友，引發了人們對這種單邊主義為全球秩序開創先例的擔憂。聯合國秘書長古特瑞斯對潛在的地區動盪表示嚴重關切。`,
+                vocabulary: [
+                    'Convened (v.): 召集/召開', 'Incursions (n.): 入侵', 'Backlash (n.): 強烈反對/後果', 'Coalition (n.): 聯盟',
+                    'Scathing (adj.): 嚴厲的/刻薄的', 'Rebukes (n.): 指責/訓斥', 'Perilous (adj.): 危險的', 'Departure (n.): 背離/出發',
+                    'UN Charter (n. proper): 聯合國憲章', 'Territorial integrity (n.phr.): 領土完整', 'Sovereignty (n.): 主權', 'Assault (n.): 攻擊',
+                    'Dismantle (v.): 拆除/解散', 'Mandate (n.): 授權/命令', 'Alienated (v.pp.): 疏遠/使隔閡', 'Precedent (n.): 先例',
+                    'Unilateralism (n.): 單邊主義', 'Destabilization (n.): 動盪/不穩定', 'Restraint (n.): 克制', 'Catastrophe (n.): 災難',
+                    'Outcry (n.): 強烈抗議', 'Intensify (v.): 加劇', 'Incursion (n.): 侵略', 'Scathing (adj.): 傷人的', 'Integrity (n.): 完整/操守'
+                ],
+                quiz: [
+                    { q: 'Which UN body convened an emergency session?', options: ['General Assembly', 'Security Council', 'Health Organization', 'Economic Council'], answer: 'Security Council' },
+                    { q: 'Which countries were mentioned as part of the coalition delivering rebukes?', options: ['UK, France, Germany', 'Mexico, Brazil, South Africa', 'China, Russia, North Korea', 'India, Japan, Australia'], answer: 'Mexico, Brazil, South Africa' },
+                    { q: 'How did the coalition describe the U.S. operation?', options: ['A peaceful mission', 'A perilous departure from the UN Charter', 'A great success', 'A minor mistake'], answer: 'A perilous departure from the UN Charter' },
+                    { q: 'U.S. officials defended the strikes as essential to do what?', options: ['Help the economy', 'Build new roads', 'Dismantle "narcoterrorist" networks', 'Promote tourism'], answer: 'Dismantle "narcoterrorist" networks' },
+                    { q: 'What was missing that alienated even some traditional allies?', options: ['Money', 'A formal UN mandate', 'Proper weapons', 'Time'], answer: 'A formal UN mandate' },
+                    { q: 'Who is the UN Secretary-General?', options: ['Nicolas Maduro', 'Donald Trump', 'Antonio Guterres', 'Michael Gahler'], answer: 'Antonio Guterres' },
+                    { q: 'What is the Secretary-General concerned about?', options: ['Global warming', 'Regional destabilization', 'Trade taxes', 'Space travel'], answer: 'Regional destabilization' },
+                    { q: 'The term "scathing" means what in the context of a rebuke?', options: ['Very soft', 'Very harsh or severe', 'Helpful', 'Forgotten'], answer: 'Very harsh or severe' },
+                    { q: 'What does "unilateralism" mean?', options: ['Working together with everyone', 'Acting alone without agreement from others', 'Building many walls', 'A type of science'], answer: 'Acting alone without agreement from others' },
+                    { q: 'The word "mandate" means an official ______ to do something.', options: ['Agreement', 'Order or authorization', 'Gift', 'Secret'], answer: 'Order or authorization' },
+                    { q: '"Territorial integrity" refers to the right of a nation to keep what?', options: ['Its money', 'Its land and borders secure', 'Its old history', 'Its army'], answer: 'Its land and borders secure' },
+                    { q: 'The term "incursion" refers to what kind of entry?', options: ['Friendly visit', 'Hostile or harmful invasion', 'Tourist trip', 'Scientific survey'], answer: 'Hostile or harmful invasion' },
+                    { q: 'What did the nations say the operation was a direct assault on?', options: ['The weather', 'National sovereignty and territorial integrity', 'The stock market', 'Education'], answer: 'National sovereignty and territorial integrity' },
+                    { q: 'The session was "convened," meaning what?', options: ['Canceled', 'Called together', 'Delayed', 'Started early'], answer: 'Called together' },
+                    { q: 'What is the "UN Charter"?', options: ['A map of New York', 'The founding document of the United Nations', 'A list of member states', 'A travel guide'], answer: 'The founding document of the United Nations' }
+                ]
+            },
+            'trump-tariffs': {
+                title: '川普 500% 懲罰性關稅',
+                english: `U.S. President Donald Trump has reignited fears of a global trade war by threatening to impose staggering 500% punitive tariffs on any nation that continues to import oil or natural gas from Russia. Speaking aboard Air Force One, the President signaled a "maximum pressure" campaign aimed at fully isolating the Kremlin’s economy, targeting countries such as India and several European nations. Economic analysts warned that this aggressive protectionist stance could fracture Western alliances, disrupt global supply chains, and trigger a sharp rise in energy costs worldwide.`,
+                chinese: `美國總統川普威脅對任何繼續從俄羅斯進口石油或天然氣的國家徵收高達 500% 的懲罰性關稅，再次引發了對全球貿易戰的擔憂。川普在「空軍一號」上發表講話，釋出了「最大壓力」行動的訊號，旨在全面孤立克里姆林宮的經濟，目標包括印度和多個歐洲國家。經濟分析人士警告，這種激進的保護主義立場可能會分裂西方聯盟，擾亂全球供應鏈，並引發全球能源成本大幅上漲。`,
+                vocabulary: [
+                    'Reignited (v.): 再次引發/重燃', 'Staggering (adj.): 驚人的/令人震驚的', 'Punitive tariffs (n.phr.): 懲罰性關稅', 'Oil (n.): 石油',
+                    'Natural gas (n.phr.): 天然氣', 'Air Force One (n. proper): 空軍一號 (美國總統專機)', 'Isolating (v.ger.): 孤立', 'Kremlin (n. proper): 克里姆林宮 (俄國政府)',
+                    'Protectionist (adj.): 保護主義的', 'Stance (n.): 立場', 'Fracture (v.): 分裂/折斷', 'Alliances (n.): 聯盟',
+                    'Disrupt (v.): 擾亂/中斷', 'Supply chains (n.phr.): 供應鏈', 'Trigger (v.): 引發', 'Punitive (adj.): 懲罰性的',
+                    'Tariffs (n.): 關稅', 'Aboard (prep.): 在...上', 'Staggering (adj.): 搖晃的/驚人的', 'Protectionism (n.): 保護主義',
+                    'Aggressive (adj.): 侵略性的/激進的', 'Moscow (n. proper): 莫斯科', 'Alignment (n.): 對齊/聯盟', 'Blocs (n.): 集團'
+                ],
+                quiz: [
+                    { q: 'What percentage of punitive tariffs did Trump threaten to impose?', options: ['5%', '50%', '100%', '500%'], answer: '500%' },
+                    { q: 'The tariffs would target nations importing what from Russia?', options: ['Grains', 'Oil or natural gas', 'Cars', 'Technology'], answer: 'Oil or natural gas' },
+                    { q: 'Where was Trump when he made the announcement?', options: ['The White House', 'Mar-a-Lago', 'Aboard Air Force One', 'New York City'], answer: 'Aboard Air Force One' },
+                    { q: 'What is the main goal of the "maximum pressure" campaign?', options: ['To trade more with Russia', 'To fully isolate the Kremlin’s economy', 'To lower oil prices', 'To build a new pipeline'], answer: 'To fully isolate the Kremlin’s economy' },
+                    { q: 'Which specific nations were mentioned as potential targets of these tariffs?', options: ['China and Japan', 'India and several European nations', 'Mexico and Brazil', 'Canada and Australia'], answer: 'India and several European nations' },
+                    { q: 'Analysts warned that this stance could "fracture" what?', options: ['Supply chains', 'Western alliances', 'Energy costs', 'The stock market'], answer: 'Western alliances' },
+                    { q: 'What is one feared consequence of these tariffs worldwide?', options: ['Lower energy costs', 'A sharp rise in energy costs', 'More free trade', 'Fewer wars'], answer: 'A sharp rise in energy costs' },
+                    { q: 'The word "punitive" means relating to what?', options: ['Prizes', 'Punishment', 'Speed', 'Money only'], answer: 'Punishment' },
+                    { q: 'What is "Air Force One"?', options: ['A new weapon', 'The U.S. President\'s plane', 'A military group', 'A trade law'], answer: 'The U.S. President\'s plane' },
+                    { q: 'What does "protectionist" mean in trade?', options: ['Protecting the environment', 'A policy of shielding domestic industries from foreign competition', 'Helping other countries', 'Saving money'], answer: 'A policy of shielding domestic industries from foreign competition' },
+                    { q: 'The term "staggering" describes something that is what?', options: ['Boring', 'Small', 'Extremely surprising or impressive', 'Very common'], answer: 'Extremely surprising or impressive' },
+                    { q: 'What could happen to global supply chains?', options: ['They could get faster.', 'They could be disrupted.', 'They could be deleted.', 'Nothing.'], answer: 'They could be disrupted.' },
+                    { q: 'Critics argue this might accelerate alignment with which blocs?', options: ['Western blocs', 'Alternative economic blocs led by China and Russia', 'UN blocs', 'Space blocs'], answer: 'Alternative economic blocs led by China and Russia' },
+                    { q: 'The word "reignited" implies that the fear was ______ before.', options: ['New', 'Already there but had quieted down', 'Never felt', 'Illegal'], answer: 'Already there but had quieted down' },
+                    { q: 'What is the Kremlin referring to in this context?', options: ['A type of food', 'The Russian government', 'A city in India', 'A mountain'], answer: 'The Russian government' }
+                ]
+            }
+        };
+
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
