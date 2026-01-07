@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 7 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 7 日頭條：勞資、晶片、AI 與全球變局</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Ministry of Labor Proposes Minimum Wage Hike\nThe Ministry of Labor (MOL) has announced a formal proposal to increase the national minimum wage for the upcoming year, aiming to help low-income earners cope with rising inflation. While labor unions have welcomed the move as a necessary step to ensure a living wage, business associations have expressed grave concerns over escalating operational costs.\n\n[2] Taiwanese Chip Giant Secures Massive US Subsidy\nTaiwan’s leading semiconductor manufacturer has officially secured a multi-billion dollar subsidy package from the U.S. government under the CHIPS Act. This financial boost is intended to accelerate the construction of advanced fabrication plants in Arizona, marking a pivotal moment in the strategic partnership between the two nations.\n\n[3] NSTC Introduces AI Ethical Guidelines\nThe National Science and Technology Council (NSTC) has unveiled a comprehensive set of ethical guidelines designed to govern the use of artificial intelligence within government agencies. The new framework prioritizes data privacy, transparency, and accountability, ensuring that AI-driven decisions do not compromise the rights of citizens.`,
+                chinese: `【1】勞動部擬調漲基本工資\n勞動部已正式提出明年調漲全國基本工資的建議，旨在幫助低收入族群應對日益嚴峻的通貨膨脹。勞工團體對此表示歡迎，認為這是確保生活工資的必要舉措；然而，工商團體則對不斷攀升的營運成本表示嚴重關切。\n\n【2】台灣半導體龍頭獲美國政府巨額補助\n台灣領先的半導體製造商已正式獲得美國政府《晶片法案》下數十億美元的補助方案。這筆資金挹注旨在加速亞利桑那州先進晶圓廠的建設，標誌著兩國策略夥伴關係的關鍵時刻。\n\n【3】國科會推動 AI 倫理指南\n國家科學及技術委員會（國科會）公布了一套全面的倫理指南，旨在規範政府機關內人工智慧的使用。新框架優先考量數據隱私、透明度與問責制，確保 AI 驅動的決策不會損害公民權利。`,
+                vocabulary: [
+                    'Ministry of Labor (n. proper): 勞動部', 'Minimum Wage Hike (n.phr.): 基本工資調漲', 'Inflation (n.): 通貨膨脹', 'Labor unions (n.phr.): 勞工團體/工會',
+                    'Operational costs (n.phr.): 營運成本', 'Escalating (adj.): 不斷攀升的', 'Semiconductor (n.): 半導體', 'Subsidy package (n.phr.): 補助方案',
+                    'Fabrication plants (n.phr.): 晶圓廠/製造廠', 'Pivotal moment (n.phr.): 關鍵時刻', 'Strategic partnership (n.phr.): 策略夥伴關係', 'Ethical guidelines (n.phr.): 倫理指南',
+                    'Public sector (n.phr.): 公共部門/政府機關', 'Transparency (n.): 透明度', 'Accountability (n.): 問責制', 'Compromise (v.): 損害/妥協',
+                    'Fostering (v.ger.): 促進/培養', 'Generative AI (n.phr.): 生成式 AI', 'Upcoming year (n.phr.): 即將到來的一年', 'Low-income earners (n.phr.): 低收入者',
+                    'Living wage (n.phr.): 生活工資', 'Grave concerns (n.phr.): 嚴重關切', 'Consultations (n.): 諮詢/協商', 'Multi-billion dollar (adj.): 數十億美元的',
+                    'Financial boost (n.phr.): 資金挹注', 'Strategic (adj.): 戰略性的', 'Indispensable (adj.): 不可或缺的', 'Framework (n.): 框架/準則',
+                    'Data privacy (n.phr.): 數據隱私', 'Unveiled (v.pp.): 揭曉/公布', 'Govern (v.): 規範/治理', 'Ecosystem (n.): 生態系統'
+                ],
+                quiz: [
+                    { q: 'What is the primary goal of the Ministry of Labor\'s proposal?', options: ['To reduce taxes', 'To help low-income earners cope with inflation', 'To shorten work hours', 'To increase government revenue'], answer: 'To help low-income earners cope with inflation' },
+                    { q: 'Who expressed concern over the minimum wage hike?', options: ['Labor unions', 'Business associations', 'Students', 'Foreign tourists'], answer: 'Business associations' },
+                    { q: 'The Taiwanese chip giant secured a subsidy from which law?', options: ['The Inflation Reduction Act', 'The CHIPS Act', 'The Digital Safety Act', 'The Trade Expansion Act'], answer: 'The CHIPS Act' },
+                    { q: 'Where are the advanced fabrication plants being built?', options: ['Taipei', 'Tokyo', 'Arizona', 'London'], answer: 'Arizona' },
+                    { q: 'What does the NSTC\'s AI framework prioritize?', options: ['Processing speed', 'Data privacy, transparency, and accountability', 'Cost reduction', 'International marketing'], answer: 'Data privacy, transparency, and accountability' },
+                    { q: 'What term describes the Taiwanese chip company\'s role in the tech ecosystem?', options: ['Temporary', 'Minor', 'Indispensable', 'Declining'], answer: 'Indispensable' },
+                    { q: 'The term "escalating" means what?', options: ['Decreasing', 'Staying stable', 'Increasing or rising', 'Becoming cheaper'], answer: 'Increasing or rising' },
+                    { q: 'Which body introduced the AI ethical guidelines?', options: ['Ministry of Education', 'Ministry of Labor', 'National Science and Technology Council', 'Ministry of Interior'], answer: 'National Science and Technology Council' },
+                    { q: 'The word "pivotal" is a synonym for which word?', options: ['Small', 'Crucial', 'Boring', 'Hidden'], answer: 'Crucial' },
+                    { q: 'What is the expected result of the semiconductor expansion for the global supply chain?', options: ['It will weaken it.', 'It will strengthen it.', 'It will have no effect.', 'It will move it to Europe.'], answer: 'It will strengthen it.' },
+                    { q: 'What is a "living wage"?', options: ['A wage only for food', 'A wage high enough to maintain a normal standard of living', 'A minimum wage for students', 'A tax-free income'], answer: 'A wage high enough to maintain a normal standard of living' },
+                    { q: 'Which group welcomed the minimum wage move?', options: ['Labor unions', 'Business associations', 'Banks', 'Farmers'], answer: 'Labor unions' },
+                    { q: 'What does the term "unveiled" mean?', options: ['Hidden', 'Announced or showed for the first time', 'Cancelled', 'Translated'], answer: 'Announced or showed for the first time' },
+                    { q: 'The CHIPS Act subsidy package is worth approximately how much?', options: ['Millions', 'Multi-billions', 'Thousands', 'Zero'], answer: 'Multi-billions' },
+                    { q: 'AI-driven decisions should not compromise the ______ of citizens.', options: ['Cars', 'Rights', 'Passwords', 'Vacations'], answer: 'Rights' }
+                ]
+            },
+            'venezuela-aid': {
+                title: '委內瑞拉尋求國際援助',
+                english: `Following the recent capture of the previous leader, Venezuela’s newly appointed transitional government has reached out to the International Monetary Fund (IMF) and the World Bank for an emergency financial package. The administration is attempting to stabilize a nation battered by hyperinflation and crumbling infrastructure, leaving millions in need of basic necessities. Officials warned that without immediate foreign capital, the country risks further economic collapse and social unrest. Meanwhile, the international community remains divided over the government’s legitimacy, with calls for a clear and transparent roadmap toward free and fair elections.`,
+                chinese: `在近期前領導人被捕後，委內瑞拉新任命的臨時政府已向國際貨幣基金組織（IMF）和世界銀行尋求緊急財政方案。該政府正試圖穩定這個遭受惡性通貨膨脹和基礎設施崩潰打擊的國家，目前有數百萬人需要基本生活物資。官員警告，若無立即的外資挹注，該國面臨進一步經濟崩潰和社會動盪的風險。同時，國際社會對該政府的合法性仍存分歧，並呼籲制定一個通往自由公正選舉的清晰透明路線圖。`,
+                vocabulary: [
+                    'Capture (n.): 抓獲/捕獲', 'Appointed (adj.): 經任命的', 'Transitional government (n.phr.): 臨時政府/過渡政府', 'International Monetary Fund (IMF) (n. proper): 國際貨幣基金組織',
+                    'Emergency financial package (n.phr.): 緊急財政方案', 'Stabilize (v.): 穩定', 'Hyperinflation (n.): 惡性通貨膨脹', 'Crumbling (adj.): 崩潰的/破碎的',
+                    'Infrastructure (n.): 基礎設施', 'Basic necessities (n.phr.): 基本生活必需品', 'Foreign capital (n.phr.): 外國資本', 'Economic collapse (n.phr.): 經濟崩潰',
+                    'Social unrest (n.phr.): 社會動盪', 'Legitimacy (n.): 合法性', 'Roadmap (n.): 路線圖', 'Free and fair elections (n.phr.): 自由公正的選舉',
+                    'Appointed (v.pp.): 任命的', 'Tumult (n.): 騷動/混亂', 'Battered (adj.): 受打擊的', 'Crumbling (v.ger.): 瓦解中的',
+                    'Necessities (n.): 必需品', 'Divided (adj.): 分歧的/分裂的', 'Transparent (adj.): 透明的', 'Reached out to (phr.v.): 向...伸出援手/聯繫',
+                    'Urgent (adj.): 緊急的', 'Catastrophe (n.): 災難', 'Capital (n.): 資本/資金', 'Risk (v.): 冒險/面臨風險',
+                    'Tumultuous (adj.): 動盪的', 'Authority (n.): 權威', 'Legitimate (adj.): 合法的', 'Financial (adj.): 財務的'
+                ],
+                quiz: [
+                    { q: 'Which two international organizations did Venezuela reach out to?', options: ['UN and WHO', 'IMF and the World Bank', 'NATO and EU', 'ASEAN and OPEC'], answer: 'IMF and the World Bank' },
+                    { q: 'What is the current state of Venezuela\'s infrastructure described in the text?', options: ['New and modern', 'Crumbling', 'Expanding rapidly', 'Stable'], answer: 'Crumbling' },
+                    { q: 'What economic issue is "battering" the nation?', options: ['Deflation', 'Hyperinflation', 'Low taxes', 'High savings'], answer: 'Hyperinflation' },
+                    { q: 'Millions of people in Venezuela are in need of what?', options: ['Luxury cars', 'Basic necessities', 'Space travel', 'Smartphones'], answer: 'Basic necessities' },
+                    { q: 'What did officials warn would happen without immediate foreign capital?', options: ['Prosperity', 'Further economic collapse and social unrest', 'Peace and unity', 'Lower prices'], answer: 'Further economic collapse and social unrest' },
+                    { q: 'The international community is divided over the government\'s ______.', options: ['Budget', 'Legitimacy', 'Color', 'Name'], answer: 'Legitimacy' },
+                    { q: 'What kind of "roadmap" is the international community calling for?', options: ['A tourist map', 'A roadmap toward free and fair elections', 'A map of oil fields', 'A roadmap for military expansion'], answer: 'A roadmap toward free and fair elections' },
+                    { q: 'What happened to the previous leader of Venezuela recently?', options: ['He won an election.', 'He retired.', 'He was captured.', 'He moved to New York.'], answer: 'He was captured' },
+                    { q: 'What does "transitional" mean in "transitional government"?', options: ['Permanent', 'Temporary/Changing from one state to another', 'Very old', 'Military'], answer: 'Temporary/Changing from one state to another' },
+                    { q: 'The term "social unrest" refers to what?', options: ['Public peace', 'Disorder or protest in society', 'A quiet party', 'A scientific experiment'], answer: 'Disorder or protest in society' },
+                    { q: 'What is the "IMF" an abbreviation for?', options: ['International Money Fund', 'International Monetary Fund', 'Internal Marketing Firm', 'Indian Military Force'], answer: 'International Monetary Fund' },
+                    { q: 'What does "battered" mean in the text?', options: ['Fried in oil', 'Damaged or hit hard by something', 'Improved', 'Painted'], answer: 'Damaged or hit hard by something' },
+                    { q: 'What does "legitimacy" refer to?', options: ['Wealth', 'The quality of being legal and accepted', 'The size of a country', 'The speed of a train'], answer: 'The quality of being legal and accepted' },
+                    { q: 'The government is described as "newly ______."', options: ['Elected', 'Appointed', 'Defeated', 'Ignored'], answer: 'Appointed' },
+                    { q: 'What is the administration attempting to do?', options: ['Start a war', 'Stabilize the nation', 'Increase inflation', 'Close the World Bank'], answer: 'Stabilize the nation' }
+                ]
+            },
+            'tech-safety': {
+                title: '科技巨頭青少年安全協議',
+                english: `Under intense pressure from regulators and parent advocacy groups, major social media corporations have signed a historic agreement to enforce stricter safety protocols for underage users. The pact includes disabling addictive algorithm features by default for teens and offering parents more robust monitoring tools to oversee their children’s digital interactions. While many praise the move as a step in the right direction, digital rights activists remain cautious, urging binding legislation rather than reliance on voluntary compliance by tech firms.`,
+                chinese: `在監管機構和家長倡導團體的強大壓力下，各大社群媒體公司簽署了一項具備歷史意義的協議，旨在為未成年用戶執行更嚴格的安全協議。該公約內容包括預設對青少年禁用具成癮性的演算法功能，並為家長提供更強大的監控工具，以監督孩子的數位互動。儘管許多人稱讚此舉是朝正確方向邁出的一步，但數位權利活動家仍保持謹慎，呼籲建立具約束力的立法，而非依賴科技公司的自願遵守。`,
+                vocabulary: [
+                    'Regulators (n.): 監管機構', 'Advocacy groups (n.phr.): 倡導團體', 'Enforce (v.): 執行/實施', 'Protocols (n.): 協議/規約',
+                    'Underage (adj.): 未成年的', 'Historic agreement (n.phr.): 歷史性的協議', 'Pact (n.): 公約/條約', 'Addictive (adj.): 成癮的',
+                    'Algorithm features (n.phr.): 演算法功能', 'By default (phr.): 預設地', 'Robust (adj.): 強大的/堅固的', 'Monitoring tools (n.phr.): 監控工具',
+                    'Oversee (v.): 監督', 'Digital interactions (n.phr.): 數位互動', 'Digital rights activists (n.phr.): 數位權利活動家', 'Cautious (adj.): 謹慎的',
+                    'Binding legislation (n.phr.): 具約束力的立法', 'Voluntary compliance (n.phr.): 自願遵守', 'Intense pressure (n.phr.): 強大壓力', 'Stricter (adj.): 更嚴格的',
+                    'Corporations (n.): 公司/企業', 'Monitoring (v.ger.): 監測', 'Digital (adj.): 數位的', 'Compliance (n.): 遵守/服從',
+                    'Urging (v.ger.): 敦促', 'Reliance (n.): 依賴', 'Algorithm (n.): 演算法', 'Interact (v.): 互動',
+                    'Parental (adj.): 父母的', 'Safety protocols (n.phr.): 安全協議', 'Direction (n.): 方向', 'Compliance (n.): 順從'
+                ],
+                quiz: [
+                    { q: 'Who put pressure on social media companies to sign the agreement?', options: ['Regulators and parent groups', 'The military', 'Space agencies', 'Sports teams'], answer: 'Regulators and parent groups' },
+                    { q: 'What kind of algorithm features will be disabled for teens by default?', options: ['Search tools', 'Addictive features', 'Login pages', 'Profile pictures'], answer: 'Addictive features' },
+                    { q: 'What new tools will be offered to parents?', options: ['Shopping lists', 'Robust monitoring tools', 'New games', 'Free internet'], answer: 'Robust monitoring tools' },
+                    { q: 'The term "underage" refers to whom?', options: ['Senior citizens', 'Employees', 'Minors/Children under the legal age', 'Business leaders'], answer: 'Minors/Children under the legal age' },
+                    { q: 'How do digital rights activists feel about the voluntary pact?', options: ['Extremely excited', 'Angry and protesting', 'Cautious', 'Completely satisfied'], answer: 'Cautious' },
+                    { q: 'What do activists urge instead of voluntary compliance?', options: ['No rules at all', 'Binding legislation', 'Higher taxes', 'Closing the platforms'], answer: 'Binding legislation' },
+                    { q: 'What does "oversee" mean in the text?', options: ['To look away', 'To supervise or monitor', 'To build', 'To forget'], answer: 'To supervise or monitor' },
+                    { q: 'The agreement is described as "historic" because...', options: ['It happened long ago.', 'It is very significant and influential.', 'It is written in old ink.', 'It is about history books.'], answer: 'It is very significant and influential.' },
+                    { q: 'The word "pact" is a synonym for which word?', options: ['Conflict', 'Agreement/Treaty', 'Market', 'Weapon'], answer: 'Agreement/Treaty' },
+                    { q: 'What is a step in the "right direction" according to the text?', options: ['The new safety agreement', 'Increasing ads', 'Ignoring parents', 'Adding more algorithms'], answer: 'The new safety agreement' },
+                    { q: 'What does "binding" mean in "binding legislation"?', options: ['Loose', 'Legally required to be followed', 'Optional', 'Beautifully tied'], answer: 'Legally required to be followed' },
+                    { q: 'The term "compliance" refers to the act of ______ a rule.', options: ['Breaking', 'Following or obeying', 'Ignoring', 'Changing'], answer: 'Following or obeying' },
+                    { q: 'Who will the safety protocols specifically protect?', options: ['Adults', 'Underage users', 'Computers', 'Regulators'], answer: 'Underage users' },
+                    { q: 'Algorithm features are disabled "by default," meaning what?', options: ['Teens have to ask for it.', 'It happens automatically unless changed.', 'It never happens.', 'It costs extra money.'], answer: 'It happens automatically unless changed.' },
+                    { q: 'What kind of "interactions" will parents oversee?', options: ['Physical', 'School', 'Digital', 'Secret'], answer: 'Digital' }
+                ]
+            },
+            'aviation-shortage': {
+                title: '全球航空業缺工困境',
+                english: `The global aviation sector is bracing for widespread disruption due to severe labor shortages, including pilots, ground crew, and air traffic controllers. Many airlines have preemptively canceled routes to avoid last-minute chaos during the winter travel season. The crisis stems from early retirements during the pandemic and a slow training pipeline as travel demand rebounds. Passengers are advised to monitor flight statuses closely and prepare for extended wait times as airlines attempt to ramp up recruitment and streamline airport operations.`,
+                chinese: `全球航空業因嚴重的勞動力短缺（包括機師、地勤人員和航管員）正準備面臨廣泛的混亂。許多航空公司已預先取消航線，以避免冬季旅遊旺季出現最後一刻的混亂。這場危機源於疫情期間的提早退休潮，以及旅遊需求回升後訓練管道的緩慢。隨著航空公司試圖加強招募並簡化機場營運，建議旅客密切關注航班狀態並做好等待時間延長的準備。`,
+                vocabulary: [
+                    'Aviation sector (n.phr.): 航空產業', 'Bracing for (phr.v.): 準備應對', 'Widespread disruption (n.phr.): 廣泛的混亂/中斷',
+                    'Labor shortages (n.phr.): 勞動力短缺', 'Pilots (n.): 機師/飛行員', 'Ground crew (n.phr.): 地勤人員', 'Air traffic controllers (n.phr.): 助航員/航管員',
+                    'Preemptively (adv.): 預先地/先發制人地', 'Canceled routes (n.phr.): 取消的航線', 'Chaos (n.): 混亂', 'Winter travel season (n.phr.): 冬季旅遊季節',
+                    'Stems from (phr.v.): 源於', 'Early retirements (n.phr.): 提早退休', 'Pandemic (n.): 疫情/大流行', 'Training pipeline (n.phr.): 訓練管道',
+                    'Travel demand (n.phr.): 旅遊需求', 'Rebounds (v.): 回升/反彈', 'Monitor (v.): 監控/關注', 'Extended wait times (n.phr.): 延長的等待時間',
+                    'Ramp up (phr.v.): 加強/提高', 'Recruitment (n.): 招募', 'Streamline (v.): 簡化/效率化', 'Operations (n.): 營運',
+                    'Severe (adj.): 嚴重的', 'Status (n.): 狀態', 'Disruption (n.): 中斷', 'Shortage (n.): 短缺',
+                    'Training (n.): 訓練', 'Pipeline (n.): 管道', 'Airlines (n.): 航空公司', 'Aviation (n.): 航空', 'Chaos (n.): 紛亂'
+                ],
+                quiz: [
+                    { q: 'Which groups are mentioned as having labor shortages in the aviation sector?', options: ['Pilots, ground crew, and air traffic controllers', 'Cooks and waiters', 'Bus drivers', 'Security guards only'], answer: 'Pilots, ground crew, and air traffic controllers' },
+                    { q: 'What have many airlines done to avoid "last-minute chaos"?', options: ['Lowered prices', 'Preemptively canceled routes', 'Hired robots', 'Closed down entirely'], answer: 'Preemptively canceled routes' },
+                    { q: 'What is one cause of the crisis mentioned in the text?', options: ['High taxes', 'Early retirements during the pandemic', 'Old planes', 'Bad weather'], answer: 'Early retirements during the pandemic' },
+                    { q: 'What is happening to travel demand currently?', options: ['It is decreasing.', 'It is staying the same.', 'It is rebounding (increasing).', 'It has stopped.'], answer: 'It is rebounding (increasing).' },
+                    { q: 'What are passengers advised to do?', options: ['Stay home.', 'Monitor flight statuses closely.', 'Buy new luggage.', 'Apply for a pilot job.'], answer: 'Monitor flight statuses closely.' },
+                    { q: 'Airlines are attempting to "ramp up" what?', options: ['Fuel prices', 'Recruitment', 'Wait times', 'Aircraft weight'], answer: 'Recruitment' },
+                    { q: 'What does "streamline" mean in the context of operations?', options: ['To make more complex', 'To make more efficient and simpler', 'To stop', 'To paint'], answer: 'To make more efficient and simpler' },
+                    { q: 'The term "aviation" refers to which industry?', options: ['Shipping', 'Railroad', 'Air travel/Flight', 'Telecommunications'], answer: 'Air travel/Flight' },
+                    { q: 'What does "preemptively" mean?', options: ['Too late', 'In advance to prevent something', 'By accident', 'In secret'], answer: 'In advance to prevent something' },
+                    { q: 'What does "rebounds" mean?', options: ['To fail', 'To recover or increase after a decrease', 'To jump high', 'To change color'], answer: 'To recover or increase after a decrease' },
+                    { q: 'The word "disruption" is a synonym for which word?', options: ['Peace', 'Interruption/Disturbance', 'Growth', 'Start'], answer: 'Interruption/Disturbance' },
+                    { q: 'A "training pipeline" refers to what process?', options: ['Building a pipe', 'The system for preparing new workers', 'A type of fuel', 'A flight route'], answer: 'The system for preparing new workers' },
+                    { q: 'What season is the peak travel time mentioned?', options: ['Spring', 'Summer', 'Autumn', 'Winter'], answer: 'Winter' },
+                    { q: 'The crisis "stems from" something, meaning it ______.', options: ['Ends with', 'Orignates from/Is caused by', 'Is hidden by', 'Solves'], answer: 'Orignates from/Is caused by' },
+                    { q: 'What should passengers prepare for besides monitoring flights?', options: ['Free food', 'Extended wait times', 'New rules', 'Gifts'], answer: 'Extended wait times' }
+                ]
+            },
+            'eu-deepfakes': {
+                title: '歐盟 AI 深偽標籤規定',
+                english: `The European Union has enacted strict regulations requiring all AI-generated images, videos, and audio to carry a digital watermark or visible disclaimer. The policy aims to counter the growing threat of deepfakes and misinformation, particularly during sensitive election cycles. Platforms failing to comply may face substantial fines, reinforcing the push for digital transparency. Although critics question the technical feasibility of universal labeling, supporters argue it is a necessary safeguard to preserve public trust and prevent the manipulation of public opinion.`,
+                chinese: `歐盟已頒布嚴格法規，要求所有 AI 生成的圖像、影片和音訊必須帶有數位浮水印或明顯的免責聲明。該政策旨在應對深偽技術（deepfakes）和虛假訊息日益嚴峻的威脅，特別是在敏感的選舉期間。未能遵守規定的平台可能面臨巨額罰款，這強化了對數位透明度的推動力。儘管批評者質疑統一標籤的技術可行性，但支持者認為這是維護公眾信任並防止公論被操縱的必要保護措施。`,
+                vocabulary: [
+                    'European Union (n. proper): 歐盟', 'Enacted (v.): 頒布/制定(法律)', 'Regulations (n.): 規章/法規', 'AI-generated (adj.): AI 生成的',
+                    'Digital watermark (n.phr.): 數位浮水印', 'Visible disclaimer (n.phr.): 明顯的免責聲明', 'Counter (v.): 應對/反擊', 'Deepfakes (n.): 深偽技術',
+                    'Misinformation (n.): 虛假訊息/錯誤訊息', 'Election cycles (n.phr.): 選舉週期', 'Comply (v.): 遵守/服從', 'Substantial fines (n.phr.): 巨額罰款',
+                    'Digital transparency (n.phr.): 數位透明度', 'Technical feasibility (n.phr.): 技術可行性', 'Universal labeling (n.phr.): 統一標籤/全面標記', 'Safeguard (n.): 保護措施',
+                    'Preserve public trust (phr.): 維護公眾信任', 'Manipulation (n.): 操縱', 'Public opinion (n.phr.): 公眾輿論/公論', 'Disclaimers (n.): 免責聲明',
+                    'Watermark (n.): 浮水印', 'Enact (v.): 實施', 'Reinforce (v.): 強化', 'Universal (adj.): 普遍的/通用的',
+                    'Election (n.): 選舉', 'Transparent (adj.): 透明的', 'Feasibility (n.): 可行性', 'Support (v.): 支持',
+                    'Disclaimer (n.): 聲明', 'Fines (n.): 罰款', 'Manipulation (n.): 玩弄/操縱', 'Misleading (adj.): 誤導的'
+                ],
+                quiz: [
+                    { q: 'Which organization enacted strict AI labeling regulations?', options: ['The United Nations', 'The European Union', 'The World Bank', 'ASEAN'], answer: 'The European Union' },
+                    { q: 'What must AI-generated images, videos, and audio carry?', options: ['A tax ID', 'A digital watermark or visible disclaimer', 'The creator\'s address', 'A price tag'], answer: 'A digital watermark or visible disclaimer' },
+                    { q: 'What is the policy aiming to counter?', options: ['Global warming', 'Deepfakes and misinformation', 'High energy costs', 'Internet speed'], answer: 'Deepfakes and misinformation' },
+                    { q: 'When is misinformation particularly threatening according to the text?', options: ['During holidays', 'During sensitive election cycles', 'At night', 'In winter'], answer: 'During sensitive election cycles' },
+                    { q: 'What happens to platforms that fail to comply?', options: ['They get a prize.', 'They are praised.', 'They may face substantial fines.', 'Nothing happens.'], answer: 'They may face substantial fines.' },
+                    { q: 'What do critics question about the new policy?', options: ['The color of the labels', 'The technical feasibility of universal labeling', 'The name of the law', 'The length of the text'], answer: 'The technical feasibility of universal labeling' },
+                    { q: 'Supporters say the labels are a necessary safeguard to preserve what?', options: ['Money', 'Public trust', 'Private secrets', 'Old photos'], answer: 'Public trust' },
+                    { q: 'The policy aims to prevent the ______ of public opinion.', options: ['Growth', 'Manipulation', 'Education', 'Distribution'], answer: 'Manipulation' },
+                    { q: 'What is a "disclaimer"?', options: ['A type of camera', 'A statement that denies responsibility or provides explanation', 'A high-speed internet link', 'A digital coin'], answer: 'A statement that denies responsibility or provides explanation' },
+                    { q: 'What is a "deepfake"?', options: ['A deep part of the ocean', 'AI-manipulated media that looks/sounds real', 'A historical book', 'A new type of fish'], answer: 'AI-manipulated media that looks/sounds real' },
+                    { q: 'What does "enacted" mean?', options: ['Cancelled', 'Put into law', 'Forgotten', 'Suggested'], answer: 'Put into law' },
+                    { q: 'The word "substantial" in "substantial fines" means what?', options: ['Very small', 'Large or significant', 'Invisible', 'Funny'], answer: 'Large or significant' },
+                    { q: 'The term "transparency" refers to being ______.', options: ['Hidden', 'Open and clear', 'Dark', 'Heavy'], answer: 'Open and clear' },
+                    { q: 'Which of the following is NOT required to be labeled if AI-generated?', options: ['Videos', 'Images', 'Physical handwritten letters', 'Audio'], answer: 'Physical handwritten letters' },
+                    { q: 'What does "feasibility" mean?', options: ['Beauty', 'The state of being able to be done easily', 'The price of an item', 'A type of rule'], answer: 'The state of being able to be done easily' }
+                ]
+            }
+        };
+
+        // --- STATE & RENDERING LOGIC ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
