@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 8 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 8 日：台灣搜救、網攻與全球變局</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Search for Missing F-16V Pilot Intensifies; Air Force Cites "Spatial Disorientation"\nThe search and rescue operation for Captain Hsin Po-yi has entered its second full day, with military and Coast Guard units scouring the waters off the Hualien coast. At a press conference on Wednesday, the Air Force revealed that preliminary radar and audio data suggest the pilot experienced "spatial disorientation" following a modular mission computer (MMC) failure. This mechanical malfunction reportedly left the pilot unable to accurately judge the aircraft’s attitude and altitude against the horizon.\n\n[2] National Security Bureau Reports 4 Million Cyberattacks During PLA Drills\nTaiwan’s National Security Bureau (NSB) disclosed that Chinese hacking groups launched an unprecedented wave of over four million cyberattacks during the recent “Justice Mission 2025” military exercises. These digital offensives were synchronized with the deployment of warships and aircraft, aiming to undermine public morale and disrupt critical infrastructure.\n\n[3] New Law Passed to Protect Delivery Workers' Rights, Setting Minimum Fee\nThe Legislative Yuan passed the “Delivery Workers' Rights Protection and Management Act.” The law mandates that the basic reward per delivery order must not fall below NT$45, or approximately 1.25 times the national minimum hourly wage. Platform operators warned of potential price hikes for consumers.`,
+                chinese: `【1】飛官辛柏毅失聯搜救持續，空軍初步分析失事主因為「空間迷向」\n對辛柏毅上尉的搜救行動已進入第二天，軍方與海巡單位正在花蓮海域進行搜查。空軍在週三的記者會上透露，初步的雷達與音訊數據顯示，飛行員在模組化任務電腦（MMC）故障後經歷了「空間迷向」。據報導，這起機械故障使飛行員無法準確判斷飛機相對於地平線的姿態與高度。賴總統強調搜尋將無期限持續。\n\n【2】國安局：中共在軍演期間發動逾 400 萬次網路攻擊\n台灣國家安全局（國安局）揭露，中國駭客組織在近期「正義使命 2025」軍演期間發動了前所未有的 400 多萬次網路攻擊。這些數位攻勢與軍艦、戰機的部署同步，旨在瓦解民心士氣並干擾能源及醫療等關鍵基礎設施。\n\n【3】外送員專法三讀通過，明定每筆訂單基本報酬不得低於 45 元\n立法院通過了《外送平台從業者權益保障法》，這標誌著台灣零工經濟從業者的重要里程碑。法律規定每筆外送訂單的基本報酬不得低於 45 元，約為全國最低時薪的 1.25 倍。法案預計在六個月內實施，平台業者則警告消費者端可能會面臨價格調漲。`,
+                vocabulary: [
+                    'intensifies (v.): 加強/強化', 'spatial disorientation (n.phr.): 空間迷向', 'scouring (v.ger.): 搜尋/搜查', 'revealed (v.): 揭露',
+                    'preliminary (adj.): 初步的', 'modular mission computer (MMC) (n.phr.): 模組化任務電腦', 'mechanical malfunction (n.phr.): 機械故障', 'accurately (adv.): 準確地',
+                    'attitude (n.): (飛機) 姿態', 'altitude (n.): 高度', 'horizon (n.): 地平線', 'emergency locator beacon (n.phr.): 緊急定位發報器',
+                    'disclosed (v.): 透露/揭露', 'unprecedented (adj.): 前所未有的', 'cyberattacks (n.): 網路攻擊', 'offensives (n.): 攻勢',
+                    'synchronized (v.pp.): 同步的', 'undermine (v.): 瓦解/削弱', 'public morale (n.phr.): 民心士氣', 'critical infrastructure (n.phr.): 關鍵基礎設施',
+                    'disinformation (n.): 虛假訊息/假新聞', 'milestone (n.): 里程碑', 'gig economy (n.phr.): 零工經濟', 'mandates (v.): 規定/要求',
+                    'basic reward (n.phr.): 基本報酬', 'minimum hourly wage (n.phr.): 最低時薪', 'comprehensive (adj.): 全面的', 'transparent (adj.): 透明的',
+                    'price hikes (n.phr.): 價格調漲', 'indefinitely (adv.): 無期限地', 'off-shore (adj.): 近海的', 'readiness (n.): 戒備狀態'
+                ],
+                quiz: [
+                    { q: 'What did the Air Force cite as the primary cause of the pilot\'s missing status?', options: ['Engine fire', 'Spatial disorientation', 'Running out of fuel', 'A cyberattack'], answer: 'Spatial disorientation' },
+                    { q: 'What device failure reportedly triggered the disorientation?', options: ['The radio', 'Modular mission computer (MMC)', 'The landing gear', 'The oxygen mask'], answer: 'Modular mission computer (MMC)' },
+                    { q: 'Who is the missing captain mentioned in the report?', options: ['Captain Hsin Po-yi', 'Captain Lai Ching-te', 'Captain Chang Wen', 'Captain Jensen Huang'], answer: 'Captain Hsin Po-yi' },
+                    { q: 'How many cyberattacks did the NSB report during the PLA drills?', options: ['4,000', '40,000', '400,000', 'Over 4 million'], answer: 'Over 4 million' },
+                    { q: 'What was the name of the military exercises mentioned by the NSB?', options: ['Peace Mission 2026', 'Justice Mission 2025', 'Taiwan Shield', 'Strait Guardian'], answer: 'Justice Mission 2025' },
+                    { q: 'The cyberattacks targeted which critical infrastructure sectors specifically?', options: ['Gaming and Social Media', 'Education and Finance', 'Energy and healthcare', 'Agriculture and Tourism'], answer: 'Energy and healthcare' },
+                    { q: 'What is the minimum fee per delivery order set by the new law?', options: ['NT$30', 'NT$45', 'NT$60', 'NT$100'], answer: 'NT$45' },
+                    { q: 'The new minimum fee is approximately how many times the minimum hourly wage?', options: ['1.0 times', '1.25 times', '1.5 times', '2.0 times'], answer: '1.25 times' },
+                    { q: 'When is the delivery workers\' law set to be implemented?', options: ['Immediately', 'In three months', 'In six months', 'Next year'], answer: 'In six months' },
+                    { q: 'What did platform operators warn about regarding the new law?', options: ['Faster delivery', 'More workers', 'Potential price hikes for consumers', 'New app features'], answer: 'Potential price hikes for consumers' },
+                    { q: 'The term "scouring" the waters means what?', options: ['Polluting the water', 'Searching thoroughly', 'Swimming', 'Fishing'], answer: 'Searching thoroughly' },
+                    { q: 'What is "disinformation" defined as in the context?', options: ['True facts', 'False info intended to mislead', 'Scientific data', 'Government rules'], answer: 'False info intended to mislead' },
+                    { q: 'The missing pilot signal is hard to find due to the absence of what?', options: ['The plane', 'The engine', 'An emergency locator beacon signal', 'The radio antenna'], answer: 'An emergency locator beacon signal' },
+                    { q: 'What was synchronized with the cyberattacks?', options: ['New Year\'s Eve', 'The deployment of warships and aircraft', 'A trade agreement', 'A space launch'], answer: 'The deployment of warships and aircraft' },
+                    { q: 'The "gig economy" refers to what kind of work?', options: ['Factory work', 'Freelance or short-term contract work', 'Permanent government jobs', 'Military service'], answer: 'Freelance or short-term contract work' }
+                ]
+            },
+            'trump-withdrawal': {
+                title: '川普退出 66 國際組織',
+                english: `President Donald Trump signed a sweeping executive memorandum directing U.S. agencies to terminate participation in 66 international organizations, including 31 UN entities and agreements such as the World Health Organization (WHO) and the Paris Climate Agreement. The administration labeled these institutions as "contrary to U.S. national interests", marking a dramatic America First realignment. Analysts warn that the withdrawal may trigger the collapse of humanitarian and environmental initiatives, potentially allowing China to expand influence within global institutions vacated by Washington.`,
+                chinese: `川普簽署備忘錄指示美國退出 66 個國際組織。美國總統川普簽署了一份廣泛的行政備忘錄，指示美國機構停止參與 66 個國際組織，其中包括 31 個聯合國實體，以及世界衛生組織 (WHO) 和巴黎氣候協定等協議。川普政府將這些機構標籤為「違反美國國家利益」，標誌著「美國優先」政策的劇烈重組。分析人士警告，此舉可能引發人道主義和環境倡議的崩潰，並可能讓中國在美國騰出的全球機構中擴大影響力。`,
+                vocabulary: [
+                    'sweeping (adj.): 廣泛的/徹底的', 'executive memorandum (n.phr.): 行政備忘錄', 'directing (v.ger.): 指示', 'terminate (v.): 終止/停止',
+                    'participation (n.): 參與', 'entities (n.): 實體/機構', 'World Health Organization (n. proper): 世界衛生組織', 'Paris Climate Agreement (n. proper): 巴黎氣候協定',
+                    'contrary to (phr.): 違反/與...相反', 'national interests (n.phr.): 國家利益', 'realignment (n.): 重組/調整', 'America First (n. proper): 美國優先',
+                    'trigger (v.): 引發', 'collapse (n.): 崩潰/瓦解', 'humanitarian (adj.): 人道主義的', 'initiatives (n.): 倡議/計畫',
+                    'potentially (adv.): 潛在地', 'vacated (v.pp.): 騰出的/空出的', 'terminate (v.): 終止', 'administration (n.): 政府/行政機關',
+                    'influence (n.): 影響力', 'global institutions (n.phr.): 全球機構', 'dramatic (adj.): 劇烈的', 'withdraw (v.): 退出',
+                    'warning (n.): 警告', 'agencies (n.): 機構', 'realignment (n.): 重新結盟', 'environmental (adj.): 環境的',
+                    'realignment (n.): 重新排隊/重組', 'labeled (v.): 貼上標籤/稱為', 'expand (v.): 擴張', 'influence (n.): 影響'
+                ],
+                quiz: [
+                    { q: 'How many international organizations is Trump withdrawing from?', options: ['31', '45', '66', '100'], answer: '66' },
+                    { q: 'How many of the organizations are UN entities?', options: ['15', '31', '66', 'None'], answer: '31' },
+                    { q: 'Which famous climate agreement is the US leaving?', options: ['Kyoto Protocol', 'Paris Climate Agreement', 'Montreal Protocol', 'Green Deal'], answer: 'Paris Climate Agreement' },
+                    { q: 'How did the administration label these institutions?', options: ['"Essential to peace"', '"Contrary to U.S. national interests"', '"Too expensive"', '"Outdated"'], answer: '"Contrary to U.S. national interests"' },
+                    { q: 'What policy theme does this move represent?', options: ['Global Cooperation', 'America First', 'Save the Planet', 'Open Borders'], answer: 'America First' },
+                    { q: 'What is one feared consequence for global initiatives?', options: ['Expansion', 'Tax reduction', 'Trigger the collapse of humanitarian/environmental initiatives', 'World peace'], answer: 'Trigger the collapse of humanitarian/environmental initiatives' },
+                    { q: 'Which country is expected to potentially fill the influence gap?', options: ['Russia', 'Japan', 'China', 'Germany'], answer: 'China' },
+                    { q: 'What did Trump sign to authorize this move?', options: ['A personal letter', 'A sweeping executive memorandum', 'A law in Congress', 'A social media post'], answer: 'A sweeping executive memorandum' },
+                    { q: 'The term "terminate" means what?', options: ['To start', 'To finish or end something', 'To change', 'To delay'], answer: 'To finish or end something' },
+                    { q: 'Which health organization is explicitly mentioned as being left?', options: ['Red Cross', 'WHO', 'UNICEF', 'CDC'], answer: 'WHO' },
+                    { q: 'The term "vacated" means the US has ______ the institutions.', options: ['Left them empty or left the position', 'Destroyed them', 'Moved them to New York', 'Renovated them'], answer: 'Left them empty or left the position' },
+                    { q: 'The move marks a dramatic ______ in US policy.', options: ['Success', 'Realignment', 'Failure', 'Mistake'], answer: 'Realignment' },
+                    { q: 'What kind of institutions are these defined as?', options: ['Local', 'Private', 'International/Global', 'State'], answer: 'International/Global' },
+                    { q: 'Trump directed which groups to terminate participation?', options: ['Individual citizens', 'U.S. agencies', 'Private banks', 'European allies'], answer: 'U.S. agencies' },
+                    { q: 'What does "sweeping" describe in the text?', options: ['Cleaning the floor', 'Wide-ranging and extensive', 'Secret', 'Very small'], answer: 'Wide-ranging and extensive' }
+                ]
+            },
+            'venezuela-oil': {
+                title: '委內瑞拉石油大計',
+                english: `Trump announced that Venezuela would transfer 30–50 million barrels of crude oil to the U.S. following the recent military operation. The oil, currently stranded on tankers, will reportedly be sold at market prices, with proceeds managed by Washington. While framed as a boost to regional energy security, legal experts questioned the legality and transparency of such a transfer under international law, as Venezuela’s interim government struggles to maintain order.`,
+                chinese: `委內瑞拉石油大計：川普宣稱獲取五千萬桶石油。川普宣布，在近期軍事行動後，委內瑞拉將向美國轉移 3,000 萬至 5,000 萬桶原油。據報導，這批目前受困於油輪上的石油將以市場價格出售，收益由華盛頓管理。雖然這被塑造為對區域能源安全的提升，但由於委內瑞拉臨時政府仍努力維持秩序，法律專家質疑此舉在國際法下的合法性與透明度。`,
+                vocabulary: [
+                    'barrels (n.): 桶', 'crude oil (n.phr.): 原油', 'transfer (v.): 轉移/轉讓', 'stranded (adj.): 受困的/擱淺的',
+                    'tankers (n.): 油輪', 'reportedly (adv.): 據報導', 'market prices (n.phr.): 市場價格', 'proceeds (n.): 收益/收入',
+                    'managed by (phr.): 由...管理', 'boost (n.): 提升/推動', 'regional (adj.): 區域的', 'energy security (n.phr.): 能源安全',
+                    'legal experts (n.phr.): 法律專家', 'legality (n.): 合法性', 'transparency (n.): 透明度', 'international law (n.phr.): 國際法',
+                    'interim government (n.phr.): 臨時政府', 'struggles (v.): 掙扎/努力', 'maintain order (phr.): 維持秩序', 'crude (adj.): 原生的/天然的',
+                    'transfer (n.): 移交', 'questioned (v.): 質疑', 'framed (v.pp.): 塑造/框架', 'operation (n.): 行動',
+                    'military (adj.): 軍事的', 'announce (v.): 宣布', 'proceeds (n.): 實收款項', 'tanker (n.): 大型油輪',
+                    'security (n.): 安全', 'regional (adj.): 地區性的', 'legal (adj.): 法律的', 'order (n.): 秩序'
+                ],
+                quiz: [
+                    { q: 'How many barrels of oil did Trump claim the US would receive from Venezuela?', options: ['10 million', '30–50 million', '100 million', '500 million'], answer: '30–50 million' },
+                    { q: 'What kind of oil is being transferred?', options: ['Refined gasoline', 'Cooking oil', 'Crude oil', 'Solar oil'], answer: 'Crude oil' },
+                    { q: 'What is the current state of the oil mentioned?', options: ['In underground pipes', 'Stranded on tankers', 'In US gas stations', 'On the moon'], answer: 'Stranded on tankers' },
+                    { q: 'At what price will the oil reportedly be sold?', options: ['Half price', 'Market prices', 'Fixed low price', 'It is free'], answer: 'Market prices' },
+                    { q: 'Who will manage the proceeds (money) from the oil sales?', options: ['The UN', 'Venezuela\'s interim government', 'Washington (US)', 'A private bank'], answer: 'Washington (US)' },
+                    { q: 'How is the move being "framed" or presented?', options: ['As a theft', 'As a boost to regional energy security', 'As a new tax', 'As a charity event'], answer: 'As a boost to regional energy security' },
+                    { q: 'What are legal experts questioning about this transfer?', options: ['The color of the oil', 'The legality and transparency under international law', 'The weight of the barrels', 'The speed of the ships'], answer: 'The legality and transparency under international law' },
+                    { q: 'What is Venezuela\'s interim government currently struggling with?', options: ['Lowering taxes', 'Maintaining order', 'Buying new planes', 'Cleaning the ocean'], answer: 'Maintaining order' },
+                    { q: 'The term "stranded" means what?', options: ['Fast moving', 'Left in a helpless or stuck position', 'Very valuable', 'Secretive'], answer: 'Left in a helpless or stuck position' },
+                    { q: 'The word "proceeds" refers to what?', options: ['A legal case', 'Money obtained from an event or sale', 'A travel route', 'A type of fuel'], answer: 'Money obtained from an event or sale' },
+                    { q: 'What kind of government is currently in Venezuela according to the text?', options: ['Communist', 'Permanent', 'Interim (temporary)', 'Monarchy'], answer: 'Interim (temporary)' },
+                    { q: 'The oil transfer follows which recent event?', options: ['A trade fair', 'A military operation', 'A space mission', 'A soccer game'], answer: 'A military operation' },
+                    { q: 'The word "crude" in "crude oil" means what?', options: ['Rude', 'Natural and unprocessed', 'Highly refined', 'Black'], answer: 'Natural and unprocessed' },
+                    { q: 'International ______ is the system being used by experts to question the move.', options: ['Trade', 'Science', 'Law', 'Sports'], answer: 'Law' },
+                    { q: 'The term "boost" is a synonym for which word?', options: ['Decrease', 'Improvement or increase', 'Failure', 'Ending'], answer: 'Improvement or increase' }
+                ]
+            },
+            'nvidia-ai-immigrants': {
+                title: '黃仁勳提出「AI 移民」',
+                english: `Jensen Huang introduced the concept of “AI immigrants”, autonomous robots designed to fill global labor shortages. NVIDIA also unveiled “Alpamayo”, an open-source autonomous driving platform, challenging Tesla’s FSD. The announcement reignited debate over job displacement, economic sustainability, and the need for government oversight in an automated future.`,
+                chinese: `黃仁勳提出「AI 移民」概念。輝達 (NVIDIA) 執行長黃仁勳提出了「AI 移民」的概念，這是一些旨在填補全球勞動力短缺的自主機器人。輝達還公布了「Alpamayo」，這是一個開源的自動駕駛平台，挑戰了特斯拉的 FSD。此公告再次引發了關於工作取代、經濟永續性以及在自動化未來中政府監管必要性的辯論。`,
+                vocabulary: [
+                    'Jensen Huang (n. proper): 黃仁勳', 'AI immigrants (n.phr.): AI 移民', 'autonomous (adj.): 自主的/自動的', 'robots (n.): 機器人',
+                    'labor shortages (n.phr.): 勞動力短缺', 'unveiled (v.): 公布/揭幕', 'open-source (adj.): 開源的', 'autonomous driving (n.phr.): 自動駕駛',
+                    'platform (n.): 平台', 'challenging (v.ger.): 挑戰', 'Tesla’s FSD (n. proper): 特斯拉全自動駕駛系統', 'reignited (v.): 再次引發',
+                    'debate (n.): 辯論', 'job displacement (n.phr.): 工作取代/失業位移', 'economic sustainability (n.phr.): 經濟永續性', 'government oversight (n.phr.): 政府監管',
+                    'automated (adj.): 自動化的', 'future (n.): 未來', 'concept (n.): 概念', 'designed to (phr.): 旨在',
+                    'fill (v.): 填補', 'platform (n.): 月台/平台', 'software (n.): 軟體', 'reignite (v.): 重燃',
+                    'displacement (n.): 取代/位移', 'sustainability (n.): 永續性', 'oversight (n.): 監督', 'autonomous (adj.): 自主性的',
+                    'labor (n.): 勞動力', 'unveil (v.): 透露', 'innovative (adj.): 創新的', 'industry (n.): 產業'
+                ],
+                quiz: [
+                    { q: 'What is the name of the concept introduced by Jensen Huang?', options: ['AI Soldiers', 'AI Immigrants', 'AI Citizens', 'AI Students'], answer: 'AI Immigrants' },
+                    { q: 'What are "AI immigrants" according to the text?', options: ['Foreign computer programmers', 'Autonomous robots designed to fill labor shortages', 'New apps for migrants', 'Smartphones for travelers'], answer: 'Autonomous robots designed to fill labor shortages' },
+                    { q: 'What is the name of NVIDIA\'s new autonomous driving platform?', options: ['FSD', 'Alpamayo', 'Apollo', 'Everest'], answer: 'Alpamayo' },
+                    { q: 'What is a key feature of the Alpamayo platform?', options: ['It is expensive.', 'It is open-source.', 'It is secret.', 'It is only for trucks.'], answer: 'It is open-source.' },
+                    { q: 'Which company\'s FSD system is NVIDIA challenging?', options: ['Apple', 'Microsoft', 'Tesla', 'Google'], answer: 'Tesla' },
+                    { q: 'What kind of debate did this announcement reignite?', options: ['Weather debate', 'Debate over job displacement and economic sustainability', 'Space travel debate', 'Food safety debate'], answer: 'Debate over job displacement and economic sustainability' },
+                    { q: 'What is needed in an automated future according to the text?', options: ['More robots', 'Government oversight', 'Higher taxes', 'Less education'], answer: 'Government oversight' },
+                    { q: 'The term "autonomous" means what?', options: ['Very expensive', 'Acting independently or having the freedom to do so', 'Manual', 'Broken'], answer: 'Acting independently or having the freedom to do so' },
+                    { q: 'What does "job displacement" refer to?', options: ['Moving an office', 'People losing jobs because they are replaced by technology', 'Hiring new workers', 'A type of training'], answer: 'People losing jobs because they are replaced by technology' },
+                    { q: 'What does "open-source" mean in software?', options: ['The code is free for anyone to use and modify', 'The code is a secret', 'The code is only for one company', 'The code is broken'], answer: 'The code is free for anyone to use and modify' },
+                    { q: 'Jensen Huang is the CEO of which company?', options: ['Tesla', 'NVIDIA', 'Apple', 'Meta'], answer: 'NVIDIA' },
+                    { q: 'The announcement was said to "reignite" a debate, meaning what?', options: ['Stop it', 'Start it again', 'Ignore it', 'Finish it'], answer: 'Start it again' },
+                    { q: 'What issue are the robots designed to "fill"?', options: ['Empty bottles', 'Global labor shortages', 'Parking spaces', 'New buildings'], answer: 'Global labor shortages' },
+                    { q: 'What does "oversight" mean?', options: ['A mistake', 'Supervision or monitoring', 'Looking away', 'Seeing far'], answer: 'Supervision or monitoring' },
+                    { q: 'Alpamayo is a platform for what?', options: ['Social media', 'Autonomous driving', 'Gaming', 'Banking'], answer: 'Autonomous driving' }
+                ]
+            },
+            'australia-heatwave': {
+                title: '澳洲遭遇極端熱浪',
+                english: `Australia issued severe heatwave warnings as temperatures surpassed 45°C in Victoria and South Australia. Authorities declared high-level fire bans, while health officials warned of critical heatstroke risks. The crisis has renewed debate over climate adaptation, infrastructure resilience, and protection for vulnerable populations.`,
+                chinese: `澳洲遭遇極端熱浪，氣溫突破 45°C。隨著維多利亞州和南澳州的氣溫突破 45°C，澳洲發布了嚴重的熱浪警告。當局宣布了高規格的禁火令，而衛生官員則警告存在嚴重的中暑風險。這場危機再次引發了關於氣候調適、基礎設施韌性以及對脆弱族群保護的辯論。`,
+                vocabulary: [
+                    'severe (adj.): 嚴重的', 'heatwave (n.): 熱浪', 'surpassed (v.): 超過/突破', 'Victoria (n. proper): 維多利亞州 (澳洲地名)',
+                    'South Australia (n. proper): 南澳州', 'authorities (n.): 當局', 'declared (v.): 宣布', 'high-level (adj.): 高規格的/高層級的',
+                    'fire bans (n.phr.): 禁火令', 'health officials (n.phr.): 衛生官員', 'critical (adj.): 嚴重的/關鍵的', 'heatstroke (n.): 中暑',
+                    'risks (n.): 風險', 'renewed (v.pp.): 再次引發/更新的', 'climate adaptation (n.phr.): 氣候調適', 'infrastructure resilience (n.phr.): 基礎設施韌性',
+                    'vulnerable populations (n.phr.): 脆弱族群', 'surpass (v.): 超過', 'critical (adj.): 危急的', 'adaptation (n.): 適應/調適',
+                    'resilience (n.): 韌性/彈性', 'vulnerable (adj.): 易受傷的/脆弱的', 'population (n.): 人口/族群', 'warning (n.): 警告',
+                    'heat (n.): 熱', 'temperature (n.): 氣溫', 'extreme (adj.): 極端的', 'official (n.): 官員',
+                    'infrastructure (n.): 基礎設施', 'adaptation (n.): 適應性', 'resilience (n.): 復原力'
+                ],
+                quiz: [
+                    { q: 'In which countries is the severe heatwave occurring?', options: ['USA and Canada', 'Australia', 'China and Japan', 'Brazil'], answer: 'Australia' },
+                    { q: 'Temperatures surpassed which level in Victoria and South Australia?', options: ['30°C', '35°C', '40°C', '45°C'], answer: '45°C' },
+                    { q: 'What kind of bans did authorities declare?', options: ['Water bans', 'High-level fire bans', 'Traffic bans', 'Smoking bans'], answer: 'High-level fire bans' },
+                    { q: 'What specific health risk did officials warn about?', options: ['Fever', 'Heatstroke risks', 'Broken bones', 'Stomach ache'], answer: 'Heatstroke risks' },
+                    { q: 'The crisis has "renewed" debate over what?', options: ['Tourism', 'Climate adaptation and infrastructure resilience', 'New car laws', 'Tax rates'], answer: 'Climate adaptation and infrastructure resilience' },
+                    { q: 'Who needs special protection during this crisis?', options: ['Athletes', 'Vulnerable populations', 'Health officials', 'Pilots'], answer: 'Vulnerable populations' },
+                    { q: 'The word "surpassed" is a synonym for which word?', options: ['Fell below', 'Stayed the same', 'Exceeded or went beyond', 'Matched'], answer: 'Exceeded or went beyond' },
+                    { q: 'What is a "heatwave"?', options: ['A cold wind', 'A period of abnormally hot weather', 'A large wave in the ocean', 'A type of spicy food'], answer: 'A period of abnormally hot weather' },
+                    { q: 'What does "resilience" mean?', options: ['Being very weak', 'The ability to recover quickly from difficulties', 'The price of a house', 'A new law'], answer: 'The ability to recover quickly from difficulties' },
+                    { q: 'What does "vulnerable" mean?', options: ['Very strong', 'Safe and secure', 'Susceptible to harm or in a position of weakness', 'Very fast'], answer: 'Susceptible to harm or in a position of weakness' },
+                    { q: 'Health ______ warned of the risks.', options: ['Lawyers', 'Officials', 'Drivers', 'Students'], answer: 'Officials' },
+                    { q: 'The term "fire ban" means it is ______ to start a fire.', options: ['Legal', 'Necessary', 'Illegal/Forbidden', 'Easy'], answer: 'Illegal/Forbidden' },
+                    { q: 'Victoria and South Australia are parts of which nation?', options: ['USA', 'Australia', 'UK', 'New Zealand'], answer: 'Australia' },
+                    { q: 'The term "adaptation" refers to the process of ______.', options: ['Changing to fit new conditions', 'Staying the same', 'Fighting', 'Leaving'], answer: 'Changing to fit new conditions' },
+                    { q: 'Is the heatwave considered "severe"?', options: ['Yes', 'No', 'Only at night', 'The text doesn\'t say'], answer: 'Yes' }
+                ]
+            }
+        };
+
+        // --- STATE & RENDERING ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
