@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 9 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 9 日：台灣本地政策與全球能源爭議</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for an immersive English news learning experience. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Cabinet Proposes Stricter Penalties for Animal Abuse and Abandonment\nIn response to growing public concern over animal welfare, the Cabinet unveiled draft revisions to the Animal Protection Act. The proposed changes seek to significantly increase fines for pet abandonment and animal cruelty, with maximum penalties potentially reaching NT$1 million. The new regulations also aim to tighten the criteria for pet owners to place animals in shelters.\n\n[2] Former Engineer Detained Over Alleged Theft of TSMC Trade Secrets\nA local court has ordered the detention of a former engineer suspected of stealing highly sensitive trade secrets from TSMC. Prosecutors alleged that the individual attempted to transfer confidential semiconductor manufacturing processes to a foreign entity before being apprehended. The court ruled that the suspect be held incommunicado to prevent evidence destruction.\n\n[3] Major Cities Expand Free School Lunch Programs\nFollowing Taipei’s lead, the city governments of Taichung and Kaohsiung announced that they will provide free lunches for all public school students starting next semester. This policy shift aims to reduce the financial burden on middle-class families and ensure that every child has access to nutritious meals regardless of economic background.`,
+                chinese: `【1】行政院擬加重虐待動物罰則\n針對公眾對動物福利日益增長的關注，行政院公布了《動物保護法》修正草案。擬議的修法尋求大幅提高棄養寵物和虐待動物的罰金，最高可達 100 萬新台幣。新規定還旨在收緊寵物主人將動物送往收容所的標準，鼓勵更負責任的飼主行為。\n\n【2】涉嫌竊取 TSMC 商業機密 工程師遭羈押\n法院已裁定羈押一名涉嫌竊取台積電（TSMC）高度敏感商業機密的前工程師。檢察官指控該名人士在被捕前，企圖將機密的半導體製造製程轉移給外國實體。法院裁定將嫌犯羈押禁見，以防止證據被毀損或與共犯串供。\n\n【3】三大城市擴大免費營養午餐\n繼台北市之後，台中市和高雄市政府也宣布將從下學期開始，為所有公立學校學生提供免費午餐。這項政策轉變旨在減輕中產階級家庭的經濟負擔，並確保每個孩子無論經濟背景如何，都能獲得營養餐點。教育官員認為這是對公共衛生和社會公平的重要投資。`,
+                vocabulary: [
+                    'Cabinet (n.): 行政院/內閣', 'Stricter penalties (n.phr.): 更嚴格的處罰', 'Animal abuse (n.phr.): 虐待動物', 'Abandonment (n.): 棄養/遺棄',
+                    'Welfare (n.): 福利', 'Unveiled (v.): 公布/揭幕', 'Draft revisions (n.phr.): 修正草案', 'Animal Protection Act (n. proper): 動物保護法',
+                    'Cruelty (n.): 虐待/殘忍行為', 'Criteria (n.): 標準', 'Shelters (n.): 收容所', 'Responsible ownership (n.phr.): 負責任的飼主行為',
+                    'Detained (v.pp.): 羈押/拘留', 'Alleged theft (n.phr.): 涉嫌竊取', 'Trade secrets (n.phr.): 商業機密', 'Sensitive (adj.): 敏感的',
+                    'Confidential (adj.): 機密的', 'Manufacturing processes (n.phr.): 製造製程', 'Foreign entity (n.phr.): 外國實體', 'Apprehended (v.pp.): 被捕',
+                    'Incommunicado (adj./adv.): 羈押禁見 (無法與外界通訊)', 'Collusion (n.): 串供', 'Accomplices (n.): 共犯', 'Intellectual property (n.phr.): 智慧財產權',
+                    'Competitive edge (n.phr.): 競爭優勢', 'School lunch program (n.phr.): 營養午餐計畫', 'Next semester (n.phr.): 下學期', 'Financial burden (n.phr.): 經濟負擔',
+                    'Middle-class (adj.): 中產階級的', 'Nutritious (adj.): 營養的', 'Budget allocation (n.phr.): 預算分配', 'Social equality (n.phr.): 社會公平'
+                ],
+                quiz: [
+                    { q: 'What is the maximum fine proposed for animal abandonment in the new draft?', options: ['NT$100,000', 'NT$500,000', 'NT$1 million', 'NT$2 million'], answer: 'NT$1 million' },
+                    { q: 'What is one additional goal of the revised Animal Protection Act?', options: ['To build more parks', 'To tighten criteria for placing animals in shelters', 'To tax pet food', 'To ban all pets'], answer: 'To tighten criteria for placing animals in shelters' },
+                    { q: 'The former engineer is suspected of stealing trade secrets from which company?', options: ['Intel', 'TSMC', 'Samsung', 'Nvidia'], answer: 'TSMC' },
+                    { q: 'Why did the court rule to hold the suspect incommunicado?', options: ['He has no lawyer.', 'To prevent evidence destruction or collusion.', 'He requested it.', 'The prison is full.'], answer: 'To prevent evidence destruction or collusion.' },
+                    { q: 'Which cities besides Taipei announced free school lunches?', options: ['Tainan and Hsinchu', 'Taichung and Kaohsiung', 'Keelung and Yilan', 'Taoyuan and Miaoli'], answer: 'Taichung and Kaohsiung' },
+                    { q: 'When will the free school lunch policy start in Taichung and Kaohsiung?', options: ['Immediately', 'Next semester', 'Next year', 'In 2027'], answer: 'Next semester' },
+                    { q: 'What is the main purpose of the free lunch policy shift?', options: ['To support local farmers', 'To reduce financial burden on middle-class families', 'To win an election', 'To test new food types'], answer: 'To reduce financial burden on middle-class families' },
+                    { q: 'The term "apprehended" is a synonym for which word?', options: ['Released', 'Caught or arrested', 'Escaped', 'Hidden'], answer: 'Caught or arrested' },
+                    { q: 'What kind of information was the engineer attempting to transfer?', options: ['Public salary data', 'Confidential semiconductor manufacturing processes', 'Office floor plans', 'Employee lunch menus'], answer: 'Confidential semiconductor manufacturing processes' },
+                    { q: 'What does "incommunicado" mean in a legal context?', options: ['Allowed to use a phone', 'Without being able to communicate with others', 'Free to go home', 'Speaking many languages'], answer: 'Without being able to communicate with others' },
+                    { q: 'The Cabinet unveiled draft ______ to the Animal Protection Act.', options: ['Revisions', 'Deletions', 'Endings', 'Books'], answer: 'Revisions' },
+                    { q: 'TSMC stated they will cooperate with law enforcement to maintain their ______.', options: ['Price edge', 'Building edge', 'Competitive edge', 'Social edge'], answer: 'Competitive edge' },
+                    { q: 'Education officials view the lunch program as an investment in public ______.', options: ['Wealth', 'Health', 'Transport', 'Safety'], answer: 'Health' },
+                    { q: 'How many years has it been since the last substantial update to pet laws?', options: ['5 years', 'Over a decade', '2 years', 'One month'], answer: 'Over a decade' },
+                    { q: 'What is the "Animal Protection Act" primarily about?', options: ['Protecting wild tigers', 'Governing pet ownership and animal treatment', 'Hunting laws', 'Animal fashion'], answer: 'Governing pet ownership and animal treatment' }
+                ]
+            },
+            'us-russia-tanker': {
+                title: '美軍扣押俄油輪並接管委國石油',
+                english: `Tensions between Washington and Moscow escalated after U.S. forces seized the Russian-flagged oil tanker “Marinera” in the North Atlantic, citing violations of American sanctions. Simultaneously, the Trump administration announced plans to take direct control over the distribution and sale of Venezuela’s petroleum products globally. White House officials stated that proceeds would be deposited into U.S.-controlled accounts to prevent funds from supporting the previous regime’s loyalists. The Kremlin condemned the seizure as “international piracy” and a blatant violation of maritime law, warning of retaliatory measures. Analysts say this strategy aims to reorganize the global energy market, potentially easing U.S. fuel prices while weakening Russia’s energy influence.`,
+                chinese: `美軍扣押俄羅斯油輪並接管委內瑞拉石油銷售。在美軍於北大西洋扣押懸掛俄羅斯國旗的「Marinera」號油輪後，華盛頓與莫斯科之間的緊張局勢升溫，理由是該船違反了美國的制裁。與此同時，川普政府宣布計畫直接控制委內瑞拉石油產品在全球的配送與銷售。白宮官員表示，所得收益將存入美國控制的帳戶，以防止資金支持前政權的擁護者。克里姆林宮譴責這次扣押是「國際海盜行為」，且公然違反海洋法，並警告將採取報復措施。分析人士表示，這項策略旨在重組全球能源市場，在削弱俄羅斯能源影響力的同時，可能緩解美國的燃油價格。`,
+                vocabulary: [
+                    'Tensions (n.): 緊張局勢', 'Escalated (v.): 升級', 'Seized (v.): 扣押/沒收', 'Russian-flagged (adj.): 懸掛俄羅斯旗幟的',
+                    'North Atlantic (n. proper): 北大西洋', 'Sanctions (n.): 制裁', 'Simultaneously (adv.): 同時地', 'Direct control (n.phr.): 直接控制',
+                    'Distribution (n.): 分銷/配送', 'Petroleum products (n.phr.): 石油產品', 'Proceeds (n.): 收益/所得', 'Deposited (v.pp.): 存入',
+                    'Regime’s loyalists (n.phr.): 政權擁護者', 'The Kremlin (n. proper): 克里姆林宮 (俄國政府)', 'Condemned (v.): 譴責', 'International piracy (n.phr.): 國際海盜行為',
+                    'Blatant violation (n.phr.): 公然違反', 'Maritime law (n.phr.): 海洋法', 'Retaliatory measures (n.phr.): 報復措施', 'Reorganize (v.): 重組',
+                    'Energy market (n.phr.): 能源市場', 'Fuel prices (n.phr.): 燃油價格', 'Influence (n.): 影響力', 'Citing (v.ger.): 引用/指出',
+                    'Escalation (n.): 擴張/升級', 'Simultaneous (adj.): 同步的', 'Petroleum (n.): 石油', 'Depositor (n.): 存款人',
+                    'Condemnation (n.): 譴責', 'Piracy (n.): 海盜行為', 'Blatant (adj.): 露骨的/冒失的', 'Retaliatory (adj.): 報復的'
+                ],
+                quiz: [
+                    { q: 'What is the name of the seized Russian oil tanker?', options: ['Centuries', 'Marinera', 'Moskva', 'Siberia'], answer: 'Marinera' },
+                    { q: 'Where was the tanker seized?', options: ['Pacific Ocean', 'North Atlantic', 'Gulf of Mexico', 'Black Sea'], answer: 'North Atlantic' },
+                    { q: 'What was the reason given for the seizure?', options: ['Theft', 'Violations of American sanctions', 'Engine failure', 'Illegal fishing'], answer: 'Violations of American sanctions' },
+                    { q: 'The US plans to take direct control over whose petroleum products?', options: ['Russia\'s', 'Iran\'s', 'Venezuela\'s', 'Saudi Arabia\'s'], answer: 'Venezuela\'s' },
+                    { q: 'Where will the proceeds from the oil sales be deposited?', options: ['The World Bank', 'The Venezuelan Central Bank', 'U.S.-controlled accounts', 'Private accounts in Switzerland'], answer: 'U.S.-controlled accounts' },
+                    { q: 'How did the Kremlin describe the US action?', options: ['A lawful arrest', 'International piracy', 'A commercial deal', 'A minor dispute'], answer: 'International piracy' },
+                    { q: 'What does the Kremlin warn of in response?', options: ['Thank you letters', 'Retaliatory measures', 'New oil sales', 'Leaving the UN'], answer: 'Retaliatory measures' },
+                    { q: 'What is the primary strategic goal of this move according to analysts?', options: ['To start a war', 'To reorganize the global energy market', 'To help Russia', 'To sell more cars'], answer: 'To reorganize the global energy market' },
+                    { q: 'The term "blatant violation" implies the violation is ______.', options: ['Secret', 'Very obvious and unashamed', 'Accidental', 'Small'], answer: 'Very obvious and unashamed' },
+                    { q: 'The word "proceeds" means what?', options: ['Rules', 'Money obtained from a sale', 'The speed of a boat', 'Future events'], answer: 'Money obtained from a sale' },
+                    { q: 'What part of the energy market might see a price ease in the US?', options: ['Electricity', 'Fuel prices', 'Coal', 'Nuclear power'], answer: 'Fuel prices' },
+                    { q: 'Who is currently making these energy strategy decisions in the US?', options: ['The Fed', 'The Trump administration', 'TSMC', 'The UN'], answer: 'The Trump administration' },
+                    { q: 'Which government is represented by the term "The Kremlin"?', options: ['USA', 'Venezuela', 'Russia', 'Ukraine'], answer: 'Russia' },
+                    { q: 'The term "maritime law" refers to laws governing what?', options: ['Outer space', 'Land property', 'Activities on the sea', 'Air travel'], answer: 'Activities on the sea' },
+                    { q: 'What does "simultaneously" mean?', options: ['One after another', 'Happening at the same time', 'Never happening', 'Happening early'], answer: 'Happening at the same time' }
+                ]
+            },
+            'fed-division': {
+                title: '聯準會 2026 利率路徑分歧',
+                english: `Recent Federal Reserve minutes reveal deep divisions among policymakers over the interest rate outlook for 2026. Some officials argue that cooling inflation justifies an earlier-than-expected rate cut to support growth, while others remain wary of persistent price pressures in the labor market. This lack of consensus has left investors and global markets in suspense. Analysts suggest future decisions will be highly data-dependent, focusing on employment figures and consumer price data.`,
+                chinese: `聯準會內部意見分歧。聯準會（Fed）最近的會議紀錄顯示，決策者對於 2026 年的利率展望存在嚴重分歧。部分官員認為，通膨降溫為早於預期的降息提供了正當理由，以支持經濟成長；而其他官員則對勞動市場持續存在的物價壓力保持警戒。這種共識的缺乏讓投資者和全球市場處於懸而未決的焦慮狀態。分析人士指出，未來的決策將高度依賴數據，重點關注就業數據和消費者物價數據。`,
+                vocabulary: [
+                    'Federal Reserve (n. proper): 聯準會 (美國中央銀行)', 'Minutes (n.): 會議紀錄', 'Policymakers (n.): 決策者', 'Interest rate (n.phr.): 利率',
+                    'Outlook (n.): 展望', 'Cooling inflation (n.phr.): 通膨降溫', 'Justifies (v.): 證明...有理/使正當化', 'Earlier-than-expected (adj.): 早於預期的',
+                    'Rate cut (n.phr.): 降息', 'Support growth (phr.): 支持成長', 'Wary (adj.): 警戒的/謹慎的', 'Persistent (adj.): 持續的',
+                    'Price pressures (n.phr.): 物價壓力', 'Labor market (n.phr.): 勞動市場', 'Consensus (n.): 共識', 'Investors (n.): 投資者',
+                    'In suspense (phr.): 懸而未決/焦慮不安', 'Data-dependent (adj.): 依賴數據的', 'Employment figures (n.phr.): 就業數據', 'Consumer price data (n.phr.): 消費者物價數據',
+                    'Inflation (n.): 通貨膨脹', 'Justify (v.): 辯護', 'Division (n.): 分歧', 'Focusing (v.ger.): 專注於',
+                    'Consensus (n.): 一致的意見', 'Outlook (n.): 景色/前景', 'Suspense (n.): 懸念', 'Dependent (adj.): 依賴的',
+                    'Pressure (n.): 壓力', 'Policymaker (n.): 政策制定者', 'Division (n.): 劃分/分歧', 'Wary (adj.): 小心的'
+                ],
+                quiz: [
+                    { q: 'Which organization released the "minutes" mentioned in the text?', options: ['The World Bank', 'The Federal Reserve', 'The Kremlin', 'The UN'], answer: 'The Federal Reserve' },
+                    { q: 'What are policymakers divided over for 2026?', options: ['The tax outlook', 'The interest rate outlook', 'Climate change laws', 'Trade sanctions'], answer: 'The interest rate outlook' },
+                    { q: 'Why do some officials support an earlier rate cut?', options: ['High taxes', 'Cooling inflation', 'Stock market crash', 'War in Europe'], answer: 'Cooling inflation' },
+                    { q: 'What are other officials "wary" of in the labor market?', options: ['Lack of workers', 'Persistent price pressures', 'Low wages', 'New technology'], answer: 'Persistent price pressures' },
+                    { q: 'The word "consensus" means what?', options: ['A legal rule', 'General agreement or unity of opinion', 'A loud argument', 'A financial loss'], answer: 'General agreement or unity of opinion' },
+                    { q: 'How do global markets feel about the lack of consensus?', options: ['They are happy.', 'They are in suspense.', 'They are closed.', 'They are not affected.'], answer: 'They are in suspense.' },
+                    { q: 'Future decisions will be "highly ______" according to analysts.', options: ['Political', 'Secret', 'Data-dependent', 'Fast'], answer: 'Data-dependent' },
+                    { q: 'Which two types of data will policymakers focus on?', options: ['Weather and traffic', 'Fashion and sports', 'Employment figures and consumer price data', 'Population and space data'], answer: 'Employment figures and consumer price data' },
+                    { q: 'The term "minutes" refers to what in this context?', options: ['60 seconds', 'The official record of a meeting', 'The distance to travel', 'The number of workers'], answer: 'The official record of a meeting' },
+                    { q: 'What does "wary" mean?', options: ['Angry', 'Feeling or showing caution', 'Extremely tired', 'Very fast'], answer: 'Feeling or showing caution' },
+                    { q: 'What is the goal of a "rate cut" for some officials?', options: ['To increase inflation', 'To support growth', 'To stop trading', 'To lower taxes'], answer: 'To support growth' },
+                    { q: 'The Federal Reserve is often referred to as what?', options: ['The Kremlin', 'The Fed', 'The Cabinet', 'The NSB'], answer: 'The Fed' },
+                    { q: 'What is "cooling inflation"?', options: ['Prices rising faster', 'Prices slowing down in their rate of increase', 'Prices dropping to zero', 'Prices staying exactly the same'], answer: 'Prices slowing down in their rate of increase' },
+                    { q: 'The term "outlook" means which of the following?', options: ['A window', 'A prospect or future expectation', 'An old law', 'A type of money'], answer: 'A prospect or future expectation' },
+                    { q: 'Is there a clear agreement on the interest rate direction for 2026?', options: ['Yes', 'No', 'Only in the US', 'The text doesn\'t say'], answer: 'No' }
+                ]
+            },
+            'australia-heatwave': {
+                title: '澳洲極端熱浪引發野火威脅',
+                english: `Australia’s record-breaking heatwave continues to intensify, with parts of South Australia reaching 47°C. Authorities issued high-level fire warnings as dry and windy conditions sharply increase the risk of catastrophic bushfires. Emergency services remain on high alert, while residents are urged to stay indoors and conserve energy to prevent strain on the power grid. Health officials warned of heightened risks of heat-related illnesses, particularly among the elderly and children. The event underscores challenges posed by increasingly severe weather patterns.`,
+                chinese: `澳洲極端熱浪持續。澳洲打破紀錄的熱浪持續加劇，南澳州部分地區氣溫攀升至 47 度。由於乾燥且多風的天氣大幅增加了發生災難性森林大火（野火）的風險，當局發布了高級別的火災警報。緊急救援服務部門保持高度警戒，同時敦促居民留在室內並節約能源，以防止電網負荷過重。衛生官員警告中暑等熱傷害疾病風險升高，特別是針對老年人和兒童。這次事件凸顯了日益嚴峻的天氣型態所帶來的挑戰。`,
+                vocabulary: [
+                    'Heatwave (n.): 熱浪', 'Intensify (v.): 加劇/強化', 'South Australia (n. proper): 南澳州', '47°C (n.): 攝氏47度',
+                    'Fire warnings (n.phr.): 火災警報', 'Dry and windy (adj.phr.): 乾燥且多風的', 'Sharply increase (phr.): 急遽增加', 'Catastrophic (adj.): 災難性的',
+                    'Bushfires (n.): 野火/森林大火', 'Emergency services (n.phr.): 緊急救援服務', 'High alert (n.phr.): 高度警戒', 'Residents (n.): 居民',
+                    'Conserve energy (phr.): 節約能源', 'Strain (n.): 壓力/負擔', 'Power grid (n.phr.): 電網', 'Health officials (n.phr.): 衛生官員',
+                    'Heightened risks (n.phr.): 升高的風險', 'Heat-related illnesses (n.phr.): 熱傷害疾病/中暑相關疾病', 'Underscores (v.): 凸顯/強調', 'Severe weather (n.phr.): 嚴峻天氣',
+                    'Weather patterns (n.phr.): 天氣型態', 'Risk (n.): 風險', 'Alert (n.): 警戒/警報', 'Intensify (v.): 強化',
+                    'Catastrophe (n.): 大災難', 'Bushfire (n.): 灌木叢火災', 'Strain (v.): 拉緊/損傷', 'Vulnerable (adj.): 脆弱的',
+                    'Increasingly (adv.): 日益增長地', 'Severe (adj.): 嚴重的', 'Challenge (n.): 挑戰', 'Elderly (n.): 老年人'
+                ],
+                quiz: [
+                    { q: 'What temperature was reached in parts of South Australia?', options: ['37°C', '40°C', '45°C', '47°C'], answer: '47°C' },
+                    { q: 'What two weather conditions increased the fire risk?', options: ['Cold and rainy', 'Dry and windy', 'Humid and cloudy', 'Snowy and calm'], answer: 'Dry and windy' },
+                    { q: 'What specific type of fire is a threat in Australia?', options: ['House fires', 'Kitchen fires', 'Bushfires (forest fires)', 'Volcanic fires'], answer: 'Bushfires (forest fires)' },
+                    { q: 'What were residents urged to do to help the power grid?', options: ['Turn on all lights', 'Stay indoors and conserve energy', 'Drive more', 'Go to the beach'], answer: 'Stay indoors and conserve energy' },
+                    { q: 'Who is most at risk for heat-related illnesses?', options: ['Young adults', 'The elderly and children', 'Athletes', 'Drivers'], answer: 'The elderly and children' },
+                    { q: 'What kind of warnings did the authorities issue?', options: ['Tsunami warnings', 'Tornado warnings', 'High-level fire warnings', 'Economic warnings'], answer: 'High-level fire warnings' },
+                    { q: 'The term "intensify" means what?', options: ['To stop', 'To become stronger or more extreme', 'To cool down', 'To change color'], answer: 'To become stronger or more extreme' },
+                    { q: 'The word "catastrophic" means which of the following?', options: ['Minor', 'Funny', 'Involving great damage or suffering', 'Normal'], answer: 'Involving great damage or suffering' },
+                    { q: 'Emergency services are on "high ______."', options: ['Holidays', 'Alert', 'Prices', 'Buildings'], answer: 'Alert' },
+                    { q: 'The extreme heat is putting a "strain" on what system?', options: ['The water system', 'The power grid', 'The internet', 'The subway'], answer: 'The power grid' },
+                    { q: 'The word "underscores" means what in the text?', options: ['Draws a line under text', 'Emphasizes or highlights', 'Ignores', 'Deletes'], answer: 'Emphasizes or highlights' },
+                    { q: 'Is the heatwave in Australia breaking any records?', options: ['No', 'Yes, it is record-breaking', 'Only at night', 'The text does not say'], answer: 'Yes, it is record-breaking' },
+                    { q: 'Where are residents urged to stay?', options: ['In parks', 'Indoors', 'At work', 'By the river'], answer: 'Indoors' },
+                    { q: 'Health ______ warned about heat-related illnesses.', options: ['Lawyers', 'Scientists', 'Officials', 'Drivers'], answer: 'Officials' },
+                    { q: 'The term "heatwave" refers to a period of ______ weather.', options: ['Rainy', 'Extremely hot', 'Extremely cold', 'Breezy'], answer: 'Extremely hot' }
+                ]
+            },
+            'un-trade-forecast': {
+                title: '聯合國預測 2026 全球貿易放緩',
+                english: `A new United Nations report predicts that global trade growth will slow markedly in 2026, driven by geopolitical conflicts and rising protectionist policies. The World Economic Situation and Prospects report warns that fragmented supply chains and expanded use of tariffs are constraining international commerce. UN Secretary-General Antonio Guterres called for strengthened multilateral cooperation to restore stability. Economists caution that without coordinated efforts to reduce trade barriers, the world risks a period of prolonged economic stagnation, disproportionately affecting developing nations.`,
+                chinese: `聯合國預測 2026 年全球貿易放緩。聯合國的一份新報告預測，受地緣政治衝突和保護主義政策抬頭的推動，2026 年全球貿易增長將顯著放緩。《世界經濟形勢與展望》報告警告說，碎片化的供應鏈和廣泛使用的關稅正在限制國際商業。聯合國秘書長古特瑞斯呼籲加強多邊合作以恢復穩定。經濟學家警告說，如果沒有協調一致的努力來減少貿易壁壘，世界面臨長期經濟停滯的風險，且這對發展中國家的影響將不成比例地嚴重。`,
+                vocabulary: [
+                    'United Nations (UN) (n. proper): 聯合國', 'Forecasts (v.): 預測', 'Markedly (adv.): 顯著地', 'Geopolitical conflicts (n.phr.): 地緣政治衝突',
+                    'Protectionist policies (n.phr.): 保護主義政策', 'World Economic Situation and Prospects (n. proper): 世界經濟形勢與展望 (報告名)', 'Fragmented (adj.): 碎片化的/分裂的', 'Supply chains (n.phr.): 供應鏈',
+                    'Tariffs (n.): 關稅', 'Constraining (v.ger.): 限制/約束', 'International commerce (n.phr.): 國際商業/貿易', 'Multilateral cooperation (n.phr.): 多邊合作',
+                    'Restore stability (phr.): 恢復穩定', 'Coordinated efforts (n.phr.): 協調一致的努力', 'Trade barriers (n.phr.): 貿易壁壘', 'Prolonged (adj.): 長期的/持續很久的',
+                    'Economic stagnation (n.phr.): 經濟停滯', 'Disproportionately (adv.): 不成比例地', 'Developing nations (n.phr.): 發展中國家', 'markedly (adv.): 顯著地',
+                    'Predict (v.): 預言/預測', 'Markedly (adv.): 明顯地', 'Geopolitical (adj.): 地緣政治的', 'Protectionist (adj.): 保護主義的',
+                    'Fragmented (adj.): 碎裂的', 'Constraint (n.): 限制', 'Multilateral (adj.): 多邊的', 'Stagnation (n.): 停滯',
+                    'Prospect (n.): 前景/展望', 'Barrier (n.): 障礙', 'Marked (adj.): 顯著的', 'Cooperation (n.): 合作'
+                ],
+                quiz: [
+                    { q: 'Which organization released the report on global trade growth?', options: ['The IMF', 'The United Nations (UN)', 'The World Bank', 'The WTO'], answer: 'The United Nations (UN)' },
+                    { q: 'What is predicted for global trade growth in 2026?', options: ['Rapid acceleration', 'It will slow markedly', 'It will stay the same', 'It will stop entirely'], answer: 'It will slow markedly' },
+                    { q: 'What are the two main drivers of the trade slowdown?', options: ['Better technology and peace', 'Geopolitical conflicts and rising protectionist policies', 'Lack of ships and planes', 'Tourism and education'], answer: 'Geopolitical conflicts and rising protectionist policies' },
+                    { q: 'What is the name of the UN report?', options: ['Global Trade Daily', 'World Economic Situation and Prospects', 'United Nations Review', 'Economic News Update'], answer: 'World Economic Situation and Prospects' },
+                    { q: 'What is "constraining" international commerce besides supply chains?', options: ['Free trade', 'Lower taxes', 'Expanded use of tariffs', 'More cooperation'], answer: 'Expanded use of tariffs' },
+                    { q: 'Who called for strengthened multilateral cooperation?', options: ['Donald Trump', 'Antonio Guterres', 'Kim Jong Un', 'Jensen Huang'], answer: 'Antonio Guterres' },
+                    { q: 'What do economists fear without coordinated efforts?', options: ['A period of prolonged economic stagnation', 'Too much economic growth', 'Lower prices for everyone', 'A return to 1990s economy'], answer: 'A period of prolonged economic stagnation' },
+                    { q: 'Who will be "disproportionately affected" by the economic stagnation?', options: ['Wealthy nations', 'Developing nations', 'Only Russia', 'Only small islands'], answer: 'Developing nations' },
+                    { q: 'The term "markedly" means what?', options: ['Slightly', 'Significantly or noticeably', 'Slowly', 'Secretly'], answer: 'Significantly or noticeably' },
+                    { q: 'What are "protectionist policies"?', options: ['Policies to protect the ocean', 'Policies shielding domestic industries from foreign competition', 'Policies to stop animal abuse', 'Policies to help travelers'], answer: 'Policies shielding domestic industries from foreign competition' },
+                    { q: 'The word "fragmented" describes something that is what?', options: ['Strong and united', 'Broken into small pieces or parts', 'New and shiny', 'Transparent'], answer: 'Broken into small pieces or parts' },
+                    { q: 'What does "stagnation" mean in an economy?', options: ['Rapid growth', 'A lack of activity, growth, or development', 'A sudden increase in wealth', 'A type of investment'], answer: 'A lack of activity, growth, or development' },
+                    { q: 'UN Secretary-General wants to restore ______.', options: ['Anger', 'Stability', 'War', 'Taxes'], answer: 'Stability' },
+                    { q: 'The term "multilateral" refers to cooperation between how many parties?', options: ['Only one', 'Only two', 'More than two/Multiple nations', 'None'], answer: 'More than two/Multiple nations' },
+                    { q: 'What does "constraining" mean?', options: ['Helping', 'Expanding', 'Restricting or limiting', 'Ignoring'], answer: 'Restricting or limiting' }
+                ]
+            }
+        };
+
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
