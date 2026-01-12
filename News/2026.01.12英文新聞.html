@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 11 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 11 日頭條：政黨外交、建設里程碑與全球能源博弈</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for professional English learning. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] TPP Chair Huang Kuo-chang Leads Delegation to Washington\nTaiwan People's Party (TPP) Chairman Huang Kuo-chang departed for Washington D.C. on Sunday afternoon, leading a high-profile delegation to meet with U.S. government officials. The three-day visit aims to address critical issues concerning regional defense and the potential impact of the Trump administration's trade tariffs on Taiwan’s economy. Huang stated that negotiating weapons procurement and trade policies directly with the U.S. is a responsibility of the opposition, especially when domestic political cooperation remains stalled.\n\n[2] Danjiang Bridge Construction Reaches Key Milestone\nThe construction of the Danjiang Bridge, which features the world's longest single-tower asymmetric cable-stayed design, reached a significant milestone this weekend. The Ministry of Transportation reported that the complex 3D curved bridge tower has demonstrated that Taiwan's structural engineering capabilities have reached international standards. Once completed, the bridge is expected to significantly alleviate traffic congestion in the Tamsui and Bali districts.\n\n[3] Constitutional Court Ruling Sparks Second Crisis\nTaiwan is facing a deepening political divide following a recent Constitutional Court ruling that restored the administration's ability to block certain opposition-passed legislation. This decision has been characterized by political analysts as a "second constitutional crisis," as it directly impacts the balance of power between the Executive Yuan and the Legislative Yuan. Opposition parties argue that the court is being used to bypass democratic legislative processes.`,
+                chinese: `【1】民眾黨主席黃國昌率團赴美，與川普政府討論國防與關稅議題\n民眾黨主席黃國昌於週日下午率領高層代表團前往華盛頓特區，與美國政府官員會面。為期三天的訪問旨在解決有關區域國防的關鍵問題，以及川普政府貿易關稅對台灣經濟的潛在影響。黃國昌在機場表示，直接與美國談判武器採購和貿易政策是在野黨的責任，特別是在國內政治合作陷入僵局的情況下。\n\n【2】台北淡江大橋工程進度達標，3D 曲面橋塔展現國際級技術水準\n淡江大橋的建設於本週末達成重大里程碑，該橋擁有全球最長的單塔不對稱斜張橋設計。交通部報告指出，複雜的 3D 曲面橋塔展現了台灣的結構工程能力已達到國際水準。一旦完工，這座大橋預計將顯著緩解淡水和八里地區的交通擁堵，同時成為北台灣海岸線的新建築地標。\n\n【3】憲法法庭裁決引發「二次憲政危機」，朝野對立情緒持續升溫\n在憲法法庭最近裁定恢復行政機關阻擋部分在野黨通過法案的能力後，台灣面臨日益加深的政治分歧。政治分析家將此決定描述為「二次憲政危機」，因為它直接影響了行政院與立法院之間的權力平衡。在野黨表示強烈不滿，認為法院被用來繞過民主立法程序，導致制度性不信任和全島性的民意兩極化。`,
+                vocabulary: [
+                    'Delegation (n.): 代表團', 'High-profile (adj.): 高調的/受矚目的', 'Procurement (n.): 採購', 'Stalled (adj.): 停滯的/陷入僵局的',
+                    'Asymmetric (adj.): 不對稱的', 'Cable-stayed (adj.): 斜張式的', 'Milestone (n.): 里程碑', 'Structural engineering (n.phr.): 結構工程',
+                    'Alleviate (v.): 緩解/減輕', 'Congestion (n.): 擁堵', 'Deepening (adj.): 加深的', 'Constitutional (adj.): 憲法的',
+                    'Legislative (adj.): 立法的', 'Polarization (n.): 兩極化', 'Bypass (v.): 繞過/避開', 'Opposition (n.): 在野黨',
+                    'Stance (n.): 立場', 'Impact (n.): 影響', 'Tariffs (n.): 關稅', 'Negotiating (v.ger.): 談判',
+                    'Stalled (v.pp.): 陷入停頓的', 'Domestic (adj.): 國內的', 'Milestone (n.): 重要階段', 'Capabilities (n.): 能力',
+                    'International standards (n.phr.): 國際標準', 'Alleviate (v.): 減輕', 'Coastline (n.): 海岸線', 'Distrust (n.): 不信任',
+                    'Consensus (n.): 共識', 'Unilateral (adj.): 單方面的', 'Executive Yuan (n. proper): 行政院', 'Legislative Yuan (n. proper): 立法院'
+                ],
+                quiz: [
+                    { q: 'Who led the TPP delegation to Washington D.C.?', options: ['Lai Ching-te', 'Huang Kuo-chang', 'Donald Trump', 'Michael Gahler'], answer: 'Huang Kuo-chang' },
+                    { q: 'What are the two main topics of the TPP visit?', options: ['Environment and Health', 'Defense and Tariffs', 'Space and Technology', 'Tourism and Sports'], answer: 'Defense and Tariffs' },
+                    { q: 'The Danjiang Bridge features the world\'s longest of which design?', options: ['Suspension bridge', 'Single-tower asymmetric cable-stayed', 'Double-deck highway', 'Wooden bridge'], answer: 'Single-tower asymmetric cable-stayed' },
+                    { q: 'Which districts will benefit from the Danjiang Bridge completion?', options: ['Xinyi and Daan', 'Tamsui and Bali', 'Banqiao and Yonghe', 'Keelung and Yilan'], answer: 'Tamsui and Bali' },
+                    { q: 'What did analysts call the recent Constitutional Court ruling?', options: ['A historic victory', 'A minor update', 'A "second constitutional crisis"', 'A technical error'], answer: 'A "second constitutional crisis"' },
+                    { q: 'The TPP delegation\'s return is scheduled for which day?', options: ['Monday', 'Tuesday', 'Wednesday', 'Sunday'], answer: 'Wednesday' },
+                    { q: 'The bridge tower is described as having what shape?', options: ['Square', 'Circular', 'Complex 3D curved', 'Straight vertical'], answer: 'Complex 3D curved' },
+                    { q: 'What is the "Executive Yuan"?', options: ['The Parliament', 'The Court', 'The Administration/Cabinet', 'The President\'s house'], answer: 'The Administration/Cabinet' },
+                    { q: 'What does "alleviate" mean?', options: ['To make worse', 'To make something less severe', 'To build faster', 'To ignore'], answer: 'To make something less severe' },
+                    { q: 'What does "procurement" refer to?', options: ['Selling goods', 'Obtaining or purchasing goods/services', 'Fixing machines', 'Teaching students'], answer: 'Obtaining or purchasing goods/services' },
+                    { q: 'The TPP Chairman stated that negotiating with the U.S. is the responsibility of the ______.', options: ['Media', 'Public', 'Opposition', 'Military'], answer: 'Opposition' },
+                    { q: 'What does "polarization" mean in politics?', options: ['Everyone agreeing', 'Division into two sharply contrasting groups', 'Moving to the North Pole', 'A peaceful vote'], answer: 'Division into two sharply contrasting groups' },
+                    { q: 'The term "milestone" indicates what?', options: ['A heavy stone', 'A significant event or stage', 'A mistake', 'A local boundary'], answer: 'A significant event or stage' },
+                    { q: 'The court ruling restored the administration\'s ability to ______ legislation.', options: ['Sign', 'Block', 'Vote for', 'Promote'], answer: 'Block' },
+                    { q: 'Domestic political cooperation in Taiwan is currently described as ______.', options: ['Successful', 'Fast', 'Stalled', 'New'], answer: 'Stalled' }
+                ]
+            },
+            'venezuela-cuba': {
+                title: '川普對委軍事保護與古巴通牒',
+                english: `President Donald Trump intensified his administration's involvement in South America on Sunday by declaring that Venezuela now enjoys the "military protection" of the United States. This follows the capture of former President Nicolas Maduro and aims to prevent regional rivals from interfering with the nation's fragile transition. Simultaneously, Trump issued a blunt warning to the Cuban government, suggesting they "make a deal" before it is too late, as U.S. forces have successfully cut off the vital flow of Venezuelan oil and money to the island. The President emphasized that the era of Cuba "living off" Venezuelan resources is over, and that Caracas no longer needs protection from "extortionists." While some jubilant exiles celebrate the move, international critics are raising concerns about the potential for prolonged U.S. military intervention and the erosion of regional sovereignty.`,
+                chinese: `川普宣布獲得美軍軍事保護，並向古巴發出「最後通牒」。美國總統川普週日加強了政府對南美的介入，宣布委內瑞拉現在享有美國的「軍事保護」。此舉發生在抓獲前總統馬杜羅之後，旨在防止區域對手干預該國脆弱的轉型期。同時，川普向古巴政府發出了直率的警告，建議他們在為時已晚之前「達成協議」，因為美軍已成功切斷了委內瑞拉向該島供應石油和資金的重要管道。川普強調，古巴「依賴」委內瑞拉資源生存的時代已經結束，加拉加斯（委內瑞拉政府）不再需要「敲詐者」的保護。雖然一些歡欣鼓舞的流亡者慶祝這一舉動，但國際批評人士對美國長期軍事干預的可能性以及區域主權受損表示擔憂。`,
+                vocabulary: [
+                    'Intensified (v.): 加強/強化', 'Involvement (n.): 介入/參與', 'Military protection (n.phr.): 軍事保護', 'Fragile transition (n.phr.): 脆弱的轉型期',
+                    'Regional rivals (n.phr.): 區域對手', 'Interfering (v.ger.): 干預', 'Blunt warning (n.phr.): 直率/生硬的警告', 'Make a deal (phr.): 達成協議',
+                    'Cut off (phr.v.): 切斷', 'Vital flow (n.phr.): 重要流動', 'Living off (phr.v.): 靠...生存/依賴', 'Extortionists (n.): 敲詐者/勒索者',
+                    'Jubilant (adj.): 歡欣鼓舞的', 'Exiles (n.): 流亡者', 'Prolonged (adj.): 長期的', 'Intervention (n.): 干預',
+                    'Erosion (n.): 侵蝕/削弱', 'Sovereignty (n.): 主權', 'Capture (n.): 抓獲', 'Simultaneously (adv.): 同時',
+                    'Blunt (adj.): 直率的/鈍的', 'Vital (adj.): 極其重要的', 'Resource (n.): 資源', 'Protection (n.): 保護',
+                    'Extortion (n.): 勒索', 'Exile (v./n.): 流亡', 'Critic (n.): 批評者', 'Potential (n.): 潛力/可能性',
+                    'Transition (n.): 轉變/過渡', 'Involvement (n.): 牽連', 'Fragile (adj.): 易碎的/脆弱的', 'Era (n.): 時代'
+                ],
+                quiz: [
+                    { q: 'Which nation now enjoys U.S. "military protection" according to Trump?', options: ['Cuba', 'Venezuela', 'Ukraine', 'Indonesia'], answer: 'Venezuela' },
+                    { q: 'Who was captured before this announcement?', options: ['Donald Trump', 'Nicolas Maduro', 'Jensen Huang', 'Elon Musk'], answer: 'Nicolas Maduro' },
+                    { q: 'Trump issued a "blunt warning" to which government?', options: ['Venezuela', 'Russia', 'Cuba', 'UK'], answer: 'Cuba' },
+                    { q: 'What "vital flow" has been cut off by U.S. forces?', options: ['Water and food', 'Venezuelan oil and money', 'Internet access', 'Air travel'], answer: 'Venezuelan oil and money' },
+                    { q: 'How did Trump describe the people Caracas no longer needs protection from?', options: ['Extortionists', 'Allies', 'Investors', 'Farmers'], answer: 'Extortionists' },
+                    { q: 'Who celebrated the move by the U.S.?', options: ['The Cuban government', 'Jubilant exiles', 'UN Secretary-General', 'Russian military'], answer: 'Jubilant exiles' },
+                    { q: 'Critics are concerned about the potential erosion of what?', options: ['The oil fields', 'Regional sovereignty', 'Trump\'s ratings', 'The price of gold'], answer: 'Regional sovereignty' },
+                    { q: 'The U.S. move aims to prevent regional ______ from interfering.', options: ['Friends', 'Rivals', 'Tourists', 'Researchers'], answer: 'Rivals' },
+                    { q: 'What does "living off" mean in this context?', options: ['Living in a house', 'Surviving by relying on someone else\'s resources', 'Traveling to a city', 'Buying goods'], answer: 'Surviving by relying on someone else\'s resources' },
+                    { q: 'What does "sovereignty" mean?', options: ['Wealth', 'Supreme power or authority of a state', 'A type of military ship', 'A trade agreement'], answer: 'Supreme power or authority of a state' },
+                    { q: 'The warning to Cuba was to "make a deal" before it is ______.', options: ['Early', 'Too late', 'Monday', 'Free'], answer: 'Too late' },
+                    { q: 'What kind of transition is Venezuela currently in?', options: ['Strong', 'Fragile', 'Permanent', 'Old'], answer: 'Fragile' },
+                    { q: 'What does "jubilant" mean?', options: ['Very sad', 'Extremely happy or triumphant', 'Scared', 'Bored'], answer: 'Extremely happy or triumphant' },
+                    { q: 'Trump made this announcement on which day?', options: ['Monday', 'Friday', 'Sunday', 'Wednesday'], answer: 'Sunday' },
+                    { q: 'The term "extortionist" refers to someone who obtains something through ______.', options: ['Kindness', 'Force or threats', 'Magic', 'Trading'], answer: 'Force or threats' }
+                ]
+            },
+            'credit-card-cap': {
+                title: '川普提議 10% 信用卡利率上限',
+                english: `Reviving a popular campaign pledge, President Donald Trump announced on Sunday that he intends to implement a one-year, 10% cap on credit card interest rates. Posting on Truth Social, the President stated that Americans should no longer be "ripped off" by companies charging rates as high as 20% to 30%. Financial researchers estimate that such a cap could save American households approximately $100 billion in interest payments annually, providing significant relief as total credit card debt has reached a record $1.23 trillion. However, the banking industry has voiced strong opposition, warning that such a drastic limit would force lenders to curtail credit lines for lower-income consumers, potentially driving them toward even higher-cost alternatives like payday loans.`,
+                chinese: `川普提議上限 10% 信用卡利率，銀行業警告恐導致信貸大幅縮減。美國總統川普週日重申了一項廣受歡迎的競選承諾，宣布他打算實施為期一年、最高 10% 的信用卡利率上限。川普在 Truth Social 上表示，美國人不再應該被收取高達 20% 至 30% 利率的公司「敲竹槓」。金融研究人員估計，這樣的上限每年可為美國家庭節省約 1000 億美元的利息支出，在信用卡總債務達到創紀錄的 1.23 兆美元之際，這將提供重大救濟。然而，銀行業表示強烈反對，警告這種激烈的限制將迫使貸款機構縮減低收入消費者的信貸額度，可能將他們推向成本更高的替代方案，如發薪日貸款（payday loans）。`,
+                vocabulary: [
+                    'Reviving (v.ger.): 重申/恢復', 'Campaign pledge (n.phr.): 競選承諾', 'Intends (v.): 打算', 'Implement (v.): 實施/執行',
+                    'Cap (n.): 上限/蓋子', 'Interest rates (n.phr.): 利率', 'Truth Social (n. proper): Truth Social (社群平台)', 'Ripped off (phr.v.): 敲竹槓/詐騙',
+                    'Estimate (v.): 估計', 'Households (n.): 家庭', 'Annually (adv.): 每年', 'Significant relief (n.phr.): 重大救濟/緩解',
+                    'Credit card debt (n.phr.): 信用卡債務', 'Record (adj.): 創紀錄的', 'Trillion (n.): 兆', 'Voiced strong opposition (phr.): 表達強烈反對',
+                    'Drastic limit (n.phr.): 激烈的限制', 'Lenders (n.): 貸款機構', 'Curtail (v.): 縮減/削減', 'Credit lines (n.phr.): 信貸額度',
+                    'Lower-income (adj.): 低收入的', 'Alternatives (n.): 替代方案', 'Payday loans (n.phr.): 發薪日貸款 (高利短期貸款)', 'Pledge (n.): 承諾',
+                    'Implement (v.): 履行', 'Household (n.): 一家人', 'Drastic (adj.): 激烈的/嚴厲的', 'Curtail (v.): 剝奪',
+                    'Alternative (n.): 二選一', 'Debt (n.): 債務', 'Oppose (v.): 反對', 'Annually (adv.): 一年一次地'
+                ],
+                quiz: [
+                    { q: 'What is the proposed cap on credit card interest rates?', options: ['5%', '10%', '15%', '20%'], answer: '10%' },
+                    { q: 'How long would the proposed cap last?', options: ['Six months', 'One year', 'Five years', 'Indefinitely'], answer: 'One year' },
+                    { q: 'On which platform did Trump post this announcement?', options: ['Twitter', 'Facebook', 'Truth Social', 'Instagram'], answer: 'Truth Social' },
+                    { q: 'Approximately how much could American households save annually with this cap?', options: ['$10 billion', '$50 billion', '$100 billion', '$1 trillion'], answer: '$100 billion' },
+                    { q: 'What is the total credit card debt in the U.S. mentioned in the text?', options: ['$500 billion', '$1 trillion', '$1.23 trillion', '$10 trillion'], answer: '$1.23 trillion' },
+                    { q: 'How did the banking industry react to the proposal?', options: ['They welcomed it.', 'They remained neutral.', 'They voiced strong opposition.', 'They asked for a lower cap.'], answer: 'They voiced strong opposition.' },
+                    { q: 'Lenders might "curtail" what for lower-income consumers?', options: ['Gifts', 'Interest', 'Credit lines', 'Advertising'], answer: 'Credit lines' },
+                    { q: 'What is a "payday loan" described as in the context?', options: ['A free loan', 'A higher-cost alternative', 'A government grant', 'A low-interest mortgage'], answer: 'A higher-cost alternative' },
+                    { q: 'What does "ripped off" mean?', options: ['To buy something cheap', 'To be cheated or overcharged', 'To win a prize', 'To fix something broken'], answer: 'To be cheated or overcharged' },
+                    { q: 'The word "pledge" is a synonym for which word?', options: ['Mistake', 'Promise', 'Meeting', 'Trip'], answer: 'Promise' },
+                    { q: 'What does "curtail" mean?', options: ['To increase', 'To reduce or restrict', 'To start', 'To complete'], answer: 'To reduce or restrict' },
+                    { q: 'Trump called interest rates as high as 20% to 30% a ______.', options: ['Fair deal', 'Good investment', 'Rip-off', 'Secret'], answer: 'Rip-off' },
+                    { q: 'The cap aims to protect which group?', options: ['Banks', 'Governments', 'Consumers', 'Researchers'], answer: 'Consumers' },
+                    { q: 'What does "drastic" mean?', options: ['Very soft', 'Extreme or severe', 'Funny', 'Small'], answer: 'Extreme or severe' },
+                    { q: 'How much total debt is recorded?', options: ['$1.23 million', '$1.23 billion', '$1.23 trillion', '$100 billion'], answer: '$1.23 trillion' }
+                ]
+            },
+            'caspian-strike': {
+                title: '烏克蘭襲擊裏海俄油井平台',
+                english: `In a bold maritime operation, the Ukrainian Special Operations Forces launched a night-time strike on Sunday against three Russian drilling platforms operated by Lukoil in the Caspian Sea. The Ukrainian General Staff confirmed that the V. Filanovsky, Yuri Korchagin, and Valery Graifer platforms were targeted because they supply essential fuel to the Russian military's war effort. Video footage released by Ukrainian intelligence showed direct hits on the facilities, which are critical to Russia’s federal budget. This attack represents a significant expansion of Ukraine's strategy to target Russian energy infrastructure far from the immediate front lines, aiming to weaken Moscow's economic capacity to sustain its ongoing offensive in the northeast.`,
+                chinese: `烏克蘭襲擊裏海三座俄羅斯鑽井平台，旨在切斷俄軍燃料供應。在一次大膽的海上行動中，烏克蘭特種作戰部隊於週日晚間對裏海三座由路克石油（Lukoil）營運的俄羅斯鑽井平台發動了襲擊。烏克蘭總參謀部證實，攻擊目標是 V. Filanovsky、Yuri Korchagin 和 Valery Graifer 平台，因為它們向俄羅斯軍隊的戰爭行動供應必要燃料。烏克蘭情報部門發布的影片顯示，這些設施遭到了直接打擊，而這些設施對俄羅斯的聯邦預算至關重要。這次襲擊代表了烏克蘭戰略的顯著擴張，即針對遠離直接前線的俄羅斯能源基礎設施，旨在削弱莫斯科支持其在東北部持續進攻的經濟能力。`,
+                vocabulary: [
+                    'Maritime operation (n.phr.): 海上行動', 'Strike (n./v.): 襲擊/打擊', 'Drilling platforms (n.phr.): 鑽井平台', 'Lukoil (n. proper): 路克石油',
+                    'Caspian Sea (n. proper): 裏海', 'General Staff (n. proper): 總參謀部', 'Essential fuel (n.phr.): 必要燃料', 'War effort (n.phr.): 戰爭行動/努力',
+                    'Intelligence (n.): 情報', 'Direct hits (n.phr.): 直接打擊', 'Federal budget (n.phr.): 聯邦預算', 'Expansion (n.): 擴張',
+                    'Infrastructure (n.): 基礎設施', 'Immediate front lines (n.phr.): 直接前線', 'Economic capacity (n.phr.): 經濟能力', 'Sustain (v.): 維持/支持',
+                    'Ongoing offensive (n.phr.): 持續的進攻', 'Northeast (n./adj.): 東北部', 'Bold (adj.): 大膽的', 'Night-time (adj.): 夜間的',
+                    'Platform (n.): 平台', 'Supply (v.): 供應', 'Critical (adj.): 至關重要的', 'Weakened (v.pp.): 削弱的',
+                    'Maritime (adj.): 海事的', 'Drilling (v.ger.): 鑽探', 'Federal (adj.): 聯邦的', 'Front line (n.phr.): 前線',
+                    'Sustain (v.): 支撐', 'Offensive (n.): 攻勢', 'Infrastructure (n.): 建設/基礎', 'Strike (v.): 擊打'
+                ],
+                quiz: [
+                    { q: 'Which body of water were the Russian oil platforms located in?', options: ['Black Sea', 'Baltic Sea', 'Caspian Sea', 'Red Sea'], answer: 'Caspian Sea' },
+                    { q: 'How many drilling platforms did Ukrainian forces strike?', options: ['One', 'Two', 'Three', 'Five'], answer: 'Three' },
+                    { q: 'Which company operates the targeted platforms?', options: ['Gazprom', 'Lukoil', 'Shell', 'Exxon'], answer: 'Lukoil' },
+                    { q: 'Why were these platforms targeted?', options: ['They are tourist sites.', 'They supply essential fuel to the Russian military.', 'They were empty.', 'They belong to Ukraine.'], answer: 'They supply essential fuel to the Russian military.' },
+                    { q: 'Who confirmed the names of the targeted platforms?', options: ['Russian President', 'The UN', 'Ukrainian General Staff', 'Lukoil CEO'], answer: 'Ukrainian General Staff' },
+                    { q: 'These facilities are critical to Russia’s ______.', options: ['Education', 'Federal budget', 'Tourism', 'Farming'], answer: 'Federal budget' },
+                    { q: 'The attack represents an expansion of Ukraine\'s strategy to target what?', options: ['Cities', 'Schools', 'Energy infrastructure far from front lines', 'Hospitals'], answer: 'Energy infrastructure far from front lines' },
+                    { q: 'What is the goal of weakening Moscow’s economic capacity?', options: ['To help them grow', 'To sustain their offensive', 'To weaken their ability to sustain the war', 'To stop all exports'], answer: 'To weaken their ability to sustain the war' },
+                    { q: 'The operation occurred at what time of day?', options: ['Morning', 'Noon', 'Night-time', 'Sunset'], answer: 'Night-time' },
+                    { q: 'What does "sustain" mean in this context?', options: ['To stop', 'To support or keep going', 'To break', 'To ignore'], answer: 'To support or keep going' },
+                    { q: 'The term "front lines" refers to what?', options: ['Queue in a shop', 'The area where fighting is happening', 'The first page of a book', 'A border crossing'], answer: 'The area where fighting is happening' },
+                    { q: 'What does "bold" mean?', options: ['Scared', 'Courageous and daring', 'Very old', 'Boring'], answer: 'Courageous and daring' },
+                    { q: 'Where is Russia currently conducting an "ongoing offensive"?', options: ['South', 'Northeast', 'West', 'Central'], answer: 'Northeast' },
+                    { q: 'Ukrainian ______ released video footage of the hits.', options: ['Tourism board', 'Intelligence', 'Public school', 'Post office'], answer: 'Intelligence' },
+                    { q: 'What does "maritime" relate to?', options: ['The sky', 'The sea/navigation', 'Mountains', 'Deserts'], answer: 'The sea/navigation' }
+                ]
+            },
+            'musk-ai-indonesia': {
+                title: '馬斯克 AI 涉黃遭印尼封禁',
+                english: `Elon Musk’s artificial intelligence platform faced significant controversy this weekend as Indonesia officially banned the service due to concerns over AI-generated explicit content. Reports surfaced that the AI had been used to create non-consensual deepfake images, prompting the Indonesian government to take immediate action to protect its citizens. Meanwhile, Musk has entered a heated rhetorical battle with British authorities, accusing the UK of attempting to suppress free speech through its strict digital regulations. The dual conflict highlights the growing global friction between Silicon Valley’s rapid technological advancement and the varying regulatory approaches taken by nations to manage the ethical and social risks associated with generative AI.`,
+                chinese: `馬斯克旗下 AI 涉色情內容遭印尼封禁，馬斯克指責英國打壓言論自由。艾隆·馬斯克的 AI 平台本週末面臨重大爭議，印尼因擔憂 AI 生成的露骨內容而正式封鎖了該服務。有報導指出，該 AI 被用來創建非自願的深偽（deepfake）圖像，促使印尼政府採取立即行動保護其公民。與此同時，馬斯克與英國當局展開了激烈的言語交鋒，指責英國企圖透過嚴格的數位法規來壓制言論自由。這場雙重衝突凸顯了矽谷快速的技術進步，與各國為管理生成式 AI 相關倫理和社會風險而採取的不同監管方式之間，日益增長的全球摩擦。`,
+                vocabulary: [
+                    'Artificial intelligence (AI) (n. proper): 人工智慧', 'Significant controversy (n.phr.): 重大爭議', 'Explicit content (n.phr.): 露骨內容/色情內容',
+                    'Non-consensual (adj.): 非自願的/未經同意的', 'Deepfake images (n.phr.): 深偽圖像', 'Prompting (v.ger.): 促使/導致', 'Immediate action (n.phr.): 立即行動',
+                    'Heated rhetorical battle (n.phr.): 激烈的言語交鋒/口水戰', 'Accusing (v.ger.): 指責/控告', 'Suppress (v.): 壓制/打壓', 'Free speech (n.phr.): 言論自由',
+                    'Digital regulations (n.phr.): 數位法規', 'Global friction (n.phr.): 全球摩擦', 'Silicon Valley (n. proper): 矽谷', 'Rapid (adj.): 快速的',
+                    'Advancement (n.): 進步/發展', 'Regulatory approaches (n.phr.): 監管方式', 'Ethical and social risks (n.phr.): 倫理與社會風險', 'Generative AI (n.phr.): 生成式 AI',
+                    'Banned (v.pp.): 封鎖的', 'Surfaced (v.): 浮現/出現', 'Citizens (n.): 公民', 'Dual conflict (n.phr.): 雙重衝突', 'Manage (v.): 管理',
+                    'Friction (n.): 摩擦', 'Rhetorical (adj.): 修辭的/言語上的', 'Explicit (adj.): 明確的/露骨的', 'Surfaced (v.): 露出水面/浮現',
+                    'Surfaced (v.): 顯露', 'Regulatory (adj.): 監管的', 'Ethical (adj.): 道德的/倫理的', 'Advancement (n.): 晉升/前進'
+                ],
+                quiz: [
+                    { q: 'Which country banned Elon Musk\'s AI platform this weekend?', options: ['UK', 'USA', 'Indonesia', 'China'], answer: 'Indonesia' },
+                    { q: 'Why was the service banned in Indonesia?', options: ['High prices', 'Explicit content and non-consensual deepfakes', 'Slow speed', 'Political reasons'], answer: 'Explicit content and non-consensual deepfakes' },
+                    { q: 'What was the AI reportedly used to create?', options: ['New music', 'Non-consensual deepfake images', 'Scientific papers', 'Travel maps'], answer: 'Non-consensual deepfake images' },
+                    { q: 'Who is Musk accusing of suppressing free speech?', options: ['The Indonesian government', 'British authorities (UK)', 'The U.S. government', 'The UN'], answer: 'British authorities (UK)' },
+                    { q: 'What does Musk blame for the suppression of free speech in the UK?', options: ['Bad weather', 'Strict digital regulations', 'Lack of money', 'Old buildings'], answer: 'Strict digital regulations' },
+                    { q: 'The conflict highlights friction between which two things?', options: ['Silicon Valley advancement and national regulatory approaches', 'Farming and Fishing', 'Cats and Dogs', 'Old and New movies'], answer: 'Silicon Valley advancement and national regulatory approaches' },
+                    { q: 'What is "Silicon Valley" famous for in the text?', options: ['Agriculture', 'Rapid technological advancement', 'Ancient history', 'Oil production'], answer: 'Rapid technological advancement' },
+                    { q: 'The term "non-consensual" means what?', options: ['Free', 'Done without someone\'s agreement/consent', 'Very fast', 'Legal'], answer: 'Done without someone\'s agreement/consent' },
+                    { q: 'The word "suppress" means to do what to something?', options: ['To support', 'To forcibly put an end to or restrain', 'To build', 'To clean'], answer: 'To forcibly put an end to or restrain' },
+                    { q: 'What kind of "risks" are associated with generative AI according to the text?', options: ['Financial only', 'Ethical and social risks', 'Mechanical risks', 'No risks'], answer: 'Ethical and social risks' },
+                    { q: 'What does "rhetorical" relate to?', options: ['Physical strength', 'The use of language or speech', 'Driving a car', 'Cooking'], answer: 'The use of language or speech' },
+                    { q: 'The word "friction" in the text refers to what?', options: ['Rubbing two things together', 'Conflict or disagreement', 'A type of oil', 'Smooth cooperation'], answer: 'Conflict or disagreement' },
+                    { q: 'What does "explicit" mean when describing content?', options: ['Vague', 'Clear and detailed, often referring to sexual matters', 'Secret', 'Boring'], answer: 'Clear and detailed, often referring to sexual matters' },
+                    { q: 'Has the Indonesian government taken action?', options: ['No', 'Yes, they took immediate action to protect citizens.', 'They are thinking about it.', 'They don\'t care.'], answer: 'Yes, they took immediate action to protect citizens.' },
+                    { q: 'The conflict involves how many countries specifically mentioned as having friction with Musk?', options: ['One', 'Two (Indonesia and UK)', 'Three', 'Ten'], answer: 'Two (Indonesia and UK)' }
+                ]
+            }
+        };
+
+        // --- CORE LOGIC ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
