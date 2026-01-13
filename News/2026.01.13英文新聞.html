@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 12 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 12 日焦點：台美貿易突破與全球避險浪潮</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for professional English learning. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] US-Taiwan Tariff Negotiations Reach Breakthrough; TSMC Expansion Proposed\nThe Trump administration is reportedly nearing a landmark tariff deal with Taiwan, entering the final stages of negotiations to lower levies on Taiwanese exports from 20% to 15%. Under the proposed framework, TSMC would commit to building five additional advanced chip plants in Arizona, potentially doubling its current U.S. manufacturing presence.\n\n[2] Taiwan’s F-16 Fleet Returns to Service; Search for Missing Pilot Persists\nTaiwan’s F-16 fighter jets returned to operational status on Monday following a one-week grounding for comprehensive safety inspections. The no-flight order was issued after an F-16V went missing during training. Search and rescue teams continue to scour the waters for Captain Hsin Po-yi.\n\n[3] Magnitude 5.3 Earthquake Strikes Off Northeastern Taiwan\nA magnitude 5.3 earthquake struck off the coast of northeastern Taiwan at 9:31 p.m. on Monday, at a depth of approximately 17 kilometers. The tremor was felt strongly across Yilan and Taipei, though no immediate casualties or structural damage have been reported.`,
+                chinese: `【1】台美關稅談判取得重大突破，美方擬降稅換取台積電投資\n據報導，川普政府正接近與台灣達成一項具里程碑意義的關稅協議，談判進入最後階段，計畫將台灣出口產品的徵稅從 20% 降至 15%。在此框架下，台積電（TSMC）將承諾在亞利桑那州增建五座先進晶圓廠，使其在美製造規模翻倍。\n\n【2】F-16 戰機恢復飛行，搜救失聯飛官行動持續進行中\n在經過為期一週的全套安全檢查後，台灣的 F-16 戰機群於週一恢復飛行狀態。先前因一架 F-16V 在訓練任務中失蹤而下達了禁飛令。搜救團隊目前仍持續在相關海域搜尋辛柏毅上尉。\n\n【3】宜蘭外海發生 5.3 級地震，北台灣感明顯震動但無災情\n根據中央氣象署（CWA）觀測，週一晚間 9 點 31 分宜蘭東北部近海發生規模 5.3 地震。震源深度約 17 公里，宜蘭、台北及鄰近北部縣市震感強烈。目前尚無人員傷亡或結構性毀損的報告。`,
+                vocabulary: [
+                    'Negotiations (n.): 談判/協商', 'Breakthrough (n.): 突破', 'Landmark (adj.): 具里程碑意義的', 'Levies (n.): 徵稅/課稅',
+                    'Exports (n.): 出口商品', 'Framework (n.): 框架/架構', 'Commit to (v.phr.): 承諾/致力於', 'Additional (adj.): 額外的',
+                    'Manufacturing presence (n.phr.): 製造規模/佈局', 'Align (v.): 使一致/對齊', 'Operational status (n.phr.): 運作狀態', 'Grounding (n.): 停飛',
+                    'Comprehensive (adj.): 全面的/詳盡的', 'Search and rescue (n.phr.): 搜救', 'Persists (v.): 持續/堅持', 'Scour (v.): 徹底搜查',
+                    'Readiness (n.): 戒備狀態/準備就緒', 'Monitoring protocols (n.phr.): 監控程序/協定', 'Magnitude (n.): 規模/震級', 'Strikes off (phr.v.): 發生於(外海)',
+                    'Depth (n.): 深度', 'Tremor (n.): 顫動/小地震', 'Surrounding (adj.): 周圍的', 'Casualties (n.): 傷亡人數',
+                    'Aftershocks (n.): 餘震', 'Secure (v.): 確保/獲得', 'Domestic supply (n.phr.): 國內供應', 'Volatile (adj.): 不穩定的/易變的',
+                    'Indispensable (adj.): 不可或缺的', 'Sovereign (adj.): 主權的', 'Retain (v.): 保留', 'Enforcement (n.): 執行'
+                ],
+                quiz: [
+                    { q: 'What is the proposed lower tariff rate for Taiwanese exports to the US?', options: ['5%', '10%', '15%', '20%'], answer: '15%' },
+                    { q: 'How many additional advanced chip plants would TSMC build in Arizona?', options: ['Two', 'Three', 'Five', 'Ten'], answer: 'Five' },
+                    { q: 'What was the reason for the initial F-16 grounding order?', options: ['Lack of fuel', 'An F-16V and its pilot went missing', 'Bad weather', 'Budget cuts'], answer: 'An F-16V and its pilot went missing' },
+                    { q: 'How long were the F-16 fighter jets grounded for safety checks?', options: ['One day', 'Three days', 'One week', 'One month'], answer: 'One week' },
+                    { q: 'What was the magnitude of the earthquake on Monday night?', options: ['3.5', '5.3', '7.0', '1.25'], answer: '5.3' },
+                    { q: 'At what depth did the Monday night earthquake occur?', options: ['5 km', '10 km', '17 km', '50 km'], answer: '17 km' },
+                    { q: 'Which US administration is reportedly nearing a tariff deal with Taiwan?', options: ['Biden', 'Trump', 'Obama', 'Bush'], answer: 'Trump' },
+                    { q: 'The term "scour" the waters means to do what?', options: ['Search thoroughly', 'Clean the water', 'Swim quickly', 'Ignore'], answer: 'Search thoroughly' },
+                    { q: 'Who is the missing captain search and rescue teams are looking for?', options: ['Captain Hsin Po-yi', 'Captain Cho Jung-tai', 'Captain Lai Ching-te', 'Captain Jensen Huang'], answer: 'Captain Hsin Po-yi' },
+                    { q: 'According to CWA, where was the earthquake felt strongly?', options: ['Kaohsiung', 'Yilan and Taipei', 'Taichung', 'Tainan'], answer: 'Yilan and Taipei' },
+                    { q: 'What does "operational status" mean for the F-16 fleet?', options: ['They are in the shop.', 'They are ready for service/flying.', 'They are retired.', 'They are being sold.'], answer: 'They are ready for service/flying.' },
+                    { q: 'The word "levies" is a synonym for which word?', options: ['Taxes', 'Gifts', 'Workers', 'Planes'], answer: 'Taxes' },
+                    { q: 'What is the goal of aligning Taiwan\'s tariffs with Japan and South Korea?', options: ['To raise prices', 'To secure domestic supply and fair rates', 'To start a war', 'To stop trading'], answer: 'To secure domestic supply and fair rates' },
+                    { q: 'What are people reminded to stay alert for in the coming days?', options: ['Tsunami', 'Aftershocks', 'Heatwaves', 'Snow'], answer: 'Aftershocks' },
+                    { q: 'The TSMC expansion would potentially ______ its current U.S. presence.', options: ['Halve', 'Double', 'Triple', 'End'], answer: 'Double' }
+                ]
+            },
+            'us-korea-command': {
+                title: '美韓建立永久聯合陸軍司令部',
+                english: `In a significant step toward South Korea assuming wartime operational control (OPCON) of its forces, Washington and Seoul officially established a permanent combined ground command on Monday. This new structure is designed to streamline the command-and-control process during a potential conflict on the Korean Peninsula and reflects years of strategic planning between the two allies. Defense officials noted that the command will enhance interoperability and ensure a more coordinated response to regional threats. While the U.S. will maintain a strong military presence, this transition signals a growing confidence in South Korea’s ability to lead its own defense. The move comes amid continued regional volatility and is viewed as a vital component of efforts to modernize the alliance in East Asia.`,
+                chinese: `美韓建立永久聯合陸軍司令部，強化首爾戰時作戰控制權。週一，華盛頓與首爾正式成立了一個永久性的聯合陸軍司令部，這是南韓朝著收回其軍隊戰時作戰控制權（OPCON）邁出的重要一步。這一新架構旨在簡化韓半島發生潛在衝突時的指揮與控制程序，反映了兩國盟友多年來的策略規劃。國防官員指出，該司令部將增進互操作性，並確保對區域威脅做出更協調的回應。雖然美國將維持強大的軍事存在，但這一過渡信號顯示出對南韓領導自身國防能力的信心日益增強。此舉發生在區域持續動盪之際，被視為現代化東亞同盟努力的核心組成部分。`,
+                vocabulary: [
+                    'Significant step (n.phr.): 重要一步', 'Wartime (n.): 戰時', 'Operational control (OPCON) (n.phr.): 作戰控制權', 'Established (v.): 建立',
+                    'Permanent (adj.): 永久的', 'Combined ground command (n.phr.): 聯合陸軍司令部', 'Streamline (v.): 簡化/精簡', 'Korean Peninsula (n. proper): 韓半島',
+                    'Strategic planning (n.phr.): 策略規劃', 'Allies (n.): 盟友', 'Enhance (v.): 增進/加強', 'Interoperability (n.): 互操作性',
+                    'Coordinated response (n.phr.): 協調一致的回應', 'Regional threats (n.phr.): 區域威脅', 'Military presence (n.phr.): 軍事存在', 'Transition (n.): 過渡/轉變',
+                    'Confidence (n.): 信心', 'Volatility (n.): 動盪/易變性', 'Vital component (n.phr.): 核心/重要組成部分', 'Modernize (v.): 現代化',
+                    'Alliance (n.): 同盟', 'Strategic milestone (n.phr.): 戰略里程碑', 'Assumed (v.pp.): 承擔/採取', 'Command-and-control (n.phr.): 指揮與控制',
+                    'Potential conflict (n.phr.): 潛在衝突', 'Noted (v.): 指出/注意到', 'Maintain (v.): 維持', 'Coordinated (adj.): 協調的',
+                    'Regional (adj.): 區域性的', 'Stability (n.): 穩定', 'Establishment (n.): 建立', 'Forces (n.): 軍隊'
+                ],
+                quiz: [
+                    { q: 'What does OPCON stand for in a military context?', options: ['Official Power Control', 'Operational Control', 'Open Peaceful Connection', 'Overseas Policy Conduct'], answer: 'Operational Control' },
+                    { q: 'What new structure did Washington and Seoul establish on Monday?', options: ['A trade office', 'A permanent combined ground command', 'A space station', 'A movie studio'], answer: 'A permanent combined ground command' },
+                    { q: 'The new command is designed to "streamline" what process?', options: ['Cooking', 'Command-and-control during potential conflict', 'Voting', 'Cleaning'], answer: 'Command-and-control during potential conflict' },
+                    { q: 'Where is the potential conflict mentioned in the text likely to occur?', options: ['South America', 'The Korean Peninsula', 'The Middle East', 'Europe'], answer: 'The Korean Peninsula' },
+                    { q: 'What will the command enhance between the two militaries?', options: ['Salaries', 'Interoperability', 'The number of tanks', 'Vacation days'], answer: 'Interoperability' },
+                    { q: 'What does this transition signal regarding South Korea?', options: ['They are giving up defense.', 'Growing confidence in their ability to lead their own defense.', 'They are moving to the US.', 'They are stopping all training.'], answer: 'Growing confidence in their ability to lead their own defense.' },
+                    { q: 'Is the U.S. planning to leave South Korea entirely?', options: ['Yes, immediately.', 'No, it will maintain a strong military presence.', 'Yes, by next month.', 'The text doesn\'t say.'], answer: 'No, it will maintain a strong military presence.' },
+                    { q: 'The move is viewed as a vital component of efforts to ______ the alliance.', options: ['End', 'Ignore', 'Modernize', 'Decrease'], answer: 'Modernize' },
+                    { q: 'What does "permanent" mean?', options: ['Temporary', 'Lasting forever or intended to last indefinitely', 'Very fast', 'Fragile'], answer: 'Lasting forever or intended to last indefinitely' },
+                    { q: 'What does "streamline" mean in the text?', options: ['To make more complex', 'To make a process more efficient and simple', 'To block', 'To paint a line'], answer: 'To make a process more efficient and simple' },
+                    { q: 'The term "interoperability" refers to the ability of systems or forces to ______.', options: ['Fight each other', 'Work together', 'Be broken', 'Stay silent'], answer: 'Work together' },
+                    { q: 'East Asia is the region where they want to modernize the ______.', options: ['Alliance', 'Agriculture', 'Tourism', 'Schools'], answer: 'Alliance' },
+                    { q: 'What is "volatility"?', options: ['The state of being stable', 'The state of being subject to rapid and unpredictable change', 'The state of being rich', 'The state of being old'], answer: 'The state of being subject to rapid and unpredictable change' },
+                    { q: 'Who officially established the command?', options: ['Washington and Seoul', 'Beijing and Tokyo', 'London and Paris', 'The UN'], answer: 'Washington and Seoul' },
+                    { q: 'Does the transition signal more or less independence for South Korea\'s defense?', options: ['Less', 'More', 'None', 'It depends on the weather'], answer: 'More' }
+                ]
+            },
+            'precious-metals': {
+                title: '國際貴金屬市場飆升',
+                english: `Global precious metal markets experienced a significant surge on Monday, with spot gold prices breaking through $4,540 per ounce as investors sought "safe-haven" assets amid rising international tensions. This rally was fueled by instability in Venezuela, the escalating situation in Iran, and the continued conflict in Ukraine. New York gold futures also climbed, surpassing $4,550 per ounce, while silver prices rose by over 1.4% to stay above $81. Analysts noted that the combination of trade tariff uncertainties and the risk of new military interventions has created a highly volatile environment, prompting many to diversify portfolios into gold and silver.`,
+                chinese: `國際貴金屬市場飆升，地緣政治緊張推動金價突破 4540 美元。全球貴金屬市場週一經歷顯著飆升，現貨金價突破每盎司 4,540 美元，因為投資者在國際局勢日益緊張之際尋求「避險」資產。這一漲勢是由委內瑞拉的不穩定、伊朗局勢升級以及烏克蘭持續衝突所推動的。紐約黃金期貨也上漲，超過每盎司 4,550 美元，而白銀價格上漲超過 1.4%，維持在 81 美元以上。分析人士指出，貿易關稅的不確定性與新軍事干預的風險共同營造了一個高度動盪的環境，促使許多人將投資組合多樣化，轉向黃金和白銀。`,
+                vocabulary: [
+                    'Precious metal (n.phr.): 貴金屬', 'Significant surge (n.phr.): 顯著飆升', 'Spot gold prices (n.phr.): 現貨金價', 'Per ounce (phr.): 每盎司',
+                    'Safe-haven (n./adj.): 避險/避風港', 'Assets (n.): 資產', 'Rally (n.): 漲勢/回升', 'Fueled by (phr.v.): 由...推動',
+                    'Instability (n.): 不穩定', 'Escalating (adj.): 升級的', 'Conflict (n.): 衝突', 'Gold futures (n.phr.): 黃金期貨',
+                    'Surpassing (v.ger.): 超過', 'Silver prices (n.phr.): 白銀價格', 'Tariff uncertainties (n.phr.): 關稅不確定性', 'Military interventions (n.phr.): 軍事干預',
+                    'Highly volatile (adj.phr.): 高度動盪的', 'Prompting (v.ger.): 促使', 'Diversify (v.): 多樣化/多元化', 'Portfolios (n.): 投資組合',
+                    'International tensions (n.phr.): 國際緊張局勢', 'Market surge (n.phr.): 市場飆升', 'Climbed (v.): 上漲', 'Risky (adj.): 風險高的',
+                    'Safe-haven assets (n.phr.): 避險資產', 'Geopolitical turmoil (n.phr.): 地緣政治動盪', 'Breaking through (phr.): 突破', 'Experience (v.): 經歷',
+                    'Situation (n.): 局勢', 'Combination (n.): 結合', 'Risk (n.): 風險', 'Environment (n.): 環境'
+                ],
+                quiz: [
+                    { q: 'What was the spot gold price per ounce mentioned in the text?', options: ['$1,000', '$2,500', '$4,540', '$10,000'], answer: '$4,540' },
+                    { q: 'Why are investors seeking gold and silver?', options: ['They are cheap.', 'As "safe-haven" assets during tensions.', 'They are easy to carry.', 'To make jewelry.'], answer: 'As "safe-haven" assets during tensions.' },
+                    { q: 'Which country\'s instability was NOT mentioned as fueling the rally?', options: ['Venezuela', 'Ukraine', 'Japan', 'Iran'], answer: 'Japan' },
+                    { q: 'New York gold futures surpassed which price level?', options: ['$4,000', '$4,540', '$4,550', '$5,000'], answer: '$4,550' },
+                    { q: 'By what percentage did silver prices rise?', options: ['0.5%', '1.0%', 'Over 1.4%', '5%'], answer: 'Over 1.4%' },
+                    { q: 'What is the current price level for silver per ounce in the text?', options: ['Above $10', 'Above $45', 'Above $81', 'Above $100'], answer: 'Above $81' },
+                    { q: 'What kind of environment has trade uncertainty created?', options: ['Stable', 'Highly volatile', 'Predictable', 'Boring'], answer: 'Highly volatile' },
+                    { q: 'Investors are "diversifying their portfolios," meaning they are ______.', options: ['Selling everything', 'Spreading investments across different assets', 'Giving money to the government', 'Closing their accounts'], answer: 'Spreading investments across different assets' },
+                    { q: 'The word "surge" means what?', options: ['A small drop', 'A sudden powerful forward or upward movement', 'A secret plan', 'A steady level'], answer: 'A sudden powerful forward or upward movement' },
+                    { q: 'The term "safe-haven" refers to an investment expected to ______ during market turbulence.', options: ['Lose value', 'Retain or increase value', 'Disappear', 'Be illegal'], answer: 'Retain or increase value' },
+                    { q: 'What does "escalating" mean in "escalating situation"?', options: ['Becoming smaller', 'Becoming more intense or serious', 'Staying the same', 'Ending'], answer: 'Becoming more intense or serious' },
+                    { q: 'Analysts noted the combination of tariffs and military ______ risks.', options: ['Withdrawals', 'Interventions', 'Parades', 'Gifts'], answer: 'Interventions' },
+                    { q: 'What is the "spot" price in markets?', options: ['A future price', 'The current market price for immediate delivery', 'A high price', 'A secret price'], answer: 'The current market price for immediate delivery' },
+                    { q: 'The rally was "fueled by" something, meaning it was ______ by it.', options: ['Stopped', 'Stimulated or powered', 'Hidden', 'Delayed'], answer: 'Stimulated or powered' },
+                    { q: 'Is the precious metal market currently stable or unstable?', options: ['Stable', 'Unstable/Highly volatile', 'Closed', 'None of the above'], answer: 'Unstable/Highly volatile' }
+                ]
+            },
+            'irish-beef': {
+                title: '中國重開愛爾蘭牛肉進口',
+                english: `The Chinese government has officially reopened its market to Irish beef imports, ending a suspension that has been in place since 2024. The ban was originally implemented following a mad cow disease case in Ireland, but after rigorous inspections and negotiations, Beijing has cleared the product for return. Irish Prime Minister Micheál Martin welcomed the news, noting that the Chinese market represents a significant opportunity for the nation’s farmers. This move is seen as a gesture of goodwill amid broader EU–China trade tensions, particularly in technology and manufacturing sectors.`,
+                chinese: `中國宣布重開愛爾蘭牛肉進口，取消自 2024 年起的暫停令。中國政府已正式對愛爾蘭牛肉進口重新開放市場，結束了自 2024 年以來實施的停進令。該禁令最初是因愛爾蘭出現狂牛症病例而實施的，但在經過嚴格的檢查與談判後，北京已核准該產品回歸。愛爾蘭總理米哈爾·馬丁（Micheál Martin）對此消息表示歡迎，並指出中國市場對該國農民而言代表著重大機遇。此舉被視為在更廣泛的中歐貿易緊張局勢（特別是在科技與製造業領域）中釋放出的善意姿態。`,
+                vocabulary: [
+                    'Officially (adv.): 正式地', 'Reopened (v.): 重新開放', 'Suspension (n.): 暫停/停職', 'In place (phr.): 實施中',
+                    'Originally (adv.): 最初', 'Implemented (v.pp.): 執行/實施', 'Mad cow disease (n.phr.): 狂牛症', 'Rigorous (adj.): 嚴格的/嚴密的',
+                    'Inspections (n.): 檢查/視察', 'Beijing (n. proper): 北京 (中國政府)', 'Cleared (v.): 核准/通過', 'Irish Prime Minister (n.phr.): 愛爾蘭總理',
+                    'Significant opportunity (n.phr.): 重大機遇', 'Gesture of goodwill (n.phr.): 善意姿態', 'Trade tensions (n.phr.): 貿易緊張局勢', 'Sectors (n.): 領域/部門',
+                    'Welcomed the news (phr.): 對消息表示歡迎', 'Farmers (n.): 農民', 'Technology (n.): 科技', 'Manufacturing (n.): 製造業',
+                    'Rigorous (adj.): 精確的/嚴格的', 'Inspections (n.): 檢閱', 'Negotiations (n.): 協商/談判', 'Ban (n.): 禁令',
+                    'Irish (adj.): 愛爾蘭的', 'Gesture (n.): 手勢/姿態', 'Goodwill (n.): 善意', 'Sector (n.): 行業',
+                    'Resume (v.): 恢復', 'Agricultural (adj.): 農業的', 'Prime Minister (n.phr.): 首相/總理', 'Sectors (n.): 扇區'
+                ],
+                quiz: [
+                    { q: 'Which country officially reopened its market to Irish beef?', options: ['USA', 'UK', 'China', 'Japan'], answer: 'China' },
+                    { q: 'Since which year had the beef ban been in place?', options: ['2020', '2022', '2024', '2025'], answer: '2024' },
+                    { q: 'What was the original reason for the ban?', options: ['High prices', 'Mad cow disease case', 'Trade war', 'Quality issues'], answer: 'Mad cow disease case' },
+                    { q: 'The product was cleared for return after negotiations and ______.', options: ['A tax increase', 'Rigorous inspections', 'A formal apology', 'A new logo'], answer: 'Rigorous inspections' },
+                    { q: 'Who is the Irish Prime Minister mentioned?', options: ['Donald Trump', 'Micheál Martin', 'Antonio Guterres', 'Michael Gahler'], answer: 'Micheál Martin' },
+                    { q: 'The move is seen as a "gesture of ______" amid trade tensions.', options: ['War', 'Goodwill', 'Anger', 'Defiance'], answer: 'Goodwill' },
+                    { q: 'In which sectors are EU-China trade tensions particularly high?', options: ['Fashion and Arts', 'Technology and manufacturing', 'Cooking and Cleaning', 'Sports and Music'], answer: 'Technology and manufacturing' },
+                    { q: 'The Chinese market represents a significant ______ for Irish farmers.', options: ['Opportunity', 'Problem', 'Debt', 'Cost'], answer: 'Opportunity' },
+                    { q: 'The word "rigorous" means which of the following?', options: ['Careless', 'Extremely thorough and careful', 'Very fast', 'Boring'], answer: 'Extremely thorough and careful' },
+                    { q: 'What does "suspension" mean in this context?', options: ['A type of bridge', 'Temporary stop or prohibition', 'A high jump', 'A type of car part'], answer: 'Temporary stop or prohibition' },
+                    { q: 'Beijing represents which government in the text?', options: ['Ireland', 'UK', 'China', 'USA'], answer: 'China' },
+                    { q: 'The term "goodwill" refers to which of the following?', options: ['Expensive gifts', 'Friendly or helpful feelings/intentions', 'A new law', 'Old furniture'], answer: 'Friendly or helpful feelings/intentions' },
+                    { q: 'What is the "ban"?', options: ['An official rule that forbids something', 'A musical group', 'A type of meat', 'A city name'], answer: 'An official rule that forbids something' },
+                    { q: 'Who welcomed the news of the market reopening?', options: ['Chinese farmers', 'Irish Prime Minister', 'US President', 'The UN'], answer: 'Irish Prime Minister' },
+                    { q: 'Are trade tensions between EU and China currently broad or narrow?', options: ['Narrow', 'Broad', 'Non-existent', 'The text doesn\'t say'], answer: 'Broad' }
+                ]
+            },
+            'bitcoin-surge': {
+                title: '比特幣重回 91,000 美元',
+                english: `Bitcoin prices climbed back above the $91,000 threshold on Monday, reflecting renewed investor optimism despite broader market volatility. This rebound follows a brief dip below $90,000 last week and suggests that institutional interest in digital assets remains strong. Market analysts attribute this resilience to the increasing adoption of crypto-based financial products and the belief that digital currencies can act as a hedge against traditional economic instability. While the market remains highly speculative and sensitive to regulatory updates from the Trump administration, many traders believe that Bitcoin is poised for further growth as more corporations adopt blockchain technology.`,
+                chinese: `比特幣重回 91,000 美元關卡，市場對加密貨幣前景保持樂觀。比特幣價格週一回升至 91,000 美元門檻以上，反映出儘管市場波動廣泛，但投資者信心已恢復。此次回升是在上週短暫跌破 90,000 美元之後發生的，顯示出機構對數位資產的興趣依然強勁。市場分析人士將這種韌性歸功於加密金融產品普及率的提高，以及數位貨幣可作為應對傳統經濟不穩定之避險工具的信念。雖然市場仍具高度投機性，且對川普政府的監管更新十分敏感，但許多交易員認為，隨著更多企業採用區塊鏈技術，比特幣已準備好進一步增長。`,
+                vocabulary: [
+                    'Bitcoin (n. proper): 比特幣', 'Threshold (n.): 門檻/關卡', 'Reflecting (v.ger.): 反映', 'Renewed (adj.): 恢復的/更新的',
+                    'Optimism (n.): 樂觀', 'Volatility (n.): 波動性', 'Rebound (n.): 回升/反彈', 'Institutional interest (n.phr.): 機構興趣',
+                    'Digital assets (n.phr.): 數位資產', 'Market analysts (n.phr.): 市場分析人士', 'Attribute to (v.phr.): 歸功於', 'Resilience (n.): 韌性',
+                    'Increasing adoption (n.phr.): 日益增長的普及/採用', 'Hedge (n./v.): 避險/對沖', 'Economic instability (n.phr.): 經濟不穩定', 'Speculative (adj.): 投機的',
+                    'Sensitive (adj.): 敏感的', 'Regulatory updates (n.phr.): 監管更新', 'Poised for (phr.v.): 準備好/蓄勢待發', 'Blockchain technology (n.phr.): 區塊鏈技術',
+                    'Optimization (n.): 優化', 'Volatility (n.): 不穩定', 'Institutional (adj.): 機構的', 'Belief (n.): 信念',
+                    'Hedge against (phr.): 避險工具', 'Speculate (v.): 投機', 'Corporation (n.): 企業/公司', 'Adopt (v.): 採用',
+                    'Poised (adj.): 泰然自若的', 'Digital (adj.): 數位的', 'Optimism (n.): 樂觀主義', 'Resilient (adj.): 有韌性的'
+                ],
+                quiz: [
+                    { q: 'What price threshold did Bitcoin climb back above on Monday?', options: ['$80,000', '$90,000', '$91,000', '$100,000'], answer: '$91,000' },
+                    { q: 'What happened to Bitcoin last week?', options: ['It reached an all-time high.', 'It stayed exactly the same.', 'It briefly dipped below $90,000.', 'It was banned.'], answer: 'It briefly dipped below $90,000.' },
+                    { q: 'What kind of interest in digital assets remains strong?', options: ['Student interest', 'Institutional interest', 'Only hobbyist interest', 'Government disinterest'], answer: 'Institutional interest' },
+                    { q: 'What do analysts attribute Bitcoin\'s resilience to?', options: ['Lower electricity costs', 'Adoption of crypto-based financial products', 'A new website', 'Lack of other investments'], answer: 'Adoption of crypto-based financial products' },
+                    { q: 'Digital currencies can act as a ______ against economic instability.', options: ['Wall', 'Hedge', 'Bridge', 'Road'], answer: 'Hedge' },
+                    { q: 'The Bitcoin market is described as being "highly ______."', options: ['Safe', 'Speculative', 'Boring', 'Predictable'], answer: 'Speculative' },
+                    { q: 'The market is sensitive to updates from which US administration?', options: ['Biden', 'Trump', 'Obama', 'Bush'], answer: 'Trump' },
+                    { q: 'Bitcoin is "poised for further growth" as more corporations adopt what?', options: ['Paper money', 'Blockchain technology', 'Solar power', 'Manual accounting'], answer: 'Blockchain technology' },
+                    { q: 'The word "rebound" means what in financial context?', options: ['To fail', 'To recover after a dip or loss', 'To lose money', 'To close a business'], answer: 'To recover after a dip or loss' },
+                    { q: 'The term "threshold" refers to which of the following?', options: ['A floor', 'A starting point or limit', 'A roof', 'A secret room'], answer: 'A starting point or limit' },
+                    { q: 'What is "optimism"?', options: ['Hopefulness and confidence about the future', 'Fear of the future', 'Boredom', 'Anger'], answer: 'Hopefulness and confidence about the future' },
+                    { q: 'The word "speculative" implies that the investment involves high ______.', options: ['Comfort', 'Risk', 'Safety', 'Salary'], answer: 'Risk' },
+                    { q: 'What are "institutional" investors?', options: ['Children', 'Large organizations like banks or funds', 'Only individual people', 'Only tourists'], answer: 'Large organizations like banks or funds' },
+                    { q: 'What does "attribute to" mean?', options: ['To ignore', 'To regard as being caused by', 'To build', 'To forget'], answer: 'To regard as being caused by' },
+                    { q: 'What is the "believed" role of digital currencies mentioned?', options: ['To buy lunch', 'To act as a hedge against instability', 'To replace gold', 'To pay taxes only'], answer: 'To act as a hedge against instability' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        // --- CORE RENDERING ---
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
