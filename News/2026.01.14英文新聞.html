@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 14 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 14 日：台灣金融穩定與全球動盪局勢</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for professional English learners. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] National Stabilization Fund Ends Record 279-Day Market Intervention\nThe National Financial Stabilization Fund officially concluded its mission on Monday, ending the longest market-stabilization intervention in Taiwan's history. The fund initially entered the market last April to counter volatility caused by U.S. trade policies. During its nine-month tenure, the fund invested approximately NT$12.2 billion and achieved a remarkable return rate exceeding 50%.\n\n[2] Taipei Metro Installs Memorial Plaque to Honor Hero\nThe Taipei Rapid Transit Corporation (TRTC) installed a permanent memorial plaque at Taipei Main Station on Tuesday to honor a citizen who lost his life while attempting to stop a violent attacker. The plaque serves as a tribute to the individual's extraordinary bravery and selfless sacrifice, ensuring such acts of heroism are never forgotten.\n\n[3] Two Indicted for Recruiting Engineers for China's OnePlus\nTwo Taiwanese nationals were indicted on Tuesday for allegedly setting up illegal operations to recruit more than 70 high-tech engineers for the Chinese electronics firm OnePlus Technology. Prosecutors stated that the individuals bypassed legal regulations regarding Chinese investment and employment in Taiwan’s sensitive tech sectors.`,
+                chinese: `【1】國安基金宣布退場：結束史上最長 279 天護盤\n國家金融安定基金（國安基金）於週一正式結束任務，結束了台灣歷史上最長的一次市場穩定干預。該基金最初於去年 4 月進場，以應對美國貿易政策引發的市場波動。在為期 9 個月的護盤期間，該基金投入約 122 億新台幣，並實現了超過 50% 的驚人收益率。\n\n【2】台北捷運設立永久紀念牌，表揚北車攻擊事件英雄\n台北捷運公司（TRTC）週二在台北車站設立了一塊永久紀念牌，以表彰一名在試圖阻止暴力攻擊者時不幸犧牲的市民。這塊紀念牌是對該名人士非凡勇氣與無私奉獻的致敬，確保這類英雄事蹟永遠不被遺忘。\n\n【3】兩名台灣人因協助中國手機大廠非法招募工程師遭起訴\n兩名台灣國民因涉嫌非法運作、為中國電子公司「一加科技」（OnePlus）招募超過 70 名高科技工程師，於週二遭到起訴。檢察官表示，這兩人繞過了台灣敏感科技領域關於中國投資與就業的法律規定，此案凸顯了政府對中國企業「挖角人才」的持續打擊。`,
+                vocabulary: [
+                    'National Stabilization Fund (n. proper): 國安基金', 'Intervention (n.): 干預/護盤', 'Concluded (v.): 結束/完成', 'Volatility (n.): 波動性',
+                    'Tenure (n.): 任期/期間', 'Remarkable (adj.): 卓越的/驚人的', 'Exceeding (v.ger.): 超過', 'Financial analysts (n.phr.): 金融分析師',
+                    'Resilience (n.): 韌性', 'Surged (v.): 飆升', 'Hardware (n.): 硬體', 'Memorial plaque (n.phr.): 紀念牌',
+                    'TRTC (n. proper): 台北捷運公司', 'Honor (v.): 表彰/致敬', 'Tribute (n.): 致敬/悼念', 'Bravery (n.): 勇氣',
+                    'Selfless sacrifice (n.phr.): 無私的犧牲', 'Vigilance (n.): 警覺', 'Transportation hubs (n.phr.): 交通樞紐', 'Indicted (v.pp.): 被起訴',
+                    'Allegedly (adv.): 據稱', 'Recruit (v.): 招募', 'High-tech engineers (n.phr.): 高科技工程師', 'OnePlus Technology (n. proper): 一加科技',
+                    'Bypassed (v.): 繞過', 'Sensitive tech sectors (n.phr.): 敏感科技領域', 'Crackdown (n.): 打擊/鎮壓', 'Talent poaching (n.phr.): 人才挖角',
+                    'Technological edge (n.phr.): 技術優勢', 'National security (n.phr.): 國家安全', 'Remarkable return (n.phr.): 卓越的回報', 'Constitutes (v.): 構成'
+                ],
+                quiz: [
+                    { q: 'How many days did the National Stabilization Fund intervene in the market?', options: ['100 days', '200 days', '279 days', '365 days'], answer: '279 days' },
+                    { q: 'What was the return rate achieved by the fund?', options: ['10%', '25%', 'Above 50%', 'Exactly 100%'], answer: 'Above 50%' },
+                    { q: 'Where was the permanent memorial plaque installed?', options: ['Taipei 101', 'Taipei Main Station', 'Taoyuan Airport', 'Kaohsiung Harbor'], answer: 'Taipei Main Station' },
+                    { q: 'The plaque honors a citizen who died during what event?', options: ['An earthquake', 'A violent attack', 'A flood', 'A fire'], answer: 'A violent attack' },
+                    { q: 'For which Chinese company were the engineers being recruited?', options: ['Huawei', 'Xiaomi', 'OnePlus Technology', 'Oppo'], answer: 'OnePlus Technology' },
+                    { q: 'How many high-tech engineers were allegedly recruited illegally?', options: ['10', '50', 'More than 70', '100'], answer: 'More than 70' },
+                    { q: 'What is the government cracking down on in the OnePlus case?', options: ['Pollution', 'Talent poaching by Chinese firms', 'Tax evasion', 'Property prices'], answer: 'Talent poaching by Chinese firms' },
+                    { q: 'The National Stabilization Fund initially entered the market to counter volatility from what?', options: ['COVID-19', 'U.S. trade policies', 'Local elections', 'Energy crisis'], answer: 'U.S. trade policies' },
+                    { q: 'The term "indicted" means the people were ______.', options: ['Rewarded', 'Formally charged with a crime', 'Hired', 'Deported'], answer: 'Formally charged with a crime' },
+                    { q: 'The word "tenure" in the text refers to what?', options: ['The amount of money', 'The period of time a position is held', 'The type of technology', 'A law'], answer: 'The period of time a position is held' },
+                    { q: 'What does "poaching" mean in "talent poaching"?', options: ['Cooking eggs', 'Illegally catching animals', 'Unfairly inducing employees to leave a company', 'Training new workers'], answer: 'Unfairly inducing employees to leave a company' },
+                    { q: 'What is the full name of the organization TRTC?', options: ['Taiwan Road Transit', 'Taipei Rapid Transit Corporation', 'Taipei River Transport', 'Taiwan Railway Center'], answer: 'Taipei Rapid Transit Corporation' },
+                    { q: 'The word "plaque" refers to what kind of object?', options: ['A large building', 'A flat tablet used for commemoration', 'A type of medicine', 'A government bill'], answer: 'A flat tablet used for commemoration' },
+                    { q: 'The term "Remarkable" is a synonym for which word?', options: ['Boring', 'Extraordinary', 'Small', 'Common'], answer: 'Extraordinary' },
+                    { q: 'What does "bypassed" mean in the context of legal regulations?', options: ['Followed strictly', 'Ignored or went around', 'Signed into law', 'Fixed'], answer: 'Ignored or went around' }
+                ]
+            },
+            'iran-crisis': {
+                title: '伊朗死亡人數飆升與川普警告',
+                english: `The humanitarian crisis in Iran has reached a devastating peak, with activists reporting on Tuesday that the death toll from nationwide protests has spiked to at least 2,000 people. Human rights groups describe the recent crackdown as a "systematic massacre", particularly during the nights of January 8 and 9. In a defiant response, President Donald Trump posted on Truth Social that he has "cancelled all meetings with Iranian officials" until the killing stops, while directly telling protesters that "help is on its way." This escalation has pushed the U.S. closer to direct military intervention, as the administration considers deep-strike options and offensive cyberattacks. Meanwhile, the Iranian regime continues to enforce a near-total internet ban, though brief international calls have revealed the true scale of the carnage across multiple cities.`,
+                chinese: `伊朗示威死亡人數飆升至 2,000 人；川普取消會面並警告「援助即將到來」。伊朗的人道主義危機已達到災難性的頂峰，活動人士週二報告稱，全國抗議活動的死亡人數已飆升至至少 2,000 人。人權組織將近期的鎮壓描述為「系統性大屠殺」，特別是在 1 月 8 日和 9 日晚上。川普總統在 Truth Social 上發表挑釁性回應，表示他已「取消與伊朗官員的所有會面」，直到殺戮停止，並直接告訴抗議者「援助即將到來」。這一局勢升級使美國更接近直接軍事干預，政府正考慮深度打擊選項和攻擊性網絡攻擊。同時，伊朗政權繼續實施近乎全面的互聯網封鎖，儘管簡短的國際通話已揭露出多個城市慘遭殺戮的真實規模。`,
+                vocabulary: [
+                    'Humanitarian crisis (n.phr.): 人道危機', 'Devastating peak (n.phr.): 災難性的頂峰', 'Activists (n.): 活動人士', 'Death toll (n.phr.): 死亡人數',
+                    'Spiked (v.): 飆升', 'Nationwide protests (n.phr.): 全國抗議', 'Crackdown (n.): 鎮壓', 'Systematic massacre (n.phr.): 系統性大屠殺',
+                    'Defiant (adj.): 挑釁的/蔑視的', 'Cancelled (v.): 取消', 'Officials (n.): 官員', 'Escalation (n.): 升級',
+                    'Military intervention (n.phr.): 軍事干預', 'Deep-strike options (n.phr.): 深度打擊選項', 'Offensive cyberattacks (n.phr.): 攻擊性網絡攻擊', 'Regime (n.): 政權',
+                    'Enforce (v.): 實施/強制執行', 'Near-total internet ban (n.phr.): 近乎全面的網絡禁令', 'Revealed (v.): 揭露', 'Carnage (n.): 慘案/大屠殺',
+                    'Multiple cities (n.phr.): 多個城市', 'Help is on its way (phr.): 援助即將到來', 'Spiked (v.): 激增', 'Activists (n.): 積極分子',
+                    'Human rights groups (n.phr.): 人權組織', 'Administration (n.): 政府', 'Systematic (adj.): 有系統的', 'Carnage (n.): 殘殺',
+                    'Totalitarian (adj.): 極權的', 'Blatant (adj.): 公然的', 'Sanctions (n.): 制裁', 'Intervention (n.): 干涉'
+                ],
+                quiz: [
+                    { q: 'What is the reported death toll from the protests in Iran?', options: ['200', '1,000', '2,000', '5,000'], answer: '2,000' },
+                    { q: 'Which dates were noted for the "systematic massacre"?', options: ['Jan 1-2', 'Jan 5-6', 'Jan 8-9', 'Dec 31'], answer: 'Jan 8-9' },
+                    { q: 'On which social platform did Trump post his message?', options: ['Twitter', 'Facebook', 'Truth Social', 'Instagram'], answer: 'Truth Social' },
+                    { q: 'What condition did Trump set for resuming meetings with Iranian officials?', options: ['New trade deal', 'The killing stops', 'Lower oil prices', 'Internet restored'], answer: 'The killing stops' },
+                    { q: 'What military option is the U.S. administration considering?', options: ['Peacekeeping only', 'Deep-strike options', 'Nuclear strike', 'Retreat'], answer: 'Deep-strike options' },
+                    { q: 'What is the current state of the internet in Iran?', options: ['Fully operational', 'Slightly slower', 'Near-total internet ban', 'Free for all'], answer: 'Near-total internet ban' },
+                    { q: 'The term "carnage" means which of the following?', options: ['A celebration', 'The killing of a large number of people', 'A new car model', 'A type of food'], answer: 'The killing of a large number of people' },
+                    { q: 'What message did Trump give directly to the protesters?', options: ['"Go home."', '"Help is on its way."', '"Stay safe."', '"We support the regime."'], answer: '"Help is on its way."' },
+                    { q: 'Human rights groups describe the crackdown as a "______ massacre."', options: ['Accidental', 'Small', 'Systematic', 'Legal'], answer: 'Systematic' },
+                    { q: 'The word "defiant" describes an attitude that shows ______.', options: ['Fear', 'Resistance or bold disobedience', 'Agreement', 'Happiness'], answer: 'Resistance or bold disobedience' },
+                    { q: 'What has the U.S. moved closer to due to this escalation?', options: ['Trade agreement', 'Direct military intervention', 'A holiday', 'Complete silence'], answer: 'Direct military intervention' },
+                    { q: 'The term "regime" typically refers to what kind of government?', options: ['Democratic', 'Authoritarian or strict government', 'No government', 'Local council'], answer: 'Authoritarian or strict government' },
+                    { q: 'How were the details of the carnage revealed despite the ban?', options: ['Government letters', 'Brief international calls', 'Smoke signals', 'Newspapers'], answer: 'Brief international calls' },
+                    { q: 'The word "escalation" refers to an ______ in intensity.', options: ['Decrease', 'Increase', 'Stability', 'End'], answer: 'Increase' },
+                    { q: 'Who reported the peak of the humanitarian crisis?', options: ['The Iranian government', 'Activists', 'Tourism agencies', 'Banks'], answer: 'Activists' }
+                ]
+            },
+            'powell-investigation': {
+                title: '司法部調查聯準會主席鮑爾',
+                english: `The Department of Justice (DOJ) has officially launched a criminal investigation into Federal Reserve Chairman Jerome Powell, triggering intense criticism from a bipartisan group of former Treasury secretaries and economic experts. The probe follows Powell’s refusal to comply with President Trump’s demands for aggressive interest rate cuts, which Trump claims are necessary to revive the "broken economy." Critics argue that using the DOJ to target the head of the central bank constitutes a flagrant violation of Federal Reserve independence, potentially destabilizing global financial markets. Economists warn that political interference in monetary policy could undermine the credibility of the U.S. dollar and the rules-based global economic order.`,
+                chinese: `司法部調查聯準會主席鮑爾；財經界人士痛批破壞央行獨立性。美國司法部（DOJ）已正式對聯準會（Fed）主席傑洛姆·鮑爾展開刑事調查，引發了由前財政部長和經濟專家組成的跨黨派團體的強烈批評。此次調查是在鮑爾拒絕遵守川普總統要求大幅降息的命令後進行的，川普聲稱大幅降息是振興「破敗經濟」所必需的。批評者認為，利用司法部針對中央銀行負責人構成了對聯準會獨立性的公然侵犯，可能導致全球金融市場動盪。經濟學家警告，政治干預貨幣政策可能會削弱美元的信譽以及基於規則的全球經濟秩序。`,
+                vocabulary: [
+                    'Department of Justice (DOJ) (n. proper): 司法部', 'Criminal investigation (n.phr.): 刑事調查', 'Federal Reserve (n. proper): 聯準會', 'Chairman (n.): 主席',
+                    'Triggering (v.ger.): 引發', 'Intense criticism (n.phr.): 強烈批評', 'Bipartisan (adj.): 跨黨派的', 'Treasury secretaries (n.phr.): 財政部長',
+                    'Economic experts (n.phr.): 經濟專家', 'Probe (n.): 調查', 'Comply with (v.phr.): 遵守/符合', 'Aggressive (adj.): 大幅的/激進的',
+                    'Interest rate cuts (n.phr.): 降息', 'Revive (v.): 振興/恢復', 'Broken economy (n.phr.): 破敗的經濟', 'Target (v.): 針對/瞄準',
+                    'Constitutes (v.): 構成', 'Flagrant violation (n.phr.): 公然違反', 'Independence (n.): 獨立性', 'Destabilizing (v.ger.): 使動盪/不穩定',
+                    'Monetary policy (n.phr.): 貨幣政策', 'Undermine (v.): 削弱/破壞', 'Credibility (n.): 信譽/公信力', 'Rules-based (adj.): 基於規則的',
+                    'Interference (n.): 干預', 'Financial markets (n.phr.): 金融市場', 'Global order (n.phr.): 全球秩序', 'launched (v.): 展開/啟動',
+                    'refusal (n.): 拒絕', 'independence (n.): 獨立', 'credibility (n.): 信用', 'expert (n.): 專家'
+                ],
+                quiz: [
+                    { q: 'Which US government department launched the investigation into Jerome Powell?', options: ['Department of Labor', 'Department of State', 'Department of Justice (DOJ)', 'Department of Defense'], answer: 'Department of Justice (DOJ)' },
+                    { q: 'Jerome Powell is the head of which organization?', options: ['The World Bank', 'The Federal Reserve', 'The IMF', 'The US Treasury'], answer: 'The Federal Reserve' },
+                    { q: 'What did Powell refuse to do according to the text?', options: ['Resign', 'Pay his taxes', 'Comply with demands for aggressive interest rate cuts', 'Attend the inauguration'], answer: 'Comply with demands for aggressive interest rate cuts' },
+                    { q: 'Trump claims the interest rate cuts are necessary to revive what?', options: ['The stock market', 'The "broken economy"', 'The military', 'The internet'], answer: 'The "broken economy"' },
+                    { q: 'Critics argue the investigation violates what key principle of the Fed?', options: ['Profits', 'Independence', 'Size', 'Location'], answer: 'Independence' },
+                    { q: 'What group has voiced intense criticism against the investigation?', options: ['The current Cabinet', 'A bipartisan group of former Treasury secretaries', 'Only Republican experts', 'The general public'], answer: 'A bipartisan group of former Treasury secretaries' },
+                    { q: 'What is a feared consequence for global financial markets?', options: ['Growth', 'Destabilization', 'Total closure', 'Nothing'], answer: 'Destabilization' },
+                    { q: 'Economists warn that political interference could undermine the ______ of the US dollar.', options: ['Color', 'Weight', 'Credibility', 'Availability'], answer: 'Credibility' },
+                    { q: 'The term "bipartisan" means involving how many political parties?', options: ['One', 'Two', 'None', 'All international parties'], answer: 'Two' },
+                    { q: 'What does "comply with" mean?', options: ['To fight against', 'To act in accordance with a command', 'To ignore', 'To change'], answer: 'To act in accordance with a command' },
+                    { q: 'The investigation is described as being "______," meaning related to crime.', options: ['Financial', 'Criminal', 'Civil', 'Educational'], answer: 'Criminal' },
+                    { q: 'The term "probe" is a synonym for which word?', options: ['Launch', 'Investigation', 'Meeting', 'Speech'], answer: 'Investigation' },
+                    { q: 'What does "flagrant" mean in "flagrant violation"?', options: ['Secret', 'Glaringly obvious or offensive', 'Small', 'Helpful'], answer: 'Glaringly obvious or offensive' },
+                    { q: 'The word "revive" means to ______.', options: ['Kill', 'Bring back to life or activity', 'Slow down', 'Hide'], answer: 'Bring back to life or activity' },
+                    { q: 'The rules-based global ______ order is at risk.', options: ['Social', 'Economic', 'Military', 'Religious'], answer: 'Economic' }
+                ]
+            },
+            'ukraine-strike': {
+                title: '俄羅斯大規模襲擊烏克蘭',
+                english: `In one of the largest coordinated air assaults of the war, Russia launched nearly 300 drones and 25 missiles overnight into Tuesday, according to the Ukrainian General Staff. The attack included 18 ballistic missiles and seven cruise missiles, primarily targeting industrial zones and energy infrastructure in Kyiv and other major cities. While Ukrainian air defenses intercepted many projectiles, several neighborhoods suffered significant damage, resulting in widespread power outages. The strike underscores Russia's strategy of using overwhelming force to exhaust Ukraine’s defenses and degrade civilian infrastructure ahead of any potential ceasefire negotiations.`,
+                chinese: `俄羅斯對烏克蘭發動大規模無人機與飛彈襲擊，發射近 300 架無人機。根據烏克蘭總參謀部的消息，在這次戰爭中規模最大的協同空襲之一中，俄羅斯在週二凌晨發射了近 300 架無人機和 25 枚飛彈。這次攻擊包括 18 枚彈道飛彈和 7 枚巡弋飛彈，主要針對基輔和其他主要城市的工業區及能源基礎設施。雖然烏克蘭防空系統攔截了許多飛行物，但多個社區仍遭受嚴重損壞，導致大範圍停電。這次襲擊凸顯了俄羅斯的策略，即在任何潛在的停火談判前，利用壓倒性的武力來耗盡烏克蘭的防禦並削弱平民基礎設施。`,
+                vocabulary: [
+                    'Coordinated air assaults (n.phr.): 協同空襲', 'Overnight (adv.): 徹夜地/凌晨', 'Drones (n.): 無人機', 'Missiles (n.): 飛彈',
+                    'Ballistic missiles (n.phr.): 彈道飛彈', 'Cruise missiles (n.phr.): 巡弋飛彈', 'Primarily (adv.): 主要地', 'Targeting (v.ger.): 針對/瞄準',
+                    'Industrial zones (n.phr.): 工業區', 'Energy infrastructure (n.phr.): 能源基礎設施', 'Intercepted (v.pp.): 攔截', 'Projectiles (n.): 拋射物/飛行物',
+                    'Significant damage (n.phr.): 嚴重損壞', 'Power outages (n.phr.): 停電', 'Underscores (v.): 凸顯/強調', 'Overwhelming force (n.phr.): 壓倒性武力',
+                    'Exhaust (v.): 耗盡', 'Degrade (v.): 削弱/降級', 'Civilian infrastructure (n.phr.): 平民基礎設施', 'Ceasefire negotiations (n.phr.): 停火談判',
+                    'Assault (n.): 襲擊', 'Infrastructure (n.): 基礎設施', 'Negotiation (n.): 談判', 'Widespread (adj.): 廣泛的',
+                    'Potential (adj.): 潛在的', 'Strategy (n.): 策略', 'Overwhelming (adj.): 壓倒性的', 'Ballistic (adj.): 彈道的',
+                    'Defense (n.): 防禦', 'Major cities (n.phr.): 主要城市', 'Projectile (n.): 發射體', 'Outage (n.): 斷電/停供'
+                ],
+                quiz: [
+                    { q: 'How many drones did Russia launch in the overnight strike?', options: ['100', '200', 'Nearly 300', '500'], answer: 'Nearly 300' },
+                    { q: 'How many total missiles were launched alongside the drones?', options: ['10', '18', '25', '300'], answer: '25' },
+                    { q: 'Which city\'s infrastructure was specifically mentioned as a target?', options: ['Moscow', 'Kyiv', 'Warsaw', 'Berlin'], answer: 'Kyiv' },
+                    { q: 'What kind of zones were primarily targeted?', options: ['Farming zones', 'Tourist zones', 'Industrial zones', 'School zones'], answer: 'Industrial zones' },
+                    { q: 'What was the result of the damage to energy infrastructure?', options: ['Lower prices', 'Widespread power outages', 'Better internet', 'More water'], answer: 'Widespread power outages' },
+                    { q: 'Russia uses "overwhelming force" to ______ Ukraine\'s defenses.', options: ['Help', 'Exhaust', 'Build', 'Study'], answer: 'Exhaust' },
+                    { q: 'The strike happened ahead of any potential ______ negotiations.', options: ['Trade', 'Ceasefire', 'Space', 'Educational'], answer: 'Ceasefire' },
+                    { q: 'The term "intercepted" means what in this context?', options: ['Helped reach the target', 'Stopped or caught before arrival', 'Ignored', 'Lost in space'], answer: 'Stopped or caught before arrival' },
+                    { q: 'What does "overwhelming" mean?', options: ['Small', 'Very great in amount or intensity', 'Boring', 'Cheap'], answer: 'Very great in amount or intensity' },
+                    { q: 'The word "infrastructure" refers to what?', options: ['Only people', 'Basic physical and organizational structures (roads, power, etc.)', 'Small handheld tools', 'Books and papers'], answer: 'Basic physical and organizational structures (roads, power, etc.)' },
+                    { q: 'What is a "ballistic missile"?', options: ['A small rock', 'A rocket-powered projectile that follows a high curve', 'A slow airplane', 'A type of drone'], answer: 'A rocket-powered projectile that follows a high curve' },
+                    { q: 'What does "degrade" mean?', options: ['To improve', 'To lower the quality or strength of', 'To clean', 'To award a prize'], answer: 'To lower the quality or strength of' },
+                    { q: 'According to the text, the attack was "coordinated," meaning what?', options: ['Random', 'Happening by accident', 'Organized and functioning together', 'Secret'], answer: 'Organized and functioning together' },
+                    { q: 'The strike targeted "civilian" infrastructure, meaning it belongs to whom?', options: ['The army only', 'Ordinary citizens/Non-military', 'Space agencies', 'Foreign governments only'], answer: 'Ordinary citizens/Non-military' },
+                    { q: 'The information about the strike came from which source?', options: ['Russian media', 'Ukrainian General Staff', 'UN researchers', 'The White House'], answer: 'Ukrainian General Staff' }
+                ]
+            },
+            'google-market': {
+                title: '谷歌市值突破四兆美元',
+                english: `Google’s parent company, Alphabet, reached a historic milestone on Tuesday as its market capitalization surpassed $4 trillion for the first time. The rally was fueled by investor optimism surrounding the company’s AI-driven growth and resilient advertising revenue, reaffirming the dominance of Big Tech in the global economy. At the same time, commodities markets experienced sharp volatility, with Brent crude oil breaking above $64 per barrel and natural gas prices continuing to rise. Analysts note that geopolitical instability and shifting U.S. energy policies are forcing investors to balance high-growth tech assets against the rising costs of raw materials.`,
+                chinese: `谷歌市值首度突破 4 萬億美元；大宗商品市場出現劇烈波動。谷歌母公司 Alphabet 週二達成歷史性里程碑，其市值首次突破 4 兆美元。這次漲勢是由投資者對該公司 AI 驅動的成長和具韌性的廣告收入的樂觀情緒所推動，再次確認了大型科技公司（Big Tech）在全球經濟中的主導地位。與此同時，大宗商品市場出現劇烈波動，布蘭特原油價格突破每桶 64 美元，天然氣價格持續上漲。分析人士指出，地緣政治的不穩定和美國能源政策的轉變，正迫使投資者在高速成長的科技資產與不斷上升的原物料成本之間尋求平衡。`,
+                vocabulary: [
+                    'Parent company (n.phr.): 母公司', 'Alphabet (n. proper): Alphabet (谷歌母公司)', 'Historic milestone (n.phr.): 歷史性里程碑', 'Market capitalization (n.phr.): 市值',
+                    'Surpassed (v.): 超過/突破', '4 trillion (n.phr.): 4 兆', 'Rally (n.): (股市) 漲勢', 'Fueled by (phr.v.): 由...推動',
+                    'Investor optimism (n.phr.): 投資者樂觀情緒', 'AI-driven (adj.): AI 驅動的', 'Resilient (adj.): 具韌性的', 'Advertising revenue (n.phr.): 廣告收入',
+                    'Reaffirming (v.ger.): 再次確認', 'Dominance (n.): 主導地位', 'Big Tech (n. proper): 大型科技公司', 'Commodities markets (n.phr.): 大宗商品市場',
+                    'Sharp volatility (n.phr.): 劇烈波動', 'Brent crude oil (n. proper): 布蘭特原油', 'Per barrel (phr.): 每桶', 'Natural gas (n.phr.): 天然氣',
+                    'Geopolitical instability (n.phr.): 地緣政治不穩定', 'Energy policies (n.phr.): 能源政策', 'High-growth tech assets (n.phr.): 高成長科技資產', 'Raw materials (n.phr.): 原物料',
+                    'Milestone (n.): 里程碑', 'Optmism (n.): 樂觀', 'Volatility (n.): 波動', 'Instability (n.): 不穩定',
+                    'Asset (n.): 資產', 'Surpass (v.): 贏過/超越', 'Surpass (v.): 超越', 'Resilient (adj.): 復原力強的'
+                ],
+                quiz: [
+                    { q: 'What is Google\'s parent company?', options: ['Amazon', 'Meta', 'Alphabet', 'Apple'], answer: 'Alphabet' },
+                    { q: 'What historic milestone did the company reach on Tuesday?', options: ['First 1 trillion valuation', 'Reached 4 trillion market cap', 'Bought Microsoft', 'Closed its search engine'], answer: 'Reached 4 trillion market cap' },
+                    { q: 'What two factors fueled the investor optimism?', options: ['Coffee and snacks', 'AI-driven growth and resilient advertising revenue', 'Lower taxes and new office', 'New CEO and lower wages'], answer: 'AI-driven growth and resilient advertising revenue' },
+                    { q: 'What kind of dominance was reaffirmed by this rally?', options: ['The dominance of Big Tech', 'The dominance of traditional banks', 'The dominance of farming', 'The dominance of small shops'], answer: 'The dominance of Big Tech' },
+                    { q: 'What price did Brent crude oil break above?', options: ['$50', '$64 per barrel', '$100', '$200'], answer: '$64 per barrel' },
+                    { q: 'The "market capitalization" refers to what?', options: ['The number of employees', 'The total value of a company\'s shares', 'The size of the head office', 'The amount of tax paid'], answer: 'The total value of a company\'s shares' },
+                    { q: 'What are investors forced to balance high-growth tech assets against?', options: ['Weather changes', 'Rising costs of raw materials', 'New games', 'Vacation time'], answer: 'Rising costs of raw materials' },
+                    { q: 'Besides oil, what other energy source is rising in price?', options: ['Solar', 'Natural gas', 'Coal', 'Wind'], answer: 'Natural gas' },
+                    { q: 'The term "surpassed" means what?', options: ['Failed', 'Stayed below', 'Went beyond or exceeded', 'Matched exactly'], answer: 'Went beyond or exceeded' },
+                    { q: 'The word "volatility" refers to what in a market?', options: ['Complete stability', 'Large and rapid changes in price', 'Zero trading', 'Government ownership'], answer: 'Large and rapid changes in price' },
+                    { q: 'Geopolitical ______ is a reason for market volatility.', options: ['Peace', 'Instability', 'Agreement', 'History'], answer: 'Instability' },
+                    { q: 'The term "Big Tech" refers to which companies?', options: ['Small startups', 'Large and dominant technology companies', 'Farming companies', 'Furniture stores'], answer: 'Large and dominant technology companies' },
+                    { q: 'Alphabet reached its milestone on which day?', options: ['Monday', 'Tuesday', 'Wednesday', 'Sunday'], answer: 'Tuesday' },
+                    { q: 'The word "resilient" means able to ______.', options: ['Break easily', 'Recover quickly or withstand difficulties', 'Sleep for a long time', 'Speak many languages'], answer: 'Recover quickly or withstand difficulties' },
+                    { q: 'What does "raw materials" mean?', options: ['Finished products like phones', 'Unprocessed basic substances used to make goods', 'Ready-to-eat food', 'Computer software'], answer: 'Unprocessed basic substances used to make goods' }
+                ]
+            }
+        };
+
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
