@@ -8,11 +8,11 @@
     <title>Daily English - 🔥東旭的每日英文補給站 | 英文單字、多益測驗與英文新聞練習</title> 
     
     <!-- 網站簡介與關鍵字 -->
-    <meta name="description" content="Daily English 是一個專為英文學習者設計的網站，由東旭維護。提供每日國際新聞導讀、多益核心單字（TOEIC）練習、以及深度閱讀文章。幫助你利用碎片時間提升英文能力。">
+    <meta name="description" content="Daily English 是一個專為英文學習者設計的網站，由東旭維護。提供每日國際新聞導讀、多益核心單字練習、以及深度閱讀文章。">
     <meta name="keywords" content="英文學習, Daily English, 每日英文, 英文單字, 多益單字, TOEIC, 英文新聞, 東旭, Shiu_orz">
     <meta name="author" content="Shiu_orz">
 
-    <!-- Open Graph (分享到 Line/FB 時的漂亮名片) -->
+    <!-- Open Graph (分享名片) -->
     <meta property="og:title" content="🔥 Daily English - 東旭的英文能量補給站！">
     <meta property="og:description" content="每天進步一點點！提供最新英文新聞導讀與多益單字練習，點擊開始學習。">
     <meta property="og:type" content="website">
@@ -88,7 +88,7 @@
             display: flex;
             white-space: nowrap;
             width: max-content;
-            animation: marquee 22s linear infinite;
+            animation: marquee 30s linear infinite;
         }
         .marquee-content:hover { animation-play-state: paused; }
         .marquee-item {
@@ -154,6 +154,22 @@
             backdrop-filter: blur(10px);
             border-radius: 1.25rem;
         }
+
+        /* 打卡火花動畫 */
+        .streak-fire {
+            animation: flicker 1.5s infinite alternate;
+        }
+        @keyframes flicker {
+            0% { filter: drop-shadow(0 0 2px #f97316); }
+            100% { filter: drop-shadow(0 0 8px #facc15); transform: scale(1.1); }
+        }
+        .welcome-modal {
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body class="p-4 sm:p-8">
@@ -161,21 +177,42 @@
         
         <!-- Header Section -->
         <header class="mb-8 px-2">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                     <h1 class="text-4xl font-black text-white tracking-tight flex items-center">
                         <span class="text-lime-500 mr-2">EN</span>每日英文補給站
                         <span class="ml-3 text-sm bg-lime-500 text-black px-2 py-0.5 rounded-md italic font-black uppercase">Shiu_orz</span>
                     </h1>
-                    <p class="text-gray-300 mt-2 font-medium italic opacity-90 text-lg">Empower Your English Brain Daily.</p>
+                    <p id="personal-greeting" class="text-gray-300 mt-2 font-medium italic opacity-90 text-lg text-pretty">Empower Your English Brain Daily.</p>
                 </div>
-                <div class="text-xs text-gray-500 font-mono tracking-widest uppercase bg-white/5 px-3 py-1 rounded-full border border-white/10">
-                    Last Update / <span id="last-updated" class="text-lime-500 font-bold">2025-12-23</span>
+                
+                <div class="flex items-center gap-3">
+                    <!-- Streak Badge -->
+                    <div id="streak-badge" class="hidden text-xs font-mono tracking-widest uppercase bg-orange-500/10 px-3 py-1.5 rounded-full border border-orange-500/20 text-orange-500 flex items-center gap-2 shadow-[0_0_20px_rgba(249,115,22,0.1)]">
+                        <span class="streak-fire text-base">🔥</span>
+                        <span id="streak-count" class="font-black">0 DAY STREAK</span>
+                    </div>
+                    <!-- Update Info -->
+                    <div class="text-xs text-gray-500 font-mono tracking-widest uppercase bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                        Last Update / <span id="last-updated" class="text-lime-500 font-bold">2026-01-15</span>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <!-- 跑馬燈區塊 (點擊跳轉版) -->
+        <!-- 個人名稱設定區 (僅第一次訪問顯示) -->
+        <div id="name-setup" class="hidden mb-10 welcome-modal">
+            <div class="glass-panel p-6 border-lime-500/30 bg-lime-500/5">
+                <h3 class="text-white font-bold text-lg mb-2">Welcome, Learner! 👋</h3>
+                <p class="text-gray-400 text-sm mb-4">告訴我們你的稱呼，讓我們為你記錄每日的進步。</p>
+                <div class="flex gap-2">
+                    <input type="text" id="user-name-input" placeholder="Your Nickname..." class="search-input flex-grow p-3 text-sm focus:outline-none focus:border-lime-500/50">
+                    <button onclick="saveName()" class="bg-lime-500 text-black px-6 py-2 rounded-xl font-black text-sm hover:bg-lime-400 transition-all uppercase tracking-wider shadow-lg shadow-lime-500/20">Set Name</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 跑馬燈區塊 (包含完整標題) -->
         <div class="marquee-wrapper mb-10 overflow-hidden">
             <div class="live-badge">
                 <span class="live-dot"></span>
@@ -184,63 +221,31 @@
             
             <div class="marquee-track">
                 <div class="marquee-content items-center h-full">
-                    <!-- 第一組 -->
                     <div class="flex shrink-0">
-                         <a href="News/2026.01.15英文新聞.html" class="marquee-item">啟動「台版星鏈」計畫：投入 400 億強化通訊韌性</a><span class="marquee-separator">•</span
-                         <a href="News/2026.01.14英文新聞.html" class="marquee-item">國安基金宣布退場：結束史上最長 279 天護盤</a><span class="marquee-separator">•</span
-                         <a href="News/2026.01.13英文新聞.html" class="marquee-item">台美關稅談判取得重大突破</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.12英文新聞.html" class="marquee-item">民眾黨主席黃國昌率團赴美</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.09英文新聞.html" class="marquee-item">涉嫌竊取 TSMC 商業機密</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.08英文新聞.html" class="marquee-item">川普退出 66 國際組織</a><span class="marquee-separator">•</span
-                         <a href="News/2026.01.07英文新聞.html" class="marquee-item">勞動部擬調漲基本工資</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.06英文新聞.html" class="marquee-item">台股無懼風險 首度攻上三萬點里程碑</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.05英文新聞.html" class="marquee-item">中國擬嚴管 AI 防止危害</a><span class="marquee-separator">•</span
-                         <a href="News/2025.12.31英文新聞.html" class="marquee-item">瑞幸咖啡進軍台灣面臨激烈競爭</a><span class="marquee-separator">•</span>
-                         <a href="News/2025.12.30英文新聞.html" class="marquee-item">解放軍在台灣周邊發動大規模軍演</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.29英文新聞.html" class="marquee-item">國際太空站 25 週年</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.25英文新聞.html" class="marquee-item">學生殺人案判決引發輕判爭議</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.24英文新聞.html" class="marquee-item">日本重啟世界最大核電廠</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.23英文新聞.html" class="marquee-item">在野黨對賴清德總統啟動彈劾程序</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.22英文新聞.html" class="marquee-item">雷霆行動救出三萬動物</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.19英文新聞.html" class="marquee-item">北極再次創下 125 年來最高溫紀錄</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.18英文新聞.html" class="marquee-item">韓國戒嚴令調查最新進展</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.17英文新聞.html" class="marquee-item">WWE 明星 John Cena 動情謝幕演出</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.16英文新聞.html" class="marquee-item">澳洲邦代海灘槍擊案傷亡更新</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.15英文新聞.html" class="marquee-item">川普百萬美元黃金簽證計劃引熱議</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.12英文新聞.html" class="marquee-item">白銀價格創歷史新高：受聯準會降息預期推動</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.11英文新聞.html" class="marquee-item">日本近海發生 7.6 級強震引發海嘯警報</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.15英文新聞.html" class="marquee-item">啟動「台版星鏈」計畫</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.14英文新聞.html" class="marquee-item">國安基金宣布退場</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.13英文新聞.html" class="marquee-item">台美關稅談判突破</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.12英文新聞.html" class="marquee-item">黃國昌率團赴美</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.09英文新聞.html" class="marquee-item">TSMC 商業機密案</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.08英文新聞.html" class="marquee-item">川普退出國際組織</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.07英文新聞.html" class="marquee-item">擬調漲基本工資</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.06英文新聞.html" class="marquee-item">台股攻上三萬點</a><span class="marquee-separator">•</span>
                     </div>
-                    <!-- 重複組 -->
                     <div class="flex shrink-0">
-                        <a href="News/2026.01.15英文新聞.html" class="marquee-item">啟動「台版星鏈」計畫：投入 400 億強化通訊韌性</a><span class="marquee-separator">•</span
-                         <a href="News/2026.01.14英文新聞.html" class="marquee-item">國安基金宣布退場：結束史上最長 279 天護盤</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.13英文新聞.html" class="marquee-item">台美關稅談判取得重大突破</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.12英文新聞.html" class="marquee-item">民眾黨主席黃國昌率團赴美</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.09英文新聞.html" class="marquee-item">涉嫌竊取 TSMC 商業機密</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.08英文新聞.html" class="marquee-item">川普退出 66 國際組織</a><span class="marquee-separator">•</span
-                         <a href="News/2026.01.07英文新聞.html" class="marquee-item">勞動部擬調漲基本工資</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.06英文新聞.html" class="marquee-item">台股無懼風險 首度攻上三萬點里程碑</a><span class="marquee-separator">•</span
-                        <a href="News/2026.01.05英文新聞.html" class="marquee-item">中國擬嚴管 AI 防止危害</a><span class="marquee-separator">•</span
-                        <a href="News/2025.12.31英文新聞.html" class="marquee-item">瑞幸咖啡進軍台灣面臨激烈競爭</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.30英文新聞.html" class="marquee-item">解放軍在台灣周邊發動大規模軍演</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.29英文新聞.html" class="marquee-item">國際太空站 25 週年</a><span class="marquee-separator">•</span>
-                         <a href="News/2025.12.25英文新聞.html" class="marquee-item">學生殺人案判決引發輕判爭議</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.24英文新聞.html" class="marquee-item">日本重啟世界最大核電廠</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.23英文新聞.html" class="marquee-item">在野黨對賴清德總統啟動彈劾程序</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.22英文新聞.html" class="marquee-item">雷霆行動救出三萬動物</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.19英文新聞.html" class="marquee-item">北極再次創下 125 年來最高溫紀錄</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.18英文新聞.html" class="marquee-item">韓國戒嚴令調查最新進展</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.17英文新聞.html" class="marquee-item">WWE 明星 John Cena 動情謝幕演出</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.16英文新聞.html" class="marquee-item">澳洲邦代海灘槍擊案傷亡更新</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.15英文新聞.html" class="marquee-item">川普百萬美元黃金簽證計劃引熱議</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.12英文新聞.html" class="marquee-item">白銀價格創歷史新高：受聯準會降息預期推動</a><span class="marquee-separator">•</span>
-                        <a href="News/2025.12.11英文新聞.html" class="marquee-item">日本近海發生 7.6 級強震引發海嘯警報</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.15英文新聞.html" class="marquee-item">啟動「台版星鏈」計畫</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.14英文新聞.html" class="marquee-item">國安基金宣布退場</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.13英文新聞.html" class="marquee-item">台美關稅談判突破</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.12英文新聞.html" class="marquee-item">黃國昌率團赴美</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.09英文新聞.html" class="marquee-item">TSMC 商業機密案</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.08英文新聞.html" class="marquee-item">川普退出國際組織</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.07英文新聞.html" class="marquee-item">擬調漲基本工資</a><span class="marquee-separator">•</span>
+                         <a href="News/2026.01.06英文新聞.html" class="marquee-item">台股攻上三萬點</a><span class="marquee-separator">•</span>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Main Content Area -->
+        <!-- 主要內容區域 -->
         <div class="glass-panel overflow-hidden shadow-2xl">
             <nav class="flex border-b border-white/10 bg-black/20">
                 <button id="tab-news-button" data-tab="news" class="tab-button active flex-1 py-4 text-sm font-black tracking-widest uppercase" onclick="openTab(event, 'news')">News Feed</button>
@@ -267,182 +272,162 @@
                     </div>
 
                     <ul id="document-list" class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-
-                        <!-- 01/15 -->
+                        <!-- 2026/01 新聞列表 -->
                         <li data-date="2026/01/15" data-month="2026-01">
                             <a href="News/2026.01.15英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260115.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260115.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=STARLINK'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_「台版星鏈」計畫：投入 400 億強化通訊韌性</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>JAN 15, 2026</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_「台版星鏈」計畫：投入 400 億強化通訊韌性</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest mt-auto"><span>JAN 15, 2026</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                         <!-- 01/14 -->
                         <li data-date="2026/01/14" data-month="2026-01">
                             <a href="News/2026.01.14英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260114.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260114.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=FUND'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_國安基金宣布退場：結束史上最長 279 天護盤</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>JAN 14, 2026</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_國安基金宣布退場：結束史上最長 279 天護盤</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>JAN 14, 2026</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                         <!-- 01/13 -->
                         <li data-date="2026/01/13" data-month="2026-01">
                             <a href="News/2026.01.13英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260113.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260113.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=TARIFFS'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_台美關稅談判取得重大突破</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>JAN 13, 2026</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_台美關稅談判取得重大突破</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>JAN 13, 2026</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                         <!-- 01/12 -->
                         <li data-date="2026/01/12" data-month="2026-01">
                             <a href="News/2026.01.12英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260112.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260112.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=USA+TRIP'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_民眾黨主席黃國昌率團赴美</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>JAN 12, 2026</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_民眾黨主席黃國昌率團赴美</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>JAN 12, 2026</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                         <!-- 01/09 -->
                         <li data-date="2026/01/09" data-month="2026-01">
                             <a href="News/2026.01.09英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260109.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260109.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=TSMC'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_涉嫌竊取 TSMC 商業機密</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>JAN 09, 2026</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_涉嫌竊取 TSMC 商業機密</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>JAN 09, 2026</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                         <!-- 01/08 -->
                         <li data-date="2026/01/08" data-month="2026-01">
                             <a href="News/2026.01.08英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260108.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260108.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=TRUMP'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_川普退出 66 國際組織</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>JAN 08, 2026</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_川普退出 66 國際組織</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>JAN 08, 2026</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                         <!-- 01/07 -->
                         <li data-date="2026/01/07" data-month="2026-01">
                             <a href="News/2026.01.07英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260107.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260107.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=WAGE'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_勞動部擬調漲基本工資</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>JAN 07, 2026</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_勞動部擬調漲基本工資</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>JAN 07, 2026</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 01/06 -->
                         <li data-date="2026/01/06" data-month="2026-01">
                             <a href="News/2026.01.06英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260106.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260106.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=STOCK'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_台股無懼風險 首度攻上三萬點里程碑</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>JAN 06, 2026</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_台股無懼風險 首度攻上三萬點里程碑</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>JAN 06, 2026</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                         <!-- 01/05 -->
                         <li data-date="2026/01/05" data-month="2026-01">
                             <a href="News/2026.01.05英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260105.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20260105.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=AI'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_中國擬嚴管 AI 防止危害</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>JAN 05, 2026</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_中國擬嚴管 AI 防止危害</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>JAN 05, 2026</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                         <!-- 12/31 -->
+
+                        <!-- 2025/12 新聞列表 -->
                         <li data-date="2025/12/31" data-month="2025-12">
                             <a href="News/2025.12.31英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251231.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251231.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=COFFEE'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_瑞幸咖啡進軍台灣面臨激烈競爭</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>DEC 31, 2025</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_瑞幸咖啡進軍台灣面臨激烈競爭</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 31, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        
-                        <!-- 12/30 -->
                         <li data-date="2025/12/30" data-month="2025-12">
                             <a href="News/2025.12.30英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251230.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251230.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=MILITARY'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_解放軍在台灣周邊發動大規模軍演</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>DEC 30, 2025</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_解放軍在台灣周邊發動大規模軍演</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 30, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                          <!-- 12/29 -->
                         <li data-date="2025/12/29" data-month="2025-12">
                             <a href="News/2025.12.29英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251229.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251229.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=SPACE'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_國際太空站 25 週年</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>DEC 29, 2025</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_國際太空站 25 週年</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 29, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        
-                         <!-- 12/25 -->
                         <li data-date="2025/12/25" data-month="2025-12">
                             <a href="News/2025.12.25英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251225.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251225.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=JUDGMENT'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_學生殺人案判決引發輕判爭議</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>DEC 25, 2025</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_學生殺人案判決引發輕判爭議</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 25, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        
-                       <!-- 12/24 -->
                         <li data-date="2025/12/24" data-month="2025-12">
                             <a href="News/2025.12.24英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251224.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251224.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=NUCLEAR'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_日本重啟世界最大核電廠</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>DEC 24, 2025</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_日本重啟世界最大核電廠</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 24, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        
-                        <!-- 12/23 -->
                         <li data-date="2025/12/23" data-month="2025-12">
                             <a href="News/2025.12.23英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251223.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LATEST+NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251223.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=POLITICS'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_在野黨對賴清德總統啟動彈劾程序</h3>
-                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black tracking-widest uppercase mt-auto"><span>DEC 23, 2025</span><span class="text-lime-500 flex items-center bg-lime-500/10 px-2 py-1 rounded-md">Open <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3"/></svg></span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_在野黨對賴清德總統啟動彈劾程序</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 23, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/22 -->
                         <li data-date="2025/12/22" data-month="2025-12">
                             <a href="News/2025.12.22英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251222.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=ANIMALS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251222.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=ANIMALS'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_雷霆行動救出三萬動物</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_雷霆行動救出三萬動物</h3>
                                     <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 22, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/19 -->
                         <li data-date="2025/12/19" data-month="2025-12">
                             <a href="News/2025.12.19英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251219.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=ARCTIC'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251219.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=ARCTIC'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2 group-hover:text-lime-400 transition-colors">重點新聞_北極再次創下 125 年來最高溫紀錄</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_北極再次創下 125 年來最高溫紀錄</h3>
                                     <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 19, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/18 -->
                         <li data-date="2025/12/18" data-month="2025-12">
                             <a href="News/2025.12.18英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251218.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=KOREA'"></div>
@@ -452,137 +437,125 @@
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/17 -->
                         <li data-date="2025/12/17" data-month="2025-12">
                             <a href="News/2025.12.17英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251217.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=STARS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251217.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=WWE'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_WWE 明星 John Cena 動情謝幕演出</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_WWE 明星 John Cena 動情謝幕演出</h3>
                                     <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 17, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/16 -->
                         <li data-date="2025/12/16" data-month="2025-12">
                             <a href="News/2025.12.16英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251216.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=NEWS'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251216.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=SHOOTING'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_澳洲邦代海灘槍擊案傷亡更新</h3>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_澳洲邦代海灘槍擊案傷亡更新</h3>
                                     <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 16, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/15 -->
                         <li data-date="2025/12/15" data-month="2025-12">
                             <a href="News/2025.12.15英文新聞.html" class="grid-card group block">
                                 <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251215.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=VISA'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_川普百萬美元黃金簽證計劃引熱議</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 15, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_川普百萬美元黃金簽證計劃引熱議</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 15, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/12 -->
                         <li data-date="2025/12/12" data-month="2025-12">
                             <a href="News/2025.12.12英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video bg-slate-800"><img src="covers/news_20251212.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=SILVER'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251212.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=SILVER'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_白銀價格創歷史新高</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 12, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_白銀價格創歷史新高：受聯準會降息預期推動</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 12, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/11 -->
                         <li data-date="2025/12/11" data-month="2025-12">
                             <a href="News/2025.12.11英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video bg-slate-800"><img src="covers/news_20251211.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=EARTHQUAKE'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251211.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=QUAKE'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_日本近海發生 7.6 級強震</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 11, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_日本近海發生 7.6 級強震引發海嘯警報</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 11, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/10 -->
                         <li data-date="2025/12/10" data-month="2025-12">
                             <a href="News/2025.12.10英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video bg-slate-800"><img src="covers/news_20251210.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=RADAR'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251210.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=RADAR'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_中國戰機對日本軍機照射雷達事件</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 10, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_中國戰機對日本軍機照射雷達事件</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 10, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/09 -->
                         <li data-date="2025/12/09" data-month="2025-12">
                             <a href="News/2025.12.09英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video bg-slate-800"><img src="covers/news_20251209.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=MERGER'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251209.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=MERGER'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_Netflix 擬收購 Warner Bros. Discovery</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 09, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_Netflix 擬收購 Warner Bros. Discovery</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 09, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/08 -->
                         <li data-date="2025/12/08" data-month="2025-12">
                             <a href="News/英文新聞2025.12.08.html" class="grid-card group block">
-                                <div class="aspect-video bg-slate-800"><img src="covers/news_20251208.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=ARMY'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251208.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=ARMY'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_國軍演習砲彈誤擊彰化民宅事件更新</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 08, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_國軍演習砲彈誤擊彰化民宅事件更新</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 08, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/06 -->
                         <li data-date="2025/12/06" data-month="2025-12">
                             <a href="News/2025.12.06英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video bg-slate-800"><img src="covers/news_20251206.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LION'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251206.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LION'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_男爬進動物園獅子圍欄不幸遭咬死</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 06, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_男爬進動物園獅子圍欄不幸遭咬死</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 06, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/05 -->
                         <li data-date="2025/12/05" data-month="2025-12">
                             <a href="News/2025.12.05英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video bg-slate-800"><img src="covers/news_20251205.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LNG'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251205.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=LNG'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
                                     <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_中油液化天然氣計畫遭貪腐調查</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 05, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 05, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/04 -->
                         <li data-date="2025/12/04" data-month="2025-12">
                             <a href="News/2025.12.04英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video bg-slate-800"><img src="covers/news_20251204.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=FISH'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251204.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=FISH'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_全聯吳郭魚排驗出禁藥引發食安疑慮</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 04, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_全聯吳郭魚排驗出禁藥引發食安疑慮</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 04, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/03 -->
                         <li data-date="2025/12/03" data-month="2025-12">
                             <a href="News/2025.12.03英文新聞.html" class="grid-card group block">
-                                <div class="aspect-video bg-slate-800"><img src="covers/news_20251203.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=WATER'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251203.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=WATER'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_淡水地區大規模停水追蹤</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 03, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_淡水地區大規模停水追蹤</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 03, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
-                        <!-- 12/02 -->
                         <li data-date="2025/12/02" data-month="2025-12">
                             <a href="News/Funday新聞20251202.html" class="grid-card group block">
-                                <div class="aspect-video bg-slate-800"><img src="covers/news_20251202.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=FIRE'"></div>
+                                <div class="aspect-video relative overflow-hidden"><img src="covers/news_20251202.jpg" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/84cc16?text=FIRE'"></div>
                                 <div class="p-6 flex flex-col justify-between flex-grow">
-                                    <h3 class="text-white font-bold text-lg mb-4">重點新聞_香港災難性高樓火警最新消息</h3>
-                                    <div class="flex justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 02, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
+                                    <h3 class="text-white font-bold text-lg mb-4 line-clamp-2">重點新聞_香港災難性高樓火警最新消息</h3>
+                                    <div class="flex items-center justify-between text-gray-400 text-xs font-black mt-auto"><span>DEC 02, 2025</span><span class="text-lime-500 bg-lime-500/10 px-2 py-1 rounded-md">Open</span></div>
                                 </div>
                             </a>
                         </li>
                     </ul>
+                    <div class="mt-8 text-center text-gray-500 text-sm italic">... 向上滑動查看更多</div>
                 </div>
 
                 <!-- 2. 閱讀文章 Content -->
@@ -598,7 +571,7 @@
                                     <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">🤖 熱狗的小故事</h3>
                                     <span class="text-xs font-black bg-lime-500/10 text-lime-500 border border-lime-500/20 px-3 py-1.5 rounded-full uppercase">B1 Intermediate</span>
                                 </div>
-                                <p class="text-gray-300 text-base mt-4 opacity-80 leading-relaxed">從街頭小吃到全球經典的進化史，探索熱狗背後有趣的文化由來。</p>
+                                <p class="text-gray-300 text-base mt-4 opacity-80 leading-relaxed text-pretty">從街頭小吃到全球經典的進化史，探索熱狗背後有趣的文化由來。</p>
                             </a>
                         </li>
                         <li>
@@ -607,7 +580,7 @@
                                     <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">☕ 全球咖啡文化觀察</h3>
                                     <span class="text-xs font-black bg-lime-500/10 text-lime-500 border border-lime-500/20 px-3 py-1.5 rounded-full uppercase">C1 Advanced</span>
                                 </div>
-                                <p class="text-gray-300 text-base mt-4 opacity-80 leading-relaxed">從歷史到現代，咖啡如何改變了全球的社會生活與社交方式。</p>
+                                <p class="text-gray-300 text-base mt-4 opacity-80 leading-relaxed text-pretty">咖啡如何從歷史到現代，改變了全球的社會生活與社交方式。</p>
                             </a>
                         </li>
                         <li>
@@ -616,7 +589,7 @@
                                     <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">🚀 火星探索的最新進展</h3>
                                     <span class="text-xs font-black bg-lime-500/10 text-lime-500 border border-lime-500/20 px-3 py-1.5 rounded-full uppercase">B1 Intermediate</span>
                                 </div>
-                                <p class="text-gray-300 text-base mt-4 opacity-80 leading-relaxed">了解無人探測器在紅色星球上的最新科學發現與挑戰。</p>
+                                <p class="text-gray-300 text-base mt-4 opacity-80 leading-relaxed text-pretty">了解無人探測器在紅色星球上的最新科學發現與挑戰。</p>
                             </a>
                         </li>
                     </ul>
@@ -635,7 +608,7 @@
                                     <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">💡 Day 1-10 核心多益單字</h3>
                                     <span class="text-xs font-black bg-orange-500/10 text-orange-500 border border-orange-500/20 px-3 py-1.5 rounded-full uppercase">Score 300+</span>
                                 </div>
-                                <p class="text-gray-300 text-base mt-4 opacity-80 leading-relaxed">包含多益考試中 100 個最常見的基礎單字，打好職場英文基本功。</p>
+                                <p class="text-gray-300 text-base mt-4 opacity-80 leading-relaxed text-pretty">包含多益考試中 100 個最常見的基礎單字，打好職場英文基本功。</p>
                             </a>
                         </li>
                         <li>
@@ -644,7 +617,7 @@
                                     <h3 class="text-white font-bold text-xl group-hover:text-lime-400 transition-colors">💡 Day 11-20 核心多益單字</h3>
                                     <span class="text-xs font-black bg-orange-500/10 text-orange-500 border border-orange-500/20 px-3 py-1.5 rounded-full uppercase">Score 600+</span>
                                 </div>
-                                <p class="text-gray-300 text-base mt-4 opacity-80 leading-relaxed">挑戰進階高頻單字，專為希望在商務情境中流暢溝通的學習者設計。</p>
+                                <p class="text-gray-300 text-base mt-4 opacity-80 leading-relaxed text-pretty">挑戰進階高頻單字，專為希望在商務情境中流暢溝通的學習者設計。</p>
                             </a>
                         </li>
                     </ul>
@@ -654,11 +627,89 @@
     </div>
 
     <script>
+        // --- 打卡與個人化功能邏輯 ---
+        function initPersonalization() {
+            const userName = localStorage.getItem('daily_english_user');
+            const setupDiv = document.getElementById('name-setup');
+            const greeting = document.getElementById('personal-greeting');
+
+            if (!userName) {
+                // 第一次進入，顯示名稱設定區塊
+                setupDiv.classList.remove('hidden');
+            } else {
+                greeting.innerText = `Good Morning, ${userName}. Ready to empower your brain?`;
+                handleStreak();
+            }
+        }
+
+        function saveName() {
+            const input = document.getElementById('user-name-input');
+            const name = input.value.trim();
+            if (name) {
+                localStorage.setItem('daily_english_user', name);
+                document.getElementById('name-setup').classList.add('hidden');
+                document.getElementById('personal-greeting').innerText = `Good Morning, ${name}. Ready to empower your brain?`;
+                handleStreak(); 
+            }
+        }
+
+        function handleStreak() {
+            const badge = document.getElementById('streak-badge');
+            const display = document.getElementById('streak-count');
+            
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+            
+            let streakData = JSON.parse(localStorage.getItem('daily_english_streak')) || {
+                count: 0,
+                lastDate: null
+            };
+
+            if (streakData.lastDate === todayStr) {
+                // 今天已經記錄過了，直接顯示
+            } else {
+                const lastDate = streakData.lastDate ? new Date(streakData.lastDate) : null;
+                
+                if (lastDate) {
+                    const diffTime = Math.abs(now.setHours(0,0,0,0) - lastDate.setHours(0,0,0,0));
+                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays === 1) {
+                        // 剛好隔一天
+                        streakData.count += 1;
+                    } else {
+                        // 斷掉了
+                        streakData.count = 1;
+                    }
+                } else {
+                    // 第一次打卡
+                    streakData.count = 1;
+                }
+                
+                streakData.lastDate = todayStr;
+                localStorage.setItem('daily_english_streak', JSON.stringify(streakData));
+            }
+
+            // 渲染顯示
+            if (streakData.count > 0) {
+                badge.classList.remove('hidden');
+                display.innerText = `${streakData.count} ${streakData.count > 1 ? 'DAYS' : 'DAY'} STREAK`;
+                
+                // 如果連勝超過 5 天，換成高級感綠色
+                if (streakData.count >= 5) {
+                    badge.classList.remove('text-orange-500', 'bg-orange-500/10', 'border-orange-500/20');
+                    badge.classList.add('text-lime-500', 'bg-lime-500/10', 'border-lime-500/20');
+                }
+            }
+        }
+
+        // --- 你原本的分頁導航與搜尋篩選邏輯 ---
         function openTab(evt, tabName) {
             let tabcontent = document.getElementsByClassName("tab-content");
             for (let i = 0; i < tabcontent.length; i++) tabcontent[i].classList.remove("active");
             let tablinks = document.getElementsByClassName("tab-button");
             for (let i = 0; i < tablinks.length; i++) tablinks[i].classList.remove("active");
+            
             document.getElementById(tabName).classList.add("active");
             const btn = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
             if (btn) btn.classList.add("active");
@@ -709,10 +760,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            initPersonalization();
             updateCount('document-list', 'file-count');
             updateCount('reading-document-list', 'reading-file-count');
             updateCount('toeic-document-list', 'toeic-file-count');
             populateMonthFilter();
+            
+            // 自動更新最後更新時間 (顯示今天)
             const now = new Date();
             const updateSpan = document.getElementById('last-updated');
             if (updateSpan) {
@@ -722,20 +776,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
