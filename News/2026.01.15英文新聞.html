@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 15 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 15 日：星鏈韌性、台美貿易突破與氣候警告</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for professional English learners. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] President Lai Unveils "Taiwan Starlink" Project to Bolster Communication Resilience\nPresident Lai Ching-te announced on Wednesday a major initiative to develop a domestic low-earth orbit (LEO) satellite constellation, often dubbed the "Taiwan Starlink." The government plans to invest NT$400 billion over the next decade to ensure the nation maintains stable internet and communication capabilities during potential military conflicts or natural disasters. Lai emphasized that self-reliance in space technology is a "non-negotiable" aspect of national security.\n\n[2] Taiwan Stocks Close Above 31,000 Points Amid Trade Optimism\nThe TAIEX surged once again on Wednesday, closing at a historic 31,120 points. Market confidence was significantly boosted by reports of a "general consensus" in the U.S.-Taiwan tariff negotiations, suggesting a reduction in levies for local tech exports. Foreign institutional investors poured over NT$45 billion into the market, primarily targeting the semiconductor and AI hardware sectors.\n\n[3] MOTC Confirms Danjiang Bridge Main Tower Completion by End of 2026\nThe Ministry of Transportation and Communications (MOTC) announced that construction of the Danjiang Bridge's main tower is progressing ahead of schedule. The world's longest single-tower asymmetric cable-stayed bridge is expected to have its main structure completed by December 2026. Once operational, it will reduce travel time between Tamsui and Bali by 25 minutes.`,
+                chinese: `【1】賴總統宣布啟動「台版星鏈」計畫：投入 400 億強化通訊韌性\n賴清德總統週三宣布一項重大倡議，將開發國內低軌道（LEO）衛星群，常被稱為「台版星鏈」。政府計畫在未來十年投入 4,000 億新台幣，以確保國家在潛在軍事衝突或自然災害期間能維持穩定的網路與通訊能力。賴總統強調，太空技術的自主自立是國家安全中「不可談判」的一環，目標是在 2027 年底前發射首批實驗衛星。\n\n【2】台股收盤站穩 31,000 點：受惠於台美關稅談判正面進展\n台股加權指數週三再度飆升，收於歷史性的 31,120 點。台美關稅談判達成「廣泛共識」的報導顯著提振了市場信心，暗示本土科技出口產品的徵稅將會調降。外資法人在市場投入超過 450 億新台幣，主要瞄準半導體與 AI 硬體產業。分析師認為，只要貿易談判維持在軌道上，市場的上升動能很可能持續整個第一季。\n\n【3】交通部宣布：淡江大橋主橋塔將於 2026 年底完工\n交通部（MOTC）週三宣布，淡江大橋主橋塔的建設進度超前。這座全球最長的單塔不對稱斜張橋預計將在 2026 年 12 月前完成主體結構。一旦投入營運，該橋將縮短淡水與八里之間 25 分鐘的車程，顯著緩解北台灣交通擁堵並帶動沿海觀光。`,
+                vocabulary: [
+                    'Unveils (v.): 揭幕/公布', 'Bolster (v.): 強化/支持', 'Resilience (n.): 韌性/彈性', 'Initiative (n.): 倡議/主動權',
+                    'Domestic (adj.): 國內的/家用的', 'Low-earth orbit (LEO) (n.phr.): 低地球軌道', 'Satellite constellation (n.phr.): 衛星群/星座', 'Dubbed (v.pp.): 被稱為',
+                    'Self-reliance (n.): 自立/自給自足', 'Non-negotiable (adj.): 不可談判的', 'National security (n.phr.): 國家安全', 'Experimental (adj.): 實驗性的',
+                    'Surged (v.): 飆升/激增', 'General consensus (n.phr.): 廣泛共識', 'Tariff negotiations (n.phr.): 關稅談判', 'Levies (n.): 稅款/徵費',
+                    'Institutional investors (n.phr.): 法人投資者', 'Semiconductor (n.): 半導體', 'Hardware sectors (n.phr.): 硬體產業', 'Upward momentum (n.phr.): 上升動能',
+                    'Ahead of schedule (phr.): 進度超前', 'Asymmetric (adj.): 不對稱的', 'Cable-stayed (adj.): 斜張式的', 'Operational (adj.): 營運中的',
+                    'Alleviate (v.): 緩解', 'Congestion (n.): 擁堵', 'Strategic partnership (n.phr.): 策略夥伴關係', 'Constellation (n.): 星座/群',
+                    'Surpassed (v.): 超過', 'Reduction (n.): 減少', 'In-place (phr.): 實施中', 'Pivotal (adj.): 關鍵的'
+                ],
+                quiz: [
+                    { q: 'How much money does the government plan to invest in "Taiwan Starlink"?', options: ['NT$40 billion', 'NT$400 billion', 'NT$45 billion', 'NT$1.25 trillion'], answer: 'NT$400 billion' },
+                    { q: 'What kind of orbit will the domestic satellite constellation use?', options: ['High-earth orbit', 'Medium-earth orbit', 'Low-earth orbit (LEO)', 'Lunar orbit'], answer: 'Low-earth orbit (LEO)' },
+                    { q: 'When is the goal to launch the first batch of experimental satellites?', options: ['Late 2026', 'Late 2027', '2030', '2035'], answer: 'Late 2027' },
+                    { q: 'What level did the TAIEX reach at Wednesday\'s close?', options: ['30,000', '31,120', '30,576', '40,000'], answer: '31,120' },
+                    { q: 'Which report significantly boosted market confidence on Wednesday?', options: ['A report on high inflation', 'A general consensus in US-Taiwan tariff talks', 'A news of a bank failure', 'A potential interest rate hike'], answer: 'A general consensus in US-Taiwan tariff talks' },
+                    { q: 'How much did foreign institutional investors pour into the market?', options: ['NT$4.5 billion', 'NT$12.2 billion', 'NT$45 billion', 'NT$400 billion'], answer: 'NT$45 billion' },
+                    { q: 'The Danjiang Bridge is expected to have its main structure completed by which date?', options: ['March 2026', 'December 2026', 'January 2027', 'End of 2030'], answer: 'December 2026' },
+                    { q: 'The bridge will reduce travel time between which two districts?', options: ['Taipei and Keelung', 'Tamsui and Bali', 'Banqiao and Xindian', 'Taoyuan and Hsinchu'], answer: 'Tamsui and Bali' },
+                    { q: 'How many minutes will be saved during travel between Tamsui and Bali?', options: ['10 minutes', '15 minutes', '25 minutes', '40 minutes'], answer: '25 minutes' },
+                    { q: 'The bridge is the world\'s longest of which type?', options: ['Suspension bridge', 'Single-tower asymmetric cable-stayed', 'Double-deck bridge', 'Wooden arch bridge'], answer: 'Single-tower asymmetric cable-stayed' },
+                    { q: 'The term "non-negotiable" means what in this context?', options: ['Easy to change', 'Something that cannot be discussed or compromised', 'Very expensive', 'Secretive'], answer: 'Something that cannot be discussed or compromised' },
+                    { q: 'What does "alleviate" mean?', options: ['To make something more severe', 'To make something less severe or difficult', 'To build faster', 'To ignore a problem'], answer: 'To make something less severe or difficult' },
+                    { q: 'The word "dubbed" is a synonym for which word?', options: ['Fixed', 'Named or called', 'Broken', 'Translated'], answer: 'Named or called' },
+                    { q: 'What does "momentum" refer to in the stock market context?', options: ['The price of a single share', 'The strength or force of the market movement', 'A type of tax', 'The opening time of the market'], answer: 'The strength or force of the market movement' },
+                    { q: 'Self-reliance in space technology is an aspect of what?', options: ['Education', 'National security', 'Tourism', 'Entertainment'], answer: 'National security' }
+                ]
+            },
+            'us-sc-tariffs': {
+                title: '美最高院裁定關稅合憲性',
+                english: `The U.S. Supreme Court issued a highly anticipated ruling on Wednesday regarding the Trump administration's use of emergency powers to impose tariffs. In a 5-4 decision, the court ruled that the tariffs are "partially constitutional," specifically upholding the President's authority to levy taxes on goods deemed a threat to national security. However, the court placed stricter limits on the duration of such emergency measures without Congressional approval. The White House immediately hailed the ruling as a victory for "American workers and sovereignty," while legal experts noted that it effectively gives the President a green light to continue a protectionist trade agenda. Critics warned this could set a dangerous precedent for executive overreach in economic policy.`,
+                chinese: `美國最高法院裁定：川普關稅政策「部分合憲」，白宮贏得初步勝利。週三，美國最高法院就川普政府動用緊急權力徵收關稅一事，發布了一項備受期待的裁決。在 5 比 4 的決定中，法院裁定這些關稅「部分合憲」，具體而言是支持總統有權對被視為國家安全威脅的商品課稅。然而，法院也規定，若未經國會批准，此類緊急措施的持續時間將面臨更嚴格的限制。白宮立即讚揚此裁決是「美國勞工與主權」的勝利，而法律專家指出，這實際上為總統繼續推行貿易保護主義議程開了綠燈。批評人士則警告，這可能為經濟政策中的行政擴權（行政逾越）開創危險先例。`,
+                vocabulary: [
+                    'Supreme Court (n. proper): 最高法院', 'Anticipated ruling (n.phr.): 備受期待的裁決', 'Emergency powers (n.phr.): 緊急權力', 'Impose tariffs (phr.): 徵收關稅',
+                    'Partially constitutional (adj.phr.): 部分合憲的', 'Upholding (v.ger.): 支持/維護', 'Authority (n.): 權威/職權', 'Levy taxes (phr.): 課稅/徵稅',
+                    'Deemed (v.pp.): 被視為', 'Duration (n.): 持續時間', 'Congressional approval (n.phr.): 國會批准', 'Hailed (v.): 讚揚/稱頌',
+                    'Sovereignty (n.): 主權', 'Protectionist (adj.): 保護主義的', 'Trade agenda (n.phr.): 貿易議程', 'Precedent (n.): 先例',
+                    'Executive overreach (n.phr.): 行政擴權/逾越', 'Anticipated (adj.): 預期的', 'Constitutional (adj.): 憲法的', 'Specifically (adv.): 具體而言',
+                    'Measures (n.): 措施', 'Victory (n.): 勝利', 'Legality (n.): 合法性', 'Override (v.): 推翻/不顧',
+                    'Protectionism (n.): 保護主義', 'Executive (n./adj.): 行政(的)', 'Overreach (v./n.): 逾越/擴張', 'Constitutional (adj.): 憲法的',
+                    'Precedent (n.): 慣例/判例', 'Mandate (n.): 授權', 'Tariff (n.): 關稅', 'Strategic (adj.): 戰略的'
+                ],
+                quiz: [
+                    { q: 'What was the result of the Supreme Court vote on the tariff case?', options: ['9-0 unanimous', '5-4 decision', '7-2 majority', 'The court refused to vote'], answer: '5-4 decision' },
+                    { q: 'What did the court specifically uphold regarding the President\'s authority?', options: ['The right to end elections', 'The authority to levy taxes on security threats', 'The right to dissolve Congress', 'The power to change the Constitution'], answer: 'The authority to levy taxes on security threats' },
+                    { q: 'The court placed stricter limits on what?', options: ['The amount of tax', 'The duration of emergency measures without Congress', 'The number of goods taxed', 'The color of the labels'], answer: 'The duration of emergency measures without Congress' },
+                    { q: 'How did the White House describe the ruling?', options: ['A tragic loss', 'A victory for "American workers and sovereignty"', 'A confusing mistake', 'A temporary delay'], answer: 'A victory for "American workers and sovereignty"' },
+                    { q: 'What did critics warn the ruling could set a precedent for?', options: ['Better trade with China', 'Executive overreach in economic policy', 'Universal free trade', 'Lower taxes for everyone'], answer: 'Executive overreach in economic policy' },
+                    { q: 'The President has a "green light" to continue what kind of agenda?', options: ['Environmental', 'Protectionist trade agenda', 'Expansionist military agenda', 'Social welfare agenda'], answer: 'Protectionist trade agenda' },
+                    { q: 'The term "partially constitutional" means what?', options: ['Completely legal', 'Partially legal according to the Constitution', 'Completely illegal', 'Forgotten by the law'], answer: 'Partially legal according to the Constitution' },
+                    { q: 'The President used "______ powers" to impose the tariffs.', options: ['Voting', 'Emergency', 'Secret', 'Limited'], answer: 'Emergency' },
+                    { q: 'What is a "precedent" in a legal context?', options: ['A previous case or decision used as a guide', 'A new law from the President', 'A meeting with a judge', 'A fine paid to the court'], answer: 'A previous case or decision used as a guide' },
+                    { q: 'Who needs to give approval for longer emergency measures?', options: ['The Supreme Court', 'The White House', 'Congressional approval', 'The UN'], answer: 'Congressional approval' },
+                    { q: 'The term "overreach" implies doing what?', options: ['Working hard', 'Exceeding the proper or legal limits of one\'s authority', 'Reaching for a high shelf', 'Helping others'], answer: 'Exceeding the proper or legal limits of one\'s authority' },
+                    { q: 'The White House "hailed" the ruling, meaning they ______.', options: ['Criticized it', 'Praised it enthusiastically', 'Ignored it', 'Called for a taxi'], answer: 'Praised it enthusiastically' },
+                    { q: 'What is "protectionism" in trade?', options: ['Free trade with everyone', 'Shielding domestic industries from foreign competition', 'Building walls around a city', 'Protecting the forest'], answer: 'Shielding domestic industries from foreign competition' },
+                    { q: 'Is the ruling seen as a complete or mixed win for the White House?', options: ['Complete win', 'Mixed win (Strategic win but with limits)', 'Complete loss', 'The text doesn\'t say'], answer: 'Mixed win (Strategic win but with limits)' },
+                    { q: 'The Supreme Court is the highest court in which nation?', options: ['UK', 'China', 'USA', 'France'], answer: 'USA' }
+                ]
+            },
+            'nvidia-ai-workforce': {
+                title: '輝達發表 AI 勞動力架構',
+                english: `NVIDIA CEO Jensen Huang introduced a revolutionary software architecture on Wednesday designed to create "digital employees" capable of performing complex administrative and analytical tasks. Huang predicted that the technology could automate up to 15% of global administrative roles by 2030, significantly boosting corporate efficiency. The announcement immediately triggered backlash from labor unions in the U.S. and Europe, which called for an "AI tax" to fund retraining programs for displaced workers. The move has sparked a global debate on how to balance technological innovation with social stability in an increasingly automated economy.`,
+                chinese: `輝達發表全新「AI 勞動力」架構：預測將取代全球 15% 的行政職位。輝達（NVIDIA）執行長黃仁勳週三推出了一項革命性的軟體架構，旨在創建能夠執行複雜行政與分析任務的「數位員工」。黃仁勳預測，到 2030 年，這項技術可以使全球高達 15% 的行政職位實現自動化，從而顯著提升企業效率。該公告立即引發了美國和歐洲工會的反彈，工會呼籲徵收「AI 稅」，為失業勞工的轉職培訓計畫提供資金。此舉引發了全球辯論：在日益自動化的經濟中，如何平衡技術創新與社會穩定。`,
+                vocabulary: [
+                    'Revolutionary (adj.): 革命性的', 'Software architecture (n.phr.): 軟體架構', 'Digital employees (n.phr.): 數位員工', 'Administrative tasks (n.phr.): 行政任務',
+                    'Analytical (adj.): 分析的', 'Automate (v.): 自動化', 'Global roles (n.phr.): 全球職位', 'Boosting efficiency (phr.): 提升效率',
+                    'Corporate efficiency (n.phr.): 企業效率', 'Triggered backlash (phr.): 引發反彈/抵制', 'Labor unions (n.phr.): 工會', 'AI tax (n.phr.): AI 稅',
+                    'Retraining programs (n.phr.): 轉職培訓計畫', 'Displaced workers (n.phr.): 失業/被取代的勞工', 'Technological innovation (n.phr.): 技術創新', 'Social stability (n.phr.): 社會穩定',
+                    'Automated economy (n.phr.): 自動化經濟', 'Backlash (n.): 強烈反對/後果', 'Displacement (n.): 取代/位移', 'Sparked (v.): 引發/觸發',
+                    'Architecture (n.): 架構', 'Analytical (adj.): 分析性的', 'Retrain (v.): 再培訓', 'Displaced (adj.): 被迫離職的',
+                    'Innovation (n.): 創新', 'Backlash (n.): 反彈', 'Automated (adj.): 自動化的', 'Stability (n.): 穩定',
+                    'Analytic (adj.): 分析的', 'Capacity (n.): 能力', 'Backlash (n.): 逆衝/回撞', 'Framework (n.): 架構/框架'
+                ],
+                quiz: [
+                    { q: 'Who introduced the "AI Workforce" framework?', options: ['Elon Musk', 'Jensen Huang', 'Donald Trump', 'Neal Mohan'], answer: 'Jensen Huang' },
+                    { q: 'What are "digital employees" designed to do?', options: ['Drive cars', 'Perform administrative and analytical tasks', 'Build houses', 'Clean offices'], answer: 'Perform administrative and analytical tasks' },
+                    { q: 'By what year did Huang predict 15% of admin roles could be automated?', options: ['2025', '2027', '2030', '2050'], answer: '2030' },
+                    { q: 'What kind of tax did labor unions call for?', options: ['Carbon tax', 'Wealth tax', 'AI tax', 'Sales tax'], answer: 'AI tax' },
+                    { q: 'The AI tax would be used to fund what kind of programs?', options: ['Vacation programs', 'Retraining programs for displaced workers', 'Military programs', 'Space programs'], answer: 'Retraining programs for displaced workers' },
+                    { q: 'The announcement triggered "backlash" where?', options: ['Only in China', 'In the U.S. and Europe', 'In the Middle East', 'Only in Africa'], answer: 'In the U.S. and Europe' },
+                    { q: 'The move sparked a global debate on balancing innovation with what?', options: ['Profit', 'Social stability', 'Speed', 'Company size'], answer: 'Social stability' },
+                    { q: 'The term "digital employees" refers to what?', options: ['Robots made of metal', 'Software-based workforce', 'People working from home', 'Internet service providers'], answer: 'Software-based workforce' },
+                    { q: 'What does "automate" mean?', options: ['To do manually', 'To make a process happen without human intervention', 'To hire more people', 'To break a machine'], answer: 'To make a process happen without human intervention' },
+                    { q: 'What is a "backlash"?', options: ['A positive response', 'A strong and adverse reaction by a large number of people', 'A type of tool', 'A fast car'], answer: 'A strong and adverse reaction by a large number of people' },
+                    { q: 'The economy is becoming increasingly "______," according to the text.', options: ['Agricultural', 'Manual', 'Automated', 'Unstable'], answer: 'Automated' },
+                    { q: 'The word "boosting" is a synonym for what?', options: ['Reducing', 'Increasing or improving', 'Hiding', 'Stopping'], answer: 'Increasing or improving' },
+                    { q: 'Retraining programs are for "displaced workers," which means people who ______.', options: ['Won a prize', 'Lost their jobs due to change', 'Are very rich', 'Are on holiday'], answer: 'Lost their jobs due to change' },
+                    { q: 'Is the new architecture hardware-based or software-based?', options: ['Hardware', 'Software', 'Both', 'Neither'], answer: 'Software' },
+                    { q: 'NVIDIA is the company behind which product/service mentioned?', options: ['Wegovy', 'The AI Workforce framework', 'Caspian oil', 'The Paris Climate Agreement'], answer: 'The AI Workforce framework' }
+                ]
+            },
+            'ukraine-urals': {
+                title: '烏軍襲擊俄羅斯深處煉油廠',
+                english: `In a significant expansion of its reach, the Ukrainian military launched a swarm of long-range drones that struck a military-grade refinery in the Ural Mountains, more than 1,500 kilometers from the border. The strike caused massive fires at the facility, which produces specialized fuel for Russia’s northern fleet and aviation units. Kyiv stated that the operation was intended to degrade Russia’s long-term logistics and economic capacity to sustain the war, forcing Moscow to divert air defense systems away from the front lines to protect critical infrastructure deep inside its territory.`,
+                chinese: `烏克蘭首次使用長程無人機襲擊俄羅斯深處的軍用煉油廠。在一次顯著的行動範圍擴張中，烏克蘭軍隊發射了一群長程無人機，襲擊了位於烏拉山脈（Ural Mountains）的一座軍用級煉油廠，距離邊境超過 1,500 公里。這次襲擊導致設施發生大火，該廠專門為俄羅斯的北方艦隊和航空部隊生產特殊燃料。基輔表示，該行動旨在削弱俄羅斯的長期後勤與經濟能力，以降低其維持戰爭的能力，並迫使莫斯科將防空系統從前線移走，以保護其領土深處的關鍵基礎設施。`,
+                vocabulary: [
+                    'Expansion of reach (n.phr.): 行動範圍擴張', 'Swarm of drones (n.phr.): 無人機群', 'Long-range (adj.): 長程的', 'Military-grade (adj.): 軍用級的',
+                    'Refinery (n.): 煉油廠', 'Ural Mountains (n. proper): 烏拉山脈', 'Facility (n.): 設施', 'Specialized fuel (n.phr.): 特殊燃料',
+                    'Northern fleet (n.phr.): 北方艦隊', 'Aviation units (n.phr.): 航空部隊', 'Logistics (n.): 後勤', 'Economic capacity (n.phr.): 經濟能力',
+                    'Sustain (v.): 維持/支撐', 'Divert (v.): 轉移/移走', 'Air defense systems (n.phr.): 防空系統', 'Front lines (n.phr.): 前線',
+                    'Critical infrastructure (n.phr.): 關鍵基礎設施', 'Deep inside (phr.): 領土深處', 'Significant (adj.): 顯著的', 'Operation (n.): 行動',
+                    'Reach (n.): 範圍/觸及', 'Swarm (n.): 一群/蜂擁', 'Logistical (adj.): 後勤的', 'Sustain (v.): 支撐',
+                    'Infrastructure (n.): 基礎建設', 'Refined (adj.): 精煉的', 'Aviation (n.): 航空', 'Strike (v./n.): 襲擊',
+                    'Refinery (n.): 煉油廠', 'Drones (n.): 無人機', 'Fleet (n.): 艦隊', 'Border (n.): 邊界'
+                ],
+                quiz: [
+                    { q: 'Where is the refinery that Ukraine struck located?', options: ['In Kyiv', 'In Moscow', 'In the Ural Mountains', 'At the border'], answer: 'In the Ural Mountains' },
+                    { q: 'How far is the refinery from the border?', options: ['100 kilometers', '500 kilometers', '1,000 kilometers', 'More than 1,500 kilometers'], answer: 'More than 1,500 kilometers' },
+                    { q: 'What kind of fuel does this facility produce?', options: ['Commercial gasoline', 'Specialized fuel for the northern fleet and aviation', 'Cooking oil', 'Rocket fuel for space only'], answer: 'Specialized fuel for the northern fleet and aviation' },
+                    { q: 'What did the strike cause at the facility?', options: ['A massive flood', 'Massive fires', 'A power outage in Kyiv', 'Nothing'], answer: 'Massive fires' },
+                    { q: 'What was the stated goal of the operation?', options: ['To kill civilians', 'To degrade long-term logistics and economic capacity', 'To steal oil', 'To start a new business'], answer: 'To degrade long-term logistics and economic capacity' },
+                    { q: 'What is Moscow forced to do as a result of the attack?', options: ['Surrender immediately', 'Pay taxes to Ukraine', 'Divert air defense systems away from the front lines', 'Buy oil from the US'], answer: 'Divert air defense systems away from the front lines' },
+                    { q: 'The term "swarm of drones" refers to what?', options: ['One very large drone', 'A large number of drones flying together', 'A secret type of bird', 'A type of bee'], answer: 'A large number of drones flying together' },
+                    { q: 'The term "reach" refers to which of the following?', options: ['The height of a building', 'The distance or range of operations', 'A type of ship', 'A handshake'], answer: 'The distance or range of operations' },
+                    { q: 'What does "degrade" mean in the text?', options: ['To improve', 'To break or weaken the quality/strength of', 'To clean', 'To award a prize'], answer: 'To break or weaken the quality/strength of' },
+                    { q: 'What does "logistics" mean?', options: ['The logic of a computer', 'The complex organization of moving goods/people', 'A type of music', 'A legal document'], answer: 'The complex organization of moving goods/people' },
+                    { q: 'The attack represents a "significant expansion" of Ukraine\'s ______.', options: ['Reach', 'Population', 'Taxes', 'Schools'], answer: 'Reach' },
+                    { q: 'What is a "refinery"?', options: ['A school for art', 'A factory where oil is processed', 'A type of boat', 'A military bunker'], answer: 'A factory where oil is processed' },
+                    { q: 'The word "divert" means to ______.', options: ['Stay in place', 'Change the direction or use of something', 'Destroy', 'Forget'], answer: 'Change the direction or use of something' },
+                    { q: 'The facility is "military-grade," meaning it is ______.', options: ['For children', 'For military use/standards', 'Very cheap', 'For commercial sale only'], answer: 'For military use/standards' },
+                    { q: 'Whose strategy is to weaken the enemy\'s economic capacity?', options: ['Kyiv (Ukraine)', 'Moscow (Russia)', 'Washington (USA)', 'The UN'], answer: 'Kyiv (Ukraine)' }
+                ]
+            },
+            'un-climate-2025': {
+                title: '2025 為史上最熱一年',
+                english: `A new report released by the United Nations confirmed that 2025 was the warmest year on record since data collection began in 1850. The report found that the global average temperature was 1.48°C above pre-industrial levels, driven by human-induced climate change and a strong El Niño event. UN Secretary-General Antonio Guterres described the findings as a "final warning" to humanity, stressing that the window to avoid catastrophic climate tipping points is rapidly closing. The report highlighted the rising frequency of extreme weather events, including record heatwaves in Australia and devastating floods in Africa, underscoring the urgent need for a faster transition to renewable energy.`,
+                chinese: `聯合國報告：2025 年是有紀錄以來最熱的一年，全球升溫逼近 1.5 度。聯合國發布的一份新報告確認，2025 年是自 1850 年開始收集數據以來最溫暖的一年。報告發現，受人為氣候變遷和強烈的聖嬰現象（El Niño）推動，全球平均氣溫比工業化前水準高出 1.48°C。聯合國秘書長古特瑞斯（Antonio Guterres）將這些發現描述為對人類的「最後警告」，並強調避免災難性氣候臨界點的窗口正在迅速關閉。報告強調了極端天氣事件發生頻率的上升，包括澳洲創紀錄的熱浪和非洲毀滅性的洪水，這凸顯了向再生能源轉型迫在眉睫。`,
+                vocabulary: [
+                    'Warmest on record (n.phr.): 有紀錄以來最溫暖的', 'Data collection (n.phr.): 數據收集', 'Global average (n.phr.): 全球平均', 'Pre-industrial levels (n.phr.): 工業化前水準',
+                    'Human-induced (adj.): 人為引起的', 'Climate change (n.phr.): 氣候變遷', 'El Niño event (n. proper): 聖嬰現象', 'Final warning (n.phr.): 最後警告',
+                    'Humanity (n.): 人類', 'Catastrophic (adj.): 災難性的', 'Tipping points (n.phr.): 臨界點/轉折點', 'Window is closing (phr.): 窗口正在關閉 (時機正在消失)',
+                    'Frequency (n.): 頻率', 'Extreme weather (n.phr.): 極端天氣', 'Heatwaves (n.): 熱浪', 'Devastating floods (n.phr.): 毀滅性的洪水',
+                    'Underscoring (v.ger.): 凸顯/強調', 'Transition (n.): 轉型/過渡', 'Renewable energy (n.phr.): 再生能源', 'Urgent need (n.phr.): 迫切需求',
+                    'Collection (n.): 收集', 'Industrial (adj.): 工業的', 'Catastrophe (n.): 大災難', 'Highlight (v.): 強調/突出',
+                    'Record-breaking (adj.): 打破紀錄的', 'Human-induced (adj.): 人為的', 'Catastrophic (adj.): 毀滅性的', 'Renewable (adj.): 可再生的',
+                    'Sustain (v.): 維持', 'Stability (n.): 穩定', 'Impact (n.): 影響', 'Global (adj.): 全球的'
+                ],
+                quiz: [
+                    { q: 'Which year was confirmed as the warmest on record?', options: ['2020', '2024', '2025', '2026'], answer: '2025' },
+                    { q: 'When did official temperature data collection begin?', options: ['1850', '1900', '1950', '2000'], answer: '1850' },
+                    { q: 'How many degrees Celsius was 2025 above pre-industrial levels?', options: ['0.5°C', '1.0°C', '1.48°C', '2.0°C'], answer: '1.48°C' },
+                    { q: 'What were the two main drivers of the temperature rise?', options: ['Volcanoes and solar power', 'Human-induced climate change and El Niño', 'Animal migration and tides', 'Space travel and moon phases'], answer: 'Human-induced climate change and El Niño' },
+                    { q: 'How did Antonio Guterres describe the findings?', options: ['A good start', 'A "final warning" to humanity', 'A boring report', 'A mystery'], answer: 'A "final warning" to humanity' },
+                    { q: 'What is said to be "rapidly closing"?', options: ['The door to the UN', 'The window to avoid catastrophic tipping points', 'The transition to oil', 'The Arctic ice'], answer: 'The window to avoid catastrophic tipping points' },
+                    { q: 'What kind of extreme weather was mentioned in Australia?', options: ['Floods', 'Snowstorms', 'Heatwaves', 'Tornadoes'], answer: 'Heatwaves' },
+                    { q: 'Where did devastating floods occur according to the report?', options: ['USA', 'Australia', 'Africa', 'Europe'], answer: 'Africa' },
+                    { q: 'There is an urgent need for a faster transition to what?', options: ['Coal', 'Oil', 'Renewable energy', 'Gasoline'], answer: 'Renewable energy' },
+                    { q: 'The term "tipping point" means what?', options: ['A point of balance', 'A critical point in a situation beyond which significant change occurs', 'A small tip for a waiter', 'The top of a mountain'], answer: 'A critical point in a situation beyond which significant change occurs' },
+                    { q: 'What does "human-induced" mean?', options: ['Natural', 'Caused by people', 'Happening in space', 'Unknown'], answer: 'Caused by people' },
+                    { q: 'The report highlighted the rising ______ of extreme weather.', options: ['Cost', 'Color', 'Frequency', 'Beauty'], answer: 'Frequency' },
+                    { q: 'What does "devastating" mean?', options: ['Beautiful', 'Highly destructive or damaging', 'New', 'Small'], answer: 'Highly destructive or damaging' },
+                    { q: 'The word "catastrophic" is used to describe what?', options: ['A party', 'A minor problem', 'A great disaster', 'A new law'], answer: 'A great disaster' },
+                    { q: 'Who is Antonio Guterres?', options: ['NVIDIA CEO', 'UN Secretary-General', 'President of Venezuela', 'The pilot of F-16V'], answer: 'UN Secretary-General' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        // --- CORE RENDERING ---
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
