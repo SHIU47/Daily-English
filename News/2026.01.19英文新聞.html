@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 19 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 19 日：國防、信保機制與全球地緣政治</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for professional English learners. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] PLA Drone Intrudes into Airspace Over Taiwan-Controlled Dongsha Island\nTaiwan's Ministry of National Defense (MND) confirmed on Sunday that a People's Liberation Army (PLA) reconnaissance drone entered the restricted airspace over Dongsha Island. This marks the first time a Chinese unmanned aerial vehicle (UAV) has directly violated the airspace of the strategic outpost. In response, the military issued radio warnings and deployed land-based missile systems to track the craft. Experts warned that Beijing is escalating "gray zone" tactics.\n\n[2] Cabinet Dismisses Concerns Over $250B US Investment Pledge\nThe Executive Yuan issued a statement addressing skepticism regarding the $250 billion investment commitment to the United States. Officials clarified that the government is not "handing out cash" but establishing a national financing guarantee mechanism. This system, led by the National Development Council, aims to help private Taiwanese enterprises secure international loans for U.S. expansion, minimizing fiscal risks to taxpayers.\n\n[3] Severe Cold Surge Grips Taiwan; CWA Warns of Plummeting Temperatures\nA powerful cold surge began affecting Taiwan on Sunday, leading to a significant drop in temperatures nationwide. The Central Weather Administration (CWA) predicted that mercury levels could fall by 6–12°C over the next three days, with some northern mountainous areas facing the risk of freezing rain and frost. Farmers are advised to take preventive measures to protect crops.`,
+                chinese: `【1】國防部證實：中共無人機首度侵入東沙島領空\n台灣國防部週日證實，解放軍一架偵察無人機進入了東沙島受限領空。這是中國無人機首次直接侵犯該戰略前哨的領空。對此，國軍發出廣播警告，並部署陸基飛彈系統追蹤該機，直到其往中國大陸方向離開。軍事專家警告，北京正在升級其「灰色地帶」戰術，挑戰台灣對外島的行政管轄權。\n\n【2】政院反駁 2,500 億美元對美投資質疑：強調非直接撥款而是信保機制\n行政院週日發表正式聲明，回應公眾對於對美投資 2,500 億美元承諾的質疑。官員澄清，政府並非從國庫「發放現金」，而是建立國家融資保證機制（信保機制）。該系統由國發會主導，旨在協助台灣民間企業為其赴美擴張計畫取得國際貸款。政府強調，此機制對深化台美經濟聯繫至關重要，同時能將台灣納稅人的直接財政風險降至最低。\n\n【3】寒流南下全台降溫，局部地區恐出現凍雨\n一場強大的寒流於週日開始影響台灣，導致全台氣溫顯著下降。中央氣象署（CWA）預測，未來三天水銀柱（氣溫）可能下降 6 至 12 度，部分北部山區面臨凍雨和結霜的風險。民眾被要求注意保暖，中南部農民也被建議採取預防措施，保護作物和牲畜免受嚴寒威脅。`,
+                vocabulary: [
+                    'Intrudes (v.): 侵入', 'Airspace (n.): 領空', 'Reconnaissance (n.): 偵察', 'Restricted (adj.): 受限的/禁區的',
+                    'Violated (v.): 違反/侵犯', 'Strategic outpost (n.phr.): 戰略前哨', 'UAV (Unmanned Aerial Vehicle) (n.): 無人飛行載體', 'Gray zone tactics (n.phr.): 灰色地帶戰術',
+                    'Administrative control (n.phr.): 行政管轄權', 'Dismisses (v.): 駁回/不予理會', 'Investment pledge (n.phr.): 投資承諾', 'Skepticism (n.): 懷疑',
+                    'Clarified (v.): 澄清', 'Handing out cash (phr.): 發放現金', 'National treasury (n.phr.): 國庫', 'Financing guarantee (n.phr.): 融資保證/信保',
+                    'Mechanism (n.): 機制', 'Enterprises (n.): 企業', 'Secure loans (phr.): 取得貸款', 'Fiscal risks (n.phr.): 財政風險',
+                    'Taxpayers (n.): 納稅人', 'Cold surge (n.phr.): 寒流', 'Plummeting (adj.): 暴跌的', 'Mercury levels (n.phr.): 氣溫/水銀柱高度',
+                    'Freezing rain (n.phr.): 凍雨', 'Frost (n.): 霜', 'Preventive measures (n.phr.): 預防措施', 'Livestock (n.): 牲畜',
+                    'Outlying islands (n.phr.): 離島', 'Escalating (v.ger.): 升級', 'Formal statement (n.phr.): 正式聲明', 'Deepening ties (phr.): 深化聯繫'
+                ],
+                quiz: [
+                    { q: 'What was the first violation confirmed by the MND on Sunday?', options: ['A naval ship intrusion', 'A PLA reconnaissance drone in Dongsha airspace', 'A cyberattack on the treasury', 'A trade embargo'], answer: 'A PLA reconnaissance drone in Dongsha airspace' },
+                    { q: 'How did the military respond to the drone intrusion?', options: ['They shot it down immediately', 'They ignored it', 'Radio warnings and tracking via missile systems', 'A formal letter of apology'], answer: 'Radio warnings and tracking via missile systems' },
+                    { q: 'What kind of tactics is Beijing reportedly escalating?', options: ['Direct warfare', 'Gray zone tactics', 'Economic aid', 'Space exploration'], answer: 'Gray zone tactics' },
+                    { q: 'The $250 billion investment pledge to the US is being clarified as what?', options: ['A direct cash gift', 'A national financing guarantee mechanism', 'A new tax on citizens', 'A military donation'], answer: 'A national financing guarantee mechanism' },
+                    { q: 'Which agency is leading the financing guarantee system?', options: ['The Ministry of Defense', 'The National Development Council', 'The Ministry of Health', 'The Taipei City Government'], answer: 'The National Development Council' },
+                    { q: 'What is the goal of the financing mechanism for Taiwanese enterprises?', options: ['To pay off debts', 'To secure international loans for U.S. expansion', 'To move headquarters to New York', 'To buy Greenland'], answer: 'To secure international loans for U.S. expansion' },
+                    { q: 'What is the predicted temperature drop over the next three days?', options: ['1–2°C', '3–5°C', '6–12°C', '20°C'], answer: '6–12°C' },
+                    { q: 'Which weather phenomenon is mentioned as a risk for northern mountains?', options: ['Sandstorms', 'Freezing rain and frost', 'Heatwaves', 'Tornadoes'], answer: 'Freezing rain and frost' },
+                    { q: 'What should farmers in central and southern Taiwan do?', options: ['Plant more crops', 'Take preventive measures', 'Stop working entirely', 'Increase water usage'], answer: 'Take preventive measures' },
+                    { q: 'The term "reconnaissance" relates to which activity?', options: ['Cooking', 'Military surveying/observing', 'Farming', 'Banking'], answer: 'Military surveying/observing' },
+                    { q: 'What does "fiscal risk" refer to?', options: ['Risk to the environment', 'Financial or budgetary risk', 'Risk of rain', 'Risk to physical health'], answer: 'Financial or budgetary risk' },
+                    { q: 'The word "clarified" means to ______.', options: ['Make something confusing', 'Make something clear or understandable', 'Delete information', 'Hide a secret'], answer: 'Make something clear or understandable' },
+                    { q: 'What is a "outpost" in a military sense?', options: ['A large city', 'A remote station or position', 'A type of airplane', 'A weapon'], answer: 'A remote station or position' },
+                    { q: 'Mercury levels in this context refer to what?', options: ['Water levels', 'Temperature', 'Pollution levels', 'Stock prices'], answer: 'Temperature' },
+                    { q: 'Is the government "handing out cash" for the U.S. investment?', options: ['Yes, from the treasury', 'No, it is using a guarantee mechanism', 'Only to government officials', 'The text doesn\'t say'], answer: 'No, it is using a guarantee mechanism' }
+                ]
+            },
+            'trump-greenland': {
+                title: '川普格陵蘭收購威脅',
+                english: `President Donald Trump escalated his rhetoric on Sunday, threatening to impose a 10% import tariff on eight European nations—including the UK, France, and Germany—starting February 1. In a post on Truth Social, the President stated that these countries would face tariffs if they do not support the United States’ “complete and total purchase” of Greenland. Trump further warned that the rate would be raised to 25% by June if a deal is not reached. The move has sparked outrage across Europe, with leaders characterizing the demand as an unprecedented violation of sovereign rights and a “mafia-style” tactic in international diplomacy.`,
+                chinese: `川普再發關稅威脅：要求歐洲 8 國限期同意格陵蘭收購案。美國總統川普週日升級了他的措辭，威脅將從 2 月 1 日起對包括英國、法國和德國在內的八個歐洲國家徵收 10% 的進口關稅。川普在 Truth Social 的貼文中表示，如果這些國家不支持美國「完全且徹底收購」格陵蘭，他們將面臨關稅。川普進一步警告，如果未達成協議，稅率將在 6 月前提高至 25%。此舉引發了全歐洲的憤慨，各國領導人將此要求定性為對主權的前所未有侵犯，並稱之為國際外交中的「黑手黨式」手段。`,
+                vocabulary: [
+                    'Escalated (v.): 升級', 'Rhetoric (n.): 修辭/言論', 'Impose (v.): 徵收/強加', 'Tariff (n.): 關稅',
+                    'Purchase (n./v.): 購買/收購', 'Outrage (n.): 憤慨/憤怒', 'Characterizing (v.ger.): 定性/描述', 'Unprecedented (adj.): 前所未有的',
+                    'Violation (n.): 侵犯/違反', 'Sovereign rights (n.phr.): 主權權利', 'Mafia-style (adj.): 黑手黨式的', 'International diplomacy (n.phr.): 國際外交',
+                    'Truth Social (n. proper): Truth Social (社群平台)', 'Escalation (n.): 擴張/升級', 'Purchase (n.): 收購', 'Rhetoric (n.): 說辭',
+                    'Tactic (n.): 手段/策略', 'Greenland (n. proper): 格陵蘭', 'European nations (n.phr.): 歐洲國家', 'Import tariff (n.phr.): 進口關稅',
+                    'Deadline (n.): 期限', 'Rhetorical (adj.): 修辭的', 'Outraged (adj.): 感到憤慨的', 'Unprecedented (adj.): 史無前例的',
+                    'Violation (n.): 違背', 'Protocol (n.): 協定/禮儀', 'Intervention (n.): 干預', 'Erosion (n.): 侵蝕',
+                    'Deal (n.): 交易', 'June (n. proper): 六月', 'February (n. proper): 二月', 'Limit (n.): 限制'
+                ],
+                quiz: [
+                    { q: 'What percentage of initial tariff did Trump threaten to impose?', options: ['5%', '10%', '25%', '50%'], answer: '10%' },
+                    { q: 'On which date would the tariffs begin?', options: ['January 1', 'February 1', 'June 1', 'Immediately'], answer: 'February 1' },
+                    { q: 'How many European nations are specifically mentioned as targets?', options: ['3', '5', '8', '12'], answer: '8' },
+                    { q: 'Which territory does Trump want to purchase?', options: ['Iceland', 'Greenland', 'Cuba', 'Taiwan'], answer: 'Greenland' },
+                    { q: 'What platform did Trump use to announce this?', options: ['Twitter', 'Truth Social', 'Facebook', 'The White House website'], answer: 'Truth Social' },
+                    { q: 'The tariff rate could rise to ______ by June if no deal is reached.', options: ['15%', '20%', '25%', '100%'], answer: '25%' },
+                    { q: 'How did European leaders describe Trump\'s tactic?', options: ['"A fair trade"', '"A mafia-style tactic"', '"A diplomatic victory"', '"A helpful suggestion"'], answer: '"A mafia-style tactic"' },
+                    { q: 'European leaders called the demand an "unprecedented violation" of what?', options: ['Trade laws', 'Sovereign rights', 'The climate', 'Human rights'], answer: 'Sovereign rights' },
+                    { q: 'What is "rhetoric"?', options: ['A type of weapon', 'Effective or persuasive speaking or writing', 'A historical map', 'A financial debt'], answer: 'Effective or persuasive speaking or writing' },
+                    { q: 'The term "sovereign" refers to what?', options: ['Wealthy', 'A supreme ruler or independent power', 'A type of ship', 'A trade agreement'], answer: 'A supreme ruler or independent power' },
+                    { q: 'Does Trump want a "partial" or "complete" purchase of Greenland?', options: ['Partial', 'Complete and total', 'A lease only', 'A shared partnership'], answer: 'Complete and total' },
+                    { q: 'What was the reaction across Europe?', options: ['Happiness', 'Outrage', 'Boredom', 'Silence'], answer: 'Outrage' },
+                    { q: 'The word "unprecedented" means ______.', options: ['Common', 'Never done or known before', 'Illegal', 'Very fast'], answer: 'Never done or known before' },
+                    { q: 'Which countries are among the eight mentioned?', options: ['China and Japan', 'UK, France, and Germany', 'Mexico and Brazil', 'Australia and Canada'], answer: 'UK, France, and Germany' },
+                    { q: 'What is the "Mafia"?', options: ['A government agency', 'An organized international body of criminals', 'A type of car', 'A sports team'], answer: 'An organized international body of criminals' }
+                ]
+            },
+            'chile-wildfires': {
+                title: '智利森林大火緊急狀態',
+                english: `The Chilean government declared a national state of emergency on Sunday as devastating wildfires continued to sweep through the central and southern regions of the country. At least 15 fatalities have been confirmed, and officials warn the number could rise as rescue teams reach isolated rural communities. Strong winds and record-breaking temperatures have hampered firefighting efforts, leading to the destruction of hundreds of homes. President Gabriel Boric has mobilized the military to assist with evacuations and disaster relief, while international aid agencies prepare to provide humanitarian support to thousands of displaced residents.`,
+                chinese: `智利進入緊急狀態：森林大火已造成至少 15 人死亡。智利政府週日宣布全國進入緊急狀態，毀滅性的森林大火繼續橫掃該國中部和南部地區。目前已證實至少有 15 人死亡，官員警告，隨著救援隊抵達偏遠的農村社區，死亡人數可能會上升。強風和破紀錄的高溫阻礙了滅火工作，導致數百棟房屋被毀。總統蓋布瑞爾·博里奇（Gabriel Boric）已動員軍隊協助疏散和災難救援，同時國際援助機構正準備向數千名流離失所的居民提供人道主義支持。`,
+                vocabulary: [
+                    'National state of emergency (n.phr.): 全國緊急狀態', 'Devastating (adj.): 毀滅性的', 'Wildfires (n.): 野火/森林大火', 'Sweep through (phr.v.): 橫掃',
+                    'Fatalities (n.): 死亡人數/身亡', 'Confirmed (v.pp.): 證實的', 'Isolated (adj.): 偏遠的/孤立的', 'Rural communities (n.phr.): 農村社區',
+                    'Hampered (v.): 阻礙', 'Firefighting efforts (n.phr.): 滅火工作', 'Destruction (n.): 毀滅/破壞', 'Gabriel Boric (n. proper): 蓋布瑞爾·博里奇',
+                    'Mobilized (v.): 動員', 'Evacuations (n.): 疏散', 'Disaster relief (n.phr.): 災難救援', 'International aid agencies (n.phr.): 國際援助機構',
+                    'Humanitarian support (n.phr.): 人道主義支持', 'Displaced residents (n.phr.): 流離失所的居民', 'Southern regions (n.phr.): 南部地區', 'Record-breaking (adj.): 破紀錄的',
+                    'Fatal (adj.): 致命的', 'Emergency (n.): 緊急情況', 'Hamper (v.): 妨礙', 'Evacuate (v.): 疏散',
+                    'Relief (n.): 救濟', 'Aid (n.): 援助', 'Humanitarian (adj.): 人道的', 'Displace (v.): 使流離失所',
+                    'Central (adj.): 中部的', 'Southern (adj.): 南部的', 'Hundreds (n.): 數百', 'Agency (n.): 機構'
+                ],
+                quiz: [
+                    { q: 'Which country declared a national state of emergency on Sunday?', options: ['Brazil', 'Argentina', 'Chile', 'Peru'], answer: 'Chile' },
+                    { q: 'In which regions are the wildfires sweeping through?', options: ['Northern only', 'Central and southern', 'Only the capital city', 'Eastern coastal areas'], answer: 'Central and southern' },
+                    { q: 'What is the minimum number of confirmed fatalities?', options: ['5', '10', '15', '50'], answer: '15' },
+                    { q: 'Why do officials warn the death toll might rise?', options: ['The fires are getting bigger', 'Rescue teams are reaching isolated rural communities', 'The hospital is full', 'They are guessing'], answer: 'Rescue teams are reaching isolated rural communities' },
+                    { q: 'What two factors have hampered firefighting efforts?', options: ['Heavy rain and cold', 'Strong winds and record-breaking temperatures', 'Lack of water and tools', 'Protests and roadblocks'], answer: 'Strong winds and record-breaking temperatures' },
+                    { q: 'Who is the President of Chile?', options: ['Nicolas Maduro', 'Gabriel Boric', 'Antonio Guterres', 'Kristi Noem'], answer: 'Gabriel Boric' },
+                    { q: 'What group has the President mobilized to assist with relief?', options: ['The military', 'The school teachers', 'The police only', 'International tourists'], answer: 'The military' },
+                    { q: 'How many homes have been destroyed according to the text?', options: ['Dozens', 'Hundreds', 'Thousands', 'Millions'], answer: 'Hundreds' },
+                    { q: 'International ______ agencies are preparing support.', options: ['Banking', 'Aid', 'Space', 'Fashion'], answer: 'Aid' },
+                    { q: 'The term "displaced residents" refers to people who ______.', options: ['Are visiting from abroad', 'Have been forced to leave their homes', 'Are firefighters', 'Are military soldiers'], answer: 'Have been forced to leave their homes' },
+                    { q: 'What does "hampered" mean?', options: ['Helped', 'Delayed or obstructed', 'Started', 'Finished'], answer: 'Delayed or obstructed' },
+                    { q: 'The word "devastating" is a synonym for ______.', options: ['Helpful', 'Highly destructive', 'Beautiful', 'Fast'], answer: 'Highly destructive' },
+                    { q: 'The term "isolated" means what in this context?', options: ['Busy', 'Far away from others/remote', 'Very modern', 'Crowded'], answer: 'Far away from others/remote' },
+                    { q: 'Humanitarian support involves providing ______.', options: ['Weapons', 'Necessities like food and shelter to those in need', 'Luxury cars', 'Political advice'], answer: 'Necessities like food and shelter to those in need' },
+                    { q: 'What kind of state was declared by the government?', options: ['State of joy', 'State of emergency', 'State of war', 'State of silence'], answer: 'State of emergency' }
+                ]
+            },
+            'ukraine-drones': {
+                title: '俄羅斯大規模無人機襲擊烏克蘭',
+                english: `President Volodymyr Zelenskyy announced on Sunday that a coordinated Russian drone attack struck multiple cities across Ukraine, resulting in at least two deaths and significant damage to energy infrastructure. Ukrainian air defense systems reportedly intercepted dozens of drones, but several "kamikaze" UAVs managed to hit their targets in urban centers. The assault follows a series of deep-strike operations by both sides as the winter conflict intensifies. Zelenskyy urged Western allies to accelerate delivery of advanced air defense systems to protect civilian lives and prevent further degradation of the power grid during the freezing winter months.`,
+                chinese: `俄羅斯對烏克蘭發動大規模無人機襲擊，澤倫斯基證實 2 人死亡。烏克蘭總統澤倫斯基週日宣布，一場協調好的俄羅斯無人機攻擊襲擊了烏克蘭全境的多個城市，導致至少兩人死亡，並對能源基礎設施造成重大損害。據報導，烏克蘭防空系統攔截了數十架無人機，但仍有幾架「自殺式」（kamikaze）無人機成功擊中城市中心的目標。此次襲擊發生在冬季衝突加劇之際，雙方都進行了一系列深度打擊行動。澤倫斯基敦促西方盟友加速交付先進的防空系統，以保護平民生命，並防止在嚴寒的冬季月份裡電網進一步退化。`,
+                vocabulary: [
+                    'Volodymyr Zelenskyy (n. proper): 澤倫斯基', 'Coordinated (adj.): 協調好的/協同的', 'Struck (v.pt.): 襲擊/打擊', 'Significant damage (n.phr.): 重大損害',
+                    'Energy infrastructure (n.phr.): 能源基礎設施', 'Air defense systems (n.phr.): 防空系統', 'Intercepted (v.pp.): 攔截的', 'Dozens of (phr.): 數十個',
+                    'Kamikaze (adj.): 自殺式的 (神風特攻隊式)', 'Urban centers (n.phr.): 城市中心', 'Assault (n.): 襲擊/攻擊', 'Deep-strike operations (n.phr.): 深度打擊行動',
+                    'Intensifies (v.): 加劇', 'Urged (v.): 敦促', 'Western allies (n.phr.): 西方盟友', 'Accelerate (v.): 加速',
+                    'Delivery (n.): 交付/遞送', 'Civilian lives (n.phr.): 平民生命', 'Degradation (n.): 退化/損壞', 'Power grid (n.phr.): 電網',
+                    'Freezing (adj.): 嚴寒的', 'Drone (n.): 無人機', 'Intercept (v.): 攔截', 'Infra (n.): 基礎',
+                    'Infrastructure (n.): 基礎建設', 'Coordinate (v.): 協調', 'Urban (adj.): 城市的', 'Center (n.): 中心',
+                    'Conflict (n.): 衝突', 'Military (adj.): 軍事的', 'Defense (n.): 防禦', 'Strike (v./n.): 打擊'
+                ],
+                quiz: [
+                    { q: 'Who announced the Russian drone attack on Sunday?', options: ['Vladimir Putin', 'Volodymyr Zelenskyy', 'Donald Trump', 'The UN Secretary-General'], answer: 'Volodymyr Zelenskyy' },
+                    { q: 'What was the result of the attack in terms of casualties?', options: ['No deaths', 'At least two deaths', 'Exactly 15 deaths', 'Thousands of deaths'], answer: 'At least two deaths' },
+                    { q: 'What type of infrastructure suffered significant damage?', options: ['Transport', 'Educational', 'Energy infrastructure', 'Agricultural'], answer: 'Energy infrastructure' },
+                    { q: 'What did Ukrainian air defense systems manage to do?', options: ['Strike Moscow', 'Intercept dozens of drones', 'Stop the winter', 'Launch missiles at ships'], answer: 'Intercept dozens of drones' },
+                    { q: 'What is another name used for the UAVs that hit urban centers?', options: ['Weather drones', 'Kamikaze drones', 'Delivery drones', 'Toy drones'], answer: 'Kamikaze drones' },
+                    { q: 'Where did some of the drones manage to hit targets?', options: ['In empty fields', 'In urban centers', 'Underground', 'At the border only'], answer: 'In urban centers' },
+                    { q: 'What kind of operations have both sides been conducting as the conflict intensifies?', options: ['Peacekeeping', 'Deep-strike operations', 'Trading', 'Educational exchanges'], answer: 'Deep-strike operations' },
+                    { q: 'What did Zelenskyy urge Western allies to accelerate?', options: ['Food delivery', 'Delivery of advanced air defense systems', 'Retreating from the border', 'Increasing oil prices'], answer: 'Delivery of advanced air defense systems' },
+                    { q: 'What is the goal of getting new air defense systems?', options: ['To start a new war', 'To protect civilian lives and prevent power grid degradation', 'To fly to the moon', 'To build a wall'], answer: 'To protect civilian lives and prevent power grid degradation' },
+                    { q: 'The term "kamikaze" in this context refers to drones that ______.', options: ['Can be reused', 'Are destroyed upon impact with the target', 'Carry cameras only', 'Fly very slowly'], answer: 'Are destroyed upon impact with the target' },
+                    { q: 'What does "intensifies" mean?', options: ['Slowing down', 'Becoming more intense or extreme', 'Staying the same', 'Ending'], answer: 'Becoming more intense or extreme' },
+                    { q: 'The word "degradation" in the text refers to ______.', options: ['Improvement', 'The process of wearing down or becoming worse', 'A high-speed race', 'A type of money'], answer: 'The process of wearing down or becoming worse' },
+                    { q: 'The conflict is happening during which season?', options: ['Spring', 'Summer', 'Autumn', 'Winter'], answer: 'Winter' },
+                    { q: 'The term "urban" relates to which location?', options: ['The countryside', 'The city', 'The ocean', 'The mountains'], answer: 'The city' },
+                    { q: 'Zelenskyy is the president of which nation?', options: ['Russia', 'Ukraine', 'Poland', 'UK'], answer: 'Ukraine' }
+                ]
+            },
+            'bangladesh-dispute': {
+                title: '孟加拉商人糾紛案',
+                english: `Tensions in Bangladesh flared on Sunday after a Hindu businessman was reportedly beaten to death following a minor dispute over the sale of bananas in the Faridpur district. Local police have detained three suspects, and the incident has sparked fear among religious minority communities. This comes amid heightened social and political sensitivity following a recent change in government. Civil rights groups have called for a swift and transparent investigation to ensure justice and prevent the isolated criminal act from escalating into wider communal violence.`,
+                chinese: `孟加拉一名印度教商人因香蕉糾紛遭毆打致死。孟加拉的緊張局勢在週日加劇，據報導，法里德布爾（Faridpur）地區一名印度教商人因香蕉買賣的小糾紛而遭毆打致死。當地警方已拘留三名嫌疑人，該事件引發了宗教少數群體社區的恐懼。此事件發生在最近政府更迭後，社會和政治敏感性高度緊張之際。民權組織呼籲進行迅速且透明的調查，以確保正義，並防止這一孤立的犯罪行為升級為更大規模的族群暴力。`,
+                vocabulary: [
+                    'Tensions (n.): 緊張局勢', 'Flared (v.): 加劇/爆發', 'Hindu businessman (n.phr.): 印度教商人', 'Minor dispute (n.phr.): 小糾紛',
+                    'Sale of bananas (n.phr.): 香蕉買賣', 'Faridpur district (n. proper): 法里德布爾地區', 'Detained (v.): 拘留', 'Suspects (n.): 嫌疑人',
+                    'Religious minority communities (n.phr.): 宗教少數群體社區', 'Heightened (adj.): 加劇的/提高的', 'Social and political sensitivity (n.phr.): 社會與政治敏感性',
+                    'Change in government (n.phr.): 政府更迭', 'Civil rights groups (n.phr.): 民權組織', 'Transparent investigation (n.phr.): 透明的調查',
+                    'Ensure justice (phr.): 確保正義', 'Isolated criminal act (n.phr.): 孤立的犯罪行為', 'Escalating (v.ger.): 升級', 'Communal violence (n.phr.): 族群暴力',
+                    'Flared (v.): 閃爍/燃起', 'Dispute (n.): 爭端', 'Minor (adj.): 輕微的', 'Minority (n.): 少數',
+                    'Justice (n.): 正義/公正', 'Act (n.): 行為', 'Investigation (n.): 調查', 'Religious (adj.): 宗教的',
+                    'Community (n.): 社區/群體', 'Swift (adj.): 迅速的', 'Transparent (adj.): 透明的', 'Violence (n.): 暴力',
+                    'Sale (n.): 銷售', 'Beat (v.): 毆打'
+                ],
+                quiz: [
+                    { q: 'In which country did the banana dispute incident occur?', options: ['India', 'Bangladesh', 'Pakistan', 'Sri Lanka'], answer: 'Bangladesh' },
+                    { q: 'What was the religious background of the businessman who died?', options: ['Muslim', 'Christian', 'Hindu', 'Buddhist'], answer: 'Hindu' },
+                    { q: 'The dispute was over the sale of which fruit?', options: ['Mangoes', 'Apples', 'Bananas', 'Oranges'], answer: 'Bananas' },
+                    { q: 'In which district did the incident take place?', options: ['Faridpur district', 'Dhaka district', 'Chittagong district', 'Sylhet district'], answer: 'Faridpur district' },
+                    { q: 'How many suspects have been detained by local police?', options: ['One', 'Two', 'Three', 'Ten'], answer: 'Three' },
+                    { q: 'The incident has sparked fear among which specific group?', options: ['Police officers', 'Religious minority communities', 'Fruit sellers only', 'Foreign tourists'], answer: 'Religious minority communities' },
+                    { q: 'The event happened amid heightened sensitivity following what?', options: ['A major flood', 'A recent change in government', 'A new tax law', 'A sports festival'], answer: 'A recent change in government' },
+                    { q: 'What kind of investigation are civil rights groups calling for?', options: ['Secret investigation', 'Swift and transparent investigation', 'No investigation', 'International military investigation'], answer: 'Swift and transparent investigation' },
+                    { q: 'The goal of the investigation is to ensure justice and prevent ______.', options: ['Lower fruit prices', 'Escalating communal violence', 'The suspects from leaving', 'More rain'], answer: 'Escalating communal violence' },
+                    { q: 'The term "minor dispute" means what?', options: ['A huge war', 'A small disagreement', 'A legal contract', 'A type of fruit'], answer: 'A small disagreement' },
+                    { q: 'What does "detained" mean?', options: ['Rewarded', 'Kept in official custody/arrested', 'Released', 'Promoted'], answer: 'Kept in official custody/arrested' },
+                    { q: 'The term "communal violence" refers to violence between ______.', options: ['Two family members', 'Different communities or groups', 'Two companies', 'Two countries'], answer: 'Different communities or groups' },
+                    { q: 'The word "flared" in "tensions flared" means ______.', options: ['Disappeared', 'Suddenly became more intense or active', 'Stayed calm', 'Changed color'], answer: 'Suddenly became more intense or active' },
+                    { q: 'What does "transparent" mean in "transparent investigation"?', options: ['Invisible', 'Open to public scrutiny and honest', 'Dark', 'Very fast'], answer: 'Open to public scrutiny and honest' },
+                    { q: 'The criminal act is currently described as "______," meaning it stands alone.', options: ['Common', 'Isolated', 'Planned', 'Legal'], answer: 'Isolated' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        // --- CORE RENDERING ---
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
