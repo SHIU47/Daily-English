@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 19 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 19 日：台美貿易里程碑與全球熱點觀察</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for professional English learners. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Taiwan Stocks Hit Record High as TSMC Reaches Historic NT$1,780 Peak\nThe TAIEX surged on Monday to close at a record 31,639 points, driven primarily by a massive rally in technology shares. Taiwan Semiconductor Manufacturing Co. (TSMC) reached an unprecedented intraday high of NT$1,780, closing at NT$1,760. Investors were bolstered by the company's confirmation of a $520–$560 billion capital expenditure plan for 2026, aimed at expanding advanced 2nm process and CoWoS packaging capacities.\n\n[2] Premier Cho Greets Returning Negotiators, Praises 15% Tariff Deal\nPremier Cho Jung-tai personally welcomed Taiwan’s trade negotiation team at Taoyuan Airport on Monday. The delegation secured a preliminary agreement to lower tariffs on Taiwanese goods to 15%—a move experts describe as a “quasi-FTA.” In return, Taiwan's tech sector has committed to investing $250 billion in the U.S. market, supported by government-backed credit guarantees.\n\n[3] Severe Cold Surge Hits Taiwan; Temperatures to Plunge to 8°C\nThe Central Weather Administration (CWA) issued a nationwide cold surge advisory on Monday as a powerful polar air mass moved southward. Temperatures are expected to drop significantly, with northern mountainous areas potentially seeing lows of 8°C. Local governments have activated emergency shelters for the homeless.`,
+                chinese: `【1】台股再創歷史新高：台積電盤中觸及 1,780 元新天價\n台股加權指數週一飆升，收於創紀錄的 31,639 點，主要受到科技股大規模漲勢的帶動。台積電（TSMC）盤中創下 1,780 元的新高，最終收於 1,760 元。投資者信心大增，主因是該公司確認了 2026 年 5,200 億至 5,600 億美元的資本支出計畫，旨在擴大先進 2 奈米製程及 CoWoS 封裝產能。\n\n【2】貿易談判團隊凱旋歸國：卓院長肯定 15% 關稅協議成果\n行政院長卓榮泰週一親自赴桃園機場迎接台灣貿易談判團隊。該代表團取得了一項初步協議，將台灣商品的關稅降至 15%，專家將此舉描述為「準自由貿易協定（quasi-FTA）」。作為回報，台灣科技產業承諾在政府信用保證的支持下，向美國市場投資 2,500 億美元。執政黨稱之為外交里程碑，但在野黨對此對國內產業基礎的影響表示擔憂。\n\n【3】寒流強襲全台：氣象署發布低溫特報，最低下探 8 度\n隨著強大的極地氣團南下，中央氣象署（CWA）週一發布了全國低溫特報。氣溫預計將大幅下降，北部山區最低溫恐下探 8 度。地方政府已為無家可歸者啟動緊急避難所，氣象署並警告沿海地區將有強風。`,
+                vocabulary: [
+                    'TAIEX (n. proper): 台股加權指數', 'Surged (v.): 飆升', 'Massive rally (n.phr.): 大規模漲勢', 'Unprecedented (adj.): 前所未有的',
+                    'Intraday high (n.phr.): 盤中高點', 'Capital expenditure (n.phr.): 資本支出', 'Packaging capacity (n.phr.): 封裝產能', 'Silicon Shield (n. proper): 矽盾',
+                    'Negotiators (n.): 談判代表', 'Delegation (n.): 代表團', 'Secured (v.): 獲得/取得', 'Preliminary agreement (n.phr.): 初步協議',
+                    'Lower tariffs (phr.): 降低關稅', 'Quasi-FTA (n.phr.): 準自由貿易協定', 'In return (phr.): 作為回報', 'Credit guarantees (n.phr.): 信用保證',
+                    'Diplomatic milestone (n.phr.): 外交里程碑', 'Domestic industrial base (n.phr.): 國內產業基礎', 'Cold surge (n.phr.): 寒流', 'Advisory (n.): 特報/公告',
+                    'Polar air mass (n.phr.): 極地氣團', 'Plunge (v.): 驟降/暴跌', 'Lows of (phr.): ...的低溫', 'Activated (v.): 啟動',
+                    'Emergency shelters (n.phr.): 緊急避難所', 'Homeless (n./adj.): 無家可歸者', 'Fluctuations (n.): 波動', 'Mindful (adj.): 注意的/留心的',
+                    'Coastal areas (n.phr.): 沿海地區', 'Expenditure (n.): 支出', 'Packaging (n.): 封裝/包裝', 'Sector (n.): 部門/產業'
+                ],
+                quiz: [
+                    { q: 'At what record point level did the TAIEX close on Monday?', options: ['30,000', '31,120', '31,639', '35,000'], answer: '31,639' },
+                    { q: 'What was the historic intraday high reached by TSMC?', options: ['NT$1,000', 'NT$1,540', 'NT$1,760', 'NT$1,780'], answer: 'NT$1,780' },
+                    { q: 'What is the planned capital expenditure for TSMC in 2026?', options: ['$10 billion', '$250 billion', '$400 billion', '$520–$560 billion'], answer: '$520–$560 billion' },
+                    { q: 'Where did Premier Cho personally welcome the trade negotiation team?', options: ['The White House', 'The Legislative Yuan', 'Taoyuan Airport', 'TSMC Headquarters'], answer: 'Taoyuan Airport' },
+                    { q: 'The preliminary trade agreement aims to lower tariffs to what level?', options: ['5%', '10%', '15%', '20%'], answer: '15%' },
+                    { q: 'What term do experts use to describe the 15% tariff deal?', options: ['A full FTA', 'A quasi-FTA', 'A trade war', 'An embargo'], answer: 'A quasi-FTA' },
+                    { q: 'How much has the Taiwan tech sector committed to investing in the U.S.?', options: ['$45 billion', '$93 billion', '$100 billion', '$250 billion'], answer: '$250 billion' },
+                    { q: 'What is the projected low temperature for northern mountainous areas?', options: ['0°C', '8°C', '12°C', '15°C'], answer: '8°C' },
+                    { q: 'Which agency issued the cold surge advisory?', options: ['MOTC', 'NSB', 'CWA', 'MND'], answer: 'CWA' },
+                    { q: 'What kind of air mass is causing the temperature drop?', options: ['Tropical', 'Marine', 'Polar air mass', 'Equatorial'], answer: 'Polar air mass' },
+                    { q: 'The term "quasi-FTA" refers to something that is ______.', options: ['Completely illegal', 'Almost or resembling an FTA', 'The opposite of an FTA', 'A military pact'], answer: 'Almost or resembling an FTA' },
+                    { q: 'What are local governments activating for the homeless?', options: ['New jobs', 'Free flights', 'Emergency shelters', 'Medical schools'], answer: 'Emergency shelters' },
+                    { q: 'The 2026 TSMC plan focuses on which process?', options: ['7nm', '5nm', '3nm', '2nm'], answer: '2nm' },
+                    { q: 'What does the opposition worry about regarding the trade deal?', options: ['Higher taxes', 'Impact on domestic industrial base', 'Travel bans', 'Too many satellites'], answer: 'Impact on domestic industrial base' },
+                    { q: 'The word "plunge" in the context of temperature means ______.', options: ['To rise slowly', 'To stay the same', 'To drop suddenly and significantly', 'To evaporate'], answer: 'To drop suddenly and significantly' }
+                ]
+            },
+            'eu-retaliation': {
+                title: '歐盟 930 億歐元關稅反制',
+                english: `The European Union (EU) held an emergency meeting on Sunday and Monday to finalize a €93 billion ($101 billion) tariff retaliation package against the United States. This move comes after President Donald Trump threatened to impose 10% universal tariffs on NATO allies who oppose his bid to purchase Greenland. EU officials characterized the U.S. stance as “economic blackmail,” stating that the retaliatory measures will automatically take effect on February 6 if no diplomatic solution is reached. Leaders from Germany, France, and Denmark issued a joint statement affirming that “sovereignty is not for sale,” setting the stage for a major transatlantic trade confrontation.`,
+                chinese: `歐盟啟動 930 億歐元關稅反制：應對川普對格陵蘭主權的關稅威脅。歐盟於週日和週一召開緊急會議，敲定了一項針對美國的 930 億歐元（約 1,010 億美元）關稅報復方案。此舉起因於川普總統威脅要對反對其收購格陵蘭島的北約盟友徵收 10% 的通用關稅。歐盟官員將美國的立場定性為「經濟勒索」，並表示若未達成外交解決方案，這些報復性措施將於 2 月 6 日自動生效。德國、法國和丹麥的領導人發表聯合聲明，重申「主權不容買賣」，為一場重大的跨大西洋貿易對抗拉開了序幕。`,
+                vocabulary: [
+                    'EU (European Union) (n. proper): 歐盟', 'Emergency meeting (n.phr.): 緊急會議', 'Finalize (v.): 敲定/完成', 'Retaliation package (n.phr.): 報復性方案',
+                    'Threatened (v.pt.): 威脅', 'Impose (v.): 徵收/強加', 'Universal tariffs (n.phr.): 通用關稅', 'NATO allies (n.phr.): 北約盟友',
+                    'Purchase (v./n.): 購買/收購', 'Characterized (v.pt.): 定性為/描述為', 'Economic blackmail (n.phr.): 經濟勒索', 'Retaliatory measures (n.phr.): 報復性措施',
+                    'Diplomatic solution (n.phr.): 外交解決方案', 'Sovereignty (n.): 主權', 'Not for sale (phr.): 不准買賣', 'Setting the stage (phr.): 拉開序幕/做準備',
+                    'Transatlantic (adj.): 跨大西洋的', 'Confrontation (n.): 對抗/對峙', 'Retaliation (n.): 報復', 'Blackmail (n.): 勒索',
+                    'Automatically (adv.): 自動地', 'Affirming (v.ger.): 重申/斷言', 'Package (n.): 一攬子計畫/方案', 'Bid (n.): 出價/努力',
+                    'Denmark (n. proper): 丹麥', 'Solution (n.): 解決方案', 'Stance (n.): 立場', 'Retaliatory (adj.): 報復性的'
+                ],
+                quiz: [
+                    { q: 'How much is the EU’s proposed tariff retaliation package?', options: ['€10 billion', '€93 billion', '$250 billion', '€560 billion'], answer: '€93 billion' },
+                    { q: 'Why is the EU planning this retaliation?', options: ['Because of US oil prices', 'In response to Trump’s Greenland tariffs', 'To help the environment', 'To end the war in Ukraine'], answer: 'In response to Trump’s Greenland tariffs' },
+                    { q: 'On which date will the EU retaliatory measures automatically take effect?', options: ['January 1', 'January 22', 'February 6', 'June 1'], answer: 'February 6' },
+                    { q: 'How did EU officials describe the U.S. stance?', options: ['"A great deal"', '"Economic blackmail"', '"A minor dispute"', '"Friendly competition"'], answer: '"Economic blackmail"' },
+                    { q: 'Which country\'s leaders joined Germany and France in the statement?', options: ['China', 'Russia', 'Denmark', 'Japan'], answer: 'Denmark' },
+                    { q: 'What core principle did the joint statement emphasize?', options: ['Lower taxes', '"Sovereignty is not for sale"', 'Cheaper energy', 'More tourism'], answer: '"Sovereignty is not for sale"' },
+                    { q: 'The term "transatlantic" refers to the region between which two areas?', options: ['Asia and America', 'Europe and America', 'Africa and Europe', 'China and Russia'], answer: 'Europe and America' },
+                    { q: 'Trump threatened to impose tariffs on which group?', options: ['The UN', 'ASEAN', 'NATO allies', 'OPEC members'], answer: 'NATO allies' },
+                    { q: 'What is the value of the package in US dollars?', options: ['$10 billion', '$93 billion', '$101 billion', '$250 billion'], answer: '$101 billion' },
+                    { q: 'The word "retaliation" means the act of ______.', options: ['Saying thank you', 'Giving a gift', 'Hitting back in response to an injury', 'Staying silent'], answer: 'Hitting back in response to an injury' },
+                    { q: 'Who is the President of the United States mentioned?', options: ['Joe Biden', 'Donald Trump', 'Barack Obama', 'George Bush'], answer: 'Donald Trump' },
+                    { q: 'What is "blackmail"?', options: ['A black envelope', 'Forcing payment by threat', 'A type of tax', 'A friendly letter'], answer: 'Forcing payment by threat' },
+                    { q: 'The emergency meeting was held on which two days?', options: ['Friday and Saturday', 'Sunday and Monday', 'Wednesday and Thursday', 'Tuesday and Friday'], answer: 'Sunday and Monday' },
+                    { q: 'What is "NATO"?', options: ['A trade group', 'An environmental agency', 'A military alliance', 'A space organization'], answer: 'A military alliance' },
+                    { q: 'The word "affirm" means to ______.', options: ['Deny', 'State strongly or confirm', 'Forget', 'Change'], answer: 'State strongly or confirm' }
+                ]
+            },
+            'spain-collision': {
+                title: '西班牙火車對撞事故',
+                english: `Spanish Prime Minister Pedro Sánchez announced three days of official mourning on Monday following a catastrophic collision between two high-speed trains in southern Spain. The confirmed death toll has risen to 40, with dozens more critically injured. Investigations are currently underway to determine the cause of the disaster, which authorities described as “violent and unprecedented.” The Spanish Ministry of Transport stated that both human error and technical failure are being considered. The mourning period will conclude on January 22, as the nation grapples with one of its worst railway accidents in decades.`,
+                chinese: `西班牙火車對撞事故死亡人數升至 40 人，總理桑切斯宣布全國哀悼。西班牙總理桑切斯週一宣布為期三天的官方哀悼，此前西班牙南部發生了兩列高鐵對撞的慘劇。目前已證實死亡人數升至 40 人，另有數十人傷勢危急。目前調查正在進行中，以確定這起被當局稱為「慘烈且前所未有」的災難原因。西班牙交通部表示，目前正同時考慮人為疏失和技術故障。哀悼期將於 1 月 22 日結束，全國上下正在面對數十年來最嚴重的鐵路事故之一。`,
+                vocabulary: [
+                    'Pedro Sánchez (n. proper): 桑切斯 (西班牙總理)', 'Official mourning (n.phr.): 官方哀悼', 'Catastrophic collision (n.phr.): 災難性碰撞',
+                    'High-speed trains (n.phr.): 高鐵/高速列車', 'Southern Spain (n. proper): 西班牙南部', 'Death toll (n.phr.): 死亡人數',
+                    'Critically injured (adj.phr.): 傷勢危急', 'Underway (adj.): 進行中', 'Determine (v.): 確定',
+                    'Disaster (n.): 災難', 'Unprecedented (adj.): 前所未有的', 'Ministry of Transport (n. proper): 交通部',
+                    'Human error (n.phr.): 人為疏失', 'Technical failure (n.phr.): 技術故障', 'Grapples with (phr.v.): 面對/努力處理',
+                    'Railway accidents (n.phr.): 鐵路事故', 'In decades (phr.): 數十年來', 'Confirmed (v.pp.): 證實的', 'Dozens (n.): 數十個',
+                    'Violent (adj.): 慘烈的/暴力的', 'Conclude (v.): 結束/結論', 'Official (adj.): 官方的', 'Casualties (n.): 傷亡',
+                    'Collision (n.): 碰撞', 'High-speed (adj.): 高速的', 'Investigation (n.): 調查', 'Grapple (v.): 扭打/格鬥',
+                    'Railway (n.): 鐵路', 'Mourning (n.): 哀悼', 'Sorrow (n.): 悲傷'
+                ],
+                quiz: [
+                    { q: 'Who is the Prime Minister of Spain?', options: ['Pedro Sánchez', 'Keir Starmer', 'Gabriel Boric', 'Emmanuel Macron'], answer: 'Pedro Sánchez' },
+                    { q: 'How many days of official mourning were announced?', options: ['One day', 'Three days', 'One week', 'Ten days'], answer: 'Three days' },
+                    { q: 'What was the confirmed death toll as of Monday?', options: ['15', '20', '31', '40'], answer: '40' },
+                    { q: 'Where in Spain did the collision occur?', options: ['Northern', 'Central', 'Southern', 'Eastern'], answer: 'Southern' },
+                    { q: 'What two types of trains were involved?', options: ['Freight trains', 'High-speed trains', 'Steam engines', 'Subway trains'], answer: 'High-speed trains' },
+                    { q: 'When will the mourning period conclude?', options: ['January 19', 'January 20', 'January 22', 'February 1'], answer: 'January 22' },
+                    { q: 'What are the two factors being considered as the cause?', options: ['Weather and animals', 'Human error and technical failure', 'Terrorism and theft', 'Lack of fuel'], answer: 'Human error and technical failure' },
+                    { q: 'The authorities described the disaster as "violent and" what?', options: ['Boring', 'Unprecedented', 'Expected', 'Small'], answer: 'Unprecedented' },
+                    { q: 'The term "death toll" refers to what?', options: ['A tax on dead people', 'The number of people killed in an event', 'The price of a funeral', 'A bell ringing'], answer: 'The number of people killed in an event' },
+                    { q: 'What does "critically injured" mean?', options: ['Slightly hurt', 'Extremely serious injuries/danger of death', 'Already recovered', 'No injuries'], answer: 'Extremely serious injuries/danger of death' },
+                    { q: 'The word "grapple" in "grapples with" means ______.', options: ['To ignore', 'To struggle to deal with', 'To finish', 'To enjoy'], answer: 'To struggle to deal with' },
+                    { q: 'The disaster is one of the worst in how long?', options: ['Months', 'A year', 'Decades', 'A century'], answer: 'Decades' },
+                    { q: 'Which ministry is investigating the cause?', options: ['Ministry of Health', 'Ministry of Finance', 'Ministry of Transport', 'Ministry of Education'], answer: 'Ministry of Transport' },
+                    { q: 'What does "catastrophic" mean?', options: ['Minor', 'Funny', 'Extremely unfortunate or disastrous', 'Beneficial'], answer: 'Extremely unfortunate or disastrous' },
+                    { q: 'The incident occurred on which day of the week?', options: ['Friday', 'Saturday', 'Sunday', 'Monday'], answer: 'Monday' }
+                ]
+            },
+            'cambodia-scam': {
+                title: '柬埔寨電詐與人口販運案',
+                english: `A high-level investigation revealed on Monday that hundreds of foreign nationals have been duped by fake employment offers in Cambodia, leading to their trafficking and exploitation in so-called “scam factories.” Authorities uncovered a sophisticated criminal network with alleged links to Pakistani groups. Victims were reportedly forced to conduct online fraud under threat of violence. International law enforcement agencies are coordinating efforts to dismantle the syndicate and rescue those still held captive, highlighting the growing regional challenge of digital-era human trafficking.`,
+                chinese: `柬埔寨電詐案爆發：數百名外籍人員遭販賣與剝削，牽涉巴基斯坦集團。週一的一項高層調查顯示，數百名外國人被柬埔寨的虛假工作邀約所欺騙，導致他們被販賣並在所謂的「詐騙工廠」中遭受剝削。當局揭露了一個複雜的犯罪網絡，據稱與巴基斯坦集團有關。據報導，受害者在暴力威脅下被迫進行網路詐騙。國際執法機構正協調努力，以瓦解該集團並營救仍被囚禁的人員，突顯了數位時代人口販運日益嚴峻的區域挑戰。`,
+                vocabulary: [
+                    'High-level investigation (n.phr.): 高層調查', 'Foreign nationals (n.phr.): 外籍人士', 'Duped (v.pp.): 欺騙/愚弄',
+                    'Fake employment offers (n.phr.): 虛假工作邀約', 'Trafficking (n.): 販運', 'Exploitation (n.): 剝削',
+                    'Scam factories (n.phr.): 詐騙工廠', 'Sophisticated (adj.): 複雜的/精密的', 'Criminal network (n.phr.): 犯罪網絡',
+                    'Alleged links (n.phr.): 據稱的聯繫', 'Pakistani groups (n. proper): 巴基斯坦集團', 'Online fraud (n.phr.): 網路詐騙',
+                    'Threat of violence (phr.): 暴力威脅', 'International law enforcement (n.phr.): 國際執法', 'Dismantle (v.): 瓦解/拆除',
+                    'Syndicate (n.): 集團/辛迪加', 'Held captive (phr.): 被囚禁/俘虜', 'Digital-era (n.): 數位時代',
+                    'Human trafficking (n.phr.): 人口販運', 'Dismantle (v.): 廢除/瓦解', 'Captive (adj./n.): 被囚禁的/俘虜', 'Regional challenge (n.phr.): 區域挑戰',
+                    'Duped (v.): 詐騙/欺騙', 'Exploitation (n.): 剝削/利用', 'Nationals (n.): 國民/人士', 'Investigation (n.): 調查',
+                    'Offer (n.): 提議/邀約', 'Coordinate (v.): 協調', 'Rescue (v.): 營救'
+                ],
+                quiz: [
+                    { q: 'In which country were the "scam factories" located?', options: ['Thailand', 'Cambodia', 'Pakistan', 'Vietnam'], answer: 'Cambodia' },
+                    { q: 'How were the foreign nationals brought to Cambodia?', options: ['As tourists', 'By fake employment offers', 'As military volunteers', 'Through official exchange'], answer: 'By fake employment offers' },
+                    { q: 'The criminal network allegedly has links to groups from which country?', options: ['China', 'Russia', 'Pakistan', 'USA'], answer: 'Pakistan' },
+                    { q: 'What were the victims forced to do?', options: ['Build houses', 'Farm bananas', 'Conduct online fraud', 'Clean the ocean'], answer: 'Conduct online fraud' },
+                    { q: 'How did the criminals force the victims to work?', options: ['By paying high salaries', 'Under threat of violence', 'With free gifts', 'By offering free food'], answer: 'Under threat of violence' },
+                    { q: 'What are international agencies trying to "dismantle"?', options: ['The government', 'A local school', 'The criminal syndicate', 'A new bridge'], answer: 'The criminal syndicate' },
+                    { q: 'The investigation revealed hundreds of ______ had been duped.', options: ['Local citizens', 'Foreign nationals', 'Police officers', 'Bank managers'], answer: 'Foreign nationals' },
+                    { q: 'The term "duped" means what?', options: ['Rewarded', 'Tricked or deceived', 'Invited', 'Protected'], answer: 'Tricked or deceived' },
+                    { q: 'What does "exploitation" refer to in this context?', options: ['Making new friends', 'The unfair treatment or use of someone for profit', 'Exploring a new cave', 'Selling a car'], answer: 'The unfair treatment or use of someone for profit' },
+                    { q: 'What kind of challenge does this highlight for the digital era?', options: ['Lack of internet', 'Human trafficking', 'Weather forecasting', 'Tourism growth'], answer: 'Human trafficking' },
+                    { q: 'The word "sophisticated" describes the criminal network as being ______.', options: ['Simple', 'Small', 'Highly complex and developed', 'Old and broken'], answer: 'Highly complex and developed' },
+                    { q: 'The word "dismantle" means to ______.', options: ['Build up', 'Take apart or destroy an organization', 'Decorate', 'Ignore'], answer: 'Take apart or destroy an organization' },
+                    { q: 'Victims are "held captive," meaning they are ______.', options: ['Free to leave', 'Working voluntarily', 'Imprisoned or kept against their will', 'On vacation'], answer: 'Imprisoned or kept against their will' },
+                    { q: 'Which day was the investigation results revealed?', options: ['Friday', 'Sunday', 'Monday', 'Wednesday'], answer: 'Monday' },
+                    { q: 'What kind of fraud is mentioned in the text?', options: ['Credit card fraud', 'Online fraud', 'Tax fraud', 'Election fraud'], answer: 'Online fraud' }
+                ]
+            },
+            'kabul-blast': {
+                title: '阿富汗喀布爾爆炸案',
+                english: `The Taliban’s interior ministry confirmed on Monday that a powerful explosion in Kabul resulted in multiple civilian casualties. While the exact target remains unclear, the blast occurred in a crowded district known for its government buildings and markets. No group has yet claimed responsibility, but the incident underscores the persistent security challenges facing the country. International aid organizations condemned the violence and urged all parties to prioritize civilian protection amid ongoing instability.`,
+                chinese: `阿富汗喀布爾發生爆炸，塔利班證實多名平民死亡。塔利班內政部週一證實，喀布爾發生一起強烈爆炸，造成多名平民傷亡。雖然確切目標尚不清楚，但爆炸發生在一個以政府大樓和市場聞名的擁擠地區。目前尚未有組織聲稱對此負責，但這起事件突顯了該國面臨的持續性安全挑戰。國際援助組織譴責暴力行為，並敦促各方在持續動盪局勢中優先保護平民。`,
+                vocabulary: [
+                    'Taliban (n. proper): 塔利班', 'Interior ministry (n.phr.): 內政部', 'Kabul (n. proper): 喀布爾 (阿富汗首都)', 'Confirmed (v.): 證實',
+                    'Powerful explosion (n.phr.): 強烈爆炸', 'Civilian casualties (n.phr.): 平民傷亡', 'Exact target (n.phr.): 確切目標', 'Remains unclear (phr.): 尚不清楚',
+                    'Crowded district (n.phr.): 擁擠的地區', 'Markets (n.): 市場', 'Claimed responsibility (phr.): 聲稱負責', 'Incident (n.): 事件',
+                    'Underscores (v.): 凸顯/強調', 'Persistent (adj.): 持續的/頑固的', 'Security challenges (n.phr.): 安全挑戰', 'Aid organizations (n.phr.): 援助組織',
+                    'Condemned (v.): 譴責', 'Prioritize (v.): 優先考慮', 'Civilian protection (n.phr.): 平民保護', 'Instability (n.): 動盪/不穩定',
+                    'Ongoing (adj.): 持續進行的', 'Casualty (n.): 傷亡人數', 'Explosion (n.): 爆炸', 'Confirm (v.): 確認',
+                    'Ministry (n.): 部', 'Violence (n.): 暴力', 'Urged (v.): 敦促', 'Exact (adj.): 確切的',
+                    'District (n.): 地區', 'Known for (phr.): 以...聞名', 'Target (n.): 目標', 'Blast (n.): 爆炸/衝擊波'
+                ],
+                quiz: [
+                    { q: 'In which city did the explosion occur?', options: ['Tehran', 'Kabul', 'Islamabad', 'Baghdad'], answer: 'Kabul' },
+                    { q: 'Which body confirmed the explosion on Monday?', options: ['The UN', 'The US Embassy', 'The Taliban’s interior ministry', 'The Red Cross'], answer: 'The Taliban’s interior ministry' },
+                    { q: 'Who were the primary casualties mentioned in the text?', options: ['Soldiers', 'Foreign tourists', 'Civilians', 'Bank managers'], answer: 'Civilians' },
+                    { q: 'The blast occurred in a district known for its markets and what else?', options: ['Schools', 'Parks', 'Government buildings', 'Hospitals'], answer: 'Government buildings' },
+                    { q: 'Has any group claimed responsibility for the attack yet?', options: ['Yes, ISIS', 'Yes, Al-Qaeda', 'No group has yet claimed responsibility.', 'The Taliban claimed it themselves.'], answer: 'No group has yet claimed responsibility.' },
+                    { q: 'The incident "underscores" which type of challenges?', options: ['Economic', 'Environmental', 'Security', 'Educational'], answer: 'Security' },
+                    { q: 'How did international aid organizations respond?', options: ['They ignored it.', 'They celebrated.', 'They condemned the violence.', 'They left the country.'], answer: 'They condemned the violence.' },
+                    { q: 'What were all parties urged to prioritize?', options: ['Trade profit', 'Civilian protection', 'New elections', 'Road building'], answer: 'Civilian protection' },
+                    { q: 'The word "persistent" means ______.', options: ['Temporary', 'Continuing to exist or endure over a long period', 'Boring', 'New'], answer: 'Continuing to exist or endure over a long period' },
+                    { q: 'The term "interior ministry" usually handles what?', options: ['Foreign space travel', 'Domestic national affairs and security', 'International trade only', 'Global health'], answer: 'Domestic national affairs and security' },
+                    { q: 'What does "instability" mean?', options: ['The state of being stable', 'The state of being unstable or unpredictable', 'Wealth', 'Silence'], answer: 'The state of being unstable or unpredictable' },
+                    { q: 'The word "blast" is a synonym for ______.', options: ['Water', 'Explosion', 'Wind', 'Quiet'], answer: 'Explosion' },
+                    { q: 'The casualties are described as "multiple," meaning ______.', options: ['Only one', 'More than one; many', 'None', 'Exactly ten'], answer: 'More than one; many' },
+                    { q: 'Kabul is the capital of which country?', options: ['Iran', 'Pakistan', 'Iraq', 'Afghanistan'], answer: 'Afghanistan' },
+                    { q: 'The word "condemn" means to ______.', options: ['Express strong disapproval of', 'Praise', 'Support', 'Ignore'], answer: 'Express strong disapproval of' }
+                ]
+            }
+        };
+
+        // --- CORE LOGIC ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
