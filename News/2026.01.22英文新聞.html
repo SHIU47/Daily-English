@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 22 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 22 日：外銷紀錄、避險潮與科技監管</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs for News Topics -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for professional English learners. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Taiwan’s 2025 Export Orders Hit Record US$743 Billion, Driven by AI Boom\nThe Ministry of Economic Affairs (MOEA) announced on Wednesday that Taiwan’s total export orders for 2025 reached a historic peak of US$743.7 billion. Orders from the United States surged by 38.6%, fueled by insatiable demand for high-performance computing (HPC) and AI infrastructure. Notably, Southeast Asia has officially surpassed China as Taiwan's second-largest export market.\n\n[2] Strong Cold Air Mass Grips Taiwan; Temperatures Plummet to 8.9°C\nThe Central Weather Administration (CWA) issued low-temperature warnings for 10 cities and counties on Wednesday. A low of 8.9°C was recorded in Yunlin County. Orange and yellow alerts remain in effect for northern and central Taiwan, with damp and freezing conditions expected to persist through Friday. Snowfall remains possible in mountainous areas above 2,000 meters.\n\n[3] U.S. House Committee Approves US$1.15 Billion in Security Assistance for Taiwan\nA key committee in the U.S. House of Representatives approved a US$1.15 billion security cooperation package for Taiwan on Wednesday. The funds are designated to enhance Taiwan’s asymmetric defense capabilities and improve joint training. This move reaffirms bipartisan support and coincides with the first U.S. warship transit of the Taiwan Strait in 2026.`,
+                chinese: `【1】2025 年外銷訂單達 7,437 億美元創歷史新高，AI 供應鏈成美方接單主力\n經濟部（MOEA）週三宣布，台灣 2025 年的總外銷訂單達到了 7,437.2 億美元的歷史巔峰。來自美國的訂單成長了 38.6%，主要受到對高效能運算（HPC）和 AI 基礎設施永無止境的需求所推動。值得注意的是，東南亞已正式超越中國，成為台灣第二大出口市場，凸顯了全球科技巨頭將製造風險從中國大陸移出的供應鏈多元化策略成功。\n\n【2】寒流籠罩全台低溫探 8.9 度，氣象署發布 10 縣市低溫特報\n隨著強大的大陸寒流籠罩全台，中央氣象署（CWA）週三對 10 個縣市發布了低溫特報。雲林縣週三清晨測得 8.9 度的低溫。北台灣和中台灣目前仍維持橙色和黃色燈號，官員警告潮濕嚴寒的天氣將持續到週五。2,000 公尺以上的山區仍有可能降雪，當局建議高海拔地區的居民與遊客提高警覺。\n\n【3】美眾院委員會通過 11.5 億美元對台軍援，協助強化不對稱作戰能力\n美國眾議院一個關鍵委員會週三批准了對台 11.5 億美元的安全合作方案。這些包含在本年度《綜合撥款法案》中的資金，旨在增強台灣的不對稱防禦能力並改善聯合訓練行動。此舉重申了華盛頓對台灣安全的跨黨派支持，且恰逢 2026 年美國軍艦首次通過台灣海峽（本週早些時候發生）。`,
+                vocabulary: [
+                    'Export orders (n.phr.): 外銷訂單', 'Historic peak (n.phr.): 歷史巔峰', 'Surged (v.): 飆升/激增', 'Insatiable (adj.): 永不滿足的/貪得無厭的',
+                    'High-performance computing (HPC) (n.phr.): 高效能運算', 'Infrastructure (n.): 基礎設施', 'Surpassed (v.): 超過', 'Diversification (n.): 多元化',
+                    'De-risk (v.): 去風險化', 'Cold air mass (n.phr.): 寒流/冷氣團', 'Plummet (v.): 暴跌/驟降', 'Blanketed (v.pt.): 籠罩/覆蓋',
+                    'Advisory (n.): 特報/公告', 'Alerts in effect (phr.): 警報生效中', 'Persist (v.): 持續', 'Snowfall (n.): 降雪',
+                    'Heightened caution (n.phr.): 提高警覺', 'High-altitude (adj.): 高海拔的', 'House of Representatives (n. proper): 眾議院', 'Security assistance (n.phr.): 安全援助',
+                    'Asymmetric defense (n.phr.): 不對稱防禦', 'Bipartisan support (n.phr.): 跨黨派支持', 'Coincides with (phr.v.): 恰逢/同時發生', 'Transit (n.): 通過/過境',
+                    'Consolidated Appropriations Act (n. proper): 綜合撥款法案', 'Notably (adv.): 顯著地/值得注意的是', 'Mainland (n.): 大陸', 'Damp (adj.): 潮濕的',
+                    'Freezing (adj.): 嚴寒的', 'Joint training (n.phr.): 聯合訓練', 'Sector (n.): 部門', 'Vulnerable (adj.): 脆弱的'
+                ],
+                quiz: [
+                    { q: 'What was the total value of Taiwan\'s 2025 export orders?', options: ['US$100 billion', 'US$743.7 billion', 'US$1.15 billion', 'US$520 billion'], answer: 'US$743.7 billion' },
+                    { q: 'Orders from which country surged by 38.6%?', options: ['China', 'Japan', 'The United States', 'Germany'], answer: 'The United States' },
+                    { q: 'Which region has officially become Taiwan\'s second-largest export market?', options: ['Europe', 'Southeast Asia', 'North America', 'South America'], answer: 'Southeast Asia' },
+                    { q: 'What was the lowest temperature recorded in Yunlin on Wednesday?', options: ['5.0°C', '8.9°C', '10.5°C', '12°C'], answer: '8.9°C' },
+                    { q: 'How many cities and counties were issued low-temperature warnings?', options: ['5', '10', '15', '20'], answer: '10' },
+                    { q: 'Until when are the damp and freezing conditions expected to persist?', options: ['Wednesday', 'Thursday', 'Friday', 'Sunday'], answer: 'Friday' },
+                    { q: 'How much security assistance did the U.S. House Committee approve?', options: ['US$743 million', 'US$1.15 billion', 'US$400 billion', 'US$10 billion'], answer: 'US$1.15 billion' },
+                    { q: 'What kind of defense capabilities is the U.S. aid intended to enhance?', options: ['Space defense', 'Nuclear defense', 'Asymmetric defense', 'Traditional naval defense'], answer: 'Asymmetric defense' },
+                    { q: 'The U.S. aid coincides with which maritime event in the Taiwan Strait?', options: ['A major flood', 'A fishing festival', 'The first U.S. warship transit of 2026', 'A local race'], answer: 'The first U.S. warship transit of 2026' },
+                    { q: 'Which agency provided the export order data?', options: ['MOEA', 'CWA', 'MND', 'NASA'], answer: 'MOEA' },
+                    { q: 'The word "insatiable" in the text describes what?', options: ['Low demand', 'Stable demand', 'Demand that cannot be satisfied', 'Hidden demand'], answer: 'Demand that cannot be satisfied' },
+                    { q: 'What color alerts are in effect for northern and central Taiwan?', options: ['Red and Green', 'Orange and Yellow', 'Blue and Purple', 'Black and White'], answer: 'Orange and Yellow' },
+                    { q: 'At what altitude is snowfall possible according to the CWA?', options: ['500 meters', '1,000 meters', 'Above 2,000 meters', 'Only at sea level'], answer: 'Above 2,000 meters' },
+                    { q: 'The term "bipartisan" means support from ______.', options: ['Only one party', 'Two political parties', 'Foreign countries only', 'Individual citizens'], answer: 'Two political parties' },
+                    { q: 'What is the full name of the CWA?', options: ['Central Water Agency', 'Central Weather Administration', 'China Weather Association', 'Coalition of Weather Affairs'], answer: 'Central Weather Administration' }
+                ]
+            },
+            'gold-record-high': {
+                title: '國際金價飆破 4,760 美元',
+                english: `Global gold prices hit an unprecedented peak on Wednesday, with February futures briefly touching $4,760 per ounce. Analysts attribute the surge to escalating geopolitical tensions, including rhetoric over Greenland, the ongoing Iran crisis, and fears of a full-blown trade war between the U.S. and the EU. Silver also posted strong gains, reflecting a broad flight to precious metals as investors hedge against currency volatility and political instability. Market sentiment remains heavily tilted toward defensive assets.`,
+                chinese: `金價一度破 4,760 美元創歷史新高，地緣政治與經濟不確定性推動避險潮。全球金價週三達到前所未有的巔峰，2 月期貨價格一度觸及每盎司 4,760 美元。分析師將此次飆升歸因於日益加劇的地緣政治緊張局勢，包括針對格陵蘭島收購案的言論、持續的伊朗危機，以及對美歐爆發全面貿易戰的擔憂。白銀也錄得強勁漲幅，反映出投資者在對沖貨幣波動和政治不穩定時，廣泛轉向貴金屬的趨勢。市場情緒目前嚴重傾向於防禦性資產。`,
+                vocabulary: [
+                    'Unprecedented peak (n.phr.): 前所未有的巔峰', 'Futures (n.): 期貨', 'Per ounce (phr.): 每盎司', 'Attribute to (v.phr.): 歸因於',
+                    'Escalating (adj.): 日益加劇的', 'Geopolitical tensions (n.phr.): 地緣政治緊張局勢', 'Rhetoric (n.): 言論/修辭', 'Ongoing crisis (n.phr.): 持續中的危機',
+                    'Full-blown (adj.): 全面的/完全的', 'Trade war (n.phr.): 貿易戰', 'Silver (n.): 白銀', 'Posted gains (phr.): 錄得漲幅',
+                    'Flight to (n.phr.): 轉向/逃向 (安全資產)', 'Precious metals (n.phr.): 貴金屬', 'Hedge against (v.phr.): 對沖/避險', 'Currency volatility (n.phr.): 貨幣波動',
+                    'Political instability (n.phr.): 政治不穩定', 'Market sentiment (n.phr.): 市場情緒', 'Tilted toward (v.pp.): 傾向於', 'Defensive assets (n.phr.): 防禦性資產',
+                    'Safe-haven (n./adj.): 避險/避風港', 'Bullion (n.): 金銀條塊', 'Speculative (adj.): 投機的', 'Demand (n.): 需求',
+                    'Economic uncertainty (n.phr.): 經濟不確定性', 'Commodity (n.): 商品', 'Stabilize (v.): 穩定', 'Investment (n.): 投資'
+                ],
+                quiz: [
+                    { q: 'What was the peak price reached by gold futures on Wednesday?', options: ['$2,000', '$3,500', '$4,760', '$5,000'], answer: '$4,760' },
+                    { q: 'Which month\'s futures were mentioned in the report?', options: ['January', 'February', 'March', 'June'], answer: 'February' },
+                    { q: 'What is one geopolitical reason mentioned for the gold surge?', options: ['A peace treaty', 'Rhetoric over Greenland', 'Lower taxes', 'New space exploration'], answer: 'Rhetoric over Greenland' },
+                    { q: 'Besides gold, which other metal posted strong gains?', options: ['Copper', 'Silver', 'Iron', 'Aluminum'], answer: 'Silver' },
+                    { q: 'Investors are "hedging against" what according to the text?', options: ['Low interest rates', 'Currency volatility and political instability', 'Technological advancement', 'New laws'], answer: 'Currency volatility and political instability' },
+                    { q: 'Market sentiment is tilted toward which type of assets?', options: ['Speculative assets', 'Defensive assets', 'Agricultural assets', 'Cryptocurrencies'], answer: 'Defensive assets' },
+                    { q: 'The term "safe-haven" refers to an investment that ______.', options: ['Is very risky', 'Retains value during market turbulence', 'Is illegal', 'Is used only for jewelry'], answer: 'Retains value during market turbulence' },
+                    { q: 'Fears of a trade war between which two entities were mentioned?', options: ['USA and China', 'USA and EU', 'EU and Russia', 'Japan and China'], answer: 'USA and EU' },
+                    { q: 'What does "unprecedented" mean?', options: ['Never happened before', 'Happens every day', 'Very cheap', 'Forgotten'], answer: 'Never happened before' },
+                    { q: 'The word "escalating" means ______.', options: ['Decreasing', 'Staying same', 'Increasing in intensity', 'Ending'], answer: 'Increasing in intensity' },
+                    { q: 'What is "volatility" in a market context?', options: ['Complete stability', 'Fast and unpredictable change', 'Zero trading', 'Legal control'], answer: 'Fast and unpredictable change' },
+                    { q: 'Gold is often used to "hedge" against risk. What does "hedge" mean?', options: ['To cut a bush', 'To protect oneself against financial loss', 'To lose money purposely', 'To hide money'], answer: 'To protect oneself against financial loss' },
+                    { q: 'The ongoing crisis mentioned is located where?', options: ['Ukraine', 'Iran', 'Venezuela', 'Chile'], answer: 'Iran' },
+                    { q: 'Which term refers to the feeling of the market?', options: ['Market cost', 'Market sentiment', 'Market place', 'Market share'], answer: 'Market sentiment' },
+                    { q: 'Gold reached this peak on which day of the week?', options: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], answer: 'Wednesday' }
+                ]
+            },
+            'openai-age-prediction': {
+                title: 'OpenAI 擬推年齡預測功能',
+                english: `OpenAI announced on Wednesday that it will introduce an age-prediction feature for individual paid users of ChatGPT later this year. The tool aims to enable more granular content moderation and prevent minors from accessing age-inappropriate material. The company emphasized that the system relies on advanced behavioral analysis, not biometric data, to protect user privacy. This announcement comes amid growing global regulatory pressure on AI firms to implement stronger safeguards for children.`,
+                chinese: `OpenAI 擬在 ChatGPT 推出「年齡預測」功能以加強兒童保護。OpenAI 週三宣布，將於今年稍晚為 ChatGPT 的個人付費用戶推出年齡預測功能。該工具旨在實現更細緻的內容審核，並防止未成年人接觸不適齡的資料。該公司強調，該系統依賴先進的行為分析而非生物識別數據，以保護用戶隱私。這一公告發布之際，全球監管機構正對 AI 企業施加日益增長的壓力，要求為兒童實施更強大的保護措施。`,
+                vocabulary: [
+                    'Age-prediction (n.): 年齡預測', 'Individual paid users (n.phr.): 個人付費用戶', 'Introduce (v.): 推出/介紹', 'Granular (adj.): 細緻的/粒度細的',
+                    'Content moderation (n.phr.): 內容審核', 'Minors (n.): 未成年人', 'Age-inappropriate (adj.): 不適齡的/年齡不當的', 'Rely on (phr.v.): 依賴',
+                    'Behavioral analysis (n.phr.): 行為分析', 'Biometric data (n.phr.): 生物識別數據', 'User privacy (n.phr.): 用戶隱私', 'Regulatory pressure (n.phr.): 監管壓力',
+                    'Safeguards (n.): 保護措施/安全保障', 'Generative AI (n.phr.): 生成式 AI', 'Social platforms (n.phr.): 社交平台', 'Implement (v.): 實施/執行',
+                    'Protect (v.): 保護', 'Minors (n.): 未成年者', 'Granular (adj.): 顆粒狀的/細分的', 'Analysis (n.): 分析',
+                    'Biometric (adj.): 生物識別的', 'Privacy (n.): 隱私', 'Regulation (n.): 規章/監管', 'Integrated (adj.): 整合的',
+                    'Safeguard (v.): 保衛', 'Access (v.): 存取/進入', 'Tool (n.): 工具', 'Individual (n./adj.): 個人(的)'
+                ],
+                quiz: [
+                    { q: 'Who announced the "age-prediction" feature?', options: ['Google', 'OpenAI', 'Microsoft', 'Meta'], answer: 'OpenAI' },
+                    { q: 'Which group of users will the feature be available to first?', options: ['All free users', 'Individual paid users', 'Only corporate users', 'Only students'], answer: 'Individual paid users' },
+                    { q: 'What is the primary goal of the "age-prediction" tool?', options: ['To charge more money', 'To enable granular content moderation and protect minors', 'To speed up ChatGPT', 'To design new emojis'], answer: 'To enable granular content moderation and protect minors' },
+                    { q: 'The system relies on what kind of analysis?', options: ['Biometric analysis', 'Behavioral analysis', 'Physical analysis', 'Financial analysis'], answer: 'Behavioral analysis' },
+                    { q: 'OpenAI emphasized that it will NOT use which kind of data?', options: ['Email addresses', 'Biometric data', 'Payment data', 'Chat history'], answer: 'Biometric data' },
+                    { q: 'What is the reason for protecting user privacy mentioned in the text?', options: ['To hide the AI', 'To avoid using biometric data', 'To follow the news', 'To sell data'], answer: 'To avoid using biometric data' },
+                    { q: 'There is growing ______ pressure on AI firms to protect children.', options: ['Educational', 'Regulatory', 'Physical', 'Weather'], answer: 'Regulatory' },
+                    { q: 'When will the feature be introduced?', options: ['Immediately', 'Later this year', 'Next year', 'In 2030'], answer: 'Later this year' },
+                    { q: 'The term "granular" in the context of moderation means what?', options: ['Very large', 'Highly detailed and specific', 'Coarse', 'Impossible'], answer: 'Highly detailed and specific' },
+                    { q: 'What are "minors"?', options: ['People working in mines', 'People under the legal age of adulthood', 'Professional experts', 'Paid subscribers'], answer: 'People under the legal age of adulthood' },
+                    { q: 'OpenAI wants to prevent access to "age-______" material.', options: ['Appropriate', 'Inappropriate', 'Specific', 'Related'], answer: 'Inappropriate' },
+                    { q: 'The word "safeguards" means ______.', options: ['Dangerous areas', 'Protective measures or rules', 'New games', 'Fast trains'], answer: 'Protective measures or rules' },
+                    { q: 'AI is becoming deeply ______ into education.', options: ['Integrated', 'Banned', 'Hidden', 'Deleted'], answer: 'Integrated' },
+                    { q: 'The company emphasized user ______ protection.', options: ['Privacy', 'Salary', 'Height', 'Speed'], answer: 'Privacy' },
+                    { q: 'The feature is for which product?', options: ['DALL-E', 'ChatGPT', 'Sora', 'Whisper'], answer: 'ChatGPT' }
+                ]
+            },
+            'south-america-wildfires': {
+                title: '南美洲森林大火災情',
+                english: `Emergency services in Chile and Colombia remained on high alert on Wednesday as multiple large-scale wildfires continued to devastate forests and farmland. The disasters—intensified by record-breaking temperatures and prolonged drought—have displaced thousands of residents and destroyed hundreds of homes. President Gabriel Boric declared a state of emergency in affected Chilean regions, while international aid agencies warned that the rising frequency of such events reflects the accelerating climate crisis in the Southern Hemisphere.`,
+                chinese: `智利與哥倫比亞發生多起森林大火，高溫乾燥天氣加劇災情。智利與哥倫比亞的緊急救援部門週三維持高度警戒，多起大規模森林大火持續蹂躪森林與農田。在破紀錄的高溫與長期乾旱的加劇下，這些災害已導致數千名居民流離失所，數百棟房屋被毀。智利總統蓋布瑞爾·博里奇（Gabriel Boric）在受災地區宣布進入緊急狀態，而國際援助機構警告說，此類事件發生頻率的上升，反映了南半球氣候危機正加速惡化。`,
+                vocabulary: [
+                    'Emergency services (n.phr.): 緊急救援部門', 'High alert (n.phr.): 高度警戒', 'Large-scale (adj.): 大規模的', 'Wildfires (n.): 森林大火/野火',
+                    'Devastate (v.): 蹂躪/破壞', 'Farmland (n.): 農田', 'Intensified (v.pp.): 加劇的', 'Record-breaking (adj.): 破紀錄的',
+                    'Prolonged drought (n.phr.): 長期乾旱', 'Displaced (v.pp.): 流離失所的', 'Residents (n.): 居民', 'Destroyed (v.pp.): 毀壞的',
+                    'Gabriel Boric (n. proper): 蓋布瑞爾·博里奇', 'State of emergency (n.phr.): 緊急狀態', 'Affected regions (n.phr.): 受災地區', 'Aid agencies (n.phr.): 援助機構',
+                    'Frequency (n.): 頻率', 'Climate crisis (n.phr.): 氣候危機', 'Southern Hemisphere (n. proper): 南半球', 'Accelerating (v.ger.): 加速中的',
+                    'Devastating (adj.): 毀滅性的', 'Drought (n.): 乾旱', 'Displace (v.): 使離家', 'Habitat (n.): 棲息地',
+                    'Humanitarian (adj.): 人道的', 'Catastrophe (n.): 災難', 'Evacuation (n.): 疏散', 'Resilience (n.): 韌性'
+                ],
+                quiz: [
+                    { q: 'Which two South American countries are battling severe wildfires?', options: ['Brazil and Argentina', 'Chile and Colombia', 'Peru and Ecuador', 'Venezuela and Guyana'], answer: 'Chile and Colombia' },
+                    { q: 'What weather conditions intensified the fires?', options: ['Heavy rain and cold', 'Snow and wind', 'Record-breaking temperatures and prolonged drought', 'High humidity'], answer: 'Record-breaking temperatures and prolonged drought' },
+                    { q: 'What has happened to thousands of residents?', options: ['They won a prize', 'They have been displaced', 'They are on holiday', 'They moved to North America'], answer: 'They have been displaced' },
+                    { q: 'How many homes have been destroyed according to the text?', options: ['Dozens', 'Hundreds', 'Thousands', 'Zero'], answer: 'Hundreds' },
+                    { q: 'Who is the President of Chile mentioned?', options: ['Donald Trump', 'Gabriel Boric', 'Antonio Guterres', 'Nicolas Maduro'], answer: 'Gabriel Boric' },
+                    { q: 'What was declared in the affected regions of Chile?', options: ['A state of joy', 'A state of emergency', 'A state of war', 'A state of holiday'], answer: 'A state of emergency' },
+                    { q: 'What do aid agencies say the fires reflect?', options: ['Better farming', 'The accelerating climate crisis', 'Economic growth', 'New technology'], answer: 'The accelerating climate crisis' },
+                    { q: 'In which hemisphere are these events reflecting a crisis?', options: ['Northern Hemisphere', 'Southern Hemisphere', 'Eastern Hemisphere', 'Western Hemisphere'], answer: 'Southern Hemisphere' },
+                    { q: 'The term "displaced" means people were ______.', options: ['Promoted at work', 'Forced to leave their homes', 'Given new cars', 'Told to stay inside'], answer: 'Forced to leave their homes' },
+                    { q: 'What does "devastate" mean?', options: ['To build', 'To cause severe damage to', 'To clean', 'To plant'], answer: 'To cause severe damage to' },
+                    { q: 'The word "prolonged" means ______.', options: ['Short', 'Continuing for a long time', 'Fast', 'Boring'], answer: 'Continuing for a long time' },
+                    { q: 'Wildfires are damaging forests and ______.', options: ['Shopping malls', 'Farmland', 'Offices', 'Space stations'], answer: 'Farmland' },
+                    { q: 'Emergency services are on "high ______."', options: ['Alert', 'Prices', 'Speed', 'Buildings'], answer: 'Alert' },
+                    { q: 'The word "frequency" refers to how ______ something happens.', options: ['Long', 'Often', 'Fast', 'Expensive'], answer: 'Often' },
+                    { q: 'Chile and Colombia are in which continent?', options: ['Africa', 'Asia', 'South America', 'Europe'], answer: 'South America' }
+                ]
+            },
+            'barcelona-train-derailment': {
+                title: '巴塞隆納列車脫軌事故',
+                english: `A passenger train derailed on the outskirts of Barcelona on Wednesday, leaving at least four people seriously injured. Preliminary investigations indicate that a nearby retaining wall collapsed onto the tracks following heavy rainfall, causing the train to jump the rails. Emergency services swiftly evacuated passengers and treated the injured. The Spanish rail operator has suspended services on the affected line as engineers assess structural integrity to prevent further incidents.`,
+                chinese: `西班牙巴塞隆納發生列車脫軌事故，造成至少 4 人重傷。週三，一列客運列車在巴塞隆納郊區脫軌，造成至少 4 人重傷。初步調查顯示，大雨後附近的一面擋土牆倒塌在鐵軌上，導致列車脫軌。緊急救援部門迅速疏散乘客並救治傷者。西班牙鐵路營運商已暫停受影響線路的服務，工程師正評估結構完整性，以防止進一步事故發生。`,
+                vocabulary: [
+                    'Passenger train (n.phr.): 客運列車', 'Derailed (v.pt.): 脫軌', 'Outskirts (n.): 郊區', 'Seriously injured (adj.phr.): 重傷',
+                    'Preliminary investigations (n.phr.): 初步調查', 'Indicate (v.): 顯示/表明', 'Retaining wall (n.phr.): 擋土牆', 'Collapsed (v.pt.): 倒塌',
+                    'Tracks (n.): 鐵軌', 'Heavy rainfall (n.phr.): 大雨/豪雨', 'Jump the rails (phr.): 衝出鐵軌/脫軌', 'Emergency services (n.phr.): 緊急救援部門',
+                    'Swiftly (adv.): 迅速地', 'Evacuated (v.pt.): 疏散', 'Rail operator (n.phr.): 鐵路營運商', 'Suspended (v.pp.): 暫停的',
+                    'Affected line (n.phr.): 受影響的線路', 'Assess (v.): 評估', 'Structural integrity (n.phr.): 結構完整性', 'Prevent (v.): 預防',
+                    'Incidents (n.): 事故/事件', 'Outskirts (n.): 市郊', 'Derailment (n.): 脫軌', 'Evacuation (n.): 疏散',
+                    'Casualties (n.): 傷亡', 'Infrastructure (n.): 基礎建設', 'Operator (n.): 營運商', 'Integrity (n.): 完整性'
+                ],
+                quiz: [
+                    { q: 'In which city did the train derailment occur?', options: ['Madrid', 'Paris', 'Barcelona', 'Lisbon'], answer: 'Barcelona' },
+                    { q: 'How many people were reported seriously injured?', options: ['None', 'At least four', 'Ten', 'Twenty'], answer: 'At least four' },
+                    { q: 'Where exactly did the derailment happen?', options: ['In the city center', 'On the outskirts (suburbs)', 'In a tunnel', 'On a bridge'], answer: 'On the outskirts (suburbs)' },
+                    { q: 'What caused the train to jump the rails?', options: ['A bomb', 'A retaining wall collapsed onto the tracks', 'A technical engine failure', 'A mistake by the driver'], answer: 'A retaining wall collapsed onto the tracks' },
+                    { q: 'What weather event preceded the wall collapse?', options: ['A heatwave', 'Heavy rainfall', 'A snowstorm', 'A tornado'], answer: 'Heavy rainfall' },
+                    { q: 'What did emergency services do after the incident?', options: ['Closed the hospital', 'Swiftly evacuated passengers and treated the injured', 'Told everyone to stay inside the train', 'Canceled all news reports'], answer: 'Swiftly evacuated passengers and treated the injured' },
+                    { q: 'What did the rail operator do following the crash?', options: ['Lowered prices', 'Suspended services on the affected line', 'Bought new trains', 'Ignored the situation'], answer: 'Suspended services on the affected line' },
+                    { q: 'What are engineers currently assessing?', options: ['The price of tickets', 'The structural integrity of the area', 'The speed of the rain', 'The history of Barcelona'], answer: 'The structural integrity of the area' },
+                    { q: 'The term "outskirts" refers to which part of a city?', options: ['The very center', 'The outer parts or edges', 'The underground part', 'The highest point'], answer: 'The outer parts or edges' },
+                    { q: 'What does "derailed" mean?', options: ['To move very fast', 'To leave the tracks (for a train)', 'To arrive early', 'To be painted red'], answer: 'To leave the tracks (for a train)' },
+                    { q: 'The word "preliminary" means ______.', options: ['Final', 'Coming before the main part/Initial', 'Secret', 'Very old'], answer: 'Coming before the main part/Initial' },
+                    { q: 'What is a "retaining wall"?', options: ['A wall meant to hold back soil or water', 'A wall inside a house', 'A very thin fence', 'A wall made of glass'], answer: 'A wall meant to hold back soil or water' },
+                    { q: 'The term "integrity" in "structural integrity" means the state of being ______.', options: ['Broken', 'Whole, sound, or unimpaired', 'Expensive', 'New'], answer: 'Whole, sound, or unimpaired' },
+                    { q: 'Barcelona is a city in which country?', options: ['France', 'Italy', 'Spain', 'Portugal'], answer: 'Spain' },
+                    { q: 'What type of train was involved?', options: ['Freight train', 'Passenger train', 'Mail train', 'Oil train'], answer: 'Passenger train' }
+                ]
+            }
+        };
+
+        // --- STATE & RENDERING ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確答案)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確答案)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
