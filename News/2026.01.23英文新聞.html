@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 22 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 22 日：關稅豁免、外交博弈與 AI 變革</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for persistent English improvement. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] TSMC Formally Granted Section 232 Exemptions\nIn a significant victory for Taiwan’s semiconductor industry, the U.S. Department of Commerce has officially granted TSMC exemptions from certain Section 232 national security tariffs and quotas. This move allows TSMC’s Arizona facilities to import critical manufacturing materials with greater flexibility and lower costs, cementing the “Silicon Shield”’s role in American national security.\n\n[2] Cold Surge Eases, but New Front Expected Sunday\nWhile the powerful continental cold air mass began to weaken on Thursday, the Central Weather Administration (CWA) cautioned that the reprieve will be brief. Daytime temperatures rose island-wide, but a new moderately strong cold front is expected to arrive on Sunday evening. The CWA advised the elderly to remain vigilant about rapid temperature fluctuations.\n\n[3] MND Detects 18 PLA Aircraft and Vessels Near Taiwan\nThe Ministry of National Defense (MND) reported that 12 PLA aircraft and 6 naval vessels were detected operating in the vicinity of Taiwan over a 24-hour period. Six of the aircraft crossed the median line of the Taiwan Strait or entered the southwestern ADIZ. Taiwan’s armed forces used mission aircraft and missile systems to respond to these persistent “gray zone” activities.`,
+                chinese: `【1】台積電正式獲得美國「232 條款」豁免，Arizona 廠區將優先受惠\n這是台灣半導體產業的重大勝利，美國商務部已正式授予台積電（TSMC）豁免部分「232 條款」國家安全關稅與配額。此舉直接源於新的雙邊貿易協議，允許台積電亞利桑那州廠以更大的靈活性和更低的成本進口關鍵製造原料，進一步鞏固了「矽盾」在美國國家安全中的角色。\n\n【2】寒流減弱氣溫回升，但氣象署提醒：週日將有新一波冷氣團南下\n雖然強大的大陸冷氣團週四開始減弱，但中央氣象署（CWA）警告這種緩解將是短暫的。全台白天氣溫回升，但預計週日晚間將有一波中等強度的冷氣團抵達。氣象署建議長者及慢性病患者應對氣溫劇烈波動保持警覺，並為下週初另一段濕冷天氣做好準備。\n\n【3】中共 18 架次機艦擾台，國防部：國軍嚴密監控並應處\n國防部（MND）報告指出，截至週四上午的 24 小時內，偵獲解放軍機 12 架次及軍艦 6 艘次在台灣周邊活動。其中 6 架次軍機逾越海峽中線或進入西南空域。國防部表示，國軍已運用任務機、艦及陸基飛彈系統，嚴密監控並應處這些持續性的「灰色地帶」活動。`,
+                vocabulary: [
+                    'Section 232 (n. phr.): 232 條款', 'Exemptions (n.): 豁免', 'Department of Commerce (n. proper): 商務部', 'Quotas (n.): 配額',
+                    'Bilateral trade pact (n.phr.): 雙邊貿易協定', 'Ramp-up (n./v.): 擴產/增加', 'Silicon Shield (n. proper): 矽盾', 'Cementing (v.ger.): 鞏固/加強',
+                    'Continental cold air mass (n.phr.): 大陸冷氣團', 'Reprieve (n.): 緩解/暫緩', 'Moderately strong (adj.phr.): 中等強度的', 'Vigilant (adj.): 警覺的',
+                    'Fluctuations (n.): 波動', 'Damp (adj.): 潮濕的', 'Vicinity (n.): 周邊/鄰近地區', 'Median line (n.phr.): 中線',
+                    'ADIZ (Air Defense Identification Zone) (n. proper): 防空識別區', 'Persistent (adj.): 持續的', 'Gray zone activities (n.phr.): 灰色地帶活動', 'National security (n.phr.): 國家安全',
+                    'Exemption (n.): 豁免', 'Strategic advantage (n.phr.): 戰略優勢', 'Fabrication (n.): 製造', 'CWA (n. proper): 中央氣象署',
+                    'Vessels (n.): 船隻', 'Monitor (v.): 監控', 'Respond (v.): 回應', 'Vigilance (n.): 警覺',
+                    'Ramp-up (v.): 增加', 'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略的', 'Vicinity (n.): 附近'
+                ],
+                quiz: [
+                    { q: 'Which US department granted TSMC the Section 232 exemptions?', options: ['Department of Labor', 'Department of Commerce', 'Department of Defense', 'The White House'], answer: 'Department of Commerce' },
+                    { q: 'What will the Section 232 exemptions allow TSMC Arizona to do?', options: ['Hire more workers', 'Import critical materials with lower costs', 'Build more parks', 'Sell consumer electronics'], answer: 'Import critical materials with lower costs' },
+                    { q: 'What concept does the text say is being "cemented" in American national security?', options: ['The Iron Dome', 'The Silicon Shield', 'The Golden Shield', 'The Trade Barrier'], answer: 'The Silicon Shield' },
+                    { q: 'When is the next moderately strong cold front expected to arrive?', options: ['Friday morning', 'Saturday afternoon', 'Sunday evening', 'Next Thursday'], answer: 'Sunday evening' },
+                    { q: 'Who did the CWA specifically advise to remain vigilant about temperature changes?', options: ['Farmers', 'The elderly', 'Students', 'Pilots'], answer: 'The elderly' },
+                    { q: 'How many total PLA aircraft and vessels were detected in the 24-hour period?', options: ['12', '18', '24', '6'], answer: '18' },
+                    { q: 'How many of the detected PLA aircraft crossed the median line or entered the ADIZ?', options: ['6', '12', '18', '2'], answer: '6' },
+                    { q: 'What term does the MND use to describe the persistent military activities?', options: ['Active warfare', '"Gray zone" activities', 'Peacekeeping missions', 'Joint training'], answer: '"Gray zone" activities' },
+                    { q: 'What system did Taiwan use to respond to the PLA movements?', options: ['Only radar', 'Land-based missile systems', 'Only naval vessels', 'Civilian police'], answer: 'Land-based missile systems' },
+                    { q: 'The Section 232 exemptions specifically involve what type of concerns?', options: ['Environmental concerns', 'National security concerns', 'Educational concerns', 'Healthcare concerns'], answer: 'National security concerns' },
+                    { q: 'The term "reprieve" in the weather news refers to a ______.', options: ['Long storm', 'Brief break from cold weather', 'New law', 'Type of snow'], answer: 'Brief break from cold weather' },
+                    { q: 'The "vicinity" of Taiwan refers to which area?', options: ['The surrounding area', 'The center of Taipei', 'The mountains only', 'The moon'], answer: 'The surrounding area' },
+                    { q: 'What does "plummet" (from earlier contexts) or "rapid fluctuation" imply?', options: ['Slow change', 'Fast and sudden change', 'No change', 'Planned change'], answer: 'Fast and sudden change' },
+                    { q: 'Is the current cold air mass described as powerful?', options: ['No', 'Yes', 'It is a heatwave', 'The text doesn\'t say'], answer: 'Yes' },
+                    { q: 'What does the acronym MND stand for?', options: ['Ministry of National Defense', 'Ministry of New Design', 'Military National Division', 'Mainland National Department'], answer: 'Ministry of National Defense' }
+                ]
+            },
+            'trump-greenland-davos': {
+                title: '川普格陵蘭收購報價流出',
+                english: `Leaked reports from a closed-door session at the World Economic Forum in Davos on Thursday suggest that President Trump has delivered a “final offer” to Danish and European officials regarding the acquisition of Greenland. While the specific dollar amount remains classified, sources indicate the proposal includes a multi-billion dollar “sovereign wealth payment” to Denmark and long-term security guarantees. Trump reportedly warned that if a memorandum of understanding (MoU) is not signed by February 15, the U.S. will immediately implement 20% universal tariffs on all EU-made automobiles and luxury goods. This ultimatum has plunged transatlantic relations to a new low, with EU leaders meeting in Brussels to coordinate an emergency anti-coercion response.`,
+                chinese: `川普達沃斯閉門會議流出：美方開出收購格陵蘭「最終報價」，否則啟動對歐全稅。週四從達沃斯世界經濟論壇閉門會議流出的報告顯示，川普總統已就收購格陵蘭一事，向丹麥及歐洲官員開出了「最終報價」。雖然具體金額仍屬機密，但消息指出，提議包括向丹麥支付數百億美元的「主權財富支出」及長期安全保障。據報導，川普警告，若在 2 月 15 日前未簽署諒解備忘錄（MoU），美國將立即對所有歐盟製造的汽車及奢侈品徵收 20% 的通用關稅。這項最後通牒使跨大西洋關係降至新低，歐盟領導人正聚集在布魯塞爾，協調緊急的「反脅迫」應對措施。`,
+                vocabulary: [
+                    'Leaked reports (n.phr.): 流出的報告', 'Closed-door session (n.phr.): 閉門會議', 'Acquisition (n.): 收購/獲得', 'Classified (adj.): 機密的',
+                    'Sovereign wealth payment (n.phr.): 主權財富支出', 'Security guarantees (n.phr.): 安全保障', 'Memorandum of understanding (MoU) (n.phr.): 諒解備忘錄', 'Universal tariffs (n.phr.): 通用關稅',
+                    'Automobiles (n.): 汽車', 'Luxury goods (n.phr.): 奢侈品', 'Ultimatum (n.): 最後通牒', 'Plunged (v.pt.): 陷入/暴跌',
+                    'Transatlantic (adj.): 跨大西洋的', 'Brussels (n. proper): 布魯塞爾 (歐盟總部所在地)', 'Anti-coercion (adj./n.): 反脅迫', 'Coercion (n.): 脅迫/強迫',
+                    'Rhetoric (n.): 辭令/修辭', 'Transactional (adj.): 交易型的', 'Territorial integrity (n.phr.): 領土完整', 'Exemption (n.): 豁免',
+                    'Retaliation (n.): 報復', 'Strategic (adj.): 策略性的', 'Davos (n. proper): 達沃斯', 'Forum (n.): 論壇',
+                    'Billion (n.): 十億', 'Sovereignty (n.): 主權', 'Exemption (n.): 豁免', 'Relief (n.): 救濟/減輕',
+                    'Precedent (n.): 先例', 'Coordinated (adj.): 協調的', 'Emergency (n.): 緊急情況', 'Negotiations (n.): 談判'
+                ],
+                quiz: [
+                    { q: 'Where did the leaked reports about Greenland originate?', options: ['The UN', 'Davos (World Economic Forum)', 'The White House', 'The Kremlin'], answer: 'Davos (World Economic Forum)' },
+                    { q: 'What territory is at the center of the dispute?', options: ['Iceland', 'Greenland', 'Cuba', 'Ukraine'], answer: 'Greenland' },
+                    { q: 'What is the deadline for signing the MoU mentioned by Trump?', options: ['January 1', 'February 1', 'February 15', 'June 1'], answer: 'February 15' },
+                    { q: 'What happens if the MoU is not signed by the deadline?', options: ['US leaves NATO', '20% tariffs on EU cars and luxury goods', 'A military strike', 'A new tax on oil'], answer: '20% tariffs on EU cars and luxury goods' },
+                    { q: 'The payment offered to Denmark is described as what?', options: ['A personal loan', 'A sovereign wealth payment', 'A monthly rent', 'A food aid package'], answer: 'A sovereign wealth payment' },
+                    { q: 'How has this ultimatum affected transatlantic relations?', options: ['Made them stronger', 'Plunged them to a new low', 'No change', 'Ended them completely'], answer: 'Plunged them to a new low' },
+                    { q: 'Where are EU leaders meeting to coordinate a response?', options: ['London', 'Paris', 'Brussels', 'Berlin'], answer: 'Brussels' },
+                    { q: 'The EU is coordinating an "emergency ______ response."', options: ['Anti-virus', 'Anti-coercion', 'Anti-climate', 'Anti-inflation'], answer: 'Anti-coercion' },
+                    { q: 'What does "classified" mean in this context?', options: ['Public', 'Categorized', 'Secret/Not for the public', 'Boring'], answer: 'Secret/Not for the public' },
+                    { q: 'The term "ultimatum" refers to what?', options: ['A friendly suggestion', 'A final demand with a threat', 'A type of map', 'A secret deal'], answer: 'A final demand with a threat' },
+                    { q: 'What kind of goods, besides cars, will face tariffs?', options: ['Computers', 'Food', 'Luxury goods', 'Medicine'], answer: 'Luxury goods' },
+                    { q: 'What does "coercion" involve?', options: ['Helping someone', 'Forcing someone to do something by threats', 'Giving a gift', 'Voting'], answer: 'Forcing someone to do something by threats' },
+                    { q: 'Is the specific dollar amount of the offer known to the public?', options: ['Yes', 'No, it remains classified', 'Only in Europe', 'Only in China'], answer: 'No, it remains classified' },
+                    { q: 'The word "acquisition" means the act of ______.', options: ['Selling', 'Gaining or buying', 'Ignoring', 'Breaking'], answer: 'Gaining or buying' },
+                    { q: 'Which two countries/entities are primarily involved in the negotiation?', options: ['USA and China', 'USA and Denmark/EU', 'Russia and Ukraine', 'UK and France'], answer: 'USA and Denmark/EU' }
+                ]
+            },
+            'ukraine-power-assault': {
+                title: '俄對烏最大電網襲擊',
+                english: `Ukrainian authorities reported on Thursday that Russia launched a coordinated wave of over 150 missiles and drones targeting the nation’s energy infrastructure, described as the largest single assault on the grid since the war began. The strikes hit thermal power plants and substations in Kyiv, Kharkiv, and Odesa, causing immediate and widespread blackouts during a period of freezing temperatures. President Zelenskyy condemned the attack as a “premeditated crime against humanity” and renewed his urgent call for Western allies to provide more Patriot air defense systems. The scale of damage has raised fears of a catastrophic humanitarian crisis as engineers struggle to restore heating and water.`,
+                chinese: `俄羅斯對烏克蘭發動「最大規模」能源設施襲擊，基輔等地陷入停電。烏克蘭當局週四報告，俄羅斯發動了由 150 多枚飛彈和無人機組成的協調攻勢，針對該國的能源基礎設施，這被描述為開戰以來對電網規模最大的單次襲擊。攻擊擊中了基輔（Kyiv）、哈爾科夫（Kharkiv）和奧德薩（Odesa）的火力發電廠與變電所，在寒流期間造成立即且大範圍的停電。澤倫斯基總統譴責這次襲擊是「蓄意的人道罪行」，並再次緊急呼籲西方盟友提供更多愛國者（Patriot）防空系統。由於工程師正努力恢復數百萬平民的暖氣和供水，損害的規模引發了對災難性人道危機的擔憂。`,
+                vocabulary: [
+                    'Coordinated wave (n.phr.): 協調一致的攻勢', 'Missiles and drones (n.phr.): 飛彈與無人機', 'Energy infrastructure (n.phr.): 能源基礎設施', 'Assault on the grid (phr.): 對電網的襲擊',
+                    'Thermal power plants (n.phr.): 火力發電廠', 'Substations (n.): 變電所', 'Widespread blackouts (n.phr.): 大範圍停電', 'Freezing temperatures (n.phr.): 寒冷/嚴寒氣溫',
+                    'Premeditated (adj.): 蓄意的/預謀的', 'Crime against humanity (n.phr.): 危害人類罪/人道罪', 'Patriot air defense (n.phr.): 愛國者防空系統', 'Scale of damage (n.phr.): 損害規模',
+                    'Catastrophic (adj.): 災難性的', 'Humanitarian crisis (n.phr.): 人道危機', 'Heating and water services (n.phr.): 暖氣與供水服務', 'Restore (v.): 恢復',
+                    'Civilian lives (n.phr.): 平民生命', 'Degradation (n.): 退化/惡化', 'Intensifies (v.): 加劇', 'Kamikaze (adj.): 自殺式的',
+                    'Projectiles (n.): 拋射物', 'Intercepted (v.pp.): 攔截的', 'Urban centers (n.phr.): 城市中心', 'Sustain (v.): 維持',
+                    'Infrastructure (n.): 基礎建設', 'Coordinate (v.): 協調', 'Degrade (v.): 降級/削弱', 'Urgent (adj.): 緊急的',
+                    'Substation (n.): 分站/變電站', 'Outage (n.): 停供', 'Ballistic (adj.): 彈道的', 'Drone (n.): 無人機'
+                ],
+                quiz: [
+                    { q: 'How many missiles and drones were launched by Russia in this assault?', options: ['50', '100', 'Over 150', '500'], answer: 'Over 150' },
+                    { q: 'What was the primary target of the attack?', options: ['Farms', 'Energy infrastructure/Power grid', 'Schools', 'Museums'], answer: 'Energy infrastructure/Power grid' },
+                    { q: 'Which cities were specifically mentioned as being hit?', options: ['Kyiv, Kharkiv, and Odesa', 'Moscow and St. Petersburg', 'London and Paris', 'Lviv and Warsaw'], answer: 'Kyiv, Kharkiv, and Odesa' },
+                    { q: 'What did the strikes cause across major cities?', options: ['Widespread blackouts', 'Internet speed increases', 'New roads', 'A celebration'], answer: 'Widespread blackouts' },
+                    { q: 'How did President Zelenskyy describe the attack?', options: ['"A minor accident"', '"A premeditated crime against humanity"', '"A military success"', '"A seasonal event"'], answer: '"A premeditated crime against humanity"' },
+                    { q: 'What specific air defense system did Zelenskyy call for?', options: ['Iron Dome', 'Patriot air defense systems', 'S-400', 'F-16'], answer: 'Patriot air defense systems' },
+                    { q: 'What is the current primary struggle for engineers in Ukraine?', options: ['Building new cars', 'Restoring heating and water services', 'Designing AI', 'Selling oil'], answer: 'Restoring heating and water services' },
+                    { q: 'The attack is the ______ single assault on the grid since the war began.', options: ['Smallest', 'First', 'Largest', 'Last'], answer: 'Largest' },
+                    { q: 'What weather condition makes the blackouts especially dangerous?', options: ['Heatwaves', 'Freezing temperatures', 'Sandstorms', 'High humidity'], answer: 'Freezing temperatures' },
+                    { q: 'The term "premeditated" means what?', options: ['Accidental', 'Happening by chance', 'Planned or considered in advance', 'Boring'], answer: 'Planned or considered in advance' },
+                    { q: 'What is a "substation" in an electrical context?', options: ['A train station', 'A facility that changes voltage to distribute power', 'A small park', 'A phone charger'], answer: 'A facility that changes voltage to distribute power' },
+                    { q: 'The word "coordinated" implies the wave of attacks was ______.', options: ['Random', 'Organized and timed to work together', 'Messy', 'Individual'], answer: 'Organized and timed to work together' },
+                    { q: 'The term "grid" refers to which system?', options: ['Water network', 'Electrical power network', 'Road system', 'Internet server'], answer: 'Electrical power network' },
+                    { q: 'Ukraine is facing a "catastrophic humanitarian ______."', options: ['Success', 'Crisis', 'Victory', 'Deal'], answer: 'Crisis' },
+                    { q: 'Who reported the coordinates of the air assault?', options: ['The Red Cross', 'Russian state media', 'Ukrainian authorities', 'The US Congress'], answer: 'Ukrainian authorities' }
+                ]
+            },
+            'australia-ai-tax': {
+                title: '澳洲 Meta/Google AI 稅',
+                english: `The Australian government announced a world-first legislative framework on Thursday that would require tech giants like Meta and Alphabet (Google) to pay a “training tax” for using Australian-produced content to train their generative AI models. Prime Minister Anthony Albanese stated that the revenue would be used to compensate artists, journalists, and cultural institutions whose intellectual property is being utilized without consent. Tech industry lobbyists warned that the move could lead to the withdrawal of certain AI services, but the government remains firm, arguing that a fair economic model is necessary to ensure the survival of local creative industries in the age of automation.`,
+                chinese: `澳洲政府宣布將對 Meta 與 Google 徵收「AI 內容訓練稅」。澳洲政府週四宣布了一項全球首創的立法框架，要求如 Meta 和 Alphabet（Google）等科技巨頭，在利用澳洲產出的內容訓練其生成式 AI 模型時，必須支付「訓練稅」。總理艾班尼斯（Anthony Albanese）表示，這筆收入將用於補償那些智慧財產權在未經同意的情況下被使用的藝術家、記者和文化機構。科技產業說客警告，此舉可能導致某些 AI 服務撤出澳洲市場，但政府立場堅定，認為在自動化時代，公平的經濟模式對於確保本土創意產業的生存至關重要。`,
+                vocabulary: [
+                    'World-first (adj.): 世界首創的', 'Legislative framework (n.phr.): 立法框架', 'Tech giants (n.phr.): 科技巨頭', 'Training tax (n.phr.): 訓練稅',
+                    'Generative AI (n.phr.): 生成式 AI', 'Revenue (n.): 收入/稅收', 'Compensate (v.): 補償', 'Intellectual property (n.phr.): 智慧財產權',
+                    'Consent (n.): 同意', 'Remuneration (n.): 報酬/酬金', 'Lobbyists (n.): 說客', 'Withdrawal (n.): 撤出/退出',
+                    'Firm (adj.): 堅定的', 'Survival (n.): 生存', 'Creative industries (n.phr.): 創意產業', 'Automation (n.): 自動化',
+                    'Framework (n.): 框架/架構', 'Revenue (n.): 歲入', 'Artist (n.): 藝術家', 'Journalist (n.): 記者',
+                    'Compensation (n.): 補償金', 'Intellectual (adj.): 智力的', 'Property (n.): 財產', 'Utilization (n.): 利用',
+                    'Withdraw (v.): 撤回', 'Automation (n.): 自動化', 'Junta (from earlier context) (n.): 軍政府', 'Compensate (v.): 賠償'
+                ],
+                quiz: [
+                    { q: 'Which two tech giants are specifically named as targets of the AI tax?', options: ['Apple and Microsoft', 'Meta and Alphabet (Google)', 'NVIDIA and Tesla', 'TikTok and Amazon'], answer: 'Meta and Alphabet (Google)' },
+                    { q: 'What activity is being taxed in Australia?', options: ['Selling ads', 'Using local content to train AI models', 'Buying computers', 'Hiring workers'], answer: 'Using local content to train AI models' },
+                    { q: 'Who is the Prime Minister of Australia mentioned?', options: ['Keir Starmer', 'Anthony Albanese', 'Gabriel Boric', 'Pedro Sánchez'], answer: 'Anthony Albanese' },
+                    { q: 'The tax revenue will be used to compensate which group?', options: ['Bankers', 'Artists, journalists, and cultural institutions', 'Factory workers', 'Government officials'], answer: 'Artists, journalists, and cultural institutions' },
+                    { q: 'What warning did tech industry lobbyists give?', options: ['Lower tax rates', 'Withdrawal of certain AI services from Australia', 'Higher salaries', 'New office buildings'], answer: 'Withdrawal of certain AI services from Australia' },
+                    { q: 'Why does the government believe this tax is necessary?', options: ['To pay for the military', 'To ensure the survival of local creative industries', 'To stop the internet', 'To lower oil prices'], answer: 'To ensure the survival of local creative industries' },
+                    { q: 'The content is being used "without ______," according to the PM.', options: ['Cameras', 'Consent', 'Electricity', 'Speed'], answer: 'Consent' },
+                    { q: 'The tax applies to the training of ______ AI models.', options: ['Manual', 'Generative', 'Old', 'Silent'], answer: 'Generative' },
+                    { q: 'What is "intellectual property"?', options: ['A house or land', 'Ownership of creations of the mind', 'A type of money', 'A government office'], answer: 'Ownership of creations of the mind' },
+                    { q: 'What does "firm" mean regarding the government\'s stance?', options: ['Soft and weak', 'Hard and steady/unyielding', 'Moving fast', 'Confused'], answer: 'Hard and steady/unyielding' },
+                    { q: 'The term "automation" refers to which age?', options: ['Stone age', 'Industrial age', 'Age of automation (using machines for labor)', 'Golden age'], answer: 'Age of automation (using machines for labor)' },
+                    { q: 'What is a "lobbyist"?', options: ['A person who tries to influence government decisions', 'A hotel worker', 'A police officer', 'A news reporter'], answer: 'A person who tries to influence government decisions' },
+                    { q: 'The framework is "world-first," meaning ______.', options: ['It exists everywhere', 'It is the first of its kind in the world', 'It is the oldest', 'It is the worst'], answer: 'It is the first of its kind in the world' },
+                    { q: 'What is "remuneration"?', options: ['A gift', 'Payment for work or service', 'A type of tool', 'A meeting'], answer: 'Payment for work or service' },
+                    { q: 'Is the Australian government backing down due to lobbyists?', options: ['Yes', 'No, they remain firm', 'Only in part', 'They are thinking about it'], answer: 'No, they remain firm' }
+                ]
+            },
+            'nvidia-eos-chip': {
+                title: '輝達低功耗 AI 晶片發布',
+                english: `Shares of NVIDIA (NVDA) rose significantly on Thursday after the company unveiled its new “Eos” architecture, a lineup of AI chips designed specifically for low-power edge computing and mobile devices. CEO Jensen Huang stated that the Eos chips deliver twice the performance of previous models while consuming 40% less energy, addressing a major bottleneck in the widespread deployment of AI in consumer electronics. The announcement has bolstered investor confidence in NVIDIA’s ability to dominate the rapidly growing sector of “on-device” AI, keeping the company at the forefront of the global tech rally.`,
+                chinese: `輝達（NVIDIA）股價大漲 4.5%：受惠於新一代「低功耗 AI 晶片」發布。週四輝達股價顯著上漲，此前該公司公佈了其全新的「Eos」架構，這是一系列專為低功耗邊緣運算及行動裝置設計的 AI 晶片。執行長黃仁勳表示，Eos 晶片能提供比前代型號高出兩倍的效能，同時減少 40% 的能耗，解決了 AI 在消費電子產品中廣泛部署的主要瓶頸。這項公告增強了投資者對輝達主導快速成長之「裝置端（on-device）」AI 領域能力的信心，使該公司持續處於全球科技股漲勢的前線。`,
+                vocabulary: [
+                    'Shares (n.): 股票/股份', 'Significantly (adv.): 顯著地', 'Unveiled (v.pt.): 公布/揭幕', 'Architecture (n.): 架構',
+                    'Lineup (n.): 陣容/產品系列', 'Low-power (adj.): 低功耗的', 'Edge computing (n.phr.): 邊緣運算', 'Performance (n.): 效能/性能',
+                    'Consuming (v.ger.): 消耗', 'Bottleneck (n.): 瓶頸', 'Deployment (n.): 部署', 'Consumer electronics (n.phr.): 消費電子產品',
+                    'Bolstered (v.pt.): 增強/支持', 'Investor confidence (n.phr.): 投資者信心', 'Dominate (v.): 主導/統治', 'On-device AI (n.phr.): 裝置端 AI',
+                    'Forefront (n.): 前線/最前沿', 'Tech rally (n.phr.): 科技股漲勢', 'Unprecedented (adj.): 前所未有的', 'Architecture (n.): 建築學/架構',
+                    'Mobile devices (n.phr.): 行動裝置', 'Previous models (n.phr.): 前代型號', 'Energy consumption (n.phr.): 能源消耗', 'Sector (n.): 領域/部門',
+                    'Rapidly growing (adj.phr.): 快速增長的', 'Dominant (adj.): 佔優勢的', 'Rally (n.): (股市) 回升', 'Efficiency (n.): 效率',
+                    'Hardware (n.): 硬體', 'Bottleneck (n.): 障礙/瓶頸', 'Performance (n.): 表現', 'Dominate (v.): 支配'
+                ],
+                quiz: [
+                    { q: 'What is the name of NVIDIA\'s new AI chip architecture?', options: ['Apollo', 'Eos', 'Titan', 'Zeus'], answer: 'Eos' },
+                    { q: 'For which specific purpose are the Eos chips designed?', options: ['Data centers only', 'Low-power edge computing and mobile devices', 'Only for desktop computers', 'Only for military ships'], answer: 'Low-power edge computing and mobile devices' },
+                    { q: 'How much more performance do Eos chips deliver compared to previous models?', options: ['Half', 'Same', 'Twice', 'Five times'], answer: 'Twice' },
+                    { q: 'What is the energy reduction percentage of the Eos chips?', options: ['10%', '25%', '40%', '75%'], answer: '40%' },
+                    { q: 'Who is the CEO of NVIDIA mentioned in the text?', options: ['Elon Musk', 'Jensen Huang', 'Shou Zi Chew', 'Mark Zuckerberg'], answer: 'Jensen Huang' },
+                    { q: 'What major bottleneck does the new chip address?', options: ['High prices', 'Widespread deployment of AI in consumer electronics', 'Small screen sizes', 'Lack of software'], answer: 'Widespread deployment of AI in consumer electronics' },
+                    { q: 'The chips focus on which growing sector of AI?', options: ['Cloud-based AI', 'On-device AI', 'History of AI', 'AI for space only'], answer: 'On-device AI' },
+                    { q: 'How did NVIDIA\'s stock react to the announcement?', options: ['It dropped', 'It rose significantly', 'No change', 'It was suspended'], answer: 'It rose significantly' },
+                    { q: 'The term "at the forefront" means which of the following?', options: ['At the back', 'In the most leading position', 'Hidden from view', 'In the middle'], answer: 'In the most leading position' },
+                    { q: 'What are "consumer electronics"?', options: ['Tractors and cranes', 'Devices like phones, laptops, and smart TVs', 'Military missiles', 'Power plants'], answer: 'Devices like phones, laptops, and smart TVs' },
+                    { q: 'What does "bolstered" mean?', options: ['Weakened', 'Strengthened or supported', 'Ignored', 'Broken'], answer: 'Strengthened or supported' },
+                    { q: 'The word "architecture" in computing refers to what?', options: ['Building design', 'The design and structure of a computer system', 'A type of screen', 'Painting styles'], answer: 'The design and structure of a computer system' },
+                    { q: 'What is "edge computing"?', options: ['Computing done only in the office', 'Computing done near the source of data/device', 'Cutting paper', 'Computing at the end of the day'], answer: 'Computing done near the source of data/device' },
+                    { q: 'NVIDIA is aiming to dominate not just data centers but also ______.', options: ['Farming', 'On-device AI', 'Clothing', 'Water supply'], answer: 'On-device AI' },
+                    { q: 'Which day was the Eos architecture unveiled?', options: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], answer: 'Thursday' }
+                ]
+            }
+        };
+
+        // --- STATE & RENDERING LOGIC ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確答案)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確答案)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
