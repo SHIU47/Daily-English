@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 27 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 27 日：科技突破、貿易風雲與社會覺醒</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for persistent professional English learning. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] TSMC Confirms 2nm Mass Production Ahead of Schedule for Mid-2026 Launch\nTaiwan Semiconductor Manufacturing Co. (TSMC) announced on Monday that its cutting-edge 2-nanometer process technology has reached "higher-than-expected" yield rates during trial production. Consequently, the company is pulling forward its mass production schedule to mid-2026. This announcement has reinforced investor confidence in Taiwan’s technological leadership.\n\n[2] MOTC Issues Lunar New Year Traffic Forecast: Congestion to Peak on Day 3 and 4\nThe Ministry of Transportation and Communications (MOTC) released its official traffic forecast for the upcoming 2026 Lunar New Year holiday. Data suggests that northbound highway traffic will reach its maximum capacity on the third and fourth days of the holiday. To manage the surge, the government will implement high-occupancy vehicle (HOV) restrictions and toll-free periods during midnight hours.\n\n[3] Magnitude 5.0 Earthquake Rattles Pingtung; No Casualties Reported\nA magnitude 5.0 earthquake struck Pingtung County at 2:15 p.m. on Monday, sending tremors across southern Taiwan. While the earthquake triggered automatic safety shutdowns for high-speed rail and certain industrial facilities, the National Fire Agency confirmed no immediate reports of significant structural damage.`,
+                chinese: `【1】台積電證實 2 奈米量產進度提前，預計 2026 年中全面供應\n台積電（TSMC）週一宣布，其尖端的 2 奈米製程技術在試產期間達到了「高於預期」的良率。因此，公司將量產時程提前至 2026 年中。這一消息強化了投資者對台灣技術領先地位的信心，特別是在全球對 AI 專用半導體的需求持續超過目前產業供應能力的情況下。\n\n【2】交通部宣布春節連假國道車流預測，初三至初四將迎最高峰\n交通部（MOTC）週一發布了即將到來的 2026 年春節連假官方交通預測。數據顯示，北向國道車流將在連假第三天（初三）和第四天（初四）達到飽和。為了因應車潮，政府將實施高乘載管制（HOV）及深夜免收費時段。官員促請用路人利用即時交通資訊 App 以避開重大瓶頸路段。\n\n【3】屏東驚傳 5 級地震，無重大災情但引發南部民眾恐慌\n屏東縣於週二下午 2 點 15 分發生規模 5.0 地震，震動傳遍南台灣。雖然地震觸發了高鐵及部分工業設施的自動安全停機，但內政部消防署證實目前尚無重大結構損壞或人員傷亡的報告。中央氣象署提醒公眾在未來 48 小時內保持警覺，留意餘震。`,
+                vocabulary: [
+                    'Mass production (n.phr.): 量產', 'Ahead of schedule (phr.): 提前', 'Cutting-edge (adj.): 尖端的/最先進的', 'Yield rates (n.phr.): 良率',
+                    'Trial production (n.phr.): 試產', 'Reinforced (v.pt.): 強化/鞏固', 'Outpace (v.): 超過/領先', 'Supply capabilities (n.phr.): 供應能力',
+                    'Traffic forecast (n.phr.): 交通預測', 'Congestion (n.): 擁堵', 'Peak (n./v.): 高峰/達到頂峰', 'Maximum capacity (n.phr.): 最大容量/飽和',
+                    'High-occupancy vehicle (HOV) (n.phr.): 高乘載車輛', 'Restrictions (n.): 限制', 'Toll-free periods (n.phr.): 免收費時段', 'Bottlenecks (n.): 瓶頸',
+                    'Rattles (v.): 震動/使驚恐', 'Casualties (n.): 傷亡人數', 'Tremors (n.): 顫動/小地震', 'Safety shutdowns (n.phr.): 安全停機',
+                    'Aftershocks (n.): 餘震', 'Yield (n.): 良率/產量', 'Forecast (v./n.): 預測', 'Implement (v.): 執行/實施',
+                    'Industrial facilities (n.phr.): 工業設施', 'National Fire Agency (n. proper): 消防署', 'Alert (adj./n.): 警覺/警報', 'Vigilance (n.): 警覺',
+                    'Outpace (v.): 發展超過', 'Consolidated (adj.): 綜合的/鞏固的', 'Asymmetric (adj.): 不對稱的', 'Transit (n.): 通過/運輸'
+                ],
+                quiz: [
+                    { q: 'When is TSMC\'s 2nm mass production now scheduled to begin?', options: ['Late 2026', 'Mid-2026', 'Early 2027', 'January 2026'], answer: 'Mid-2026' },
+                    { q: 'What reason did TSMC give for pulling forward the production schedule?', options: ['High demand from Apple', 'Higher-than-expected yield rates', 'New government subsidies', 'Lower electricity costs'], answer: 'Higher-than-expected yield rates' },
+                    { q: 'On which days of the Lunar New Year is traffic expected to peak?', options: ['Day 1 and 2', 'Day 3 and 4', 'Day 5 and 6', 'The last day only'], answer: 'Day 3 and 4' },
+                    { q: 'What measure will be implemented for highway traffic during the holiday?', options: ['Total road closures', 'High-occupancy vehicle (HOV) restrictions', 'Mandatory parking', 'Free gas'], answer: 'High-occupancy vehicle (HOV) restrictions' },
+                    { q: 'What was the magnitude of the earthquake in Pingtung?', options: ['4.5', '5.0', '6.0', '7.0'], answer: '5.0' },
+                    { q: 'Did the Pingtung earthquake result in immediate reports of major structural damage?', options: ['Yes, many buildings collapsed', 'Only in northern Taiwan', 'No immediate reports of significant damage', 'The news did not mention damage'], answer: 'No immediate reports of significant damage' },
+                    { q: 'The MOTC advised travelers to use what to avoid bottlenecks?', options: ['Paper maps', 'Real-time traffic apps', 'Local radio only', 'Taxis only'], answer: 'Real-time traffic apps' },
+                    { q: 'What triggered automatic safety shutdowns after the earthquake?', options: ['The wind', 'The tremor/earthquake', 'A power surge', 'Human error'], answer: 'The tremor/earthquake' },
+                    { q: 'The term "pulling forward" a schedule means ______.', options: ['Delaying it', 'Cancelling it', 'Moving it to an earlier time', 'Publishing it'], answer: 'Moving it to an earlier time' },
+                    { q: 'The word "yield" in semiconductors refers to the percentage of ______.', options: ['Electricity used', 'Usable or functional chips', 'Workers on strike', 'Money invested'], answer: 'Usable or functional chips' },
+                    { q: 'Which agency confirmed the lack of casualties in Pingtung?', options: ['The National Fire Agency', 'The Ministry of Finance', 'The Labor Union', 'NVIDIA'], answer: 'The National Fire Agency' },
+                    { q: 'HOV restrictions stand for what?', options: ['Heavy Oil Vehicle', 'High-Occupancy Vehicle', 'Highway Only Venture', 'Hazardous Object Vessel'], answer: 'High-Occupancy Vehicle' }
+                ]
+            },
+            'trump-canada-tariffs': {
+                title: '川普威脅對加徵收 100% 關稅',
+                english: `President Donald Trump sent shockwaves through the North American markets on Monday by formally threatening to impose 100% tariffs on all Canadian imports. The ultimatum follows Canada’s decision to lower duties on Chinese electric vehicles and agricultural products, a move Trump characterized as an "unacceptable betrayal" of the US-led economic order. While Canadian Prime Minister Justin Trudeau argued the deal was necessary for agricultural survival, the White House maintained that Canada is "subsidizing our enemies." This potential trade war has sent the Canadian dollar to its lowest level in years and raised fears of a permanent fracture in the USMCA trade agreement, potentially disrupting critical automotive and energy supply chains across the continent.`,
+                chinese: `川普正式威脅對加拿大課徵 100% 關稅，因其與中國達成農業與電動車協議。美國總統川普週一正式威脅要對所有加拿大進口商品徵收 100% 的關稅，這給北美市場帶來了巨大衝擊。這一最後通牒是在加拿大決定降低對中國電動車及農產品的關稅後發出的，川普將此舉描述為對美國領導之經濟秩序「不可接受的背叛」。雖然加拿大總理杜魯道辯稱該協議對農業生存至關重要，但白宮堅稱加拿大是在「補貼我們的敵人」。這場潛在的貿易戰已使加幣跌至多年來的最低點，並引發了人們對《美墨加協定》（USMCA）永久破裂的擔憂，這可能擾亂整個大陸關鍵的汽車和能源供應鏈。`,
+                vocabulary: [
+                    'Shockwaves (n.): 衝擊波/震撼', 'Impose (v.): 徵收/強加', 'Tariffs (n.): 關稅', 'Ultimatum (n.): 最後通牒',
+                    'Duties (n.): 關稅/稅', 'Betrayal (n.): 背叛', 'Economic order (n.phr.): 經濟秩序', 'Agricultural survival (n.phr.): 農業生存',
+                    'Subsidizing (v.ger.): 補貼', 'Potential trade war (n.phr.): 潛在貿易戰', 'Canadian dollar (n.): 加幣', 'Lowest level (n.phr.): 最低點',
+                    'Permanent fracture (n.phr.): 永久性破裂', 'USMCA (n. proper): 美墨加協定', 'Disrupting (v.ger.): 擾亂/中斷', 'Supply chains (n.phr.): 供應鏈',
+                    'Ultimatum (n.): 最後通牒', 'Betrayal (n.): 背叛行為', 'Subsidize (v.): 資助/補貼', 'Fracture (n./v.): 斷裂/破裂',
+                    'Strategic (adj.): 戰略的', 'Conflict (n.): 衝突', 'Sovereignty (n.): 主權', 'Retaliation (n.): 報復',
+                    'Exemption (n.): 豁免', 'Unacceptable (adj.): 不可接受的', 'Characterized (v.pp.): 描述/定性', 'Enemies (n.): 敵人'
+                ],
+                quiz: [
+                    { q: 'What percentage of tariff did Trump threaten to impose on Canada?', options: ['10%', '25%', '50%', '100%'], answer: '100%' },
+                    { q: 'What triggered Trump\'s ultimatum to Canada?', options: ['Canada\'s decision to lower duties on Chinese products', 'A border dispute', 'A disagreement over climate policy', 'The capture of a US citizen'], answer: 'Canada\'s decision to lower duties on Chinese products' },
+                    { q: 'How did Trump characterize Canada\'s trade deal with China?', options: ['A good partnership', 'An "unacceptable betrayal"', 'A necessary step', 'A technical error'], answer: 'An "unacceptable betrayal"' },
+                    { q: 'What specific products did Canada lower duties on?', options: ['Smartphones and toys', 'Electric vehicles and agricultural products', 'Oil and gas', 'Lumber and steel'], answer: 'Electric vehicles and agricultural products' },
+                    { q: 'How has the Canadian dollar reacted to this threat?', options: ['It reached an all-time high', 'It remained stable', 'It fell to its lowest level in years', 'It became more valuable than the US dollar'], answer: 'It fell to its lowest level in years' },
+                    { q: 'The term "USMCA" refers to a trade agreement between which three nations?', options: ['US, Canada, and Mexico', 'US, China, and Australia', 'US, UK, and Canada', 'Canada, Mexico, and China'], answer: 'US, Canada, and Mexico' },
+                    { q: 'What does "subsidizing" mean in the context of the White House\'s claim?', options: ['Fighting against', 'Providing financial support to', 'Ignoring', 'Taxing'], answer: 'Providing financial support to' },
+                    { q: 'Which industries are most at risk of disruption across the continent?', options: ['Farming and Fishing', 'Automotive and energy', 'Retail and Fashion', 'Education and Medicine'], answer: 'Automotive and energy' },
+                    { q: 'Who is the Prime Minister of Canada?', options: ['Justin Trudeau', 'Emmanuel Macron', 'Keir Starmer', 'Pedro Sánchez'], answer: 'Justin Trudeau' },
+                    { q: 'What is an "ultimatum"?', options: ['A friendly gift', 'A final demand with a threat of action', 'A secret meeting', 'A new law'], answer: 'A final demand with a threat of action' },
+                    { q: 'The word "fracture" implies what for the trade agreement?', options: ['Improvement', 'Breaking or splitting', 'Strengthening', 'Renewing'], answer: 'Breaking or splitting' },
+                    { q: 'What does "betrayal" mean?', options: ['Loyalty', 'An act of breaking trust', 'A type of tax', 'Success'], answer: 'An act of breaking trust' }
+                ]
+            },
+            'us-canada-storm': {
+                title: '美加邊境因冰雪風暴關閉',
+                english: `The catastrophic winter storm that has gripped North America for three days worsened on Monday, forcing the closure of several major border crossings between the U.S. and Canada due to extreme icing and whiteout conditions. Over 2 million people are currently without power across the Midwest and Ontario, with temperatures plummeting to record lows. Emergency services in Minneapolis and Toronto are struggling to reach stranded motorists, and officials warn that the recovery effort could take weeks as more freezing rain is forecasted for the Northeast corridor by Tuesday morning.`,
+                chinese: `世紀冰雪風暴造成美、加邊境關閉，逾 200 萬人斷電。一場橫跨北美三天的災難性冬季風暴在週一進一步惡化，由於極端結冰與「白矇天（whiteout）」狀況，被迫關閉了美加之間的數個主要邊境口岸。目前美國中西部及加拿大安大略省有超過 200 萬人斷電，氣溫驟降至歷史低點。明尼阿波利斯與多倫多的緊急救援部門正努力營救受困的駕駛人，官員警告，隨著週二清晨東北走廊預計將有更多凍雨，復原工作可能需要數週時間。`,
+                vocabulary: [
+                    'Catastrophic (adj.): 災難性的', 'Grip (v.): 籠罩/緊握', 'Worsened (v.pt.): 惡化', 'Border crossings (n.phr.): 邊境口岸',
+                    'Extreme icing (n.phr.): 極端結冰', 'Whiteout conditions (n.phr.): 白矇天狀況 (能見度極低)', 'Midwest (n. proper): (美國) 中西部', 'Ontario (n. proper): (加拿大) 安大略省',
+                    'Record lows (n.phr.): 歷史低點', 'Plummeting (adj.): 暴跌的', 'Emergency services (n.phr.): 緊急救援部門', 'Stranded motorists (n.phr.): 受困的駕駛',
+                    'Recovery effort (n.phr.): 復原工作', 'Freezing rain (n.phr.): 凍雨', 'Northeast corridor (n. proper): 東北走廊', 'Paralyzes (v.): 使癱瘓',
+                    'Catastrophic (adj.): 大災難的', 'Worsen (v.): 變糟', 'Closure (n.): 關閉', 'Conditions (n.): 條件/狀況',
+                    'Struggle (v.): 掙扎', 'Motorist (n.): 汽車駕駛', 'Forecast (v.pp.): 預測', 'Corridor (n.): 走廊'
+                ],
+                quiz: [
+                    { q: 'How long has the winter storm gripped North America?', options: ['One day', 'Two days', 'Three days', 'One week'], answer: 'Three days' },
+                    { q: 'Why were the border crossings between the US and Canada closed?', options: ['Protests', 'Extreme icing and whiteout conditions', 'Tariff disputes', 'Political elections'], answer: 'Extreme icing and whiteout conditions' },
+                    { q: 'How many people are currently without power?', options: ['10,000', '100,000', 'Over 2 million', '10 million'], answer: 'Over 2 million' },
+                    { q: 'Which Canadian province was specifically mentioned as having power outages?', options: ['Quebec', 'British Columbia', 'Ontario', 'Alberta'], answer: 'Ontario' },
+                    { q: 'Which two cities\' emergency services are mentioned as struggling?', options: ['New York and London', 'Minneapolis and Toronto', 'Los Angeles and Vancouver', 'Chicago and Montreal'], answer: 'Minneapolis and Toronto' },
+                    { q: 'What is a "whiteout condition"?', options: ['A sunny day with clouds', 'A situation where visibility is near zero due to snow', 'A type of clean energy', 'A political protest'], answer: 'A situation where visibility is near zero due to snow' },
+                    { q: 'Officials warn that recovery could take how long?', options: ['A few hours', 'One day', 'Weeks', 'Months'], answer: 'Weeks' },
+                    { q: 'What kind of rain is forecasted for the Northeast corridor on Tuesday?', options: ['Tropical rain', 'Freezing rain', 'Acid rain', 'Light drizzle'], answer: 'Freezing rain' },
+                    { q: 'The term "catastrophic" means which of the following?', options: ['Minor and unimportant', 'Extremely unfortunate or disastrous', 'Planned and successful', 'Fast and loud'], answer: 'Extremely unfortunate or disastrous' },
+                    { q: 'What does "stranded" mean?', options: ['Moving fast', 'Left in a helpless position', 'Rich and famous', 'Underground'], answer: 'Left in a helpless position' },
+                    { q: 'The word "plummeting" describes temperatures that are ______.', options: ['Rising quickly', 'Dropping steeply and suddenly', 'Staying exactly the same', 'Comfortable'], answer: 'Dropping steeply and suddenly' },
+                    { q: 'The "Midwest" refers to a region in which country?', options: ['Canada', 'USA', 'Mexico', 'UK'], answer: 'USA' }
+                ]
+            },
+            'nvidia-sovereign-ai': {
+                title: '輝達將發布「主權 AI」計畫',
+                english: `NVIDIA CEO Jensen Huang announced on Monday that the company will launch a new initiative in February aimed at helping "sovereign nations" build their own independent AI infrastructure. The program will provide specialized hardware and software packages to countries looking to reduce their reliance on U.S. or Chinese cloud providers for critical government and defense AI applications. Industry analysts suggest this move is a strategic attempt to diversify NVIDIA’s revenue streams while navigating increasingly complex export controls and the growing global demand for "digital sovereignty."`,
+                chinese: `輝達（NVIDIA）預計二月發布「主權 AI」計畫，協助中等國家建立獨立算力。輝達執行長黃仁勳週一宣布，公司將於二月推出一項新倡議，旨在幫助「主權國家」建立自己的獨立 AI 基礎設施。該計畫將為希望減少在關鍵政府和國防 AI 應用上依賴美國或中國雲端服務商的國家，提供專門的硬體和軟體包。產業分析師指出，此舉是輝達多元化營收來源的策略性嘗試，同時也能應對日益複雜的出口管制以及全球對「數位主權」不斷增長的需求。`,
+                vocabulary: [
+                    'Sovereign AI (n.phr.): 主權 AI', 'Initiative (n.): 倡議/計畫', 'Independent (adj.): 獨立的', 'Infrastructure (n.): 基礎設施',
+                    'Specialized (adj.): 專門的', 'Software packages (n.phr.): 軟體包', 'Reliance (n.): 依賴', 'Cloud providers (n.phr.): 雲端供應商',
+                    'Critical (adj.): 關鍵的/至關重要的', 'Defense applications (n.phr.): 國防應用', 'Strategic attempt (n.phr.): 策略性嘗試', 'Diversify (v.): 多元化',
+                    'Revenue streams (n.phr.): 營收來源', 'Navigating (v.ger.): 應對/導航', 'Export controls (n.phr.): 出口管制', 'Digital sovereignty (n.phr.): 數位主權',
+                    'Middle-power nations (n.phr.): 中等權力國家', 'Sovereign (adj.): 有主權的', 'Hardware (n.): 硬體', 'Package (n.): 套件',
+                    'Reliance on (phr.): 對...的依賴', 'Application (n.): 應用/應用程式', 'Complexity (n.): 複雜性', 'Sovereignty (n.): 主權'
+                ],
+                quiz: [
+                    { q: 'Who is the CEO of NVIDIA?', options: ['Elon Musk', 'Jensen Huang', 'Shou Zi Chew', 'Bill Gates'], answer: 'Jensen Huang' },
+                    { q: 'What is the name of the new NVIDIA initiative?', options: ['Global AI', 'Sovereign AI', 'Cloud AI', 'Alliance AI'], answer: 'Sovereign AI' },
+                    { q: 'When is the NVIDIA initiative set to launch?', options: ['Immediately', 'January', 'February', 'December'], answer: 'February' },
+                    { q: 'What is the main goal of "Sovereign AI"?', options: ['To build bigger data centers in the US', 'To help nations build independent AI infrastructure', 'To lower the price of gaming cards', 'To replace the internet'], answer: 'To help nations build independent AI infrastructure' },
+                    { q: 'Why do countries want independent AI infrastructure?', options: ['To increase taxes', 'To reduce reliance on U.S. or Chinese cloud providers', 'To store more photos', 'To play games faster'], answer: 'To reduce reliance on U.S. or Chinese cloud providers' },
+                    { q: 'In which sectors is the initiative particularly helpful for countries?', options: ['Farming and Arts', 'Government and defense', 'Cooking and Sports', 'Music and Fashion'], answer: 'Government and defense' },
+                    { q: 'NVIDIA wants to "diversify" its revenue streams. What does "diversify" mean?', options: ['To keep only one source', 'To enlarge a single stream', 'To branch out or create more varied sources', 'To lose money'], answer: 'To branch out or create more varied sources' },
+                    { q: 'What global demand is growing according to the analysts?', options: ['Demand for "digital sovereignty"', 'Demand for oil', 'Demand for manual labor', 'Demand for older computers'], answer: 'Demand for "digital sovereignty"' },
+                    { q: 'What kind of "controls" is NVIDIA navigating?', options: ['Traffic controls', 'Export controls', 'Remote controls', 'Temperature controls'], answer: 'Export controls' },
+                    { q: 'What does "sovereign" mean in this context?', options: ['Very expensive', 'Relating to a nation with its own independent power', 'A type of coin', 'A high building'], answer: 'Relating to a nation with its own independent power' },
+                    { q: 'NVIDIA will provide "packages" of ______.', options: ['Food and water', 'Hardware and software', 'Stocks and bonds', 'Clothes and shoes'], answer: 'Hardware and software' },
+                    { q: 'The move is seen as a "strategic ______."', options: ['Mistake', 'Attempt', 'Failure', 'Celebration'], answer: 'Attempt' }
+                ]
+            },
+            'barcelona-strike': {
+                title: '巴塞隆納大罷工：反過度觀光',
+                english: `Massive Strike Paralyzes Barcelona as Residents Protest Overtourism and Housing Costs\nTens of thousands of workers and residents in Barcelona went on strike on Monday to protest the negative impacts of "overtourism" on the city’s housing market. Protesters blocked major tourist routes and demonstrated outside the city hall, demanding a total ban on short-term rentals and a cap on cruise ship arrivals. The strike highlights the growing tension in European cities where local residents are being priced out of their neighborhoods, forcing governments to consider radical new regulations on the tourism industry.`,
+                chinese: `西班牙巴塞隆納發生大規模罷工，抗議過度觀光與住房成本飆升。週一，巴塞隆納數萬名工人和居民發起罷工，抗議「過度觀光（overtourism）」對該市住房市場產生的負面影響。抗議者封鎖了主要的旅遊路線，並在市政廳外示威，要求全面禁止短期租賃並對郵輪到港人數設定上限。這場罷工凸顯了歐洲城市日益緊張的局勢，當地居民正因高昂的生活成本而被排擠出原有的社區，這迫使各國政府考慮對觀光產業實施徹底的新規範。`,
+                vocabulary: [
+                    'Massive strike (n.phr.): 大規模罷工', 'Paralyzes (v.): 使癱瘓', 'Residents (n.): 居民', 'Protest (v./n.): 抗議',
+                    'Overtourism (n.): 過度觀光', 'Housing costs (n.phr.): 住房成本', 'Negative impacts (n.phr.): 負面影響', 'Housing market (n.phr.): 住房市場',
+                    'Tourist routes (n.phr.): 旅遊路線', 'City hall (n. proper): 市政廳', 'Short-term rentals (n.phr.): 短期租賃', 'Cap (n.): 上限',
+                    'Cruise ship (n.phr.): 郵輪', 'Arrivals (n.): 抵達人數', 'Tension (n.): 緊張局勢', 'Priced out (phr.v.): (因價格太高而) 被擠出/買不起',
+                    'Neighborhoods (n.): 社區', 'Radical (adj.): 徹底的/激進的', 'Regulations (n.): 規章/規範', 'Tourism industry (n.phr.): 觀光產業',
+                    'Protester (n.): 抗議者', 'Paralyze (v.): 使痲痹', 'Housing (n.): 住房', 'Rental (n.): 出租/租金'
+                ],
+                quiz: [
+                    { q: 'In which city did the massive strike occur?', options: ['Madrid', 'Barcelona', 'Paris', 'London'], answer: 'Barcelona' },
+                    { q: 'What is the primary reason for the protest in Barcelona?', options: ['Bad weather', 'Overtourism and high housing costs', 'Lack of jobs', 'Low quality of food'], answer: 'Overtourism and high housing costs' },
+                    { q: 'What specific demand did the protesters make regarding rentals?', options: ['Lower tax on rentals', 'A total ban on short-term rentals', 'More rentals for tourists', 'Rentals should be free'], answer: 'A total ban on short-term rentals' },
+                    { q: 'What else did they want a "cap" on?', options: ['The price of coffee', 'Cruise ship arrivals', 'The number of cars', 'The height of buildings'], answer: 'Cruise ship arrivals' },
+                    { q: 'Where did the protesters demonstrate?', options: ['At the airport', 'Outside the city hall', 'In a local forest', 'On the beach only'], answer: 'Outside the city hall' },
+                    { q: 'What has happened to local residents in their neighborhoods?', options: ['They have become richer', 'They are being "priced out"', 'They all moved to the US', 'They are ignoring the tourists'], answer: 'Being "priced out"' },
+                    { q: 'The strike highlights "growing tension" in which continent?', options: ['Asia', 'Africa', 'Europe', 'South America'], answer: 'Europe' },
+                    { q: 'Governments are considering "radical new ______" on tourism.', options: ['Gifts', 'Tours', 'Regulations', 'Prices'], answer: 'Regulations' },
+                    { q: 'The term "overtourism" refers to ______.', options: ['Not enough tourists', 'Too many tourists causing harm to a destination', 'Tourists who stay too long', 'High-quality tourism'], answer: 'Too many tourists causing harm to a destination' },
+                    { q: 'What does "priced out" mean?', options: ['Getting a discount', 'Being unable to afford something that was once affordable', 'Selling something at a high price', 'Finding a lower price'], answer: 'Being unable to afford something that was once affordable' },
+                    { q: 'The word "paralyzes" in this news means ______.', options: ['Heals', 'Brings to a complete stop or standstill', 'Starts quickly', 'Makes louder'], answer: 'Brings to a complete stop or standstill' },
+                    { q: 'The protesters blocked "major tourist ______."', options: ['Routes', 'Hotels', 'Posters', 'Menus'], answer: 'Routes' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        // --- CORE RENDERING ---
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (quizResult[topicId] === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    const qIdxText = element.closest('.mb-8').querySelector('p').innerText;
+                    const match = qIdxText.match(/Q(\d+):/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]) - 1;
+                        const opt = element.innerText.substring(3).replace(' (正確)', '').trim();
+                        element.classList.remove('selected');
+                        if (currentQuizState[qIdx] === opt) element.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
