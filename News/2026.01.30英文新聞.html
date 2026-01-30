@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 1 月 30 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 1 月 30 日：台美戰略備忘錄、中東局勢轉折與降息定局</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for daily English proficiency. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Taiwan and U.S. Sign Supply Chain MOU; TSMC Arizona Plants Join Strategic Priority List\nIn a move that further intertwines the national security of both nations, Taipei and Washington officially signed a "Supply Chain Security Memorandum" on Thursday. The agreement formally designates TSMC’s Arizona facilities as "strategic priority suppliers" for U.S. defense and critical infrastructure. Premier Cho Jung-tai stated that this pact solidifies the "Silicon Shield" on American soil.\n\n[2] President Lai Visits TASA; Declares 2026 as Year One for Taiwan’s LEO Satellite Commercialization\nPresident Lai Ching-te visited the Taiwan Space Agency (TASA) on Thursday, emphasizing that the "Taiwan Starlink" project has entered its final testing phase. Lai announced that the government will facilitate the first batch of commercial LEO satellite launches by late 2026, aiming to ensure Taiwan’s communication autonomy.\n\n[3] Lunar New Year Travel Begins; MOTC Predicts Early Peak for Northbound Traffic\nAs the Lunar New Year holiday officially commenced on Thursday, major highways in Taiwan saw a 15% increase in vehicle volume. The Ministry of Transportation and Communications (MOTC) issued an updated forecast, warning that the peak for northbound traffic might occur as early as Feb 1st.`,
+                chinese: `【1】台美簽署「供應鏈安全備忘錄」：台積電 Arizona 廠正式納入美軍戰略優先供應名單\n台北與華盛頓週四正式簽署了《供應鏈安全備忘錄》，此舉進一步交織了兩國的國家安全。該協議正式將台積電（TSMC）亞利桑那州廠列為美國國防與關鍵基礎設施的「戰略優先供應商」。行政院長卓榮泰表示，這項協議鞏固了美國領土上的「矽盾」，確保台灣的技術實力繼續成為民主同盟防禦架構的支柱。\n\n【2】賴總統視察「國家太空中心」：宣布 2026 年為台灣低軌衛星商業化元年\n賴清德總統週四視察國家太空中心（TASA），強調「台版星鏈」計畫已進入最後測試階段。賴總統宣布，政府將於 2026 年底前促成首批商業低軌衛星（LEO）的發射，旨在確保台灣的通訊自主，並擴大台灣在全球太空供應鏈中的足跡。\n\n【3】春節連假首日國道湧現車潮，交通部預估北返高峰將提前至初二\n隨著春節連假於週四正式開始，台灣主要國道車流量較去年成長了 15%。交通部（MOTC）發布了更新後的預測，警告北向交通高峰可能會提前至連假第二天（2月1日，農曆初二）。為了緩解擁堵，政府已實施彈性收費並增加了高鐵班次。`,
+                vocabulary: [
+                    'Intertwines (v.): 交織/纏繞', 'MOU (Memorandum of Understanding) (n.phr.): 備忘錄', 'Designates (v.): 指定/任命', 'Strategic priority (n.phr.): 戰略優先',
+                    'Critical infrastructure (n.phr.): 關鍵基礎設施', 'Solidifies (v.): 鞏固', 'Silicon Shield (n. proper): 矽盾', 'Prowess (n.): 實力/高超技術',
+                    'Backbone (n.): 支柱/脊樑', 'TASA (Taiwan Space Agency) (n. proper): 國家太空中心', 'LEO (Low Earth Orbit) (adj./n.): 低地球軌道', 'Commercialization (n.): 商業化',
+                    'Autonomy (n.): 自主權', 'Footprint (n.): 足跡/影響範圍', 'Ground station (n.phr.): 地面站', 'Commenced (v.pt.): 開始',
+                    'Northbound (adj./adv.): 北向的', 'Mitigate (v.): 緩解/減輕', 'Congestion (n.): 擁堵', 'Flexible tolling (n.phr.): 彈性收費',
+                    'Frequency (n.): 頻率', 'Facilitate (v.): 促成/使便利', 'Initiative (n.): 倡議/計畫', 'Outpost (n.): 前哨',
+                    'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略的', 'Infrastructure (n.): 基礎建設', 'Expansion (n.): 擴張',
+                    'Resilience (n.): 韌性', 'Unprecedented (adj.): 史無前例的', 'Capacity (n.): 容量/生產力', 'Deployment (n.): 部署'
+                ],
+                quiz: [
+                    { q: 'What is the specific status granted to TSMC’s Arizona plants in the new MOU?', options: ['Commercial partner', 'Strategic priority supplier', 'Temporary consultant', 'Experimental facility'], answer: 'Strategic priority supplier' },
+                    { q: 'Who signed the "Supply Chain Security Memorandum" on Thursday?', options: ['Taipei and Tokyo', 'Taipei and Washington', 'TSMC and Intel', 'TASA and NASA'], answer: 'Taipei and Washington' },
+                    { q: 'Which year was declared as the "Year One" for Taiwan’s LEO satellite commercialization?', options: ['2025', '2026', '2027', '2030'], answer: '2026' },
+                    { q: 'What is the goal of launching the first batch of commercial LEO satellites?', options: ['To explore Mars', 'To ensure communication autonomy', 'To sell weather data', 'To track ocean currents'], answer: 'To ensure communication autonomy' },
+                    { q: 'By how much did highway vehicle volume increase on the first day of LNY?', options: ['5%', '10%', '15%', '50%'], answer: '15%' },
+                    { q: 'When is the updated peak for northbound traffic predicted by the MOTC?', options: ['Jan 30', 'Feb 1 (Day 2)', 'Feb 8', 'End of the month'], answer: 'Feb 1 (Day 2)' },
+                    { q: 'What measure is being used to mitigate highway congestion?', options: ['Closing all roads', 'Free gas', 'Flexible tolling', 'Banning trucks only'], answer: 'Flexible tolling' },
+                    { q: 'TASA stands for what organization?', options: ['Taiwan Aviation and Space Authority', 'Taiwan Space Agency', 'Taipei Science Association', 'Technology and Space Alliance'], answer: 'Taiwan Space Agency' },
+                    { q: 'The term "Silicon Shield" refers to Taiwan\'s dominance in ______.', options: ['Agriculture', 'Textiles', 'Semiconductors', 'Aerospace'], answer: 'Semiconductors' },
+                    { q: 'What does "autonomy" mean in the context of communications?', options: ['Dependency', 'The state of being self-governing or independent', 'A type of satellite', 'High cost'], answer: 'The state of being self-governing or independent' },
+                    { q: 'The MOU "formally designates" the plants, meaning it ______.', options: ['Hides them', 'Officially names them for a purpose', 'Closes them', 'Sells them'], answer: 'Officially names them for a purpose' },
+                    { q: 'The "Taiwan Starlink" project is related to which technology?', options: ['Deep sea cables', 'Low Earth Orbit (LEO) satellites', '5G towers', 'Fiber optics'], answer: 'Low Earth Orbit (LEO) satellites' },
+                    { q: 'The LNY holiday "commenced" on Thursday, meaning it ______.', options: ['Ended', 'Began', 'Was delayed', 'Was cancelled'], answer: 'Began' },
+                    { q: 'Which leader visited TASA on Thursday?', options: ['Premier Cho', 'President Lai', 'Mayor Chiang', 'Elon Musk'], answer: 'President Lai' },
+                    { q: 'The MOU further "intertwines" national security, meaning it ______.', options: ['Separates', 'Connects or twists together', 'Weakens', 'Ignores'], answer: 'Connects or twists together' }
+                ]
+            },
+            'iran-collapse': {
+                title: '中東地緣巨變：川普承認伊朗臨時政府',
+                english: `In a seismic shift for Middle Eastern geopolitics, President Donald Trump officially recognized the "Provisional Council for National Salvation" based in Tabriz as the legitimate representative of the Iranian people on Thursday. The announcement followed reports of entire regular army divisions in Tehran surrendering their headquarters to protesters. The Revolutionary Guard (IRGC) is reportedly retreating to fortified bases in the south. This move effectively ends decades of diplomatic isolation for the Iranian opposition and places the current regime on the brink of total collapse. Global oil markets reacted with extreme volatility, as analysts ponder the stability of a post-Islamic Republic Iran.`,
+                chinese: `川普正式承認伊朗「臨時政府」，德黑蘭示威群組宣佈軍隊大規模倒戈。中東地緣政治發生地震般的轉變，美國總統川普週四正式承認總部位於大不里士（Tabriz）的「國家救國臨時委員會」為伊朗人民的合法代表。在此之前，有報導稱德黑蘭的整個正規軍師團向抗議者交出了總部。據報導，革命衛隊（IRGC）正退守至南部的強化基地。此舉有效地結束了伊朗反對派數十年的外交孤立，並使現政權處於全面崩潰的邊緣。全球石油市場反應劇烈波動，分析師正思考後伊斯蘭共和國時代伊朗的穩定性。`,
+                vocabulary: [
+                    'Seismic shift (n.phr.): 地震般的轉變/重大變化', 'Geopolitics (n.): 地緣政治', 'Recognized (v.pt.): 承認/認可', 'Provisional Council (n.phr.): 臨時委員會',
+                    'Salvation (n.): 拯救/救贖', 'Legitimate (adj.): 合法的/正統的', 'Regular army (n.phr.): 正規軍', 'Divisions (n.): (軍事) 師團',
+                    'Surrendering (v.ger.): 投降/交出', 'Headquarters (n.): 總部', 'Fortified (adj.): 強化防禦的/加固的', 'Brink (n.): 邊緣',
+                    'Total collapse (n.phr.): 全面崩潰', 'Opposition (n.): 反對派', 'Volatility (n.): 波動', 'Post-Islamic Republic (adj.): 後伊斯蘭共和國的',
+                    'Retreating (v.ger.): 退卻/撤退', 'Cripple (v.): 使癱瘓/削弱', 'Provisional (adj.): 臨時的', 'Diplomatic isolation (n.phr.): 外交孤立',
+                    'Representative (n.): 代表', 'Regime (n.): 政權', 'Defection (n.): 叛逃/倒戈', 'Council (n.): 委員會',
+                    'Recognition (n.): 承認', 'Instability (n.): 不穩定', 'Tensions (n.): 緊張局勢', 'Strategic (adj.): 戰略的',
+                    'Fortified (adj.): 築堡的', 'Ponder (v.): 思考', 'Decades (n.): 數十年', 'Announced (v.pp.): 宣布的'
+                ],
+                quiz: [
+                    { q: 'Where is the newly recognized "Provisional Council for National Salvation" based?', options: ['Tehran', 'Tabriz', 'Baghdad', 'Dubai'], answer: 'Tabriz' },
+                    { q: 'Who officially recognized the council as the legitimate representative of Iran?', options: ['The UN', 'President Donald Trump', 'The UK Prime Minister', 'The French President'], answer: 'President Donald Trump' },
+                    { q: 'What did the regular army divisions in Tehran reportedly do?', options: ['Launched a counter-attack', 'Surrendered their headquarters to protesters', 'Fled to Russia', 'Joined the IRGC'], answer: 'Surrendered their headquarters to protesters' },
+                    { q: 'Where is the Revolutionary Guard (IRGC) reportedly retreating to?', options: ['The North', 'Fortified bases in the south', 'Underground tunnels', 'The US border'], answer: 'Fortified bases in the south' },
+                    { q: 'The move ends how many years of diplomatic isolation for the Iranian opposition?', options: ['5 years', '10 years', 'Decades', 'One century'], answer: 'Decades' },
+                    { q: 'The current regime is described as being on the "______" of total collapse.', options: ['Center', 'Brink', 'Peak', 'Distance'], answer: 'Brink' },
+                    { q: 'How did global oil markets react to the announcement?', options: ['They remained stable', 'Extreme volatility', 'Prices dropped to zero', 'Trading was suspended'], answer: 'Extreme volatility' },
+                    { q: 'The term "seismic shift" refers to what kind of change?', options: ['Small and slow', 'Very large and sudden', 'Scientific only', 'Related to weather'], answer: 'Very large and sudden' },
+                    { q: 'What does "provisional" mean?', options: ['Permanent', 'Temporary', 'Professional', 'Secret'], answer: 'Temporary' },
+                    { q: 'The word "legitimate" is a synonym for ______.', options: ['Illegal', 'Lawful/Official', 'Hidden', 'Brave'], answer: 'Lawful/Official' },
+                    { q: 'What is the "IRGC"?', options: ['International Red Global Committee', 'Iranian Revolutionary Guard Corps', 'Independent Russian Ground Command', 'Internal Reform Group Council'], answer: 'Iranian Revolutionary Guard Corps' },
+                    { q: 'What does "retreating" mean?', options: ['Moving forward', 'Moving back or away from a position', 'Staying still', 'Winning'], answer: 'Moving back or away from a position' },
+                    { q: 'The opposition has been in diplomatic "______" for decades.', options: ['Unity', 'Isolation', 'Wealth', 'Power'], answer: 'Isolation' },
+                    { q: 'Analysts are "pondering" the future, which means they are ______.', options: ['Ignoring it', 'Thinking carefully about it', 'Buying it', 'Building it'], answer: 'Thinking carefully about it' },
+                    { q: 'The term "fortified" means ______.', options: ['Weakened', 'Strengthened against attack', 'Beautifully decorated', 'Old and broken'], answer: 'Strengthened against attack' }
+                ]
+            },
+            'fed-hassett': {
+                title: '聯準會哈塞特演說：增長優先政策確立',
+                english: `Acting Federal Reserve Chairman Kevin Hassett delivered his first major policy address on Thursday at the Economic Club of New York. Hassett firmly defended the Trump administration’s push for lower interest rates, arguing that "inflation is no longer the primary threat; economic stagnation is." He signaled that a 50-basis-point rate cut in March is essential to support the ongoing domestic industrial revival. While equity markets rallied on the news, traditional economists expressed concern that this "dovish" pivot could reignite price volatility. Hassett emphasized that the central bank’s independence must be balanced with a commitment to national economic expansion.`,
+                chinese: `聯準會新任主席哈塞特首場演說：捍衛「增長型」貨幣政策，三月降息已成定局。代理聯準會（Fed）主席凱文·哈塞特週四在紐約經濟俱樂部發表了其首場重大政策演說。哈塞特堅決捍衛川普政府對調降利率的推動，辯稱「通膨不再是主要威脅，經濟停滯才是」。他發出訊號表示，三月降息 50 個基點（兩碼）對於支持正在進行的國內工業復興至關重要。雖然股市受此消息激勵上漲，但傳統經濟學家表示擔憂，認為這種「鴿派」轉向可能會重新引發物價波動。哈塞特強調，央行的獨立性必須與對國家經濟擴張的承諾之間取得平衡。`,
+                vocabulary: [
+                    'Acting Chairman (n.phr.): 代理主席', 'Policy address (n.phr.): 政策演說', 'Economic Club (n. proper): 經濟俱樂部', 'Interest rates (n.phr.): 利率',
+                    'Inflation (n.): 通膨/通貨膨脹', 'Primary threat (n.phr.): 主要威脅', 'Economic stagnation (n.phr.): 經濟停滯', 'Basis-point (n.): 基點 (0.01%)',
+                    'Essential (adj.): 必要的/至關重要的', 'Industrial revival (n.phr.): 工業復興', 'Equity markets (n.phr.): 股市/股票市場', 'Rallied (v.pt.): (股市) 回升/上漲',
+                    'Dovish (adj.): 鴿派的 (支持低利率)', 'Pivot (n./v.): 轉向/軸心', 'Reignite (v.): 重新引發/重燃', 'Price volatility (n.phr.): 物價波動',
+                    'Central bank (n.phr.): 中央銀行', 'Independence (n.): 獨立性', 'Expansion (n.): 擴張', 'Commitment (n.): 承諾',
+                    'Address (n.): 演說/致詞', 'Defend (v.): 捍衛/辯護', 'Stagnation (n.): 停滯/蕭條', 'Revival (n.): 復興',
+                    'Pivot (n.): 關鍵轉折', 'Economist (n.): 經濟學家', 'Balanced (adj.): 平衡的', 'Monetary (adj.): 貨幣的',
+                    'Stagnant (adj.): 停滯的', 'Volatility (n.): 不穩定', 'Essential (adj.): 基本的', 'Address (v.): 處理/發表演說'
+                ],
+                quiz: [
+                    { q: 'Where did Kevin Hassett deliver his first major policy address?', options: ['The White House', 'The Economic Club of New York', 'Wall Street', 'Congress'], answer: 'The Economic Club of New York' },
+                    { q: 'What does Hassett believe is currently a bigger threat than inflation?', options: ['Cyber warfare', 'Economic stagnation', 'High taxes', 'Oil prices'], answer: 'Economic stagnation' },
+                    { q: 'How many basis points did Hassett signal the Fed would cut in March?', options: ['10 bps', '25 bps', '50 bps', '100 bps'], answer: '50 bps' },
+                    { q: 'What is the goal of the 50bps rate cut according to Hassett?', options: ['To increase taxes', 'To support domestic industrial revival', 'To stop the trade war', 'To help the stock market crash'], answer: 'To support domestic industrial revival' },
+                    { q: 'How did equity markets react to Hassett’s speech?', options: ['They crashed', 'They rallied (rose)', 'There was no change', 'They closed for the day'], answer: 'They rallied (rose)' },
+                    { q: 'What term describes Hassett\'s policy shift toward lower rates?', options: ['Hawkish', 'Dovish', 'Neutral', 'Aggressive'], answer: 'Dovish' },
+                    { q: 'What do traditional economists fear this pivot could reignite?', options: ['Job growth', 'Price volatility', 'Space exploration', 'Lower taxes'], answer: 'Price volatility' },
+                    { q: 'The term "acting" Chairman means he is ______.', options: ['A professional actor', 'Temporarily filling the role', 'A retired official', 'An elected member'], answer: 'Temporarily filling the role' },
+                    { q: 'What does "stagnation" mean in an economy?', options: ['Rapid growth', 'A period of little or no growth', 'Inflation', 'High employment'], answer: 'A period of little or no growth' },
+                    { q: 'The word "rallied" in stock market news means ______.', options: ['A sudden fall', 'A recovery or sharp increase in prices', 'A long meeting', 'A technical failure'], answer: 'A recovery or sharp increase in prices' },
+                    { q: 'What is a "basis point"?', options: ['A full 1% increase', '0.01% (one hundredth of a percent)', 'A type of stock', 'A gold coin'], answer: '0.01% (one hundredth of a percent)' },
+                    { q: 'Hassett defended the "push" for what?', options: ['Higher interest rates', 'Lower interest rates', 'Higher taxes', 'Closing banks'], answer: 'Lower interest rates' },
+                    { q: 'The term "pivot" refers to a ______ in strategy.', options: ['Continuation', 'Sharp change or turn', 'Problem', 'Failure'], answer: 'Sharp change or turn' },
+                    { q: 'Who is the politically appointed leader mentioned?', options: ['Jerome Powell', 'Kevin Hassett', 'Donald Trump', 'Elon Musk'], answer: 'Kevin Hassett' },
+                    { q: 'Hassett wants to balance independence with a commitment to economic ______.', options: ['Shrinkage', 'Expansion', 'Isolation', 'Stagnation'], answer: 'Expansion' }
+                ]
+            },
+            'japan-election': {
+                title: '日本大選倒數：高市早苗「日本優先」引關注',
+                english: `As the February 8th general election approaches, Japanese Prime Minister Sanae Takaichi’s campaign has doubled down on its nationalist "Japan First" economic and security agenda. On Thursday, Takaichi pledged to further increase defense spending and provide direct subsidies to Japanese firms looking to reshore their overseas operations. While these policies are popular domestically, they have raised significant concerns in Seoul and Southeast Asian capitals regarding potential shifts in regional trade dynamics and defense cooperation. Analysts suggest that a Takaichi victory could lead to a more assertive and isolationist Japan, challenging the traditional multi-lateral framework in the Asia-Pacific.`,
+                chinese: `日本眾議院大選倒數 10 天：高市早苗「日本優先」政策引發亞太鄰國關注。隨著 2 月 8 日大選逼近，日本首相高市早苗的競選活動加倍推行其民族主義色彩的「日本優先」經濟與安全議程。週四，高市承諾將進一步增加國防支出，並向尋求將海外業務遷回國內（reshore）的日本企業提供直接補貼。雖然這些政策在國內廣受歡迎，但已引起首爾及東南亞各國對區域貿易動態和國防合作可能轉變的嚴重擔憂。分析師指出，高市的勝利可能導致日本變得更加強硬且具孤立主義色彩，挑戰亞太地區傳統的多邊框架。`,
+                vocabulary: [
+                    'General election (n.phr.): 大選', 'Approaches (v.): 接近/逼近', 'Campaign (n.): 競選活動', 'Doubled down (phr.v.): 加倍努力/堅持立場',
+                    'Nationalist (adj.): 民族主義的', 'Japan First (n. proper): 日本優先', 'Agenda (n.): 議程/計畫', 'Pledged (v.pt.): 承諾',
+                    'Defense spending (n.phr.): 國防支出', 'Direct subsidies (n.phr.): 直接補貼', 'Reshore (v.): 將(海外生產/業務)遷回國內', 'Overseas operations (n.phr.): 海外業務',
+                    'Domestically (adv.): 國內地', 'Raised concerns (phr.): 引發擔憂', 'Regional trade dynamics (n.phr.): 區域貿易動態', 'Assertive (adj.): 斷然的/強硬的',
+                    'Isolationist (adj.): 孤立主義的', 'Multi-lateral framework (n.phr.): 多邊框架', 'Asia-Pacific (n. proper): 亞太地區', 'Countdown (n.): 倒數',
+                    'Reshore (v.): 重回岸上/遷回本土', 'Assertive (adj.): 堅定的/果斷的', 'Rattles (v.): 使驚恐/使動搖', 'Neighbor (n.): 鄰居/鄰國',
+                    'Dynamics (n.): 動力/動態', 'Framework (n.): 框架/體系', 'Reshoring (n.): 回流/產業回歸', 'Spend (v.): 花費',
+                    'Subsidize (v.): 補助', 'Voter (n.): 選民', 'Conservative (adj.): 保守的', 'Diplomacy (n.): 外交'
+                ],
+                quiz: [
+                    { q: 'When is the Japanese general election scheduled to take place?', options: ['January 30', 'February 1', 'February 8', 'March 1'], answer: 'February 8' },
+                    { q: 'What is the name of the current Prime Minister of Japan mentioned?', options: ['Fumio Kishida', 'Sanae Takaichi', 'Shinzo Abe', 'Yoshihide Suga'], answer: 'Sanae Takaichi' },
+                    { q: 'What is the central theme of Takaichi’s campaign?', options: ['"Open Borders"', '"Japan First"', '"European Alliance"', '"Green Growth"'], answer: '"Japan First"' },
+                    { q: 'What did Takaichi pledge to increase on Thursday?', options: ['Taxes on citizens', 'Defense spending', 'Import of US beef', 'The number of public holidays'], answer: 'Defense spending' },
+                    { q: 'What does "reshore" mean in the context of Japanese firms?', options: ['Moving operations to China', 'Moving operations from overseas back to Japan', 'Selling the company', 'Closing all factories'], answer: 'Moving operations from overseas back to Japan' },
+                    { q: 'Which two regions/cities are mentioned as being concerned about these policies?', options: ['Washington and London', 'Seoul and Southeast Asian capitals', 'Beijing and Moscow', 'Paris and Berlin'], answer: 'Seoul and Southeast Asian capitals' },
+                    { q: 'Analysts fear a Takaichi victory could make Japan more ______.', options: ['Helpful', 'Assertive and isolationist', 'Dependent on others', 'Quiet'], answer: 'Assertive and isolationist' },
+                    { q: 'The policies challenge the traditional "______ framework" in the region.', options: ['Solo', 'Bilateral', 'Multi-lateral', 'Secret'], answer: 'Multi-lateral' },
+                    { q: 'What is a "subsidy"?', options: ['A type of tax', 'Financial aid provided by the government', 'A military weapon', 'A group of voters'], answer: 'Financial aid provided by the government' },
+                    { q: 'The term "campaign" refers to ______.', options: ['A family vacation', 'An organized effort to win an election', 'A type of food', 'A construction project'], answer: 'An organized effort to win an election' },
+                    { q: 'What does it mean to "double down" on an agenda?', options: ['To give up', 'To significantly increase commitment to a strategy', 'To change the plan', 'To cut the budget in half'], answer: 'To significantly increase commitment to a strategy' },
+                    { q: 'The word "assertive" describes someone who is ______.', options: ['Shy', 'Confident and direct in expression', 'Weak', 'Confused'], answer: 'Confident and direct in expression' },
+                    { q: 'Southeast Asian "capitals" refers to ______.', options: ['The money they have', 'The cities that are seats of government', 'Their large buildings', 'The letters they write'], answer: 'The cities that are seats of government' },
+                    { q: 'A "general election" is for choosing which group?', options: ['School teachers', 'Members of parliament or head of state', 'Sports captains', 'New CEOs'], answer: 'Members of parliament or head of state' },
+                    { q: 'The term "isolationist" describes a policy of ______.', options: ['Joining all alliances', 'Avoiding involvement in the affairs of other nations', 'Trading with everyone', 'Traveling the world'], answer: 'Avoiding involvement in the affairs of other nations' }
+                ]
+            },
+            'mexico-tunnel': {
+                title: '墨西哥邊境發現大型走私地道',
+                english: `Mexican security forces discovered a sophisticated cross-border tunnel near the U.S. border on Thursday. The tunnel, equipped with electricity and a ventilation system, is suspected to have been used for the transport of illicit goods. The discovery follows a period of intensified enforcement under the Trump administration’s "Operation Secure Border," highlighting the ongoing challenges of securing the extensive border against highly funded criminal organizations. Officials stated that the tunnel was engineered with professional techniques, allowing for a high volume of traffic without detection from the surface.`,
+                chinese: `墨西哥在邊境查獲大型地道，疑涉及跨國犯罪集團運送非法物資。墨西哥安全部隊週四在美墨邊境附近發現了一條複雜的跨境地道。該地道配備了電力和通風系統，懷疑被用於運送非法物資。這一發現是在川普政府「安全邊境行動」加強執法的一段時間後出現的，凸顯了在應對資金雄厚的犯罪組織時，維護漫長邊境安全的持續挑戰。官員表示，該地道採用專業技術建造，可在不被地面發現的情況下進行大量運輸。`,
+                vocabulary: [
+                    'Security forces (n.phr.): 安全部隊', 'Sophisticated (adj.): 複雜的/先進的', 'Cross-border (adj.): 跨境的', 'Tunnel (n.): 地道/隧道',
+                    'Equipped with (phr.): 配備有...', 'Electricity (n.): 電力', 'Ventilation system (n.phr.): 通風系統', 'Suspected (v.pp.): 懷疑',
+                    'Transport (v./n.): 運輸', 'Illicit goods (n.phr.): 非法貨物/物資', 'Intensified (v.pp.): 加強的/強化的', 'Enforcement (n.): 執法',
+                    'Operation Secure Border (n. proper): 安全邊境行動', 'Extensive border (n.phr.): 漫長的邊境', 'Highly funded (adj.phr.): 資金雄厚的', 'Criminal organizations (n.phr.): 犯罪組織',
+                    'Engineered (v.pp.): 建造/設計的', 'Professional techniques (n.phr.): 專業技術', 'Detection (n.): 偵測/發現', 'Surface (n.): 地面/表面',
+                    'Tunnel (n.): 隧道', 'Illicit (adj.): 非法的', 'Security (n.): 安全', 'Discovery (n.): 發現',
+                    'Sophisticated (adj.): 精密的', 'Border (n.): 邊界', 'Technique (n.): 技巧/技術', 'Organization (n.): 組織',
+                    'Criminal (adj./n.): 犯罪的/罪犯', 'Transport (v.): 運送', 'Construction (n.): 建設', 'Illegal (adj.): 違法的'
+                ],
+                quiz: [
+                    { q: 'Where was the sophisticated tunnel discovered?', options: ['Near the Canada border', 'Near the U.S.–Mexico border', 'Under a volcano', 'Inside a major city'], answer: 'Near the U.S.–Mexico border' },
+                    { q: 'What features did the tunnel have?', options: ['WiFi and water', 'Electricity and a ventilation system', 'A kitchen and a bedroom', 'Solar panels and a pool'], answer: 'Electricity and a ventilation system' },
+                    { q: 'What is the tunnel suspected to have been used for?', options: ['Mining gold', 'The transport of illicit goods', 'Tourist tours', 'Subway expansion'], answer: 'The transport of illicit goods' },
+                    { q: 'What is the name of the Trump administration\'s enforcement period?', options: ['"Open Gate"', '"Operation Secure Border"', '"Safe Path"', '"Border Bridge"'], answer: '"Operation Secure Border"' },
+                    { q: 'How was the tunnel built according to officials?', options: ['By hand with shovels', 'With professional engineering techniques', 'By nature', 'By high-speed train robots'], answer: 'With professional engineering techniques' },
+                    { q: 'The tunnel allowed traffic without being noticed from where?', options: ['The sky', 'The surface (ground)', 'The police station', 'Satellites'], answer: 'The surface (ground)' },
+                    { q: 'The "highly funded" groups behind the tunnel are ______.', options: ['Charities', 'Criminal organizations', 'Local farmers', 'Student groups'], answer: 'Criminal organizations' },
+                    { q: 'The term "sophisticated" means which of the following?', options: ['Simple', 'Highly complex and advanced', 'Very old', 'Broken'], answer: 'Highly complex and advanced' },
+                    { q: 'What is the purpose of a "ventilation system"?', options: ['To provide light', 'To provide fresh air', 'To carry water', 'To make noise'], answer: 'To provide fresh air' },
+                    { q: 'The word "illicit" is a synonym for ______.', options: ['Illegal', 'Expensive', 'Heavy', 'Foreign'], answer: 'Illegal' },
+                    { q: 'The border is described as "extensive," meaning it is ______.', options: ['Very short', 'Very long or covering a large area', 'Underwater', 'Invisible'], answer: 'Very long or covering a large area' },
+                    { q: 'What does "detection" mean?', options: ['Creating something new', 'The action of discovering something', 'Hiding a secret', 'Destroying evidence'], answer: 'The action of discovering something' },
+                    { q: 'Who discovered the tunnel?', options: ['U.S. tourists', 'Mexican security forces', 'A lost dog', 'A group of school children'], answer: 'Mexican security forces' },
+                    { q: 'The tunnel discovery "highlights" which challenge?', options: ['Lack of electricity', 'Ongoing challenges of securing the border', 'Climate change', 'High cost of gasoline'], answer: 'Ongoing challenges of securing the border' },
+                    { q: 'On which day was the discovery made?', options: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], answer: 'Thursday' }
+                ]
+            }
+        };
+
+        // --- STATE & UI LOGIC ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            const submitButton = result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${submitButton}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(element => {
+                    // Update classes without full re-render for performance
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
