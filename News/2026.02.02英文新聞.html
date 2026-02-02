@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 2 月 2 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 2 月 2 日：台北燈節盛況、TSMC 技術突破與全球通訊/外交變局</p>
+        </header>
+
+        <div class="container-card">
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for professional English learners. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Taipei Lantern Festival "Dragon" Lit Up; Record 800,000 Visitors on Opening Night\nThe 2026 Taipei Lantern Festival officially commenced on Sunday evening with the lighting of the 15-meter "Dragon Leaping Over Clouds" main installation. Combining AI-driven light shows and kinetic art, the opening ceremony attracted an unprecedented 800,000 visitors. Mayor Chiang Wan-an noted that the integration of AR interactive tours has successfully drawn a younger demographic.\n\n[2] TSMC Achieves Over 90% Yield in 2nm Pilot Line, Widening Lead Over Rivals\nIndustry reports confirmed on Sunday that TSMC’s 2-nanometer (N2) pilot production line has achieved a yield rate exceeding 90%—a milestone reached months ahead of schedule. This breakthrough solidifies Taiwan’s dominance in next-generation high-performance computing (HPC) and AI chips. Analysts suggest that this technological moat ensures that TSMC will remain the primary beneficiary of surging global demand.\n\n[3] CWA Issues Cold Alert: Damp and Chilly Weather to Grip Taiwan on Monday\nThe Central Weather Administration (CWA) warned on Sunday that a moisture-laden cold front will arrive on Monday, bringing widespread rain and a significant drop in temperatures. Northern Taiwan is expected to see lows of 10°C, while central and southern regions will experience increased humidity. The cold front is predicted to persist through Wednesday.`,
+                chinese: `【1】2026 台北燈節「龍躍雲端」正式點燈，單日湧入 80 萬人次破紀錄\n2026 台北燈節於週日晚間正式開幕，由 15 公尺高的主燈「龍躍雲端」點亮儀式拉開序幕。結合了 AI 驅動的燈光秀與動力藝術，開幕式吸引了史無前例的 80 萬名遊客。台北市長蔣萬安指出，AR 互動導覽的整合成功吸引了年輕族群，為傳統節慶注入活力，並在連假期間大幅提振了城市的觀光與零售業。\n\n【2】台積電證實 2 奈米測試產線良率突破 90%，領先全球競爭對手\n週日的產業報告證實，台積電的 2 奈米（N2）試產線已達到超過 90% 的良率，這比原定時程提前了數個月。這項突破鞏固了台灣在下一代高效能運算（HPC）與 AI 晶片領域的主導地位。分析師認為，這種技術護城河確保了台積電在全球 AI 基礎設施需求飆升中，仍將是主要的受益者，即便面臨複雜的地緣政治轉變與國際擴張。\n\n【3】氣象署發布低溫特報：週一全台轉濕冷，北台灣最低溫探 10 度\n中央氣象署（CWA）週日警告，一個充滿水氣的冷鋒將於週一抵達，帶來大範圍降雨與氣溫顯著下降。北台灣預計最低溫下探 10 度，中南部地區濕度也將增加。建議民眾注意保暖，並為週一濕冷的開工日做好準備，預計冷鋒將持續影響至週三。`,
+                vocabulary: [
+                    'Commenced (v.pt.): 開始/開幕', 'Main installation (n.phr.): 主體裝置/主燈', 'Kinetic art (n.phr.): 動力藝術', 'Unprecedented (adj.): 史無前例的',
+                    'Integration (n.): 整合', 'AR interactive tours (n.phr.): AR 互動導覽', 'Demographic (n.): 人口統計特徵/族群', 'Revitalizing (v.ger.): 賦予活力',
+                    'Yield rate (n.phr.): 良率', 'Pilot production line (n.phr.): 試產線/測試產線', 'Ahead of schedule (phr.): 提前/進度領先', 'Solidifies (v.): 鞏固/使堅實',
+                    'Dominance (n.): 主導地位', 'High-performance computing (HPC) (n.phr.): 高效能運算', 'Technological moat (n.phr.): 技術護城河', 'Primary beneficiary (n.phr.): 主要受益者',
+                    'Surging demand (n.phr.): 飆升的需求', 'Navigates (v.): 應對/導航', 'Geopolitical shifts (n.phr.): 地緣政治轉變', 'Moisture-laden (adj.): 充滿水氣的',
+                    'Cold front (n.phr.): 冷鋒', 'Widespread rain (n.phr.): 大範圍降雨', 'Lows of (phr.): ...的低溫', 'Persist (v.): 持續/堅持',
+                    'Advisory (n.): 特報/公告', 'Humidity (n.): 濕度', 'Retail sector (n.phr.): 零售業', 'Prowess (n.): 技術實力/英勇',
+                    'Moat (n.): 護城河/防禦', 'Milestone (n.): 里程碑', 'Infrastructure (n.): 基礎建設', 'Expansion (n.): 擴張'
+                ],
+                quiz: [
+                    { q: 'How many visitors attended the opening night of the Taipei Lantern Festival?', options: ['100,000', '500,000', '800,000', 'One million'], answer: '800,000' },
+                    { q: 'What is the height of the "Dragon Leaping Over Clouds" installation?', options: ['10 meters', '15 meters', '20 meters', '50 meters'], answer: '15 meters' },
+                    { q: 'What specific technology was integrated to draw a younger demographic to the festival?', options: ['Robot servers', 'AR interactive tours', 'Free Wi-Fi only', 'Video games'], answer: 'AR interactive tours' },
+                    { q: 'What yield rate has TSMC’s 2nm pilot line achieved?', options: ['50%', '75%', 'Over 90%', '100%'], answer: 'Over 90%' },
+                    { q: 'How does the timing of the TSMC breakthrough compare to the original schedule?', options: ['Months behind schedule', 'Exactly on time', 'Months ahead of schedule', 'One year delayed'], answer: 'Months ahead of schedule' },
+                    { q: 'What term describes TSMC\'s protection against competition in AI chips?', options: ['Technological moat', 'Economic wall', 'Software bridge', 'Digital island'], answer: 'Technological moat' },
+                    { q: 'What is the predicted low temperature for northern Taiwan on Monday?', options: ['5°C', '10°C', '15°C', '20°C'], answer: '10°C' },
+                    { q: 'How long is the cold front predicted to persist?', options: ['Until Monday night', 'Until Tuesday morning', 'Through Wednesday', 'Until next weekend'], answer: 'Through Wednesday' },
+                    { q: 'Which agency issued the cold alert for Taiwan?', options: ['NSB', 'MOEA', 'CWA', 'MND'], answer: 'CWA' },
+                    { q: 'What does "unprecedented" mean?', options: ['Very expensive', 'Never done or known before', 'Happening every year', 'Secretly planned'], answer: 'Never done or known before' },
+                    { q: 'The term "kinetic art" refers to art that ______.', options: ['Contains light', 'Uses sound', 'Moves', 'Is made of metal'], answer: 'Moves' },
+                    { q: 'What does "N2" stand for in the context of TSMC?', options: ['Nitrogen 2', 'New Generation 2', '2-nanometer', 'Night 2'], answer: '2-nanometer' },
+                    { q: 'What will central and southern regions experience according to the CWA?', options: ['Snow', 'A heatwave', 'Increased humidity', 'Total drought'], answer: 'Increased humidity' },
+                    { q: 'Who is the Mayor of Taipei mentioned in the article?', options: ['Chiang Wan-an', 'Cho Jung-tai', 'Lai Ching-te', 'Tsai Ing-wen'], answer: 'Chiang Wan-an' },
+                    { q: 'The TSMC breakthrough "solidifies" Taiwan\'s dominance. What does "solidify" mean?', options: ['To weaken', 'To make stronger or more stable', 'To melt', 'To change completely'], answer: 'To make stronger or more stable' }
+                ]
+            },
+            'trump-iran-dialogue': {
+                title: '川普與伊朗「直接對話」',
+                english: `President Donald Trump issued a landmark statement on Sunday, officially opening a direct line of communication with Iran’s newly formed Provisional Council. Trump stated that the U.S. is ready to provide humanitarian aid and assist in "restoring order" in exchange for a permanent end to Iran’s nuclear program and regional proxy wars. This pivot marks the end of decades of "maximum pressure" and signals a transactional approach to fostering a "New Middle East." Critics and allies alike are watching closely to see whether this diplomatic gamble will lead to long-term stability or further regional fragmentation.`,
+                chinese: `川普宣佈將與伊朗過渡政府建立「直接對話」，尋求重塑中東安全。美國總統川普週日發表了一項里程碑式的聲明，正式與伊朗新成立的臨時委員會（Provisional Council）開啟了直接溝通管道。川普表示，美國已準備好提供人道主義援助並協助「恢復秩序」，以換取伊朗永久終止核計畫及區域代理人戰爭。這一轉向標誌著數十年來「最大壓力」政策的結束，也顯示出一種以「交易模式」推動「新中東」的方針。批評者與盟友都在密切關注，這場外交賭注究竟會帶來長期穩定，還是導致區域進一步碎片化。`,
+                vocabulary: [
+                    'Landmark statement (n.phr.): 里程碑式的聲明', 'Provisional Council (n.phr.): 臨時委員會', 'Humanitarian aid (n.phr.): 人道援助', 'Restoring order (phr.): 恢復秩序',
+                    'In exchange for (phr.): 以換取', 'Permanent end (n.phr.): 永久終止', 'Nuclear program (n.phr.): 核計畫', 'Proxy wars (n.phr.): 代理人戰爭',
+                    'Pivot (n./v.): 轉向/樞紐', 'Maximum pressure (n.phr.): 最大壓力(政策)', 'Transactional approach (n.phr.): 交易型/互惠式方法', 'Fostering (v.ger.): 促進/培養',
+                    'New Middle East (n. proper): 新中東', 'Diplomatic gamble (n.phr.): 外交賭注', 'Fragmentation (n.): 碎片化/分裂', 'Direct line (n.phr.): 直接聯繫管道',
+                    'Reshape (v.): 重塑', 'Regime (n.): 政權', 'Defection (n.): 叛逃/倒戈', 'Council (n.): 委員會',
+                    'Isolation (n.): 孤立', 'Stability (n.): 穩定', 'Sovereignty (n.): 主權', 'Erosion (n.): 侵蝕',
+                    'Recognition (n.): 承認', 'Negotiate (v.): 談判', 'Transaction (n.): 交易', 'Humanitarian (adj.): 人道的',
+                    'Cripple (v.): 使癱瘓/削弱', 'Fortified (adj.): 加強的', 'Ponder (v.): 思考', 'Decades (n.): 數十年'
+                ],
+                quiz: [
+                    { q: 'Who did President Trump officially open a direct line of communication with?', options: ['The old Iranian government', 'Iran’s newly formed Provisional Council', 'The Russian military', 'The UN Security Council'], answer: 'Iran’s newly formed Provisional Council' },
+                    { q: 'What is the U.S. ready to provide to Iran?', options: ['Military weapons', 'Oil and gas', 'Humanitarian aid and help in restoring order', 'Free internet for all'], answer: 'Humanitarian aid and help in restoring order' },
+                    { q: 'What does the U.S. demand "in exchange for" its aid?', options: ['A permanent end to the nuclear program and proxy wars', 'Control over all oil fields', 'Immediate payment in gold', 'Access to Greenland'], answer: 'A permanent end to the nuclear program and proxy wars' },
+                    { q: 'The statement marks the end of which long-standing U.S. policy toward Iran?', options: ['"Open Doors"', '"Maximum Pressure"', '"Strategic Patience"', '"Economic Partnership"'], answer: '"Maximum Pressure"' },
+                    { q: 'What kind of approach is Trump signaling toward the "New Middle East"?', options: ['A purely military approach', 'A humanitarian-only approach', 'A transactional approach', 'A hands-off approach'], answer: 'A transactional approach' },
+                    { q: 'What is a major fear regarding this "diplomatic gamble"?', options: ['It will cost too much', 'Regional fragmentation', 'Too much oil will be sold', 'The US will lose its satellites'], answer: 'Regional fragmentation' },
+                    { q: 'The term "Provisional" means ______.', options: ['Permanent', 'Temporary', 'Professional', 'Elite'], answer: 'Temporary' },
+                    { q: 'What are "proxy wars"?', options: ['Wars between robots', 'Conflicts where parties use others to fight for them', 'Small local fights', 'Wars over computers'], answer: 'Conflicts where parties use others to fight for them' },
+                    { q: 'The word "pivot" in politics refers to a ______.', options: ['Fixed position', 'Significant change in direction or policy', 'Type of meeting', 'Secret plan'], answer: 'Significant change in direction or policy' },
+                    { q: 'What does "fostering" mean?', options: ['Stopping', 'Destroying', 'Encouraging or promoting development', 'Hiding'], answer: 'Encouraging or promoting development' },
+                    { q: 'What kind of Council was formed in Iran?', options: ['Financial Council', 'Provisional Council', 'Scientific Council', 'Space Council'], answer: 'Provisional Council' },
+                    { q: 'The term "transactional" suggests a focus on ______.', options: ['Emotions', 'History', 'Mutually beneficial deals/exchanges', 'Total surrender'], answer: 'Mutually beneficial deals/exchanges' },
+                    { q: 'Is the U.S. seeking a "temporary" or "permanent" end to the nuclear program?', options: ['Temporary', 'Permanent', 'One year only', 'The text doesn\'t say'], answer: 'Permanent' },
+                    { q: 'Who issued the statement on Sunday?', options: ['The Iranian Council', 'Donald Trump', 'The UN', 'Zelenskyy'], answer: 'Donald Trump' },
+                    { q: 'The news refers to the "restoration" of what?', options: ['The nuclear program', 'Order', 'Old oil prices', 'Internet speed'], answer: 'Order' }
+                ]
+            },
+            'fed-hassett-75bps': {
+                title: '聯準會降息規模可能擴大',
+                english: `In a televised interview on Sunday, acting Federal Reserve Chairman Kevin Hassett suggested that the planned interest rate cut in March could be more aggressive than previously anticipated. Citing a projected slowdown in global maritime trade and the impact of shifting tariff policies, Hassett indicated that a 75-basis-point reduction is "on the table." This "shock and awe" approach aims to front-load monetary support for the U.S. industrial sector. The news has sent the U.S. dollar lower while fueling a massive rally in technology and small-cap stocks.`,
+                chinese: `聯準會主席哈塞特：三月降息規模可能擴大至 75 個基點以應對貿易放緩。代理聯準會（Fed）主席凱文·哈塞特週日在電視採訪中表示，計畫於 3 月進行的降息規模可能比先前預期的更為激進。哈塞特引用了全球海運貿易預計放緩以及關稅政策轉變的影響，表示 75 個基點（三碼）的降息幅度已「列入考慮」。這種「震懾（shock and awe）」策略旨在為美國工業部門預先提供貨幣支持。此消息已導致美元走低，同時推動科技股與小型股的大規模漲勢。`,
+                vocabulary: [
+                    'Televised interview (n.phr.): 電視採訪', 'Acting Chairman (n.phr.): 代理主席', 'Aggressive (adj.): 激進的/強力的', 'Previously anticipated (adj.phr.): 先前預期的',
+                    'Projected slowdown (n.phr.): 預計的放緩', 'Maritime trade (n.phr.): 海運貿易', 'Tariff policies (n.phr.): 關稅政策', '75-basis-point (n.phr.): 75 個基點 (0.75%)',
+                    'On the table (phr.): 列入考慮/在討論中', 'Shock and awe (n.phr.): 震懾/打擊與威懾', 'Front-load (v.): 預先提供/集中於初期', 'Monetary support (n.phr.): 貨幣支持',
+                    'Industrial sector (n.phr.): 工業部門', 'Equity rally (n.phr.): 股市漲勢', 'Small-cap stocks (n.phr.): 小型股', 'Headwinds (n.): 逆風/阻力',
+                    'Basis-point (bps) (n.): 基點', 'Interest rate cut (n.phr.): 降息', 'Monetary policy (n.phr.): 貨幣政策', 'Revival (n.): 復興',
+                    'Dovish (adj.): 鴿派的', 'Pivot (n.): 轉向', 'Price volatility (n.phr.): 物價波動', 'Credibility (n.): 公信力',
+                    'Stagnation (n.): 停滯', 'Industrial (adj.): 工業的', 'Anticipated (adj.): 預期的', 'Reduction (n.): 減少',
+                    'Commitment (n.): 承諾', 'Inflation (n.): 通膨', 'Currency (n.): 貨幣', 'Rally (v./n.): 飆升'
+                ],
+                quiz: [
+                    { q: 'What is the potential size of the interest rate cut mentioned for March?', options: ['25 bps', '50 bps', '75 bps', '100 bps'], answer: '75 bps' },
+                    { q: 'Why is the Fed considering a larger cut?', options: ['To stop oil drilling', 'Slowdown in global maritime trade and tariff impacts', 'Too many jobs being created', 'High food prices'], answer: 'Slowdown in global maritime trade and tariff impacts' },
+                    { q: 'What phrase did Hassett use to describe the large cut approach?', options: ['"Slow and steady"', '"Wait and see"', '"Shock and awe"', '"Standard procedure"'], answer: '"Shock and awe"' },
+                    { q: 'Which sector is the monetary support primarily aimed at?', options: ['Farming', 'US industrial sector', 'Art industry', 'Sports management'], answer: 'US industrial sector' },
+                    { q: 'How did the U.S. dollar react to the news?', options: ['It rose higher', 'It was sent lower', 'There was no change', 'It was replaced'], answer: 'It was sent lower' },
+                    { q: 'Which stocks saw a "massive rally" following the interview?', options: ['Oil stocks', 'Technology and small-cap stocks', 'Food industry stocks', 'Travel stocks'], answer: 'Technology and small-cap stocks' },
+                    { q: 'What does "front-load" mean in the text?', options: ['To delay support', 'To provide support early or at the beginning', 'To cancel support', 'To hide support'], answer: 'To provide support early or at the beginning' },
+                    { q: 'The term "maritime trade" refers to trade by ______.', options: ['Air', 'Rail', 'Sea', 'Truck'], answer: 'Sea' },
+                    { q: 'What does it mean for a plan to be "on the table"?', options: ['It is a secret', 'It is being actively considered or discussed', 'It is finished', 'It is a mistake'], answer: 'It is being actively considered or discussed' },
+                    { q: 'A "75-basis-point" cut equals what percentage?', options: ['0.075%', '0.75%', '7.5%', '75%'], answer: '0.75%' },
+                    { q: 'Hassett is the "acting" Chairman, meaning he is ______.', options: ['A professional actor', 'In a temporary role', 'The previous leader', 'Elected for life'], answer: 'In a temporary role' },
+                    { q: 'What kind of headwinds is the global trade facing?', options: ['Positive winds', 'Economic obstacles or resistance', 'No issues', 'Technological benefits'], answer: 'Economic obstacles or resistance' },
+                    { q: 'The term "small-cap" refers to companies with ______ market value.', options: ['Large', 'Medium', 'Relatively small', 'Infinite'], answer: 'Relatively small' },
+                    { q: 'Which day was the televised interview held?', options: ['Saturday', 'Sunday', 'Monday', 'Friday'], answer: 'Sunday' },
+                    { q: 'What is the goal of "monetary support"?', options: ['To buy computers', 'To influence the economy via money supply/interest', 'To print books', 'To start a war'], answer: 'To influence the economy via money supply/interest' }
+                ]
+            },
+            'ukraine-vienna-summit': {
+                title: '烏克蘭維也納高峰會前瞻',
+                english: `Sources close to the upcoming Vienna peace summit revealed on Sunday that the Kremlin has indicated a potential willingness to discuss the return of certain non-strategic territories to Ukraine. While the status of Crimea remains a non-starter for Moscow, the openness to negotiate on other fronts is seen as a significant concession. President Volodymyr Zelenskyy has cautioned that any deal must be backed by "ironclad" security guarantees from the U.S. and a concrete timeline for Russian withdrawal, setting the stage for one of the most complex diplomatic negotiations in modern history.`,
+                chinese: `烏克蘭維也納高峰會前瞻：俄羅斯同意討論「歸還部分佔領區」的可能性。接近即將舉行的維也納和平高峰會的消息人士週日透露，克里姆林宮已表示，可能願意討論歸還部分非戰略性領土給烏克蘭。雖然克里米亞的地位對莫斯科而言仍是「不予考慮（non-starter）」的紅線，但在其他陣線上展現的談判意願被視為重大讓步。烏克蘭總統澤倫斯基警告，任何協議都必須得到美國「鋼鐵般（ironclad）」的安全保障，以及俄軍撤軍的具體時間表，這為現代史上最複雜的外交談判之一拉開了序幕。`,
+                vocabulary: [
+                    'Upcoming summit (n.phr.): 即將舉行的峰會', 'Vienna peace summit (n. proper): 維納也和平高峰會', 'Kremlin (n. proper): 克里姆林宮 (俄國政府)', 'Potential willingness (n.phr.): 潛在的意願',
+                    'Non-strategic territories (n.phr.): 非戰略性領土', 'Non-starter (n.): 不予考慮/無法開始討論的事項', 'Openness to negotiate (phr.): 談判的開放性', 'Significant concession (n.phr.): 重大讓步',
+                    'Ironclad (adj.): 鋼鐵般的/不容置疑的', 'Security guarantees (n.phr.): 安全保障', 'Concrete timeline (n.phr.): 具體的時間表', 'Withdrawal (n.): 撤軍/退回',
+                    'Setting the stage (phr.): 為...做準備/拉開序幕', 'Complex negotiations (n.phr.): 複雜的談判', 'Territorial integrity (n.phr.): 領土完整', 'Acknowledged (v.pt.): 承認',
+                    'Concession (n.): 讓步', 'Withdrawal (n.): 撤回', 'Guarantees (n.): 保證', 'Implementation (n.): 執行',
+                    'Trilateral (adj.): 三方的', 'Framework (n.): 框架', 'Sovereignty (n.): 主權', 'Erosion (n.): 侵蝕',
+                    'Concession (n.): 特許/讓步', 'Conflict (n.): 衝突', 'Diplomatic (adj.): 外交的', 'Territory (n.): 領土',
+                    'Strategic (adj.): 戰略的', 'Negotiate (v.): 談判', 'Timeline (n.): 時間表', 'Guaranteed (adj.): 保證的'
+                ],
+                quiz: [
+                    { q: 'In which city will the upcoming peace summit be held?', options: ['Kyiv', 'Moscow', 'Vienna', 'Washington'], answer: 'Vienna' },
+                    { q: 'What is the Kremlin reportedly willing to discuss returning?', options: ['Crimea', 'All occupied lands', 'Certain non-strategic territories', 'Their nuclear weapons'], answer: 'Certain non-strategic territories' },
+                    { q: 'Which territory remains a "non-starter" for negotiation by Moscow?', options: ['Donbas', 'Kyiv', 'Crimea', 'Odesa'], answer: 'Crimea' },
+                    { q: 'Russia\'s willingness to negotiate on other fronts is seen as a ______.', options: ['Victory', 'Mistake', 'Significant concession', 'Threat'], answer: 'Significant concession' },
+                    { q: 'What does Zelenskyy require from the U.S. for any deal?', options: ['Cash only', '"Ironclad" security guarantees', 'Space technology', 'New cars'], answer: '"Ironclad" security guarantees' },
+                    { q: 'Zelenskyy also demands a "concrete timeline" for what?', options: ['Tax cuts', 'Russian withdrawal', 'New elections', 'Building roads'], answer: 'Russian withdrawal' },
+                    { q: 'The term "non-starter" refers to an idea that ______.', options: ['Is the best part', 'Has no chance of being successful/discussed', 'Is very fast', 'Is expensive'], answer: 'Has no chance of being successful/discussed' },
+                    { q: 'What does "ironclad" mean in a legal or diplomatic sense?', options: ['Made of actual iron', 'Impossible to break or change', 'Very rusty', 'Flexible'], answer: 'Impossible to break or change' },
+                    { q: 'The negotiations are described as being among the most ______ in modern history.', options: ['Simple', 'Boring', 'Complex', 'Short'], answer: 'Complex' },
+                    { q: 'What is a "concession"?', options: ['A type of food', 'A thing that is granted in response to a demand', 'A military tank', 'A winning vote'], answer: 'A thing that is granted in response to a demand' },
+                    { q: 'The Kremlin is a synonym for which country\'s government?', options: ['Ukraine', 'USA', 'Russia', 'Austria'], answer: 'Russia' },
+                    { q: 'The news was revealed on which day?', options: ['Friday', 'Saturday', 'Sunday', 'Monday'], answer: 'Sunday' },
+                    { q: 'A "summit" in this context is a ______.', options: ['The top of a mountain', 'A meeting between high-level leaders', 'A type of book', 'A sports game'], answer: 'A meeting between high-level leaders' },
+                    { q: 'What does "withdrawal" mean for a military?', options: ['Attacking', 'The act of taking back or removing forces', 'Winning a battle', 'Recruiting new soldiers'], answer: 'The act of taking back or removing forces' },
+                    { q: 'What fronts is the Kremlin open to negotiate on?', options: ['None', 'Only Crimea', 'Other fronts besides Crimea', 'Nuclear only'], answer: 'Other fronts besides Crimea' }
+                ]
+            },
+            'un-shipping-rates': {
+                title: '聯合國：2026 全球海運運費看漲',
+                english: `A new UNCTAD report released on Sunday warns that global maritime shipping rates are expected to rise by an average of 15% throughout 2026. The report cites the persistent need for route diversions around the Cape of Good Hope and escalating insurance costs in the Persian Gulf. UN officials warned that these rising logistics costs will inevitably be passed on to consumers, potentially triggering a new wave of "imported inflation" for energy-dependent nations in Europe and Asia. Developing countries may also face supply chain delays as carriers prioritize higher-margin routes.`,
+                chinese: `聯合國：2026 年全球海運運費因區域衝突預計將上漲 15%。聯合國貿易和發展會議（UNCTAD）週日發布的一份新報告警告，2026 年全球海運動費預計平均將上漲 15%。報告引用了船隻持續需要繞道好望角（Cape of Good Hope），以及波斯灣日益升高的保險成本。聯合國官員警告，這些不斷增加的物流成本將不可避免地轉嫁給消費者，可能在歐洲與亞洲的能源依賴型國家引發新一波「輸入性通膨（imported inflation）」。由於航運公司將優先考慮利潤較高的航線，開發中國家也可能面臨供應鏈延遲。`,
+                vocabulary: [
+                    'UNCTAD (n. proper): 聯合國貿易和發展會議', 'Maritime shipping rates (n.phr.): 海運運費', 'Average of 15% (phr.): 平均 15%', 'Persistent need (n.phr.): 持續的需求',
+                    'Route diversions (n.phr.): 航線繞道/變更', 'Cape of Good Hope (n. proper): 好望角', 'Escalating (adj.): 日益升級的', 'Insurance costs (n.phr.): 保險成本',
+                    'Persian Gulf (n. proper): 波斯灣', 'Logistics costs (n.phr.): 物流成本', 'Inevitably (adv.): 不可避免地', 'Passed on to consumers (phr.): 轉嫁給消費者',
+                    'Imported inflation (n.phr.): 輸入性通膨', 'Energy-dependent nations (n.phr.): 能源依賴國', 'Supply chain delays (n.phr.): 供應鏈延遲', 'Higher-margin routes (n.phr.): 高毛利/高利潤航線',
+                    'Regional unrest (n.phr.): 區域動盪', 'Maritime (adj.): 海事的', 'Surge (v.): 飆升', 'Inevitability (n.): 必然性',
+                    'Diversion (n.): 轉向', 'Escalation (n.): 擴張', 'Logistics (n.): 物流', 'Carrier (n.): 承運商/航運公司',
+                    'Developing countries (n.phr.): 開發中國家', 'Margin (n.): 利潤/邊際', 'Inflation (n.): 通膨', 'Escalate (v.): 升級',
+                    'Route (n.): 路線', 'Diversion (n.): 轉向/分心', 'Inevitably (adv.): 必然地', 'Trigger (v.): 引發'
+                ],
+                quiz: [
+                    { q: 'By what average percentage are global shipping rates expected to rise in 2026?', options: ['5%', '10%', '15%', '25%'], answer: '15%' },
+                    { q: 'Which UN body released the report on shipping rates?', options: ['WHO', 'UNCTAD', 'UNESCO', 'UNICEF'], answer: 'UNCTAD' },
+                    { q: 'Ships are persistently needing to divert around which location?', options: ['Panama Canal', 'Suez Canal', 'Cape of Good Hope', 'Strait of Malacca'], answer: 'Cape of Good Hope' },
+                    { q: 'Insurance costs are escalating in which specific region?', options: ['The Arctic', 'The Gulf of Mexico', 'The Persian Gulf', 'The South China Sea'], answer: 'The Persian Gulf' },
+                    { q: 'Who will eventually pay for the rising logistics costs?', options: ['Governments', 'The UN', 'Consumers', 'Carriers only'], answer: 'Consumers' },
+                    { q: 'What kind of inflation is predicted for Europe and Asia?', options: ['Internal inflation', 'Hyperinflation', 'Imported inflation', 'No inflation'], answer: 'Imported inflation' },
+                    { q: 'Which type of nations are most at risk of "imported inflation"?', options: ['Energy-dependent nations', 'Large agricultural nations', 'Islands only', 'High-tech nations'], answer: 'Energy-dependent nations' },
+                    { q: 'Why might developing countries face supply chain delays?', options: ['Lack of ships', 'Carriers prioritizing higher-margin routes', 'Total border closures', 'Weather only'], answer: 'Carriers prioritizing higher-margin routes' },
+                    { q: 'The term "maritime" refers to things related to the ______.', options: ['Sky', 'Mountains', 'Sea', 'Forest'], answer: 'Sea' },
+                    { q: 'What does "inevitably" mean?', options: ['Maybe', 'Impossible', 'Unavoidably/Certainly to happen', 'Quickly'], answer: 'Unavoidably/Certainly to happen' },
+                    { q: 'The word "diversion" means a ______ from a regular path.', options: ['Shortcut', 'Departure or detour', 'New road', 'Speed limit'], answer: 'Departure or detour' },
+                    { q: 'The costs are being "passed on," meaning they are ______.', options: ['Paid by the company', 'Transferred to another party', 'Deleted', 'Delayed'], answer: 'Transferred to another party' },
+                    { q: 'What does "higher-margin" mean in business?', options: ['Faster', 'More profitable', 'Larger', 'Safer'], answer: 'More profitable' },
+                    { q: 'The term "logistics" involves the management of ______.', options: ['Only people', 'The flow of goods/services', 'Only money', 'Only time'], answer: 'The flow of goods/services' },
+                    { q: 'When was the report released?', options: ['Friday', 'Saturday', 'Sunday', 'Monday'], answer: 'Sunday' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        // --- CORE RENDERING ---
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title.split('：')[0]}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
