@@ -1,0 +1,395 @@
+	<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 2 月 2 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 2 月 2 日：關鍵物資韌性、台積電布局與全球地緣政治</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for persistent professional English learning. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] President Lai Visits "Taiwan-US Resilience Center"; Sets 12-Month Strategic Reserve Goal\nPresident Lai Ching-te visited the newly established Joint Resilience Center on Monday, emphasizing the importance of supply chain security. Under the framework of the "US-Taiwan Trade Initiative Act," the government has officially set a target to maintain a 12-month strategic reserve of critical materials, including energy, medical supplies, and food. Lai stated that this "resilience-first" approach is essential to ensure national stability.\n\n[2] TSMC 2026 Capex Projected at $45B; Pivots Fully Toward 2nm and A14 Nodes\nFinancial analysts on Monday projected that TSMC’s capital expenditure (capex) for 2026 will reach $45 billion. The company plans to allocate over 70% of this budget to its domestic facilities in Hsinchu and Kaohsiung to support the mass production of 2nm (N2) chips. This investment reinforces Taiwan’s status as the global epicentre for high-end AI and HPC hardware.\n\n[3] CWA: Temperatures to Recover Gradually; New Cold Front Expected Friday\nThe Central Weather Administration (CWA) reported on Monday that the recent cold surge has begun to weaken, with daytime temperatures set to rise through Thursday. However, forecasters warned that a new moisture-heavy front is expected on Friday, bringing rain and another slight dip in temperatures. Citizens are advised to enjoy the brief reprieve.`,
+                chinese: `【1】賴總統視察「台美共同韌性中心」：確立關鍵物資 12 個月戰略儲備目標\n賴清德總統週一視察新成立的「共同韌性中心」，強調供應鏈安全的重要性。在近期通過的《台美貿易倡議法案》框架下，政府正式設定了維持 12 個月關鍵物資戰略儲備的目標，包括能源、醫療物資與食品。賴總統表示，這種「韌性優先」的方針對於在潛在區域中斷或全球供應鏈衝擊期間確保國家穩定至關重要。\n\n【2】台積電 2026 年資本支出估達 450 億美元，重心全面轉向 2 奈米與 A14 製程\n金融分析師週一預測，隨著科技巨頭加速建置最先進的邏輯節點，台積電 2026 年的資本支出（Capex）將達到 450 億美元。該公司計畫將超過 70% 的預算撥給新竹與高雄的國內廠區，以支援 2 奈米（N2）晶片的量產。這項投資強化了台灣作為全球高階 AI 與高效能運算（HPC）硬體核心樞紐的地位。\n\n【3】氣象署：冷氣團減弱氣溫緩步回升，週五將有另一波鋒面抵達\n中央氣象署（CWA）週一報告指出，近期的冷氣團已開始減弱，台灣各地白天氣溫將持續回升至週四。然而，預報員警告，週五預計將有一波水氣豐沛的鋒面抵達，帶來降雨與氣溫微幅下降。建議民眾享受這段短暫的舒適天氣，同時為週末轉趨濕冷做好準備。`,
+                vocabulary: [
+                    'Resilience (n.): 韌性/彈性', 'Joint (adj.): 共同的/聯合的', 'Strategic reserve (n.phr.): 戰略儲備', 'Critical materials (n.phr.): 關鍵物資',
+                    'Supply chain security (n.phr.): 供應鏈安全', 'Disruptions (n.): 中斷/擾亂', 'Framework (n.): 框架/準則', 'Stabilization (n.): 穩定',
+                    'Capital expenditure (Capex) (n.phr.): 資本支出', 'Pivots (v.): 轉向/樞紐', 'Nodes (n.): 節點/製程', 'Allocate (v.): 分配/撥給',
+                    'Mass production (n.phr.): 量產', 'Epicentre (n.): 中心/核心', 'High-performance computing (HPC) (n.phr.): 高效能運算', 'Reinforce (v.): 強化/鞏固',
+                    'Cold surge (n.phr.): 寒流/冷氣團', 'Recover (v.): 恢復/康復', 'Gradually (adv.): 逐漸地', 'Moisture-heavy (adj.): 水氣重的/潮濕的',
+                    'Reprieve (n.): 緩解/暫緩', 'Damp (adj.): 潮濕的', 'HPC (n. proper): 高效能運算', 'Logic nodes (n.phr.): 邏輯節點',
+                    'Infrastructure (n.): 基礎建設', 'Initiative (n.): 倡議/計畫', 'Forecaster (n.): 預報員', 'Vigilance (n.): 警覺',
+                    'Status (n.): 地位/狀態', 'Investment (n.): 投資', 'Premeditated (adj.): 蓄意的', 'Coincide (v.): 同時發生'
+                ],
+                quiz: [
+                    { q: 'What is the new strategic reserve goal for critical materials in Taiwan?', options: ['3 months', '6 months', '12 months', '24 months'], answer: '12 months' },
+                    { q: 'Which two countries are collaborating on the new Resilience Center?', options: ['Taiwan and Japan', 'Taiwan and the US', 'US and Russia', 'Taiwan and Australia'], answer: 'Taiwan and the US' },
+                    { q: 'What is the projected capex for TSMC in 2026?', options: ['$10 billion', '$25 billion', '$45 billion', '$100 billion'], answer: '$45 billion' },
+                    { q: 'Where will TSMC allocate over 70% of its 2026 budget?', options: ['Arizona plants', 'Domestic facilities in Hsinchu and Kaohsiung', 'Japan research centers', 'German factories'], answer: 'Domestic facilities in Hsinchu and Kaohsiung' },
+                    { q: 'What technology nodes are the primary focus for TSMC\'s 2026 expansion?', options: ['7nm and 5nm', '2nm and A14', '28nm and 40nm', 'AI software only'], answer: '2nm and A14' },
+                    { q: 'When is the next weather front expected to arrive in Taiwan?', options: ['Tuesday', 'Wednesday', 'Friday', 'Sunday'], answer: 'Friday' },
+                    { q: 'How will the weather be on Friday according to the CWA?', options: ['Hot and sunny', 'Moisture-heavy and rainy', 'Dry and cold', 'Snowing'], answer: 'Moisture-heavy and rainy' },
+                    { q: 'The term "resilience-first" implies what priority?', options: ['Saving money', 'National stability during disruptions', 'Speed of production', 'New construction only'], answer: 'National stability during disruptions' },
+                    { q: 'What does "HPC" stand for in the context of TSMC?', options: ['High Power Connection', 'High-Performance Computing', 'Home Project Center', 'Hualien Power Company'], answer: 'High-Performance Computing' },
+                    { q: 'Which agency provides the official weather forecast in Taiwan?', options: ['MOEA', 'MND', 'CWA', 'NSB'], answer: 'CWA' },
+                    { q: 'The word "pivot" in the TSMC news means to ______.', options: ['Stay the same', 'Completely turn or change focus', 'Stop production', 'Lower prices'], answer: 'Completely turn or change focus' },
+                    { q: 'What does "reprieve" mean in the weather context?', options: ['A long winter', 'A temporary relief from something unpleasant', 'A rainy season', 'A sudden storm'], answer: 'A temporary relief from something unpleasant' },
+                    { q: 'TSMC is reinforcing Taiwan\'s status as the global "______" for hardware.', options: ['Epicentre', 'Border', 'Market', 'School'], answer: 'Epicentre' },
+                    { q: 'Critical materials for the reserve include food, medical supplies, and ______.', options: ['Cars', 'Energy', 'Gold', 'Satellites'], answer: 'Energy' },
+                    { q: 'The capex projected by analysts occurred on which day?', options: ['Friday', 'Sunday', 'Monday', 'Tuesday'], answer: 'Monday' }
+                ]
+            },
+            'fed-disinflation': {
+                title: '聯準會降息：去通膨化成功之慶',
+                english: `In a speech delivered in Chicago on Monday, acting Federal Reserve Chairman Kevin Hassett reframed the upcoming interest rate cut not as a desperate measure, but as a recognition of economic victory. Hassett argued that since inflation has stabilized at 2%, the Fed can now focus entirely on aggressive growth. He hinted that the "neutral rate" might be lower than previously estimated, suggesting a long runway for further cuts. Markets reacted positively, with industrial and small-cap indices reaching new highs. However, some economists warn that celebrating too early could lead to a resurgence of price pressures if the labor market overheats.`,
+                chinese: `聯準會主席哈塞特：三月降息不僅是「預防」，更是為了應對「去通膨化」成功。代理聯準會主席凱文·哈塞特週一在芝加哥發表演說，將即將到來的降息重新定義為對經濟勝利的認可，而非一項絕望的措施。哈塞特主張，既然通貨膨脹已穩定在 2%，聯準會現在可以完全專注於積極成長。他暗示「中性利率」可能低於先前的估計，這顯示未來還有很長的降息空間。市場對此反應積極，工業與小型股指數均創下新高。然而，部分經濟學家警告，若勞動力市場過熱，過早慶祝可能會導致物價壓力捲土重來。`,
+                vocabulary: [
+                    'Disinflation (n.): 去通膨化', 'Desperate measure (n.phr.): 絕望的措施', 'Recognition (n.): 認可/承認', 'Neutral rate (n.phr.): 中性利率',
+                    'Aggressive growth (n.phr.): 積極成長', 'Stabilized (v.pp.): 穩定的', 'Runway (n.): 跑道/緩衝空間', 'Small-cap indices (n.phr.): 小型股指數',
+                    'Resurgence (n.): 復甦/捲土重來', 'Price pressures (n.phr.): 物價壓力', 'Labor market (n.phr.): 勞動市場', 'Overheats (v.): 過熱',
+                    'Reframed (v.pt.): 重新定義/架構', 'Upcoming (adj.): 即將到來的', 'Interest rate (n.phr.): 利率', 'Economic victory (n.phr.): 經濟勝利',
+                    'Previously estimated (adj.phr.): 先前估計的', 'Monetary policy (n.phr.): 貨幣政策', 'Federal Reserve (n. proper): 聯準會', 'Chicago (n. proper): 芝加哥',
+                    'Commitment (n.): 承諾', 'Inflation (n.): 通膨', 'Dovish (adj.): 鴿派的', 'Pivot (n.): 轉向',
+                    'Volatility (n.): 波動', 'Stagnation (n.): 停滯', 'Industrial (adj.): 工業的', 'Anticipated (adj.): 預期的',
+                    'Reduction (n.): 減少', 'Currency (n.): 貨幣', 'Rally (v./n.): 飆升', 'Basis-point (n.): 基點'
+                ],
+                quiz: [
+                    { q: 'Where did Kevin Hassett deliver his speech on Monday?', options: ['New York', 'Chicago', 'Washington D.C.', 'Los Angeles'], answer: 'Chicago' },
+                    { q: 'How does Hassett view the upcoming rate cut?', options: ['As a desperate move', 'As a celebration of economic victory', 'As a mistake', 'As a temporary loan'], answer: 'As a celebration of economic victory' },
+                    { q: 'What is the inflation level mentioned as being stabilized?', options: ['0%', '1%', '2%', '5%'], answer: '2%' },
+                    { q: 'What did Hassett suggest about the "neutral rate"?', options: ['It is rising', 'It might be lower than previously estimated', 'It is exactly 5%', 'It doesn\'t exist'], answer: 'It might be lower than previously estimated' },
+                    { q: 'Which indices reached new highs following the speech?', options: ['Oil and Gas', 'Industrial and small-cap indices', 'European bank indices', 'Gold and Silver'], answer: 'Industrial and small-cap indices' },
+                    { q: 'What is a potential risk of "celebrating too early"?', options: ['Lower taxes', 'Resurgence of price pressures', 'Faster internet', 'Higher savings'], answer: 'Resurgence of price pressures' },
+                    { q: 'A "long runway" for further cuts implies what?', options: ['No more cuts', 'Potential for many future cuts', 'A literal airport project', 'Higher interest rates soon'], answer: 'Potential for many future cuts' },
+                    { q: 'The labor market "overheating" means what?', options: ['Too many people retiring', 'Excessive demand for labor causing wage/price spikes', 'Offices are too warm', 'Not enough jobs available'], answer: 'Excessive demand for labor causing wage/price spikes' },
+                    { q: 'What does "disinflation" mean?', options: ['Inflation is at 0%', 'Prices are dropping', 'A reduction in the rate of inflation', 'A type of tax'], answer: 'A reduction in the rate of inflation' },
+                    { q: 'Hassett wants the Fed to focus entirely on ______.', options: ['Cutting debt', 'Aggressive growth', 'Saving banks', 'Fighting climate change'], answer: 'Aggressive growth' },
+                    { q: 'The term "reframed" means to ______.', options: ['Change a photo frame', 'Present something in a new way', 'Cancel a meeting', 'Delete a law'], answer: 'Present something in a new way' },
+                    { q: 'Market reaction was ______ to the speech.', options: ['Negative', 'Positive', 'Neutral', 'Angry'], answer: 'Positive' },
+                    { q: 'What is the role of Kevin Hassett mentioned in the text?', options: ['Previous Fed Chair', 'Acting Federal Reserve Chairman', 'A random businessman', 'A senator from Chicago'], answer: 'Acting Federal Reserve Chairman' },
+                    { q: 'The word "resurgence" is a synonym for ______.', options: ['Ending', 'Comeback or reappearance', 'Starting for the first time', 'Failure'], answer: 'Comeback or reappearance' },
+                    { q: 'Economic ______ is what Hassett believes the Fed has achieved.', options: ['Failure', 'Victory', 'Stagnation', 'Stability only'], answer: 'Victory' }
+                ]
+            },
+            'nvidia-sovereign-deals': {
+                title: '輝達與中東過渡政權簽署主權 AI 協議',
+                english: `Capitalizing on geopolitical shifts in the region, NVIDIA CEO Jensen Huang announced on Monday that the company has signed preliminary agreements with several transitional governments in the Middle East, including the Iranian Provisional Council. The deals focus on building state-of-the-art AI data centres to modernize national administration and healthcare systems. Huang stated that "AI is the new infrastructure of freedom," positioning NVIDIA as a pivotal player in the region’s digital reconstruction. These agreements represent a major expansion of NVIDIA's "Sovereign AI" strategy, aimed at providing nations with independent computing power.`,
+                chinese: `輝達（NVIDIA）宣佈與中東過渡政權簽署「主權 AI」基礎設施協議。利用該地區的地緣政治轉變，輝達執行長黃仁勳週一宣布，公司已與中東數個過渡政府簽署初步協議，其中包括伊朗臨時委員會（Provisional Council）。這些協議專注於建設頂尖的 AI 數據中心，以實現國家行政與醫療體系的現代化。黃仁勳表示，「AI 是自由的新型基礎設施」，將輝達定位為該地區數位重建的關鍵角色。這些協議代表了輝達「主權 AI」策略的重大擴張，旨在為各國提供獨立的運算能力。`,
+                vocabulary: [
+                    'Capitalizing on (phr.v.): 利用/趁勢', 'Geopolitical shifts (n.phr.): 地緣政治轉變', 'Preliminary agreements (n.phr.): 初步協議', 'Transitional governments (n.phr.): 過渡政府',
+                    'Provisional Council (n. proper): 臨時委員會', 'State-of-the-art (adj.): 頂尖的/最先進的', 'Modernize (v.): 現代化', 'National administration (n.phr.): 國家行政',
+                    'Healthcare systems (n.phr.): 醫療體系', 'Infrastructure of freedom (n.phr.): 自由的基礎設施', 'Pivotal player (n.phr.): 關鍵角色', 'Digital reconstruction (n.phr.): 數位重建',
+                    'Independent computing power (n.phr.): 獨立運算能力', 'Sovereign AI (n.phr.): 主權人工智慧', 'Expansion (n.): 擴張', 'Strategy (n.): 策略',
+                    'Middle East (n. proper): 中東', 'Infrastructure (n.): 基礎建設', 'Sovereignty (n.): 主權', 'Architecture (n.): 架構',
+                    'Autonomous (adj.): 自主的', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Data centres (n.phr.): 數據中心', 'Administration (n.): 行政/管理', 'Digital (adj.): 數位的',
+                    'Reconstruction (n.): 重建', 'Pivotal (adj.): 關鍵的', 'Strategic (adj.): 策略性的', 'Deal (n.): 協議/交易'
+                ],
+                quiz: [
+                    { q: 'Who did NVIDIA sign preliminary agreements with on Monday?', options: ['The US military', 'Transitional governments in the Middle East', 'A German car company', 'The Australian Parliament'], answer: 'Transitional governments in the Middle East' },
+                    { q: 'Which specific council was mentioned as a partner?', options: ['European Commission', 'Iranian Provisional Council', 'UN Security Council', 'World Health Board'], answer: 'Iranian Provisional Council' },
+                    { q: 'What is the focus of these new deals?', options: ['Building oil pipelines', 'Building state-of-the-art AI data centres', 'Selling gaming graphics cards', 'Training human soldiers'], answer: 'Building state-of-the-art AI data centres' },
+                    { q: 'What systems are intended to be modernized through these deals?', options: ['Farming and Fishing', 'National administration and healthcare', 'Space rockets', 'Traditional postal services'], answer: 'National administration and healthcare' },
+                    { q: 'How did Jensen Huang describe AI in his statement?', options: ['"A dangerous tool"', '"The new infrastructure of freedom"', '"An expensive toy"', '"The end of labor"'], answer: '"The new infrastructure of freedom"' },
+                    { q: 'NVIDIA is positioning itself as a pivotal player in what?', options: ['Oil extraction', 'Digital reconstruction of the region', 'Traditional banking', 'Social media moderation'], answer: 'Digital reconstruction of the region' },
+                    { q: 'What is the name of NVIDIA’s strategy mentioned in the text?', options: ['Global AI', 'Sovereign AI', 'Free AI', 'Universal Computing'], answer: 'Sovereign AI' },
+                    { q: 'The term "preliminary" means ______.', options: ['Final and permanent', 'Initial or coming before the main part', 'Secret', 'Illegal'], answer: 'Initial or coming before the main part' },
+                    { q: 'What does "capitalizing on" mean?', options: ['Losing money', 'Taking advantage of a situation', 'Hiding a secret', 'Ignoring a shift'], answer: 'Taking advantage of a situation' },
+                    { q: 'What is the goal of "Sovereign AI" for these nations?', options: ['To rely on US cloud providers', 'To have independent computing power', 'To stop using technology', 'To increase taxes'], answer: 'To have independent computing power' },
+                    { q: 'The term "state-of-the-art" is used to describe ______.', options: ['Old art from a museum', 'Modern and advanced technology', 'Cheaply made goods', 'Handmade tools'], answer: 'Modern and advanced technology' },
+                    { q: 'What kind of "shifts" are occurring in the region?', options: ['Weather shifts', 'Geopolitical shifts', 'Tidal shifts', 'Clock shifts'], answer: 'Geopolitical shifts' },
+                    { q: 'The word "pivotal" means ______.', options: ['Unimportant', 'Crucial or of central importance', 'Slow', 'Forgotten'], answer: 'Crucial or of central importance' },
+                    { q: 'Who is the CEO of NVIDIA?', options: ['Elon Musk', 'Jensen Huang', 'Shou Zi Chew', 'Bill Gates'], answer: 'Jensen Huang' },
+                    { q: 'Middle East deals focus on "digital ______."', options: ['Destruction', 'Reconstruction', 'Isolation', 'Banning'], answer: 'Reconstruction' }
+                ]
+            },
+            'australia-tiktok-ban': {
+                title: '澳洲 TikTok 禁令威脅：要求算法透明',
+                english: `The Australian government issued a final ultimatum to TikTok on Monday, demanding a full audit of its content recommendation algorithms related to political topics. Prime Minister Anthony Albanese stated that "national security is not a negotiable feature." If the platform fails to comply by March, it could face a total nationwide ban. TikTok has consistently denied foreign government influence, but the pressure in Canberra reflects a broader Western shift toward digital sovereignty laws. The legislation also targets the potential for "covert influence" during sensitive election cycles.`,
+                chinese: `澳洲政府：TikTok 若不披露「政治影響算法」，將面臨無限期禁令。澳洲政府週一向 TikTok 發出最後通牒，要求對其涉及政治話題的內容推薦演算法進行全面審核。總理艾班尼斯（Anthony Albanese）表示，「國家安全不是一個可以談判的特性」。如果該平台未能在 3 月前遵守規定，可能會面臨全境範圍的無限期禁令。TikTok 一貫否認受外國政府影響，但坎培拉方面的壓力反映出西方國家轉向數位主權法律的更廣泛趨勢。該立法還針對敏感選舉週期內潛在的「隱蔽影響」。`,
+                vocabulary: [
+                    'Final ultimatum (n.phr.): 最後通牒', 'Full audit (n.phr.): 全面審核', 'Content recommendation (n.phr.): 內容推薦', 'Algorithms (n.): 演算法',
+                    'Negotiable feature (n.phr.): 可談判的特性', 'Nationwide ban (n.phr.): 全國性禁令', 'Consistently denied (phr.): 一貫否認', 'Foreign government influence (n.phr.): 外國政府影響',
+                    'Digital sovereignty (n.phr.): 數位主權', 'Legislation (n.): 立法', 'Covert influence (n.phr.): 隱蔽影響/秘密影響', 'Sensitive election cycles (n.phr.): 敏感選舉週期',
+                    'Canberra (n. proper): 坎培拉 (澳洲政府所在地)', 'Ultimatum (n.): 最後通牒', 'Audit (v./n.): 審計/查核', 'Comply (v.): 遵守',
+                    'Indefinite (adj.): 無限期的', 'Transparency (n.): 透明度', 'Enforcement (n.): 執法', 'Sovereignty (n.): 主權',
+                    'Coincides (v.): 同時發生', 'Discourse (n.): 對話/演說', 'Accountability (n.): 問責制', 'Manipulation (n.): 操縱',
+                    'Platform (n.): 平台', 'Nationwide (adj.): 全國性的', 'Negotiable (adj.): 可商量的', 'Audit (n.): 稽核',
+                    'Compliance (n.): 順從/合規', 'Influence (n.): 影響', 'Election (n.): 選舉', 'Cycle (n.): 週期'
+                ],
+                quiz: [
+                    { q: 'Which country issued a final ultimatum to TikTok on Monday?', options: ['USA', 'UK', 'Australia', 'Japan'], answer: 'Australia' },
+                    { q: 'What does the Australian government demand from TikTok?', options: ['A payment of $1 billion', 'A full audit of its political recommendation algorithms', 'To move its office to Sydney', 'To hire more Australian actors'], answer: 'A full audit of its political recommendation algorithms' },
+                    { q: 'Who is the Prime Minister of Australia mentioned?', options: ['Kevin Hassett', 'Anthony Albanese', 'Giorgia Meloni', 'Keir Starmer'], answer: 'Anthony Albanese' },
+                    { q: 'What is the deadline for TikTok to comply?', options: ['January', 'February', 'March', 'June'], answer: 'March' },
+                    { q: 'What could happen to TikTok if it fails to comply?', options: ['A small fine', 'A total nationwide ban', 'A name change', 'Nothing'], answer: 'A total nationwide ban' },
+                    { q: 'What has TikTok consistently denied?', options: ['Being a popular app', 'Foreign government influence', 'Using algorithms', 'Having an office in Australia'], answer: 'Foreign government influence' },
+                    { q: 'The pressure in Canberra reflects a shift toward what kind of laws?', options: ['Environmental laws', 'Digital sovereignty laws', 'Lower tax laws', 'Old-fashioned media laws'], answer: 'Digital sovereignty laws' },
+                    { q: 'What does "covert influence" mean?', options: ['Open and public influence', 'Secret or hidden influence', 'Scientific influence', 'Helpful advice'], answer: 'Secret or hidden influence' },
+                    { q: 'The word "ultimatum" refers to ______.', options: ['A friendly gift', 'A final demand with a threat of action', 'A secret deal', 'A new law'], answer: 'A final demand with a threat of action' },
+                    { q: 'What is "national security" described as by the Prime Minister?', options: ['A negotiable feature', 'A "non-negotiable" feature', 'A minor detail', 'A financial problem'], answer: 'A "non-negotiable" feature' },
+                    { q: 'What part of TikTok is being audited?', options: ['The logo design', 'The content recommendation algorithms', 'The office snacks', 'The price of stock'], answer: 'The content recommendation algorithms' },
+                    { q: 'Canberra is a synonym for which government?', options: ['UK', 'USA', 'Australia', 'Canada'], answer: 'Australia' },
+                    { q: 'The term "audit" means a ______.', options: ['Loud noise', 'Thorough examination or check', 'Type of car', 'Celebration'], answer: 'Thorough examination or check' },
+                    { q: 'Sensitive "______ cycles" are a concern for the government.', options: ['Weather', 'Election', 'Economic', 'Lunar'], answer: 'Election' },
+                    { q: 'What does "comply" mean?', options: ['To fight back', 'To act in accordance with a wish or command', 'To ignore', 'To change completely'], answer: 'To act in accordance with a wish or command' }
+                ]
+            },
+            'un-suez-canal': {
+                title: '聯合國：蘇伊士運河航運持續低迷',
+                english: `A new UNCTAD report released on Monday warns that global maritime trade through the Suez Canal is unlikely to recover to pre-conflict levels in 2026. The report notes that shipping firms have "structurally adjusted" their routes around the Cape of Good Hope, leading to a permanent increase in logistics costs for certain commodities. The UN urged renewed commitment to international maritime security, warning that prolonged route diversions are contributing to "logistics-led" inflationary pressure on the global economy. This shift has also impacted the economies of countries along the canal, notably Egypt.`,
+                chinese: `聯合國：2026 年全球海運貿易量受蘇伊士運河局勢影響將持續低迷。聯合國貿易和發展會議（UNCTAD）週一發布的新報告警告，蘇伊士運河的全球海運貿易量在 2026 年不太可能恢復到衝突前的水準。報告指出，航運公司已「結構性調整」了繞行好望角（Cape of Good Hope）的航線，導致某些大宗物資的物流成本面臨永久性增加。聯合國敦促各國重新致力於國際海事安全，並警告長期的航線繞道正在為全球經濟帶來「物流主導型」的通膨壓力。這一轉變也影響了運河沿線國家的經濟，特別是埃及。`,
+                vocabulary: [
+                    'UNCTAD (n. proper): 聯合國貿易和發展會議', 'Maritime trade (n.phr.): 海運貿易', 'Suez Canal (n. proper): 蘇伊士運河', 'Pre-conflict levels (n.phr.): 衝突前水準',
+                    'Structurally adjusted (adj.phr.): 結構性調整的', 'Cape of Good Hope (n. proper): 好望角', 'Permanent increase (n.phr.): 永久性增加', 'Logistics costs (n.phr.): 物流成本',
+                    'Commodities (n.): 大宗商品', 'Renewed commitment (n.phr.): 重新致力於', 'International maritime security (n.phr.): 國際海事安全', 'Prolonged (adj.): 長期的',
+                    'Route diversions (n.phr.): 航線繞道', 'Logistics-led (adj.): 物流主導的', 'Inflationary pressure (n.phr.): 通膨壓力', 'Global economy (n.phr.): 全球經濟',
+                    'Notably (adv.): 顯著地/特別是', 'Slump (n.): 低迷/衰落', 'Egypt (n. proper): 埃及', 'Persistent (adj.): 持續的',
+                    'Diversion (n.): 轉向', 'Escalating (v.ger.): 升級', 'Inevitably (adv.): 必然地', 'Carrier (n.): 承運商',
+                    'Impacted (v.pp.): 受到影響的', 'Slump (n.): 暴跌', 'Logistics (n.): 物流', 'Structural (adj.): 結構的',
+                    'Route (n.): 路線', 'Canal (n.): 運河', 'Inflation (n.): 通膨', 'Commitment (n.): 承諾'
+                ],
+                quiz: [
+                    { q: 'Which UN body released the report on the Suez Canal?', options: ['WHO', 'UNCTAD', 'UNESCO', 'UNICEF'], answer: 'UNCTAD' },
+                    { q: 'Is trade through the Suez Canal expected to fully recover in 2026?', options: ['Yes, by summer', 'No, it is unlikely to recover to pre-conflict levels', 'It has already recovered', 'The canal is closed forever'], answer: 'No, it is unlikely to recover to pre-conflict levels' },
+                    { q: 'What adjustment have shipping firms made to their routes?', options: ['They stopped using ships', 'They "structurally adjusted" routes around the Cape of Good Hope', 'They are using planes now', 'They are digging a new canal'], answer: 'They "structurally adjusted" routes around the Cape of Good Hope' },
+                    { q: 'The route change has led to what kind of cost increase?', options: ['Temporary decrease', 'Permanent increase in logistics costs', 'No change', 'A decrease in insurance costs'], answer: 'Permanent increase in logistics costs' },
+                    { q: 'Which country\'s economy is notably impacted along the canal?', options: ['China', 'USA', 'Egypt', 'Brazil'], answer: 'Egypt' },
+                    { q: 'The UN warned of "______" inflationary pressure.', options: ['Food-led', 'Logistics-led', 'Space-led', 'Art-led'], answer: 'Logistics-led' },
+                    { q: 'The UN urged renewed commitment to what?', options: ['Building more ships', 'International maritime security', 'Stopping all trade', 'Raising taxes'], answer: 'International maritime security' },
+                    { q: 'The word "slump" means which of the following?', options: ['A sudden rise', 'A period of low or reduced activity/value', 'A type of fuel', 'A fast boat'], answer: 'A period of low or reduced activity/value' },
+                    { q: 'The term "structural" adjustment implies the change is ______.', options: ['Minor and accidental', 'Fundamental and long-term', 'Temporary for one day', 'Secret'], answer: 'Fundamental and long-term' },
+                    { q: 'What are "commodities"?', options: ['Raw materials or primary agricultural products', 'Finished smartphones only', 'Types of services', 'Bank loans'], answer: 'Raw materials or primary agricultural products' },
+                    { q: 'The term "maritime" refers to ______.', options: ['Air travel', 'Sea and ships', 'Underground mining', 'Forestry'], answer: 'Sea and ships' },
+                    { q: 'What does "prolonged" mean?', options: ['Short', 'Continuing for a long time', 'Very fast', 'Boring'], answer: 'Continuing for a long time' },
+                    { q: 'A "diversion" in this context is a ______.', options: ['Joke', 'Change from a typical route', 'New tax', 'Ship engine'], answer: 'Change from a typical route' },
+                    { q: 'Logistics involves the management of ______.', options: ['Only money', 'The movement of goods and services', 'Only people', 'Only software'], answer: 'The movement of goods and services' },
+                    { q: 'Which day was the UNCTAD report released?', options: ['Sunday', 'Monday', 'Friday', 'Saturday'], answer: 'Monday' }
+                ]
+            }
+        };
+
+        // --- STATE & RENDERING ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title.split('：')[0]}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確答案)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
