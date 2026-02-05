@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 2 月 4 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 2 月 4 日：能源韌性、半導體尖端佈局與全球社經變革</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for persistent professional English learning. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Taiwan and U.S. Sign Clean Energy Pact; U.S. to License Geothermal Technology\nIn a move to bolster Taiwan's energy security, Taipei and Washington signed a "Clean Energy Cooperation Agreement" on Wednesday. Under the deal, the U.S. will license advanced deep-earth geothermal technology to Taiwan, with the goal of constructing several new power plants by 2028. Premier Cho Jung-tai stated that this partnership supports Taiwan’s net-zero transition and reduces reliance on imported LNG.\n\n[2] TSMC Confirms A14 (1.4nm) Plant Location in Taichung; Groundbreaking in Mid-2026\nEnding months of speculation, TSMC officially confirmed that its first production facility for the A14 (1.4-nanometer) node will be built in the Taichung Science Park. The expansion is expected to create over 5,000 high-tech jobs and solidify central Taiwan’s role in the global AI supply chain. Selection of Taichung highlights the government’s commitment to "balanced regional development."\n\n[3] Taipei Lantern Festival Ends: "Dragon" Main Installation Hits 10M Digital Views\nThe Taipei City Government announced that the 2026 Lantern Festival has reached a conclusion with record-breaking engagement. The main installation, "Dragon Leaping Over Clouds," leveraged 5G and AR technology to attract over 10 million digital views worldwide. Mayor Chiang Wan-an stated that the festival’s success demonstrates how traditional culture can be revitalized through technological innovation.`,
+                chinese: `【1】台美簽署「潔淨能源合作協議」：美方將授權地熱技術給台灣\n為加強台灣的能源安全，台北與華盛頓週三簽署了《潔淨能源合作協議》。根據協議，美國將向台灣授權先進的深層地熱技術，目標是在 2028 年前建設數座新電廠。行政院長卓榮泰表示，這項夥伴關係不僅支持台灣的淨零轉型，還能減少對進口液化天然氣（LNG）的依賴，進一步將「矽盾」與西方永續能源池整合。\n\n【2】台積電證實 A14（1.4 奈米）廠區落腳台中，預計 2026 年中動工\n結束了數月的揣測，台積電（TSMC）週三正式證實，其 A14（1.4 奈米）製程的首座生產設施將建於台中科學園區。此次擴張預計將創造超過 5,000 個高科技職缺，並鞏固中台灣在全球 AI 供應鏈中的角色。分析師指出，選擇台中凸顯了該地區強大的基礎設施及政府對「區域均衡發展」的承諾，同時維持台灣的技術領先地位。\n\n【3】台北燈節進入尾聲：主燈「龍躍雲端」結合 5G 技術創下千萬級數位瀏覽\n台北市政府週三宣布，2026 台北燈節圓滿落幕，參與度創下紀錄。主燈「龍躍雲端」利用 5G 和 AR 技術，在全球吸引了超過 1,000 萬次數位觀看。市長蔣萬安表示，燈節的成功證明了傳統文化如何透過技術創新煥發活力，使台北成為「智慧文化觀光」的全球領導者。`,
+                vocabulary: [
+                    'Bolster (v.): 強化/支持', 'Pact (n.): 協議/公約', 'License (v.): 授權', 'Geothermal (adj.): 地熱的',
+                    'Net-zero transition (n.phr.): 淨零轉型', 'Reliance (n.): 依賴', 'Imported LNG (n.phr.): 進口液化天然氣', 'Sustainable energy (n.phr.): 永續能源',
+                    'Speculation (n.): 揣測/推測', 'Facility (n.): 設施', 'Node (n.): 節點/製程', 'Groundbreaking (n.): 動工/開工',
+                    'Solidify (v.): 鞏固/強化', 'Supply chain (n.phr.): 供應鏈', 'Balanced development (n.phr.): 均衡發展', 'Technological edge (n.phr.): 技術優勢',
+                    'Conclusion (n.): 結尾/結論', 'Engagement (n.): 參與/互動', 'Leveraged (v.pt.): 利用/槓桿', 'Digital views (n.phr.): 數位瀏覽量',
+                    'Revitalized (v.pp.): 煥發活力的', 'Innovation (n.): 創新', 'Positioning (v.ger.): 定位', 'Commercialization (n.): 商業化',
+                    'Autonomy (n.): 自主性', 'Inception (n.): 成立/開始', 'Kinetic (adj.): 動力的', 'Infrastructure (n.): 基礎建設',
+                    'Refining (v.ger.): 提煉', 'Munition (n.): 彈藥', 'Reparation (n.): 賠償', 'Meteorologist (n.): 氣象員'
+                ],
+                quiz: [
+                    { q: 'Which technology will the U.S. license to Taiwan under the new energy pact?', options: ['Nuclear fusion', 'Deep-earth geothermal technology', 'Solar panel manufacturing', 'Wind turbine software'], answer: 'Deep-earth geothermal technology' },
+                    { q: 'What is the goal for the completion of the new power plants mentioned in the energy pact?', options: ['2026', '2027', '2028', '2030'], answer: '2028' },
+                    { q: 'The partnership aims to reduce Taiwan\'s reliance on which imported energy source?', options: ['Coal', 'Imported LNG', 'Solar cells', 'Uranium'], answer: 'Imported LNG' },
+                    { q: 'Where will TSMC build its first A14 (1.4nm) production facility?', options: ['Hsinchu', 'Taichung Science Park', 'Kaohsiung', 'Tainan'], answer: 'Taichung Science Park' },
+                    { q: 'How many high-tech jobs is the new TSMC expansion expected to create?', options: ['1,000', '2,500', 'Over 5,000', '10,000'], answer: 'Over 5,000' },
+                    { q: 'When is the groundbreaking for the A14 plant expected?', options: ['Late 2025', 'Early 2026', 'Mid-2026', '2028'], answer: 'Mid-2026' },
+                    { q: 'Which technologies did the Taipei Lantern Festival leverage to attract digital views?', options: ['Radio and TV', '5G and AR', 'Satellite and AI only', 'VR and Blockchain'], answer: '5G and AR' },
+                    { q: 'How many digital views did the main installation "Dragon Leaping Over Clouds" hit?', options: ['1 million', '5 million', 'Over 10 million', '100 million'], answer: 'Over 10 million' },
+                    { q: 'What did Mayor Chiang Wan-an say about the success of the festival?', options: ['It was too expensive', 'It shows culture can be revitalized through innovation', 'It needs more funding next year', 'It should be longer'], answer: 'It shows culture can be revitalized through innovation' },
+                    { q: 'The term "LNG" stands for which energy source?', options: ['Light Natural Gas', 'Liquefied Natural Gas', 'Low Nitrogen Gas', 'Local Natural Generator'], answer: 'Liquefied Natural Gas' },
+                    { q: 'A "groundbreaking" ceremony refers to what?', options: ['Breaking a building', 'The start of construction', 'The completion of a project', 'An earthquake event'], answer: 'The start of construction' },
+                    { q: 'What does "net-zero transition" refer to?', options: ['Zero jobs', 'Transition to zero carbon emissions', 'Reducing taxes to zero', 'Zero waste in water'], answer: 'Transition to zero carbon emissions' },
+                    { q: 'Taichung was selected partly to promote "______ regional development."', options: ['Rapid', 'Balanced', 'Expensive', 'Centralized'], answer: 'Balanced' },
+                    { q: 'The word "revitalized" means to ______.', options: ['End something', 'Bring new life or energy to something', 'Sell something', 'Change a name'], answer: 'Bring new life or energy to something' },
+                    { q: 'Which leader noted the integration of the "Silicon Shield" with Western energy?', options: ['President Lai', 'Premier Cho Jung-tai', 'Mayor Chiang', 'Jensen Huang'], answer: 'Premier Cho Jung-tai' }
+                ]
+            },
+            'iran-reform': {
+                title: '伊朗社會改革與美援恢復',
+                english: `The "Provisional Council for National Salvation" in Iran took a monumental step toward social reform on Wednesday by officially abolishing the notorious Morality Police. The council pledged to establish a neutral legal code that respects individual liberties. Following this, the White House announced the resumption of non-military aid to Tehran, focused on healthcare and telecommunications reconstruction. This de-escalation is seen as a critical victory for President Trump’s "Peace Through Strength" strategy, aiming to stabilize the region through economic engagement rather than direct military intervention.`,
+                chinese: `伊朗過渡委員會宣佈解散「道德警察」，美方恢復對德黑蘭非軍事援助。伊朗「國家救國臨時委員會」週三在社會改革方面邁出了里程碑式的一步，正式廢除了惡名昭彰的「道德警察」。該委員會承諾建立一套尊重個人自由的中立法律體系。隨後，美國白宮宣布恢復對德黑蘭的非軍事援助，重點放在醫療保健與電信重建。這次局勢降溫被視為川普總統「以實力求和平（Peace Through Strength）」策略的關鍵勝利，旨在透過經濟介入而非直接軍事干預來穩定該地區。`,
+                vocabulary: [
+                    'Provisional Council (n.phr.): 臨時委員會', 'Monumental step (n.phr.): 里程碑式的一步', 'Social reform (n.phr.): 社會改革', 'Abolishing (v.ger.): 廢除',
+                    'Notorious (adj.): 惡名昭彰的', 'Morality Police (n. proper): 道德警察', 'Pledged (v.pt.): 承諾', 'Legal code (n.phr.): 法律體系/法典',
+                    'Individual liberties (n.phr.): 個人自由', 'Resumption (n.): 恢復', 'Non-military aid (n.phr.): 非軍事援助', 'Telecommunications (n.): 電信/通訊',
+                    'Reconstruction (n.): 重建', 'De-escalation (n.): 局勢降溫', 'Peace Through Strength (phr.): 以實力求和平', 'Engagement (n.): 參與/介入',
+                    'Intervention (n.): 干預', 'Stabilize (v.): 穩定', 'Neutral (adj.): 中立的', 'Healthcare (n.): 醫療保健',
+                    'Strategic (adj.): 戰略性的', 'Notorious (adj.): 聲名狼藉的', 'Liberties (n.): 自由', 'Diplomacy (n.): 外交',
+                    'Stabilization (n.): 穩定化', 'Abolish (v.): 廢止', 'Pledge (n./v.): 誓約', 'Neutral (adj.): 中立的',
+                    'Engagement (n.): 接洽/介入', 'Intervention (n.): 調停/干預', 'Council (n.): 委員會', 'Strategic (adj.): 戰略的'
+                ],
+                quiz: [
+                    { q: 'Which notorious organization did Iran\'s Provisional Council abolish?', options: ['The Regular Army', 'The Morality Police', 'The Tax Bureau', 'The Foreign Ministry'], answer: 'The Morality Police' },
+                    { q: 'What kind of legal code did the council pledge to establish?', options: ['Religious code', 'Strict military code', 'Neutral legal code respecting individual liberties', 'Secret code'], answer: 'Neutral legal code respecting individual liberties' },
+                    { q: 'The White House announced the resumption of which type of aid?', options: ['Military aid (weapons)', 'Non-military aid', 'Only gold aid', 'Space technology aid'], answer: 'Non-military aid' },
+                    { q: 'Which sectors will the new U.S. aid for Iran focus on?', options: ['Oil and Gas', 'Healthcare and telecommunications reconstruction', 'Farming and Fishing', 'Arts and Fashion'], answer: 'Healthcare and telecommunications reconstruction' },
+                    { q: 'The de-escalation is seen as a victory for which Trump strategy?', options: ['"America First" only', '"Peace Through Strength"', '"War at all costs"', '"Open Borders"'], answer: '"Peace Through Strength"' },
+                    { q: 'The goal of the U.S. strategy is to stabilize the region through ______.', options: ['Direct military intervention', 'Economic engagement', 'Total isolation', 'Removing all aid'], answer: 'Economic engagement' },
+                    { q: 'What does "abolish" mean?', options: ['To create', 'To officially end or stop a law/system', 'To hide', 'To repair'], answer: 'To officially end or stop a law/system' },
+                    { q: 'The term "notorious" implies being famous for ______.', options: ['Good deeds', 'Something bad', 'Being rich', 'Being very old'], answer: 'Something bad' },
+                    { q: 'What is "telecommunications" related to?', options: ['Eating', 'Communication (phones, internet)', 'Building houses', 'Farming'], answer: 'Communication (phones, internet)' },
+                    { q: 'The word "monumental" means ______.', options: ['Small and quiet', 'Great in importance or size', 'Forgotten', 'Broken'], answer: 'Great in importance or size' },
+                    { q: 'The term "de-escalation" refers to a ______ in intensity.', options: ['Increase', 'Decrease', 'Stability', 'End'], answer: 'Decrease' },
+                    { q: 'What are "individual liberties"?', options: ['Personal freedoms', 'Personal debts', 'Government taxes', 'Military rules'], answer: 'Personal freedoms' },
+                    { q: 'Resumption refers to ______ something after a pause.', options: ['Stopping', 'Beginning again', 'Deleting', 'Selling'], answer: 'Beginning again' },
+                    { q: 'Where is the Provisional Council for National Salvation located?', options: ['Iraq', 'Iran', 'USA', 'Turkey'], answer: 'Iran' },
+                    { q: 'Is the U.S. providing weapons to the council currently according to the text?', options: ['Yes', 'No, focused on non-military aid', 'Only missiles', 'The text doesn\'t say'], answer: 'No, focused on non-military aid' }
+                ]
+            },
+            'nvidia-market-cap': {
+                title: '輝達市值突破 4.8 兆美元',
+                english: `NVIDIA’s stock surged once again on Wednesday, propelling the company’s market capitalization toward a record-breaking $4.8 trillion. The latest rally followed reports of unprecedented pre-orders for its "Project Isaac" robotics chips, designed to accelerate the development of autonomous humanoid robots for industrial manufacturing. CEO Jensen Huang stated that the integration of generative AI with physical robotics marks the "next frontier" of the digital revolution, positioning NVIDIA as the primary architect of the next industrial era.`,
+                chinese: `輝達（NVIDIA）市值突破 4.8 兆美元，新一代 AI 自動化機器人架構預購火爆。輝達股價週三再度飆升，推動其市值逼近創紀錄的 4.8 兆美元。最新的漲勢主因是其「艾薩克計畫（Project Isaac）」機器人晶片接獲了前所未有的海量預購訂單，該晶片旨在加速用於工業製造的自主人形機器人的開發。執行長黃仁勳表示，生成式 AI 與實體機器人技術的整合標誌著數位革命的「下一個前沿」，並將輝達定位為下一個工業時代的主要建構者（Architect）。`,
+                vocabulary: [
+                    'Market capitalization (n.phr.): 市值', 'Surged (v.pt.): 飆升', 'Propelling (v.ger.): 推進/驅使', 'Record-breaking (adj.): 打破紀錄的',
+                    'Rally (n.): (股市) 漲勢', 'Unprecedented (adj.): 前所未有的', 'Pre-orders (n.): 預購', 'Project Isaac (n. proper): 艾薩克計畫',
+                    'Autonomous (adj.): 自主的', 'Humanoid robots (n.phr.): 人形機器人', 'Industrial manufacturing (n.phr.): 工業製造', 'Integration (n.): 整合/結合',
+                    'Generative AI (n.phr.): 生成式人工智慧', 'Physical robotics (n.phr.): 實體機器人技術', 'Next frontier (n.phr.): 下一個前沿/邊疆', 'Digital revolution (n.phr.): 數位革命',
+                    'Primary architect (n.phr.): 主要架構師/建構者', 'Industrial era (n.phr.): 工業時代', 'Accelerate (v.): 加速', 'Unveiling (n.): 揭幕',
+                    'Robot (n.): 機器人', 'Stock (n.): 股票', 'Surpass (v.): 超過', 'Trillion (n.): 兆',
+                    'Breakthrough (n.): 突破', 'Dominance (n.): 主導', 'Hardware (n.): 硬體', 'Software (n.): 軟體',
+                    'Integration (n.): 整合', 'Manufacturing (n.): 製造', 'Foreseeable (adj.): 可預見的', 'Sustained (adj.): 持續的'
+                ],
+                quiz: [
+                    { q: 'What is NVIDIA\'s new record-breaking market capitalization milestone?', options: ['$1 trillion', '$3 trillion', '$4.5 trillion', '$4.8 trillion'], answer: '$4.8 trillion' },
+                    { q: 'What is the name of the new robotics project mentioned?', options: ['Project Apollo', 'Project Isaac', 'Project Titan', 'Project Neo'], answer: 'Project Isaac' },
+                    { q: 'The new robotics chips are designed for which specific purpose?', options: ['Video gaming', 'Autonomous humanoid robots for industrial manufacturing', 'Smartphone cameras', 'Self-driving planes only'], answer: 'Autonomous humanoid robots for industrial manufacturing' },
+                    { q: 'Who is the CEO of NVIDIA?', options: ['Elon Musk', 'Jensen Huang', 'Shou Zi Chew', 'Jeff Bezos'], answer: 'Jensen Huang' },
+                    { q: 'What did Huang call the integration of generative AI and physical robotics?', options: ['"A minor update"', '"The next frontier" of the digital revolution', '"An expensive dream"', '"The end of AI"'], answer: '"The next frontier" of the digital revolution' },
+                    { q: 'NVIDIA is positioning itself as the primary ______ of the next industrial era.', options: ['Seller', 'Architect', 'Rival', 'Customer'], answer: 'Architect' },
+                    { q: 'What kind of orders led to the latest stock rally?', options: ['Cancellations', 'Unprecedented pre-orders', 'Small test orders', 'Only government orders'], answer: 'Unprecedented pre-orders' },
+                    { q: 'The term "market capitalization" refers to ______.', options: ['Total profit', 'Total value of a company\'s shares', 'Total number of employees', 'Total debt'], answer: 'Total value of a company\'s shares' },
+                    { q: 'What does "humanoid" mean?', options: ['Very big', 'Resembling a human in appearance', 'Made of metal only', 'Invisible'], answer: 'Resembling a human in appearance' },
+                    { q: 'The word "surged" means the stock price ______.', options: ['Dropped', 'Rose suddenly and strongly', 'Stayed the same', 'Disappeared'], answer: 'Rose suddenly and strongly' },
+                    { q: 'The "next frontier" refers to a ______.', options: ['New wall', 'New field or limit of knowledge/achievement', 'Old history book', 'Small room'], answer: 'New field or limit of knowledge/achievement' },
+                    { q: 'What is "industrial manufacturing"?', options: ['Hand-making small toys', 'Large-scale production of goods in factories', 'Cooking food at home', 'Farming'], answer: 'Large-scale production of goods in factories' },
+                    { q: 'The word "propelling" means ______.', options: ['Slowing down', 'Driving or pushing forward', 'Stopping', 'Painting'], answer: 'Driving or pushing forward' },
+                    { q: 'What kind of AI is being integrated with robotics?', options: ['Static AI', 'Generative AI', 'Simple math AI', 'No AI'], answer: 'Generative AI' },
+                    { q: 'Which day did the NVIDIA stock surge occur?', options: ['Monday', 'Tuesday', 'Wednesday', 'Sunday'], answer: 'Wednesday' }
+                ]
+            },
+            'mexico-lithium': {
+                title: '墨西哥鋰礦國家化',
+                english: `In a move that surprised Washington, Mexican President Claudia Sheinbaum announced on Wednesday that all lithium refining operations would be placed under state control. Sheinbaum argued that the move is necessary to ensure that Mexico’s natural wealth benefits its citizens rather than foreign corporations. U.S. trade officials warned that this could violate USMCA provisions, potentially leading to retaliatory tariffs and complicating the North American transition to electric vehicles. Mexico holds some of the world’s largest lithium deposits, which are essential for EV batteries.`,
+                chinese: `墨西哥總統宣佈將「國家化」鋰礦提煉業，引發美墨貿易局勢緊張。令華盛頓感到意外的是，墨西哥總統克勞迪婭·辛鮑姆（Claudia Sheinbaum）週三宣布，所有鋰礦提煉業務將由國家控制。辛鮑姆辯稱，此舉對於確保墨西哥的自然財富造福其公民而非外國公司至關重要。美國貿易官員警告，這可能違反《美墨加協定》（USMCA）的規定，可能導致報復性關稅，並使北美的電動車轉型變得複雜。墨西哥擁有世界上一些最大的鋰儲量，這對於電動車電池至關重要。`,
+                vocabulary: [
+                    'Nationalize (v.): 國家化/收歸國有', 'Lithium (n.): 鋰', 'Refining operations (n.phr.): 提煉業務', 'State control (n.phr.): 國家控制',
+                    'Natural wealth (n.phr.): 自然財富', 'Foreign corporations (n.phr.): 外國公司', 'Violate (v.): 違反', 'USMCA provisions (n.phr.): 《美墨加協定》條款',
+                    'Retaliatory tariffs (n.phr.): 報復性關稅', 'Complicating (v.ger.): 使複雜化', 'Electric vehicles (EVs) (n.phr.): 電動車', 'Lithium deposits (n.phr.): 鋰儲量/礦床',
+                    'EV batteries (n.phr.): 電動車電池', 'Surprised (v.pt.): 使驚訝', 'Trade officials (n.phr.): 貿易官員', 'Provisions (n.): 條款/規定',
+                    'Nationalization (n.): 國有化', 'Wealth (n.): 財富', 'Transition (n.): 轉型/過渡', 'Battery (n.): 電池',
+                    'Strategic (adj.): 戰略的', 'Refinery (n.): 提煉廠', 'Tariff (n.): 關稅', 'Retaliatory (adj.): 報復性的',
+                    'Violation (n.): 違規/違反', 'Provision (n.): 供應/條款', 'Citizen (n.): 公民', 'Corporation (n.): 公司'
+                ],
+                quiz: [
+                    { q: 'Who is the President of Mexico mentioned in the text?', options: ['Justin Trudeau', 'Claudia Sheinbaum', 'Donald Trump', 'Emmanuel Macron'], answer: 'Claudia Sheinbaum' },
+                    { q: 'What industry is Mexico moving to nationalize?', options: ['Oil drilling', 'Lithium refining', 'Tourism', 'Farming'], answer: 'Lithium refining' },
+                    { q: 'Why did the President say nationalization is necessary?', options: ['To buy more weapons', 'To ensure natural wealth benefits Mexican citizens', 'To increase taxes for everyone', 'To stop all manufacturing'], answer: 'To ensure natural wealth benefits Mexican citizens' },
+                    { q: 'Which trade agreement might this move violate?', options: ['NAFTA', 'USMCA', 'OPEC', 'ASEAN'], answer: 'USMCA' },
+                    { q: 'What kind of response did U.S. trade officials warn of?', options: ['A friendly letter', 'Retaliatory tariffs', 'A total ban on cars', 'No response'], answer: 'Retaliatory tariffs' },
+                    { q: 'What North American transition could be complicated by this move?', options: ['Transition to space travel', 'Transition to electric vehicles', 'Transition to a new currency', 'Transition to paper files'], answer: 'Transition to electric vehicles' },
+                    { q: 'What is lithium essential for in modern technology?', options: ['Computer screens', 'EV batteries', 'Clothing', 'Building roads'], answer: 'EV batteries' },
+                    { q: 'The term "nationalize" means ______.', options: ['To sell a company', 'To bring under government control/ownership', 'To close a business', 'To move a factory to another country'], answer: 'To bring under government control/ownership' },
+                    { q: 'What are "provisions" in a trade deal?', options: ['Food supplies', 'Legal clauses or requirements', 'New cars', 'Taxes'], answer: 'Legal clauses or requirements' },
+                    { q: 'What does "retaliatory" mean?', options: ['Kind and helpful', 'Done in response to an injury or action (hitting back)', 'Expensive', 'Very fast'], answer: 'Done in response to an injury or action (hitting back)' },
+                    { q: 'Where are some of the world\'s largest lithium deposits located according to the text?', options: ['USA', 'China', 'Mexico', 'Australia'], answer: 'Mexico' },
+                    { q: 'The word "refining" refers to ______.', options: ['Growing crops', 'The process of purifying a substance', 'Selling goods in a shop', 'Driving a car'], answer: 'The process of purifying a substance' },
+                    { q: 'Washington was "surprised" by the move, meaning it was ______.', options: ['Expected', 'Unexpected', 'Planned with them', 'Very small'], answer: 'Unexpected' },
+                    { q: 'What is a "deposit" in a geological sense?', options: ['A sum of money', 'An accumulation of mineral matter (ore)', 'A new building', 'A type of tool'], answer: 'An accumulation of mineral matter (ore)' },
+                    { q: 'On which day was the announcement made?', options: ['Monday', 'Tuesday', 'Wednesday', 'Sunday'], answer: 'Wednesday' }
+                ]
+            },
+            'turkey-inflation': {
+                title: '土耳其通膨顯著下降',
+                english: `Turkey’s Finance Ministry reported on Wednesday that annual inflation slowed to 35% in January, the lowest level in nearly three years. Finance Minister Mehmet Şimşek attributed the decline to the central bank’s tight monetary policy and the government’s efforts to reduce the fiscal deficit. While the cost of living remains high for many Turkish citizens, the downward trend has bolstered investor confidence in the nation’s economic recovery heading into the second quarter of 2026. Experts say this is a critical test for the government's long-term stabilization plan.`,
+                chinese: `土耳其一月通膨率降至 35%，經濟部長宣稱「去通膨化」取得顯著進展。土耳其財政部週三報告指出，一月份年通膨率放緩至 35%，為近三年來的最低水準。財政部長希姆謝克（Mehmet Şimşek）將此下降歸因於央行的緊縮貨幣政策以及政府減少財政赤字的努力。儘管對許多土耳其公民而言生活成本依然高昂，但這一下降趨勢增強了投資者對該國在 2026 年第二季走向經濟復甦的信心。專家表示，這是對政府長期穩定計畫的關鍵考驗。`,
+                vocabulary: [
+                    'Annual inflation (n.phr.): 年通膨率', 'Slowed to (v.pt.): 放緩至', 'Lowest level (n.phr.): 最低水準', 'Finance Minister (n.phr.): 財政部長',
+                    'Attributed the decline (phr.): 將下降歸因於', 'Tight monetary policy (n.phr.): 緊縮貨幣政策', 'Fiscal deficit (n.phr.): 財政赤字', 'Cost of living (n.phr.): 生活成本',
+                    'Downward trend (n.phr.): 下降趨勢', 'Bolstered (v.pt.): 增強/支持', 'Investor confidence (n.phr.): 投資者信心', 'Economic recovery (n.phr.): 經濟復甦',
+                    'Second quarter (n.phr.): 第二季 (Q2)', 'Stabilization plan (n.phr.): 穩定計畫', 'Disinflation (n.): 去通膨化', 'Fiscal (adj.): 財政的',
+                    'Deficit (n.): 赤字/虧空', 'Monetary (adj.): 貨幣的', 'Inflation (n.): 通膨', 'Confidence (n.): 信心',
+                    'Critical (adj.): 關鍵的/批判的', 'Trend (n.): 趨勢', 'Recovery (n.): 復甦/恢復', 'Investor (n.): 投資者',
+                    'Stabilize (v.): 穩定', 'Annual (adj.): 每年的/年度的', 'Department (n.): 部門', 'Attribute (v.): 歸屬/歸因'
+                ],
+                quiz: [
+                    { q: 'What was Turkey\'s annual inflation rate in January?', options: ['15%', '35%', '50%', '80%'], answer: '35%' },
+                    { q: 'The inflation rate is the lowest in how long?', options: ['One year', 'Two years', 'Nearly three years', 'Ten years'], answer: 'Nearly three years' },
+                    { q: 'Who is the Finance Minister of Turkey mentioned?', options: ['Mehmet Şimşek', 'Jensen Huang', 'Claudia Sheinbaum', 'Cho Jung-tai'], answer: 'Mehmet Şimşek' },
+                    { q: 'What are the two main reasons for the decline in inflation?', options: ['Tax cuts and more printing of money', 'Tight monetary policy and efforts to reduce fiscal deficit', 'High oil prices and tourism', 'A new trade deal with the US'], answer: 'Tight monetary policy and efforts to reduce fiscal deficit' },
+                    { q: 'How is the cost of living currently described for many Turkish citizens?', options: ['Very low', 'Remaining high', 'Non-existent', 'Stable'], answer: 'Remaining high' },
+                    { q: 'The downward trend has bolstered confidence in which group?', options: ['Students', 'Investors', 'Farmers only', 'Artists'], answer: 'Investors' },
+                    { q: 'When is the nation heading into its next economic phase according to the text?', options: ['Immediate Q1', 'Second quarter of 2026', 'End of 2028', '2030'], answer: 'Second quarter of 2026' },
+                    { q: 'What is a "fiscal deficit"?', options: ['A surplus of money', 'When government spending exceeds revenue', 'A type of tax', 'A new bank'], answer: 'When government spending exceeds revenue' },
+                    { q: 'What does "monetary policy" refer to?', options: ['Police in the city', 'Management of a country\'s money supply and interest rates', 'The price of food', 'Rules for space travel'], answer: 'Management of a country\'s money supply and interest rates' },
+                    { q: 'The word "bolstered" means ______.', options: ['Weakened', 'Strengthened or supported', 'Ignored', 'Deleted'], answer: 'Strengthened or supported' },
+                    { q: 'The term "disinflation" refers to ______.', options: ['Prices falling to zero', 'A reduction in the rate of inflation', 'A huge price increase', 'A type of gold coin'], answer: 'A reduction in the rate of inflation' },
+                    { q: 'Which ministry reported the inflation data?', options: ['Ministry of Health', 'Ministry of Finance', 'Ministry of Education', 'Ministry of Interior'], answer: 'Ministry of Finance' },
+                    { q: 'The trend is described as "downward," meaning prices are ______.', options: ['Rising faster', 'Increasing at a slower rate/Falling', 'Staying the same', 'Impossible to measure'], answer: 'Increasing at a slower rate/Falling' },
+                    { q: 'What is a "quarter" in an economic year?', options: ['25 cents', 'Three months', 'Six months', 'A full year'], answer: 'Three months' },
+                    { q: 'Is the stabilization plan considered finished or undergoing a test?', options: ['Finished', 'A critical test', 'Cancelled', 'Not started yet'], answer: 'A critical test' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        // --- CORE RENDERING ---
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title.split('：')[0]}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
