@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 2 月 9 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 2 月 9 日：高市大勝、半導體加速與利率轉向</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for professional English learners. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] TSMC Confirms Arizona Phase 2 to Begin Equipment Move-In by Late 2026\nFollowing a high-level meeting with U.S. trade officials, TSMC confirmed on Sunday that its second fab in Arizona is ahead of schedule. The facility, designed for 3nm and potentially 2nm production, is now slated to start equipment installation by the end of this year. This acceleration is attributed to the "Green Channel" regulatory fast-track provided under the new bilateral trade framework. Analysts believe this move significantly reduces geopolitical risk for U.S. big-tech clients while maintaining Taiwan's operational leadership.\n\n[2] Academia Sinica Develops "Trust Digital Signature" to Detect AI Deepfakes\nAcademia Sinica researchers announced on Sunday a breakthrough in digital forensics. The newly developed "Trust Digital Signature" can identify AI-generated or manipulated images and videos with a 99.7% accuracy rate. The technology is expected to be integrated into government communication platforms by mid-2026 to combat disinformation campaigns, especially as regional tensions involve sophisticated cyber influence operations.\n\n[3] Severe Cold Surge Persists: 10 Counties on Alert as Farmers Brace for Frost Damage\nThe Central Weather Administration (CWA) extended low-temperature warnings for 10 cities and counties on Sunday. A low of 6.8°C was recorded in rural Miaoli early this morning. Agriculture officials have urged fruit growers and aquaculture farmers in central Taiwan to implement emergency heating measures, as the freezing conditions are expected to persist through Tuesday.`,
+                chinese: `【1】台積電證實：亞利桑那二期廠區將提前於 2026 年底進入設備安裝階段\n在與美國貿易官員舉行高層會議後，台積電（TSMC）週日證實其亞利桑那州第二座晶圓廠進度超前。該設施設計用於 3 奈米及潛在的 2 奈米生產，目前預計於今年底開始安裝設備。此次加速歸功於新雙邊貿易框架下提供的「綠色通道」法規快速審核。分析師認為，此舉顯著降低了美國科技巨頭客戶的地緣政治風險，同時維持了台灣的營運領先地位。\n\n【2】台灣中研院突破：成功開發出能精準辨識 AI 深偽影像的「信任數位簽章」\n在對抗認知作戰的鬥爭中，中央研究院研究人員週日宣布了數位鑑識領域的突破。新開發的「信任數位簽章」能以 99.7% 的準確率辨識 AI 生成或變造的圖像與影片。這項技術預計將在 2026 年中整合至政府通訊平台與主要新聞門戶，以打擊假訊息活動，特別是當區域緊張局勢日益涉及複雜的網路影響力操作時。\n\n【3】寒流影響持續：全台 10 縣市低溫特報，農漁業防寒進入最緊要關頭\n隨著強大的極地氣團持續籠罩台灣，中央氣象署（CWA）週日對 10 個縣市延長了低溫特報。今日凌晨在苗栗郊區測得 6.8 度的低溫。農業官員已促請中部地區的果農與養殖業者實施緊急加熱措施，因為濕冷嚴寒的環境預計將持續到週二，隨後才會開始緩步回升。`,
+                vocabulary: [
+                    'Equipment Move-In (n.phr.): 設備進場/安裝', 'Ahead of schedule (phr.): 提前', 'Slated to (v.pp.): 預定/計畫', 'Acceleration (n.): 加速',
+                    'Attributed to (v.phr.): 歸因於', 'Green Channel (n.phr.): 綠色通道/快速路徑', 'Regulatory fast-track (n.phr.): 法規快速審理', 'Geopolitical risk (n.phr.): 地緣政治風險',
+                    'Operational leadership (n.phr.): 營運領導地位', 'Academia Sinica (n. proper): 中央研究院', 'Trust Digital Signature (n.phr.): 信任數位簽章', 'Digital forensics (n.phr.): 數位鑑識',
+                    'Manipulated (adj.): 被操縱的/變造的', 'Accuracy rate (n.phr.): 準確率', 'Cognitive warfare (n.phr.): 認知作戰', 'Disinformation campaigns (n.phr.): 假訊息活動',
+                    'Cyber influence operations (n.phr.): 網路影響力操作', 'Cold surge (n.phr.): 寒流', 'Blanket (v.): 覆蓋/籠罩', 'Low-temperature warnings (n.phr.): 低溫特報',
+                    'Aquaculture (n.): 養殖業', 'Frost damage (n.phr.): 霜害', 'Persist (v.): 持續', 'Rural (adj.): 鄉村的/郊區的',
+                    'Infrastructure (n.): 基礎建設', 'Expansion (n.): 擴張', 'Resilience (n.): 韌性', 'Unprecedented (adj.): 史無前例的',
+                    'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略性的', 'Vicinity (n.): 附近', 'Vigilance (n.): 警覺'
+                ],
+                quiz: [
+                    { q: 'What activity is slated to begin for TSMC Arizona Phase 2 by late 2026?', options: ['Groundbreaking', 'Staff recruitment', 'Equipment installation', 'Market listing'], answer: 'Equipment installation' },
+                    { q: 'What provided the "fast-track" for TSMC\'s Arizona acceleration?', options: ['Lower electricity costs', 'The "Green Channel" regulatory framework', 'New local laws', 'A gift from the mayor'], answer: 'The "Green Channel" regulatory framework' },
+                    { q: 'The Arizona Phase 2 facility is designed for which technology?', options: ['5nm and 7nm', '3nm and potentially 2nm', 'Memory chips only', 'Solar panels'], answer: '3nm and potentially 2nm' },
+                    { q: 'What is the accuracy rate of Academia Sinica\'s new deepfake detection tool?', options: ['80%', '90.5%', '99.7%', '100%'], answer: '99.7%' },
+                    { q: 'When is the deepfake detection technology expected to be integrated into government platforms?', options: ['Immediately', 'By late 2026', 'By mid-2026', '2030'], answer: 'By mid-2026' },
+                    { q: 'What kind of "warfare" is Academia Sinica fighting against?', options: ['Nuclear warfare', 'Cognitive warfare', 'Trench warfare', 'Economic warfare'], answer: 'Cognitive warfare' },
+                    { q: 'Where was the low of 6.8°C recorded early Sunday morning?', options: ['Taipei City', 'Taitung coast', 'Rural Miaoli', 'Central Park'], answer: 'Rural Miaoli' },
+                    { q: 'How many counties were on alert for low temperatures?', options: ['5', '10', '15', '18'], answer: '10' },
+                    { q: 'Agriculture officials urged which measures for farmers?', options: ['Planting more seeds', 'Emergency heating measures', 'Selling crops early', 'Stopping irrigation'], answer: 'Emergency heating measures' },
+                    { q: 'What does "slated" mean in the text?', options: ['Cancelled', 'Planned or scheduled', 'Hated', 'Finished'], answer: 'Planned or scheduled' },
+                    { q: 'The term "digital forensics" refers to ______.', options: ['Cleaning computers', 'Scientific study of evidence from digital sources', 'Building new apps', 'Selling cameras'], answer: 'Scientific study of evidence from digital sources' },
+                    { q: 'What does "persists" mean in the weather context?', options: ['Ends quickly', 'Continues to exist', 'Stops and starts', 'Changes color'], answer: 'Continues to exist' },
+                    { q: 'The TSMC move is believed to reduce ______ risk for U.S. clients.', options: ['Financial', 'Geopolitical', 'Weather', 'Education'], answer: 'Geopolitical' },
+                    { q: 'Disinformation campaigns are often part of ______ operations.', options: ['Friendly', 'Sophisticated cyber influence', 'Simple farming', 'Space travel'], answer: 'Sophisticated cyber influence' },
+                    { q: 'Academia Sinica is a research institution in which country?', options: ['USA', 'China', 'Japan', 'Taiwan'], answer: 'Taiwan' }
+                ]
+            },
+            'japan-election-takaichi': {
+                title: '日本眾議院大選：高市早苗大勝',
+                english: `In a political landslide set to reshape East Asian security, Prime Minister Sanae Takaichi’s Liberal Democratic Party (LDP) secured a solid majority in Sunday’s snap general election. The victory provides a clear mandate for Takaichi’s hawkish platform, which includes doubling defense spending and acquiring "counter-strike" capabilities. Exit polls suggest that voters prioritized national security and industrial reshoring amid global trade volatility. The result is expected to lead to even closer trilateral defense cooperation between Tokyo, Washington, and Taipei in the coming years.`,
+                chinese: `日本眾議院大選：高市早苗領導的自民黨取得「過半數」大勝，強軍政策獲民意授權。在這一場將重塑東亞安全的政治大勝中，首相高市早苗領導的自由民主黨（自民黨，LDP）在週日的閃電大選中獲得了穩固的過半席次。這次勝利為高市的「鷹派」綱領提供了明確的授權，該綱領包括國防支出翻倍以及獲得「反擊」能力。出口民調顯示，在全球貿易動盪之際，選民優先考慮國家安全與產業回流（Reshoring）。預計這一結果將在未來幾年推動東京、華盛頓與台北之間更緊密的三方防禦合作。`,
+                vocabulary: [
+                    'Political landslide (n.phr.): 政治大勝/壓倒性勝利', 'Snap general election (n.phr.): 閃電大選', 'Mandate (n.): 授權/民意委託', 'Hawkish (adj.): 鷹派的/強硬的',
+                    'Platform (n.): 政綱/月台', 'Defense spending (n.phr.): 國防支出', 'Counter-strike (n./v.): 反擊/逆襲', 'Exit polls (n.phr.): 出口民調',
+                    'Prioritized (v.pt.): 優先考慮', 'Reshoring (v.ger.): (產業)回流/搬回國內', 'Volatility (n.): 動盪/揮發性', 'Trilateral (adj.): 三方的',
+                    'Decisive majority (n.phr.): 決定性多數', 'Mandate (v.): 授權', 'Sovereignty (n.): 主權', 'Erosion (n.): 侵蝕/削弱',
+                    'Restraint (n.): 克制', 'Catastrophe (n.): 災難', 'Implementation (n.): 執行', 'Verification (n.): 驗證',
+                    'LDP (Liberal Democratic Party) (n. proper): 自民黨', 'Landslide (n.): 壓倒性勝利', 'Security (n.): 安全', 'Reshape (v.): 重塑',
+                    'Platform (n.): 綱領', 'Acquire (v.): 獲得', 'Prioritize (v.): 優先', 'Industrial (adj.): 工業的'
+                ],
+                quiz: [
+                    { q: 'Which political party won a decisive majority in Japan\'s election?', options: ['CDP', 'LDP (Liberal Democratic Party)', 'Communist Party', 'Green Party'], answer: 'LDP (Liberal Democratic Party)' },
+                    { q: 'Who is the Prime Minister of Japan mentioned in the article?', options: ['Fumio Kishida', 'Sanae Takaichi', 'Shinzo Abe', 'Yoshihide Suga'], answer: 'Sanae Takaichi' },
+                    { q: 'What does Takaichi\'s "hawkish" platform include?', options: ['Lowering taxes', 'Doubling defense spending', 'Closing all factories', 'Stopping trade with the US'], answer: 'Doubling defense spending' },
+                    { q: 'According to exit polls, what did voters prioritize?', options: ['National security and industrial reshoring', 'Environmental protection', 'Art and Music', 'Tourism only'], answer: 'National security and industrial reshoring' },
+                    { q: 'The election is expected to lead to closer cooperation between which three cities?', options: ['London, Paris, Berlin', 'Tokyo, Washington, Taipei', 'Beijing, Moscow, Tehran', 'Seoul, Hanoi, Bangkok'], answer: 'Tokyo, Washington, Taipei' },
+                    { q: 'What specific capability is Japan looking to acquire?', options: ['Space mining', 'Counter-strike capabilities', 'Deep sea drilling', 'Crypto mining'], answer: 'Counter-strike capabilities' },
+                    { q: 'The election was a "snap" election, meaning it was ______.', options: ['Very slow', 'Called earlier than expected/lightning fast', 'Banned', 'Only for one city'], answer: 'Called earlier than expected/lightning fast' },
+                    { q: 'What does "mandate" mean in a political context?', options: ['A type of food', 'Official authority or authorization to act', 'A secret deal', 'A military rank'], answer: 'Official authority or authorization to act' },
+                    { q: 'The term "landslide victory" means ______.', options: ['A small win', 'An overwhelming majority win', 'A win by mistake', 'A win that was cancelled'], answer: 'An overwhelming majority win' },
+                    { q: 'What does "reshoring" involve?', options: ['Moving jobs overseas', 'Bringing manufacturing back to the home country', 'Buying a new boat', 'Moving to another planet'], answer: 'Bringing manufacturing back to the home country' },
+                    { q: 'Japan is looking to double its defense ______.', options: ['Spending', 'Taxes', 'Schools', 'Museums'], answer: 'Spending' },
+                    { q: 'The term "trilateral" means involving how many parties?', options: ['Two', 'Three', 'Four', 'Ten'], answer: 'Three' },
+                    { q: 'Waiters are often asked about "exit polls," which are taken ______.', options: ['Before voting', 'Immediately after voters leave the polling station', 'Next year', 'By robots only'], answer: 'Immediately after voters leave the polling station' },
+                    { q: 'Which region\'s security will the result reshape?', options: ['Europe', 'North America', 'East Asian security', 'African security'], answer: 'East Asian security' },
+                    { q: 'The word "hawkish" is a synonym for ______.', options: ['Peaceful', 'Aggressive or hard-line', 'Confused', 'Old-fashioned'], answer: 'Aggressive or hard-line' }
+                ]
+            },
+            'fed-hassett-growth': {
+                title: '聯準會主席哈塞特：增長優先利率政策',
+                english: `Acting Federal Reserve Chairman Kevin Hassett delivered a firm defense of his dovish policy on Sunday, stating that the central bank's goal to bring interest rates down to 1.5% by year-end is essential for global economic restructuring. Hassett argued that "cheap capital" is the most effective weapon against inflation caused by supply-side disruptions. While the U.S. dollar weakened slightly, equity markets responded with optimism, betting that the Fed's aggressive cuts will fuel a long-term industrial boom in North America and its key democratic partners.`,
+                chinese: `聯準會主席哈塞特：捍衛「增長優先」立場，指 1.5% 利率目標有利於全球供應鏈重組。代理聯準會主席凱文·哈塞特週日對其「鴿派」政策進行了堅定辯護，表示央行在年底前將利率降至 1.5% 的目標對於全球經濟重組至關重要。哈塞特辯稱，「廉價資本」是對抗供應端中斷引發之通膨的最有效武器。雖然美元因該消息略有走弱，但股市反應樂觀，預期聯準會的激進降息將推動北美及其主要民主夥伴國家的長期工業繁榮。`,
+                vocabulary: [
+                    'Growth-First (adj.): 增長優先的', 'Acting Chairman (n.phr.): 代理主席', 'Dovish policy (n.phr.): 鴿派政策', '1.5% Target (n.phr.): 1.5% 的目標',
+                    'Economic restructuring (n.phr.): 經濟重組', 'Cheap capital (n.phr.): 廉價資本/低利資金', 'Supply-side disruptions (n.phr.): 供應端中斷', 'Inflation (n.): 通膨',
+                    'Aggressive cuts (n.phr.): 激進降息', 'Industrial boom (n.phr.): 工業繁榮', 'Democratic partners (n.phr.): 民主夥伴', 'Equity markets (n.phr.): 股市/股票市場',
+                    'Restructuring (v.ger.): 重組', 'Weapon (n.): 武器/手段', 'Weakened (v.pt.): 走弱', 'Optimism (n.): 樂觀',
+                    'Monetary policy (n.phr.): 貨幣政策', 'Federal Reserve (n. proper): 聯準會', 'Hassett (n. proper): 哈塞特', 'Restructuring (n.): 重組',
+                    'Volatility (n.): 波動', 'Stagnation (n.): 停滯', 'Industrial (adj.): 工業的', 'Anticipated (adj.): 預期的',
+                    'Reduction (n.): 減少', 'Currency (n.): 貨幣', 'Rally (v./n.): 飆升', 'Basis-point (n.): 基點'
+                ],
+                quiz: [
+                    { q: 'What is the Fed\'s target interest rate by the end of the year?', options: ['0.5%', '1.5%', '3.5%', '5.0%'], answer: '1.5%' },
+                    { q: 'Hassett argues that "______ capital" is an effective weapon against inflation.', options: ['Expensive', 'Foreign', 'Cheap', 'Digital'], answer: 'Cheap' },
+                    { q: 'What does Hassett blame for the current inflation?', options: ['High wages', 'Supply-side disruptions', 'Low taxes', 'Space travel'], answer: 'Supply-side disruptions' },
+                    { q: 'How did the U.S. dollar react to Hassett\'s statement?', options: ['It became stronger.', 'It weakened slightly.', 'It stayed the same.', 'It was replaced by gold.'], answer: 'It weakened slightly.' },
+                    { q: 'Equity markets responded with ______.', options: ['Fear', 'Optimism', 'Anger', 'Indifference'], answer: 'Optimism' },
+                    { q: 'The aggressive cuts are expected to fuel an industrial boom where?', options: ['North America and key democratic partners', 'Russia and China', 'Africa only', 'Antarctica'], answer: 'North America and key democratic partners' },
+                    { q: 'What is the current title of Kevin Hassett?', options: ['LDP Leader', 'Acting Federal Reserve Chairman', 'Prime Minister', 'TSMC CEO'], answer: 'Acting Federal Reserve Chairman' },
+                    { q: 'Hassett\'s policy is described as "dovish," meaning he favors ______.', options: ['High interest rates', 'Low interest rates to promote growth', 'Selling all gold', 'Starting a war'], answer: 'Low interest rates to promote growth' },
+                    { q: 'The goal of the policy is global economic "______."', options: ['Destruction', 'Restructuring', 'Isolation', 'Stagnation'], answer: 'Restructuring' },
+                    { q: 'The term "cheap capital" means borrowing money is ______.', options: ['Impossible', 'Inexpensive/Low interest', 'Forbidden', 'Only for the rich'], answer: 'Inexpensive/Low interest' },
+                    { q: 'What does "restructuring" mean in an economic sense?', options: ['Building a new house', 'Significant reorganization of the economy\'s structure', 'Doing nothing', 'Printing paper money only'], answer: 'Significant reorganization of the economy\'s structure' },
+                    { q: 'Hassett believes the cuts will fuel a long-term ______.', options: ['Recession', 'Industrial boom', 'Inflation peak', 'Tax increase'], answer: 'Industrial boom' },
+                    { q: 'The term "supply-side" relates to the ______ of goods and services.', options: ['Demand', 'Production and availability', 'Advertising', 'Cleaning'], answer: 'Production and availability' },
+                    { q: 'Is Hassett a permanent or acting Chairman?', options: ['Permanent', 'Acting', 'Retired', 'Elected by the public'], answer: 'Acting' },
+                    { q: 'The word "fuel" in this context means to ______.', options: ['Put gas in a car', 'Stimulate or encourage', 'Stop or hinder', 'Ignore'], answer: 'Stimulate or encourage' }
+                ]
+            },
+            'un-shipping-elevated': {
+                title: '聯合國：全球海運運費將維持在高檔',
+                english: `A new UNCTAD report released on Sunday suggests that the "structural diversion" of shipping around the Cape of Good Hope has become a permanent feature of global logistics. The report predicts that maritime transport costs will remain 15–20% higher than pre-2024 levels throughout the year. UN officials warned that this "logistics tax" is disproportionately affecting developing nations, urging a renewed global effort to restore the security of the Suez Canal route. The ongoing Red Sea crisis remains the primary cause of these elevated rates.`,
+                chinese: `聯合國：2026 年全球海運運費因「紅海長期繞道」預計將維持在高檔。聯合國貿易和發展會議（UNCTAD）週日發布的新報告指出，繞道好望角（Cape of Good Hope）的「結構性分流」已成為全球物流的常態。報告預測，今年海運成本將維持在比 2024 年前高出 15% 至 20% 的水平。聯合國官員警告，這種「物流稅」正不成比例地影響著開發中國家，並促請全球重新努力恢復蘇伊士運河航線的安全與可預測性。持續中的紅海危機仍是導致運費居高不下的主要原因。`,
+                vocabulary: [
+                    'UNCTAD (n. proper): 聯合國貿易和發展會議', 'Structural diversion (n.phr.): 結構性分流/繞道', 'Cape of Good Hope (n. proper): 好望角', 'Permanent feature (n.phr.): 永久特徵/常態',
+                    'Global logistics (n.phr.): 全球物流', 'Maritime transport costs (n.phr.): 海運成本', 'Elevated (adj.): 提高的/高檔的', 'Logistics tax (n.phr.): 物流稅',
+                    'Disproportionately (adv.): 不成比例地', 'Developing nations (n.phr.): 開發中國家', 'Predictability (n.): 可預見性', 'Suez Canal route (n.phr.): 蘇伊士運河航線',
+                    'Red Sea crisis (n. proper): 紅海危機', 'Urging (v.ger.): 促請/敦促', 'Restoration (n.): 恢復', 'Escalating (adj.): 升級的',
+                    'Logistics (n.): 物流', 'Inevitably (adv.): 必然地', 'Carrier (n.): 承運商', 'Impacted (v.pp.): 受到影響的',
+                    'Slump (n.): 暴跌', 'Structural (adj.): 結構的', 'Route (n.): 路線', 'Inflation (n.): 通膨',
+                    'Commitment (n.): 承諾', 'Sovereignty (n.): 主權', 'Erosion (n.): 侵蝕', 'Tensions (n.): 緊張局勢'
+                ],
+                quiz: [
+                    { q: 'According to the UNCTAD report, shipping around which location has become a "permanent feature"?', options: ['Panama Canal', 'Suez Canal', 'Cape of Good Hope', 'Strait of Malacca'], answer: 'Cape of Good Hope' },
+                    { q: 'How much higher are maritime transport costs expected to remain compared to pre-2024 levels?', options: ['5%', '10%', '15–20%', '50%'], answer: '15–20%' },
+                    { q: 'What is the primary cause of the elevated shipping rates?', options: ['Overproduction of ships', 'The Red Sea crisis', 'Low oil prices', 'A strike in Barcelona'], answer: 'The Red Sea crisis' },
+                    { q: 'Who is being "disproportionately affected" by the higher costs?', options: ['Developed nations', 'Developing nations', 'The US government', 'Space agencies'], answer: 'Developing nations' },
+                    { q: 'What term does the UN use to describe the extra cost added by logistics problems?', options: ['"Fuel subsidy"', '"Logistics tax"', '"Service fee"', '"Travel grant"'], answer: '"Logistics tax"' },
+                    { q: 'The UN is urging a renewed effort to restore security to which route?', options: ['The Arctic route', 'The Suez Canal route', 'The Atlantic route', 'The local bus route'], answer: 'The Suez Canal route' },
+                    { q: 'The report describes the change in shipping as a "structural ______."', options: ['Success', 'Diversion', 'Failure', 'Celebration'], answer: 'Diversion' },
+                    { q: 'What does "elevated" mean?', options: ['Lowered', 'Kept at a higher level', 'Hidden', 'Boring'], answer: 'Kept at a higher level' },
+                    { q: 'The word "disproportionately" means something is not ______.', options: ['Correct', 'Equal or balanced in proportion', 'Fast', 'Scientific'], answer: 'Equal or balanced in proportion' },
+                    { q: 'The "Cape of Good Hope" is located near which continent?', options: ['South America', 'Africa', 'Asia', 'Europe'], answer: 'Africa' },
+                    { q: 'What is "UNCTAD"?', options: ['A branch of the military', 'United Nations Conference on Trade and Development', 'A type of shipping boat', 'A financial bank'], answer: 'United Nations Conference on Trade and Development' },
+                    { q: 'The term "logistics" refers to the ______ of Goods.', options: ['Manufacturing', 'Detailed organization and implementation of complex operations/movement', 'Selling', 'Advertising'], answer: 'Detailed organization and implementation of complex operations/movement' },
+                    { q: 'Officials warn that this will affect "predictability." What is that?', options: ['The ability to be foreseen', 'The speed of light', 'The price of gold', 'A type of fuel'], answer: 'The ability to be foreseen' },
+                    { q: 'The diversion is now considered a "______ feature."', options: ['Temporary', 'Permanent', 'Minor', 'Unknown'], answer: 'Permanent' },
+                    { q: 'Where was the report released?', options: ['Washington', 'Geneva/The UN (implied)', 'Tokyo', 'London'], answer: 'Geneva/The UN (implied)' }
+                ]
+            },
+            'olympic-flame-cortina': {
+                title: '2026 冬奧聖火抵達科爾蒂納',
+                english: `The 2026 Milano Cortina Winter Olympic Torch Relay reached the alpine town of Cortina d’Ampezzo on Sunday. Local residents and athletes greeted the flame with a traditional mountain celebration. After decades since it last hosted the Games, Cortina is set to be the co-host for skiing and ice events. The torch relay has served as a vital tool for social acceptance and promoting the "infrastructural legacy" of the Games across northern Italy. The opening ceremony is just weeks away, and the atmosphere in the Dolomites is described as "electric."`,
+                chinese: `2026 米蘭冬奧會聖火抵達科爾蒂納：當地民眾熱烈歡迎聖火回歸。2026 年米蘭-科爾蒂納冬奧會聖火傳遞週日抵達了高山小鎮科爾蒂納丹佩佐（Cortina d’Ampezzo）。當地居民與運動員以傳統的高山慶祝活動迎接聖火。在距離上一次舉辦冬奧數十年後，科爾蒂納將再次成為滑雪與冰上項目的協辦城市。聖火傳遞不僅是推動社會認同的重要工具，也展示了北義大利各地的「基礎設施遺產」。開幕式將在幾週後舉行，目前多洛米蒂山脈（Dolomites）的氣氛被描述為「令人興奮（electric）」。`,
+                vocabulary: [
+                    'Torch Relay (n.phr.): 聖火傳遞', 'Alpine town (n.phr.): 高山小鎮', 'Cortina d’Ampezzo (n. proper): 科爾蒂納丹佩佐', 'Residents (n.): 居民',
+                    'Co-host (n./v.): 協辦者/協辦', 'Skiing and ice events (n.phr.): 滑雪與冰上項目', 'Social acceptance (n.phr.): 社會認同/接受', 'Promoting (v.ger.): 促進/宣傳',
+                    'Infrastructural legacy (n.phr.): 基礎設施遺產', 'Opening ceremony (n.phr.): 開幕式', 'Atmosphere (n.): 氣氛', 'Electric (adj.): 令人興奮的/觸電般的',
+                    'Dolomites (n. proper): 多洛米蒂山脈', 'Heritage (n.): 遺產/傳承', 'Homecoming (n.): 回歸/家鄉之行', 'Inauguration (n.): 就職典禮/落成儀式',
+                    'Sustained (adj.): 持續的', 'Legacy (n.): 遺產/遺留物', 'Winter Olympics (n. proper): 冬季奧運', 'Torch (n.): 火炬',
+                    'Celebration (n.): 慶祝', 'Relay (n.): 接力/傳遞', 'Athlete (n.): 運動員', 'Dolomite (n.): 白雲石/多洛米蒂',
+                    'Acceptance (n.): 接受/認可', 'Infrastructure (n.): 基礎設施', 'Legacy (n.): 遺產', 'Promotion (n.): 晉升/推廣'
+                ],
+                quiz: [
+                    { q: 'Which two cities are hosting the 2026 Winter Olympics?', options: ['Paris and London', 'Milano and Cortina', 'Beijing and Tokyo', 'Salt Lake City and Denver'], answer: 'Milano and Cortina' },
+                    { q: 'Where did the torch relay arrive on Sunday?', options: ['Rome', 'Milan city center', 'Cortina d’Ampezzo', 'Naples'], answer: 'Cortina d’Ampezzo' },
+                    { q: 'What kind of events will Cortina host?', options: ['Swimming and Diving', 'Skiing and ice events', 'Track and Field', 'Soccer'], answer: 'Skiing and ice events' },
+                    { q: 'How long has it been since Cortina last hosted the Games?', options: ['One year', 'Five years', 'Decades', 'It never hosted before'], answer: 'Decades' },
+                    { q: 'How is the atmosphere in the Dolomites described?', options: ['Quiet and calm', 'Electric (exciting)', 'Angry', 'Boring'], answer: 'Electric (exciting)' },
+                    { q: 'The torch relay promotes the "______ legacy" of the Games.', options: ['Financial', 'Infrastructural', 'Digital', 'Old'], answer: 'Infrastructural' },
+                    { q: 'The opening ceremony is how far away?', options: ['One year', 'Six months', 'Just weeks away', 'Tomorrow'], answer: 'Just weeks away' },
+                    { q: 'What kind of celebration greeted the flame?', options: ['A small dinner', 'A traditional mountain celebration', 'A silent prayer', 'A business meeting'], answer: 'A traditional mountain celebration' },
+                    { q: 'The term "relay" in this context refers to ______.', options: ['A type of machine', 'A race or process where things are passed along', 'A radio tower', 'An expensive gift'], answer: 'A race or process where things are passed along' },
+                    { q: 'What does "alpine" refer to?', options: ['The deep ocean', 'Related to high mountains (Alps)', 'A hot desert', 'The moon'], answer: 'Related to high mountains (Alps)' },
+                    { q: 'A "co-host" is someone who ______.', options: ['Hosts alone', 'Hosts along with another party', 'Attends as a guest', 'Bans the event'], answer: 'Hosts along with another party' },
+                    { q: 'What is the "Dolomites"?', options: ['A type of pizza', 'A mountain range in Italy', 'A local newspaper', 'The name of the torch'], answer: 'A mountain range in Italy' },
+                    { q: 'The relay has served as a "vital tool" for what?', options: ['Building bridges', 'Social acceptance', 'Cleaning the city', 'Farming'], answer: 'Social acceptance' },
+                    { q: 'The word "legacy" refers to ______.', options: ['A type of car', 'Something handed down from the past', 'A new rule', 'A mistake'], answer: 'Something handed down from the past' },
+                    { q: 'Cortina d’Ampezzo is a town in which country?', options: ['France', 'Switzerland', 'Italy', 'Austria'], answer: 'Italy' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        // --- CORE RENDERING ---
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title.split('：')[0]}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確答案)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
