@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 2 月 10 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 2 月 10 日：矽盾保衛、NVIDIA 進駐與全球經濟新頁</p>
+        </header>
+
+        <div class="container-card">
+            <!-- Main Tabs -->
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for persistent professional English learning. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] Vice Premier: Taiwan Committed to Keeping Core Chip Production On-Shore\nAddressing concerns over "industrial hollowing out," the Vice Premier clarified on Tuesday that there is no plan to relocate 40% of high-end chip production to the U.S. While TSMC is expanding globally, the government emphasized that advanced 2nm and future 1.4nm nodes will remain anchored in Taiwan. The administration aims to maintain at least 80% of global advanced capacity domestically to preserve Taiwan’s strategic "Silicon Shield."\n\n[2] Taipei Finalizes NT$12.2 Billion Royalty Deal with NVIDIA for New HQ\nTaipei Mayor Chiang Wan-an confirmed on Tuesday that the city has finalized negotiations with NVIDIA for its new Taiwan headquarters in the Beitou–Shilin Technology Park. The NT$12.2 billion (US$380 million) deal marks the final stage before the contract signing next week. The project is expected to transform the district into a world-class AI research hub, attracting secondary investments from global AI server manufacturers.\n\n[3] Cold Surge Intensifies: Temperatures in Northern Taiwan to Dip Below 10°C Tonight\nThe Central Weather Administration (CWA) issued a fresh cold alert on Tuesday. A powerful polar air mass is moving across the island, with temperatures in Taipei and Yilan expected to drop below 10°C by midnight. Local governments have activated emergency shelters for the homeless, and citizens are urged to be cautious of the health risks associated with sudden temperature drops.`,
+                chinese: `【1】行政院副院長澄清：台灣不會將 40% 的晶片產能移往美國\n針對外界對「產業空洞化」的擔憂，行政院副院長週二澄清，並沒有將 40% 的高階晶片產能遷移至美國的計畫。雖然台積電正進行全球擴張，但政府強調，先進的 2 奈米及未來的 1.4 奈米製程將紮根台灣。政府的目標是將至少 80% 的全球先進產能留在國內，以維護台灣具戰略意義的「矽盾」。\n\n【2】台北市政府與 NVIDIA 簽署 122 億元權利金協議，研發中心落腳北投士林\n台北市長蔣萬安週二證實，市府已與 NVIDIA 就其在北投士林科技園區設立台灣新總部一事完成談判。這項價值 122 億新台幣（約 3.8 億美元）的協議標誌著下週正式簽約前的最後階段。該計畫預計將使該區轉型為世界級的 AI 研發中心，並吸引全球 AI 伺服器製造商的後續投資。\n\n【3】氣象署：強冷空氣南下，北台灣週二晚間低溫恐探 10°C 以下\n中央氣象署（CWA）週二發布了新的低溫特報。一波強大的極地氣團正橫越台灣，台北與宜蘭的氣溫預計在午夜前降至 10 度以下。地方政府已為無家可歸者啟動緊急避難所，並促請民眾注意氣溫驟降及伴隨鋒面而來的高濕度所引發的健康風險。`,
+                vocabulary: [
+                    'Vice Premier (n.phr.): 行政院副院長', 'Hollowing out (n.phr.): 空洞化', 'Relocate (v.): 遷移', 'High-end chips (n.phr.): 高階晶片',
+                    'Anchored (v.pp.): 紮根/固定', 'Nodes (n.): 節點/製程', 'Capacity (n.): 產能', 'Preserve (v.): 維護/保存',
+                    'Strategic (adj.): 戰略性的', 'Silicon Shield (n. proper): 矽盾', 'Finalizes (v.): 敲定/完成', 'Royalty deal (n.phr.): 權利金協議',
+                    'Headquarters (HQ) (n.): 總部', 'Technology Park (n.phr.): 科技園區', 'Research hub (n.phr.): 研發中心', 'Secondary investments (n.phr.): 後續/次級投資',
+                    'Cold surge (n.phr.): 寒流/冷空氣', 'Intensifies (v.): 加劇', 'Dip (v.): 下降', 'Polar air mass (n.phr.): 極地氣團',
+                    'Midnight (n.): 午夜', 'Activated (v.pt.): 啟動', 'Emergency shelters (n.phr.): 緊急避難所', 'Homeless (n./adj.): 無家可歸者',
+                    'Sudden (adj.): 突然的', 'Humidity (n.): 濕度', 'Bilateral (adj.): 雙邊的', 'Infrastructure (n.): 基礎建設',
+                    'Negotiation (n.): 談判', 'World-class (adj.): 世界級的', 'Committed (adj.): 致力於的', 'Epicentre (n.): 中心'
+                ],
+                quiz: [
+                    { q: 'What percentage of high-end chip production did the Vice Premier deny moving to the U.S.?', options: ['20%', '40%', '80%', '100%'], answer: '40%' },
+                    { q: 'What is the goal for the percentage of advanced capacity to be kept domestically?', options: ['At least 40%', 'At least 50%', 'At least 80%', '100%'], answer: 'At least 80%' },
+                    { q: 'Which advanced nodes will remain anchored in Taiwan?', options: ['2nm and 1.4nm', '5nm and 7nm', '10nm and 28nm', 'Only legacy nodes'], answer: '2nm and 1.4nm' },
+                    { q: 'Where is the new NVIDIA headquarters in Taipei going to be located?', options: ['Neihu Technology Park', 'Hsinchu Science Park', 'Beitou–Shilin Technology Park', 'Xinyi District'], answer: 'Beitou–Shilin Technology Park' },
+                    { q: 'What is the total value of the deal between Taipei City and NVIDIA?', options: ['NT$1.22 billion', 'NT$12.2 billion', 'US$12.2 billion', 'NT$380 billion'], answer: 'NT$12.2 billion' },
+                    { q: 'The NVIDIA deal is expected to transform the district into a ______.', options: ['World-class AI research hub', 'Shopping mall', 'Residential complex', 'Agricultural zone'], answer: 'World-class AI research hub' },
+                    { q: 'What is the predicted low temperature for northern Taiwan tonight?', options: ['Below 15°C', 'Below 10°C', 'Exactly 0°C', '5°C'], answer: 'Below 10°C' },
+                    { q: 'What has the local government activated for the homeless due to the cold?', options: ['New jobs', 'Emergency shelters', 'Free transportation', 'Public parks'], answer: 'Emergency shelters' },
+                    { q: 'Which weather agency issued the cold alert?', options: ['MND', 'MOEA', 'CWA', 'NSTC'], answer: 'CWA' },
+                    { q: 'The term "Silicon Shield" refers to what?', options: ['A literal wall of chips', 'Taiwan\'s strategic importance due to semiconductors', 'A new brand of sunscreen', 'A US military project'], answer: 'Taiwan\'s strategic importance due to semiconductors' },
+                    { q: 'The word "anchored" in the context of production means ______.', options: ['Moving away', 'Deeply rooted or staying in one place', 'Floating', 'Sinking'], answer: 'Deeply rooted or staying in one place' },
+                    { q: 'The term "hollowing out" refers to the loss of ______.', options: ['Trees', 'Industrial capacity or jobs to other countries', 'Water', 'Memory'], answer: 'Industrial capacity or jobs to other countries' },
+                    { q: 'NVIDIA\'s new project is expected to attract "secondary" investments from ______.', options: ['AI server manufacturers', 'Fruit farmers', 'Automotive companies', 'Space agencies'], answer: 'AI server manufacturers' },
+                    { q: 'Midnight refers to what time?', options: ['6:00 p.m.', '12:00 a.m.', '12:00 p.m.', 'Early morning'], answer: '12:00 a.m.' },
+                    { q: 'Who is the Mayor of Taipei mentioned in the text?', options: ['Lai Ching-te', 'Cho Jung-tai', 'Chiang Wan-an', 'Lin Chia-lung'], answer: 'Chiang Wan-an' }
+                ]
+            },
+            'takaichinomics': {
+                title: '「高市經濟學」與日股新高',
+                english: `Following her decisive election victory, Prime Minister Sanae Takaichi held her first post-election press conference on Tuesday, outlining a vision for "Takaichinomics." Markets responded with a historic rally, as investors bet on her "peace through strength" agenda and consumption tax relief. Takaichi confirmed she intends to visit the U.S. in March to meet with President Trump, aiming to revitalize the Japan–U.S. alliance and discuss a joint strategy for Indo-Pacific security. Her stance on a "stronger, more autonomous Japan" has sent ripples through regional diplomatic circles, particularly in Beijing and Seoul.`,
+                chinese: `「高市經濟學」時代開啟：日股創歷史新高，高市早苗計畫 3 月訪美會川普。在取得決定性的勝選後，日本首相高市早苗週二舉行了選後首場記者會，概述了其「高市經濟學（Takaichinomics）」的願景。市場對此反應強烈，日股出現歷史性漲勢，投資者押注於她的「以實力求和平」議程與消費稅減免政策。高市證實她打算在 3 月訪問美國會晤川普總統，旨在振興美日同盟並討論印太安全的共同戰略。她主張「更強大、更自主的日本」的立場，已在區域外交圈（特別是北京與首爾）引發漣漪。`,
+                vocabulary: [
+                    'Decisive victory (n.phr.): 決定性勝利', 'Landslide (n.): 壓倒性大勝', 'Press conference (n.phr.): 記者會', 'Outlining (v.ger.): 概述',
+                    'Takaichinomics (n. proper): 高市經濟學', 'Historic rally (n.phr.): 歷史性漲勢', 'Peace through strength (phr.): 以實力求和平', 'Consumption tax relief (n.phr.): 消費稅減免',
+                    'Intends to (v.phr.): 打算', 'Revitalize (v.): 振興/賦予活力', 'Alliance (n.): 同盟', 'Joint strategy (n.phr.): 共同戰略',
+                    'Indo-Pacific (n. proper): 印太地區', 'Autonomous (adj.): 自主的', 'Sent ripples (phr.): 引發漣漪/影響', 'Diplomatic circles (n.phr.): 外交圈',
+                    'Nationalist (adj.): 民族主義的', 'Defense spending (n.phr.): 國防支出', 'Subsidies (n.): 補貼', 'Reshoring (v.ger.): 產業回流',
+                    'Volatility (n.): 動盪', 'Mandate (n.): 民意授權', 'Landslide (adj.): 壓倒性的', 'Press (n.): 新聞界/媒體',
+                    'Relief (n.): 減輕/救濟', 'Security (n.): 安全', 'Press conference (n.phr.): 記者會', 'Regional (adj.): 區域的',
+                    'Strategic (adj.): 戰略的', 'Negotiate (v.): 談判', 'Timeline (n.): 時間表', 'Guaranteed (adj.): 保證的'
+                ],
+                quiz: [
+                    { q: 'What is the name given to Prime Minister Takaichi\'s economic vision?', options: ['Abenomics', 'Takaichinomics', 'Trumpnomics', 'LDP-nomics'], answer: 'Takaichinomics' },
+                    { q: 'How did the stock market respond to the press conference?', options: ['It crashed', 'It remained stable', 'A historic rally (rise)', 'It was closed'], answer: 'A historic rally (rise)' },
+                    { q: 'Which tax policy did investors bet on to provide relief?', options: ['Corporate tax', 'Consumption tax', 'Income tax', 'Property tax'], answer: 'Consumption tax' },
+                    { q: 'When does Prime Minister Takaichi intend to visit the U.S.?', options: ['Immediately', 'February', 'March', 'End of 2026'], answer: 'March' },
+                    { q: 'Who does Takaichi plan to meet at Mar-a-Lago?', options: ['The UN Secretary-General', 'President Trump', 'Kevin Hassett', 'The Pope'], answer: 'President Trump' },
+                    { q: 'Takaichi wants to discuss a joint strategy for which region\'s security?', options: ['European security', 'Indo-Pacific security', 'Arctic security', 'Middle East security'], answer: 'Indo-Pacific security' },
+                    { q: 'Her stance on an "autonomous Japan" sent ripples through which cities?', options: ['London and Paris', 'Beijing and Seoul', 'Washington and Taipei', 'New York and Tokyo'], answer: 'Beijing and Seoul' },
+                    { q: 'The term "landslide" in an election context means ______.', options: ['A natural disaster', 'An overwhelming victory', 'A very close race', 'A technical failure'], answer: 'An overwhelming victory' },
+                    { q: 'What does "revitalize" mean?', options: ['To end something', 'To give new life or energy to something', 'To sell something', 'To change a name'], answer: 'To give new life or energy to something' },
+                    { q: 'The word "decisive" means ______.', options: ['Uncertain', 'Settling an issue; producing a definite result', 'Quiet', 'Delayed'], answer: 'Settling an issue; producing a definite result' },
+                    { q: 'What is "consumption tax relief"?', options: ['Increasing the tax', 'Lowering or removing the tax on goods bought', 'A new gift for shoppers', 'A type of food'], answer: 'Lowering or removing the tax on goods bought' },
+                    { q: 'The phrase "sent ripples" means it ______.', options: ['Had no effect', 'Caused a series of small, spreading effects/reactions', 'Was very loud', 'Was kept secret'], answer: 'Caused a series of small, spreading effects/reactions' },
+                    { q: 'What is the LDP?', options: ['Liberal Democratic Party', 'Labor Defense Project', 'Large Digital Platform', 'Local Development Plan'], answer: 'Liberal Democratic Party' },
+                    { q: 'Takaichi wants a "stronger, more ______ Japan."', options: ['Dependent', 'Autonomous', 'Small', 'Quiet'], answer: 'Autonomous' },
+                    { q: 'The press conference was held ______ her election victory.', options: ['Before', 'During', 'After (Post-election)', 'Years before'], answer: 'After (Post-election)' }
+                ]
+            },
+            'tech-rebound-tsmc': {
+                title: '科技股反彈與台積電 ADR',
+                english: `After a week of "AI bubble" fears, tech stocks staged a massive comeback on Monday and Tuesday. The Dow Jones hit another record high as market confidence returned. TSMC’s ADR led the charge, closing at a historic $355.41, representing a 23.7% premium over its Taipei-traded shares. Investors are increasingly dismissing the "overcapacity" narrative, focusing instead on verified earnings growth across the AI hardware ecosystem, as Samsung and SK Hynix prepare for mass HBM4 shipments.`,
+                chinese: `科技股拋售潮後強勢反彈：道瓊再創新高，台積電 ADR 溢價達 23.7%。在經歷了一週的「AI 泡沫」恐懼後，科技股在週一和週二上演了大規模的反攻。隨著市場信心回歸，道瓊工業指數再創歷史新高。台積電 ADR 領漲，收於歷史性的 355.41 美元，其溢價較台北掛牌股票高出 23.7%。投資者正日益拋棄「產能過剩」的說法，轉而關注整個 AI 硬體生態系統中經過證實的獲利增長，此時三星與 SK 海力士也正為 HBM4 的大規模出貨做準備。`,
+                vocabulary: [
+                    'Tech rebound (n.phr.): 科技股反彈', 'Staged a comeback (phr.): 上演反攻/回歸', 'Massive (adj.): 大規模的', 'Market confidence (n.phr.): 市場信心',
+                    'TSMC ADR (n. proper): 台積電美國存託憑證', 'Led the charge (phr.): 帶頭/領軍', 'Historic high (n.phr.): 歷史高點', 'Premium (n.): 溢價/保險費',
+                    'Taipei-traded shares (n.phr.): 台北掛牌股票', 'Dismissing (v.ger.): 排除/不予理會', 'Overcapacity (n.): 產能過剩', 'Narrative (n.): 說法/敘事',
+                    'Verified earnings (n.phr.): 經過證實的獲利', 'Hardware ecosystem (n.phr.): 硬體生態系統', 'HBM4 (High Bandwidth Memory 4) (n. proper): 第四代高頻寬記憶體', 'Shipments (n.): 出貨量',
+                    'Rout (n.): 潰敗 (反義詞為 rebound)', 'Profitability (n.): 獲利能力', 'Wary (adj.): 警惕的', 'Expenditure (n.): 支出',
+                    'Ecosystem (n.): 生態系', 'Verification (n.): 驗證', 'Momentum (n.): 動能', 'Surge (v.): 飆升',
+                    'Aggressive (adj.): 激進的', 'Premium (adj.): 高價的/優質的', 'Premium (n.): 溢價', 'Disruption (n.): 中斷',
+                    'Supply-side (n.): 供應端', 'Aggressive cut (n.phr.): 激進降息', 'Reshoring (n.): 回流', 'Boom (n.): 繁榮'
+                ],
+                quiz: [
+                    { q: 'What happened to tech stocks after a week of "AI bubble" fears?', options: ['They crashed further.', 'They staged a massive comeback.', 'They were banned.', 'They stayed exactly the same.'], answer: 'They staged a massive comeback.' },
+                    { q: 'Which stock index hit another record high mentioned in the text?', options: ['NASDAQ', 'S&P 500', 'Dow Jones', 'Nikkei 225'], answer: 'Dow Jones' },
+                    { q: 'What was the closing price of TSMC’s ADR?', options: ['$100.00', '$250.75', '$355.41', '$500.00'], answer: '$355.41' },
+                    { q: 'What is the premium of TSMC\'s ADR over its Taipei-traded shares?', options: ['10%', '23.7%', '50%', '90%'], answer: '23.7%' },
+                    { q: 'Investors are dismissing which negative "narrative"?', options: ['"High demand"', '"Overcapacity"', '"Low prices"', '"Better batteries"'], answer: '"Overcapacity"' },
+                    { q: 'What are investors focusing on instead of overcapacity?', options: ['Office location', 'Verified earnings growth', 'New logos', 'Employee holidays'], answer: 'Verified earnings growth' },
+                    { q: 'Samsung and SK Hynix are preparing for mass shipments of what?', options: ['Smartphone screens', 'HBM4 chips', 'Solar panels', 'Traditional keyboards'], answer: 'HBM4 chips' },
+                    { q: 'The term "staged a comeback" means ______.', options: ['To fail again', 'To return to a successful position', 'To organize a play', 'To leave the market'], answer: 'To return to a successful position' },
+                    { q: 'What does "premium" mean in the context of stock prices?', options: ['A penalty', 'The amount by which a price is higher than a standard', 'A free gift', 'The total number of shares'], answer: 'The amount by which a price is higher than a standard' },
+                    { q: 'The word "verified" means ______.', options: ['Fake', 'Confirmed to be true/accurate', 'Guessed', 'Hidden'], answer: 'Confirmed to be true/accurate' },
+                    { q: 'What is an ADR?', options: ['Automatic Digital Record', 'American Depositary Receipt', 'Annual Defense Report', 'Artificial Data Research'], answer: 'American Depositary Receipt' },
+                    { q: 'The "narrative" refers to which of the following?', options: ['A story or spoken account of events', 'A type of money', 'A new computer', 'A fast boat'], answer: 'A story or spoken account of events' },
+                    { q: 'Is the hardware ecosystem related to AI mentioned as having growth?', options: ['Yes, verified growth', 'No, declining growth', 'The text doesn\'t say', 'Only in Europe'], answer: 'Yes, verified growth' },
+                    { q: 'The term "overcapacity" means ______.', options: ['Not enough products', 'Production capacity exceeding demand', 'Perfect balance', 'Buying too many shares'], answer: 'Production capacity exceeding demand' },
+                    { q: 'TSMC is part of which industry?', options: ['Semiconductor', 'Textile', 'Agriculture', 'Aviation'], answer: 'Semiconductor' }
+                ]
+            },
+            'japan-nuclear-restart': {
+                title: '日本重啟全球最大核電廠',
+                english: `In a major pivot for Japan’s energy policy, the Kashiwazaki–Kariwa nuclear power plant began its restart sequence on Tuesday. This marks the first time the world's largest nuclear facility has operated since the 2011 Fukushima disaster. The Takaichi administration has pushed for the restart to lower carbon emissions and, more importantly, reduce industrial electricity costs to support the "reshoring" of Japanese manufacturing firms. While local safety concerns persist, the national government emphasized that the facility has undergone rigorous security upgrades to meet post-Fukushima standards.`,
+                chinese: `停機 14 年後，日本重啟「全球最大核電廠」柏崎刈羽 7 號機組。日本能源政策出現重大轉向，柏崎刈羽核電廠於週二開始重啟程序。這標誌著這座全球最大的核能設施自 2011 年福島災難以來首次運行。高市內閣推動重啟旨在降低碳排放，更重要的是降低工業電費，以支持日本製造業企業的「回流（reshoring）」。雖然當地對安全的擔憂依然存在，但中央政府強調，該設施已進行了嚴格的安全升級，以符合後福島時代的標準。`,
+                vocabulary: [
+                    'Pivot (n.): 轉向/樞紐', 'Energy policy (n.phr.): 能源政策', 'Restart sequence (n.phr.): 重啟程序/序列', 'Nuclear facility (n.phr.): 核能設施',
+                    'Fukushima disaster (n. proper): 福島災難', 'Carbon emissions (n.phr.): 碳排放', 'Industrial electricity costs (n.phr.): 工業電費', 'Reshoring (v.ger.): (產業)回流',
+                    'Manufacturing firms (n.phr.): 製造業公司', 'Rigorous (adj.): 嚴格的/嚴密的', 'Security upgrades (n.phr.): 安全升級', 'Post-Fukushima standards (n.phr.): 後福島標準',
+                    'Undergone (v.pp.): 經歷/遭受', 'Persist (v.): 持續', 'Emphasized (v.pt.): 強調', 'Sequence (n.): 順序/程序',
+                    'Reactor (n.): 反應爐', 'Hiatus (n.): 停滯/間斷', 'Milestone (n.): 里程碑', 'Sovereignty (n.): 主權',
+                    'Compliance (n.): 遵守', 'Verification (n.): 驗證', 'Implementation (n.): 執行', 'Catastrophe (n.): 災難',
+                    'Reliability (n.): 可靠性', 'Diversification (n.): 多元化', 'Sustainability (n.): 永續性', 'Infrastructure (n.): 基礎建設'
+                ],
+                quiz: [
+                    { q: 'What is the name of the world\'s largest nuclear power plant being restarted?', options: ['Fukushima Daiichi', 'Chernobyl', 'Kashiwazaki–Kariwa', 'Three Mile Island'], answer: 'Kashiwazaki–Kariwa' },
+                    { q: 'Since which year had the facility been shut down?', options: ['2000', '2011', '2020', '2024'], answer: '2011' },
+                    { q: 'What major event caused the initial shutdown of Japan\'s nuclear plants?', options: ['A trade war', 'A worker strike', 'The Fukushima disaster', 'High coal prices'], answer: 'The Fukushima disaster' },
+                    { q: 'What is the Takaichi administration’s primary economic goal for the restart?', options: ['To sell nuclear waste', 'To reduce industrial electricity costs to support reshoring', 'To build more cars', 'To stop the internet'], answer: 'To reduce industrial electricity costs to support reshoring' },
+                    { q: 'The government aims to lower ______ emissions through nuclear energy.', options: ['Oxygen', 'Water', 'Carbon', 'Nitrogen'], answer: 'Carbon' },
+                    { q: 'What has the facility undergone to meet new standards?', options: ['Nothing', 'Rigorous security upgrades', 'A paint job', 'Total demolition'], answer: 'Rigorous security upgrades' },
+                    { q: 'The term "reshoring" refers to ______.', options: ['Moving jobs to China', 'Bringing manufacturing back to the home country', 'Buying a new boat', 'Moving to another planet'], answer: 'Bringing manufacturing back to the home country' },
+                    { q: 'The news describes this as a "major ______" for energy policy.', options: ['Failure', 'Pivot (change)', 'Secret', 'Mistake'], answer: 'Pivot (change)' },
+                    { q: 'A "nuclear facility" is used to produce what?', options: ['Oil', 'Electrical power from nuclear energy', 'Farming tools', 'Cars'], answer: 'Electrical power from nuclear energy' },
+                    { q: 'What does "rigorous" mean?', options: ['Lazy', 'Extremely thorough and careful', 'Very fast', 'Small'], answer: 'Extremely thorough and careful' },
+                    { q: 'The facility is the world\'s ______ nuclear plant.', options: ['Smallest', 'Oldest', 'Largest', 'Most expensive'], answer: 'Largest' },
+                    { q: 'Do local safety concerns still exist?', options: ['No, everyone is happy.', 'Yes, they persist.', 'Only in Tokyo.', 'The text doesn\'t say.'], answer: 'Yes, they persist.' },
+                    { q: 'What does "sequence" mean in "restart sequence"?', options: ['A random order', 'A particular order in which events follow each other', 'A loud noise', 'A type of tool'], answer: 'A particular order in which events follow each other' },
+                    { q: 'Which administration pushed for the restart?', options: ['The Biden admin', 'The Takaichi admin', 'The Trump admin', 'The UN'], answer: 'The Takaichi admin' },
+                    { q: 'Nuclear energy is being used to lower "carbon ______."', options: ['Injections', 'Emissions', 'Fines', 'Taxes'], answer: 'Emissions' }
+                ]
+            },
+            'gold-reclaims-5000': {
+                title: '金價重回 5,000 美元里程碑',
+                english: `Following a week of extreme volatility, gold prices firmly regained the $5,000 per ounce level on Tuesday. Analysts attribute the rally to a combination of "dip-buying" and renewed geopolitical anxiety over the U.S.–Iran maritime standoff. Silver also saw significant gains, highlighting a broad shift toward defensive assets as investors await critical U.S. inflation data later this week. As currency volatility increases, institutional investors are increasingly turning to bullion as a hedge against potential systemic instability.`,
+                chinese: `避險資金回流：金價重新站上 5,000 美元大關，銀價同步走高。在經歷了一週的劇烈波動後，黃金價格於週二穩固地回升至每盎司 5,000 美元的水平。分析師將此次漲勢歸因於「逢低買進」及對美伊海上對峙引發的新地緣政治焦慮。白銀同樣錄得顯著漲幅，在投資者等待本週稍晚公佈的關鍵美國通膨數據之際，凸顯了向防禦性資產的大範圍轉向。隨著貨幣波動加劇，機構投資者正日益轉向實體金銀（bullion），作為對抗潛在系統性不穩定的避險手段。`,
+                vocabulary: [
+                    'Reclaims (v.): 奪回/重回', 'Milestone (n.): 里程碑', 'Extreme volatility (n.phr.): 劇烈波動', 'Per ounce (phr.): 每盎司',
+                    'Firmly regained (phr.): 穩固回升', 'Attribute to (v.phr.): 歸因於', 'Dip-buying (n.): 逢低買進', 'Renewed (adj.): 更新的/再次出現的',
+                    'Geopolitical anxiety (n.phr.): 地緣政治焦慮', 'Maritime standoff (n.phr.): 海上對峙', 'Significant gains (n.phr.): 顯著漲幅', 'Defensive assets (n.phr.): 防禦性資產',
+                    'Critical (adj.): 關鍵的', 'Inflation data (n.phr.): 通膨數據', 'Currency volatility (n.phr.): 貨幣波動', 'Institutional investors (n.phr.): 機構/法人投資者',
+                    'Bullion (n.): 實體金銀/金銀塊', 'Hedge (n./v.): 避險/對沖', 'Systemic instability (n.phr.): 系統性不穩定', 'Safe-haven (n.): 避險',
+                    'Standoff (n.): 對峙', 'Turmoil (n.): 動盪', 'Flight to safety (phr.): 避險潮', 'Precious metals (n.phr.): 貴金屬',
+                    'Diversify (v.): 多樣化', 'Stabilization (n.): 穩定', 'Commodity (n.): 商品', 'Restructure (v.): 重組',
+                    'Aggressive (adj.): 激進的', 'Escalating (adj.): 升級的', 'Uncertainty (n.): 不確定性', 'Portfolio (n.): 投資組合'
+                ],
+                quiz: [
+                    { q: 'What price level did gold reclaim on Tuesday?', options: ['$1,000', '$3,500', '$5,000 per ounce', '$10,000'], answer: '$5,000 per ounce' },
+                    { q: 'What is one reason for the rally according to analysts?', options: ['High interest rates', '"Dip-buying"', 'Low oil production', 'A peaceful treaty'], answer: '"Dip-buying"' },
+                    { q: 'Which geopolitical situation caused renewed anxiety?', options: ['A trade deal with China', 'The U.S.–Iran maritime standoff', 'A volcano in Japan', 'The Olympics'], answer: 'The U.S.–Iran maritime standoff' },
+                    { q: 'What other metal saw significant gains along with gold?', options: ['Copper', 'Silver', 'Iron', 'Zinc'], answer: 'Silver' },
+                    { q: 'Investors are shifting toward "defensive assets," which means ______.', options: ['High-risk gambling', 'Low-risk assets used for protection', 'Agricultural tools', 'Social media stocks'], answer: 'Low-risk assets used for protection' },
+                    { q: 'What critical data are investors awaiting later this week?', options: ['Weather data', 'U.S. inflation data', 'Space launch data', 'Tourism figures'], answer: 'U.S. inflation data' },
+                    { q: 'Who is increasingly turning to bullion as a hedge?', options: ['Students', 'Institutional investors', 'Only farmers', 'Only small shops'], answer: 'Institutional investors' },
+                    { q: 'What is "bullion"?', options: ['A type of coin only', 'Physical gold or silver in bars/bulk', 'A digital currency', 'A high-speed train'], answer: 'Physical gold or silver in bars/bulk' },
+                    { q: 'Investors use gold as a "hedge" against what?', options: ['Good weather', 'Potential systemic instability', 'Higher salaries', 'New movies'], answer: 'Potential systemic instability' },
+                    { q: 'The term "volatility" refers to ______.', options: ['Stability', 'Rapid and unpredictable change', 'Fixed prices', 'A type of gold'], answer: 'Rapid and unpredictable change' },
+                    { q: 'What does "reclaims" mean?', options: ['To lose something', 'To get something back/regain', 'To build something new', 'To throw away'], answer: 'To get something back/regain' },
+                    { q: 'What is a "maritime standoff"?', options: ['A race at sea', 'A deadlock or confrontation at sea', 'A party on a boat', 'A type of fish'], answer: 'A deadlock or confrontation at sea' },
+                    { q: 'The word "critical" is a synonym for ______.', options: ['Unimportant', 'Crucial or essential', 'Funny', 'Slow'], answer: 'Crucial or essential' },
+                    { q: 'The term "defensive assets" refers to ______ assets.', options: ['Risky', 'Safe-haven', 'New', 'Secret'], answer: 'Safe-haven' },
+                    { q: 'Institutional investors are looking to ______ against currency risk.', options: ['Hedge', 'Jump', 'Sell', 'Hide'], answer: 'Hedge' }
+                ]
+            }
+        };
+
+        // --- STATE & RENDERING ---
+        let currentTopicId = Object.keys(NEWS_DATA)[0]; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確答案)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
