@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 2 月 11 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #eef2f9; 
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 0 40px rgba(45, 55, 72, 0.15); 
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1.5rem 1.5rem 0 0;
+            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #4a5568; 
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2b6cb0; 
+            border-bottom-color: #3182ce; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #edf2f7;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #4c51bf; 
+            box-shadow: 0 4px 6px rgba(76, 81, 191, 0.3);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #e2e8f0; }
+        .quiz-option.selected { border-color: #4c51bf; background-color: #e0e7ff; }
+        .quiz-option.correct { background-color: #c6f6d5; border-color: #38a169; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fed7d7; border-color: #e53e3e; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-xl text-indigo-600 font-semibold">2026 年 2 月 11 日：NVIDIA 簽約台北、半導體投資與全球安全變革</p>
+        </header>
+
+        <div class="container-card">
+            <div id="main-tabs" class="main-tabs-container flex border-b border-gray-200"></div>
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-12 text-gray-500">
+                    <p class="text-2xl font-bold mb-4">內容載入中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Designed for persistent professional English learning. Powered by Gemini.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] NVIDIA's Taipei R&D Center Finalized; Jensen Huang and Mayor Chiang Sign Landmark Deal\nTaipei Mayor Chiang Wan-an and NVIDIA CEO Jensen Huang officially signed the cooperation agreement for NVIDIA's new R&D headquarters in the Beitou–Shilin Technology Park late Tuesday. The project, involving a NT$15 billion investment, will focus on next-generation "Physical AI" and robotics. Mayor Chiang stated that this center will be the "heart of Asia's AI ecosystem," expected to create over 3,000 high-level engineering roles.\n\n[2] TSMC Board Approves NT$4.5 Dividend; Pledges Expansion of Advanced Packaging\nFollowing its board meeting on Tuesday, TSMC announced a quarterly cash dividend of NT$4.5. More importantly, the company authorized a massive capital injection to expand CoWoS and SoIC advanced packaging capacities. This move targets the increasing bottleneck in AI chip supply, ensuring that Taiwan remains the indispensable manufacturing hub.\n\n[3] MND Confirms Successful Combat Testing of First Indigenous VTOL Drones\nThe Ministry of National Defense (MND) confirmed on Wednesday that the first batch of domestically developed vertical take-off and landing (VTOL) surveillance drones has passed final operational evaluations. These drones are a key component of Taiwan’s "asymmetric defense" strategy and will be deployed to frontline units in Kinmen and Matsu.`,
+                chinese: `【1】輝達（NVIDIA）研發中心落腳北投士林：台北市政府與黃仁勳正式完成簽約\n台北市長蔣萬安與 NVIDIA 執行長黃仁勳週二晚間正式簽署合作協議，確定 NVIDIA 的新研發總部將進駐北投士林科技園區。該計畫涉及 150 億新台幣的投資，將專注於下一代「實體 AI」與機器人技術。蔣市長表示，該中心將成為「亞洲 AI 生態系統的心臟」，預計創造超過 3,000 個高階工程職位並吸引全球 AI 新創進駐。\n\n【2】台積電董事會通過配息 4.5 元：宣布加碼投資 2 奈米以下先進封裝產能\n台積電週二董事會決議發放每股 4.5 元的季現金股利。更重要的是，公司核准了巨額資本挹注，用於擴張 CoWoS 與 SoIC 先進封裝產能。此舉旨在解決 AI 晶片供應日益嚴峻的瓶頸，確保台灣在 NVIDIA 與 Apple 轉向 2 奈米以下節點時，仍是不可或缺的製造中心。\n\n【3】國防部：首批自主研發「垂直起降」無人機完成作戰測評\n國防部週三上午證實，首批國內研發的垂直起降（VTOL）偵察無人機已通過最終作戰評估。這些專為崎嶇地形與艦艇部署設計的無人機，是台灣「不對稱防禦」戰略的關鍵組成部分，將部署於金門、馬祖等前線單位，以增強即時情勢感知能力。`,
+                vocabulary: [
+                    'Finalized (v.pp.): 最終敲定/完成', 'Landmark deal (n.phr.): 里程碑式的協議', 'Physical AI (n.phr.): 實體人工智慧', 'Robotics (n.): 機器人技術',
+                    'Ecosystem (n.): 生態系統', 'Engineering roles (n.phr.): 工程職位', 'Startups (n.): 新創公司', 'Dividend (n.): 股利/紅利',
+                    'Capital injection (n.phr.): 資本挹注', 'Advanced packaging (n.phr.): 先進封裝', 'CoWoS (n. proper): 晶圓級封裝技術', 'Bottleneck (n.): 瓶頸',
+                    'Indispensable (adj.): 不可或缺的', 'Manufacturing hub (n.phr.): 製造中心', 'Indigenous (adj.): 土生土長的/本土的', 'VTOL (Vertical Take-Off and Landing) (adj.phr.): 垂直起降',
+                    'Combat testing (n.phr.): 作戰測試', 'Asymmetric defense (n.phr.): 不對稱防禦', 'Situational awareness (n.phr.): 情勢感知', 'Rugged terrain (n.phr.): 崎嶇地形',
+                    'Quarterly (adj./adv.): 每季的', 'Authorized (v.pt.): 核准/授權', 'Injection (n.): 注入/挹注', 'Nodes (n.): 節點',
+                    'Frontline units (n.phr.): 前線單位', 'Surveillance (n.): 偵察/監視', 'Evaluation (n.): 評估', 'Deployment (n.): 部署',
+                    'Backbone (n.): 支柱/骨幹', 'Prowess (n.): 實力/高超技術', 'Expansion (n.): 擴張', 'Commitment (n.): 承諾'
+                ],
+                quiz: [
+                    { q: 'Where will NVIDIA’s new Taiwan R&D headquarters be located?', options: ['Neihu Technology Park', 'Hsinchu Science Park', 'Beitou–Shilin Technology Park', 'Southern Taiwan Science Park'], answer: 'Beitou–Shilin Technology Park' },
+                    { q: 'What is the focus of NVIDIA’s new Taipei center?', options: ['Gaming software', 'Physical AI and robotics', 'Crypto mining', 'Traditional PC parts'], answer: 'Physical AI and robotics' },
+                    { q: 'How many high-level engineering roles are expected from the NVIDIA project?', options: ['500', '1,500', 'Over 3,000', '10,000'], answer: 'Over 3,000' },
+                    { q: 'What was the quarterly dividend approved by the TSMC board?', options: ['NT$2.5', 'NT$3.0', 'NT$4.5', 'NT$10.0'], answer: 'NT$4.5' },
+                    { q: 'TSMC is expanding packaging capacities for which two technologies?', options: ['7nm and 5nm', 'CoWoS and SoIC', 'DRAM and NAND', 'Bluetooth and WiFi'], answer: 'CoWoS and SoIC' },
+                    { q: 'What problem does TSMC’s expansion of packaging aim to solve?', options: ['High electricity costs', 'Bottlenecks in AI chip supply', 'Lack of office space', 'Too much water usage'], answer: 'Bottlenecks in AI chip supply' },
+                    { q: 'What does "VTOL" stand for in the context of the new drones?', options: ['Very Tall Operational Link', 'Vertical Take-Off and Landing', 'Visual Target Output Location', 'Variable Tension Optical Lens'], answer: 'Vertical Take-Off and Landing' },
+                    { q: 'Where will the new indigenous drones be primarily deployed?', options: ['Taipei and Kaohsiung', 'Kinmen and Matsu', 'The Moon', 'Arizona'], answer: 'Kinmen and Matsu' },
+                    { q: 'The new drones are a key component of which defense strategy?', options: ['Conventional warfare', 'Space defense only', 'Asymmetric defense', 'Nuclear deterrence'], answer: 'Asymmetric defense' },
+                    { q: 'The term "indispensable" means which of the following?', options: ['Easily replaced', 'Absolutely necessary', 'Very cheap', 'Old-fashioned'], answer: 'Absolutely necessary' },
+                    { q: 'What kind of terrain are the VTOL drones designed to handle?', options: ['Flat roads only', 'Rugged terrain', 'Only underwater', 'Only high-altitude clouds'], answer: 'Rugged terrain' },
+                    { q: 'Who officially signed the NVIDIA agreement with Jensen Huang?', options: ['President Lai', 'Mayor Chiang Wan-an', 'Premier Cho', 'Minister Lin'], answer: 'Mayor Chiang Wan-an' },
+                    { q: 'The word "injection" in a business sense refers to ______.', options: ['Medical treatment', 'Providing a large amount of capital/money', 'A type of engine', 'A marketing strategy'], answer: 'Providing a large amount of capital/money' },
+                    { q: 'Which company is mentioned as a major user of TSMC’s next-gen processors?', options: ['NVIDIA and Apple', 'Amazon and Meta', 'Tesla and Space-X', 'Microsoft and Google'], answer: 'NVIDIA and Apple' },
+                    { q: 'What is the investment amount for the NVIDIA project in Taipei?', options: ['NT$1 billion', 'NT$15 billion', 'US$15 billion', 'NT$500 billion'], answer: 'NT$15 billion' }
+                ]
+            },
+            'japan-defense-whitepaper': {
+                title: '日本國防白皮書初稿流出',
+                english: `The first draft of Prime Minister Sanae Takaichi’s new defense strategy surfaced in Tokyo on Wednesday. The document explicitly labels the stability of the Taiwan Strait as "inseparable from Japan’s national survival" and suggests the establishment of a formal maritime communication channel between Tokyo and Taipei. This hawkish shift has drawn a sharp protest from Beijing, yet it aligns with Takaichi’s election promise to build a more "autonomous and assertive" Japan in the Indo-Pacific. Analysts predict this policy could lead to increased joint naval exercises in the region.`,
+                chinese: `高市早苗內閣「國防白皮書」初稿流出：強調日台軍事聯繫必要性。日本首相高市早苗的新國防戰略初稿於週三在東京曝光。該文件明確將台灣海峽的穩定標記為「與日本國家生存不可分割」，並建議建立東京與台北之間的正式海上通訊管道。這一「鷹派」轉向引發了北京方面的強烈抗議，但這與高市在大選中承諾建立一個在印太地區更「自主與強硬」的日本之政見一致。分析人士預計，此政策可能導致該地區聯合軍演次數的增加。`,
+                vocabulary: [
+                    'Defense White Paper (n.phr.): 國防白皮書', 'Draft (n.): 草案/初稿', 'Surfaced (v.pt.): 浮現/曝光', 'Explicitly (adv.): 明確地',
+                    'Taiwan Strait (n. proper): 台灣海峽', 'Inseparable (adj.): 不可分割的', 'National survival (n.phr.): 國家生存', 'Establishment (n.): 建立',
+                    'Maritime communication (n.phr.): 海上通訊', 'Hawkish (adj.): 鷹派的/強硬的', 'Shift (n.): 轉向/轉變', 'Sharp protest (n.phr.): 強烈抗議',
+                    'Aligns with (v.phr.): 與...一致', 'Autonomous (adj.): 自主的', 'Assertive (adj.): 強硬的/肯定的', 'Indo-Pacific (n. proper): 印太地區',
+                    'Joint naval exercises (n.phr.): 聯合海軍演習', 'Provisional (adj.): 臨時的', 'Sovereignty (n.): 主權', 'Erosion (n.): 侵蝕',
+                    'Verification (n.): 驗證', 'Implementation (n.): 執行', 'Mandate (n.): 授權/指令', 'Landslide (n.): 壓倒性勝利',
+                    'Security (n.): 安全', 'Reshape (v.): 重塑', 'Platform (n.): 平台', 'Acquire (v.): 獲得',
+                    'Volatility (n.): 動盪', 'Reshoring (v.ger.): 產業回流', 'Trilateral (adj.): 三方的', 'Decisive (adj.): 決定性的'
+                ],
+                quiz: [
+                    { q: 'Where did the draft of the new defense strategy surface?', options: ['Taipei', 'Beijing', 'Tokyo', 'Washington'], answer: 'Tokyo' },
+                    { q: 'How does the document describe the stability of the Taiwan Strait?', options: ['A minor concern', 'Inseparable from Japan’s national survival', 'A regional trade issue', 'Not Japan\'s business'], answer: 'Inseparable from Japan’s national survival' },
+                    { q: 'What new channel does the document suggest establishing?', options: ['A common currency', 'A formal maritime communication channel', 'A high-speed train link', 'A shared satellite network'], answer: 'A formal maritime communication channel' },
+                    { q: 'How has Beijing responded to the draft?', options: ['With silence', 'With a sharp protest', 'With congratulations', 'By joining the talks'], answer: 'With a sharp protest' },
+                    { q: 'What was Takaichi’s election promise related to this shift?', options: ['Lowering military budget', 'Building a more "autonomous and assertive" Japan', 'Leaving the UN', 'Closing all borders'], answer: 'Building a more "autonomous and assertive" Japan' },
+                    { q: 'The term "hawkish" refers to a policy that is ______.', options: ['Peaceful', 'Aggressive or military-focused', 'Boring', 'Environmental'], answer: 'Aggressive or military-focused' },
+                    { q: 'Analysts predict the policy will lead to an increase in ______.', options: ['Agricultural trade', 'Joint naval exercises', 'Movie production', 'Car imports'], answer: 'Joint naval exercises' },
+                    { q: 'The word "explicitly" means which of the following?', options: ['Vaguely', 'In a clear and detailed way', 'Secretly', 'Quickly'], answer: 'In a clear and detailed way' },
+                    { q: 'What does "inseparable" mean?', options: ['Easy to break', 'Unable to be separated or treated as distinct', 'Very expensive', 'Old and broken'], answer: 'Unable to be separated or treated as distinct' },
+                    { q: 'Takaichi is the Prime Minister of which nation?', options: ['China', 'Japan', 'South Korea', 'Singapore'], answer: 'Japan' },
+                    { q: 'The term "maritime" refers to things related to the ______.', options: ['Air', 'Sea', 'Land', 'Mountains'], answer: 'Sea' },
+                    { q: 'The policy aligns with the goal of a "more assertive Japan" in which region?', options: ['Atlantic', 'Indo-Pacific', 'Middle East', 'Africa'], answer: 'Indo-Pacific' },
+                    { q: 'What kind of document is a "White Paper"?', options: ['A blank notebook', 'An official government report', 'A newspaper headline', 'A comic book'], answer: 'An official government report' },
+                    { q: 'The term "draft" implies the document is ______.', options: ['Final and signed', 'A preliminary version', 'Completely illegal', 'A historical book'], answer: 'A preliminary version' },
+                    { q: 'Who is the Prime Minister mentioned in the text?', options: ['Fumio Kishida', 'Sanae Takaichi', 'Shinzo Abe', 'Yoshihide Suga'], answer: 'Sanae Takaichi' }
+                ]
+            },
+            'amazon-capex-2026': {
+                title: '亞馬遜 2026 資本支出計畫',
+                english: `Amazon announced on Wednesday a staggering $200 billion capital expenditure budget for 2026, marking one of the largest single-year investments in corporate history. The funds are primarily earmarked for the expansion of AWS data centers and the development of proprietary generative AI models. CEO Andy Jassy emphasized that the "once-in-a-generation" transition to AI-driven computing justifies the aggressive spending. However, investors remain cautious about the timeline for realizing returns on such high-intensity infrastructure investments.`,
+                chinese: `亞馬遜宣布 2,000 億美元資本支出計畫，致力於維持雲端與 AI 領先地位。亞馬遜週三宣布 2026 年高達 2,000 億美元的資本支出預算，這創下了企業史上單年度投資的紀錄。這筆資金主要用於擴展 AWS 數據中心以及開發專有的生成式 AI 模型。執行長安迪·賈西（Andy Jassy）強調，向 AI 驅動運算的「世代級」轉型證明了這種激進支出的合理性。然而，投資者對於此類高強度基礎設施投資實現回報之時間點仍持謹慎態度。`,
+                vocabulary: [
+                    'Staggering (adj.): 驚人的/令人震驚的', 'Capital expenditure (Capex) (n.phr.): 資本支出', 'Earmarked (v.pp.): 指定用途/撥款', 'Proprietary (adj.): 專有的',
+                    'Generative AI (n.phr.): 生成式人工智慧', 'Transition (n.): 轉型/過渡', 'Justifies (v.): 證明...合理', 'Aggressive spending (n.phr.): 激進支出',
+                    'Infrastructure (n.): 基礎建設', 'Cautious (adj.): 謹慎的', 'Timeline (n.): 時間表/時程', 'Realizing returns (phr.): 實現回報',
+                    'AWS (Amazon Web Services) (n. proper): 亞馬遜網路服務', 'Dominance (n.): 主導地位', 'High-intensity (adj.): 高強度的', 'Corporate history (n.phr.): 企業歷史',
+                    'Investment (n.): 投資', 'Staggering (adj.): 搖晃的/驚人的', 'Justify (v.): 辯護/證明', 'Anxiety (n.): 焦慮',
+                    'Expenditure (n.): 支出/花費', 'Data center (n.phr.): 數據中心', 'Foreseeable (adj.): 可預見的', 'Aggressive (adj.): 積極的/侵略性的',
+                    'Hardware (n.): 硬體', 'Software (n.): 軟體', 'Integration (n.): 整合', 'Bottleneck (n.): 瓶頸',
+                    'Performance (n.): 表現/性能', 'Deploy (v.): 部署', 'Sustained (adj.): 持續的', 'Sector (n.): 部門/產業'
+                ],
+                quiz: [
+                    { q: 'How much is Amazon\'s capital expenditure budget for 2026?', options: ['$50 billion', '$100 billion', '$200 billion', '$450 billion'], answer: '$200 billion' },
+                    { q: 'What is the primary use of these funds?', options: ['Buying a new company', 'Expansion of AWS data centers and generative AI development', 'Paying off debt', 'Employee benefits'], answer: 'Expansion of AWS data centers and generative AI development' },
+                    { q: 'Who is the CEO of Amazon mentioned?', options: ['Jeff Bezos', 'Andy Jassy', 'Jensen Huang', 'Bill Gates'], answer: 'Andy Jassy' },
+                    { q: 'How did Jassy describe the current transition in computing?', options: ['A temporary trend', 'A minor change', '"Once-in-a-generation"', '"A mistake"'], answer: '"Once-in-a-generation"' },
+                    { q: 'What are investors "cautious" about?', options: ['The color of the servers', 'The timeline for realizing returns', 'The name of the company', 'The weather in Seattle'], answer: 'The timeline for realizing returns' },
+                    { q: 'The budget is one of the largest in "______ history."', options: ['World', 'Corporate', 'Farming', 'Art'], answer: 'Corporate' },
+                    { q: 'The term "staggering" means ______.', options: ['Small', 'Impressive or shocking', 'Boring', 'Secret'], answer: 'Impressive or shocking' },
+                    { q: 'What does "earmarked" mean?', options: ['Stolen', 'Marked for a specific purpose', 'Lost', 'Forgotten'], answer: 'Marked for a specific purpose' },
+                    { q: 'The transition is "AI-driven," meaning it is ______.', options: ['Powered by electricity only', 'Motivated or pushed by AI technology', 'Controlled by humans only', 'A physical car'], answer: 'Motivated or pushed by AI technology' },
+                    { q: 'What is "AWS" an abbreviation for?', options: ['Amazon Web Systems', 'Amazon Web Services', 'Always Work Swiftly', 'American World Security'], answer: 'Amazon Web Services' },
+                    { q: 'The spending is described as "aggressive," meaning it is ______.', options: ['Careful and slow', 'Bold and energetic', 'Weak', 'Hidden'], answer: 'Bold and energetic' },
+                    { q: 'What is "generative AI"?', options: ['AI that can create new content', 'AI used only for math', 'Old-fashioned software', 'A type of battery'], answer: 'AI that can create new content' },
+                    { q: 'Infrastructure refers to which of the following?', options: ['Only people', 'Basic physical systems/structures', 'Only books', 'Only clothes'], answer: 'Basic physical systems/structures' },
+                    { q: 'The investment is for which year?', options: ['2025', '2026', '2027', '2030'], answer: '2026' },
+                    { q: 'Which word describes the level of intensity for the infrastructure?', options: ['Low-intensity', 'High-intensity', 'Medium-intensity', 'Zero-intensity'], answer: 'High-intensity' }
+                ]
+            },
+            'dubai-world-summit': {
+                title: '2026 迪拜世界政府峰會閉幕',
+                english: `The World Government Summit concluded in Dubai on Wednesday, bringing together global leaders to discuss the integration of AI in public services and sustainable urban development. A highlight of the event was the "New Silk Road Forum," where participants discussed industrial synergies and economic corridors in a fragmented world. The summit underscored the UAE's role as a neutral platform for global dialogue on technology and governance. Leaders emphasized that international cooperation is the only way to navigate current economic headwinds.`,
+                chinese: `2026 迪拜世界政府峰會閉幕：探討「塑造未來政府」與新絲路論壇。世界政府峰會週三在迪拜閉幕，各國領導人齊聚一堂討論 AI 在公共服務中的整合以及永續城市發展。活動的一大亮點是「新絲路論壇」，參與者討論了在碎片化世界中的產業協同效應與經濟走廊。峰會強調了阿拉伯聯合大公國（UAE）作為全球技術與治理對話中立平台的角色。領導人們強調，國際合作是應對當前經濟逆風的唯一途徑。`,
+                vocabulary: [
+                    'World Government Summit (n. proper): 世界政府峰會', 'Concluded (v.pt.): 閉幕/結束', 'Dubai (n. proper): 迪拜', 'Global leaders (n.phr.): 全球領導人',
+                    'Integration (n.): 整合', 'Public services (n.phr.): 公共服務', 'Sustainable urban development (n.phr.): 永續城市發展', 'New Silk Road Forum (n. proper): 新絲路論壇',
+                    'Industrial synergies (n.phr.): 產業協同效應', 'Economic corridors (n.phr.): 經濟走廊', 'Fragmented world (n.phr.): 碎片化/分裂的世界', 'Underscored (v.pt.): 強調/突顯',
+                    'UAE (United Arab Emirates) (n. proper): 阿拉伯聯合大公國', 'Neutral platform (n.phr.): 中立平台', 'Governance (n.): 治理/管理', 'Economic headwinds (n.phr.): 經濟逆風',
+                    'Navigate (v.): 應對/導航', 'Fragmented (adj.): 碎裂的', 'Platform (n.): 平台', 'Dialogue (n.): 對話',
+                    'Highlight (n.): 亮點', 'Participants (n.): 參與者', 'Innovative (adj.): 創新的', 'Prosperity (n.): 繁榮',
+                    'Summit (n.): 峰會', 'Governance (n.): 治理', 'Headwinds (n.): 逆風/阻力', 'Neutral (adj.): 中立的',
+                    'Sustainable (adj.): 永續的', 'Industrial (adj.): 工業的', 'Synergy (n.): 協同', 'Corridor (n.): 走廊'
+                ],
+                quiz: [
+                    { q: 'Where was the World Government Summit held?', options: ['New York', 'London', 'Dubai', 'Beijing'], answer: 'Dubai' },
+                    { q: 'The summit discussed the integration of what into public services?', options: ['Nuclear power', 'Artificial Intelligence (AI)', 'Farming tools', 'Paper money'], answer: 'Artificial Intelligence (AI)' },
+                    { q: 'What was a major forum mentioned at the event?', options: ['"Old Road Forum"', '"New Silk Road Forum"', '"Ocean Forum"', '"Mountain Forum"'], answer: '"New Silk Road Forum"' },
+                    { q: 'The summit emphasized the UAE’s role as a ______ platform.', options: ['Military', 'Aggressive', 'Neutral', 'Commercial only'], answer: 'Neutral' },
+                    { q: 'The world is described as "fragmented," meaning it is ______.', options: ['United', 'Broken into separate parts/divided', 'Very hot', 'Small'], answer: 'Broken into separate parts/divided' },
+                    { q: 'What is the only way to navigate economic headwinds according to leaders?', options: ['Starting a war', 'International cooperation', 'Raising taxes only', 'Closing borders'], answer: 'International cooperation' },
+                    { q: 'What kind of urban development was discussed?', options: ['Temporary', 'Sustainable', 'Industrial only', 'Underwater'], answer: 'Sustainable' },
+                    { q: 'What does "underscored" mean?', options: ['To hide', 'To emphasize or highlight', 'To delete', 'To count'], answer: 'To emphasize or highlight' },
+                    { q: 'What is a "corridor" in an economic context?', options: ['A hallway', 'A geographic route for trade and transport', 'A small box', 'A new currency'], answer: 'A geographic route for trade and transport' },
+                    { q: 'The word "concluded" means ______.', options: ['Began', 'Continued', 'Ended or finished', 'Delayed'], answer: 'Ended or finished' },
+                    { q: 'The term "governance" refers to ______.', options: ['The price of food', 'How a country or organization is run', 'A type of sports game', 'Building a bridge'], answer: 'How a country or organization is run' },
+                    { q: 'What is "synergy"?', options: ['Working alone', 'The combined effect being greater than parts', 'Losing money', 'A slow process'], answer: 'The combined effect being greater than parts' },
+                    { q: 'The term "headwinds" in economics refers to ______.', options: ['Fast winds', 'Difficult conditions or obstacles', 'Gifts', 'Successes'], answer: 'Difficult conditions or obstacles' },
+                    { q: 'The UAE stands for which country?', options: ['United American Empire', 'United Arab Emirates', 'Universal Art Entity', 'Urban Asian Enterprise'], answer: 'United Arab Emirates' },
+                    { q: 'What day did the summit conclude?', options: ['Monday', 'Tuesday', 'Wednesday', 'Sunday'], answer: 'Wednesday' }
+                ]
+            },
+            'iran-reform-celebrations': {
+                title: '伊朗過渡政府廢除伊斯蘭法庭',
+                english: `In a historic move toward secularism, Iran’s "Provisional Council for National Salvation" announced on Tuesday the total abolition of the Islamic Revolutionary Courts. The council pledged to restore a civilian judiciary based on international legal standards. This decision led to spontaneous street celebrations across Tehran and Tabriz. The U.S. has reportedly begun coordinating "economic normalization" talks with the interim council, signaling a potential end to decades of regional hostility. This shift is seen as a pivotal step in Iran's social and political transformation.`,
+                chinese: `伊朗過渡政府宣布廢除「伊斯蘭法庭」，德黑蘭街頭爆發慶祝熱潮。在一場邁向世俗主義的歷史性行動中，伊朗「國家救國臨時委員會」週二宣布全面廢除伊斯蘭革命法庭。該委員會承諾恢復基於國際法律標準的民事司法體系。這項決定引發了德黑蘭與大不里士（Tabriz）各地的自發性街頭慶祝活動。據報導，美國已開始與過渡委員會協調「經濟正常化」談判，釋放出結束數十年區域敵對狀態的訊號。這一轉變被視為伊朗社會與政治轉型中的關鍵一步。`,
+                vocabulary: [
+                    'Secularism (n.): 世俗主義', 'Provisional Council (n. proper): 臨時委員會', 'Salvation (n.): 拯救/救贖', 'Total abolition (n.phr.): 全面廢除',
+                    'Islamic Revolutionary Courts (n. proper): 伊斯蘭革命法庭', 'Civilian judiciary (n.phr.): 民事司法體系', 'Legal standards (n.phr.): 法律標準', 'Spontaneous (adj.): 自發的',
+                    'Economic normalization (n.phr.): 經濟正常化', 'Interim council (n.phr.): 臨時/過渡委員會', 'Hostility (n.): 敵對/敵意', 'Social transformation (n.phr.): 社會轉型',
+                    'Secular (adj.): 世俗的', 'Judiciary (n.): 司法部/司法體系', 'Abolition (n.): 廢除/廢止', 'Hostile (adj.): 敵對的',
+                    'Spontaneity (n.): 自發性', 'Decades (n.): 數十年', 'Pivotal step (n.phr.): 關鍵一步', 'Reform (v./n.): 改革',
+                    'Notorious (adj.): 惡名昭彰的', 'Individual liberties (n.phr.): 個人自由', 'De-escalation (n.): 局勢降溫', 'Neutral (adj.): 中立的',
+                    'Judiciary (n.): 司法機關', 'Restoration (n.): 恢復', 'Council (n.): 委員會', 'Strategic (adj.): 戰略的',
+                    'Normalization (n.): 常態化', 'Hostility (n.): 戰鬥/敵意', 'Shift (n.): 轉向', 'Spontaneous (adj.): 自然的'
+                ],
+                quiz: [
+                    { q: 'What significant judicial change did Iran’s Provisional Council announce?', options: ['Expanding Islamic Courts', 'The total abolition of Islamic Revolutionary Courts', 'Hiring more religious judges', 'Building new prisons'], answer: 'The total abolition of Islamic Revolutionary Courts' },
+                    { q: 'The move is described as a step toward ______.', options: ['Religion', 'Secularism', 'Taxes', 'War'], answer: 'Secularism' },
+                    { q: 'What did the council pledge to restore?', options: ['The Monarchy', 'A civilian judiciary based on international standards', 'The old Morality Police', 'A new tax system'], answer: 'A civilian judiciary based on international standards' },
+                    { q: 'Where did spontaneous celebrations break out?', options: ['London and Paris', 'Tehran and Tabriz', 'Washington and New York', 'Baghdad and Dubai'], answer: 'Tehran and Tabriz' },
+                    { q: 'The U.S. is reportedly coordinating "______ normalization" talks with Iran.', options: ['Military', 'Economic', 'Space', 'Educational'], answer: 'Economic' },
+                    { q: 'This shift signals a potential end to decades of ______.', options: ['Peace', 'Hostility', 'Growth', 'Trade'], answer: 'Hostility' },
+                    { q: 'What does "provisional" mean?', options: ['Permanent', 'Temporary', 'Professional', 'Elite'], answer: 'Temporary' },
+                    { q: 'The word "spontaneous" means something that is ______.', options: ['Planned', 'Unplanned or voluntary', 'Forbidden', 'Very slow'], answer: 'Unplanned or voluntary' },
+                    { q: 'What is a "judiciary"?', options: ['A group of soldiers', 'The system of courts of justice', 'A list of laws', 'A bank'], answer: 'The system of courts of justice' },
+                    { q: 'What does "abolition" refer to?', options: ['Building a new law', 'Officially ending a system or practice', 'Moving to another city', 'Changing the name of a law'], answer: 'Officially ending a system or practice' },
+                    { q: 'The U.S. is talking to an "interim" council. What is "interim"?', options: ['Final', 'Temporary or in-between', 'Banned', 'Retired'], answer: 'Temporary or in-between' },
+                    { q: 'Tehran is the ______ of Iran.', options: ['Border', 'Capital', 'Island', 'Province'], answer: 'Capital' },
+                    { q: 'The news refers to a "social transformation." What is that?', options: ['A dinner party', 'A significant change in society', 'A scientific experiment', 'A type of sports event'], answer: 'A significant change in society' },
+                    { q: 'The word "pivotal" means ______.', options: ['Unimportant', 'Crucial or essential', 'Slow', 'Hidden'], answer: 'Crucial or essential' },
+                    { q: 'What happened in Tabriz and Tehran on Tuesday?', options: ['A large fire', 'Celebrations over judicial reform', 'A border dispute', 'A rocket launch'], answer: 'Celebrations over judicial reform' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-gray-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-100"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-600 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 中文翻譯</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-xl shadow-inner"><p>${text.trim()}</p></div><div class="mt-6 text-center"><button class="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-gray-100"><span class="font-semibold text-indigo-700">${parts[0]}</span> <span class="text-gray-500 text-sm italic">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 核心單字與片語</h2><ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">${listItems}</ul><div class="mt-8 text-center"><button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border border-gray-300 rounded-lg block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-700 font-bold"> (正確答案)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-8 p-6 bg-white rounded-xl shadow-md border-t-4 border-indigo-500"><p class="text-xl font-bold text-gray-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-indigo-100 rounded-xl mb-8 border-4 border-indigo-500"><h3 class="text-3xl font-extrabold text-indigo-700 mb-2">測驗結果</h3><p class="text-4xl font-black text-indigo-900">${result.score} / ${result.total}</p><button class="mt-4 px-6 py-2 bg-yellow-500 text-white font-semibold rounded-full" onclick="initQuiz(true)">🔄 重置測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title} - 內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-8 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-8 py-3 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-50" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-red-500 font-semibold"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (!forceReset && currentSubTab === 'quiz') return;
+            quizState[topicId] = {};
+            quizResult[topicId] = undefined;
+            currentSubTab = 'quiz';
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有問題已回答。' : `請完成所有問題 (${answeredCount}/${quizQuestions.length})`;
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent();
+            window.changeTopic = changeTopic;
+            window.changeSubTab = changeSubTab;
+            window.selectOption = selectOption;
+            window.submitQuizAnswer = submitQuizAnswer;
+            window.initQuiz = initQuiz;
+        });
+    </script>
+</body>
+</html>
