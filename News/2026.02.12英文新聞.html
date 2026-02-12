@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 2 月 12 日 - 科技專題</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f0f4f8; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        .main-tabs-container {
+            background-color: #f8fafc; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1rem 0 1rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -2px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #1d4ed8; 
+            border-bottom-color: #1d4ed8; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f8fafc; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1.25em;
+        }
+        ::-webkit-scrollbar { height: 5px; width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-6xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">每日英文新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold tracking-widest uppercase">2026 年 2 月 12 日 科技專題課程</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- News Category Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-10">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning. Optimized for Deep Acquisition.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-tech': {
+                title: '台灣科技焦點',
+                english: `[1] TSMC A14 (1.4nm) Lab Leak: Breakthrough in CFET Vertical Transistor Yields
+A leaked technical report from TSMC's Baoshan R&D center suggests the company has achieved a 75% yield in its initial CFET (Complementary FET) structure testing for the A14 node. By vertically stacking n-type and p-type transistors, TSMC aims to shrink cell size by another 40%. This breakthrough effectively silences rumors about the physical limits of silicon, ensuring Taiwan's lead in the 2027 "Angstrom Era."
+
+[2] Dimensity 9600 Unveiled: MediaTek Debuts World's First Hardware-Level AI Video Inpainting
+MediaTek officially announced its flagship Dimensity 9600 chipset today. The chip features a dedicated "GenAI Video NPU" that can remove objects or extend backgrounds in 4K/60fps video in real-time. This marks a shift from cloud-based AI to "On-Device" production-grade video editing, directly challenging Qualcomm's upcoming Snapdragon 8 Gen 5 in the AI smartphone race.
+
+[3] Ministry of Labor Launches "Digital Nomad Visa" to Attract Global Tech Talent
+To combat the aging population and fill tech vacancies, Taiwan officially opened its Digital Nomad Visa program today. The policy allows foreign remote workers to stay for up to 3 years with simplified tax procedures. Officials hope this "Lifestyle Diplomacy" will turn Taiwan into an international hub for the global gig economy and software innovation.`,
+                chinese: `【1】台積電 A14 (1.4nm) 實驗室數據外洩：首度達成「全垂直堆疊」電晶體良率突破
+一份從台積電寶山研發中心外洩的技術報告顯示，該公司在 A14 節點的初期 CFET（互補場效應電晶體）結構測試中已達到 75% 的良率。通過垂直堆疊 n 型與 p 型電晶體，台積電目標是再縮小 40% 的晶胞尺寸。這項突破有效地平息了關於矽材料物理極限的傳言，確保台灣在 2027 年「埃米時代」的領先地位。
+
+【2】聯發科天璣 9600 亮相：整合首款「硬體級」生成式 AI 影片修補引擎
+聯發科今日正式發表旗艦級天璣 9600 晶片組。該晶片配備專用的「生成式 AI 影片神經處理器（GenAI Video NPU）」，能夠即時移除物件或延伸 4K/60fps 影片的背景。這標誌著從雲端 AI 轉向「裝置端」製作級影片編輯的轉變，直接挑戰高通即將推出的 Snapdragon 8 Gen 5 在 AI 智慧型手機競賽中的地位。
+
+【3】勞動部：2026 年起「數位遊牧族」專案正式啟動，吸引全球軟體人才移居台灣
+為對抗人口老化並填補科技職缺，台灣今日正式啟動「數位遊牧族簽證」計畫。該政策允許外國遠端工作者在台停留最長 3 年，並享有簡化的稅務程序。官員希望這項「生活方式外交」能將台灣打造成全球零工經濟與軟體創新的國際樞紐。`,
+                vocabulary: [
+                    'Leaked (adj.): 外洩的', 'Technical report (n.phr.): 技術報告', 'R&D center (n.phr.): 研發中心', 'Yield (n.): 良率/產率',
+                    'CFET (n.): 互補場效應電晶體', 'Structure testing (n.phr.): 結構測試', 'Node (n.): 製程節點', 'Vertically stacking (v.phr.): 垂直堆疊',
+                    'n-type transistor (n.phr.): n 型電晶體', 'p-type transistor (n.phr.): p 型電晶體', 'Cell size (n.phr.): 晶胞尺寸', 'Shrink (v.): 縮小',
+                    'Breakthrough (n.): 突破', 'Effectively (adv.): 有效地', 'Silence (v.): 使沉默/平息', 'Rumors (n.): 傳言/謠言',
+                    'Physical limits (n.phr.): 物理極限', 'Silicon (n.): 矽', 'Ensure (v.): 確保', 'Lead (n.): 領先地位',
+                    'Angstrom Era (n.phr.): 埃米時代', 'Flagship (n./adj.): 旗艦/旗艦級', 'Chipset (n.): 晶片組', 'Feature (v.): 配備/具有',
+                    'Dedicated (adj.): 專用的', 'GenAI (Generative AI) (n.): 生成式人工智慧', 'NPU (Neural Processing Unit) (n.): 神經處理器', 'Remove (v.): 移除',
+                    'Extend (v.): 延伸/擴展', 'Real-time (adj.): 即時的', 'Shift (n.): 轉變', 'Cloud-based (adj.): 雲端的',
+                    'On-Device (adj.): 裝置端的', 'Production-grade (adj.): 製作級的', 'Challenge (v.): 挑戰', 'Combat (v.): 對抗/打擊',
+                    'Aging population (n.phr.): 人口老化', 'Fill (v.): 填補', 'Tech vacancies (n.phr.): 科技職缺', 'Remote workers (n.phr.): 遠端工作者',
+                    'Simplified (adj.): 簡化的', 'Tax procedures (n.phr.): 稅務程序', 'Lifestyle Diplomacy (n.phr.): 生活方式外交', 'International hub (n.phr.): 國際樞紐',
+                    'Gig economy (n.phr.): 零工經濟', 'Software innovation (n.phr.): 軟體創新', 'Semiconductor (n.): 半導體', 'Manufacturing (n.): 製造',
+                    'Innovation (n.): 創新', 'Capability (n.): 能力', 'Advanced (adj.): 先進的', 'Competitive (adj.): 競爭的'
+                ],
+                quiz: [
+                    { q: 'What percentage yield did TSMC achieve in CFET testing?', options: ['50%', '60%', '75%', '90%'], answer: '75%' },
+                    { q: 'What does CFET stand for?', options: ['Complementary FET', 'Complete FET', 'Complex FET', 'Compressed FET'], answer: 'Complementary FET' },
+                    { q: 'By what percentage does TSMC aim to shrink cell size?', options: ['20%', '30%', '40%', '50%'], answer: '40%' },
+                    { q: 'What era is Taiwan ensuring its lead in by 2027?', options: ['Digital Era', 'Angstrom Era', 'Quantum Era', 'Nano Era'], answer: 'Angstrom Era' },
+                    { q: 'What is the name of MediaTek\'s new flagship chipset?', options: ['Dimensity 9500', 'Dimensity 9600', 'Helio G100', 'MT8000'], answer: 'Dimensity 9600' },
+                    { q: 'At what video quality can the Dimensity 9600 remove objects?', options: ['1080p/30fps', '4K/30fps', '4K/60fps', '8K/30fps'], answer: '4K/60fps' },
+                    { q: 'What special feature does the Dimensity 9600 have?', options: ['5G modem', 'GenAI Video NPU', 'WiFi 7', 'Bluetooth 6'], answer: 'GenAI Video NPU' },
+                    { q: 'Which competitor does MediaTek directly challenge?', options: ['Apple A18', 'Snapdragon 8 Gen 5', 'Exynos 2500', 'Tensor G5'], answer: 'Snapdragon 8 Gen 5' },
+                    { q: 'What is the name of Taiwan\'s new visa program?', options: ['Tech Visa', 'Digital Nomad Visa', 'Work Permit', 'Student Visa'], answer: 'Digital Nomad Visa' },
+                    { q: 'How long can foreign remote workers stay under this program?', options: ['1 year', '2 years', '3 years', '5 years'], answer: '3 years' },
+                    { q: 'What procedures are simplified for visa holders?', options: ['Visa renewal', 'Tax procedures', 'Housing', 'Healthcare'], answer: 'Tax procedures' },
+                    { q: 'What term describes Taiwan\'s policy approach?', options: ['Economic Diplomacy', 'Lifestyle Diplomacy', 'Cultural Exchange', 'Trade Agreement'], answer: 'Lifestyle Diplomacy' },
+                    { q: 'The word "leaked" means ______.', options: ['Official announcement', 'Unauthorized disclosure', 'Planned release', 'Public statement'], answer: 'Unauthorized disclosure' },
+                    { q: 'What does "yield" refer to in manufacturing?', options: ['Speed', 'Success rate of production', 'Size', 'Cost'], answer: 'Success rate of production' },
+                    { q: 'What does NPU stand for?', options: ['Network Processing Unit', 'Neural Processing Unit', 'New Performance Unit', 'Next Power Unit'], answer: 'Neural Processing Unit' },
+                    { q: 'The term "real-time" means ______.', options: ['Delayed processing', 'Happening instantly', 'Next day', 'Once a week'], answer: 'Happening instantly' },
+                    { q: 'What does "on-device" processing mean?', options: ['In the cloud', 'On the phone itself', 'On a server', 'On a computer'], answer: 'On the phone itself' },
+                    { q: 'What does "combat" mean in this context?', options: ['Fight against', 'Celebrate', 'Ignore', 'Study'], answer: 'Fight against' },
+                    { q: 'A "digital nomad" is someone who ______.', options: ['Never uses technology', 'Works remotely while traveling', 'Only works in offices', 'Studies computers'], answer: 'Works remotely while traveling' },
+                    { q: 'The "gig economy" refers to ______.', options: ['Traditional full-time jobs', 'Short-term freelance work', 'Government employment', 'Manufacturing jobs'], answer: 'Short-term freelance work' }
+                ]
+            },
+            'seedance-2': {
+                title: '字節跳動 Seedance 2.0',
+                english: `ByteDance's AI lab officially released Seedance 2.0 on Thursday. The model features a revolutionary physics-consistent algorithm that ensures objects maintain consistent gravity and fluid dynamics across frames. This breakthrough solves the "glitchy" nature of previous AI videos, making it a viable tool for professional filmmakers and digital marketing agencies.`,
+                chinese: `字節跳動的 AI 實驗室週四正式發布 Seedance 2.0。該模型具備革命性的物理一致性演算法，確保物體在影格之間維持一致的重力與流體動力學表現。這項突破解決了先前 AI 影片的「故障」特性，使其成為專業電影製作人與數位行銷機構的可行工具。`,
+                vocabulary: [
+                    'AI lab (n.phr.): 人工智慧實驗室', 'Officially (adv.): 正式地', 'Released (v.pt.): 發布', 'Model (n.): 模型',
+                    'Feature (v.): 具有/配備', 'Revolutionary (adj.): 革命性的', 'Physics-consistent (adj.): 物理一致性的', 'Algorithm (n.): 演算法',
+                    'Ensure (v.): 確保', 'Objects (n.): 物體', 'Maintain (v.): 維持', 'Consistent (adj.): 一致的',
+                    'Gravity (n.): 重力', 'Fluid dynamics (n.phr.): 流體動力學', 'Across frames (prep.phr.): 跨影格/在影格之間', 'Breakthrough (n.): 突破',
+                    'Solve (v.): 解決', 'Glitchy (adj.): 有故障的/不穩定的', 'Nature (n.): 特性/本質', 'Previous (adj.): 先前的',
+                    'Viable (adj.): 可行的', 'Tool (n.): 工具', 'Professional (adj.): 專業的', 'Filmmakers (n.): 電影製作人',
+                    'Digital marketing (n.phr.): 數位行銷', 'Agencies (n.): 機構/公司', 'Generation (n.): 生成', 'Quality (n.): 品質',
+                    'Realistic (adj.): 真實的', 'Innovation (n.): 創新', 'Technology (n.): 技術', 'Industry (n.): 產業'
+                ],
+                quiz: [
+                    { q: 'Which company released Seedance 2.0?', options: ['Google', 'Meta', 'ByteDance', 'OpenAI'], answer: 'ByteDance' },
+                    { q: 'When was Seedance 2.0 released?', options: ['Monday', 'Tuesday', 'Thursday', 'Friday'], answer: 'Thursday' },
+                    { q: 'What type of algorithm does the model feature?', options: ['Random', 'Physics-consistent', 'Speed-focused', 'Color-based'], answer: 'Physics-consistent' },
+                    { q: 'What does the algorithm ensure about objects?', options: ['They change randomly', 'They maintain consistent gravity and fluid dynamics', 'They disappear', 'They multiply'], answer: 'They maintain consistent gravity and fluid dynamics' },
+                    { q: 'What problem of previous AI videos does this solve?', options: ['Too slow', 'Glitchy nature', 'Too expensive', 'Too small'], answer: 'Glitchy nature' },
+                    { q: 'Who can use this as a viable tool?', options: ['Only students', 'Professional filmmakers and digital marketing agencies', 'Only government', 'Only scientists'], answer: 'Professional filmmakers and digital marketing agencies' },
+                    { q: 'What does "physics-consistent" mean?', options: ['Ignores physics', 'Follows physical laws consistently', 'Random physics', 'No physics'], answer: 'Follows physical laws consistently' },
+                    { q: 'An "algorithm" is a ______.', options: ['Type of food', 'Set of rules for solving problems', 'Musical instrument', 'Building'], answer: 'Set of rules for solving problems' },
+                    { q: 'What does "maintain" mean?', options: ['Destroy', 'Keep or preserve', 'Change', 'Hide'], answer: 'Keep or preserve' },
+                    { q: 'The term "fluid dynamics" relates to ______.', options: ['Electricity', 'Movement of liquids and gases', 'Sound waves', 'Light'], answer: 'Movement of liquids and gases' },
+                    { q: 'What does "glitchy" mean?', options: ['Perfect', 'Malfunctioning or unstable', 'Expensive', 'Beautiful'], answer: 'Malfunctioning or unstable' },
+                    { q: 'A "breakthrough" is a ______.', options: ['Failure', 'Major achievement or discovery', 'Small step', 'Mistake'], answer: 'Major achievement or discovery' },
+                    { q: 'What does "viable" mean?', options: ['Impossible', 'Capable of working successfully', 'Old', 'Cheap'], answer: 'Capable of working successfully' },
+                    { q: 'The word "filmmakers" refers to people who ______.', options: ['Watch movies', 'Create films', 'Only act', 'Only edit'], answer: 'Create films' },
+                    { q: 'What aspect of physics is mentioned alongside gravity?', options: ['Electricity', 'Fluid dynamics', 'Magnetism', 'Nuclear force'], answer: 'Fluid dynamics' }
+                ]
+            },
+            'apple-homeos': {
+                title: '蘋果 HomeOS',
+                english: `Supply chain leaks suggest Apple is finalizing "HomeOS," a variant of iOS designed to power household robotic assistants. Unlike current smart speakers, these devices will use Apple Intelligence to autonomously manage home environments. This marks Apple's most significant pivot into "Physical AI," aiming to turn the iPhone ecosystem into a proactive domestic companion.`,
+                chinese: `供應鏈外洩消息顯示，蘋果正在完成「HomeOS」——一個專為家用機器人助理設計的 iOS 變體。與目前的智慧音箱不同，這些裝置將使用蘋果智慧（Apple Intelligence）自主管理家庭環境。這標誌著蘋果在「實體 AI」領域最重要的轉型，目標是將 iPhone 生態系統轉變為主動式家庭夥伴。`,
+                vocabulary: [
+                    'Supply chain (n.phr.): 供應鏈', 'Leaks (n.): 洩漏/外洩消息', 'Suggest (v.): 顯示/暗示', 'Finalizing (v.ger.): 完成/定案',
+                    'Variant (n.): 變體/版本', 'iOS (n. proper): 蘋果作業系統', 'Designed to (v.phr.): 設計用來', 'Power (v.): 驅動/提供動力',
+                    'Household (adj.): 家用的/家庭的', 'Robotic assistants (n.phr.): 機器人助理', 'Unlike (prep.): 與...不同', 'Current (adj.): 目前的',
+                    'Smart speakers (n.phr.): 智慧音箱', 'Devices (n.): 裝置', 'Apple Intelligence (n. proper): 蘋果智慧', 'Autonomously (adv.): 自主地',
+                    'Manage (v.): 管理', 'Home environments (n.phr.): 家庭環境', 'Mark (v.): 標誌', 'Significant (adj.): 重要的',
+                    'Pivot (n.): 轉型/轉向', 'Physical AI (n.phr.): 實體人工智慧', 'Aim (v.): 目標', 'Turn into (v.phr.): 轉變為',
+                    'iPhone ecosystem (n.phr.): iPhone 生態系統', 'Proactive (adj.): 主動的', 'Domestic (adj.): 家庭的', 'Companion (n.): 夥伴/陪伴者',
+                    'Innovation (n.): 創新', 'Technology (n.): 技術', 'Smart home (n.phr.): 智慧家庭', 'Automation (n.): 自動化'
+                ],
+                quiz: [
+                    { q: 'What is the name of Apple\'s new operating system for robots?', options: ['RobotOS', 'HomeOS', 'AppleBot', 'iHome'], answer: 'HomeOS' },
+                    { q: 'HomeOS is described as a variant of what?', options: ['macOS', 'watchOS', 'iOS', 'tvOS'], answer: 'iOS' },
+                    { q: 'What will HomeOS be designed to power?', options: ['Cars', 'Household robotic assistants', 'Drones', 'Computers'], answer: 'Household robotic assistants' },
+                    { q: 'How do the new devices differ from smart speakers?', options: ['They\'re cheaper', 'They autonomously manage environments', 'They\'re louder', 'They\'re smaller'], answer: 'They autonomously manage environments' },
+                    { q: 'What Apple technology will the devices use?', options: ['Siri only', 'Apple Intelligence', 'iTunes', 'iCloud'], answer: 'Apple Intelligence' },
+                    { q: 'This represents Apple\'s pivot into what field?', options: ['Virtual AI', 'Physical AI', 'Cloud computing', 'Gaming'], answer: 'Physical AI' },
+                    { q: 'What ecosystem does Apple aim to transform?', options: ['Mac', 'iPad', 'iPhone', 'Watch'], answer: 'iPhone' },
+                    { q: 'The devices will be what kind of companion?', options: ['Passive', 'Proactive domestic', 'Entertainment', 'Gaming'], answer: 'Proactive domestic' },
+                    { q: 'Where did the information about HomeOS come from?', options: ['Official announcement', 'Supply chain leaks', 'Customer reviews', 'Conference'], answer: 'Supply chain leaks' },
+                    { q: 'What does "autonomously" mean?', options: ['With help', 'Independently/on its own', 'Slowly', 'Loudly'], answer: 'Independently/on its own' },
+                    { q: 'A "variant" is a ______.', options: ['Exact copy', 'Different version', 'Opposite', 'Mistake'], answer: 'Different version' },
+                    { q: 'What does "pivot" mean in business?', options: ['Stay the same', 'Strategic change in direction', 'Close down', 'Expand'], answer: 'Strategic change in direction' },
+                    { q: 'The term "proactive" means ______.', options: ['Reactive', 'Taking action in anticipation', 'Slow', 'Passive'], answer: 'Taking action in anticipation' },
+                    { q: 'An "ecosystem" in technology refers to ______.', options: ['A forest', 'Interconnected products and services', 'A single device', 'A building'], answer: 'Interconnected products and services' },
+                    { q: 'What does "domestic" mean in this context?', options: ['International', 'Related to the home', 'Foreign', 'Commercial'], answer: 'Related to the home' }
+                ]
+            },
+            'gemini-health': {
+                title: '谷歌 Gemini Health',
+                english: `Google DeepMind officially launched Gemini Health, a multimodal model capable of analyzing X-rays, lab results, and patient histories simultaneously. In early clinical tests, the AI achieved 92% diagnostic accuracy, identifying rare conditions that traditional screening often misses. This technology aims to alleviate the burden on overstretched healthcare systems, serving as a "Co-pilot" for doctors rather than a replacement for professional judgment.`,
+                chinese: `谷歌 DeepMind 正式推出 Gemini Health，這是一個能同時分析 X 光片、實驗室結果與病患病史的多模態模型。在早期臨床測試中，該 AI 達到 92% 的診斷準確度，能辨識傳統篩檢常遺漏的罕見病況。這項技術旨在減輕過度負荷之醫療系統的負擔，作為醫生的「副駕駛」而非專業判斷的替代品。`,
+                vocabulary: [
+                    'DeepMind (n. proper): 深度思維(谷歌AI部門)', 'Launched (v.pt.): 推出/發布', 'Multimodal model (n.phr.): 多模態模型', 'Capable of (adj.phr.): 能夠',
+                    'Analyzing (v.ger.): 分析', 'X-rays (n.): X 光片', 'Lab results (n.phr.): 實驗室結果', 'Patient histories (n.phr.): 病患病史',
+                    'Simultaneously (adv.): 同時地', 'Early (adj.): 早期的', 'Clinical tests (n.phr.): 臨床測試', 'Achieved (v.pt.): 達到',
+                    'Diagnostic accuracy (n.phr.): 診斷準確度', 'Identifying (v.ger.): 辨識/識別', 'Rare conditions (n.phr.): 罕見病況', 'Traditional screening (n.phr.): 傳統篩檢',
+                    'Miss (v.): 遺漏/錯過', 'Aim (v.): 旨在/目的', 'Alleviate (v.): 減輕/緩解', 'Burden (n.): 負擔',
+                    'Overstretched (adj.): 過度負荷的', 'Healthcare systems (n.phr.): 醫療系統', 'Serve as (v.phr.): 作為', 'Co-pilot (n.): 副駕駛',
+                    'Replacement (n.): 替代品', 'Professional judgment (n.phr.): 專業判斷', 'Medical (adj.): 醫療的', 'Diagnosis (n.): 診斷',
+                    'AI (Artificial Intelligence) (n.): 人工智慧', 'Technology (n.): 技術', 'Innovation (n.): 創新', 'Support (v./n.): 支援'
+                ],
+                quiz: [
+                    { q: 'Which Google division launched Gemini Health?', options: ['Google Search', 'Google DeepMind', 'Google Cloud', 'Google Maps'], answer: 'Google DeepMind' },
+                    { q: 'What type of model is Gemini Health?', options: ['Single-modal', 'Multimodal', 'Text-only', 'Image-only'], answer: 'Multimodal' },
+                    { q: 'What can Gemini Health analyze?', options: ['Only X-rays', 'X-rays, lab results, and patient histories', 'Only medications', 'Only symptoms'], answer: 'X-rays, lab results, and patient histories' },
+                    { q: 'What diagnostic accuracy did it achieve in clinical tests?', options: ['75%', '85%', '92%', '100%'], answer: '92%' },
+                    { q: 'What kind of conditions can it identify that traditional screening misses?', options: ['Common', 'Rare', 'Mild', 'Chronic'], answer: 'Rare' },
+                    { q: 'What is the technology\'s goal for healthcare systems?', options: ['Replace them', 'Alleviate their burden', 'Complicate them', 'Close them'], answer: 'Alleviate their burden' },
+                    { q: 'How is the AI described in relation to doctors?', options: ['Replacement', 'Co-pilot', 'Manager', 'Student'], answer: 'Co-pilot' },
+                    { q: 'What does the AI NOT aim to replace?', options: ['Hospitals', 'Professional judgment', 'Computers', 'Medicine'], answer: 'Professional judgment' },
+                    { q: 'The word "multimodal" means capable of processing ______.', options: ['One type of data', 'Multiple types of data', 'No data', 'Only text'], answer: 'Multiple types of data' },
+                    { q: 'What does "simultaneously" mean?', options: ['One at a time', 'At the same time', 'Never', 'Later'], answer: 'At the same time' },
+                    { q: 'The term "diagnostic accuracy" refers to ______.', options: ['Speed', 'Correctness in identifying diseases', 'Cost', 'Size'], answer: 'Correctness in identifying diseases' },
+                    { q: 'What does "alleviate" mean?', options: ['Increase', 'Make worse', 'Reduce or ease', 'Ignore'], answer: 'Reduce or ease' },
+                    { q: 'An "overstretched" healthcare system is one that is ______.', options: ['Well-funded', 'Under too much pressure', 'Empty', 'New'], answer: 'Under too much pressure' },
+                    { q: 'A "co-pilot" is someone who ______.', options: ['Works alone', 'Assists the main operator', 'Is in charge', 'Watches only'], answer: 'Assists the main operator' },
+                    { q: 'What does it mean to "miss" a condition?', options: ['Find it', 'Fail to detect it', 'Cure it', 'Study it'], answer: 'Fail to detect it' }
+                ]
+            },
+            'eu-digital-wallet': {
+                title: '歐盟數位錢包',
+                english: `The European Parliament passed a landmark bill requiring member states to offer a "Digital Identity Wallet" for IDs, driver's licenses, and health records. This "Digital Sovereignty" move aims to simplify cross-border travel and public services while setting a global standard for data privacy and decentralized identity verification, demonstrating the EU's resolve in building a secure and transparent digital social order.`,
+                chinese: `歐洲議會通過一項里程碑法案，要求成員國提供「數位身份錢包」，用於身份證、駕照與健康紀錄。這項「數位主權」舉措旨在簡化跨境旅行與公共服務，同時為資料隱私與去中心化身份驗證設立全球標準，展現歐盟在建立安全與透明數位社會秩序的決心。`,
+                vocabulary: [
+                    'European Parliament (n. proper): 歐洲議會', 'Passed (v.pt.): 通過(法案)', 'Landmark (adj.): 里程碑的/劃時代的', 'Bill (n.): 法案',
+                    'Requiring (v.ger.): 要求', 'Member states (n.phr.): 成員國', 'Offer (v.): 提供', 'Digital Identity Wallet (n.phr.): 數位身份錢包',
+                    'IDs (n.): 身份證', 'Driver\'s licenses (n.phr.): 駕照', 'Health records (n.phr.): 健康紀錄', 'Digital Sovereignty (n.phr.): 數位主權',
+                    'Move (n.): 舉措/行動', 'Aim (v.): 旨在', 'Simplify (v.): 簡化', 'Cross-border (adj.): 跨境的',
+                    'Travel (n.): 旅行', 'Public services (n.phr.): 公共服務', 'Setting (v.ger.): 設立/建立', 'Global standard (n.phr.): 全球標準',
+                    'Data privacy (n.phr.): 資料隱私', 'Decentralized (adj.): 去中心化的', 'Identity verification (n.phr.): 身份驗證', 'Demonstrate (v.): 展現/證明',
+                    'EU (European Union) (n. proper): 歐盟', 'Resolve (n.): 決心', 'Build (v.): 建立', 'Secure (adj.): 安全的',
+                    'Transparent (adj.): 透明的', 'Digital (adj.): 數位的', 'Social order (n.phr.): 社會秩序', 'Framework (n.): 框架'
+                ],
+                quiz: [
+                    { q: 'Which governing body passed the digital identity bill?', options: ['US Congress', 'European Parliament', 'UN Assembly', 'NATO'], answer: 'European Parliament' },
+                    { q: 'What are member states required to offer?', options: ['Free healthcare', 'Digital Identity Wallet', 'Tax breaks', 'Free education'], answer: 'Digital Identity Wallet' },
+                    { q: 'What documents can be stored in the Digital Identity Wallet?', options: ['Only passports', 'IDs, driver\'s licenses, and health records', 'Only photos', 'Only emails'], answer: 'IDs, driver\'s licenses, and health records' },
+                    { q: 'What concept does this initiative represent?', options: ['Digital Colonialism', 'Digital Sovereignty', 'Digital Divide', 'Digital Marketing'], answer: 'Digital Sovereignty' },
+                    { q: 'What does the wallet aim to simplify?', options: ['Shopping', 'Cross-border travel and public services', 'Gaming', 'Cooking'], answer: 'Cross-border travel and public services' },
+                    { q: 'What global standard is the EU setting?', options: ['Food safety', 'Data privacy and decentralized identity verification', 'Trade tariffs', 'Military standards'], answer: 'Data privacy and decentralized identity verification' },
+                    { q: 'The EU aims to build what kind of digital social order?', options: ['Chaotic', 'Secure and transparent', 'Expensive', 'Hidden'], answer: 'Secure and transparent' },
+                    { q: 'What does "landmark" mean when describing a bill?', options: ['Unimportant', 'Historically significant', 'Temporary', 'Failed'], answer: 'Historically significant' },
+                    { q: 'What does "cross-border" mean?', options: ['Within one country', 'Between different countries', 'Underground', 'In space'], answer: 'Between different countries' },
+                    { q: 'The term "decentralized" means ______.', options: ['Controlled by one authority', 'Distributed without central control', 'Chaotic', 'Expensive'], answer: 'Distributed without central control' },
+                    { q: 'What does "sovereignty" refer to?', options: ['Dependence', 'Independence and self-governance', 'Weakness', 'Confusion'], answer: 'Independence and self-governance' },
+                    { q: 'What does "simplify" mean?', options: ['Make more complex', 'Make easier', 'Destroy', 'Hide'], answer: 'Make easier' },
+                    { q: 'What does "demonstrate" mean?', options: ['Hide', 'Show or prove', 'Deny', 'Forget'], answer: 'Show or prove' },
+                    { q: 'The word "resolve" means ______.', options: ['Confusion', 'Firm determination', 'Weakness', 'Hesitation'], answer: 'Firm determination' },
+                    { q: 'By when should member states implement the Digital Identity Wallet?', options: ['2025', 'Late 2026', '2030', 'Never mentioned'], answer: 'Late 2026' }
+                ]
+            }
+        };
+
+        // --- CORE LOGIC ---
+        let currentTopicId = 'taiwan-tech'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-slate-600 leading-relaxed p-6 bg-slate-50 rounded-xl border border-slate-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">${title} - 譯文</h2><div class="prose max-w-none text-lg text-slate-600 leading-relaxed p-6 bg-blue-50 border-l-4 border-blue-500 rounded-xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-slate-100 hover:border-blue-300 transition cursor-default"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-400 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-slate-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold"> (正確答案)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-6 bg-white rounded-xl border border-slate-100 shadow-sm"><p class="text-lg font-bold text-slate-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-blue-600 text-white rounded-2xl mb-10 shadow-lg"><h3 class="text-2xl font-bold mb-2">測驗分數</h3><p class="text-5xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>提交答案並評分</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '已完成所有作答' : `已回答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace(' (正確答案)', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
