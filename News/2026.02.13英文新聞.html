@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 2 月 13 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 2 月 13 日：AI 物理感知與通用智能新前沿</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for advanced learners.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地科技焦點',
+                english: `[1] TSMC A14 (1.4nm) R&D Gains Momentum; Initial Pilot Yields Surpass Expectations\nAccording to industry insiders in Hsinchu, TSMC’s A14 process has achieved a significant milestone. The preliminary yield rates for the new CFET (Complementary FET) structure are reportedly ahead of the internal 2026 roadmap. This progress ensures that Taiwan remains the sole global hub for the most advanced logic chips, reinforcing the "Silicon Shield" as tech giants compete for 2027 capacity.\n\n[2] NVIDIA and ITRI Launch "Physical AI" Lab to Propel Taiwan’s Robotics\nNVIDIA officially signed a memorandum with the Industrial Technology Research Institute (ITRI) to establish a joint laboratory focused on Physical AI. The facility will utilize NVIDIA's Omniverse platform to train autonomous mobile robots (AMRs). This partnership aims to integrate Taiwan’s precision machinery with high-end AI, positioning local firms like Techman Robot as primary global suppliers.\n\n[3] NDC: National Smart Grid Coverage Hits 60%, Enhancing Resilience\nThe National Development Council (NDC) announced on Friday that Taiwan’s Smart Grid 2.0 initiative has reached a 60% coverage milestone. The integration of AI-driven load balancing has reducedLocalized brownouts by 40%. The government plans to further incentivize private energy storage to stabilize the grid as renewable energy sources continue to expand.`,
+                chinese: `【1】台積電 A14 (1.4nm) 研發進度超前：傳首批試產良率突破預期\n根據新竹產業消息人士透露，台積電的 A14（1.4 奈米）製程在試產階段取得了重大里程碑。新型 CFET（互補場效應電晶體）結構的初步良率據傳已領先公司內部的 2026 年藍圖。這一進展確保了台灣仍是全球唯一最先進邏輯晶片的樞紐，在科技巨頭爭奪 2027 年產能之際，進一步鞏固了「矽盾」。\n\n【2】輝達與工研院合作「物理 AI」實驗室：推動台灣機器人供應鏈外銷\n輝達（NVIDIA）正式與工研院（ITRI）簽署合作備忘錄，成立專注於「物理 AI（Physical AI）」的聯合實驗室。該設施將利用 NVIDIA 的 Omniverse 平台訓練工業用自主移動機器人（AMR）。此夥伴關係旨在將台灣的精密機械與高階 AI 結合，使達明機器人（Techman Robot）等本土廠商定位為全球自動化大廠的主要供應商。\n\n【3】國發會：2026 年「全台智慧電網」覆蓋率達 60%，電網韌性顯著提升\n國家發展委員會週五宣布，台灣「智慧電網 2.0」計畫已在住宅與工業領域達成 60% 的覆蓋率里程碑。AI 驅動的負載平衡整合已使局部區域斷電頻率減少了 40%。隨著再生能源持續擴大，政府計畫進一步激勵民間儲能設備的安裝，以穩定電網運作。`,
+                vocabulary: [
+                    'R&D (Research and Development) (n.): 研發', 'Gains Momentum (phr.): 獲得動力/進展加速', 'Pilot Yields (n.phr.): 試產良率', 'Complementary FET (CFET) (n.): 互補式場效電晶體',
+                    'Roadmap (n.): 藍圖/時程表', 'Sole Hub (n.phr.): 唯一樞紐', 'Silicon Shield (n. proper): 矽盾', 'Omniverse (n. proper): 輝達全宇宙平台',
+                    'AMR (Autonomous Mobile Robot) (n.): 自主移動機器人', 'Precision machinery (n.phr.): 精密機械', 'Positioning (v.ger.): 定位', 'Automated factories (n.phr.): 自動化工廠',
+                    'Smart Grid (n.phr.): 智慧電網', 'Resilience (n.): 韌性', 'Load balancing (n.phr.): 負載平衡', 'Localized brownouts (n.phr.): 局部限電/電壓下降',
+                    'Incentivize (v.): 激勵/獎勵', 'Renewable energy (n.phr.): 再生能源', 'Logic chips (n.phr.): 邏輯晶片', 'Reinforcing (v.ger.): 強化',
+                    'Capacity (n.): 產能', 'Joint (adj.): 聯合的', 'Memorandum (n.): 備忘錄', 'Integrate (v.): 整合',
+                    'Primary suppliers (n.phr.): 主要供應商', 'Coverage (n.): 覆蓋率', 'Milestone (n.): 里程碑', 'Sovereignty (n.): 主權',
+                    'Sub-second (adj.): 秒以下的', 'Latency (n.): 延遲', 'Constellation (n.): 星座/衛星群', 'Maritime (adj.): 海事的'
+                ],
+                quiz: [
+                    { q: 'What is the specific transistor structure mentioned for TSMC\'s A14 process?', options: ['FinFET', 'GAA', 'CFET', 'Planar'], answer: 'CFET' },
+                    { q: 'What is the status of TSMC\'s A14 R&D according to the news?', options: ['Delayed', 'Cancelled', 'Ahead of schedule', 'On track with 2028'], answer: 'Ahead of schedule' },
+                    { q: 'Which partner is NVIDIA working with to launch the "Physical AI" lab?', options: ['TSMC', 'ITRI', 'Foxconn', 'MediaTek'], answer: 'ITRI' },
+                    { q: 'What is the primary platform used to train robots in the new lab?', options: ['ChatGPT', 'Omniverse', 'TensorFlow', 'iOS'], answer: 'Omniverse' },
+                    { q: 'What is the goal of the NVIDIA-ITRI partnership?', options: ['To build phones', 'To propel Taiwan\'s robotics export supply chain', 'To design clothes', 'To build data centers only'], answer: 'To propel Taiwan\'s robotics export supply chain' },
+                    { q: 'What is the 2026 coverage target achieved by the National Smart Grid?', options: ['40%', '60%', '80%', '100%'], answer: '60%' },
+                    { q: 'By how much have localized brownouts been reduced due to AI load balancing?', options: ['10%', '25%', '40%', '60%'], answer: '40%' },
+                    { q: 'What does "AMR" stand for?', options: ['Advanced Machine Robot', 'Autonomous Mobile Robot', 'Automated Material Relay', 'Airborne Motion Receiver'], answer: 'Autonomous Mobile Robot' },
+                    { q: 'The term "Silicon Shield" refers to Taiwan\'s importance in ______.', options: ['Agriculture', 'Textiles', 'Semiconductors', 'Space exploration'], answer: 'Semiconductors' },
+                    { q: 'What is the NDC planning to incentivize next to stabilize the grid?', options: ['Coal mining', 'Private energy storage installations', 'Nuclear power', 'Water usage'], answer: 'Private energy storage installations' },
+                    { q: 'The word "preliminary" means ______.', options: ['Final', 'Initial or preparatory', 'Hidden', 'Illegal'], answer: 'Initial or preparatory' },
+                    { q: 'What does "propel" mean in the robotics news?', options: ['To stop', 'To push forward or drive', 'To sell', 'To study'], answer: 'To push forward or drive' },
+                    { q: 'The smart grid initiative mentioned is named ______.', options: ['Smart Grid 1.0', 'Smart Grid 2.0', 'Grid Max', 'Energy Link'], answer: 'Smart Grid 2.0' },
+                    { q: 'Techman Robot is mentioned as a primary ______.', options: ['Customer', 'Supplier', 'Regulator', 'Competitor'], answer: 'Supplier' },
+                    { q: 'The term "CFET" stands for ______.', options: ['Complementary FET', 'Compressed FET', 'Central FET', 'Commercial FET'], answer: 'Complementary FET' }
+                ]
+            },
+            'bytedance-seedance': {
+                title: '字節跳動 Seedance 2.0 更新',
+                english: `ByteDance’s AI division shocked the creative industry on Friday by pushing a major update to Seedance 2.0, introducing the "Cine-Consistency" module. This feature allows users to maintain character likeness and environmental details across hundreds of disparate shots, a feat previously considered the "holy grail" of generative video. By utilizing a new "Spatio-Temporal Memory Anchor" algorithm, Seedance 2.0 ensures that lighting, textures, and character proportions do not "drift" during longer sequences. Film studios in Hollywood and Seoul are reportedly already testing the model for pre-visualization. Critics noted that this update effectively turns Seedance 2.0 from a viral clip generator into a legitimate production-grade tool, potentially disrupting the CGI industry by late 2026.`,
+                chinese: `字節跳動 Seedance 2.0 推出「Cine-Consistency」更新：AI 影片邁入專業長片領域。字節跳動 AI 部門週五推播了 Seedance 2.0 的重大更新，推出「影片一致性（Cine-Consistency）」模組，震撼創意產業。這項功能允許用戶在數百個不同鏡頭中維持角色容貌與環境細節的一致性，這曾被視為生成式影片的「聖盃」。藉由全新的「時空記憶錨點（Spatio-Temporal Memory Anchor）」演算法，Seedance 2.0 確保光影、紋理與角色比例在長序列中不會發生「漂移」。據報導，好萊塢與首爾的電影製片廠已開始測試該模型用於預視覺化。評論家指出，這次更新有效地將 Seedance 2.0 從單純的短片產生器轉型為合法的製作級工具，可能在 2026 年底前顛覆產值數十億美元的傳統 CGI 產業。`,
+                vocabulary: [
+                    'Cine-Consistency (n.): 影片/電影一致性', 'Module (n.): 模組', 'Likeness (n.): 容貌/相似性', 'Disparate shots (n.phr.): 不同的鏡頭',
+                    'Holy grail (n.phr.): 聖盃 (指終極目標)', 'Spatio-Temporal (adj.): 時空的', 'Memory Anchor (n.phr.): 記憶錨點', 'Algorithm (n.): 演算法',
+                    'Textures (n.): 紋理/質地', 'Proportions (n.): 比例', 'Drift (v.): 漂移/變動', 'Sequences (n.): 序列/片段',
+                    'Pre-visualization (n.): 預視覺化', 'Viral clip (n.phr.): 瘋傳的短片', 'Legitimate (adj.): 合法的/正統的', 'Production-grade (adj.): 製作級的',
+                    'Disrupting (v.ger.): 顛覆/擾亂', 'CGI (Computer-Generated Imagery) (n.): 電腦繪圖/動畫', 'Disparate (adj.): 迥然不同的', 'Consistency (n.): 一致性',
+                    'Feature (n.): 功能/特色', 'Sequence (n.): 順序/連續', 'Studio (n.): 工作室/製片廠', 'Potential (adj.): 潛在的',
+                    'Framework (n.): 框架', 'Anchor (n.): 錨/核心', 'Proportion (n.): 部分/比例', 'Legitimacy (n.): 合法性',
+                    'Disrupt (v.): 使混亂', 'Module (n.): 單元', 'Sequence (n.): 一連串', 'Cine (adj.): 電影的'
+                ],
+                quiz: [
+                    { q: 'What is the name of the new ByteDance module?', options: ['Video Gen', 'Seedance 1.0', 'Cine-Consistency', 'Visual Anchor'], answer: 'Cine-Consistency' },
+                    { q: 'What "feat" does the new update allow users to perform?', options: ['Translate text', 'Maintain character likeness across shots', 'Change video colors only', 'Reduce file size'], answer: 'Maintain character likeness across shots' },
+                    { q: 'What was this feature previously considered in generative video?', options: ['A mistake', 'A "holy grail"', 'A simple task', 'Illegal'], answer: 'A "holy grail"' },
+                    { q: 'What is the name of the new algorithm being used?', options: ['Memory Link', 'Spatio-Temporal Memory Anchor', 'AI Focus v2', 'Logic Gate'], answer: 'Spatio-Temporal Memory Anchor' },
+                    { q: 'The update prevents textures and lighting from doing what?', options: ['Improving', 'Drifting', 'Staying still', 'Disappearing'], answer: 'Drifting' },
+                    { q: 'Which two global film cities are reportedly testing the model?', options: ['Tokyo and New York', 'Hollywood and Seoul', 'Paris and London', 'Taipei and Beijing'], answer: 'Hollywood and Seoul' },
+                    { q: 'The update turns Seedance into a ______ tool.', options: ['Gaming', 'Viral only', 'Production-grade', 'Simple'], answer: 'Production-grade' },
+                    { q: 'Which industry might be disrupted by late 2026?', options: ['Traditional CGI industry', 'Farming industry', 'Automotive industry', 'Music industry'], answer: 'Traditional CGI industry' },
+                    { q: 'What does "disparate" mean?', options: ['Similar', 'Very different', 'Fast', 'Broken'], answer: 'Very different' },
+                    { q: 'What is "pre-visualization" in filmmaking?', options: ['Editing the final sound', 'Viewing scenes before actual filming', 'Selling tickets', 'Hiring actors'], answer: 'Viewing scenes before actual filming' },
+                    { q: 'The term "holy grail" refers to something that is ______.', options: ['Easy to find', 'Highly desired but difficult to achieve', 'Very cheap', 'Old and useless'], answer: 'Highly desired but difficult to achieve' },
+                    { q: 'What does "spatio-temporal" relate to?', options: ['Space and time', 'Light and color', 'Sound and music', 'Weight and height'], answer: 'Space and time' },
+                    { q: 'The word "legitimate" is a synonym for ______.', options: ['Fake', 'Authentic or valid', 'New', 'Secret'], answer: 'Authentic or valid' },
+                    { q: 'The CGI industry is worth how much according to the text?', options: ['Millions', 'Multi-billions', 'Trillions', 'Nothing'], answer: 'Multi-billions' },
+                    { q: 'ByteDance is a company mostly known for owning ______.', options: ['Facebook', 'TikTok', 'Instagram', 'Twitter'], answer: 'TikTok' }
+                ]
+            },
+            'openai-strawberry': {
+                title: 'OpenAI Strawberry-Plus 傳聞',
+                english: `Industry leaks from Silicon Valley suggest that OpenAI is preparing to release Strawberry-Plus, an enhanced high-reasoning model. Unlike current LLMs that provide probabilistic answers, Strawberry-Plus is designed to perform "multi-step deductive reasoning." Sources indicate the model has successfully identified new potential drug compounds and solved complex engineering bottlenecks in semiconductor design during testing. This development marks a shift from "Chat AI" to "Agentic AI" that can act as a junior researcher. If released in Q2 2026, it could redefine how white-collar professionals interact with technology, moving from prompt-and-response to collaborative problem-solving.`,
+                chinese: `OpenAI 傳將發表「Strawberry-Plus」：具備自主科研能力，朝 AGI 邁出關鍵一步。矽谷產業外洩消息顯示，OpenAI 正準備發布 Strawberry-Plus，這是其高推理邏輯模型的增強版。與目前提供機率性回答的 LLM 不同，Strawberry-Plus 旨在執行「多步驟演繹推理」。消息來源指出，該模型在內部測試期間已成功辨識出新的潛在藥物化合物，並解決了半導體設計中複雜的工程瓶頸。這項發展標誌著從「對話式 AI」向能擔任初級研究員的「代理型 AI（Agentic AI）」的轉變。若能在 2026 年第二季發布，它將重新定義白領專業人士與技術互動的方式，從「提問與回答」轉向「協作式解決問題」，使世界更接近通用人工智慧（AGI）時代。`,
+                vocabulary: [
+                    'Enhanced (adj.): 增強的', 'High-reasoning (n.): 高推理', 'Probabilistic (adj.): 機率性的', 'Deductive reasoning (n.phr.): 演繹推理',
+                    'Multi-step (adj.): 多步驟的', 'Identified (v.pt.): 辨識/確認', 'Drug compounds (n.phr.): 藥物化合物', 'Engineering bottlenecks (n.phr.): 工程瓶頸',
+                    'Semiconductor design (n.phr.): 半導體設計', 'Agentic AI (n.phr.): 代理型 AI', 'Junior researcher (n.phr.): 初級研究員', 'Collaborative (adj.): 協作的',
+                    'Artificial General Intelligence (AGI) (n.): 通用人工智慧', 'Redefine (v.): 重新定義', 'White-collar (adj.): 白領的', 'Collaborative (adj.): 合作的/協作的',
+                    'Logic model (n.phr.): 邏輯模型', 'Prompt-and-response (phr.): 提問與回答', 'Era (n.): 時代', 'Reasoning (n.): 推理',
+                    'Compound (n.): 化合物/複合物', 'Deductive (adj.): 演繹的', 'Probabilistic (adj.): 概率的', 'Potential (adj.): 潛在的',
+                    'Collaborative (adj.): 共同開發的', 'Researcher (n.): 研究者', 'Industry (n.): 行業', 'Interaction (n.): 互動'
+                ],
+                quiz: [
+                    { q: 'What is the name of the rumored OpenAI model?', options: ['Strawberry-Plus', 'Apple-GPT', 'Logic-Mind', 'Omni-Search'], answer: 'Strawberry-Plus' },
+                    { q: 'Strawberry-Plus is designed to perform what kind of reasoning?', options: ['Simple matching', 'Multi-step deductive reasoning', 'Random guessing', 'Basic addition'], answer: 'Multi-step deductive reasoning' },
+                    { q: 'How is it different from current LLMs?', options: ['It is faster', 'It provides deductive reasoning instead of just probabilistic answers', 'It is cheaper', 'It only works in Silicon Valley'], answer: 'It provides deductive reasoning instead of just probabilistic answers' },
+                    { q: 'What specific field has the model successfully tested in?', options: ['Cooking', 'Semiconductor design and identifying drug compounds', 'Sports training', 'Fashion modeling'], answer: 'Semiconductor design and identifying drug compounds' },
+                    { q: 'The shift is from "Chat AI" to ______ AI.', options: ['Search', 'Agentic', 'Legacy', 'Basic'], answer: 'Agentic' },
+                    { q: 'The model can act as a junior ______.', options: ['Pilot', 'Researcher', 'Driver', 'Cook'], answer: 'Researcher' },
+                    { q: 'When is the rumored release date for Strawberry-Plus?', options: ['Q1 2025', 'Q2 2026', 'Late 2028', '2030'], answer: 'Q2 2026' },
+                    { q: 'What era is this model bringing the world closer to?', options: ['Industrial Era', 'Artificial General Intelligence (AGI) Era', 'Ice Age', 'Stone Age'], answer: 'Artificial General Intelligence (AGI) Era' },
+                    { q: 'What does "deductive" mean?', options: ['Subtracting numbers', 'Drawing logical conclusions from facts', 'Making a guess', 'Being angry'], answer: 'Drawing logical conclusions from facts' },
+                    { q: 'The term "Agentic" refers to an AI that can ______.', options: ['Only talk', 'Take autonomous action or tasks', 'Only search Google', 'Only play music'], answer: 'Take autonomous action or tasks' },
+                    { q: 'Strawberry-Plus could redefine how ______ professionals work.', options: ['Manual labor', 'White-collar', 'Retired', 'Student'], answer: 'White-collar' },
+                    { q: 'What does "bottleneck" mean in engineering?', options: ['A type of glass', 'A point of congestion or obstruction', 'A successful end', 'A new tool'], answer: 'A point of congestion or obstruction' },
+                    { q: 'The news moves technology from "prompt-and-response" to "______ problem-solving."', options: ['Solo', 'Collaborative', 'Automated', 'Secret'], answer: 'Collaborative' },
+                    { q: 'Where are the "industry leaks" coming from?', options: ['New York', 'Silicon Valley', 'Taipei', 'London'], answer: 'Silicon Valley' },
+                    { q: 'A "compound" in chemistry refers to ______.', options: ['A large house', 'A substance composed of two or more elements', 'A type of money', 'A group of people'], answer: 'A substance composed of two or more elements' }
+                ]
+            },
+            'tesla-optimus': {
+                title: '特斯拉 Optimus Gen-3 整合',
+                english: `Elon Musk confirmed on Friday that Tesla’s Optimus Gen-3 humanoid robot has officially begun utilizing the FSD v13 vision stack. This integration provides the robot with a "World Model" that allows it to navigate complex human environments without pre-mapping. The Gen-3 model can now predict human movement and avoid collisions proactively, a breakthrough dubbed "Common Sense Robotics." Tesla aims to begin low-volume external deliveries of Optimus to partner logistics firms by the end of 2026. This Radically expands the utility of humanoid assistants.`,
+                chinese: `特斯拉 Optimus Gen-3 正式與「FSD v13」整合：機器人現在具備「常識空間意識」。伊隆·馬斯克週五證實，特斯拉 Optimus Gen-3 人形機器人已正式開始使用 FSD v13（全自動駕駛）視覺技術。這項整合為機器人提供了「世界模型（World Model）」，使其能在不需要預先繪製地圖的情況下，導航複雜且非結構化的人類環境（如忙碌的廚房或雜亂的車間）。Gen-3 模型現在能預測人類動作並主動避開碰撞，這項突破被稱為「具備常識的機器人技術（Common Sense Robotics）」。特斯拉目標是在 2026 年底前開始向合作的物流公司少量交付 Optimus。這標誌著為自動駕駛開發的軟體成功移植到雙足形態中，徹底擴大了人形助手的實用性。`,
+                vocabulary: [
+                    'Humanoid robot (n.phr.): 人形機器人', 'Vision stack (n.phr.): 視覺技術棧/架構', 'Integration (n.): 整合', 'World Model (n. proper): 世界模型',
+                    'Navigate (v.): 導航/通行', 'Unstructured environments (n.phr.): 非結構化環境', 'Pre-mapping (n.): 預先製圖', 'Predict (v.): 預測',
+                    'Proactively (adv.): 主動地', 'Collisions (n.): 碰撞', 'Dubbed (v.pp.): 被稱為/賦予稱號', 'Common Sense (n.): 常識',
+                    'Low-volume (adj.): 小量的', 'External deliveries (n.phr.): 對外交付', 'Logistics firms (n.phr.): 物流公司', 'Transplanted (v.pp.): 移植/遷移',
+                    'Bipedal (adj.): 雙足的', 'Form factor (n.phr.): 形態規格/外型', 'Utility (n.): 實用性/效用', 'Radically (adv.): 徹底地/根本地',
+                    'Vision (n.): 視覺/遠見', 'Collision (n.): 衝撞/牴觸', 'Autonomous (adj.): 自主的', 'Assistants (n.): 助理/助手',
+                    'Environment (n.): 環境', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Optimization (n.): 優化', 'Humanoid (adj.): 類人的', 'Navigation (n.): 領航', 'Spatial (adj.): 空間的'
+                ],
+                quiz: [
+                    { q: 'Which vision technology is Optimus Gen-3 now using?', options: ['FSD v10', 'FSD v13', 'X-Ray Vision', 'Google Maps'], answer: 'FSD v13' },
+                    { q: 'What does the "World Model" allow the robot to do?', options: ['Speak every language', 'Navigate complex environments without pre-mapping', 'Drive a car only', 'Cook pasta'], answer: 'Navigate complex environments without pre-mapping' },
+                    { q: 'The breakthrough is dubbed as "______ Robotics."', options: ['Rocket', 'Common Sense', 'Silent', 'Heavy'], answer: 'Common Sense' },
+                    { q: 'When does Tesla aim to begin external deliveries of Optimus?', options: ['Late 2025', 'Early 2026', 'By the end of 2026', '2030'], answer: 'By the end of 2026' },
+                    { q: 'What kind of companies will receive the first deliveries of Optimus?', options: ['Gaming firms', 'Logistics firms', 'Hospitals', 'Schools'], answer: 'Logistics firms' },
+                    { q: 'Optimus is a "______" robot, meaning it has two legs.', options: ['Quadruped', 'Bipedal', 'Hexapod', 'Wheeled'], answer: 'Bipedal' },
+                    { q: 'What can the Gen-3 model now proactively avoid?', options: ['Taxes', 'Collisions', 'The internet', 'Cleaning'], answer: 'Collisions' },
+                    { q: 'The robot can navigate "unstructured" environments, meaning ______.', options: ['Empty rooms only', 'Complex and unplanned spaces', 'Only squares', 'Only digital spaces'], answer: 'Complex and unplanned spaces' },
+                    { q: 'The term "humanoid" refers to ______.', options: ['A type of car', 'Something resembling a human', 'A type of space station', 'A fast computer'], answer: 'Something resembling a human' },
+                    { q: 'What does "proactively" mean?', options: ['Slowly', 'Reacting after something happens', 'Taking action before a problem occurs', 'Doing nothing'], answer: 'Taking action before a problem occurs' },
+                    { q: 'The word "utility" refers to ______.', options: ['Size', 'Practical use or usefulness', 'Price', 'Color'], answer: 'Practical use or usefulness' },
+                    { q: 'The software was "transplanted" from ______.', options: ['Smartphones', 'Autonomous driving (FSD)', 'Video games', 'Kitchen appliances'], answer: 'Autonomous driving (FSD)' },
+                    { q: 'What is a "form factor"?', options: ['A type of math', 'The physical size and shape of a device', 'A business plan', 'A new law'], answer: 'The physical size and shape of a device' },
+                    { q: 'Elon Musk confirmed the news on which day?', options: ['Monday', 'Wednesday', 'Friday', 'Sunday'], answer: 'Friday' },
+                    { q: 'Tesla aims for "low-volume" deliveries first. What is low-volume?', options: ['Small quantity', 'Large quantity', 'Loud noise', 'Quiet noise'], answer: 'Small quantity' }
+                ]
+            },
+            'amazon-kuiper': {
+                title: '亞馬遜 Kuiper 整合邊緣 AI',
+                english: `Amazon’s satellite division, Project Kuiper, announced on Friday that its latest satellite constellation features onboard AI processing units. This allows the satellites to perform initial data filtering and routing in space, significantly reducing round-trip latency for users. By integrating AWS (Amazon Web Services) logic directly into orbital hardware, Amazon aims to provide "Enterprise-Grade" internet to maritime, aviation, and rural industrial sites. This move directly challenges SpaceX’s Starlink, offering more seamless integration with cloud-native AI applications.`,
+                chinese: `亞馬遜宣布「Project Kuiper」整合 AI 邊緣運算：衛星通訊進入秒級延遲時代。亞馬遜的衛星部門「凱伊博計畫（Project Kuiper）」週五宣布，其最新的衛星群具備機載 AI 處理單元。這使得衛星能夠在太空中執行初步的數據過濾與路由，顯著降低用戶的來回延遲（Round-trip latency）。藉由將 AWS（亞馬遜網路服務）邏輯直接整合進軌道硬體中，亞馬遜旨在為海事、航空與偏遠工業據點提供「企業級」網路。此舉直接挑戰了 SpaceX 的星鏈（Starlink），並為雲端原生 AI 應用提供更無縫的整合環境。`,
+                vocabulary: [
+                    'Satellite division (n.phr.): 衛星部門', 'Project Kuiper (n. proper): 凱伊博計畫', 'Constellation (n.): 星座/衛星群', 'Onboard (adj.): 機載的/內建的',
+                    'AI processing units (n.phr.): AI 處理單元', 'Data filtering (n.phr.): 數據過濾', 'Routing (n.): 路由/路徑選擇', 'Round-trip latency (n.phr.): 來回延遲',
+                    'Integrating (v.ger.): 整合', 'Orbital hardware (n.phr.): 軌道硬體', 'Enterprise-Grade (adj.): 企業級的', 'Maritime (adj.): 海事的',
+                    'Aviation (n.): 航空', 'Rural (adj.): 偏遠的/鄉村的', 'Challenges (v.): 挑戰', 'Starlink (n. proper): 星鏈',
+                    'Seamless (adj.): 無縫的', 'Cloud-native (adj.): 雲端原生的', 'Infrastructure (n.): 基礎建設', 'Latency (n.): 延遲',
+                    'Constellation (n.): 衛星網', 'Aims to (v.phr.): 旨在', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑',
+                    'Architecture (n.): 架構', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Satellite (n.): 衛星', 'Connectivity (n.): 連接性', 'Sub-second (adj.): 亞秒級的', 'Filtering (v.ger.): 過濾'
+                ],
+                quiz: [
+                    { q: 'What is the name of Amazon\'s satellite project?', options: ['Starlink', 'Project Kuiper', 'Blue Origin', 'Satellite AI'], answer: 'Project Kuiper' },
+                    { q: 'What new feature do the latest Kuiper satellites have?', options: ['Solar ovens', 'Onboard AI processing units', 'Laser cannons', 'Libraries'], answer: 'Onboard AI processing units' },
+                    { q: 'Where is the data filtering and routing performed under the new system?', options: ['On Earth', 'In Space (onboard)', 'In the clouds', 'In the ocean'], answer: 'In Space (onboard)' },
+                    { q: 'The new system significantly reduces "round-trip" ______.', options: ['Cost', 'Weight', 'Latency', 'Distance'], answer: 'Latency' },
+                    { q: 'Which specific group is Amazon aiming to provide "Enterprise-Grade" internet to?', options: ['City students', 'Maritime, aviation, and rural industrial sites', 'Only government officials', 'Individual gamers only'], answer: 'Maritime, aviation, and rural industrial sites' },
+                    { q: 'Amazon\'s project directly challenges which SpaceX service?', options: ['Dragon', 'Starlink', 'Falcon 9', 'Tesla'], answer: 'Starlink' },
+                    { q: 'Amazon is integrating ______ logic directly into its orbital hardware.', options: ['Microsoft', 'AWS (Amazon Web Services)', 'Google', 'Facebook'], answer: 'AWS (Amazon Web Services)' },
+                    { q: 'What is the primary benefit for remote users mentioned in the text?', options: ['Free internet', 'Faster shipping', 'Significantly reduced latency', 'New computers'], answer: 'Significantly reduced latency' },
+                    { q: 'The term "constellation" in this context refers to ______.', options: ['A group of stars', 'A group of satellites working together', 'A type of galaxy', 'A map'], answer: 'A group of satellites working together' },
+                    { q: 'What does "latency" mean in communication?', options: ['The speed of sound', 'The delay before a transfer of data begins', 'The size of a file', 'The color of a wire'], answer: 'The delay before a transfer of data begins' },
+                    { q: 'The word "maritime" relates to things connected with the ______.', options: ['Sky', 'Sea', 'Land', 'Forest'], answer: 'Sea' },
+                    { q: 'What does "seamless" mean?', options: ['With many holes', 'Smooth and without interruptions', 'Very rough', 'Slow'], answer: 'Smooth and without interruptions' },
+                    { q: 'The project "Kuiper" belongs to which company?', options: ['SpaceX', 'Google', 'Amazon', 'Apple'], answer: 'Amazon' },
+                    { q: 'The internet is described as "Enterprise-Grade," meaning it is ______.', options: ['For children', 'High-quality enough for professional businesses', 'Very poor quality', 'Free'], answer: 'High-quality enough for professional businesses' },
+                    { q: 'When was the onboard AI processing unit announced?', options: ['Tuesday', 'Thursday', 'Friday', 'Saturday'], answer: 'Friday' }
+                ]
+            }
+        };
+
+        // --- STATE & RENDERING ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (15 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-slate-600 leading-relaxed p-6 bg-slate-50 rounded-xl border border-slate-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-slate-600 leading-relaxed p-6 bg-blue-50 border-l-4 border-blue-500 rounded-xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-slate-100 hover:border-blue-300 transition cursor-default"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-400 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-slate-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold"> (正確答案)</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-6 bg-white rounded-xl border border-slate-100 shadow-sm"><p class="text-lg font-bold text-slate-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-blue-600 text-white rounded-2xl mb-10 shadow-lg"><h3 class="text-2xl font-bold mb-2">測驗得分</h3><p class="text-5xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>提交答案並評分</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '已完成所有作答' : `已回答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace(' (正確答案)', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
