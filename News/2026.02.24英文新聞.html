@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 2 月 24 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 2 月 24 日：A16 晶片元年與星際拓荒 countdown</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for High-Performance Learners.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地科技焦點',
+                english: `[1] TSMC Confirms Installation of Next-Gen Transistor Inspection Tools for A16 at Kaohsiung Fab\nNew progress at the Kaohsiung Nanzi Science Park shows that TSMC has begun installing specialized high-precision inspection tools for the A16 (1.6nm) node. Unlike the 2nm lines, A16 requires unique metrology systems for its backside power delivery architecture. This move ensures that the P3 facility remains on track for risk production in late 2026.\n\n[2] AMD Zen 6 "Olympic Ridge" Details Emerge; TSMC A16 Node to Enable 24-Core "Medusa" CCDs\nLeaked technical specifications for AMD’s Zen 6 architecture suggest that it will utilize TSMC’s A16 process to achieve up to 24 cores per CCD—a significant jump from Zen 5. This performance-per-watt optimization is specifically designed to counter Intel’s 14A roadmap.\n\n[3] NDC Launches Phase 2 of National Smart Health Cloud; 50 Hospitals Achieve AI Record Syncing\nThe National Development Council (NDC) announced that 50 major medical centers in Taiwan have successfully integrated the second phase of the AI-driven Health Cloud. This enables real-time cross-hospital diagnostic data sharing using encrypted AI models, reducing duplicate examinations.`,
+                chinese: `【1】南科 P3 廠 A16 進度更新：台積電確認引進首批高效能電晶體檢測設備\n高雄楠梓科學園區的新進展顯示，台積電已開始為 A14（1.6 奈米）節點安裝專用的高精度檢測工具。與 2 奈米產線不同，A16 的「背面供電」架構需要獨特的計量系統（Metrology）。此舉證實台積電在硬體部署上毫不懈怠，確保 P3 廠區維持在 2026 年底進行風險試產的進度。\n\n【2】AMD Zen 6 "Olympic Ridge" 規格洩露：台積電 A16 製程將成為效能跳躍關鍵\n新竹供應鏈今日流出了 AMD「Olympic Ridge」（Zen 6）架構的技術規格。報告指出，Zen 6 將利用台積電 A16 製程，達成每個 CCD（核心複合晶粒）高達 24 核心的目標，較 Zen 5 有顯著提升。這種每瓦效能優化專為對抗英特爾（Intel）的 14A 藍圖而設計，鞏固了台積電與 AMD 的策略聯盟。\n\n【3】國發會：2026「智慧醫療雲」第二階段啟動，全台 50 家醫院達成 AI 病歷同步\n國家發展委員會（國發會）宣布，台灣 50 家主要醫療中心已成功整合「AI 驅動健康雲」的第二階段。這使得各醫院間能利用加密 AI 模型即時分享診斷數據，減少重複檢查並提高急診分流效率。此計畫標誌著台灣邁向「全球智慧醫療樞紐」目標的重要里程碑。`,
+                vocabulary: [
+                    'Inspection tools (n.phr.): 檢測設備/工具', 'High-precision (adj.): 高精度的', 'Metrology (n.): 計量學/度量', 'Backside power delivery (n.phr.): 背面供電',
+                    'A16 node (n.phr.): A16 節點 (1.6 奈米)', 'Risk production (n.phr.): 風險試產', 'On track (phr.): 照計畫進行', 'Skipping a beat (phr.v.): 停頓/懈怠',
+                    'Technical specifications (n.phr.): 技術規格', 'Leaked (adj.): 洩露的', 'CCD (Core Complex Die) (n.): 核心複合晶粒', 'Performance-per-watt (n.phr.): 每瓦效能',
+                    'Optimization (n.): 優化', 'Counter (v.): 對抗/反擊', 'Strategic alliance (n.phr.): 策略聯盟', 'Solidifying (v.ger.): 鞏固',
+                    'Smart Health Cloud (n.phr.): 智慧醫療雲', 'Phase 2 (n.phr.): 第二階段', 'Diagnostic data (n.phr.): 診斷數據', 'Encrypted (adj.): 加密的',
+                    'Duplicate examinations (n.phr.): 重複檢查', 'Triage efficiency (n.phr.): 分流效率', 'Medical centers (n.phr.): 醫療中心', 'Integration (n.): 整合',
+                    'Milestone (n.): 里程碑', 'Sovereign AI (n.phr.): 主權人工智慧', 'Logic chips (n.phr.): 邏輯晶片', 'Packaging (n.): 封裝',
+                    'Aviation (n.): 航空', 'Maritime (adj.): 海事的', 'Constellation (n.): 星座/衛星群', 'Sub-second (adj.): 秒級以下的'
+                ],
+                quiz: [
+                    { q: 'What is the specific technical architecture for A16 mentioned?', options: ['FinFET', 'GAA', 'Backside power delivery', 'Traditional Planar'], answer: 'Backside power delivery' },
+                    { q: 'In which city is the TSMC P3 facility located?', options: ['Hsinchu', 'Taichung', 'Kaohsiung', 'Tainan'], answer: 'Kaohsiung' },
+                    { q: 'AMD\'s Zen 6 architecture is codenamed what?', options: ['Medusa', 'Olympic Ridge', 'Vera Rubin', 'Project Isaac'], answer: 'Olympic Ridge' },
+                    { q: 'How many cores per CCD could Zen 6 achieve using A16?', options: ['8', '16', '24', '32'], answer: '24' },
+                    { q: 'What is the goal of the "Smart Health Cloud" Phase 2?', options: ['Building new hospitals', 'AI record syncing among 50 hospitals', 'Selling medicine online', 'Training AI doctors only'], answer: 'AI record syncing among 50 hospitals' },
+                    { q: 'When is risk production for the A16 node scheduled to begin?', options: ['Early 2026', 'Late 2026', 'Early 2027', 'Mid 2028'], answer: 'Late 2026' },
+                    { q: 'AMD aims to optimize ______ specifically to counter Intel.', options: ['Price only', 'Packaging speed', 'Performance-per-watt', 'Color design'], answer: 'Performance-per-watt' },
+                    { q: 'What does "metrology" refer to in semiconductor manufacturing?', options: ['The study of weather', 'The science of measurement', 'The use of robots', 'Metal refining'], answer: 'The science of measurement' },
+                    { q: 'How many major medical centers have integrated the Health Cloud?', options: ['10', '25', '50', '100'], answer: '50' },
+                    { q: 'The term "risk production" means ______.', options: ['Dangerous work', 'Initial production before full yield stability', 'Production without safety rules', 'High-cost production'], answer: 'Initial production before full yield stability' },
+                    { q: 'Which US company is in a "high-performance CPU race" with AMD?', options: ['Apple', 'Intel', 'Google', 'NVIDIA'], answer: 'Intel' },
+                    { q: 'What is reduced by sharing diagnostic data?', options: ['AI accuracy', 'Duplicate examinations', 'Doctor salaries', 'Internet speed'], answer: 'Duplicate examinations' },
+                    { q: 'What is the "Silicon Shield" reinforcing in the CPU race?', options: ['The TSMC-AMD alliance', 'Global food supply', 'Aviation safety', 'The price of gold'], answer: 'The TSMC-AMD alliance' },
+                    { q: 'What does "encrypted" mean in the Health Cloud context?', options: ['Hidden in a box', 'Protected by digital code', 'Printed on paper', 'Deleted permanently'], answer: 'Protected by digital code' },
+                    { q: 'Kaohsiung Nanzi Science Park is the site for which fab?', options: ['P1', 'P2', 'P3', 'P4'], answer: 'P3' }
+                ]
+            },
+            'sk-hynix-hbm4': {
+                title: 'SK 海力士 HBM4 擴張計畫',
+                english: `SK Hynix committed to a significant production increase for its High Bandwidth Memory (HBM) lines on Tuesday. The company plans to double HBM4 output by late 2026 to meet soaring demand from NVIDIA’s "Vera Rubin" architecture. Chairman Chey Tae-won described the current cycle not as a fluctuation, but as a structural "Memory Super-Cycle." To achieve this expansion, SK Hynix is repurposing existing DRAM lines and investing heavily in advanced TSV (Through-Silicon Via) packaging. Analysts note that the firm is racing to defend its 50%+ HBM market share, as Samsung and Micron accelerate competing roadmaps. This competition is expected to push memory prices to record highs in 2026.`,
+                chinese: `SK 海力士宣布 2026 年產能擴張計畫：全力衝刺 HBM4 以應對 NVIDIA 訂單爆發。SK 海力士週二承諾將大幅提升其高頻寬記憶體（HBM）產線。該公司計畫在 2026 年底前將 HBM4 的產量翻倍，以滿足來自 NVIDIA「Vera Rubin」架構的飆升需求。董事長崔泰源將當前的週期描述為結構性的「記憶體超長週期（Super-Cycle）」，而非短暫波動。為了實現這一擴張，SK 海力士正在改建現有的 DRAM 產線，並投入巨資於先進的 TSV（矽穿孔）封裝技術。分析師指出，該公司正競相捍衛其 50% 以上的 HBM 市場份額，因為三星與美光正加速其競爭藍圖。隨著 AI 數據中心的記憶體與運算比率持續攀升，預計這場競爭將在 2026 年將記憶體價格推向歷史新高。`,
+                vocabulary: [
+                    'Committed (v.pt.): 承諾', 'High Bandwidth Memory (HBM) (n.phr.): 高頻寬記憶體', 'Output (n.): 產量', 'Soaring demand (n.phr.): 飆升的需求',
+                    'Vera Rubin (n. proper): 薇拉·魯賓 (NVIDIA 下一代架構代號)', 'Fluctuation (n.): 波動', 'Structural (adj.): 結構性的', 'Memory Super-Cycle (n.phr.): 記憶體超長週期',
+                    'Repurposing (v.ger.): 改建/變更用途', 'DRAM lines (n.phr.): DRAM 產線', 'Investing heavily (phr.): 投入巨資', 'TSV (Through-Silicon Via) (n.): 矽穿孔封裝技術',
+                    'Market share (n.phr.): 市場份額', 'Competing roadmaps (n.phr.): 競爭藍圖', 'Intensifying (v.ger.): 加劇', 'Memory-to-compute ratio (n.phr.): 記憶體對運算比率',
+                    'Hyperscaler (n.): 超大型服務商', 'Capital expenditure (Capex) (n.phr.): 資本支出', 'Primary driver (n.phr.): 主要驅動力', 'Value chain (n.phr.): 價值鏈',
+                    'Segment (n.): 領域/部分', 'Stark (adj.): 鮮明的/嚴酷的', 'Underscores (v.): 凸顯/強調', 'Projected (v.pp.): 預計的',
+                    'Packaging (n.): 封裝', 'Reliability (n.): 可靠性', 'Exceed (v.): 超過', 'Concentration (n.): 集中',
+                    'Divergence (n.): 分歧', 'Backlog (n.): 積壓', 'Milestone (n.): 里程碑', 'Alliance (n.): 聯盟'
+                ],
+                quiz: [
+                    { q: 'What is the production goal for SK Hynix’s HBM4 by late 2026?', options: ['Reduce by 10%', 'Stay the same', 'Double output', 'Triple output'], answer: 'Double output' },
+                    { q: 'Which NVIDIA architecture is driving the HBM4 demand?', options: ['Blackwell', 'Vera Rubin', 'Hopper', 'Ada Lovelace'], answer: 'Vera Rubin' },
+                    { q: 'How does Chairman Chey describe the current market phase?', options: ['Short fluctuation', 'Memory Super-Cycle', 'Economic crash', 'Stable growth'], answer: 'Memory Super-Cycle' },
+                    { q: 'What specific packaging technology is SK Hynix investing in?', options: ['Flip-chip', 'TSV (Through-Silicon Via)', 'InFO', 'CoWoS-L'], answer: 'TSV (Through-Silicon Via)' },
+                    { q: 'What is SK Hynix\'s current estimated HBM market share?', options: ['25%', '40%', '50%+', '80%'], answer: '50%+' },
+                    { q: 'Who are the primary competitors of SK Hynix in the HBM market?', options: ['Apple and Google', 'Samsung and Micron', 'Intel and AMD', 'Sony and Panasonic'], answer: 'Samsung and Micron' },
+                    { q: 'What is expected to happen to memory prices in 2026?', options: ['Drop significantly', 'Stay stable', 'Reach record highs', 'Become zero'], answer: 'Reach record highs' },
+                    { q: 'To achieve expansion, SK Hynix is "repurposing" which lines?', options: ['CPU lines', 'Logic lines', 'DRAM lines', 'Flash memory only'], answer: 'DRAM lines' },
+                    { q: 'The "Memory Super-Cycle" is described as ______.', options: ['Temporary', 'Structural', 'Accidental', 'Unimportant'], answer: 'Structural' },
+                    { q: 'HBM stands for ______.', options: ['High Battery Management', 'High Bandwidth Memory', 'Home Board Module', 'Heated Base Machine'], answer: 'High Bandwidth Memory' },
+                    { q: 'What ratio in AI data centers is continuing to climb?', options: ['Water-to-power', 'Memory-to-compute', 'Staff-to-robot', 'Space-to-earth'], answer: 'Memory-to-compute' },
+                    { q: 'Chairman Chey Tae-won leads which company?', options: ['Samsung', 'Micron', 'SK Hynix', 'TSMC'], answer: 'SK Hynix' },
+                    { q: 'A "super-cycle" implies a period of ______.', options: ['Recession', 'Sustained and high demand/growth', 'Zero movement', 'Quick failure'], answer: 'Sustained and high demand/growth' },
+                    { q: 'What is a "Through-Silicon Via"?', options: ['A type of road', 'A vertical electrical connection through a silicon wafer', 'A new type of solar panel', 'A memory storage box'], answer: 'A vertical electrical connection through a silicon wafer' },
+                    { q: 'When was this commitment announced?', options: ['Monday', 'Tuesday', 'Wednesday', 'Friday'], answer: 'Tuesday' }
+                ]
+            },
+            'japan-rapidus': {
+                title: '日本政府資助 Rapidus 2 奈米廠',
+                english: `Japan’s Ministry of Economy, Trade and Industry (METI) approved an additional 1.2 trillion yen ($8 billion) subsidy for Rapidus on Tuesday. The funding is earmarked for final-stage equipment move-ins at the Hokkaido 2nm fab. Japan aims to achieve "Chip Sovereignty" via partnerships with IBM and imec, targeting Full-Flow Integration Testing by June 2026. While skeptics question Japan’s ability to close the gap with TSMC, policymakers are betting on a "Small-Batch, High-Customization" manufacturing model focused on automotive and aerospace clients.`,
+                chinese: `日本政府加碼 1.2 兆日圓：資助 Rapidus 2 奈米廠 2026 上半年進行「全面設備聯測」。日本經濟產業省（METI）週二批准了對 Rapidus 的額外 1.2 兆日圓（約 80 億美元）補助。這筆資金將專門用於北海道 2 奈米晶圓廠最後階段的設備進場。日本旨在透過與 IBM 和 imec 的合作達成「晶片主權」，目標是在 2026 年 6 月前進行全流程整合測試（Full-Flow Integration Testing）。雖然懷疑論者質疑日本縮小與台積電差距的能力，但政策制定者正押注於一種專注於汽車與航太客戶的「小批量、高定制」製造模式。這項補貼加強了全球「半導體民族主義」的加速趨勢。`,
+                vocabulary: [
+                    'Ministry of Economy, Trade and Industry (METI) (n. proper): 經濟產業省', 'Additional subsidy (n.phr.): 額外補貼', 'Trillion yen (n.phr.): 兆日圓', 'Earmarked (v.pp.): 指定用途的',
+                    'Equipment move-ins (n.phr.): 設備進場', 'Hokkaido (n. proper): 北海道', 'Chip Sovereignty (n.phr.): 晶片主權', 'imec (n. proper): 比利時微電子研究中心',
+                    'Full-Flow Integration Testing (n.phr.): 全流程整合測試', 'Skeptics (n.): 懷疑論者', 'Close the gap (phr.): 縮小差距', 'Small-Batch (adj.): 小批量的',
+                    'High-Customization (adj.): 高定制的', 'Automotive and aerospace (n.phr.): 汽車與航太', 'Semiconductor Nationalism (n.phr.): 半導體民族主義', 'Hedge against (v.phr.): 對沖/避險',
+                    'Disruptions (n.): 中斷', 'Policy-makers (n.): 政策制定者', 'Advanced manufacturing (n.phr.): 先進製造', 'Subsidy (n.): 補助金',
+                    'Sovereignty (n.): 主權', 'Customization (n.): 客製化', 'Integration (n.): 整合', 'Roadmap (n.): 藍圖',
+                    'Sustained (adj.): 持續的', 'Unprecedented (adj.): 史無前例的', 'Strategic (adj.): 戰略的', 'Bilateral (adj.): 雙邊的',
+                    'Consolidated (adj.): 綜合的', 'Asymmetric (adj.): 不對稱的', 'Transit (n.): 通過', 'Vicinity (n.): 附近'
+                ],
+                quiz: [
+                    { q: 'How much additional subsidy did the Japanese government approve for Rapidus?', options: ['500 billion yen', '1 trillion yen', '1.2 trillion yen', '5 trillion yen'], answer: '1.2 trillion yen' },
+                    { q: 'In which location is the Rapidus 2nm fab being built?', options: ['Tokyo', 'Osaka', 'Hokkaido', 'Kyoto'], answer: 'Hokkaido' },
+                    { q: 'What is Japan’s strategic goal mentioned in the text?', options: ['Chip Sovereignty', 'Space dominance', 'Tourism expansion', 'Lower oil prices'], answer: 'Chip Sovereignty' },
+                    { q: 'Rapidus has partnerships with which two organizations?', options: ['Apple and Google', 'IBM and imec', 'TSMC and NVIDIA', 'Intel and Samsung'], answer: 'IBM and imec' },
+                    { q: 'What is the target date for Full-Flow Integration Testing?', options: ['January 2026', 'June 2026', 'December 2026', 'June 2027'], answer: 'June 2026' },
+                    { q: 'What type of manufacturing model is Rapidus focusing on?', options: ['Mass production for smartphones', 'Small-Batch, High-Customization', 'Cloud-based only', 'Manual hand-assembly'], answer: 'Small-Batch, High-Customization' },
+                    { q: 'Which two industries are the primary clients for Rapidus?', options: ['Fashion and Arts', 'Automotive and aerospace', 'Food and Drink', 'Gaming and Movies'], answer: 'Automotive and aerospace' },
+                    { q: 'The global trend mentioned is called "Semiconductor ______."', options: ['Globalism', 'Nationalism', 'Capitalism', 'Isolationism'], answer: 'Nationalism' },
+                    { q: 'What does "METI" stand for?', options: ['Ministry of Energy, Technology and Internet', 'Ministry of Economy, Trade and Industry', 'Mobile Engineering and Tech Institute', 'Mainland Export and Trade Insurance'], answer: 'Ministry of Economy, Trade and Industry' },
+                    { q: 'The term "earmarked" means ______.', options: ['Lost', 'Designated for a specific purpose', 'Stolen', 'Shared with everyone'], answer: 'Designated for a specific purpose' },
+                    { q: 'Policymakers are "betting on" a model. What does "betting on" mean here?', options: ['Gamble with money', 'Expecting or relying on something for success', 'Fighting against', 'Ignoring'], answer: 'Expecting or relying on something for success' },
+                    { q: 'The word "skeptic" refers to a person who ______.', options: ['Believes everything', 'Doubts or questions things', 'Works in a factory', 'Designs chips'], answer: 'Doubts or questions things' },
+                    { q: 'Rapidus aims to "close the gap" with which company?', options: ['Intel', 'Samsung', 'TSMC', 'NVIDIA'], answer: 'TSMC' },
+                    { q: 'The funding is for "final-stage ______ move-ins."', options: ['Staff', 'Equipment', 'Raw material', 'Furniture'], answer: 'Equipment' },
+                    { q: 'What is "Chip Sovereignty"?', options: ['Owning all chips', 'A nation\'s ability to independently produce chips', 'A high-priced chip', 'A type of government'], answer: 'A nation\'s ability to independently produce chips' }
+                ]
+            },
+            'spacex-starship-6': {
+                title: 'SpaceX Starship 6 測試成功',
+                english: `In a flawless test flight on Tuesday, SpaceX’s Starship 6 achieved its first "Precision Point Landing" on a designated offshore platform. The mission validated upgraded Hot-Staging thrusters and a reinforced heat shield system for deep-space re-entry. According to Elon Musk, the success initiates the official countdown for the 2027 uncrewed Mars cargo mission, which aims to preposition life-support systems. Starship’s full reusability continues to slash the cost per kilogram to orbit, igniting a new "Orbital Gold Rush" as private firms plan commercial space stations.`,
+                chinese: `SpaceX「Starship 6」成功完成「精準定點降落」：宣告 2027 火星貨運任務進入倒數。在週二的一次完美試飛中，SpaceX 的「星艦 6 號（Starship 6）」首次在指定的離岸平台上完成了「精準定點降落」。這次任務驗證了升級後的「熱分離（Hot-Staging）」推進器以及用於深空重返大氣層的強化隔熱罩系統。據伊隆·馬斯克表示，這次成功正式開啟了 2027 年無人火星貨運任務的倒數計時，該任務旨在提前佈署維生系統和燃料合成單元。星艦的完全可重複使用性持續大幅削減每公斤入軌成本，在私人企業規劃商業太空站和月球工業風險投資之際，引發了新一輪的「軌道淘金熱」。`,
+                vocabulary: [
+                    'Starship 6 (n. proper): 星艦 6 號', 'Precision Point Landing (n.phr.): 精準定點降落', 'Designated (adj.): 指定的', 'Offshore platform (n.phr.): 離岸平台',
+                    'Validated (v.pt.): 驗證', 'Hot-Staging (n.): 熱分離 (火箭技術)', 'Thrusters (n.): 推進器', 'Reinforced heat shield (n.phr.): 強化隔熱罩',
+                    'Deep-space re-entry (n.phr.): 深空重返 (大氣層)', 'Initiates (v.): 啟動/開始', 'Countdown (n.): 倒數計時', 'Uncrewed (adj.): 無人的',
+                    'Mars cargo mission (n.phr.): 火星貨運任務', 'Preposition (v.): 提前佈署', 'Life-support systems (n.phr.): 維生系統', 'Fuel-synthesis (n.phr.): 燃料合成',
+                    'Full reusability (n.phr.): 完全可重複使用性', 'Slash the cost (phr.): 大幅削減成本', 'Orbital Gold Rush (n.phr.): 軌道淘金熱', 'Lunar industrial ventures (n.phr.): 月球工業風險投資',
+                    'Flawless (adj.): 完美的/無暇的', 'Thruster (n.): 螺旋槳/推進器', 'Orbital (adj.): 軌道的', 'Ignite (v.): 點燃/引發',
+                    'Preposition (v.): 介詞/預置', 'Synthesis (n.): 合成', 'Reusability (n.): 可重用性', 'Preach (v.): 宣揚',
+                    'Stellar (adj.): 星級的', 'Logistics (n.): 物流/後勤', 'Pre-visualization (n.): 預視覺化', 'Infrastructure (n.): 基礎建設'
+                ],
+                quiz: [
+                    { q: 'Which Starship test flight successfully completed the point landing on Tuesday?', options: ['Starship 1', 'Starship 3', 'Starship 5', 'Starship 6'], answer: 'Starship 6' },
+                    { q: 'Where did the Starship 6 land?', options: ['In the desert', 'On a designated offshore platform', 'At the launch pad', 'In the mountains'], answer: 'On a designated offshore platform' },
+                    { q: 'What specific propulsion technology was validated in this mission?', options: ['Nuclear propulsion', 'Hot-Staging thrusters', 'Electric fans', 'Steam engines'], answer: 'Hot-Staging thrusters' },
+                    { q: 'When is the uncrewed Mars cargo mission scheduled?', options: ['2026', '2027', '2030', '2035'], answer: '2027' },
+                    { q: 'What is the primary goal of the uncrewed Mars mission?', options: ['To find aliens', 'To preposition life-support systems', 'To take photos only', 'To bring back Martian soil'], answer: 'To preposition life-support systems' },
+                    { q: 'What does "full reusability" help to achieve?', options: ['Increased noise', 'Slashing the cost per kilogram to orbit', 'Changing the moon\'s orbit', 'Building better computers'], answer: 'Slashing the cost per kilogram to orbit' },
+                    { q: 'Elon Musk describes the current space activity as a new "______."', options: ['Space war', 'Orbital Gold Rush', 'Silent era', 'Moon race only'], answer: 'Orbital Gold Rush' },
+                    { q: 'What system was "reinforced" for re-entry?', options: ['The radio', 'The heat shield system', 'The window', 'The fuel tank only'], answer: 'The heat shield system' },
+                    { q: 'The mission was "flawless," meaning it was ______.', options: ['Full of errors', 'Perfect/Without mistakes', 'Very slow', 'Secretly failed'], answer: 'Perfect/Without mistakes' },
+                    { q: 'What is "fuel-synthesis"?', options: ['Buying fuel', 'Creating fuel from other substances', 'Burning fuel', 'Selling fuel'], answer: 'Creating fuel from other substances' },
+                    { q: 'The term "uncrewed" means a mission has ______.', options: ['No fuel', 'No humans on board', 'No target', 'No budget'], answer: 'No humans on board' },
+                    { q: 'What does "offshore" mean?', options: ['Deep in the forest', 'Away from the coast/at sea', 'On the beach', 'Underground'], answer: 'Away from the coast/at sea' },
+                    { q: 'SpaceX is aiming for Mars "cargo" missions. What is cargo?', options: ['People', 'Goods or equipment carried by a vehicle', 'Fuel only', 'Rocket parts'], answer: 'Goods or equipment carried by a vehicle' },
+                    { q: 'Starship 6 achieved "precision point landing," meaning it ______.', options: ['Crashed randomly', 'Landed exactly where it was supposed to', 'Missed the platform', 'Landed in the wrong country'], answer: 'Landed exactly where it was supposed to' },
+                    { q: 'The cost per ______ to orbit is being slashed.', options: ['Mile', 'Gram', 'Kilogram', 'Pound'], answer: 'Kilogram' }
+                ]
+            },
+            'tesla-fsd-v13': {
+                title: '特斯拉 FSD v13 自動停車',
+                english: `Tesla previewed its upcoming FSD v13 "Any-Scene Autopark" capability on Tuesday. Unlike current systems that rely on clearly marked lanes, the upgrade leverages Embodied Spatial Logic to navigate unstructured, narrow urban environments. The system can predict pedestrian movement and even communicate via external speakers to negotiate right-of-way during maneuvers. This enhancement is central to Tesla’s "Robotaxi Readiness" strategy, addressing the "last-meter" disengagement challenge. Analysts view this focus on niche environmental complexity as Tesla’s key competitive differentiator.`,
+                chinese: `特斯拉預告 FSD v13「全場景自動停車」：利用具身智能解決高難度窄巷停車。特斯拉週二預覽了即將推出的 FSD v13「全場景自動停車（Any-Scene Autopark）」功能。與目前依賴清晰標線的系統不同，這次升級利用了「具身空間邏輯（Embodied Spatial Logic）」來導航非結構化、狹窄的城市環境（如忙碌的廚房或雜亂的車間）。該系統能預測行人動作，甚至能透過外部喇叭通訊，在操作過程中協商先行權（Right-of-way）。這項增強功能是特斯拉「自駕計程車就緒（Robotaxi Readiness）」策略的核心，解決了自動駕駛中最常見的「最後一米」接管挑戰。分析師認為，這種對利基環境複雜性的關注是特斯拉在叫車網路發布前的關鍵競爭優勢。`,
+                vocabulary: [
+                    'FSD (Full Self-Driving) (n. proper): 全自動駕駛', 'Any-Scene Autopark (n.phr.): 全場景自動停車', 'Capability (n.): 能力/功能', 'Marked lanes (n.phr.): 標線車道',
+                    'Leverages (v.): 利用/槓桿', 'Embodied Spatial Logic (n.phr.): 具身空間邏輯', 'Unstructured environments (n.phr.): 非結構化環境', 'Narrow urban (adj.phr.): 狹窄城市的',
+                    'Predict (v.): 預測', 'Pedestrian movement (n.phr.): 行人動作', 'External speakers (n.phr.): 外部喇叭', 'Negotiate (v.): 協商/談判',
+                    'Right-of-way (n.): 先行權/路權', 'Maneuvers (n.): (車輛)操作/動作', 'Enhancement (n.): 增強/提升', 'Robotaxi Readiness (n.phr.): 自駕計程車就緒狀態',
+                    'Last-meter (adj.): 最後一米的', 'Disengagement (n.): 脫離/接管 (指自駕失效)', 'Competitive differentiator (n.phr.): 競爭差異化優勢', 'Niche complexity (n.phr.): 利基/局部複雜性',
+                    'Embodied (adj.): 具身的', 'Spatial (adj.): 空間的', 'Autopark (v.): 自動停車', 'Urban (adj.): 城市的',
+                    'Pedestrian (n.): 行人', 'Proactively (adv.): 主動地', 'Collision (n.): 碰撞', 'Autonomous (adj.): 自主的',
+                    'Optimization (n.): 優化', 'Humanoid (adj.): 類人的', 'Navigation (n.): 導航', 'Efficiency (n.): 效率'
+                ],
+                quiz: [
+                    { q: 'What is the name of the upcoming Tesla FSD capability?', options: ['Fast Parking', 'Any-Scene Autopark', 'Lane Follower', 'Smart Summon 2.0'], answer: 'Any-Scene Autopark' },
+                    { q: 'Which version of FSD is mentioned in the news?', options: ['v10', 'v11', 'v12', 'v13'], answer: 'v13' },
+                    { q: 'Unlike old systems, FSD v13 does NOT strictly rely on ______.', options: ['Cameras', 'Marked lanes', 'The internet', 'Battery power'], answer: 'Marked lanes' },
+                    { q: 'What is the name of the logic used for narrow environments?', options: ['Embodied Spatial Logic', 'Linear Math', 'Simple Detection', 'Cloud Search'], answer: 'Embodied Spatial Logic' },
+                    { q: 'How can the car communicate to negotiate right-of-way?', options: ['Via text message', 'Via external speakers', 'By flashing lights only', 'By calling the police'], answer: 'Via external speakers' },
+                    { q: 'This feature is central to which Tesla strategy?', options: ['Solar energy', '"Robotaxi Readiness"', 'Battery recycling', 'Truck design'], answer: '"Robotaxi Readiness"' },
+                    { q: 'What is the "last-meter" disengagement challenge?', options: ['The car runs out of gas.', 'The car stops far from the curb.', 'The failure of autonomous systems in final maneuvers.', 'The car drives too fast.'], answer: 'The failure of autonomous systems in final maneuvers.' },
+                    { q: 'The system can predict the movement of ______.', options: ['Clouds', 'Pedestrians', 'Stars', 'Prices'], answer: 'Pedestrians' },
+                    { q: 'The term "unstructured environment" refers to ______.', options: ['A clean highway', 'Narrow alleys or busy, messy spaces', 'A perfect circle', 'A digital simulation only'], answer: 'Narrow alleys or busy, messy spaces' },
+                    { q: 'The word "maneuver" in a driving context means ______.', options: ['To wait', 'A skillful movement or series of actions', 'To break the car', 'To clean the seats'], answer: 'A skillful movement or series of actions' },
+                    { q: 'What is a "competitive differentiator"?', options: ['A rule that everyone follows', 'A feature that makes a product stand out from rivals', 'A lower price', 'A type of engine'], answer: 'A feature that makes a product stand out from rivals' },
+                    { q: 'The term "Right-of-way" means ______.', options: ['The right to own a car', 'The legal right to proceed before others', 'A long road', 'A map'], answer: 'The legal right to proceed before others' },
+                    { q: 'Tesla uses "Embodied AI" which means AI that ______.', options: ['Is only in the cloud', 'Is physically integrated into hardware to interact with the world', 'Only writes text', 'Has no body'], answer: 'Is physically integrated into hardware to interact with the world' },
+                    { q: 'FSD v13 "leverages" logic. What does "leverage" mean?', options: ['To hide', 'To use something to maximum advantage', 'To lose', 'To explain'], answer: 'To use something to maximum advantage' },
+                    { q: 'Which leader or company is mentioned as the source of this preview?', options: ['NVIDIA', 'Tesla (Elon Musk)', 'Apple', 'Ford'], answer: 'Tesla (Elon Musk)' }
+                ]
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        // --- CORE RENDERING ---
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-6 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-slate-600 leading-relaxed p-6 bg-slate-50 rounded-xl border border-slate-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">${title}</h2><div class="prose max-w-none text-lg text-slate-600 leading-relaxed p-6 bg-blue-50 border-l-4 border-blue-500 rounded-xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-3 bg-white rounded-lg shadow-sm border border-slate-100 hover:border-blue-300 transition cursor-default"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-400 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-slate-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-6 bg-white rounded-xl border border-slate-100 shadow-sm"><p class="text-lg font-bold text-slate-800 mb-4">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-8 bg-blue-600 text-white rounded-2xl mb-10 shadow-lg"><h3 class="text-2xl font-bold mb-2">測驗分數</h3><p class="text-5xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-2xl font-bold text-slate-800 mb-6">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>提交答案並評分</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '已完成所有作答' : `已回答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
