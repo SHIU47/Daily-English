@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 2 月 25 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 2 月 25 日：晶片戰略、量子防護與具身智能</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Consolidated Knowledge Platform.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地科技焦點',
+                english: `[1] TSMC to Fast-track N2P Pilot Production in H2 2026; Backside Power Delivery Enters Commercial Phase\nTSMC’s board confirmed on Wednesday that the N2P node will commence risk production ahead of schedule. The key differentiator is the "Super PowerRail" backside power delivery, which significantly reduces voltage drop and boosts efficiency by 12%. This move serves as a direct preemptive strike against Intel’s 14A roadmap.\n\n[2] Chunghwa Telecom and Foxconn Complete First "Quantum-Safe 5G Private Network" Pilot\nIn a milestone for national security, Chunghwa Telecom and Foxconn successfully deployed a Quantum Key Distribution (QKD) layered 5G network at Hsinchu Science Park. This infrastructure provides "unbreakable" encryption for sensitive semiconductor R&D data against future quantum-computer attacks.\n\n[3] NDC Launches 2026 Smart Port Initiative; Kaohsiung Port Adopts AI-AGVs to Boost Efficiency by 35%\nThe National Development Council (NDC) officially inaugurated an AI-automated terminal at Kaohsiung Port. By deploying hundreds of domestically produced AI-Autonomous Guided Vehicles (AGVs), the port has optimized container stacking loading workflows, reducing ship turnaround times by 35%.`,
+                chinese: `【1】台積電宣布「N2P」製程將於 2026 下半年提前試產：背面供電技術正式進入商用階段\n台積電董事會週三證實，N2P（2 奈米效能增強版）節點將提前開始風險試產。其核心差異在於「超級電源軌（Super PowerRail）」背面供電技術，能顯著降低電壓降並提升 12% 的能源效率。此舉被視為對英特爾 14A 藍圖的先發制人，確保 Apple 與 NVIDIA 的 2027 年晶片組仍留在台灣先進平台上。\n\n【2】中華電信與鴻海完成首個「量子加密 5G 專網」測試：確保高科技園區資安防護\n這是一項國家安全的里程碑，中華電信與鴻海在新竹科學園區成功部署了量子密鑰分發（QKD）層級的 5G 專網。該基礎設施為敏感的半導體研發數據提供「不可破解」的加密防護，以應對未來量子電腦的攻擊。政府計畫在 2026 年底前強制要求所有關鍵基礎設施提供者採用此標準。\n\n【3】國發會：2026「智慧港口」計畫啟動，高雄港導入 AI 自動導引拖車提升效率 35%\n國家發展委員會（國發會）正式在高雄港啟用了 AI 自動化碼頭。透過部署數百台國產 AI 自動導引車（AGV），該港口優化了貨櫃堆疊與裝卸流程。這項數位改造預計將縮短船隻週轉時間達 35%，強化台灣作為亞太首要物流樞紐的地位。`,
+                vocabulary: [
+                    'Fast-track (v.): 加速/走捷徑', 'Commence (v.): 開始', 'Differentiator (n.): 區別因素/差異點', 'Backside Power Delivery (n.phr.): 背面供電',
+                    'Voltage drop (n.phr.): 電壓降', 'Preemptive strike (n.phr.): 先發制人/預警打擊', 'Roadmap (n.): 藍圖/時程表', 'Quantum-Safe (adj.): 量子安全的',
+                    'Private Network (n.phr.): 專網', 'Quantum Key Distribution (QKD) (n.phr.): 量子密鑰分發', 'Encryption (n.): 加密', 'Unbreakable (adj.): 不可破解的',
+                    'Inaugurated (v.pt.): 啟用/開幕', 'Autonomous Guided Vehicles (AGVs) (n.phr.): 自動導引車', 'Turnaround times (n.phr.): 週轉時間/處理時間', 'Logistics hub (n.phr.): 物流樞紐',
+                    'Overhaul (n./v.): 徹底檢修/改造', 'Infrastructure (n.): 基礎建設', 'Cybersecurity (n.): 資安', 'Mandate (v.): 強制要求/授權',
+                    'Node (n.): 節點/製程', 'Capacity (n.): 產能', 'Milestone (n.): 里程碑', 'Resilience (n.): 韌性',
+                    'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略性的', 'Consolidated (adj.): 綜合的/鞏固的', 'Terminal (n.): 碼頭/終端',
+                    'Propel (v.): 推進', 'Prowess (n.): 實力/高超技術', 'Deployment (n.): 部署', 'Efficiency (n.): 效率'
+                ],
+                quiz: [
+                    { q: 'When is TSMC’s N2P node expected to begin pilot production?', options: ['H1 2026', 'H2 2026', 'Early 2027', 'Late 2028'], answer: 'H2 2026' },
+                    { q: 'What is the "key differentiator" for the N2P node?', options: ['Lower cost', 'Super PowerRail backside power delivery', 'Bigger chip size', 'Solar power integration'], answer: 'Super PowerRail backside power delivery' },
+                    { q: 'N2P process aims to boost efficiency by what percentage?', options: ['5%', '12%', '35%', '50%'], answer: '12%' },
+                    { q: 'Which two companies completed the first "Quantum-Safe 5G Private Network" pilot?', options: ['TSMC and MediaTek', 'Chunghwa Telecom and Foxconn', 'NVIDIA and Apple', 'Intel and Marvell'], answer: 'Chunghwa Telecom and Foxconn' },
+                    { q: 'Where was the Quantum-Safe network deployed?', options: ['Kaohsiung Port', 'Hsinchu Science Park', 'Taipei 101', 'Tainan Science Park'], answer: 'Hsinchu Science Park' },
+                    { q: 'What does QKD stand for?', options: ['Quick Key Delivery', 'Quantum Key Distribution', 'Quality Knot Design', 'Quantum Kernel Data'], answer: 'Quantum Key Distribution' },
+                    { q: 'By how much is the Kaohsiung Port efficiency expected to increase using AI-AGVs?', options: ['12%', '20%', '35%', '60%'], answer: '35%' },
+                    { q: 'What specific vehicle type is being used at Kaohsiung Port?', options: ['Fighter jets', 'Drones', 'Autonomous Guided Vehicles (AGVs)', 'Submarines'], answer: 'Autonomous Guided Vehicles (AGVs)' },
+                    { q: 'The term "preemptive strike" in the TSMC context refers to ______.', options: ['Military action', 'A strategic business move to gain an advantage', 'A computer virus', 'A price increase'], answer: 'A strategic business move to gain an advantage' },
+                    { q: 'What is the purpose of the Quantum-Safe network?', options: ['Faster video streaming', 'Encryption against future quantum-computer attacks', 'Cheaper phone bills', 'Weather monitoring'], answer: 'Encryption against future quantum-computer attacks' },
+                    { q: 'The word "inaugurated" means ______.', options: ['Cancelled', 'Formally opened or introduced', 'Repaired', 'Sold'], answer: 'Formally opened or introduced' },
+                    { q: 'Ship "turnaround time" refers to ______.', options: ['The time it takes to build a ship', 'The time a ship spends in port from arrival to departure', 'The speed of the ship at sea', 'The age of the ship'], answer: 'The time a ship spends in port from arrival to departure' },
+                    { q: 'Backside power delivery helps to reduce ______.', options: ['Employee count', 'Voltage drop', 'Chip storage', 'Internet latency'], answer: 'Voltage drop' },
+                    { q: 'Who plans to mandate the quantum-safe standard by late 2026?', options: ['Apple', 'The Government', 'Foxconn', 'Intel'], answer: 'The Government' },
+                    { q: 'The smart port initiative strengthens Taiwan’s position as a ______ hub.', options: ['Banking', 'Asia-Pacific logistics', 'Farming', 'Art'], answer: 'Asia-Pacific logistics' }
+                ]
+            },
+            'intel-foundry': {
+                title: '英特爾 14A 製程大單',
+                english: `In a critical win for Pat Gelsinger’s "IDM 2.0" strategy, industry sources indicate that Marvell Technology will utilize Intel’s 14A (1.4nm) node for next-generation networking silicon. This marks Intel’s first significant non-x86 design win at the Angstrom era. The deal reportedly leverages High-NA EUV lithography, a capability Intel is deploying ahead of TSMC. If yields stabilize, analysts believe this could challenge TSMC’s sub-2nm dominance in the second half of 2026 and intensify the U.S.–Taiwan manufacturing race.`,
+                chinese: `英特爾（Intel）14A 製程宣佈獲得「首家非 x86」大客戶：Marvell 傳將採用其代工服務。這是英特爾執行長格辛格（Pat Gelsinger）「IDM 2.0」策略的關鍵勝利。業界消息指出，美滿電子（Marvell Technology）將採用英特爾的 14A（1.4 奈米）節點生產下一代網路晶片。這標誌著英特爾在埃米（Angstrom）時代的首個重大非 x86 設計獲獎。據報導，該交易利用了高數值孔徑極紫外光（High-NA EUV）微影技術，這是英特爾領先台積電部署的能力。若良率穩定，分析師認為這可能在 2026 下半年挑戰台積電在 2 奈米以下的霸主地位，並加劇美台之間的製造競賽。`,
+                vocabulary: [
+                    'Critical win (n.phr.): 關鍵勝利', 'IDM 2.0 (n. proper): 英特爾整合製造與代工策略', 'Networking silicon (n.phr.): 網路晶片', 'Angstrom era (n.phr.): 埃米時代 (10分之1奈米)',
+                    'Design win (n.phr.): 設計中標/獲選', 'Leverages (v.): 利用/槓桿', 'High-NA EUV (n. proper): 高數值孔徑極紫外光', 'Lithography (n.): 微影技術/光刻',
+                    'Stabilize (v.): 穩定', 'Intensify (v.): 加劇/強化', 'Dominance (n.): 主導地位/霸權', 'Manufacturing race (n.phr.): 製造競賽',
+                    'Backlog (n.): 積壓', 'Packaging (n.): 封裝', 'Yield (n.): 良率', 'Silicon (n.): 矽/晶片',
+                    'Foundry (n.): 鑄造廠/代工廠', 'Strategic (adj.): 戰略的', 'Bilateral (adj.): 雙邊的', 'Consolidated (adj.): 綜合的',
+                    'Preemptive (adj.): 先發制人的', 'Angstrom (n.): 埃米', 'Architecture (n.): 架構', 'Deployment (n.): 部署'
+                ],
+                quiz: [
+                    { q: 'Who is the "first major non-x86 client" for Intel\'s 14A node?', options: ['Apple', 'NVIDIA', 'Marvell Technology', 'AMD'], answer: 'Marvell Technology' },
+                    { q: 'What is the technical name for the 1.4nm node in the "Angstrom era"?', options: ['N2', 'A16', '14A', 'GAA'], answer: '14A' },
+                    { q: 'Which advanced lithography technology is Intel deploying ahead of TSMC?', options: ['Standard DUV', 'High-NA EUV', 'X-Ray Lithography', 'Manual Etching'], answer: 'High-NA EUV' },
+                    { q: 'What strategy is Pat Gelsinger pursuing for Intel?', options: ['Only Design', 'IDM 2.0', 'Retail only', 'Cloud Search'], answer: 'IDM 2.0' },
+                    { q: 'Intel\'s 14A process targets what kind of product for Marvell?', options: ['Smartphone screens', 'Networking silicon (chips)', 'Laptop batteries', 'Gaming consoles'], answer: 'Networking silicon (chips)' },
+                    { q: 'When could Intel start challenging TSMC\'s dominance if yields stabilize?', options: ['Early 2025', 'Second half of 2026', 'Late 2028', '2030'], answer: 'Second half of 2026' },
+                    { q: 'What does "design win" mean in the chip industry?', options: ['Winning a drawing contest', 'Having a product selected for use in a client\'s device', 'Selling the company', 'Reducing the price'], answer: 'Having a product selected for use in a client\'s device' },
+                    { q: 'The term "yield" refers to which of the following?', options: ['The speed of the factory', 'The percentage of non-defective chips produced', 'The total number of employees', 'The height of the building'], answer: 'The percentage of non-defective chips produced' },
+                    { q: 'What does "High-NA" stand for in EUV technology?', options: ['High New Age', 'High Numerical Aperture', 'High Natural Air', 'High Network Access'], answer: 'High Numerical Aperture' },
+                    { q: 'The "Angstrom" is equal to how many meters?', options: ['10^-9', '10^-10', '10^-12', '10^-6'], answer: '10^-10' },
+                    { q: 'What does "intensify" mean?', options: ['To become weaker', 'To become stronger or more extreme', 'To stop completely', 'To hide'], answer: 'To become stronger or more extreme' },
+                    { q: 'Intel aims to challenge TSMC\'s ______ dominance.', options: ['7nm', 'Sub-2nm', '10nm', 'Legacy'], answer: 'Sub-2nm' },
+                    { q: 'The word "win" in "design win" is a synonym for ______.', options: ['Success/Achievement', 'Failure', 'Attempt', 'Loss'], answer: 'Success/Achievement' },
+                    { q: 'EUV stands for ______ Ultraviolet.', options: ['Extreme', 'Electric', 'Enhanced', 'External'], answer: 'Extreme' },
+                    { q: 'Marvell is a company primarily focused on ______.', options: ['Social media', 'Infrastructure and networking', 'Farming', 'Fast food'], answer: 'Infrastructure and networking' }
+                ]
+            },
+            'openai-video-llm': {
+                title: 'OpenAI Video-LLM-1 發表',
+                english: `OpenAI introduced Video-LLM-1, a foundational model acting as a "Universal Translator" for video synthesis. Unlike conventional systems, it enables creators to specify cinematic movements, lighting transitions, and object physics through a standardized structured language. Seen as a counter to ByteDance’s Seedance 2.0, the strategy aims to standardize the "input logic" of video generation. By integrating with tools such as Adobe Premiere Pro, OpenAI is positioning itself to define the creative grammar of the AI-native film era.`,
+                chinese: `OpenAI 發表「Video-LLM-1」：建立全球首個統一影片生成標註語言，挑戰字節跳動。OpenAI 推出了 Video-LLM-1，這是一款作為影片合成「通用翻譯器」的基礎模型。與傳統基於提示詞（prompt）的系統不同，它允許創作者透過標準化的結構語言，精確指定電影運鏡、光影過渡和物體物理特性。此舉被視為對字節跳動 Seedance 2.0 的反擊，旨在將影片生成的「輸入邏輯」標準化。透過與 Adobe Premiere Pro 及 DaVinci Resolve 等工具整合，OpenAI 正致力於定義 AI 原生電影時代的「創作語法」。`,
+                vocabulary: [
+                    'Universal Translator (n.phr.): 通用翻譯器', 'Video synthesis (n.phr.): 影片合成', 'Foundational model (n.phr.): 基礎模型', 'Cinematic movements (n.phr.): 電影運鏡',
+                    'Lighting transitions (n.phr.): 光影過渡', 'Standardized (adj.): 標準化的', 'Structured language (n.phr.): 結構化語言', 'Input logic (n.phr.): 輸入邏輯',
+                    'Creative grammar (n.phr.): 創作語法', 'AI-native (adj.): AI 原生的', 'Counter (n./v.): 反擊/櫃檯', 'Integrating (v.ger.): 整合',
+                    'Prompt-based (adj.): 基於提示詞的', 'Foundational (adj.): 基礎性的', 'Standardize (v.): 使標準化', 'Architecture (n.): 架構',
+                    'Algorithm (n.): 演算法', 'Spatio-temporal (adj.): 時空的', 'Consistency (n.): 一致性', 'Legitimate (adj.): 合法的/正統的',
+                    'Disrupting (v.ger.): 顛覆/擾亂', 'CGI (n.): 電腦繪圖', 'Substantial (adj.): 實質的/大量的', 'Feasibility (n.): 可行性',
+                    'Manipulation (n.): 操縱', 'Accountability (n.): 問責制', 'Discourse (n.): 論述', 'Sovereignty (n.): 主權'
+                ],
+                quiz: [
+                    { q: 'What is the name of OpenAI’s new video model?', options: ['Sora', 'Video-LLM-1', 'ChatGPT Video', 'Seedance 2.0'], answer: 'Video-LLM-1' },
+                    { q: 'Video-LLM-1 is described as a "Universal ______" for video synthesis.', options: ['Player', 'Translator', 'Camera', 'Editor'], answer: 'Translator' },
+                    { q: 'How does it differ from conventional prompt-based systems?', options: ['It is slower', 'It uses a standardized structured language', 'It is free', 'It only makes cartoons'], answer: 'It uses a standardized structured language' },
+                    { q: 'Which company\'s model is Video-LLM-1 countering?', options: ['Google', 'Meta', 'ByteDance (Seedance 2.0)', 'Tesla'], answer: 'ByteDance (Seedance 2.0)' },
+                    { q: 'OpenAI aims to standardize the "______ logic" of video generation.', options: ['Output', 'Input', 'Pricing', 'Legal'], answer: 'Input' },
+                    { q: 'Which software tool is mentioned for integration with Video-LLM-1?', options: ['Microsoft Word', 'Adobe Premiere Pro', 'Spotify', 'Instagram'], answer: 'Adobe Premiere Pro' },
+                    { q: 'What era is OpenAI trying to define the "creative grammar" for?', options: ['The Silent Film Era', 'The AI-native film era', 'The Radio Era', 'The Streaming Era'], answer: 'The AI-native film era' },
+                    { q: 'The model allows specifying "object ______," like how things move.', options: ['Color', 'Physics', 'Name', 'Price'], answer: 'Physics' },
+                    { q: 'The term "synthesis" in video means ______.', options: ['Deleting videos', 'Combining or generating videos from elements', 'Watching videos', 'Buying cameras'], answer: 'Combining or generating videos from elements' },
+                    { q: 'What does "cinematic" mean?', options: ['Related to medicine', 'Related to motion pictures/movies', 'Very small', 'Electronic only'], answer: 'Related to motion pictures/movies' },
+                    { q: 'The strategy aims to ______ the logic of video generation.', options: ['Destroy', 'Standardize', 'Hide', 'Complicate'], answer: 'Standardize' },
+                    { q: 'What does "positioning itself" mean in a business context?', options: ['Sitting down', 'Setting itself up in a particular role/market', 'Moving to a new office', 'Running away'], answer: 'Setting itself up in a particular role/market' },
+                    { q: 'The word "foundational" means ______.', options: ['The very top', 'Forming the base or core', 'Unimportant', 'A minor update'], answer: 'Forming the base or core' },
+                    { q: 'Creators can specify "______ transitions," like changes in brightness.', options: ['Water', 'Lighting', 'Sound', 'Price'], answer: 'Lighting' },
+                    { q: 'Is Video-LLM-1 a "conventional" system?', options: ['Yes', 'No, it is a foundational shift', 'Only in Europe', 'The text doesn\'t say'], answer: 'No, it is a foundational shift' }
+                ]
+            },
+            'microsoft-robotics': {
+                title: '微軟「意圖感知」人型機器人',
+                english: `Microsoft and 1X Technologies launched a pilot deploying "Intent-Aware" humanoid robots in U.S. logistics centers. Powered by Azure AI and the "Neo-Vision" model, the robots can interpret human intent rather than simply avoiding obstacles. This marks a shift toward collaborative robotics, focusing on last-meter sorting and assisted picking. The companies plan to scale deployment to 500 units by 2026, signaling momentum for Embodied AI in warehousing.`,
+                chinese: `微軟與 1X Technologies 合作：「意圖感知」人型機器人首度進入零售倉儲實測。微軟與 1X Technologies 啟動了一項試點計畫，在美國物流中心部署具備「意圖感知（Intent-Aware）」能力的人型機器人。透過 Azure AI 與「Neo-Vision」模型驅動，這些機器人能解釋人類意圖，而不僅僅是避開障礙物。這標誌著向「協作機器人」的轉型，重點在於「最後一米」的分類與輔助揀貨。兩家公司計畫在 2026 年底前擴大規模至 500 台，顯示了具身智能（Embodied AI）在倉儲領域的強大動能。`,
+                vocabulary: [
+                    'Intent-Aware (adj.): 意圖感知的', 'Humanoid robots (n.phr.): 人型機器人', 'Logistics centers (n.phr.): 物流中心', 'Interpret (v.): 解釋/解讀',
+                    'Avoid obstacles (phr.): 避開障礙物', 'Collaborative robotics (n.phr.): 協作機器人技術', 'Last-meter sorting (n.phr.): 最後一米分類', 'Assisted picking (n.phr.): 輔助揀貨',
+                    'Scale deployment (v.phr.): 擴大部署規模', 'Embodied AI (n.phr.): 具身智能', 'Warehousing (n.): 倉儲', 'Pilot (n./v.): 試點/引導',
+                    'Human intent (n.phr.): 人類意圖', 'Obstacles (n.): 障礙', 'Pick and place (phr.): 拾取與放置', 'Momentum (n.): 動能/勢頭',
+                    'Human-Robot Interaction (n.phr.): 人機互動', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Autonomous (adj.): 自主的', 'Mobility (n.): 流動性/移動性', 'Azure (n. proper): 微軟雲端平台',
+                    'Logistical (adj.): 後勤的', 'Assistance (n.): 協助', 'Retail (n.): 零售', 'Fulfillment (n.): 履行/訂單處理'
+                ],
+                quiz: [
+                    { q: 'Who is Microsoft partnering with for the humanoid robot pilot?', options: ['Tesla', '1X Technologies', 'NVIDIA', 'Boston Dynamics'], answer: '1X Technologies' },
+                    { q: 'What is the special capability of these new robots?', options: ['Flying', 'Intent-Awareness (interpreting human intent)', 'Cooking', 'Playing music'], answer: 'Intent-Awareness (interpreting human intent)' },
+                    { q: 'What model powers the robots\' vision?', options: ['GPT-4', 'Neo-Vision', 'Strawberry', 'Eos'], answer: 'Neo-Vision' },
+                    { q: 'The robots are being tested in which type of facility?', options: ['Hospitals', 'Logistics/Retail fulfillment centers', 'Schools', 'Farms'], answer: 'Logistics/Retail fulfillment centers' },
+                    { q: 'What is the focus of these "collaborative robotics"?', options: ['Building cars', 'Last-meter sorting and assisted picking', 'Space mining', 'Underwater cable repair'], answer: 'Last-meter sorting and assisted picking' },
+                    { q: 'How many units do the companies plan to deploy by 2026?', options: ['10', '100', '500', '1,000'], answer: '500' },
+                    { q: 'The term "Embodied AI" refers to AI that ______.', options: ['Has no physical form', 'Is integrated into a physical body or hardware to interact with the world', 'Only writes code', 'Only exists on a server'], answer: 'Is integrated into a physical body or hardware to interact with the world' },
+                    { q: 'What is the robots\' primary improvement over older models?', options: ['They are cheaper', 'They can interpret human intent instead of just avoiding obstacles', 'They are much faster', 'They use less electricity'], answer: 'They can interpret human intent instead of just avoiding obstacles' },
+                    { q: 'The term "last-meter" in logistics refers to ______.', options: ['The long distance travel', 'The final part of the process where goods reach the target/sort', 'The height of a shelf', 'The price of shipping'], answer: 'The final part of the process where goods reach the target/sort' },
+                    { q: 'What does "interpret" mean?', options: ['To hide', 'To explain or understand the meaning of something', 'To destroy', 'To copy'], answer: 'To explain or understand the meaning of something' },
+                    { q: 'The pilot is happening in which country?', options: ['UK', 'Japan', 'U.S.', 'China'], answer: 'U.S.' },
+                    { q: 'What cloud platform is mentioned in the news?', options: ['Google Cloud', 'AWS', 'Azure', 'iCloud'], answer: 'Azure' },
+                    { q: 'The robots are "humanoid," meaning they ______.', options: ['Look like animals', 'Look like humans in shape', 'Are shaped like boxes', 'Are invisible'], answer: 'Look like humans in shape' },
+                    { q: 'The word "momentum" is a synonym for ______.', options: ['Failure', 'Driving force or strength', 'Slow speed', 'Secret plan'], answer: 'Driving force or strength' },
+                    { q: 'What is "assisted picking"?', options: ['Buying a gift', 'Helping to select items from shelves', 'Picking flowers', 'Taking a photo'], answer: 'Helping to select items from shelves' }
+                ]
+            },
+            'amd-mi400': {
+                title: 'AMD MI400 加速器細節',
+                english: `AMD CEO Lisa Su unveiled early details of the Instinct MI400 accelerator on Tuesday. Built on a multi-die "chiplet" stack with expanded HBM capacity, AMD claims the platform will deliver 3x AI training performance over NVIDIA’s H100. By leveraging TSMC’s CoWoS-S advanced packaging, AMD aims to offer a cost-efficient alternative for hyperscalers such as Meta and Microsoft. If the 2026 launch timeline holds, MI400 could meaningfully disrupt the AI data center accelerator market.`,
+                chinese: `AMD 發表「MI400」加速器初步細節：採用「芯粒」堆疊技術，算力超越 H100 三倍。AMD 執行長蘇姿丰週二揭曉了 Instinct MI400 加速器的初步細節。該平台建立在具有擴展高頻寬記憶體（HBM）容量的「多晶片/芯粒（chiplet）」堆疊技術之上，AMD 聲稱其 AI 訓練效能將是 NVIDIA H100 的三倍。透過利用台積電的 CoWoS-S 先進封裝技術，AMD 旨在為 Meta 與微軟等超大規模雲端服務商提供具成本效益的替代方案。若 2026 年的發布時程不變，MI400 可能會對 AI 數據中心加速器市場產生實質性的顛覆。`,
+                vocabulary: [
+                    'Accelerator (n.): 加速器', 'Unveiled (v.pt.): 揭曉/公布', 'Instinct MI400 (n. proper): AMD 加速器型號', 'Multi-die (adj.): 多晶片的',
+                    'Chiplet (n.): 芯粒/小晶片', 'Stack (n./v.): 堆疊', 'Expanded capacity (n.phr.): 擴展的容量', 'HBM (High Bandwidth Memory) (n.): 高頻寬記憶體',
+                    '3x Performance (phr.): 三倍效能', 'NVIDIA H100 (n. proper): 輝達 H100 晶片 (競爭對手)', 'Leveraging (v.ger.): 利用/槓桿', 'CoWoS-S (n. proper): 台積電先進封裝技術',
+                    'Cost-efficient (adj.): 具成本效益的', 'Alternative (n.): 替代方案', 'Hyperscalers (n.): 超大規模雲端服務商', 'Disrupt (v.): 顛覆/中斷',
+                    'Data center (n.phr.): 數據中心', 'Launch timeline (n.phr.): 發布時程', 'Silicon (n.): 矽/晶片', 'Packaging (n.): 封裝',
+                    'Revenue (n.): 營收', 'Architecture (n.): 架構', 'Deployment (n.): 部署', 'Efficiency (n.): 效率',
+                    'Sustained (adj.): 持續的', 'Unprecedented (adj.): 史無前例的', 'Strategic (adj.): 戰略的', 'Divergence (n.): 分歧',
+                    'Convergence (n.): 匯聚', 'Backlog (n.): 積壓', 'Milestone (n.): 里程碑', 'Accelerator (n.): 促進者/加速器'
+                ],
+                quiz: [
+                    { q: 'Who is the CEO of AMD?', options: ['Jensen Huang', 'Lisa Su', 'Pat Gelsinger', 'Andy Jassy'], answer: 'Lisa Su' },
+                    { q: 'What is the name of the new AMD accelerator?', options: ['Vera Rubin', 'Instinct MI400', 'Blackwell', 'A18'], answer: 'Instinct MI400' },
+                    { q: 'What technology does MI400 use to combine multiple chips?', options: ['Glue', 'Multi-die "chiplet" stack', 'Single large die', 'Wireless connection'], answer: 'Multi-die "chiplet" stack' },
+                    { q: 'AMD claims MI400 is how much faster than NVIDIA\'s H100 in AI training?', options: ['50% faster', 'Twice as fast', '3x faster', '10x faster'], answer: '3x faster' },
+                    { q: 'What type of memory capacity has been expanded in the MI400?', options: ['Flash', 'DDR5', 'HBM (High Bandwidth Memory)', 'Hard drive'], answer: 'HBM (High Bandwidth Memory)' },
+                    { q: 'Which TSMC packaging technology does AMD leverage?', options: ['InFO', 'CoWoS-S', 'SoIC', 'Flip-Chip'], answer: 'CoWoS-S' },
+                    { q: 'Which two companies are mentioned as target "hyperscalers" for AMD?', options: ['Apple and Google', 'Meta and Microsoft', 'Tesla and SpaceX', 'Intel and Marvell'], answer: 'Meta and Microsoft' },
+                    { q: 'The MI400 aims to be a "______ alternative" to NVIDIA.', options: ['More expensive', 'Cost-efficient', 'Slower', 'Temporary'], answer: 'Cost-efficient' },
+                    { q: 'When is the planned launch year for the MI400?', options: ['2025', '2026', '2027', '2028'], answer: '2026' },
+                    { q: 'The term "chiplet" refers to ______.', options: ['A very large chip', 'A small piece of a larger chip system', 'A type of potato chip', 'A cooling fan'], answer: 'A small piece of a larger chip system' },
+                    { q: 'What does "disrupt" mean in the data center market?', options: ['To clean', 'To significantly change or disturb the current state', 'To build from zero', 'To follow the rules'], answer: 'To significantly change or disturb the current state' },
+                    { q: 'The word "unveiled" is a synonym for ______.', options: ['Hidden', 'Revealed/Shown', 'Deleted', 'Delayed'], answer: 'Revealed/Shown' },
+                    { q: 'What does "capacity" mean in "HBM capacity"?', options: ['The size of the box', 'The maximum amount that can be contained', 'The speed of light', 'The color of the chip'], answer: 'The maximum amount that can be contained' },
+                    { q: 'AMD is a competitor of which other company mentioned?', options: ['Samsung', 'NVIDIA', 'BMW', 'Nike'], answer: 'NVIDIA' },
+                    { q: 'Instinct is the ______ of AMD\'s accelerator line.', options: ['Founder', 'Brand name/Product series', 'Website', 'Factory name'], answer: 'Brand name/Product series' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
