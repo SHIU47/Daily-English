@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 2 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 2 日：地緣避險與科技整合新紀元</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Global Intelligence Edition.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點新聞',
+                english: `[1] TSMC to Hold Historic First Overseas Board Meeting in Kumamoto\nTSMC has scheduled its first-ever overseas board meeting in Kumamoto, marking a significant evolution in its global governance model. Chairman C. C. Wei met with Sanae Takaichi, highlighting a strategic upgrade for Kumamoto Fab 2, which is now set to produce 3nm chips with total investment rising to $17 billion. This institutional shift reflects a move from "Taiwan-centric" manufacturing toward a resilience-based geographic diversification strategy.\n\n[2] Taiwan Ranks 2nd Globally in National Entrepreneurial Context Index (NECI)\nAccording to the 2025–2026 Global Entrepreneurship Monitor (GEM) report, Taiwan ranks second worldwide in the NECI, trailing only the UAE. Strong institutional support for R&D commercialization and physical infrastructure were key scoring drivers. This signals a structural shift toward a high-value, innovation-led economy.\n\n[3] MOFA Issues "Red" Travel Alerts for Middle East Amid Escalating Strikes\nFollowing escalating hostilities between Israel and Iran, Taiwan’s Ministry of Foreign Affairs (MOFA) has issued its highest-level "red" travel alerts for both countries. This response underscores the vulnerability of global shipping lanes and reflects a broader shift toward proactive geopolitical risk management.`,
+                chinese: `【1】台積電於日本熊本召開首次海外董事會\n台積電計畫在熊本舉行有史以來第一次海外董事會，標誌著其全球治理模式的重大演進。董事長魏哲家會晤了日本首相高市早苗，強調熊本二廠的戰略升級，該廠現預計生產 3 奈米晶片，總投資額增至 170 億美元。這一制度性轉變反映了從「以台灣為中心」的製造模式轉向基於韌性的地理多元化策略，將「矽盾」的戰略邏輯延伸至台灣海峽之外。\n\n【2】台灣創業環境環境指數（NECI）全球排名第二\n根據最新的 2025–2026 全球創業觀察（GEM）報告，台灣在國家創業環境指數（NECI）中全球排名第二，僅次於阿拉伯聯合大公國。對研發商業化與實體基礎設施的強大制度支持是評分的關鍵驅動力。從宏觀角度看，這信號了台灣正從傳統的依賴 OEM（代工）模式轉向高價值、創新驅動的經濟，強化了台灣對風險投資與全球流動的高階人才的吸引力。\n\n【3】中東衝突升級：外交部針對以色列與伊朗發布「紅色」警示\n隨著以色列與伊朗之間的敵對行動升級，台灣外交部（MOFA）已對這兩個國家發布最高等級的「紅色」旅遊警示。此一應對措施凸顯了全球航運航道與航空路線的脆弱性，並可能對台灣的能源安全與物價穩定產生外溢效應。該建議反映了外交政策中向「主動地緣政治風險管理」的更廣泛轉變。`,
+                vocabulary: [
+                    'Overseas board meeting (n.phr.): 海外董事會', 'Governance model (n.phr.): 治理模式', 'Strategic upgrade (n.phr.): 戰略升級', 'Institutional shift (n.phr.): 制度性轉變',
+                    'Resilience-based (adj.): 基於韌性的', 'Geographic diversification (n.phr.): 地理多元化', 'National Entrepreneurial Context Index (NECI) (n. proper): 國家創業環境指數', 'GEM (Global Entrepreneurship Monitor) (n. proper): 全球創業觀察',
+                    'Trailing (v.ger.): 落後於/僅次於', 'R&D commercialization (n.phr.): 研發商業化', 'Structural shift (n.phr.): 結構性轉變', 'OEM-dependent (adj.): 依賴代工的',
+                    'Innovation-led (adj.): 創新驅動的', 'Venture capital (n.phr.): 風險投資', 'High-tier talent (n.phr.): 高階人才', 'Red travel alerts (n.phr.): 紅色旅遊警示',
+                    'Hostilities (n.): 敵對行動', 'Vulnerability (n.): 脆弱性', 'Shipping lanes (n.phr.): 航道', 'Spillover (n.): 外溢效應',
+                    'Proactive (adj.): 主動的', 'Geopolitical risk management (n.phr.): 地緣政治風險管理', 'Roadmap (n.): 藍圖', 'Centric (adj.): 以...為中心的',
+                    'Commercialization (n.): 商業化', 'Infrastructure (n.): 基礎設施', 'Diversification (n.): 多樣化', 'Escalating (adj.): 升級中的',
+                    'Bilateral (adj.): 雙邊的', 'Strategic logic (n.phr.): 戰略邏輯', 'Macroscopically (adv.): 從宏觀角度', 'Vulnerable (adj.): 易受傷的'
+                ],
+                quiz: [
+                    { q: 'Where is TSMC holding its first overseas board meeting?', options: ['Arizona', 'Kumamoto', 'Dresden', 'Singapore'], answer: 'Kumamoto' },
+                    { q: 'What chip technology is Kumamoto Fab 2 now set to produce?', options: ['7nm', '5nm', '3nm', '2nm'], answer: '3nm' },
+                    { q: 'Taiwan ranks ______ globally in the National Entrepreneurial Context Index (NECI).', options: ['1st', '2nd', '5th', '10th'], answer: '2nd' },
+                    { q: 'Which country is the only one ranked higher than Taiwan in the 2025-26 NECI?', options: ['USA', 'UAE', 'Japan', 'Germany'], answer: 'UAE' },
+                    { q: 'What color travel alert did MOFA issue for Israel and Iran?', options: ['Yellow', 'Orange', 'Red', 'Blue'], answer: 'Red' },
+                    { q: 'The shift from "Taiwan-centric" manufacturing is based on which concept?', options: ['Cost-cutting', 'Resilience and geographic diversification', 'Marketing', 'Labor shortages'], answer: 'Resilience and geographic diversification' },
+                    { q: 'TSMC\'s total investment for Kumamoto Fab 2 has risen to ______.', options: ['$10 billion', '$12.2 billion', '$17 billion', '$45 billion'], answer: '$17 billion' },
+                    { q: 'What was a key scoring driver for Taiwan’s high NECI ranking?', options: ['Low taxes only', 'Strong institutional support for R&D commercialization', 'Population size', 'Military strength'], answer: 'Strong institutional support for R&D commercialization' },
+                    { q: 'The NECI report signals a move away from which traditional model?', options: ['Farming-led', 'OEM-dependent', 'Retail-based', 'Tourism-centric'], answer: 'OEM-dependent' },
+                    { q: 'What does "spillover" refer to in the context of the Middle East conflict?', options: ['A type of oil spill', 'Potential effects on Taiwan\'s energy and inflation', 'Cleaning the ocean', 'Exporting food'], answer: 'Potential effects on Taiwan\'s energy and inflation' },
+                    { q: 'Who is the Chairman of TSMC mentioned in the text?', options: ['Morris Chang', 'C. C. Wei', 'Chiang Wan-an', 'Jensen Huang'], answer: 'C. C. Wei' },
+                    { q: 'What does "proactive" mean in foreign policy?', options: ['Waiting for things to happen', 'Taking action in anticipation of future issues', 'Reacting slowly', 'Ignoring risks'], answer: 'Taking action in anticipation of future issues' },
+                    { q: 'The term "Silicon Shield" is being extended beyond where?', options: ['The Pacific Ocean', 'The Taiwan Strait', 'The South China Sea', 'Hsinchu'], answer: 'The Taiwan Strait' },
+                    { q: 'What does GEM stand for?', options: ['Global Economic Monitor', 'Global Entrepreneurship Monitor', 'Governmental Exchange Mission', 'General Energy Management'], answer: 'Global Entrepreneurship Monitor' },
+                    { q: 'Taiwan’s economy is moving toward being "______-led."', options: ['Labor', 'Debt', 'Innovation', 'Import'], answer: 'Innovation' }
+                ]
+            },
+            'iran-strikes': {
+                title: '美以對伊打擊',
+                english: `Joint strikes by the United States and Israel targeting Iranian nuclear and military assets have intensified regional instability. The shift from “containment” to “direct preemption” marks a significant recalibration in Western policy toward Iran. Markets have responded by reintroducing a “geopolitical risk premium” into global energy prices, raising concerns about renewed inflationary pressure and potential stagflation risks, complicating the monetary policy outlook of major central banks. Experts warn that the targeting of critical infrastructure could lead to a broader retaliatory cycle affecting maritime security in the Strait of Hormuz.`,
+                chinese: `美國與以色列對伊朗發動預防性打擊：引發全球能源與安全連動。美國與以色列針對伊朗核能與軍事資產發動的聯合打擊，加劇了區域不穩定。從「圍堵（containment）」轉向「直接預防性打擊（direct preemption）」標誌著西方對伊政策的重大重新校準。市場對此的反應是將「地緣政治風險溢價」重新引入全球能源價格，引發了對通膨壓力捲土重來及潛在滯脹（stagflation）風險的擔憂，使各大央行的貨幣政策展望變得複雜。專家警告，針對關鍵基礎設施的打擊可能導致更廣泛的報復循環，進而影響荷莫茲海峽（Strait of Hormuz）的海事安全。`,
+                vocabulary: [
+                    'Joint strikes (n.phr.): 聯合打擊', 'Nuclear and military assets (n.phr.): 核能與軍事資產', 'Instability (n.): 不穩定', 'Containment (n.): 圍堵/遏制',
+                    'Direct preemption (n.phr.): 直接預防性打擊', 'Recalibration (n.): 重新校準/調整', 'Geopolitical risk premium (n.phr.): 地緣政治風險溢價', 'Inflationary pressure (n.phr.): 通膨壓力',
+                    'Stagflation (n.): 滯脹 (停滯性通膨)', 'Monetary policy outlook (n.phr.): 貨幣政策展望', 'Central banks (n.phr.): 央行', 'Retaliatory cycle (n.phr.): 報復循環',
+                    'Maritime security (n.phr.): 海事安全', 'Strait of Hormuz (n. proper): 荷莫茲海峽', 'Critical infrastructure (n.phr.): 關鍵基礎設施', 'Preemption (n.): 優先購買/預防性行動',
+                    'Recalibrate (v.): 重新調整', 'Premium (n.): 溢價/獎金', 'Instability (n.): 不穩定', 'Escalation (n.): 升級',
+                    'Retaliatory (adj.): 報復性的', 'Monetary (adj.): 貨幣的', 'Policy (n.): 政策', 'Security (n.): 安全',
+                    'Strike (n./v.): 罷工/打擊', 'Contain (v.): 包含/遏制', 'Complex (adj.): 複雜的', 'Stagnation (n.): 停滯',
+                    'Diversify (v.): 多樣化', 'Sovereignty (n.): 主權', 'Integrity (n.): 完整性', 'Neutral (adj.): 中立的'
+                ],
+                quiz: [
+                    { q: 'Which two countries launched joint strikes on Iran?', options: ['UK and USA', 'USA and Israel', 'Israel and France', 'Russia and Iran'], answer: 'USA and Israel' },
+                    { q: 'What were the primary targets of the strikes?', options: ['Farms', 'Nuclear and military assets', 'Schools', 'Hospitals'], answer: 'Nuclear and military assets' },
+                    { q: 'Western policy has shifted from "containment" to what?', options: ['Appeasement', 'Direct preemption', 'Isolation', 'Silent observation'], answer: 'Direct preemption' },
+                    { q: 'How did markets respond to the strikes?', options: ['Prices dropped', 'Reintroducing a geopolitical risk premium', 'Trading stopped', 'No change'], answer: 'Reintroducing a geopolitical risk premium' },
+                    { q: 'What economic risk are analysts concerned about besides inflation?', options: ['Deflation', 'Stagflation', 'Low interest rates', 'Labor surplus'], answer: 'Stagflation' },
+                    { q: 'Which strait\'s maritime security might be affected by a retaliatory cycle?', options: ['Strait of Malacca', 'Strait of Hormuz', 'Strait of Dover', 'Bering Strait'], answer: 'Strait of Hormuz' },
+                    { q: 'The news suggests the policy change is a "______ recalibration."', options: ['Minor', 'Significant', 'Hidden', 'Failed'], answer: 'Significant' },
+                    { q: 'What is a "geopolitical risk premium"?', options: ['A tax on politicians', 'Added cost in prices due to political instability', 'A government subsidy', 'An insurance policy'], answer: 'Added cost in prices due to political instability' },
+                    { q: 'What is "stagflation"?', options: ['High growth and low inflation', 'Economic stagnation combined with high inflation', 'Rapid price drops', 'Zero unemployment'], answer: 'Economic stagnation combined with high inflation' },
+                    { q: 'The strikes "intensified regional ______."', options: ['Peace', 'Instability', 'Wealth', 'Unity'], answer: 'Instability' },
+                    { q: 'A "retaliatory cycle" means what?', options: ['A type of bicycle', 'A series of repeated revenge actions', 'A recycling program', 'A financial report'], answer: 'A series of repeated revenge actions' },
+                    { q: 'The term "preemption" implies taking action ______.', options: ['After a problem', 'Before a problem happens', 'Never', 'Only at night'], answer: 'Before a problem happens' },
+                    { q: 'Major ______ ______ now face a complicated policy outlook.', options: ['Retail shops', 'Central banks', 'Tech startups', 'Oil companies'], answer: 'Central banks' },
+                    { q: 'The news focuses on Western policy toward which country?', options: ['Ukraine', 'Iran', 'Venezuela', 'Japan'], answer: 'Iran' },
+                    { q: 'What kind of pressure is being renewed on energy dependent nations?', options: ['Water pressure', 'Inflationary pressure', 'Social pressure', 'Cold air pressure'], answer: 'Inflationary pressure' }
+                ]
+            },
+            'oracle-cloud': {
+                title: '甲骨文 500 億美元融資計畫',
+                english: `Oracle Corporation announced plans to raise between $45–50 billion through a mix of debt and equity financing to accelerate AI data center expansion for clients including OpenAI and NVIDIA. This move highlights the unprecedented capital intensity of AI infrastructure, signaling a transition into an “infrastructure-first” era where access to land, power, and advanced hardware becomes the primary competitive constraint. Analysts note that as large language models grow, the bottleneck has shifted from software code to physical capacity.`,
+                chinese: `甲骨文（Oracle）公佈 500 億美元融資計畫以擴張 AI 數據中心。甲骨文公司（Oracle）宣布計畫透過債務與股權融資的結合，籌集 450 億至 500 億美元，以加速為 OpenAI 和 NVIDIA 等客戶擴張 AI 數據中心。此舉凸顯了 AI 基礎設施前所未有的「資本密集度（capital intensity）」，標誌著轉向「基礎設施優先」的時代。在這個時代，獲取土地、電力和先進硬體成為了主要的競爭限制（constraint）。分析師指出，隨著大型語言模型的增長，瓶頸已從軟體代碼轉向實體產能。`,
+                vocabulary: [
+                    'Fundraising plan (n.phr.): 融資計畫', 'Debt and equity financing (n.phr.): 債務與股權融資', 'Unprecedented (adj.): 前所未有的', 'Capital intensity (n.phr.): 資本密集度',
+                    'Infrastructure-first (adj.): 基礎設施優先的', 'Competitive constraint (n.phr.): 競爭限制/約束', 'Advanced hardware (n.phr.): 先進硬體', 'Bottleneck (n.): 瓶頸',
+                    'Physical capacity (n.phr.): 實體產能', 'Large language models (n.phr.): 大型語言模型', 'Accelerate (v.): 加速', 'Unveils (v.): 揭幕/公布',
+                    'Financing (n.): 融資', 'Era (n.): 時代', 'Software code (n.phr.): 軟體代碼', 'Hyperscaler (n.): 超大型服務商',
+                    'Sustained (adj.): 持續的', 'Constraint (n.): 限制', 'Intensity (n.): 強度/密集度', 'Transition (n.): 轉型',
+                    'Equity (n.): 股權/公平', 'Revenue (n.): 收入', 'Architecture (n.): 架構', 'Deployment (n.): 部署',
+                    'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑', 'Investment (n.): 投資',
+                    'Billion (n.): 十億', 'Capacity (n.): 產能', 'Primary (adj.): 主要的', 'Divergence (n.): 分歧'
+                ],
+                quiz: [
+                    { q: 'How much money does Oracle plan to raise?', options: ['$10-15B', '$20B', '$45-50B', '$100B'], answer: '$45-50B' },
+                    { q: 'Oracle uses a mix of what for financing?', options: ['Gold and Silver', 'Debt and equity', 'Only loans', 'Cash only'], answer: 'Debt and equity' },
+                    { q: 'Who are mentioned as clients for Oracle\'s AI data center expansion?', options: ['Apple and Google', 'OpenAI and NVIDIA', 'SpaceX and Tesla', 'Microsoft and Meta'], answer: 'OpenAI and NVIDIA' },
+                    { q: 'The current phase is described as an "______-first" era.', options: ['Software', 'Infrastructure', 'Mobile', 'Retail'], answer: 'Infrastructure' },
+                    { q: 'What is becoming a "primary competitive constraint" according to the text?', options: ['Access to land, power, and hardware', 'Marketing budget', 'Employee count', 'Number of offices'], answer: 'Access to land, power, and hardware' },
+                    { q: 'The bottleneck in AI has shifted from software code to what?', options: ['Data centers location', 'Physical capacity', 'User interface', 'CEO decisions'], answer: 'Physical capacity' },
+                    { q: 'The term "capital intensity" refers to ______.', options: ['Low cost', 'Unprecedented amount of money required', 'Fast spending', 'Paying taxes'], answer: 'Unprecedented amount of money required' },
+                    { q: 'Oracle Corporation is primarily expanding in which field?', options: ['Space travel', 'AI data centers', 'Automobile manufacturing', 'Agriculture'], answer: 'AI data centers' },
+                    { q: 'What does "unprecedented" mean?', options: ['Very common', 'Never happened before', 'Boring', 'Small'], answer: 'Never happened before' },
+                    { q: 'The word "constraint" is a synonym for ______.', options: ['Help', 'Limitation or restriction', 'Achievement', 'Mistake'], answer: 'Limitation or restriction' },
+                    { q: 'What are LLMs?', options: ['Large Labor Machines', 'Large Language Models', 'Little Logic Modules', 'Long List Menus'], answer: 'Large Language Models' },
+                    { q: 'What does "financing" mean?', options: ['Paying for a dinner', 'The process of providing funds for business', 'Closing a bank', 'Writing a book'], answer: 'The process of providing funds for business' },
+                    { q: 'The transition is "infrastructure-first," which emphasizes ______ components.', options: ['Virtual', 'Physical', 'Mental', 'Imaginary'], answer: 'Physical' },
+                    { q: 'Analysts noted the bottleneck ______ from code to capacity.', options: ['Stayed', 'Shifted/Moved', 'End', 'Fixed'], answer: 'Shifted/Moved' },
+                    { q: 'Is Oracle using only debt for this fundraising?', options: ['Yes', 'No, a mix of debt and equity', 'Only equity', 'The text doesn\'t say'], answer: 'No, a mix of debt and equity' }
+                ]
+            },
+            'spacex-xai-merger': {
+                title: 'SpaceX 與 xAI 合併傳聞',
+                english: `Reports indicate discussions to merge SpaceX with xAI under the leadership of Elon Musk. The rationale centers on addressing the escalating costs of training trillion-parameter AI models. Such integration would create a “Space-AI vertical”, leveraging Starlink connectivity and potential orbital infrastructure to reduce terrestrial dependency. Strategically, this represents defensive consolidation against rivals such as Microsoft and Google, who are building their own internal computing ecosystems. Critics, however, warn about the complexities of merging a capital-intensive aerospace firm with a high-speed software entity.`,
+                chinese: `SpaceX 考慮合併 xAI：馬斯克尋求 AI 與航太基建之垂直整合。有報導指出，在伊隆·馬斯克的領導下，SpaceX 與 xAI 正進行合併討論。其理由（rationale）集中於解決訓練「兆級參數（trillion-parameter）」AI 模型不斷攀升的成本。這種整合將創造一個「太空-AI 垂直體系」，利用星鏈（Starlink）的連網能力與潛在的軌道基礎設施，減少對地面（terrestrial）設施的依賴。在戰略上，這代表了對抗微軟和 Google 等正在建立內部運算生態系統之競爭對手的防禦性鞏固。然而，批評者警告，將一家資本密集的航太公司與一家高速發展的軟體實體合併具有複雜性。`,
+                vocabulary: [
+                    'Merger (n.): 合併', 'Rationale (n.): 理由/基本原理', 'Escalating costs (n.phr.): 攀升的成本', 'Trillion-parameter (adj.): 兆級參數的',
+                    'Vertical integration (n.phr.): 垂直整合', 'Leveraging (v.ger.): 利用/槓桿', 'Connectivity (n.): 連通性', 'Orbital infrastructure (n.phr.): 軌道基礎設施',
+                    'Terrestrial dependency (n.phr.): 地面依賴', 'Defensive consolidation (n.phr.): 防禦性鞏固/整合', 'Ecosystems (n.): 生態系統', 'Aerospace firm (n.phr.): 航太公司',
+                    'Software entity (n.phr.): 軟體實體', 'Complexities (n.): 複雜性', 'Ambitions (n.): 野心/抱負', 'Infrastructure (n.): 基礎建設',
+                    'Satellite (n.): 衛星', 'Parameter (n.): 參數', 'Escalating (adj.): 升級的', 'Consolidation (n.): 鞏固/合併',
+                    'Vertical (adj.): 垂直的', 'Dependency (n.): 依賴', 'Orbital (adj.): 軌道的', 'Integration (n.): 整合',
+                    'Rival (n.): 競爭對手', 'Constraint (n.): 限制', 'Autonomous (adj.): 自主的', 'Deployment (n.): 部署',
+                    'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑', 'Consolidate (v.): 鞏固'
+                ],
+                quiz: [
+                    { q: 'Which two companies are reportedly discussing a merger?', options: ['Tesla and xAI', 'SpaceX and xAI', 'Amazon and Blue Origin', 'NVIDIA and Oracle'], answer: 'SpaceX and xAI' },
+                    { q: 'Who is the leader of both companies involved in the merger discussions?', options: ['Jeff Bezos', 'Elon Musk', 'Bill Gates', 'Satya Nadella'], answer: 'Elon Musk' },
+                    { q: 'What is the "rationale" for the merger?', options: ['To sell more cars', 'To address the escalating costs of AI training', 'To buy a news company', 'To close Starlink'], answer: 'To address the escalating costs of AI training' },
+                    { q: 'What kind of "vertical" would the integration create?', options: ['Car-AI', 'Space-AI', 'Food-AI', 'Medical-AI'], answer: 'Space-AI' },
+                    { q: 'Which SpaceX service would be leveraged for connectivity?', options: ['Falcon 9', 'Starlink', 'Dragon', 'Heavy Lift'], answer: 'Starlink' },
+                    { q: 'The merger aims to reduce "______ dependency."', options: ['Space', 'Terrestrial (ground-based)', 'Water', 'Financial'], answer: 'Terrestrial (ground-based)' },
+                    { q: 'The move is seen as a defensive consolidation against which rivals?', options: ['Apple and Samsung', 'Microsoft and Google', 'NVIDIA and AMD', 'SpaceX and Blue Origin'], answer: 'Microsoft and Google' },
+                    { q: 'What is a trillion-parameter AI model?', options: ['A small app', 'A very large and complex AI model', 'A type of rocket engine', 'A new satellite'], answer: 'A very large and complex AI model' },
+                    { q: 'The term "merger" refers to ______.', options: ['A split', 'Combining two companies into one', 'A type of space suit', 'Closing a business'], answer: 'Combining two companies into one' },
+                    { q: 'What does "terrestrial" mean?', options: ['Related to stars', 'Related to the Earth or ground', 'Related to Mars', 'Related to the internet only'], answer: 'Related to the Earth or ground' },
+                    { q: 'Critics warn about the ______ of merging an aerospace firm and a software entity.', options: ['Simplicity', 'Complexities', 'Profit', 'Beauty'], answer: 'Complexities' },
+                    { q: 'What is "vertical integration"?', options: ['Building tall buildings', 'Control of multiple stages of production/supply', 'Falling down', 'Selling different products'], answer: 'Control of multiple stages of production/supply' },
+                    { q: 'The term "orbital" refers to things in ______.', options: ['Underground', 'Space orbit', 'The ocean', 'The office'], answer: 'Space orbit' },
+                    { q: 'Musk is seeking to "______ AI ambitions."', options: ['Delete', 'Consolidate (combine)', 'Fail', 'Hide'], answer: 'Consolidate (combine)' },
+                    { q: 'What is an "aerospace firm"?', options: ['A farming company', 'A company focused on air and space travel', 'A software office', 'A clothing brand'], answer: 'A company focused on air and space travel' }
+                ]
+            },
+            'micron-hbm4': {
+                title: '美光 HBM4 與印度封裝廠進展',
+                english: `Micron Technology confirmed that HBM4 pilot yields have reached internal targets, while its advanced assembly, test, and packaging (ATMP) facility in India has reached full operational capacity. This development reflects ongoing "friend-shoring" strategies, redistributing semiconductor back-end processes beyond East Asia. For India, the milestone advances its ambition to become a global manufacturing hub, while strengthening Micron’s overall supply chain resilience amid geopolitical uncertainty. Analysts believe Micron’s lead in HBM4 could challenge SK Hynix’s market share in 2026.`,
+                chinese: `美光（Micron）證實 HBM4 研發進度領先並啟動印度先進封裝廠。美光科技（Micron Technology）證實其 HBM4 試產良率已達到內部目標，同時其在印度的先進封裝測試（ATMP）設施已達到全產能運作。這一發展反映了持續進行中的「友岸外包（friend-shoring）」策略，將半導體後段製程重新分配到東亞以外的地區。對印度而言，這一里程碑推動了其成為全球製造中心（hub）的野心；同時，在面對地緣政治不確定性時，也強化了美光整體的供應鏈韌性。分析師認為，美光在 HBM4 上的領先優勢可能會在 2026 年挑戰 SK 海力士（SK Hynix）的市場份額。`,
+                vocabulary: [
+                    'Pilot yields (n.phr.): 試產良率', 'Internal targets (n.phr.): 內部目標', 'ATMP (Assembly, Test, and Packaging) (n. abbreviation): 封測',
+                    'Operational capacity (n.phr.): 營運產能', 'Friend-shoring (n.): 友岸外包 (在盟友國生產)', 'Redistributing (v.ger.): 重新分配', 'Back-end processes (n.phr.): 後段製程',
+                    'Manufacturing hub (n.phr.): 製造中心', 'Supply chain resilience (n.phr.): 供應鏈韌性', 'Geopolitical uncertainty (n.phr.): 地緣政治不確定性', 'Market share (n.phr.): 市場份額', 'Pilot (n./adj.): 試點/實驗性的',
+                    'Confirm (v.): 證實', 'Footprint (n.): 腳印/佈局', 'MOU (n.): 備忘錄', 'Exclusively (adv.): 專門地',
+                    'Proximity (n.): 鄰近', 'Anchored (v.pp.): 紮根的', 'Strategic (adj.): 戰略的', 'Unprecedented (adj.): 史無前例的',
+                    'Packaging (n.): 封裝', 'Logic (n.): 邏輯', 'Integration (n.): 整合', 'Resilience (n.): 韌性',
+                    'High-volume (adj.): 大量的', 'Assembly (n.): 組裝', 'Milestone (n.): 里程碑', 'Redistribute (v.): 重新分佈',
+                    'Decisive (adj.): 決定性的', 'Dovish (adj.): 鴿派的', 'Premium (n.): 溢價', 'Stagflation (n.): 滯脹'
+                ],
+                quiz: [
+                    { q: 'Micron Technology confirmed that ______ pilot yields reached internal targets.', options: ['DDR5', 'HBM3', 'HBM4', 'SSD'], answer: 'HBM4' },
+                    { q: 'Where is Micron’s advanced ATMP facility located?', options: ['Taiwan', 'USA', 'India', 'Japan'], answer: 'India' },
+                    { q: 'What does ATMP stand for?', options: ['Assembly, Test, and Packaging', 'Advanced Technology for Mobile Phones', 'Automated Tool and Machine Part', 'Arctic Terminal Management Plan'], answer: 'Assembly, Test, and Packaging' },
+                    { q: 'The strategy of moving manufacturing to allied nations is called "______-shoring."', options: ['Near', 'Far', 'Friend', 'Off'], answer: 'Friend' },
+                    { q: 'India aims to become a global ______ hub through this milestone.', options: ['Financial', 'Manufacturing', 'Fashion', 'Gaming'], answer: 'Manufacturing' },
+                    { q: 'Micron is redistributing which part of the semiconductor process beyond East Asia?', options: ['Front-end only', 'Design only', 'Back-end processes (ATMP)', 'Software coding'], answer: 'Back-end processes (ATMP)' },
+                    { q: 'What does the Indian facility reaching "full operational capacity" mean?', options: ['It is closed.', 'It is working at its maximum level.', 'It is just starting.', 'It has no workers.'], answer: 'It is working at its maximum level.' },
+                    { q: 'The move strengthens Micron\'s supply chain "______" amid uncertainty.', options: ['Weakness', 'Resilience', 'Cost', 'Size'], answer: 'Resilience' },
+                    { q: 'Micron\'s HBM4 could challenge which company\'s market share?', options: ['Apple', 'TSMC', 'SK Hynix', 'NVIDIA'], answer: 'SK Hynix' },
+                    { q: 'The term "pilot yield" refers to the success rate in ______.', options: ['Mass production', 'Initial/Experimental production', 'Selling products', 'Flying planes'], answer: 'Initial/Experimental production' },
+                    { q: 'What kind of uncertainty is mentioned as a driver for this move?', options: ['Weather', 'Geopolitical', 'Educational', 'Biological'], answer: 'Geopolitical' },
+                    { q: 'Micron is a ______ company based on the context.', options: ['Indian', 'Semiconductor', 'Oil', 'Clothing'], answer: 'Semiconductor' },
+                    { q: 'The term "back-end" in chips refers to ______.', options: ['Designing code', 'Packaging and testing', 'Selling in stores', 'Farming silicon'], answer: 'Packaging and testing' },
+                    { q: 'India is described as having an "______" to become a hub.', options: ['Ambition', 'Problem', 'Mistake', 'Fear'], answer: 'Ambition' },
+                    { q: 'When is the HBM4 challenge expected to happen?', options: ['2025', '2026', '2030', 'Next decade'], answer: '2026' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
