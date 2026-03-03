@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 3 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 3 日：產能主權與 AI 合作新範式</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for advanced tech and finance learners.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] Taiwan Manufacturing PMI Hits 4-Year High in Feb Amid Surging AI Demand\nTaiwan’s manufacturing sector recorded its strongest expansion since December 2021, with the S&P Global PMI rising to 55.2 in February. The rebound is primarily driven by accelerating global demand for semiconductors and AI-related technologies. Macroscopically, however, the rapid upswing is straining supply chains and extending delivery times.\n\n[2] TSMC Urges Clients to Secure N2 Allocation as Capacity Reaches Saturation Point\nTSMC’s N2 (2nm) node is reportedly fully booked through late 2027. This bottleneck underscores the emergence of a “capacity-as-sovereignty” era, where access to advanced nodes defines competitive viability. Smaller chip designers risk structural exclusion from the leading edge until late 2027.\n\n[3] MOFA Warns China Against "Meddling" in Evacuations Amid Middle East Strikes\nTaiwan’s Ministry of Foreign Affairs (MOFA) publicly rejected Beijing’s offer to assist Taiwanese citizens in Iran holding “Taiwan Compatriot Permits.” MOFA emphasized that citizen evacuation is a matter of sovereign jurisdiction, warning against political exploitation.`,
+                chinese: `【1】台灣製造業前哨：2 月 PMI 創 4 年新高，晶片需求與 AI 雙引擎驅動\n台灣製造業錄得自 2021 年 12 月以來最強勁的擴張，2 月 S&P 全球 PMI 從 1 月的 51.7 升至 55.2。這一反彈主要由全球對半導體和 AI 相關技術的加速需求所推動。從宏觀角度看，快速的上升正使供應鏈承壓，延長了交貨時間並加劇了原物料價格壓力。\n\n【2】台積電 N2 製程產能告急：2027 年前產位近乎預訂一空\n據報導，台積電的 N2（2 奈米）節點在 2027 年底前的產能已被預訂一空，新增配額的交期長達六個季度。這一瓶頸凸顯了「產能即主權」時代的到來，獲取先進製程的能力決定了競爭生存力。小型晶片設計公司面臨在 2027 年底前被排除在頂尖 AI 硬體效能之外的結構性風險。\n\n【3】外交部正告北京：撤離滯伊朗台人「不容中共干預」\n針對美以對伊朗發動打擊後局勢緊張，台灣外交部（MOFA）公開拒絕了北京方面向持「台胞證」台灣公民提供協助的提議。外交部強調，撤僑是主權管轄範圍內的事務，警告不得進行政治利用。這再次觸發了兩岸外交摩擦，強化了台灣建立主動海外危機機制的需求。`,
+                vocabulary: [
+                    'PMI (Purchasing Managers\' Index) (n.): 採購經理人指數', 'Expansion (n.): 擴張', 'Rebound (n./v.): 反彈', 'Accelerating (v.ger.): 加速中',
+                    'Macroscopically (adv.): 從宏觀角度', 'Upswing (n.): 上升/增長', 'Straining (v.ger.): 使承壓/緊張', 'Capacity constraints (n.phr.): 產能限制',
+                    'Saturation point (n.phr.): 飽和點', 'Allocation (n.): 分配/配額', 'Bottleneck (n.): 瓶頸', 'Emergence (n.): 出現/興起',
+                    'Sovereignty (n.): 主權', 'Viability (n.): 生存能力/可行性', 'Structural exclusion (n.phr.): 結構性排除', 'Leading edge (n.phr.): 領先邊緣/頂尖',
+                    'Meddling (v.ger.): 干預/管閒事', 'Evacuation (n.): 撤離/撤僑', 'Sovereign jurisdiction (n.phr.): 主權管轄權', 'Exploitation (n.): 利用/剝削',
+                    'Compatriot Permits (n.phr.): 台胞證', 'Proactive (adj.): 主動的/積極的', 'Crisis protocols (n.phr.): 危機協議/機制', 'Gray zone (n.phr.): 灰色地帶',
+                    'Upswing (n.): 增長', 'Intensifying (v.ger.): 強化', 'Constraint (n.): 限制', 'Backlog (n.): 積壓',
+                    'Exclusion (n.): 排除', 'Narrative (n.): 敘事/說法', 'Stretching (v.ger.): 延伸', 'Preemptive (adj.): 先發制人的'
+                ],
+                quiz: [
+                    { q: 'What was Taiwan\'s manufacturing PMI in February?', options: ['51.7', '55.2', '60.0', '45.0'], answer: '55.2' },
+                    { q: 'What is the primary driver of the PMI rebound?', options: ['Tourism', 'Agricultural exports', 'Semiconductors and AI demand', 'Textiles'], answer: 'Semiconductors and AI demand' },
+                    { q: 'Until when is TSMC\'s N2 capacity reportedly booked?', options: ['Late 2025', 'Early 2026', 'Late 2027', '2030'], answer: 'Late 2027' },
+                    { q: 'The term "capacity-as-sovereignty" refers to what bottleneck?', options: ['Water supply', 'Access to advanced semiconductor nodes', 'Labor shortages', 'Oil reserves'], answer: 'Access to advanced semiconductor nodes' },
+                    { q: 'Who are the major clients mentioned that secured N2 capacity?', options: ['Apple and NVIDIA', 'Intel and Samsung', 'Sony and Microsoft', 'Tesla and Amazon'], answer: 'Apple and NVIDIA' },
+                    { q: 'What is the "lead time" for additional N2 allocations?', options: ['Two weeks', 'One month', 'Up to six quarters', 'One year'], answer: 'Up to six quarters' },
+                    { q: 'How did MOFA respond to Beijing\'s offer to assist in evacuations?', options: ['They accepted it.', 'They publicly rejected it.', 'They asked for more money.', 'They ignored it.'], answer: 'They publicly rejected it.' },
+                    { q: 'MOFA emphasized that evacuation is a matter of ______.', options: ['Economic cooperation', 'Sovereign jurisdiction', 'Humanitarian aid only', 'Aviation safety'], answer: 'Sovereign jurisdiction' },
+                    { q: 'The PMI reached its highest level since which year?', options: ['2019', '2021', '2023', '2025'], answer: '2021' },
+                    { q: 'The word "straining" in the text refers to what effect on supply chains?', options: ['Making them faster', 'Putting them under too much pressure', 'Expanding them', 'Fixing them'], answer: 'Putting them under too much pressure' },
+                    { q: 'What does "viability" mean in a competitive sense?', options: ['The ability to survive or succeed', 'The cost of production', 'The speed of growth', 'The color of a product'], answer: 'The ability to survive or succeed' },
+                    { q: 'Small chip designers risk "structural ______" from the leading edge.', options: ['Inclusion', 'Exclusion', 'Expansion', 'Collaboration'], answer: 'Exclusion' },
+                    { q: 'What is a "Taiwan Compatriot Permit"?', options: ['A Taiwanese passport', 'A document issued by China for Taiwanese (台胞證)', 'A visa for Japan', 'A work permit'], answer: 'A document issued by China for Taiwanese (台胞證)' },
+                    { q: 'What kind of narratives is Taiwan trying to counter in the MOFA news?', options: ['Environmental narratives', '"Gray zone" jurisdictional narratives', 'Financial narratives', 'Farming narratives'], answer: '"Gray zone" jurisdictional narratives' },
+                    { q: 'Waiters use the word "saturation" to mean something is ______.', options: ['Empty', 'Completely full/Soaked', 'Missing', 'New'], answer: 'Completely full/Soaked' }
+                ]
+            },
+            'apple-google': {
+                title: 'Apple 與 Google 歷史性合作',
+                english: `Apple-Google Strategic Realignment: Licensing Gemini 3 to Rescue Siri from Obsolescence\nApple has reportedly signed a multi-year agreement with Google to license a customized version of Gemini 3, with annual payments estimated at $1 billion. Internal data indicated Apple’s proprietary models failed roughly 33% of complex queries, prompting a strategic pivot. By integrating Google’s 1.2-trillion-parameter model while leveraging its own Private Cloud Compute architecture, Apple aims to safeguard its ecosystem of over 2 billion active devices. Structurally, this marks a departure from Apple’s historical “vertical autonomy” philosophy toward pragmatic AI collaboration.`,
+                chinese: `Apple 與 Google 達成歷史性合作：Gemini 3 將全面驅動 Siri 生態。據報導，蘋果已與 Google 簽署了一項為期數年的協議，授權使用定制版 Gemini 3，預計年費達 10 億美元。內部數據顯示，蘋果自研模型在處理複雜查詢時的失敗率約為 33%，促使了這項策略性轉型。透過整合 Google 具備 1.2 兆參數的模型，並結合自家的私有雲端運算（Private Cloud Compute）架構，蘋果旨在保護其擁有超過 20 億台活躍裝置的生態系統。從結構上看，這標誌著蘋果從歷史悠久的「垂直自主」哲學向務實的 AI 協作轉型。`,
+                vocabulary: [
+                    'Realignment (n.): 重新結盟/調整', 'Licensing (v.ger.): 授權', 'Obsolescence (n.): 過時/淘汰', 'Proprietary models (n.phr.): 專有/自研模型',
+                    'Complex queries (n.phr.): 複雜查詢', 'Strategic pivot (n.phr.): 策略性轉向', '1.2-trillion-parameter (adj.): 1.2 兆參數的', 'Leveraging (v.ger.): 利用/槓桿',
+                    'Safeguard (v.): 保護/捍衛', 'Ecosystem (n.): 生態系統', 'Vertical autonomy (n.phr.): 垂直自主', 'Philosophy (n.): 哲學/理念',
+                    'Pragmatic (adj.): 務實的', 'Collaboration (n.): 協作', 'Departure from (phr.): 背離/與...不同', 'Integration (n.): 整合',
+                    'Parameters (n.): 參數', 'Architecture (n.): 架構', 'Active devices (n.phr.): 活躍裝置', 'Customized (adj.): 客製化的',
+                    'Inception (n.): 開始/成立', 'Differentiator (n.): 區分因素', 'Preemptive (adj.): 先發制人的', 'Backlog (n.): 積壓',
+                    'Sovereignty (n.): 主權', 'Integrity (n.): 完整性', 'Verification (n.): 驗證', 'Discourse (n.): 論述',
+                    'Refining (v.ger.): 提煉', 'Munition (n.): 彈藥', 'Reparation (n.): 賠償', 'Meteorologist (n.): 氣象員'
+                ],
+                quiz: [
+                    { q: 'Which Google AI model is Apple reportedly licensing?', options: ['Gemini 1.5', 'Gemini 2.0', 'Gemini 3', 'Grok'], answer: 'Gemini 3' },
+                    { q: 'What is the estimated annual payment from Apple to Google?', options: ['$100 million', '$500 million', '$1 billion', '$10 billion'], answer: '$1 billion' },
+                    { q: 'Why did Apple decide on this strategic pivot?', options: ['To save money', 'Internal models failed 33% of complex queries', 'Google threatened a lawsuit', 'The government mandated it'], answer: 'Internal models failed 33% of complex queries' },
+                    { q: 'How many parameters does the Gemini 3 model mentioned have?', options: ['1 billion', '100 billion', '1.2 trillion', '10 trillion'], answer: '1.2 trillion' },
+                    { q: 'Which Apple architecture will work with Google’s model?', options: ['iCloud Sync', 'Private Cloud Compute', 'MacBook Air', 'Safari Browser'], answer: 'Private Cloud Compute' },
+                    { q: 'How many active devices are in Apple’s ecosystem?', options: ['500 million', '1 billion', 'Over 2 billion', '5 billion'], answer: 'Over 2 billion' },
+                    { q: 'This move is a departure from Apple’s historical ______ ______ philosophy.', options: ['Open source', 'Vertical autonomy', 'Cloud-only', 'Android-based'], answer: 'Vertical autonomy' },
+                    { q: 'What does "obsolescence" mean?', options: ['The state of being useful', 'The state of becoming old-fashioned or no longer useful', 'The state of being expensive', 'A type of engine'], answer: 'The state of becoming old-fashioned or no longer useful' },
+                    { q: 'The term "pragmatic" refers to an approach based on ______.', options: ['Dreams', 'Practical considerations', 'Emotions', 'History only'], answer: 'Practical considerations' },
+                    { q: 'What does "leveraging" mean?', options: ['To lift something heavy', 'To use something to its maximum advantage', 'To lose money', 'To ignore'], answer: 'To use something to its maximum advantage' },
+                    { q: 'A "strategic pivot" means a ______ in strategy.', options: ['Continuation', 'Sharp change or turn', 'Failure', 'Success'], answer: 'Sharp change or turn' },
+                    { q: 'What does "proprietary" mean?', options: ['Free for all', 'Owned by a specific company', 'Publicly available', 'Broken'], answer: 'Owned by a specific company' },
+                    { q: 'Siri is described as being rescued from ______.', options: ['Rain', 'Obsolescence', 'The ocean', 'Robots'], answer: 'Obsolescence' },
+                    { q: 'The word "realignment" implies a ______.', options: ['New division', 'New arrangement or alliance', 'Termination', 'Price increase'], answer: 'New arrangement or alliance' },
+                    { q: 'Apple aims to "safeguard" its ecosystem. What is safeguard?', options: ['To attack', 'To protect', 'To delete', 'To hide'], answer: 'To protect' }
+                ]
+            },
+            'micron-hbm': {
+                title: '美光 HBM 4E 良率突破',
+                english: `Micron HBM 4E Achieves Production Yield Milestone Amid Global AI Squeeze\nMicron Technology announced that its next-generation HBM 4E memory has achieved key yield milestones, positioning it as a primary supplier for the late-2026 server upgrade cycle. As AI models expand in scale, memory bandwidth has become a structural chokepoint, elevating HBM to a strategic asset class within data centers. Micron’s breakthrough diversifies revenue beyond cyclical DRAM and allows it to capture the high-margin “compute premium” demanded by hyperscalers. This development highlights Micron's ability to challenge the SK Hynix-Samsung duopoly in high-end AI memory.`,
+                chinese: `美光（Micron）HBM 4E 良率突破：引領 AI 記憶體架構轉向。美光科技宣布，其下一代 HBM 4E 記憶體已達成關鍵良率里程碑，使其成為 2026 年底伺服器升級週期的主要供應商。隨著 AI 模型規模擴張，記憶體頻寬已成為結構性瓶頸（chokepoint），使 HBM 提升為數據中心內的策略資產類別。美光的突破使營收在週期性的 DRAM 之外實現多元化，並使其能獲取超大規模服務商（hyperscalers）要求的、高毛利的「運算溢價」。此一發展凸顯了美光在高端 AI 記憶體領域挑戰 SK 海力士與三星雙佔局面的能力。`,
+                vocabulary: [
+                    'HBM (High Bandwidth Memory) (n.): 高頻寬記憶體', 'Yield Milestone (n.phr.): 良率里程碑', 'Squeeze (n.): 緊縮/擠壓', 'Primary supplier (n.phr.): 主要供應商',
+                    'Server upgrade cycle (n.phr.): 伺服器升級週期', 'Bandwidth (n.): 頻寬', 'Structural chokepoint (n.phr.): 結構性瓶頸', 'Strategic asset class (n.phr.): 策略資產類別',
+                    'Diversifies (v.): 多元化', 'Cyclical (adj.): 週期性的', 'Capture (v.): 獲取/捕捉', 'High-margin (adj.): 高毛利的',
+                    'Compute premium (n.phr.): 運算溢價', 'Hyperscalers (n.): 超大規模雲端服務商', 'Duopoly (n.): 雙佔/雙頭壟斷', 'High-end (adj.): 高端的',
+                    'Reflect (v.): 反映', 'Instability (n.): 不穩定', 'Tensions (n.): 緊張局勢', 'Strategic (adj.): 戰略的',
+                    'Verification (n.): 驗證', 'Implementation (n.): 執行', 'Mandate (n.): 授權', 'Landslide (n.): 壓倒性勝利',
+                    'Security (n.): 安全', 'Reshape (v.): 重塑', 'Platform (n.): 平台', 'Acquire (v.): 獲得',
+                    'Volatility (n.): 波動', 'Reshoring (v.ger.): 產業回流', 'Trilateral (adj.): 三方的', 'Decisive (adj.): 決定性的'
+                ],
+                quiz: [
+                    { q: 'What type of memory did Micron achieve a yield milestone for?', options: ['DDR4', 'Flash', 'HBM 4E', 'LPDDR6'], answer: 'HBM 4E' },
+                    { q: 'For which year\'s upgrade cycle is Micron positioning itself?', options: ['Late 2025', 'Early 2026', 'Late 2026', '2030'], answer: 'Late 2026' },
+                    { q: 'What has become a "structural chokepoint" as AI models expand?', options: ['CPU speed', 'Memory bandwidth', 'Screen resolution', 'Battery capacity'], answer: 'Memory bandwidth' },
+                    { q: 'What is HBM considered within modern data centers?', options: ['A cheap commodity', 'A strategic asset class', 'A minor accessory', 'A legacy technology'], answer: 'A strategic asset class' },
+                    { q: 'Micron is capturing the high-margin "______ premium" from hyperscalers.', options: ['Labor', 'Compute', 'Shipping', 'Office'], answer: 'Compute' },
+                    { q: 'Which two companies form the "duopoly" that Micron is challenging?', options: ['Intel and AMD', 'Apple and Google', 'SK Hynix and Samsung', 'NVIDIA and TSMC'], answer: 'SK Hynix and Samsung' },
+                    { q: 'The breakthrough diversifies revenue beyond ______ DRAM.', options: ['Cyclical', 'Permanent', 'Slow', 'Hidden'], answer: 'Cyclical' },
+                    { q: 'What does "bandwidth" refer to in computing?', options: ['The weight of a cable', 'The capacity for data transfer', 'The size of a chip', 'The price of a server'], answer: 'The capacity for data transfer' },
+                    { q: 'The term "chokepoint" means a point of ______.', options: ['Expansion', 'Congestion or blockage', 'High speed', 'Freedom'], answer: 'Congestion or blockage' },
+                    { q: 'What is a "hyperscaler"?', options: ['A small startup', 'A massive cloud computing provider', 'A high-speed train', 'A type of solar panel'], answer: 'A massive cloud computing provider' },
+                    { q: 'The term "duopoly" means a market dominated by how many companies?', options: ['One', 'Two', 'Five', 'Ten'], answer: 'Two' },
+                    { q: 'What does "yield" refer to in memory manufacturing?', options: ['The profit margin', 'The percentage of usable products', 'The speed of light', 'The total debt'], answer: 'The percentage of usable products' },
+                    { q: 'HBM stands for ______.', options: ['High Battery Management', 'High Bandwidth Memory', 'Home Building Module', 'Heated Base Machine'], answer: 'High Bandwidth Memory' },
+                    { q: 'The news describes a global AI "______," meaning supply is tight.', options: ['Surplus', 'Squeeze', 'Waste', 'Holiday'], answer: 'Squeeze' },
+                    { q: 'Which company announced the HBM 4E success?', options: ['Samsung', 'Micron', 'NVIDIA', 'TSMC'], answer: 'Micron' }
+                ]
+            },
+            'fed-rates': {
+                title: '聯準會維持利率不變',
+                english: `Fed Holds Rates Steady at 3.5%-3.75%: Political and Data Blackouts Cloud March Outlook\nThe Federal Reserve has paused its rate-cutting trajectory, maintaining benchmark rates at 3.5%–3.75%. Market expectations for a March cut have diminished, particularly amid risks of a U.S. government shutdown. Macroscopically, the “Higher for Longer” regime has institutionalized elevated liquidity yields. Money market funds have surged to approximately $8.2 trillion, reflecting investor preference for stability over equity volatility—creating a persistent liquidity drag on growth-oriented sectors.`,
+                chinese: `聯準會維持利率不變：通膨黏性與政局動盪鞏固「Higher for Longer」。聯準會（Fed）已暫停降息軌跡，將基準利率維持在 3.5%–3.75% 區間。市場對 3 月降息的預期已有所下降，特別是在面臨美國政府關門風險及潛在數據中斷的情況下。從宏觀角度看，「Higher for Longer（長期高利率）」體制已使高流動性收益制度化。貨幣市場基金已飆升至約 8.2 兆美元，反映出投資者比起股市波動更偏好穩定，這對成長導向型產業造成了持續性的流動性拖累。`,
+                vocabulary: [
+                    'Steady (adj.): 穩定的', 'Benchmark rates (n.phr.): 基準利率', 'Rate-cutting trajectory (n.phr.): 降息軌跡', 'Paused (v.pt.): 暫停',
+                    'Diminished (v.pp.): 減少/下降', 'Government shutdown (n.phr.): 政府關門', 'Data blackouts (n.phr.): 數據中斷/封鎖', 'Higher for Longer (phr.): 長期高利率',
+                    'Regime (n.): 體制/制度', 'Institutionalized (v.pp.): 制度化/使成慣例', 'Elevated (adj.): 提高的/處於高位的', 'Liquidity yields (n.phr.): 流動性收益',
+                    'Money market funds (n.phr.): 貨幣市場基金', 'Equity volatility (n.phr.): 股市波動', 'Persistent (adj.): 持續的', 'Liquidity drag (n.phr.): 流動性拖累',
+                    'Growth-oriented (adj.): 成長導向的', 'Sectors (n.): 領域/產業', 'Surged (v.pt.): 飆升', 'Reflecting (v.ger.): 反映',
+                    'Trajectory (n.): 軌道/路徑', 'Cloud (v.): 遮蔽/使模糊', 'Expectation (n.): 預期', 'Shutdown (n.): 停工/關閉',
+                    'Institutional (adj.): 機構的', 'Volatility (n.): 揮發性/不穩定', 'Liquidity (n.): 流動性', 'Drag (n.): 拖累',
+                    'Persistent (adj.): 執著的/持續的', 'Benchmark (n.): 基準', 'Blackout (n.): 斷電/消息封鎖', 'Stable (adj.): 穩定的'
+                ],
+                quiz: [
+                    { q: 'What is the current Federal Reserve benchmark rate range?', options: ['1.0%-1.5%', '2.5%-2.75%', '3.5%-3.75%', '5.0%-5.25%'], answer: '3.5%-3.75%' },
+                    { q: 'What did the Fed do with its rate-cutting trajectory?', options: ['Accelerated it', 'Paused it', 'Reversed it to hikes', 'Ended it forever'], answer: 'Paused it' },
+                    { q: 'Market expectations for a ______ cut have diminished.', options: ['January', 'February', 'March', 'June'], answer: 'March' },
+                    { q: 'What political risk is mentioned as affecting the outlook?', options: ['Election fraud', 'A U.S. government shutdown', 'A new tax law', 'Trade war with UK'], answer: 'A U.S. government shutdown' },
+                    { q: 'The term "Higher for Longer" refers to what?', options: ['Higher mountains', 'Sustained high interest rates', 'Higher skyscrapers', 'Longer work days'], answer: 'Sustained high interest rates' },
+                    { q: 'How much money is currently in money market funds?', options: ['$1 trillion', '$4.5 trillion', '$8.2 trillion', '$20 trillion'], answer: '$8.2 trillion' },
+                    { q: 'Investors currently prefer stability over what?', options: ['Equity volatility', 'Free food', 'New technology', 'Gold'], answer: 'Equity volatility' },
+                    { q: 'The current regime has caused a "liquidity drag" on which sectors?', options: ['Farming', 'Growth-oriented sectors', 'Energy only', 'Retail'], answer: 'Growth-oriented sectors' },
+                    { q: 'What does "trajectory" mean?', options: ['A type of car', 'The path followed by a moving object/process', 'A heavy box', 'A secret plan'], answer: 'The path followed by a moving object/process' },
+                    { q: 'The word "diminished" is a synonym for ______.', options: ['Increased', 'Reduced or decreased', 'Fixed', 'Hidden'], answer: 'Reduced or decreased' },
+                    { q: 'What is a "benchmark" rate?', options: ['The fastest speed', 'A standard or reference rate', 'The highest tax', 'A type of bank account'], answer: 'A standard or reference rate' },
+                    { q: 'A "data blackout" refers to a ______ of data.', options: ['Surplus', 'Suppression or lack', 'Celebration', 'Coloring'], answer: 'Suppression or lack' },
+                    { q: 'What does "liquidity" mean in finance?', options: ['Liquid water', 'The availability of liquid assets/cash', 'High temperature', 'A type of gas'], answer: 'The availability of liquid assets/cash' },
+                    { q: 'The Fed is the ______ of the United States.', options: ['Treasury', 'Central bank', 'Supreme Court', 'Parliament'], answer: 'Central bank' },
+                    { q: 'Has the Fed recently cut rates according to the text?', options: ['Yes', 'No, it paused the trajectory', 'Only by 5%', 'The text doesn\'t say'], answer: 'No, it paused the trajectory' }
+                ]
+            },
+            'blackrock-markets': {
+                title: '貝萊德預見「長久韌性」回報',
+                english: `Money Markets as a New Status Quo: Investors Embrace "Benevolent Ordinary" Yields\nAnalysts from BlackRock and Federated Hermes note that money market assets continue to expand despite prior rate cuts, reaching historic highs. This capital allocation shift suggests that the anticipated rotation back into equities has stalled. For 2026, only companies demonstrating clear earnings validation and durable cash flow are likely to attract capital away from the safety of the $8 trillion liquidity pool, reinforcing a selective and fundamentals-driven market environment.`,
+                chinese: `貝萊德預見「長久韌性」回報：貨幣市場成為新常態。來自貝萊德（BlackRock）與 Federated Hermes 的分析師指出，儘管先前曾降息，貨幣市場資產仍持續擴張，並達到歷史新高。這種資本配置的轉移顯示，預期中的「資金輪動回股市」已經停滯。對於 2026 年而言，只有展現出明確獲利證實與持久現金流的公司，才有可能吸引資金離開這價值 8 兆美元的流動性安全池，進而強化了一個更具選擇性且由基本面驅動的市場環境。`,
+                vocabulary: [
+                    'Status Quo (n.): 現狀', 'Embrace (v.): 擁抱/接受', 'Benevolent Ordinary (n.phr.): 仁慈的普通 (指穩定的低風險收益)', 'Yields (n.): 收益/產出',
+                    'Capital allocation (n.phr.): 資本配置', 'Rotation (n.): 輪動/旋轉', 'Equities (n.): 股票/股權', 'Stalled (v.pp.): 停滯/熄火',
+                    'Earnings validation (n.phr.): 獲利證實', 'Durable cash flow (n.phr.): 持久的現金流', 'Liquidity pool (n.phr.): 流動性資金池', 'Selective (adj.): 有選擇性的',
+                    'Fundamentals-driven (adj.): 基本面驅動的', 'BlackRock (n. proper): 貝萊德 (全球最大資管公司)', 'Federated Hermes (n. proper): 聯博 (資管公司)', 'Validation (n.): 驗證',
+                    'Prior (adj.): 先前的', 'Capital (n.): 資本', 'Allocation (n.): 分配', 'Equities (n.): 股票/權益',
+                    'Validation (n.): 批准/確證', 'Durable (adj.): 耐用的/持久的', 'Fundamentals (n.): 基本面', 'Environment (n.): 環境',
+                    'Constraint (n.): 限制', 'Autonomous (adj.): 自主的', 'Deployment (n.): 部署', 'Efficiency (n.): 效率',
+                    'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Selective (adj.): 選擇性的'
+                ],
+                quiz: [
+                    { q: 'Which major investment firm is mentioned in the headline?', options: ['Goldman Sachs', 'BlackRock', 'Morgan Stanley', 'NVIDIA'], answer: 'BlackRock' },
+                    { q: 'What is becoming the "New Status Quo" in the market?', options: ['Cryptocurrency', 'Money Markets', 'Real Estate', 'Oil'], answer: 'Money Markets' },
+                    { q: 'What shift in capital allocation is suggested?', options: ['Shift to gold', 'Anticipated rotation into equities has stalled', 'Moving everything to Japan', 'Stopping all investments'], answer: 'Anticipated rotation into equities has stalled' },
+                    { q: 'How large is the "liquidity pool" mentioned?', options: ['$1 trillion', '$5 trillion', '$8 trillion', '$20 trillion'], answer: '$8 trillion' },
+                    { q: 'What two qualities must companies demonstrate to attract capital in 2026?', options: ['New logos and many workers', 'Clear earnings validation and durable cash flow', 'Low prices and fast shipping', 'Famous CEOs and high debt'], answer: 'Clear earnings validation and durable cash flow' },
+                    { q: 'The current market environment is described as ______.', options: ['Random and fast', 'Selective and fundamentals-driven', 'Chaotic and unstable', 'Closed for holidays'], answer: 'Selective and fundamentals-driven' },
+                    { q: 'What does "status quo" mean?', options: ['A type of computer', 'The existing state of affairs', 'A new law', 'A sudden change'], answer: 'The existing state of affairs' },
+                    { q: 'The term "equities" is a synonym for ______.', options: ['Bonds', 'Stocks', 'Cash', 'Real estate'], answer: 'Stocks' },
+                    { q: 'The rotation back into equities has "stalled," meaning it ______.', options: ['Accelerated', 'Stopped or slowed down', 'Finished successfully', 'Changed direction'], answer: 'Stopped or slowed down' },
+                    { q: 'What is "durable cash flow"?', options: ['Money that disappears quickly', 'Consistent and lasting movement of money into a business', 'Fake money', 'Government taxes'], answer: 'Consistent and lasting movement of money into a business' },
+                    { q: 'The word "embrace" in this context means ______.', options: ['To hug a person', 'To accept or support an idea willingly', 'To reject', 'To hide'], answer: 'To accept or support an idea willingly' },
+                    { q: 'Investors are looking for "______ validation" of success.', options: ['Color', 'Earnings', 'Name', 'Social'], answer: 'Earnings' },
+                    { q: 'A "selective" market means investors are ______.', options: ['Buying everything', 'Carefully choosing only certain assets', 'Not buying anything', 'Confused'], answer: 'Carefully choosing only certain assets' },
+                    { q: 'BlackRock is a global leader in what field?', options: ['Semiconductors', 'Asset management', 'Space travel', 'Agriculture'], answer: 'Asset management' },
+                    { q: 'The yields are described as "benevolent ordinary," implying they are ______.', options: ['Extremely high and risky', 'Reasonable and stable', 'Zero', 'Negative'], answer: 'Reasonable and stable' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (15 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
