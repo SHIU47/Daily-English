@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 4 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 4 日：貨幣主權、資產重組與能源衝擊</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Focusing on Geopolitics and Tech Frontiers.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-focus': {
+                title: '台灣本地焦點',
+                english: `[1] Leading State Banks Evaluate Cross-Border "Compute-Settlement" for CBDC\nFollowing pilot outcomes from Project mBridge, Taiwan’s leading state-owned lenders — Bank of Taiwan and Mega International Commercial Bank — are assessing wholesale CBDC integration for real-time settlement of high-value semiconductor and ICT exports. Macroscopically, adopting a DLT-based settlement framework could reduce reliance on correspondent banking networks, reinforcing transactional sovereignty in cross-border chip trade.\n\n[2] Wealth Concentration: 124,000 Taiwanese Surpass NT$100M in Assets\nA newly released domestic wealth survey shows 124,000 Taiwanese individuals now hold over NT$100 million in investable assets, largely driven by sustained gains in semiconductor and AI equities. Macroscopically, this high-net-worth cohort is accelerating growth in private banking, but the “K-shaped” divergence intensifies policy pressure on housing affordability.\n\n[3] MOFA Confirms Final Evacuation of Stranded Citizens Amid Middle East Conflict\nTaiwan’s Ministry of Foreign Affairs confirmed that the final group of Taiwanese citizens stranded in Israel and Iran has safely reached Jordan. The successful evacuation underscores Taiwan’s independent diplomatic crisis response capability amid escalating geopolitical volatility.`,
+                chinese: `【1】台銀與兆豐銀評估「數位新台幣」跨境算力支付與結算\n繼「多邊央行數位貨幣橋（Project mBridge）」試點成果後，台灣兩大公股銀行——台灣銀行與兆豐銀行——正評估批發型中央銀行數位貨幣（CBDC）的整合，用於高價值半導體與資通訊（ICT）出口的即時結算。從宏觀角度看，採用基於分散式帳本技術（DLT）的結算框架，可減少對代理行網路的依賴，使台灣核心出口產業免受匯率波動與金融瓶頸的影響，同時強化跨境晶片貿易的「交易主權」。\n\n【2】台灣資本市場新氣象：12.4 萬人擁有億元以上資產\n一份最新公布的國內財富調查顯示，全台已有 12.4 萬人持有超過 1 億元新台幣的可投資資產，這主要受到半導體與 AI 相關股票持續上漲的推動。科技霸權帶來的資本增值週期從結構上重塑了資產分配。從宏觀角度看，這一高淨值客群正加速私人銀行與多元化投資的成長。然而，「K 型」分化也加劇了住房負擔能力及社會基礎建設的政策壓力，特別是對於在通膨房價中掙扎的 22 至 35 歲專業人士。\n\n【3】外交部通報：受中東衝突影響之最後一批滯留台民平安撤離\n台灣外交部（MOFA）證實，最後一批滯留在以色列與伊朗的台灣公民已安全抵達約旦。這次成功的撤離行動凸顯了台灣獨立的外交危機應對能力。從宏觀角度看，這強化了在地緣政治衝突升級時的制度韌性，同時突顯了中東局勢動盪如何直接影響與台灣出口經濟相關的航線、貨運保險及全球物流鏈。`,
+                vocabulary: [
+                    'CBDC (Central Bank Digital Currency) (n.): 央行數位貨幣', 'Wholesale (adj.): 批發型/大規模的', 'Settlement (n.): 結算/清算', 'ICT (Information and Communication Technology) (n.): 資通訊技術',
+                    'DLT (Distributed Ledger Technology) (n.): 分散式帳本技術', 'Correspondent banking (n.phr.): 代理行業務', 'Transactional sovereignty (n.phr.): 交易主權', 'FX volatility (n.phr.): 匯率波動',
+                    'Wealth concentration (n.phr.): 財富集中', 'Investable assets (n.phr.): 可投資資產', 'Equities (n.): 股票/股權', 'Capital appreciation (n.phr.): 資本增值',
+                    'High-net-worth cohort (n.phr.): 高淨值族群', 'Structured products (n.phr.): 衍生性/結構型產品', 'K-shaped divergence (n.phr.): K 型分化', 'Housing affordability (n.phr.): 住房負擔能力',
+                    'Evacuation (n.): 撤離/撤僑', 'Stranded citizens (n.phr.): 滯留公民', 'Diplomatic crisis response (n.phr.): 外交危機應對', 'Geopolitical volatility (n.phr.): 地緣政治波動',
+                    'Institutional resilience (n.phr.): 制度韌性', 'Logistics chains (n.phr.): 物流鏈', 'Sustained gains (n.phr.): 持續獲利', 'Inflated real estate (n.phr.): 膨脹的房地產',
+                    'Sovereign (adj.): 主權的', 'Autonomous (adj.): 自主的', 'Disruption (n.): 中斷/干擾', 'Redundancy (n.): 備援/冗餘',
+                    'Allocation (n.): 分配', 'Hyperscale (adj.): 超大規模的', 'Benchmark (n.): 基準', 'Disinflation (n.): 去通膨化'
+                ],
+                quiz: [
+                    { q: 'Which two Taiwanese state-owned banks are assessing CBDC integration?', options: ['Bank of Taiwan and Mega Bank', 'E.SUN and Cathay', 'Fubon and CTBC', 'Land Bank and First Bank'], answer: 'Bank of Taiwan and Mega Bank' },
+                    { q: 'What is the primary goal of the DLT-based settlement framework?', options: ['To increase taxes', 'To reduce reliance on correspondent banking networks', 'To slow down exports', 'To replace paper money in local shops'], answer: 'To reduce reliance on correspondent banking networks' },
+                    { q: 'How many Taiwanese individuals hold over NT$100M in assets?', options: ['12,400', '124,000', '1,240,000', '50,000'], answer: '124,000' },
+                    { q: 'What industry is the main driver of wealth concentration in Taiwan?', options: ['Agriculture', 'Tourism', 'Semiconductor and AI', 'Textiles'], answer: 'Semiconductor and AI' },
+                    { q: 'What does "K-shaped divergence" refer to in the text?', options: ['The shape of new buildings', 'The gap between different economic growth paths', 'A type of stock market graph only', 'The layout of the MRT'], answer: 'The gap between different economic growth paths' },
+                    { q: 'Where did the final group of stranded citizens arrive safely?', options: ['Tel Aviv', 'Tehran', 'Jordan', 'New York'], answer: 'Jordan' },
+                    { q: 'The successful evacuation underscores Taiwan’s ______ response capability.', options: ['Military', 'Independent diplomatic crisis', 'Agricultural', 'Financial'], answer: 'Independent diplomatic crisis' },
+                    { q: 'CBDC stands for ______ Bank Digital Currency.', options: ['Commercial', 'Central', 'Capital', 'Citizens'], answer: 'Central' },
+                    { q: 'What technical term is used for the logic of cross-border chip trade security?', options: ['Transactional sovereignty', 'Data encryption', 'Cloud backup', 'Shipping insurance'], answer: 'Transactional sovereignty' },
+                    { q: 'The survey shows policy pressure is intensifying on which area?', options: ['Education', 'Housing affordability', 'Space exploration', 'Car manufacturing'], answer: 'Housing affordability' },
+                    { q: 'Which professional group is specifically mentioned as navigating inflated real estate markets?', options: ['Retirees', 'Farming experts', 'Professionals aged 22–35', 'School students'], answer: 'Professionals aged 22–35' },
+                    { q: 'The term "wholesale" in finance usually refers to ______.', options: ['Small retail sales', 'Transactions between financial institutions', 'Free gifts', 'Taxes on imports'], answer: 'Transactions between financial institutions' },
+                    { q: 'MOFA stands for Ministry of ______ Affairs.', options: ['Financial', 'Foreign', 'Forest', 'Future'], answer: 'Foreign' },
+                    { q: 'Geopolitical instability in the Middle East impacts which logistics factor?', options: ['Library hours', 'Shipping insurance and aviation routes', 'Local park maintenance', 'Weather reports'], answer: 'Shipping insurance and aviation routes' },
+                    { q: 'What does "DLT" stand for?', options: ['Digital Low Tech', 'Distributed Ledger Technology', 'Direct Line Transfer', 'Dual Logic Tool'], answer: 'Distributed Ledger Technology' }
+                ]
+            },
+            'epic-fury': {
+                title: '中東安全新常態',
+                english: `Aftermath of "Operation Epic Fury": The New Normal for Maritime Security\nFollowing coordinated strikes by the United States and Israel on Iranian military infrastructure, the region has entered sustained high-alert status. Iran’s Islamic Revolutionary Guard Corps (IRGC) has threatened commercial shipping through the Strait of Hormuz — a corridor responsible for roughly 20% of global oil transit. Macroscopically, the crisis has embedded a structural “geopolitical risk premium” into global energy pricing. The shift from containment to active disruption is forcing shipping insurers and energy-importing nations to reassess supply chain redundancy and maritime security frameworks.`,
+                chinese: `美以對伊朗「史詩憤怒行動」後續：紅海與荷姆茲海峽之新常態\n在美國與以色列對伊朗軍事基礎設施進行協同打擊後，該地區已進入持續的高級警戒狀態。伊朗伊斯蘭革命衛隊（IRGC）威脅將封鎖通過荷姆茲海峽（Strait of Hormuz）的商業航運，該通道負責全球約 20% 的石油運輸。從宏觀角度看，這場危機已將結構性的「地緣政治風險溢價」植入全球能源定價。從「圍堵（containment）」向「主動中斷（active disruption）」的轉變，正迫使航運保險公司與能源進口國重新評估供應鏈的備援性與海事安全框架。`,
+                vocabulary: [
+                    'Operation Epic Fury (n. proper): 史詩憤怒行動', 'Aftermath (n.): 後果/餘波', 'Coordinated strikes (n.phr.): 協同打擊', 'Infrastructure (n.): 基礎設施',
+                    'High-alert status (n.phr.): 高級警戒狀態', 'IRGC (Islamic Revolutionary Guard Corps) (n. proper): 伊斯蘭革命衛隊', 'Strait of Hormuz (n. proper): 荷姆茲海峽', 'Oil transit (n.phr.): 石油運輸',
+                    'Geopolitical risk premium (n.phr.): 地緣政治風險溢價', 'Energy pricing (n.phr.): 能源定價', 'Containment (n.): 圍堵/遏制', 'Active disruption (n.phr.): 主動中斷/干擾',
+                    'Shipping insurers (n.phr.): 航運保險人', 'Redundancy (n.): 備援/冗餘', 'Maritime security frameworks (n.phr.): 海事安全框架', 'Corridor (n.): 走廊/通道',
+                    'Sustained (adj.): 持續的', 'Commercial shipping (n.phr.): 商業航運', 'Embedded (v.pp.): 嵌入/植入', 'Structural (adj.): 結構性的',
+                    'Recalibration (n.): 重新校準', 'Instability (n.): 不穩定', 'Volatility (n.): 波動性', 'Disruption (n.): 擾亂/中斷',
+                    'Premium (n.): 溢價', 'Transit (n.): 運輸', 'Sovereignty (n.): 主權', 'Integrity (n.): 完整性',
+                    'Neutral (adj.): 中立的', 'Fragile (adj.): 脆弱的', 'Headwinds (n.): 逆風/阻力', 'Prerequisite (n.): 前提條件'
+                ],
+                quiz: [
+                    { q: 'What is the name of the operation mentioned in the text?', options: ['Desert Storm', 'Epic Fury', 'Red Sea Guardian', 'Northern Strike'], answer: 'Epic Fury' },
+                    { q: 'Which two countries conducted the coordinated strikes?', options: ['USA and UK', 'USA and Israel', 'Israel and Saudi Arabia', 'France and Germany'], answer: 'USA and Israel' },
+                    { q: 'What percentage of global oil transit passes through the Strait of Hormuz?', options: ['5%', '10%', '20%', '50%'], answer: '20%' },
+                    { q: 'Who has threatened commercial shipping in the region?', options: ['The UN', 'The IRGC', 'The US Navy', 'Private pirates'], answer: 'The IRGC' },
+                    { q: 'The crisis has added a "geopolitical risk ______" to energy prices.', options: ['Discount', 'Premium', 'Tax', 'Subsidy'], answer: 'Premium' },
+                    { q: 'The shift is described as moving from "containment" to what?', options: ['Total peace', 'Active disruption', 'Economic aid', 'Silence'], answer: 'Active disruption' },
+                    { q: 'Who is being forced to reassess supply chain redundancy?', options: ['Tech startups', 'Shipping insurers and energy-importing nations', 'Local farmers', 'Space agencies'], answer: 'Shipping insurers and energy-importing nations' },
+                    { q: 'The IRGC stands for ______ Revolutionary Guard Corps.', options: ['International', 'Islamic', 'Internal', 'Indian'], answer: 'Islamic' },
+                    { q: 'A "geopolitical risk premium" means prices are ______.', options: ['Lower due to stability', 'Higher due to political instability', 'Exactly the same', 'Fixed by the government'], answer: 'Higher due to political instability' },
+                    { q: 'The term "corridor" refers to a ______.', options: ['Type of weapon', 'Geographic route for transport', 'Bank account', 'New law'], answer: 'Geographic route for transport' },
+                    { q: 'What does "aftermath" mean?', options: ['Before an event', 'The consequences or results of a significant event', 'A mathematical formula', 'A type of ship'], answer: 'The consequences or results of a significant event' },
+                    { q: 'What kind of status has the region entered?', options: ['Peaceful', 'Sustained high-alert', 'Low-risk', 'Holiday'], answer: 'Sustained high-alert' },
+                    { q: 'Energy-importing nations are reassessing their "redundancy." What is redundancy?', options: ['Speed', 'Backup systems or excess capacity for safety', 'Low cost', 'Lack of workers'], answer: 'Backup systems or excess capacity for safety' },
+                    { q: 'Hormuz is a "Strait." What is a strait?', options: ['A large ocean', 'A narrow passage of water connecting two seas', 'A high mountain', 'A wide desert'], answer: 'A narrow passage of water connecting two seas' },
+                    { q: 'Is the crisis considered "structural" or "temporary" according to the text?', options: ['Structural', 'Temporary', 'Minor', 'Unknown'], answer: 'Structural' }
+                ]
+            },
+            'spacex-starship': {
+                title: 'SpaceX 星艦回收里程碑',
+                english: `SpaceX Starship V3 "Launch-Mount Catch" Milestone: Defining the Future of Orbital Logistics\nSpaceX has reportedly achieved a 90% booster recovery rate for its Starship V3 system using the “Mechazilla” launch-mount catch mechanism. This marks a structural transition from partially reusable systems to rapid full-cycle reusability. Macroscopically, dramatically lower launch costs could make orbital data centers and in-space manufacturing commercially viable. By 2030, suborbital cargo transport could emerge as a disruptive alternative for time-sensitive freight.`,
+                chinese: `SpaceX 星艦（Starship）V3 「發射台回收」成功率突破 90%\nSpaceX 的 Starship V3 系統利用「機械拉（Mechazilla）」發射架回收機制，據報導已達成 90% 的助推器回收成功率。這標誌著從「部分可重複使用」系統向「快速全週期可重複使用」的結構性轉變。從宏觀角度看，大幅降低的發射成本可能使軌道數據中心、太空製造在商業上變得可行。到 2030 年，亞軌道貨運（suborbital cargo transport）可能成為高價值、具時效性貨運的顛覆性替代方案。`,
+                vocabulary: [
+                    'Starship V3 (n. proper): 星艦 V3 版', 'Launch-Mount Catch (n.phr.): 發射台捕捉/回收', 'Booster recovery rate (n.phr.): 助推器回收率', 'Mechazilla (n. proper): 機械拉 (SpaceX 回收臂)',
+                    'Structural transition (n.phr.): 結構性轉變', 'Full-cycle reusability (n.phr.): 全週期可重複使用性', 'Orbital data centers (n.phr.): 軌道數據中心', 'In-space manufacturing (n.phr.): 太空製造',
+                    'Commercially viable (adj.phr.): 商業可行的', 'Suborbital cargo transport (n.phr.): 亞軌道貨運', 'Disruptive alternative (n.phr.): 顛覆性替代方案', 'Time-sensitive freight (n.phr.): 具時效性的貨物',
+                    'Dramatically (adv.): 大幅地/劇烈地', 'Heavy-lift logistics (n.phr.): 重型物流', 'Igniting (v.ger.): 引發/點燃', 'Orbital Gold Rush (n.phr.): 軌道淘金熱',
+                    'Reusability (n.): 可重複使用性', 'Booster (n.): 助推器', 'Launch (v./n.): 發射', 'Mechanism (n.): 機制',
+                    'Alternative (n.): 替代品', 'Transition (n.): 轉型', 'Viability (n.): 可行性', 'Freight (n.): 貨運',
+                    'Suborbital (adj.): 亞軌道的', 'Cargo (n.): 貨物', 'Milestone (n.): 里程碑', 'Sustained (adj.): 持續的'
+                ],
+                quiz: [
+                    { q: 'What is the name of the SpaceX recovery mechanism?', options: ['Star-Catch', 'Mechazilla', 'Falcon-Grab', 'Iron Arm'], answer: 'Mechazilla' },
+                    { q: 'What is the reported booster recovery rate for Starship V3?', options: ['50%', '75%', '90%', '100%'], answer: '90%' },
+                    { q: 'This marks a transition from partially reusable to ______ reusable.', options: ['Never', 'Rapid full-cycle', 'Slowly', 'Manual'], answer: 'Rapid full-cycle' },
+                    { q: 'What kind of facilities could become "commercially viable" due to lower costs?', options: ['Underwater parks', 'Orbital data centers and in-space manufacturing', 'Fast food shops', 'Libraries'], answer: 'Orbital data centers and in-space manufacturing' },
+                    { q: 'When could suborbital cargo transport emerge as a major alternative?', options: ['2026', '2027', '2030', '2050'], answer: '2030' },
+                    { q: 'For what kind of freight would suborbital transport be used?', options: ['Cheap sand', 'Time-sensitive and high-value freight', 'Old books', 'Heavy water only'], answer: 'Time-sensitive and high-value freight' },
+                    { q: 'Lower launch costs are described as having changed ______.', options: ['Dramatically', 'Slightly', 'Not at all', 'Only in Florida'], answer: 'Dramatically' },
+                    { q: 'The term "Orbital" refers to things in ______.', options: ['The ocean', 'Space orbit', 'Underground', 'A city street'], answer: 'Space orbit' },
+                    { q: 'What does "commercially viable" mean?', options: ['Illegal to sell', 'Capable of making a profit in a business sense', 'Free for everyone', 'Too expensive to use'], answer: 'Capable of making a profit in a business sense' },
+                    { q: 'What is a "booster" in a rocket system?', options: ['A type of fuel', 'The first stage that provides initial thrust', 'A radio antenna', 'A pilot\'s seat'], answer: 'The first stage that provides initial thrust' },
+                    { q: 'The word "disruptive" in business means ______.', options: ['Boring', 'Changing an industry significantly and making old ways obsolete', 'Quiet and calm', 'Broken and useless'], answer: 'Changing an industry significantly and making old ways obsolete' },
+                    { q: 'What is "freight"?', options: ['A scary feeling', 'Goods transported in bulk by truck, ship, or aircraft', 'A type of energy', 'A space station'], answer: 'Goods transported in bulk by truck, ship, or aircraft' },
+                    { q: 'SpaceX is achieving "full-cycle ______."', options: ['Loss', 'Reusability', 'Destruction', 'Isolation'], answer: 'Reusability' },
+                    { q: 'The term "suborbital" means the flight does not ______.', options: ['Use fuel', 'Carry people', 'Reach a full orbit around Earth', 'Fly high'], answer: 'Reach a full orbit around Earth' },
+                    { q: 'What is the "launch-mount" catch mechanism?', options: ['Catching the booster on the ground arm', 'Landing in the water', 'A giant net', 'Using a parachute'], answer: 'Catching the booster on the ground arm' }
+                ]
+            },
+            'micron-hbm4': {
+                title: '美光 HBM4 戰略分配',
+                english: `Micron Confirms 2026 HBM4 Capacity Fully Allocated: The Strategic Memory Squeeze\nMicron Technology confirmed that its entire 2026 HBM4 production capacity has been pre-allocated to three hyperscale clients. The move reflects a broader transformation of advanced memory from cyclical commodity to strategic infrastructure asset. Macroscopically, while this secures Micron’s margin visibility, it also creates a “compute chokepoint,” raising entry barriers for smaller AI labs unable to secure high-bandwidth memory necessary for trillion-parameter model training.`,
+                chinese: `美光確立 2026 年 HBM4 產能全數分配：記憶體之「戰略物資化」\n美光科技（Micron Technology）證實，其 2026 年所有的 HBM4 產量已被預先分配給三家超大規模（hyperscale）客戶。此舉反映了先進記憶體正從傳統的週期性大宗商品，轉型為「策略性基礎設施資產」。從宏觀角度看，這雖然確保了美光的利潤可見性，但也造成了「運算瓶頸（compute chokepoint）」，提高了小型 AI 實驗室的准入門檻，因為他們將無法取得訓練兆級參數模型所需的關鍵高頻寬記憶體。`,
+                vocabulary: [
+                    'HBM4 (High Bandwidth Memory 4) (n. proper): 第四代高頻寬記憶體', 'Fully Allocated (adj.phr.): 全數分配', 'Memory Squeeze (n.phr.): 記憶體擠壓/緊縮', 'Hyperscale clients (n.phr.): 超大規模客戶',
+                    'Cyclical commodity (n.phr.): 週期性大宗商品', 'Infrastructure asset (n.phr.): 基礎設施資產', 'Margin visibility (n.phr.): 利潤可見性', 'Compute chokepoint (n.phr.): 運算瓶頸',
+                    'Entry barriers (n.phr.): 准入門檻/障礙', 'Trillion-parameter model (n.phr.): 兆級參數模型', 'High-bandwidth (adj.): 高頻寬的', 'Production capacity (n.phr.): 產能',
+                    'Pre-allocated (v.pp.): 預先分配的', 'Transformation (n.): 轉型', 'Secures (v.): 確保/獲得', 'Visibility (n.): 可見性',
+                    'Chokepoint (n.): 瓶頸/阻塞點', 'Commodity (n.): 商品', 'Strategic (adj.): 戰略的', 'Constraint (n.): 限制',
+                    'Autonomous (adj.): 自主的', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Sovereignty (n.): 主權', 'Integrity (n.): 完整性',
+                    'Benchmark (n.): 基準', 'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件', 'Refining (v.ger.): 提煉'
+                ],
+                quiz: [
+                    { q: 'For which year is Micron\'s HBM4 capacity already fully allocated?', options: ['2024', '2025', '2026', '2030'], answer: '2026' },
+                    { q: 'How many hyperscale clients have secured the HBM4 capacity?', options: ['One', 'Three', 'Ten', 'All of them'], answer: 'Three' },
+                    { q: 'Advanced memory is shifting from a cyclical commodity to what?', options: ['A free service', 'A strategic infrastructure asset', 'A type of toy', 'Waste material'], answer: 'A strategic infrastructure asset' },
+                    { q: 'What does "margin visibility" refer to for Micron?', options: ['Predictable profit levels', 'Clear windows in the office', 'Better satellite cameras', 'Lower tax rates'], answer: 'Predictable profit levels' },
+                    { q: 'What problem does the pre-allocation create for smaller AI labs?', options: ['High electricity prices', 'A "compute chokepoint" and higher entry barriers', 'Lack of office space', 'Too many employees'], answer: 'A "compute chokepoint" and higher entry barriers' },
+                    { q: 'What kind of models require the high-bandwidth memory Micron produces?', options: ['Trillion-parameter AI models', 'Simple weather models', 'Small smartphone apps', 'Paper airplanes'], answer: 'Trillion-parameter AI models' },
+                    { q: 'The term "HBM" stands for ______.', options: ['High Battery Mode', 'High Bandwidth Memory', 'Human Brain Matrix', 'Heavy Building Module'], answer: 'High Bandwidth Memory' },
+                    { q: 'What is a "hyperscaler"?', options: ['A small startup', 'A massive cloud provider like Google or Amazon', 'A high-speed train', 'A type of weight scale'], answer: 'A massive cloud provider like Google or Amazon' },
+                    { q: 'The word "allocated" means ______.', options: ['Lost', 'Distributed or assigned for a specific purpose', 'Hiding', 'Sold at a discount'], answer: 'Distributed or assigned for a specific purpose' },
+                    { q: 'A "chokepoint" is a point of ______.', options: ['Growth', 'Congestion or blockage', 'Safety', 'Freedom'], answer: 'Congestion or blockage' },
+                    { q: 'What does "cyclical" mean in the context of commodities?', options: ['Happening in a regular, repeating pattern', 'Linear and straight', 'Unpredictable', 'One-time only'], answer: 'Happening in a regular, repeating pattern' },
+                    { q: 'Micron Technology is a ______ company.', options: ['Car', 'Semiconductor/Memory', 'Clothing', 'Food'], answer: 'Semiconductor/Memory' },
+                    { q: 'What does "secures" mean?', options: ['To lose', 'To obtain or fix firmly', 'To break', 'To ignore'], answer: 'To obtain or fix firmly' },
+                    { q: 'A "parameter" in AI refers to ______.', options: ['A physical part of a computer', 'A variable within a model that is learned from data', 'The price of a server', 'The location of a factory'], answer: 'A variable within a model that is learned from data' },
+                    { q: 'The term "strategic memory squeeze" implies memory is ______.', options: ['Abundant and cheap', 'Scarce and tightly controlled', 'Useless', 'Liquid'], answer: 'Scarce and tightly controlled' }
+                ]
+            },
+            'oil-surge': {
+                title: '原油跳漲與能源衝擊',
+                english: `Brent Crude Surges on Middle-East Turmoil: Strait of Hormuz Risks Target $120\nBrent crude prices surged 13% to a 14-month high of $82 per barrel following tanker attacks near the Strait of Hormuz, with analysts projecting a potential spike toward $120 should disruptions escalate. Macroscopically, the situation represents a supply-side energy shock that threatens to reverse the global disinflation trend. For capital markets, the shift drives defensive rotation into energy-linked assets while compressing margins for airlines and logistics operators — effectively imposing a “growth tax” on energy-importing economies.`,
+                chinese: `布蘭特原油跳漲 13%：荷姆茲海峽局勢引發「1970 年代式」能源衝擊\n在荷姆茲海峽附近發生油輪遭襲擊事件後，布蘭特原油價格飆升 13% 至 82 美元的 14 個月新高。分析師預測，若衝突進一步升級，油價可能飆升至 120 美元。從宏觀角度看，此一局勢代表了典型的「供應端能源衝擊」，威脅到全球「去通膨化（disinflation）」的趨勢。對資本市場而言，這促使資金轉向能源相關資產進行防禦，同時也壓縮了航空公司與物流業者的利潤空間，實際上是對能源進口型經濟體徵收了一種「成長稅」。`,
+                vocabulary: [
+                    'Brent Crude (n. proper): 布蘭特原油', 'Turmoil (n.): 動盪/騷亂', 'Surged (v.pt.): 飆升', 'Tanker attacks (n.phr.): 油輪襲擊',
+                    'Per barrel (phr.): 每桶', 'Spike (v./n.): 激增/突升', 'Disruptions (n.): 中斷/干擾', 'Escalate (v.): 升級',
+                    'Supply-side shock (n.phr.): 供應端衝擊', 'Disinflation trend (n.phr.): 去通膨化趨勢', 'Capital markets (n.phr.): 資本市場', 'Defensive rotation (n.phr.): 防禦性輪動',
+                    'Energy-linked assets (n.phr.): 能源相關資產', 'Compressing margins (phr.): 壓縮利潤/邊際', 'Logistics operators (n.phr.): 物流業者', 'Growth tax (n.phr.): 成長稅',
+                    'Energy-importing (adj.): 能源進口的', 'Price surge (n.phr.): 價格飆升', 'Instability (n.): 不穩定', 'Recalibration (n.): 重新校準',
+                    'Volatility (n.): 波動性', 'Disinflation (n.): 通膨減緩', 'Benchmark (n.): 基準', 'Commodity (n.): 商品',
+                    'Airlines (n.): 航空公司', 'Structural (adj.): 結構性的', 'Inflation (n.): 通膨', 'Asset (n.): 資產',
+                    'Margin (n.): 利潤/邊際', 'Imposing (v.ger.): 徵收/強加', 'Projecting (v.ger.): 預計', 'Potential (adj.): 潛在的'
+                ],
+                quiz: [
+                    { q: 'How much did Brent crude prices surge following the tanker attacks?', options: ['5%', '10%', '13%', '25%'], answer: '13%' },
+                    { q: 'What was the recorded price per barrel of Brent crude?', options: ['$50', '$64', '$82', '$120'], answer: '$82' },
+                    { q: 'Analysts project oil could reach what price if disruptions escalate?', options: ['$85', '$100', '$120', '$200'], answer: '$120' },
+                    { q: 'The situation is described as a ______-side energy shock.', options: ['Demand', 'Supply', 'Government', 'Financial'], answer: 'Supply' },
+                    { q: 'What global economic trend is threatened by rising oil prices?', options: ['Increasing debt', 'Disinflation trend', 'Tourism growth', 'Technology boom'], answer: 'Disinflation trend' },
+                    { q: 'Which sectors are seeing their "margins compressed" (profits reduced)?', options: ['Software and Hardware', 'Airlines and logistics operators', 'Farming and Fishing', 'Arts and Fashion'], answer: 'Airlines and logistics operators' },
+                    { q: 'Investors are rotating into which type of assets for defense?', options: ['Tech stocks', 'Energy-linked assets', 'Real estate', 'Crypto'], answer: 'Energy-linked assets' },
+                    { q: 'The oil surge is effectively acting as a "______ tax" on energy-importing economies.', options: ['Income', 'Growth', 'Sales', 'Luxury'], answer: 'Growth' },
+                    { q: 'The term "turmoil" means a state of ______.', options: ['Peace and quiet', 'Great disturbance, confusion, or uncertainty', 'High profit', 'Fast travel'], answer: 'Great disturbance, confusion, or uncertainty' },
+                    { q: 'What is a "tanker" in this news?', options: ['A military tank', 'A large ship used for transporting liquids in bulk', 'A type of airplane', 'A fuel storage tank on land'], answer: 'A large ship used for transporting liquids in bulk' },
+                    { q: 'The word "surged" means ______.', options: ['Dropped suddenly', 'Rose suddenly and powerfully', 'Stayed exactly the same', 'Vanished'], answer: 'Rose suddenly and powerfully' },
+                    { q: 'What does "disinflation" mean?', options: ['Prices rising very fast', 'A reduction in the rate of inflation', 'Zero prices', 'A type of investment'], answer: 'A reduction in the rate of inflation' },
+                    { q: 'The word "compressing" means ______.', options: ['Expanding', 'Squeezing or flattening by pressure/reducing', 'Fixing', 'Cleaning'], answer: 'Squeezing or flattening by pressure/reducing' },
+                    { q: 'Energy-importing economies refer to countries that ______.', options: ['Sell oil to the world', 'Buy oil from other countries', 'Do not use oil', 'Only use solar power'], answer: 'Buy oil from other countries' },
+                    { q: 'Which strait is mentioned as a risk factor for oil prices?', options: ['Strait of Malacca', 'Strait of Hormuz', 'Strait of Dover', 'Bering Strait'], answer: 'Strait of Hormuz' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-focus'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (15 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1] || ''}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
