@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 5 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 5 日：基建競爭與地緣範式轉移</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. All Daily Updates Integrated.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地科技焦點',
+                english: `[1] Manufacturing PMI Surges to 55.2 on AI Demand: Strongest Expansion in 4 Years\nThe S&P Global Taiwan Manufacturing PMI climbed to 55.2 in February 2026, marking the strongest improvement in operating conditions since late 2021. The surge is driven by rising export orders for advanced semiconductors and AI server components. Macroscopically, this suggests a structural decoupling from broader industrial stagnation.\n\n[2] 360° Mobility Mega Show 2026: Taiwan Targets SDV Supply Chain\nThe Taiwan External Trade Development Council (TAITRA) announced the strategic direction for the 2026 Mobility Show, centered on AI-powered, software-defined vehicle (SDV) architectures. Taiwan aims to position itself as a critical mid-stream technology partner for automakers like Tesla and European OEMs.\n\n[3] TSMC Fab Progress: Arizona and Kumamoto Move Toward 3nm "Gigafab" Status\nTSMC confirmed that equipment installation for its second Arizona fab will begin in mid-2026, targeting 3nm volume production by 2027. Meanwhile, the Kumamoto expansion in Japan has evolved into a $17 billion 3nm initiative. This shift marks the transformation of overseas sites into full-scale “Advanced Logic Clusters.”`,
+                chinese: `【1】2 月製造業 PMI 升至 55.2：AI 與晶片需求引領四年來最強勁擴張\n2026 年 2 月 S&P 全球台灣製造業採購經理人指數（PMI）攀升至 55.2，創下自 2021 年底以來營運狀況最強勁的改善。這一飆升由先進半導體與 AI 伺服器零組件的出口訂單增加所推動。從宏觀角度看，這項擴張顯示台灣高階科技製造業正與整體工業停滯進行結構性脫鉤。\n\n【2】2026 智慧移動大展：台灣佈局軟體定義汽車（SDV）供應鏈\n外貿協會（TAITRA）宣布了 2026 年智慧移動展的戰略方向，核心圍繞在 AI 驅動、軟體定義汽車（SDV）架構。台灣旨在利用半導體與 AI 運算專業知識，將自身定位為特斯拉與歐洲領先 OEM 廠的關鍵中游技術夥伴，形塑自動駕駛平台與次世代智慧座艙系統。\n\n【3】台積電亞利桑那與熊本廠進度更新：邁向 3 奈米「全球巨型晶圓廠」\n台積電證實亞利桑那二廠將於 2026 年中開始安裝設備，目標 2027 年量產 3 奈米。同時，日本熊本廠的擴建已演變為一項價值 170 億美元的 3 奈米計畫。這一轉變標誌著海外據點從試點專案轉型為全規模的「先進邏輯晶片集群」。這項策略降低了過度集中的風險，確保 2028 年前在西方盟友及日本領土內擁有相當比例的先進產能。`,
+                vocabulary: [
+                    'Surges (v.): 飆升', 'Manufacturing PMI (n.phr.): 製造業採購經理人指數', 'Expansion (n.): 擴張', 'Operating conditions (n.phr.): 營運狀況',
+                    'Export orders (n.phr.): 出口訂單', 'Semiconductors (n.): 半導體', 'Server components (n.phr.): 伺服器零組件', 'Macroscopically (adv.): 從宏觀角度',
+                    'Structural decoupling (n.phr.): 結構性脫鉤', 'Industrial stagnation (n.phr.): 工業停滯', 'Input costs (n.phr.): 投入成本', 'Margin compression (n.phr.): 利潤空間壓縮',
+                    'Software-Defined Vehicle (SDV) (n.phr.): 軟體定義汽車', 'Strategic direction (n.phr.): 戰略方向', 'Architectures (n.): 架構', 'Mid-stream (adj.): 中游的',
+                    'Automakers (n.): 汽車製造商', 'OEM (Original Equipment Manufacturer) (n.): 原始設備製造商', 'Expertise (n.): 專業知識', 'Smart cockpit (n.phr.): 智慧座艙',
+                    'Equipment installation (n.phr.): 設備安裝', 'Volume production (n.phr.): 量產', 'Initiative (n.): 計畫/倡議', 'Advanced Logic Clusters (n.phr.): 先進邏輯集群',
+                    'Concentration risk (n.phr.): 集中風險', 'Allied (adj.): 結盟的/盟友的', 'Jurisdictions (n.): 管轄區', 'Evolution (n.): 演進/發展',
+                    'Megashow (n.): 大型展覽', 'Autonomous (adj.): 自主的', 'Hardware stack (n.phr.): 硬體堆棧', 'Milestone (n.): 里程碑'
+                ],
+                quiz: [
+                    { q: 'What was the S&P Global Taiwan Manufacturing PMI in February 2026?', options: ['51.7', '55.2', '58.0', '52.5'], answer: '55.2' },
+                    { q: 'What is the primary driver of the PMI surge?', options: ['Domestic consumption', 'Export orders for semiconductors and AI components', 'Agricultural exports', 'Real estate boom'], answer: 'Export orders for semiconductors and AI components' },
+                    { q: 'What term describes the separation of Taiwan’s tech sector from global industrial stagnation?', options: ['Market integration', 'Structural decoupling', 'Economic dependence', 'Global inflation'], answer: 'Structural decoupling' },
+                    { q: 'What is the main focus of the 360° Mobility Mega Show 2026?', options: ['Gasoline cars', 'Software-defined vehicle (SDV) architectures', 'Bicycle manufacturing', 'Boat logistics'], answer: 'Software-defined vehicle (SDV) architectures' },
+                    { q: 'Taiwan aims to be a ______ technology partner for global automakers.', options: ['Downstream', 'Upstream', 'Mid-stream', 'Final assembly'], answer: 'Mid-stream' },
+                    { q: 'When is TSMC Arizona’s second fab targeting equipment installation?', options: ['Late 2025', 'Early 2026', 'Mid-2026', 'Late 2027'], answer: 'Mid-2026' },
+                    { q: 'What is the total investment amount for the Kumamoto expansion in Japan?', options: ['$1 billion', '$12.2 billion', '$17 billion', '$45 billion'], answer: '$17 billion' },
+                    { q: 'Overseas TSMC sites are transforming into "______ Logic Clusters."', options: ['Simple', 'Advanced', 'Legacy', 'Basic'], answer: 'Advanced' },
+                    { q: 'The shift to overseas production aims to mitigate what kind of risk?', options: ['Concentration risk', 'Market demand risk', 'Software risk', 'Taxes risk'], answer: 'Concentration risk' },
+                    { q: 'What does PMI stand for?', options: ['Private Market Index', 'Purchasing Managers\' Index', 'Product Manufacturing Initiative', 'Public Money Indicator'], answer: 'Purchasing Managers\' Index' },
+                    { q: 'What technology expertise is Taiwan leveraging for the SDV market?', options: ['Textiles', 'Semiconductor and AI compute', 'Farming', 'Oil refining'], answer: 'Semiconductor and AI compute' },
+                    { q: 'What does "margin compression" mean?', options: ['Rising profits', 'Increasing sales', 'Reduction in profit margins due to costs', 'Smaller chip sizes'], answer: 'Reduction in profit margins due to costs' },
+                    { q: 'Which two countries/regions are hosting TSMC\'s new 3nm initiatives mentioned?', options: ['USA and Germany', 'Arizona (USA) and Kumamoto (Japan)', 'Taiwan and China', 'Japan and Europe'], answer: 'Arizona (USA) and Kumamoto (Japan)' },
+                    { q: 'By what year does TSMC target 3nm volume production in Arizona?', options: ['2025', '2026', '2027', '2030'], answer: '2027' },
+                    { q: 'The term "Gigafab" implies what about the manufacturing site?', options: ['It is a small laboratory', 'A massive-scale manufacturing facility', 'It produces only toys', 'It is located underwater'], answer: 'A massive-scale manufacturing facility' }
+                ]
+            },
+            'paradigm-shift': {
+                title: '中東地緣政治範式轉移',
+                english: `Following coordinated military strikes by the United States and Israel on Iranian infrastructure, the regional balance has shifted from containment to active disruption. Warnings from the United Nations highlight concerns over humanitarian and legal implications. Macroscopically, the potential emergence of a “proxy vacuum” may intensify regional power struggles, potentially requiring sustained Western military engagement and diverting strategic resources from the Indo-Pacific theater. This aftermath of "Operation Epic Fury" represents a historic paradigm shift in how Western powers manage regional threats.`,
+                chinese: `美以對伊朗「史詩憤怒行動」後續：中東地緣政治之範式轉移\n在美國與以色列針對伊朗基礎設施進行協同軍事打擊後，區域平衡已從「圍堵（containment）」轉向「主動瓦解（active disruption）」。聯合國發出警告，強調了對人道與法律後果的擔憂。從宏觀角度看，「代理人真空（proxy vacuum）」的潛在出現可能會加劇區域權力鬥爭，可能需要西方持續的軍事介入，並從印太戰區轉移策略資源。這次行動後的局勢代表了西方強權在管理區域威脅方式上的歷史性範式轉移（paradigm shift）。`,
+                vocabulary: [
+                    'Coordinated strikes (n.phr.): 協同打擊', 'Infrastructure (n.): 基礎設施', 'Containment (n.): 圍堵/遏制', 'Active disruption (n.phr.): 主動瓦解/中斷',
+                    'Humanitarian implications (n.phr.): 人道影響/後果', 'Legal implications (n.phr.): 法律影響', 'Paradigm shift (n.phr.): 範式轉移/思維轉型', 'Proxy vacuum (n.phr.): 代理人真空',
+                    'Intensify (v.): 加劇', 'Power struggles (n.phr.): 權力鬥爭', 'Sustained (adj.): 持續的', 'Military engagement (n.phr.): 軍事介入/行動',
+                    'Diverting (v.ger.): 轉移', 'Strategic resources (n.phr.): 策略資源', 'Indo-Pacific theater (n. proper): 印太戰區', 'Aftermath (n.): 後果/餘波',
+                    'Recalibration (n.): 重新校準', 'Instability (n.): 不穩定', 'Volatility (n.): 波動性', 'Escalation (n.): 升級',
+                    'Proxy (n.): 代理人', 'Theater (n.): (軍事) 戰區', 'Contain (v.): 遏制', 'Avert (v.): 避免',
+                    'Preemptive (adj.): 先發制人的', 'Multilateral (adj.): 多邊的', 'Sovereignty (n.): 主權', 'Integrity (n.): 完整性',
+                    'Vacuum (n.): 真空', 'Protocol (n.): 協議', 'Meddling (v.ger.): 干預', 'Jurisdiction (n.): 管轄權'
+                ],
+                quiz: [
+                    { q: 'What has the regional balance shifted from and to?', options: ['Peace to War', 'Containment to active disruption', 'Trade to Military', 'Democracy to Dictatorship'], answer: 'Containment to active disruption' },
+                    { q: 'Which two countries conducted the coordinated military strikes?', options: ['USA and UK', 'Israel and Iran', 'United States and Israel', 'Russia and USA'], answer: 'United States and Israel' },
+                    { q: 'What is the UN concerned about regarding the strikes?', options: ['Oil prices', 'Humanitarian and legal implications', 'Space travel', 'Tourism'], answer: 'Humanitarian and legal implications' },
+                    { q: 'What term describes the historical change in Western strategy?', options: ['Normal update', 'Paradigm shift', 'Strategic mistake', 'Minor adjustment'], answer: 'Paradigm shift' },
+                    { q: 'What might emerge as a result of the strikes?', options: ['A proxy vacuum', 'Total peace', 'New oil fields', 'A global bank'], answer: 'A proxy vacuum' },
+                    { q: 'What is a potential negative side effect for the Indo-Pacific region?', options: ['More investment', 'Diverting strategic resources away to the Middle East', 'Faster internet', 'Lower taxes'], answer: 'Diverting strategic resources away to the Middle East' },
+                    { q: 'What does "sustained engagement" mean in the text?', options: ['Temporary help', 'Continuing involvement over time', 'Leaving immediately', 'Hiding a secret'], answer: 'Continuing involvement over time' },
+                    { q: 'The term "aftermath" refers to what?', options: ['The time before an event', 'The consequences or results of a significant event', 'A mathematical formula', 'A type of rocket'], answer: 'The consequences or results of a significant event' },
+                    { q: 'What kind of struggles might be intensified?', options: ['Economic struggles', 'Power struggles', 'Environmental struggles', 'Farming struggles'], answer: 'Power struggles' },
+                    { q: 'What does "containment" mean in geopolitics?', options: ['Selling goods', 'The policy of preventing the expansion of a hostile power', 'Giving away land', 'Starting a war'], answer: 'The policy of preventing the expansion of a hostile power' },
+                    { q: 'The word "infrastructure" includes which of the following?', options: ['Only people', 'Basic physical systems like power and transport', 'Only clothes', 'Books and papers'], answer: 'Basic physical systems like power and transport' },
+                    { q: 'What is a "proxy" in a military context?', options: ['The main leader', 'A party used by another to represent its interests', 'A type of metal', 'A new weapon'], answer: 'A party used by another to represent its interests' },
+                    { q: 'What is a "theater" in military terms?', options: ['A place to watch plays', 'A specific geographic area of military operations', 'A hospital', 'A school'], answer: 'A specific geographic area of military operations' },
+                    { q: 'Operation "______" Fury is the name mentioned.', options: ['Rapid', 'Epic', 'Golden', 'Final'], answer: 'Epic' },
+                    { q: 'Does the text suggest the conflict might require more or less Western military presence?', options: ['Less', 'More (Sustained engagement)', 'Zero', 'The text doesn\'t say'], answer: 'More (Sustained engagement)' }
+                ]
+            },
+            'micron-hbm': {
+                title: '美光 HBM 獲利新核心',
+                english: `Micron Technology shares have recently outperformed NVIDIA, driven by acute shortages of HBM3E and HBM4 memory. With its 2026 capacity fully allocated, Micron is capitalizing on a severe demand-supply imbalance. Structurally, the AI bottleneck has shifted from GPU logic processing to memory bandwidth, elevating advanced memory manufacturers to strategic parity with chip designers. This redefines profit distribution across the AI hardware stack, as record margins are driven by the “compute premium” demanded by hyperscalers.`,
+                chinese: `美光獲利表現超越英偉達：HBM 記憶體成為 AI 獲利新核心\n美光科技（Micron）股價表現近期超越了 NVIDIA，這主要受到 HBM3E 與 HBM4 記憶體的極度短缺所推動。由於 2026 年的產能已全數分配完畢，美光正利用嚴重的供需失衡獲利。從結構上看，AI 的瓶頸已從 GPU 的邏輯處理轉向了記憶體頻寬（memory bandwidth），這使先進記憶體製造商提升到與晶片設計商同等的策略地位。這也重新定義了整個 AI 硬體堆疊的利潤分配，因為超大規模服務商（hyperscalers）對「運算溢價」的需求正推動著創紀錄的利潤空間。`,
+                vocabulary: [
+                    'Outperformed (v.pt.): 表現優於', 'Acute shortages (n.phr.): 極度/劇烈短缺', 'Fully allocated (adj.phr.): 全數分配', 'Capitalizing on (phr.v.): 利用/趁勢獲利',
+                    'Demand-supply imbalance (n.phr.): 供需失衡', 'Bottleneck (n.): 瓶頸', 'Memory bandwidth (n.phr.): 記憶體頻寬', 'Strategic parity (n.phr.): 戰略對等/同等地位',
+                    'Redefines (v.): 重新定義', 'Profit distribution (n.phr.): 利潤分配', 'Hardware stack (n.phr.): 硬體堆疊', 'Record margins (n.phr.): 創紀錄的利潤率',
+                    'Compute premium (n.phr.): 運算溢價', 'Hyperscalers (n.): 超大規模雲端服務商', 'Structural (adj.): 結構性的', 'Yield (n.): 良率',
+                    'Allocation (n.): 分配/配額', 'DRAM (n. abbreviation): 動態隨機存取記憶體', 'Shortage (n.): 短缺', 'Imbalance (n.): 失衡',
+                    'Bandwidth (n.): 頻寬', 'Manufacturer (n.): 製造商', 'Parity (n.): 對等/平等', 'Hierarchy (n.): 層級',
+                    'Squeeze (n.): 擠壓/緊縮', 'Premium (n.): 溢價', 'Capacity (n.): 產能', 'Benchmark (n.): 基準',
+                    'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件', 'Refining (v.ger.): 提煉', 'Incentivize (v.): 激勵'
+                ],
+                quiz: [
+                    { q: 'Which company’s shares recently outperformed NVIDIA according to the text?', options: ['Apple', 'Micron Technology', 'Samsung', 'Intel'], answer: 'Micron Technology' },
+                    { q: 'What is driving the performance of Micron?', options: ['Low food prices', 'Acute shortages of HBM memory', 'New office buildings', 'Selling older cars'], answer: 'Acute shortages of HBM memory' },
+                    { q: 'For which year is Micron’s capacity already fully allocated?', options: ['2024', '2025', '2026', '2030'], answer: '2026' },
+                    { q: 'The AI bottleneck has shifted from GPU logic processing to what?', options: ['Battery life', 'Memory bandwidth', 'Screen size', 'Keyboard design'], answer: 'Memory bandwidth' },
+                    { q: 'Advanced memory manufacturers have reached ______ with chip designers.', options: ['A disagreement', 'Strategic parity (equal importance)', 'A lower status', 'Bankruptcy'], answer: 'Strategic parity (equal importance)' },
+                    { q: 'What are "hyperscalers" demanding that drives record margins?', options: ['Cheaper paper', '"Compute premium"', 'Faster shipping only', 'Manual labor'], answer: '"Compute premium"' },
+                    { q: 'The news suggests a redefinition of what in the AI industry?', options: ['Holiday dates', 'Profit distribution across the hardware stack', 'Tax laws only', 'The color of chips'], answer: 'Profit distribution across the hardware stack' },
+                    { q: 'What does "fully allocated" mean?', options: ['None of it is used', 'All of it has been assigned or given out', 'It is lost', 'It is free'], answer: 'All of it has been assigned or given out' },
+                    { q: 'The term "bandwidth" in computing refers to ______.', options: ['Weight of a cable', 'Data transfer capacity', 'The cost of electricity', 'Length of a room'], answer: 'Data transfer capacity' },
+                    { q: 'What does "capitalizing on" mean?', options: ['Losing money', 'Taking advantage of an opportunity for profit', 'Closing a factory', 'Hiding a secret'], answer: 'Taking advantage of an opportunity for profit' },
+                    { q: 'What is a "bottleneck"?', options: ['A type of wine', 'A point that limits the flow or performance of a system', 'A success', 'A clear road'], answer: 'A point that limits the flow or performance of a system' },
+                    { q: 'What is HBM an abbreviation for?', options: ['High Battery Mode', 'High Bandwidth Memory', 'Home Building Module', 'Human Brain Matrix'], answer: 'High Bandwidth Memory' },
+                    { q: 'The word "acute" describes a shortage that is ______.', options: ['Small', 'Severe and intense', 'Boring', 'Normal'], answer: 'Severe and intense' },
+                    { q: 'Profit margins are described as "record," meaning they are ______.', options: ['The lowest ever', 'Higher than ever before', 'Being recorded on video', 'Deleted'], answer: 'Higher than ever before' },
+                    { q: 'Micron is a ______ manufacturer.', options: ['Farming', 'Advanced memory', 'Clothing', 'Car'], answer: 'Advanced memory' }
+                ]
+            },
+            'oracle-nvidia': {
+                title: '甲骨文與 NVIDIA 深度聯盟',
+                english: `Oracle is aggressively expanding its cloud infrastructure to host next-generation clusters from NVIDIA, positioning Oracle Cloud Infrastructure (OCI) as a foundational utility layer for AI compute. This pivot signals a shift in competitive dynamics: cloud providers increasingly compete on physical power, cooling, and land capacity rather than software ecosystems. Macroscopically, as global tech giants collectively invest hundreds of billions in capex, control over energy and physical infrastructure becomes the defining competitive moat of the AI era. Analysts suggest this is the "utility-ization" of the data center.`,
+                chinese: `甲骨文與 NVIDIA 深度聯盟：資料中心之「基建公用事業化」\n甲骨文（Oracle）正積極擴張其雲端基礎設施，以承載 NVIDIA 的次世代集群，將 Oracle 雲端基礎設施（OCI）定位為 AI 運算的基礎公用事業層（utility layer）。這一轉向標誌著競爭態勢的轉變：雲端服務商日益在電力供應、冷卻系統與土地容量等物理因素上競爭，而非僅靠軟體生態系。從宏觀角度看，隨著全球科技巨頭集體投入數千億美元的資本支出（Capex），對能源與實體基建的控制權正成為 AI 時代決定性的競爭護城河（moat）。分析師建議，這正是資料中心的「公用事業化」。`,
+                vocabulary: [
+                    'Cloud infrastructure (n.phr.): 雲端基礎設施', 'Host (v.): 承載/主辦', 'Next-generation clusters (n.phr.): 次世代集群', 'OCI (Oracle Cloud Infrastructure) (n. proper): 甲骨文雲端基建',
+                    'Foundational utility layer (n.phr.): 基礎公用事業層', 'Competitive dynamics (n.phr.): 競爭動態/態勢', 'Physical power (n.phr.): 物理電力/供應', 'Cooling systems (n.phr.): 冷卻系統',
+                    'Land capacity (n.phr.): 土地容量', 'Software ecosystems (n.phr.): 軟體生態系', 'Capex (Capital Expenditure) (n.): 資本支出', 'Competitive moat (n.phr.): 競爭護城河',
+                    'Utility-ization (n.): 公用事業化', 'Moat (n.): 護城河 (競爭優勢)', 'Infrastructure-first (adj.): 基礎設施優先的', 'Competitive constraint (n.phr.): 競爭限制',
+                    'Utility (n.): 公用事業', 'Dynamics (n.): 動態', 'Collectively (adv.): 集體地', 'Defining (adj.): 具定義性的/決定性的',
+                    'Constraint (n.): 限制', 'Autonomous (adj.): 自主的', 'Deployment (n.): 部署', 'Efficiency (n.): 效率',
+                    'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Billion (n.): 十億',
+                    'Capacity (n.): 產能/容量', 'Foundational (adj.): 基礎的', 'Transition (n.): 轉變', 'Strategic (adj.): 戰略的'
+                ],
+                quiz: [
+                    { q: 'Which company is Oracle aggressively expanding its infrastructure for?', options: ['Apple', 'Microsoft', 'NVIDIA', 'Amazon'], answer: 'NVIDIA' },
+                    { q: 'What does OCI stand for?', options: ['Optimal Cloud Index', 'Oracle Cloud Infrastructure', 'Online Computing Interface', 'Orbital Communications Integrated'], answer: 'Oracle Cloud Infrastructure' },
+                    { q: 'Cloud providers are now competing on which factors?', options: ['Logos and marketing', 'Physical power, cooling, and land capacity', 'Only software prices', 'The number of employees'], answer: 'Physical power, cooling, and land capacity' },
+                    { q: 'What is becoming the "defining competitive moat" of the AI era?', options: ['Social media followers', 'Control over energy and physical infrastructure', 'Paper production', 'Office furniture design'], answer: 'Control over energy and physical infrastructure' },
+                    { q: 'The news describes the change as the "______-ization" of data centers.', options: ['Mobile', 'Utility', 'Small', 'Free'], answer: 'Utility' },
+                    { q: 'How much are tech giants collectively investing in capex?', options: ['Millions', 'Billions', 'Hundreds of billions', 'Nothing'], answer: 'Hundreds of billions' },
+                    { q: 'Oracle aims to be a foundational "______ layer" for AI compute.', options: ['Static', 'Utility', 'Boring', 'Optional'], answer: 'Utility' },
+                    { q: 'The term "moat" in business refers to ______.', options: ['A hole in the wall', 'A sustainable competitive advantage', 'A type of tax', 'A water storage unit'], answer: 'A sustainable competitive advantage' },
+                    { q: 'What does "aggressively" mean in this context?', options: ['With anger', 'In a determined and forceful way', 'Slowing down', 'Lazily'], answer: 'In a determined and forceful way' },
+                    { q: 'The word "host" means to ______.', options: ['Destroy', 'Provide space or services for', 'Buy', 'Clean'], answer: 'Provide space or services for' },
+                    { q: 'A "cluster" in computing refers to ______.', options: ['A single computer', 'A group of interconnected computers working together', 'A type of fruit', 'A broken part'], answer: 'A group of interconnected computers working together' },
+                    { q: 'Energy is a key factor. What is "physical power"?', options: ['Body strength', 'Electrical energy supply', 'Political power', 'Wind power only'], answer: 'Electrical energy supply' },
+                    { q: 'The term "foundational" means it is at the ______ level.', options: ['Top', 'Base/Core', 'Outer', 'Temporary'], answer: 'Base/Core' },
+                    { q: 'Analysts suggest the "utility-ization" is happening to what type of facility?', options: ['Schools', 'Data centers', 'Parks', 'Hospitals'], answer: 'Data centers' },
+                    { q: 'Is OCI focusing more on software ecosystems or physical capacity now?', options: ['Software ecosystems', 'Physical capacity', 'Both equally', 'Neither'], answer: 'Physical capacity' }
+                ]
+            },
+            'market-resilience': {
+                title: '美股反彈與市場韌性測試',
+                english: `The S&P 500 and Nasdaq Composite rebounded sharply as Brent crude eased to $81.51 per barrel, suggesting markets are pricing Middle East tensions as short-term volatility. Despite geopolitical stress, investors appear to be positioning for a soft landing scenario supported by resilient U.S. service-sector growth. However, the recent 12.1% plunge in South Korea’s Kospi index underscores the vulnerability of export-driven Asian tech hubs during regional instability, highlighting the divergence between U.S. equity optimism and Asia’s sensitivity.`,
+                english: `The S&P 500 and Nasdaq Composite rebounded sharply as Brent crude eased to $81.51 per barrel, suggesting markets are pricing Middle East tensions as short-term volatility. Despite geopolitical stress, investors appear to be positioning for a soft landing scenario supported by resilient U.S. service-sector growth. However, the recent 12.1% plunge in South Korea’s Kospi index underscores the vulnerability of export-driven Asian tech hubs during regional instability, highlighting the divergence between U.S. equity optimism and Asia’s geopolitical sensitivity.`,
+                chinese: `美股反彈與油價回落：市場對中東衝突之「韌性測試」\n隨標普 500 指數與那斯達克綜合指數大幅反彈，布蘭特原油回落至每桶 81.51 美元，顯示市場正將中東緊張局勢視為短期波動。儘管面臨地緣政治壓力，在具韌性的美國服務業成長支持下，投資者似乎正為「軟著陸（soft landing）」的情境做準備。然而，南韓 KOSPI 指數近期暴跌 12.1%，凸顯了出口導向型亞洲科技樞紐在區域動盪期間的脆弱性，並揭示了美國股市樂觀情緒與亞洲地緣政治敏感性之間的嚴重分歧。`,
+                vocabulary: [
+                    'Rebounded sharply (phr.): 強勢反彈', 'Brent crude (n. proper): 布蘭特原油', 'Eased (v.pt.): 回落/放緩', 'Pricing (v.ger.): 定價 (市場反應)',
+                    'Short-term volatility (n.phr.): 短期波動', 'Geopolitical stress (n.phr.): 地緣政治壓力', 'Soft landing scenario (n.phr.): 軟著陸情境', 'Resilient (adj.): 具韌性的',
+                    'Service-sector growth (n.phr.): 服務業成長', 'Plunge (n./v.): 暴跌', 'Kospi index (n. proper): 韓國綜合股價指數', 'Underscores (v.): 凸顯/強調',
+                    'Vulnerability (n.): 脆弱性', 'Export-driven (adj.): 出口導向的', 'Asian tech hubs (n.phr.): 亞洲科技樞紐', 'Instability (n.): 不穩定',
+                    'Divergence (n.): 分歧/背離', 'Equity optimism (n.phr.): 股市樂觀情緒', 'Geopolitical sensitivity (n.phr.): 地緣政治敏感性', 'Resilience test (n.phr.): 韌性測試',
+                    'Moderated (v.pt.): 緩和', 'Scenario (n.): 情境/劇本', 'Diverge (v.): 分歧', 'Stress (n.): 壓力',
+                    'plunge (n.): 跳水/大跌', 'divergence (n.): 分歧', 'sensitivity (n.): 敏感', 'instability (n.): 不穩定',
+                    'Export (n.): 出口', 'Equity (n.): 股票/權益', 'Pricing (v.): 對...定價', 'Resilient (adj.): 復原力強的'
+                ],
+                quiz: [
+                    { q: 'Which two US stock indices rebounded sharply?', options: ['Dow and S&P', 'S&P 500 and Nasdaq Composite', 'Nikkei and TAIEX', 'Kospi and FTSE'], answer: 'S&P 500 and Nasdaq Composite' },
+                    { q: 'What was the price per barrel of Brent crude as it eased?', options: ['$50', '$64', '$81.51', '$120'], answer: '$81.51' },
+                    { q: 'How are markets currently viewing the Middle East tensions?', options: ['As a long-term war', 'As short-term volatility', 'As a reason to stop all trading', 'As an irrelevant event'], answer: 'As short-term volatility' },
+                    { q: 'What economic scenario are investors positioning for in the US?', options: ['Recession', 'Soft landing', 'Hyperinflation', 'Hard crash'], answer: 'Soft landing' },
+                    { q: 'Which Asian index experienced a 12.1% plunge?', options: ['TAIEX', 'Nikkei 225', 'Kospi index', 'Hang Seng'], answer: 'Kospi index' },
+                    { q: 'The plunge in the Kospi index underscores the ______ of Asian tech hubs.', options: ['Strength', 'Vulnerability', 'Wealth', 'Independence'], answer: 'Vulnerability' },
+                    { q: 'The growth in which U.S. sector is supporting optimism?', options: ['Agriculture', 'Mining', 'Service-sector', 'Handicrafts'], answer: 'Service-sector' },
+                    { q: 'What does "divergence" refer to in the text?', options: ['Agreement between markets', 'Difference between U.S. optimism and Asia’s sensitivity', 'A type of rocket', 'A new stock exchange'], answer: 'Difference between U.S. optimism and Asia’s sensitivity' },
+                    { q: 'What does "rebounded" mean in finance?', options: ['Dropped lower', 'Recovered after a fall', 'Stayed the same', 'Vanished'], answer: 'Recovered after a fall' },
+                    { q: 'The term "soft landing" refers to which economic outcome?', options: ['A plane crash', 'Curbing inflation without causing a major recession', 'Prices reaching zero', 'Increasing interest rates to the maximum'], answer: 'Curbing inflation without causing a major recession' },
+                    { q: 'What does "pricing" mean for markets in this context?', options: ['Tagging items in a store', 'Accounting for or reflecting risks in asset prices', 'Selling at a discount', 'Buying a gift'], answer: 'Accounting for or reflecting risks in asset prices' },
+                    { q: 'South Korea is described as an "______-driven" hub.', options: ['Import', 'Export', 'Tourism', 'Farming'], answer: 'Export' },
+                    { q: 'The word "plunge" is a synonym for ______.', options: ['Small rise', 'Drastic drop', 'Stable walk', 'Slow growth'], answer: 'Drastic drop' },
+                    { q: 'What is a "Scenario"?', options: ['A type of flower', 'A sequence of events or a situation', 'A new building', 'A movie theater'], answer: 'A sequence of events or a situation' },
+                    { q: 'Does the text show that U.S. and Asian markets are moving in the same direction?', options: ['Yes', 'No, it highlights a divergence', 'Only on weekends', 'The text doesn\'t say'], answer: 'No, it highlights a divergence' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1] || ''}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
