@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 6 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 6 日：AI 擴張、矽安全與資本新前沿</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. March Insights Edition.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地科技焦點',
+                english: `[1] TSMC Advances Tainan Fab Proposal: AI Surge to Create 1,400 Direct Jobs\nTSMC has advanced the Environmental Impact Assessment (EIA) process for a proposed 15.46-hectare fabrication plant in the Southern Taiwan Science Park. The facility is part of TSMC’s “uninterrupted expansion” strategy to address relentless demand for AI-optimized semiconductor nodes. Macroscopically, the fab—targeted for completion by 2028—will reinforce Taiwan’s role as the global center of AI hardware manufacturing.\n\n[2] January Exports Surge 70%: AI Hardware Drives Fastest Growth in 16 Years\nTaiwan’s January export data showed a 70% year-on-year increase, largely fueled by the global surge in AI infrastructure demand. Revenue growth at TSMC alone reached 37% during the same period, prompting the government to revise its annual GDP growth outlook to approximately 8.68%. Macroscopically, Taiwan’s export engine is evolving into a structural pillar of the global AI economy.\n\n[3] Geopolitical Survey: 94% of Tech Employers Feel Pressure, 56% Shift Hiring to SE Asia\nA survey revealed that 94% of Taiwan’s technology employers are experiencing operational pressure due to geopolitical tensions. Approximately 56% of firms have begun shifting hiring to Southeast Asia, signaling a transition toward “supply-chain fragmentation.” Taiwan continues to serve as the R&D nucleus while operational functions adopt a “Taiwan+1” strategy.`,
+                chinese: `【1】台積電台南新廠提案進展：AI 擴張帶動 1,400 個直接就業機會\n台積電已推進其在南科提出的 15.46 公頃晶圓廠環境影響評估（EIA）程序。該設施是台積電「擴張不間斷」策略的一部分，旨在應對對 AI 優化半導體節點的持續需求。從宏觀角度看，這座預計 2028 年完工的晶圓廠將強化台灣作為全球 AI 硬體製造中心的地位，同時創造 1,400 個直接就業機會與約 500 個供應鏈職位。\n\n【2】台灣元月份出口強勁反彈：AI 伺服器推動 70% 創紀錄增長\n台灣 1 月份出口數據顯示年增達 70%，創下 16 年來最快增速，主要由全球 AI 基礎設施需求的飆升所推動。僅台積電同期的營收成長就達到了 37%，促使政府將年度 GDP 成長預期修正至約 8.68%。從宏觀角度看，台灣的出口引擎正從傳統的循環性電子週期演變為全球 AI 經濟的結構性支柱。\n\n【3】2026 年地緣政治衝擊調查：94% 科技雇主感到壓力，轉向東南亞佈局\n由 Robert Walters 與歐洲商會合作進行的調查顯示，94% 的台灣科技雇主因地緣政治緊張與貿易政策演變而感受到營運壓力。約 56% 的企業已開始將招聘或營運職能轉向東南亞，標誌著向「供應鏈碎片化」的策略轉型以分散風險。從宏觀角度看，台灣將持續作為研發與創新的核心，而生產營運則日益採用「Taiwan+1」多元化策略以確保產業韌性。`,
+                vocabulary: [
+                    'Environmental Impact Assessment (EIA) (n.phr.): 環境影響評估', 'Fabrication plant (n.phr.): 晶圓廠/製造廠', 'Hectare (n.): 公頃', 'Uninterrupted (adj.): 不間斷的',
+                    'Relentless demand (n.phr.): 持續不斷的需求', 'Semiconductor nodes (n.phr.): 半導體節點/製程', 'Macroscopically (adv.): 從宏觀角度', 'Reinforce (v.): 強化/加固',
+                    'Multiplier effect (n.phr.): 乘數效應', 'Contractor (n.): 承包商', 'Year-on-year (adj./adv.): 年增/與去年同期相比', 'Fueled by (phr.v.): 由...推動',
+                    'Infrastructure (n.): 基礎建設', 'Outlook (n.): 展望', 'Structural pillar (n.phr.): 結構性支柱', 'Cyclical (adj.): 循環的/週期性的',
+                    'Momentum (n.): 動能', 'Exposure (n.): 風險敞口/暴露', 'Geopolitical tensions (n.phr.): 地緣政治緊張', 'Disruptions (n.): 中斷/干擾',
+                    'Partnership (n.): 夥伴關係', 'Operational pressure (n.phr.): 營運壓力', 'Supply-chain fragmentation (n.phr.): 供應鏈碎片化', 'Risk mitigation (n.phr.): 風險緩解',
+                    'Nucleus (n.): 核心/中心', 'Diversification strategy (n.phr.): 多元化策略', 'Industrial resilience (n.phr.): 產業韌性', 'Direct jobs (n.phr.): 直接就業機會',
+                    'Survey (n.): 調查', 'Shift (v./n.): 轉移', 'Expansion (n.): 擴張', 'Commitment (n.): 承諾'
+                ],
+                quiz: [
+                    { q: 'How many direct jobs is the new TSMC Tainan fab expected to create?', options: ['500', '1,400', '2,000', '5,000'], answer: '1,400' },
+                    { q: 'What is the size of the proposed TSMC fab area in Tainan?', options: ['10 hectares', '15.46 hectares', '25 hectares', '50 hectares'], answer: '15.46 hectares' },
+                    { q: 'By what percentage did Taiwan’s January exports grow year-on-year?', options: ['37%', '50%', '70%', '8.68%'], answer: '70%' },
+                    { q: 'What is the government\'s revised annual GDP growth outlook?', options: ['5.5%', '7.0%', '8.68%', '10.2%'], answer: '8.68%' },
+                    { q: 'According to the survey, what percentage of tech employers feel operational pressure?', options: ['56%', '70%', '94%', '100%'], answer: '94%' },
+                    { q: 'What strategy are firms adopting by moving functions to Southeast Asia?', options: ['Taiwan-Only', 'Taiwan+1', 'Zero-Growth', 'Global-Merge'], answer: 'Taiwan+1' },
+                    { q: 'The TSMC expansion is described as an "______ expansion" strategy.', options: ['Interrupted', 'Uninterrupted', 'Slow', 'Localized'], answer: 'Uninterrupted' },
+                    { q: 'What is the "EIA" mentioned in the fab proposal?', options: ['Electronic Industry Alliance', 'Environmental Impact Assessment', 'Economic Investment Agreement', 'Expat International Association'], answer: 'Environmental Impact Assessment' },
+                    { q: 'Revenue growth at TSMC alone reached ______ in January.', options: ['16%', '37%', '70%', '94%'], answer: '37%' },
+                    { q: 'The shift to Southeast Asia is a form of geopolitical ______.', options: ['Risk amplification', 'Risk mitigation', 'Total exit', 'Military planning'], answer: 'Risk mitigation' },
+                    { q: 'Taiwan’s export engine is evolving from a traditional ______ cycle.', options: ['Farming', 'Cyclical electronics', 'Textile', 'Luxury'], answer: 'Cyclical electronics' },
+                    { q: 'What percentage of firms shifted hiring or operations to SE Asia?', options: ['15%', '37%', '56%', '94%'], answer: '56%' },
+                    { q: 'The Tainan fab is targeted for completion by which year?', options: ['2026', '2027', '2028', '2030'], answer: '2028' },
+                    { q: 'The word "nucleus" in the context of R&D means ______.', options: ['Small part', 'The central and most important part', 'A type of energy', 'An ending'], answer: 'The central and most important part' },
+                    { q: 'Waiters are experiencing operational pressure. "Operational" means related to ______.', options: ['Surgery', 'Running a business or system', 'Vacation', 'Sleeping'], answer: 'Running a business or system' }
+                ]
+            },
+            'us-ai-exports': {
+                title: '美國 AI 晶片出口新規',
+                english: `U.S. Debates New Export Rules: Foreign Investment in U.S. Data Centers as a Condition for AI Chips\nOfficials in the United States are reportedly considering a new regulatory framework that would tie exports of advanced AI chips to mandatory foreign investment in U.S.-based AI infrastructure or security guarantees. Under the proposal, even smaller deployments involving fewer than 1,000 AI chips could require individual export licenses. Macroscopically, this signals a transition away from an open global market toward a strategic “Security-for-Silicon” exchange system. Such a model would centralize the world’s largest AI compute clusters within U.S. territory and force international partners to balance technological access against domestic investment autonomy.`,
+                chinese: `美國擬定 AI 晶片出口新約：外國投資美國資料中心成為換取晶片前提\n據報導，美國官員正考慮建立一個新的監管框架，將先進 AI 晶片的出口與「強制性外國投資美國境內 AI 基礎設施」或「安全保障」掛鉤。根據該提案，即便是涉及少於 1,000 顆 AI 晶片的小規模部署，也可能需要單獨的出口許可。從宏觀角度看，這標誌著從開放的全球 AI 硬體市場向策略性的「安全換晶片（Security-for-Silicon）」交換體系轉型。這種模式將使全球最大的 AI 運算叢集集中在美國領土內，並迫使國際合作夥伴（特別是中東和東南亞國家）在獲取技術與維持國內投資自主權之間尋求平衡。`,
+                vocabulary: [
+                    'Regulatory framework (n.phr.): 監管框架', 'Tie (v.): 聯繫/掛鉤', 'Mandatory (adj.): 強制性的', 'Advanced AI chips (n.phr.): 先進 AI 晶片',
+                    'Security guarantees (n.phr.): 安全保障', 'Deployments (n.): 部署', 'Individual export licenses (n.phr.): 單獨出口許可', 'Silicon (n.): 矽 (指晶片)',
+                    'Sovereignty (n.): 主權', 'Centralize (v.): 集中', 'Compute clusters (n.phr.): 運算叢集', 'Investment autonomy (n.phr.): 投資自主權',
+                    'Recalibration (n.): 重新校準', 'Instability (n.): 不穩定', 'National security (n.phr.): 國家安全', 'Preemptive (adj.): 先發制人的',
+                    'Constraint (n.): 限制/約束', 'Transition (n.): 轉型/過渡', 'Strategic (adj.): 戰略的', 'Autonomy (n.): 自主性',
+                    'Exchange system (n.phr.): 交換體系', 'Bilateral (adj.): 雙邊的', 'Protocol (n.): 協議', 'Verification (n.): 驗證',
+                    'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件', 'Refining (v.ger.): 提煉', 'Allocation (n.): 分配',
+                    'Incentivize (v.): 激勵', 'Markup (n.): 漲價', 'Stark (adj.): 鮮明的', 'Consolidation (n.): 鞏固'
+                ],
+                quiz: [
+                    { q: 'What is the condition being considered for foreign nations to receive US AI chips?', options: ['Higher prices', 'Investment in U.S.-based AI infrastructure', 'Sending workers to the US', 'Stopping their own chip design'], answer: 'Investment in U.S.-based AI infrastructure' },
+                    { q: 'Even deployments with fewer than how many chips might require licenses?', options: ['100', '500', '1,000', '5,000'], answer: '1,000' },
+                    { q: 'What term is used to describe this strategic exchange system?', options: ['Oil-for-Food', 'Security-for-Silicon', 'Data-for-Hardware', 'Land-for-Chips'], answer: 'Security-for-Silicon' },
+                    { q: 'The proposed rule would centralize AI compute clusters in which territory?', options: ['China', 'United States', 'Europe', 'The Middle East'], answer: 'United States' },
+                    { q: 'What must international partners balance against technological access?', options: ['Domestic investment autonomy', 'Food security', 'Tourism growth', 'Currency value'], answer: 'Domestic investment autonomy' },
+                    { q: 'The proposal signals a move away from which type of market?', options: ['Closed market', 'Open global market', 'Barter market', 'Local market'], answer: 'Open global market' },
+                    { q: 'Which regions are specifically mentioned as being forced to balance their choices?', options: ['South America', 'Europe and Japan', 'Middle East and Southeast Asia', 'Africa'], answer: 'Middle East and Southeast Asia' },
+                    { q: 'What kind of "licenses" would be required for small deployments?', options: ['Driving licenses', 'Business licenses', 'Individual export licenses', 'Building permits'], answer: 'Individual export licenses' },
+                    { q: 'The word "mandatory" is a synonym for ______.', options: ['Optional', 'Required/Compulsory', 'Free', 'Secret'], answer: 'Required/Compulsory' },
+                    { q: 'What is a "regulatory framework"?', options: ['A type of computer', 'A system of rules and laws', 'A picture frame', 'A construction site'], answer: 'A system of rules and laws' },
+                    { q: 'What does "centralize" mean?', options: ['To spread out', 'To bring together under a central authority', 'To delete', 'To hide'], answer: 'To bring together under a central authority' },
+                    { q: 'U.S. officials are "reportedly" considering the rule. What does "reportedly" mean?', options: ['Definitely', 'According to what some say (but not confirmed)', 'Illegally', 'Secretly'], answer: 'According to what some say (but not confirmed)' },
+                    { q: 'What kind of "autonomy" are nations worried about losing?', options: ['Investment autonomy', 'Flight autonomy', 'Car autonomy', 'Physical autonomy'], answer: 'Investment autonomy' },
+                    { q: 'The term "silicon" in the text refers to which industry?', options: ['Glass making', 'Semiconductor/Chip industry', 'Farming', 'Construction'], answer: 'Semiconductor/Chip industry' },
+                    { q: 'Does this move encourage or restrict global free trade of chips?', options: ['Encourage', 'Restrict', 'No effect', 'Only at night'], answer: 'Restrict' }
+                ]
+            },
+            'tesla-optimus': {
+                title: '特斯拉機器人與 AGI 預期',
+                english: `Musk Targets 2026 for AGI in Humanoid Robots; Optimus Gen 3 Reveal Imminent\nElon Musk stated on March 4 that Tesla could achieve Artificial General Intelligence (AGI) through its Optimus humanoid robot program as early as 2026. The upcoming Optimus Gen 3 reveal at Tesla’s Fremont facility is being viewed by analysts as a critical proof-of-concept moment. Macroscopically, Tesla is attempting to transition from an automotive manufacturer into a “physical AI” company. If successful, the integration of AGI-capable robotics could accelerate automation across manufacturing, logistics, and service industries.`,
+                chinese: `特斯拉 Optimus 人型機器人預期：馬斯克宣稱 2026 年將實現機器人 AGI\n伊隆·馬斯克於 3 月 4 日表示，特斯拉最快可在 2026 年透過其 Optimus 人型機器人計畫實現通用人工智慧（AGI）。即將在特斯拉弗里蒙特（Fremont）廠區舉行的 Optimus Gen 3 亮相，被分析師視為關鍵的「概念驗證」時刻。從宏觀角度看，特斯拉正試圖從汽車製造商轉型為「實體 AI」公司。如果成功，具備 AGI 能力的機器人整合將加速製造、物流與服務業的自動化，潛在重塑全球勞動力經濟的速度將遠快於大多數預測。`,
+                vocabulary: [
+                    'Artificial General Intelligence (AGI) (n.): 通用人工智慧', 'Humanoid robot (n.phr.): 人型機器人', 'Reveal (n./v.): 亮相/揭露', 'Imminent (adj.): 即將發生的/迫在眉睫的',
+                    'Fremont facility (n. proper): 弗里蒙特設施 (工廠)', 'Proof-of-concept (n.phr.): 概念驗證', 'Automotive manufacturer (n.phr.): 汽車製造商', 'Physical AI (n.phr.): 實體人工智慧',
+                    'Logistics (n.): 物流', 'Reshaping (v.ger.): 重塑', 'Labor economics (n.phr.): 勞動力經濟', 'Forecast (n.): 預測',
+                    'Integration (n.): 整合', 'Automation (n.): 自動化', 'Cognitive (adj.): 認知的', 'Spatial awareness (n.phr.): 空間意識',
+                    'Unstructured (adj.): 非結構化的', 'Proactively (adv.): 主動地', 'Pivotal (adj.): 關鍵的/樞紐的', 'Form factor (n.phr.): 形態規格',
+                    'Utility (n.): 效用/實用性', 'Bipedal (adj.): 雙足的', 'Collision (n.): 碰撞', 'Autonomous (adj.): 自主的',
+                    'Optimizing (v.ger.): 優化', 'Humanoid (adj.): 類人的', 'Navigate (v.): 導航/通行', 'Efficiency (n.): 效率',
+                    'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Architecture (n.): 架構'
+                ],
+                quiz: [
+                    { q: 'In which year does Elon Musk target achieving AGI through Optimus?', options: ['2025', '2026', '2027', '2030'], answer: '2026' },
+                    { q: 'What is the version number of the upcoming Optimus reveal?', options: ['Gen 1', 'Gen 2', 'Gen 3', 'Gen X'], answer: 'Gen 3' },
+                    { q: 'Where will the Optimus Gen 3 reveal take place?', options: ['Texas Gigafactory', 'Berlin Factory', 'Fremont facility', 'Shanghai Factory'], answer: 'Fremont facility' },
+                    { q: 'What does "AGI" stand for?', options: ['Advanced Ground Intelligence', 'Artificial General Intelligence', 'Automated General Integration', 'Apple Gaming Interface'], answer: 'Artificial General Intelligence' },
+                    { q: 'Analysts view the upcoming reveal as a "critical ______" moment.', options: ['Financial failure', 'Proof-of-concept', 'Marketing mistake', 'Secret test'], answer: 'Proof-of-concept' },
+                    { q: 'Tesla is transitioning from an automaker to which type of company?', options: ['Space travel', 'Physical AI', 'Social media', 'Solar only'], answer: 'Physical AI' },
+                    { q: 'Which industries could be accelerated by AGI-capable robotics?', options: ['Manufacturing, logistics, and service', 'Only farming', 'Only medicine', 'Only teaching'], answer: 'Manufacturing, logistics, and service' },
+                    { q: 'The term "humanoid" refers to what?', options: ['A type of car', 'Something that resembles a human in form', 'A small dog', 'A giant computer screen'], answer: 'Something that resembles a human in form' },
+                    { q: 'What does "imminent" mean?', options: ['Never happening', 'Happening in the distant future', 'About to happen very soon', 'Boring'], answer: 'About to happen very soon' },
+                    { q: 'A "proof-of-concept" is used to ______.', options: ['Sell items to kids', 'Verify that a theory or method is feasible', 'Stop a project', 'Decorate an office'], answer: 'Verify that a theory or method is feasible' },
+                    { q: 'What does "automation" mean?', options: ['Working with hands only', 'Using machines to perform tasks without human help', 'Buying more cars', 'Turning off computers'], answer: 'Using machines to perform tasks without human help' },
+                    { q: 'The integration of AGI could "reshape" global ______.', options: ['Weather', 'Labor economics', 'Food prices', 'Taxes'], answer: 'Labor economics' },
+                    { q: 'What is "logistics"?', options: ['The study of logic', 'The detailed organization and implementation of transport', 'A type of tool', 'A meeting room'], answer: 'The detailed organization and implementation of transport' },
+                    { q: 'The word "transition" in the text means ______.', options: ['Staying the same', 'The process of changing from one state to another', 'Failing a test', 'Moving very slowly'], answer: 'The process of changing from one state to another' },
+                    { q: 'Which leader made the statement about 2026 AGI?', options: ['Tim Cook', 'Jensen Huang', 'Elon Musk', 'Sam Altman'], answer: 'Elon Musk' }
+                ]
+            },
+            'spacex-ipo': {
+                title: 'SpaceX 1.5 兆美元上市預期',
+                english: `SpaceX IPO Rumors Intensify: Targeting $1.5 Trillion Valuation by Mid-2026\nReports suggest that SpaceX is considering a historic IPO as early as mid-2026, potentially raising more than $30 billion and targeting a valuation of $1.5 trillion. Capital raised from the offering would reportedly fund the development of space-based data centers and expanded orbital infrastructure. Macroscopically, this reflects a structural shift in the role of space—from communications infrastructure to a frontier for high-performance computing. For capital markets, a SpaceX listing could create an entirely new asset class centered on “orbital infrastructure” investment.`,
+                chinese: `SpaceX 尋求 2026 年中旬上市：估值上看 1.5 兆美元\n傳言指出，SpaceX 正考慮最快在 2026 年年中進行歷史性的首次公開募股（IPO），潛在籌資額超過 300 億美元，目標估值達 1.5 兆美元。據報導，募得的資金將用於開發「太空數據中心」及擴展軌道基礎設施。從宏觀角度看，這反映了太空角色從單純的「通訊基礎設施」向「高效能運算與數據處理前沿」的結構性轉變。對於資本市場而言，SpaceX 的上市可能會創造一個以「軌道基礎設施」投資為核心的全新資產類別。`,
+                vocabulary: [
+                    'IPO (Initial Public Offering) (n.): 首次公開募股/上市', 'Valuation (n.): 估值', 'Staggering (adj.): 驚人的', 'Historic (adj.): 歷史性的',
+                    'Offering (n.): (股票)發行/提供', 'Space-based data centers (n.phr.): 太空數據中心', 'Orbital infrastructure (n.phr.): 軌道基礎設施', 'Frontier (n.): 前沿/邊境',
+                    'High-performance computing (n.phr.): 高效能運算', 'Asset class (n.phr.): 資產類別', 'Intensify (v.): 加劇/強化', 'Offering (n.): 提案/報價',
+                    'Capital raised (n.phr.): 募集的資金', 'Structural shift (n.phr.): 結構性轉變', 'Redefining (v.ger.): 重新定義', 'Constellation (n.): 衛星群/星座',
+                    'Sub-second (adj.): 秒級以下的', 'Latency (n.): 延遲', 'Maritime (adj.): 海事的', 'Aviation (n.): 航空',
+                    'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑',
+                    'Investment (n.): 投資', 'Billion (n.): 十億', 'Trillion (n.): 兆', 'Primary (adj.): 主要的',
+                    'Alternative (n.): 替代方案', 'Transition (n.): 轉型', 'Strategic (adj.): 戰略的', 'Consolidation (n.): 鞏固'
+                ],
+                quiz: [
+                    { q: 'What is the rumored target valuation for SpaceX’s IPO?', options: ['$500 billion', '$1 trillion', '$1.5 trillion', '$4.5 trillion'], answer: '$1.5 trillion' },
+                    { q: 'When is the historic IPO potentially scheduled to happen?', options: ['Early 2026', 'Mid-2026', 'Late 2027', '2030'], answer: 'Mid-2026' },
+                    { q: 'How much capital could the SpaceX IPO potentially raise?', options: ['$1 billion', '$10 billion', '$30 billion', '$100 billion'], answer: '$30 billion' },
+                    { q: 'What would the raised capital be used to fund?', options: ['Buying Twitter', 'Space-based data centers and orbital infrastructure', 'Building more cars', 'Paying off debt'], answer: 'Space-based data centers and orbital infrastructure' },
+                    { q: 'Space is shifting from a communication role to what kind of "frontier"?', options: ['A tourism frontier', 'A high-performance computing frontier', 'A farming frontier', 'An underwater frontier'], answer: 'A high-performance computing frontier' },
+                    { q: 'What new "asset class" could a SpaceX listing create?', options: ['Real estate in space', 'Orbital infrastructure investment', 'Crypto coins', 'Oil assets'], answer: 'Orbital infrastructure investment' },
+                    { q: 'What does "IPO" stand for?', options: ['Independent Public Organization', 'Initial Public Offering', 'International Price Order', 'Internal Profit Option'], answer: 'Initial Public Offering' },
+                    { q: 'The term "valuation" refers to what?', options: ['The color of a company', 'The estimated worth of a company', 'The number of ships', 'The speed of light'], answer: 'The estimated worth of a company' },
+                    { q: 'What is "orbital infrastructure"?', options: ['Roads on Earth', 'Facilities and structures located in space orbit', 'A type of airplane', 'A building in Texas'], answer: 'Facilities and structures located in space orbit' },
+                    { q: 'The word "intensify" means to ______.', options: ['To become weaker', 'To become stronger or more extreme', 'To stop completely', 'To hide'], answer: 'To become stronger or more extreme' },
+                    { q: 'What is a "frontier" in a conceptual sense?', options: ['A wall', 'The extreme limit of understanding or achievement', 'A back door', 'A starting point'], answer: 'The extreme limit of understanding or achievement' },
+                    { q: 'The term "offering" in stock markets refers to ______.', options: ['A gift to a temple', 'The issue of shares to investors', 'A type of dinner', 'A secret deal'], answer: 'The issue of shares to investors' },
+                    { q: 'SpaceX is described as "considering" a historic IPO. What is historic?', options: ['Very old', 'Very significant in history', 'Boring', 'Small'], answer: 'Very significant in history' },
+                    { q: 'Capital raised from the ______ would fund development.', options: ['Tax', 'Offering', 'Loan', 'Gift'], answer: 'Offering' },
+                    { q: 'Does the text confirm the IPO is definitely happening?', options: ['Yes', 'No, it is currently "rumors" and "reports suggest"', 'Only for employees', 'Only in 2030'], answer: 'No, it is currently "rumors" and "reports suggest"' }
+                ]
+            },
+            'duke-robotics': {
+                title: '國防科技：Duke Robotics 股票分割',
+                english: `Duke Robotics Implements 25-for-1 Reverse Split to Support National Exchange Uplisting\nDuke Robotics implemented a 25-for-1 reverse stock split at market open today under the temporary ticker DUKRD. The move is designed to increase the share price to meet listing requirements for a potential uplisting to a major national exchange. Macroscopically, the decision reflects a broader industry trend in which defense-technology startups are repositioning themselves to attract institutional investment. With global defense spending rising and autonomous systems becoming a core military capability, drone-focused firms are transitioning from speculative ventures to strategic components of national defense supply chains.`,
+                chinese: `Duke Robotics 宣佈 25 比 1 反向股票分割：支持國防與民用無人機轉型\n無人機國防科技公司 Duke Robotics 今日開盤實施了 25 比 1 的反向股票分割（Reverse Split），臨時股票代碼為 DUKRD。此舉旨在提高股價以符合在主要國家級交易所（如納斯達克或紐交所）掛牌的最低價格要求。從宏觀角度看，這項決定反映了整體產業趨勢：國防科技初創公司正重新定位，以吸引機構投資者的資金。隨著全球國防開支上升及自主系統成為核心軍事能力，專注於無人機的企業正從投機性的早期風險投資轉型為國防供應鏈的戰略組成部分。`,
+                vocabulary: [
+                    'Reverse stock split (n.phr.): 反向股票分割 (縮股)', 'Ticker (n.): 股票代碼', 'Uplisting (v.ger.): 轉板/升級掛牌', 'National exchange (n.phr.): 國家交易所 (如 NYSE)',
+                    'Listing requirements (n.phr.): 掛牌要求/上市門檻', 'Industry trend (n.phr.): 產業趨勢', 'Defense-technology (adj.): 國防科技的', 'Startups (n.): 初創公司',
+                    'Repositioning (v.ger.): 重新定位', 'Institutional investment (n.phr.): 機構投資', 'Defense spending (n.phr.): 國防開支', 'Autonomous systems (n.phr.): 自主系統',
+                    'Core military capability (n.phr.): 核心軍事能力', 'Drone-focused (adj.): 專注於無人機的', 'Speculative ventures (n.phr.): 投機性創投/企業', 'Strategic components (n.phr.): 策略組成部分',
+                    'Supply chain (n.phr.): 供應鏈', 'Implementing (v.ger.): 執行/實施', 'Temporary (adj.): 暫時的', 'Potential (adj.): 潛在的',
+                    'Exchange (n.): 交易所/交換', 'Differentiator (n.): 區分因素', 'Preemptive (adj.): 先發制人的', 'Deployment (n.): 部署',
+                    'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑', 'Investment (n.): 投資',
+                    'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略的', 'Infrastructure (n.): 基礎建設', 'Expansion (n.): 擴張'
+                ],
+                quiz: [
+                    { q: 'What action did Duke Robotics implement at the market open?', options: ['Standard split', 'Reverse stock split', 'Buying back all shares', 'Bankruptcy'], answer: 'Reverse stock split' },
+                    { q: 'What is the temporary ticker for Duke Robotics after the split?', options: ['DUKE', 'DUKRD', 'ROBOT', 'DRONE'], answer: 'DUKRD' },
+                    { q: 'What is the ratio of the reverse stock split?', options: ['1-for-1', '5-for-1', '10-for-1', '25-for-1'], answer: '25-for-1' },
+                    { q: 'What is the goal of the reverse split?', options: ['To lower the price', 'To increase the share price to meet listing requirements', 'To sell the company', 'To hide the ticker'], answer: 'To increase the share price to meet listing requirements' },
+                    { q: 'Duke Robotics is aiming for an "______" to a major national exchange.', options: ['Downlisting', 'Uplisting', 'Retirement', 'Merging'], answer: 'Uplisting' },
+                    { q: 'The move reflects a trend of startups trying to attract ______ investment.', options: ['Student', 'Retail only', 'Institutional', 'Foreign aid'], answer: 'Institutional' },
+                    { q: 'What is becoming a "core military capability" mentioned in the text?', options: ['Traditional tanks', 'Autonomous systems', 'Paper maps', 'Manual rifles'], answer: 'Autonomous systems' },
+                    { q: 'Drone-focused firms are transitioning from "______ ventures" to strategic components.', options: ['Proven', 'Speculative', 'Failed', 'Static'], answer: 'Speculative' },
+                    { q: 'The word "implement" means ______.', options: ['To cancel', 'To put into effect', 'To think about', 'To forget'], answer: 'To put into effect' },
+                    { q: 'What is a "reverse stock split"?', options: ['Reducing the number of shares and increasing price per share', 'Increasing the number of shares and lowering price', 'Closing the stock market', 'A type of tax'], answer: 'Reducing the number of shares and increasing price per share' },
+                    { q: 'What is a "ticker"?', options: ['A watch', 'A series of letters identifying a stock', 'A loud noise', 'A type of bug'], answer: 'A series of letters identifying a stock' },
+                    { q: 'Duke Robotics focuses on what kind of technology?', options: ['Farming robots', 'Defense-technology/Drones', 'Medical tools', 'Cleaning robots'], answer: 'Defense-technology/Drones' },
+                    { q: 'What does "speculative" mean in a financial sense?', options: ['Completely safe', 'Involving high risk but potential for high gain', 'Very cheap', 'Boring'], answer: 'Involving high risk but potential for high gain' },
+                    { q: 'The term "uplisting" refers to moving a stock to a ______ exchange.', options: ['Smaller', 'Major national', 'International only', 'Private'], answer: 'Major national' },
+                    { q: 'Who or what is "DUKRD"?', options: ['The CEO', 'The temporary ticker for Duke Robotics', 'The name of a new robot', 'A military base'], answer: 'The temporary ticker for Duke Robotics' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
