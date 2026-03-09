@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 9 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 9 日：人才戰爭、航運風險與資本形成</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. March 9th Knowledge Update.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] TSMC Launches 2026 Recruitment: Entry-Level Master’s Salaries Hit NT$2.2M\nTSMC has officially launched its 2026 campus recruitment program, aiming to hire 8,000 new employees to support N2 and A16 nodes. The company set a benchmark starting salary of NT$2.2 million annually for master’s graduates, highlighting an escalating “talent war.” Macroscopically, this surge triggers talent migration from traditional industries toward tech.\n\n[2] Taiwan Hosts 2026 World Indoor Tug of War Championships in March\nThe 2026 World Indoor Tug of War Championships opened in Taiwan this week, attracting teams from over 20 countries. Hosting international sporting events serves as a form of soft-power diplomacy, allowing Taiwan to expand global engagement. Such events demonstrate the island’s logistical capacity and international visibility.\n\n[3] MOL Reports 24-Month High in Unpaid Leave for Traditional Manufacturing\nThe Ministry of Labor reported over 12,000 workers in textiles and plastics are on unpaid leave, marking a 24-month high. Despite the semiconductor boom, this illustrates a widening “K-shaped recovery.” Macroscopically, the divide raises structural concerns regarding income inequality and the urgency for vocational retraining.`,
+                chinese: `【1】台積電啟動 2026 攬才計畫：碩士工程師起薪年薪 220 萬\n台積電正式啟動 2026 年校園徵才計畫，目標招募 8,000 名新員工，以支援 N2 與 A16 製程節點的擴張。公司為碩士畢業的初階工程師設定了 220 萬新台幣（約 7 萬美元）的起薪基準。這凸顯了台灣半導體生態系統中日益加劇的「人才戰爭」。從宏觀角度看，薪資飆升預計將引發人才從傳統產業向先進製造業遷移，迫使台灣勞動力市場進行更廣泛的重新校準。\n\n【2】台灣室內拔河世錦賽開幕：利用運動賽事強化國際能見度\n由國際拔河總會主辦的 2026 世界室內拔河錦標賽本週在台灣正式開幕，吸引了 20 多個國家的代表隊參加。舉辦國際體育賽事是一種「軟實力外交」，讓台灣在外交限制下擴大國際參與。從宏觀角度看，這類活動增強了台灣的國際能見度與文化交流，同時展示了台灣在交通、觀光與款待協調方面的物流能力。\n\n【3】勞動部：傳統產業無薪假人數創 24 個月新高，K 型復甦擴大\n勞動部報告指出，紡織與塑膠等部門有超過 1.2 萬名勞工正實施無薪假，創下 24 個月來新高。儘管半導體經濟蓬勃發展，這一趨勢說明了台灣產業景觀中日益擴大的「K 型復甦」。從宏觀角度看，高科技產業與傳統製造業之間日益加深的鴻溝引發了關於收入不平等、勞動力位移與經濟韌性的結構性擔憂，增加了大規模職業轉型計畫的迫切性。`,
+                vocabulary: [
+                    'Recruitment (n.): 招募', 'Benchmark (n.): 基準/標竿', 'Escalating (adj.): 加劇的/上升的', 'Talent war (n.phr.): 人才戰爭',
+                    'Migration (n.): 遷移/移居', 'Recalibration (n.): 重新校準', 'Non-semiconductor (adj.): 非半導體的', 'Soft-power diplomacy (n.phr.): 軟實力外交',
+                    'Logistical capacity (n.phr.): 物流/協調能力', 'Hospitality (n.): 款待/餐旅業', 'Unpaid leave (n.phr.): 無薪假', 'K-shaped recovery (n.phr.): K 型復甦',
+                    'Industrial landscape (n.phr.): 產業景觀', 'Income inequality (n.phr.): 收入不平等', 'Vocational retraining (n.phr.): 職業轉型培訓', 'Nodes (n.): 節點/製程',
+                    'Infrastructure (n.): 基礎建設', 'Expansion (n.): 擴張', 'Constraints (n.): 限制', 'Engagement (n.): 參與',
+                    'Sector (n.): 部門/產業', 'Mandatory (adj.): 強制性的', 'Preemptive (adj.): 先發制人的', 'Instability (n.): 不穩定',
+                    'Multiplier effect (n.phr.): 乘數效應', 'Contractor (n.): 承包商', 'Year-on-year (adj.): 年增', 'Pillar (n.): 支柱',
+                    'Structural (adj.): 結構性的', 'Resilience (n.): 韌性', 'Urgency (n.): 迫切性', 'Diversification (n.): 多元化'
+                ],
+                quiz: [
+                    { q: 'How many new employees does TSMC aim to hire in 2026?', options: ['1,400', '3,000', '8,000', '12,000'], answer: '8,000' },
+                    { q: 'What is the benchmark starting salary for a master\'s entry-level engineer at TSMC?', options: ['NT$1.5M', 'NT$2.2M', 'NT$5.0M', 'NT$8.0M'], answer: 'NT$2.2M' },
+                    { q: 'The wage surge in the tech sector is expected to cause "______ migration."', options: ['Capital', 'Talent', 'Factory', 'Border'], answer: 'Talent' },
+                    { q: 'How many countries are participating in the Tug of War Championships?', options: ['10', 'More than 20', '50', 'Over 100'], answer: 'More than 20' },
+                    { q: 'Hosting sporting events is described as a form of ______ diplomacy.', options: ['Hard-power', 'Soft-power', 'Economic', 'Secret'], answer: 'Soft-power' },
+                    { q: 'What kind of recovery is Taiwan’s industry experiencing currently?', options: ['V-shaped', 'U-shaped', 'K-shaped', 'L-shaped'], answer: 'K-shaped' },
+                    { q: 'How many workers are currently on unpaid leave in traditional manufacturing?', options: ['5,000', '8,000', 'More than 12,000', '20,000'], answer: 'More than 12,000' },
+                    { q: 'Which two traditional sectors are mentioned as having a 24-month high in unpaid leave?', options: ['AI and Semi', 'Textiles and Plastics', 'Tourism and Retail', 'Food and Housing'], answer: 'Textiles and Plastics' },
+                    { q: 'The tech wage surge forces a "broader ______" of the labor market.', options: ['Recalibration', 'Closure', 'Simplification', 'Reduction'], answer: 'Recalibration' },
+                    { q: 'The word "logistical" in the sports news refers to ______.', options: ['Mathematical logic', 'Coordination of transport and events', 'Military fighting', 'Ancient history'], answer: 'Coordination of transport and events' },
+                    { q: 'What is the "urgency" mentioned in the unpaid leave news?', options: ['To build more chips', 'To provide vocational retraining', 'To lower interest rates', 'To start a war'], answer: 'To provide vocational retraining' },
+                    { q: 'The term "soft-power" relates to influence through ______.', options: ['Force', 'Cultural and sporting attraction', 'Bribes', 'Nuclear weapons'], answer: 'Cultural and sporting attraction' },
+                    { q: 'TSMC is hiring to support which two fabrication nodes?', options: ['7nm and 5nm', 'N2 and A16', '10nm and 14nm', 'Only legacy nodes'], answer: 'N2 and A16' },
+                    { q: 'The word "benchmark" is a synonym for ______.', options: ['Final result', 'Standard or reference point', 'Problem', 'Table'], answer: 'Standard or reference point' },
+                    { q: 'Traditional manufacturing workers face structural concerns regarding income ______.', options: ['Equality', 'Inequality', 'Stability', 'Surplus'], answer: 'Inequality' }
+                ]
+            },
+            'operation-epic-fury': {
+                title: '中東安全與航運保費',
+                english: `Aftermath of "Operation Epic Fury": Strait of Hormuz Risks Institutionalize High Freight Rates\nFollowing coordinated strikes by the United States and Israel targeting Iranian missile infrastructure, tensions around the Strait of Hormuz have intensified. Insurance premiums for tankers operating in the Persian Gulf have reportedly surged over 450%, reflecting the growing perception of systemic maritime risk. Macroscopically, the situation acts as a “supply-side tax” on the global economy, forcing energy-importing nations to accelerate diversification strategies such as renewable energy expansion and nuclear baseload development.`,
+                chinese: `美以對伊朗「史詩憤怒行動」後續：荷姆茲海峽風險導致高運費常態化\n在美國與以色列對伊朗飛彈基礎設施進行協同打擊後，荷姆茲海峽（Strait of Hormuz）周邊的緊張局勢急遽升溫。據報導，在波斯灣運行的油輪保險溢價已飆升超過 450%，反映出全球對系統性海事風險的認知不斷增加。從宏觀角度看，此局勢對全球經濟而言如同「供應端稅收」，迫使能源進口國加速多元化策略，如擴張再生能源與發展核能基載。`,
+                vocabulary: [
+                    'Aftermath (n.): 餘波/後果', 'Operation Epic Fury (n. proper): 史詩憤怒行動', 'Coordinated strikes (n.phr.): 協同打擊', 'Infrastructure (n.): 基礎設施',
+                    'Institutionalize (v.): 使常態化/制度化', 'Freight rates (n.phr.): 運費', 'Insurance premiums (n.phr.): 保險費/溢價', 'Tankers (n.): 油輪',
+                    'Persian Gulf (n. proper): 波斯灣', 'Surged (v.pt.): 飆升', 'Systemic risk (n.phr.): 系統性風險', 'Maritime (adj.): 海事/航海的',
+                    'Supply-side tax (n.phr.): 供應端稅收', 'Energy-importing (adj.): 能源進口的', 'Diversification (n.): 多元化', 'Renewable energy (n.phr.): 再生能源',
+                    'Nuclear baseload (n.phr.): 核能基載', 'Escalation (n.): 升級', 'Containment (n.): 圍堵', 'Paradigm shift (n.phr.): 範式轉移',
+                    'Strategic resources (n.phr.): 策略資源', 'Indo-Pacific theater (n. proper): 印太戰區', 'Retaliation (n.): 報復', 'Sovereignty (n.): 主權',
+                    'Insurance premium (n.phr.): 保險溢價', 'Maritime security (n.phr.): 海事安全', 'Freight (n.): 貨運', 'Transit (n.): 運輸',
+                    'Disruption (n.): 中斷', 'Recalibration (n.): 重新校準', 'Inflationary (adj.): 通膨的', 'Premium (n.): 溢價/保險費'
+                ],
+                quiz: [
+                    { q: 'What is the reported increase in insurance premiums for tankers in the Persian Gulf?', options: ['10%', '100%', '450%', '1,000%'], answer: '450%' },
+                    { q: 'Which operation by the US and Israel targeted Iranian infrastructure?', options: ['Operation Desert Storm', 'Operation Epic Fury', 'Operation Golden Shield', 'Operation Red Sea'], answer: 'Operation Epic Fury' },
+                    { q: 'What kind of infrastructure was specifically targeted?', options: ['Oil refineries', 'Missile infrastructure', 'Schools', 'Data centers'], answer: 'Missile infrastructure' },
+                    { q: 'The situation acts as a "______ tax" on the global economy.', options: ['Demand-side', 'Supply-side', 'Value-added', 'Income'], answer: 'Supply-side' },
+                    { q: 'Energy-importing nations are accelerating strategies for what?', options: ['More oil imports', 'Diversification (renewables and nuclear)', 'Ending all trade', 'Building more cars'], answer: 'Diversification (renewables and nuclear)' },
+                    { q: 'The Strait of ______ is the key maritime corridor mentioned.', options: ['Malacca', 'Hormuz', 'Gibraltar', 'Dover'], answer: 'Hormuz' },
+                    { q: 'What does "institutionalize" mean in the headline?', options: ['To put in a hospital', 'To make something a permanent or standard feature', 'To cancel a law', 'To build a new school'], answer: 'To make something a permanent or standard feature' },
+                    { q: 'What kind of risk is described as "growing in perception"?', options: ['Personal risk', 'Systemic maritime risk', 'Weather risk', 'Software risk'], answer: 'Systemic maritime risk' },
+                    { q: 'The word "aftermath" refers to which period?', options: ['Before the strikes', 'During the strikes', 'The period following the strikes', 'The planning phase'], answer: 'The period following the strikes' },
+                    { q: 'Tankers are ships designed to carry ______.', options: ['People', 'Liquid like oil', 'Cars only', 'Airplanes'], answer: 'Liquid like oil' },
+                    { q: 'What does "premium" mean in insurance?', options: ['The amount of money paid for an insurance policy', 'A type of fuel', 'The speed of a boat', 'A government building'], answer: 'The amount of money paid for an insurance policy' },
+                    { q: 'The situation forces nations to accelerate "diversification." What is that?', options: ['Buying only one type of fuel', 'Broadening the range of energy sources', 'Reducing all energy use', 'Printing more money'], answer: 'Broadening the range of energy sources' },
+                    { q: 'What is "nuclear baseload"?', options: ['A nuclear weapon', 'The minimum amount of power a grid must provide using nuclear energy', 'A secret bunker', 'A type of rocket'], answer: 'The minimum amount of power a grid must provide using nuclear energy' },
+                    { q: 'The news suggests tensions have "intensified," meaning they ______.', options: ['Stopped', 'Became stronger or more extreme', 'Became boring', 'Were hidden'], answer: 'Became stronger or more extreme' },
+                    { q: 'Which two countries conducted the coordinated strikes?', options: ['USA and UK', 'USA and Israel', 'Iran and Israel', 'Russia and Iran'], answer: 'USA and Israel' }
+                ]
+            },
+            'spacex-orbital': {
+                title: 'SpaceX 與軌道基建',
+                english: `SpaceX Launches EchoStar XXV Mission: Expanding Global Suborbital Infrastructure\nSpaceX successfully launched the EchoStar XXV satellite using its Falcon 9 launch vehicle, continuing its rapid mission cadence throughout 2026. The launch underscores a structural shift in the space industry from exploratory missions toward industrial-scale orbital infrastructure. Macroscopically, increasing satellite density supporting AI data transmission, global broadband, and communication networks positions SpaceX as a central physical infrastructure provider for the next generation of global connectivity.`,
+                chinese: `SpaceX 成功發射 EchoStar XXV：亞軌道物流與衛星寬頻持續擴張\nSpaceX 成功利用獵鷹 9 號（Falcon 9）運載火箭發射了 EchoStar XXV 衛星，延續其 2026 年快速的任務節奏。這次發射強調了航太產業從「探索型任務」向「工業規模軌道基礎設施」的結構性轉變。從宏觀角度看，支援 AI 數據傳輸、全球寬頻與通訊網絡的衛星密度不斷增加，正將 SpaceX 定位為次世代全球連網的核心實體基礎設施提供商。`,
+                vocabulary: [
+                    'Mission cadence (n.phr.): 任務節奏/頻率', 'Falcon 9 (n. proper): 獵鷹 9 號火箭', 'Launch vehicle (n.phr.): 運載火箭', 'Underscores (v.): 強調/突顯',
+                    'Exploratory (adj.): 探索性的', 'Industrial-scale (adj.): 工業規模的', 'Orbital infrastructure (n.phr.): 軌道基礎設施', 'Satellite density (n.phr.): 衛星密度',
+                    'AI data transmission (n.phr.): AI 數據傳輸', 'Global broadband (n.phr.): 全球寬頻', 'Connectivity (n.): 連通性', 'Physical infrastructure (n.phr.): 實體基礎設施',
+                    'Suborbital (adj.): 亞軌道的', 'Logistics (n.): 物流', 'Cadence (n.): 節奏/韻律', 'Constellation (n.): 星座/衛星群',
+                    'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑',
+                    'Propelling (v.ger.): 推進', 'Aviation (n.): 航空', 'Maritime (adj.): 海事的', 'Sub-second (adj.): 秒級以下的',
+                    'Architecture (n.): 架構', 'Optimization (n.): 優化', 'Performance (n.): 表現/性能', 'Capacity (n.): 容量'
+                ],
+                quiz: [
+                    { q: 'What is the name of the satellite launched by SpaceX this week?', options: ['Starlink-100', 'EchoStar XXV', 'Galaxy Explorer', 'Orbital One'], answer: 'EchoStar XXV' },
+                    { q: 'Which launch vehicle was used for the mission?', options: ['Falcon Heavy', 'Falcon 9', 'Starship', 'Dragon'], answer: 'Falcon 9' },
+                    { q: 'The space industry is shifting from exploratory missions toward ______.', options: ['Tourist trips only', 'Industrial-scale orbital infrastructure', 'Planting trees', 'Mining the moon only'], answer: 'Industrial-scale orbital infrastructure' },
+                    { q: 'What is increasing that supports AI data transmission?', options: ['The price of rockets', 'Satellite density', 'The size of the moon', 'Oxygen levels'], answer: 'Satellite density' },
+                    { q: 'SpaceX is positioning itself as a provider of what for global connectivity?', options: ['Software only', 'Physical infrastructure', 'Free phones', 'Legal advice'], answer: 'Physical infrastructure' },
+                    { q: 'What term refers to the rate or rhythm of missions?', options: ['Mission speed', 'Mission cadence', 'Mission length', 'Mission cost'], answer: 'Mission cadence' },
+                    { q: 'Broadband is another term for high-speed ______.', options: ['Transportation', 'Internet', 'Electricity', 'Water'], answer: 'Internet' },
+                    { q: 'The word "underscores" means to ______.', options: ['Draw a line under a word', 'Emphasize or stress', 'Ignore', 'Delete'], answer: 'Emphasize or stress' },
+                    { q: 'A "launch vehicle" is a technical term for a ______.', options: ['Car', 'Rocket', 'Boat', 'Airplane'], answer: 'Rocket' },
+                    { q: 'What kind of data transmission is specifically mentioned as being supported?', options: ['Radio data', 'AI data transmission', 'Paper mail', 'Television signals'], answer: 'AI data transmission' },
+                    { q: 'The term "Orbital" relates to the ______ of an object around Earth.', options: ['Speed', 'Path/Orbit', 'Weight', 'Color'], answer: 'Path/Orbit' },
+                    { q: 'The news states SpaceX has a "rapid" mission cadence. What is rapid?', options: ['Slow', 'Fast', 'Boring', 'Secret'], answer: 'Fast' },
+                    { q: 'What does "exploratory" mean?', options: ['Buying something', 'Searching or investigating to learn more', 'Finishing a task', 'Ending a war'], answer: 'Searching or investigating to learn more' },
+                    { q: 'Global connectivity refers to the ability to ______ worldwide.', options: ['Fly', 'Connect to the internet/network', 'Farm', 'Speak'], answer: 'Connect to the internet/network' },
+                    { q: 'EchoStar is likely the name of the satellite\'s ______.', options: ['Fuel', 'Owner/Brand', 'Destination', 'Engine'], answer: 'Owner/Brand' }
+                ]
+            },
+            'wall-street-capex': {
+                title: '華爾街 AI 資本支出展望',
+                english: `Wall Street 2026 CapEx Outlook: AI Data Center Spending to Surpass $550 Billion\nAnalysts from Goldman Sachs and Zacks Investment Research estimate that global hyperscalers will collectively invest over $550 billion in capital expenditures in 2026. The surge reflects the institutionalization of AI infrastructure as the primary driver of global capital formation. Macroscopically, the scale of investment raises systemic stakes. Should these expenditures fail to produce revenue expansion by 2027, financial markets could face a valuation correction reminiscent of past infrastructure investment bubbles.`,
+                chinese: `華爾街 2026 年 AI 資本支出展望：投資將突破 5,500 億美元\n高盛（Goldman Sachs）與 Zacks 投資研究中心的分析師估計，全球超大規模服務商（Hyperscalers）在 2026 年的資本支出（CapEx）將集體超過 5,500 億美元。這一飆升反映了 AI 基礎設施已制度化為全球資本形成的主要驅動力，涉及對數據中心、GPU、網路與能源產能的海量投資。從宏觀角度看，投資規模提升了系統性風險。若這些支出到 2027 年仍無法產生生產力提升或營收擴張，金融市場可能會面臨令人聯想到過去基礎設施投資泡沫的「估值修正」。`,
+                vocabulary: [
+                    'CapEx (Capital Expenditure) (n.): 資本支出', 'Outlook (n.): 展望', 'Surpass (v.): 超過/突破', 'Hyperscalers (n.): 超大規模雲端服務商',
+                    'Collectively (adv.): 集體地', 'Capital formation (n.phr.): 資本形成', 'Primary driver (n.phr.): 主要驅動力', 'Institutionalization (n.): 制度化',
+                    'Systemic stakes (n.phr.): 系統性利害關係/風險', 'Revenue expansion (n.phr.): 營收擴張', 'Productivity gains (n.phr.): 生產力提升', 'Valuation correction (n.phr.): 估值修正',
+                    'Reminiscent (adj.): 讓人想起的', 'Investment bubbles (n.phr.): 投資泡沫', 'Aggregate (adj./n.): 總計/聚合', 'GPU (Graphics Processing Unit) (n.): 繪圖處理器',
+                    'Networking (n.): 網路', 'Energy capacity (n.phr.): 能源產能', 'Staggering (adj.): 驚人的', 'Optimize (v.): 優化',
+                    'Sustainable (adj.): 永續的', 'Allocation (n.): 分配', 'Margin (n.): 利潤/邊際', 'Liquidity (n.): 流動性',
+                    'Constraint (n.): 限制', 'Benchmark (n.): 基準', 'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件',
+                    'Refining (v.ger.): 提煉', 'Incentivize (v.): 激勵', 'Markup (n.): 漲價', 'Consolidation (n.): 鞏固'
+                ],
+                quiz: [
+                    { q: 'How much is the global AI data center spending projected to be in 2026?', options: ['$100 billion', '$250 billion', 'Over $550 billion', '$1 trillion'], answer: 'Over $550 billion' },
+                    { q: 'Which two investment research groups are mentioned as the source of this estimate?', options: ['Apple and Google', 'Goldman Sachs and Zacks', 'The UN and IMF', 'Tesla and SpaceX'], answer: 'Goldman Sachs and Zacks' },
+                    { q: 'What is becoming the "primary driver" of global capital formation?', options: ['Real estate', 'AI infrastructure', 'Oil refining', 'Agricultural trade'], answer: 'AI infrastructure' },
+                    { q: 'Large cloud companies like Google and Amazon are called "______."', options: ['Hyperscalers', 'Startups', 'Retailers', 'Founders'], answer: 'Hyperscalers' },
+                    { q: 'What could happen if AI expenditures fail to produce revenue expansion by 2027?', options: ['A celebration', 'A valuation correction (market drop)', 'Free chips for everyone', 'A decrease in electricity prices'], answer: 'A valuation correction (market drop)' },
+                    { q: 'The spending includes GPUs, networking, and what other capacity?', options: ['Water', 'Energy', 'Farming', 'Art'], answer: 'Energy' },
+                    { q: 'What are the high levels of investment described as raising?', options: ['Systemic stakes/risks', 'Individual bank accounts', 'The height of buildings', 'The number of holidays'], answer: 'Systemic stakes/risks' },
+                    { q: 'A "valuation correction" is reminiscent of what past economic event?', options: ['The Industrial Revolution', 'Investment bubbles', 'World War II', 'The discovery of gold'], answer: 'Investment bubbles' },
+                    { q: 'What does "CapEx" stand for?', options: ['Capital Exchange', 'Capital Expenditure', 'Capability Expansion', 'Cash Extra'], answer: 'Capital Expenditure' },
+                    { q: 'The term "collectively" means ______.', options: ['One by one', 'Working together or as a whole', 'In secret', 'By accident'], answer: 'Working together or as a whole' },
+                    { q: 'What is "revenue expansion"?', options: ['Losing money', 'An increase in total income/earnings', 'Opening a new office', 'Paying taxes'], answer: 'An increase in total income/earnings' },
+                    { q: 'The word "surpass" is a synonym for ______.', options: ['Stay below', 'Exceed or go beyond', 'Fail', 'Understand'], answer: 'Exceed or go beyond' },
+                    { q: 'What does "reminiscent" mean?', options: ['New and modern', 'Tending to remind one of something', 'Boring', 'Forgotten'], answer: 'Tending to remind one of something' },
+                    { q: 'Systemic stakes refer to things that affect ______.', options: ['Only one person', 'The entire system or industry', 'Only small birds', 'Only a local town'], answer: 'The entire system or industry' },
+                    { q: 'Analysts "estimate" the spending, meaning they ______.', options: ['Know for a fact', 'Calculate or predict based on data', 'Ignore the spending', 'Change the numbers'], answer: 'Calculate or predict based on data' }
+                ]
+            },
+            'market-risk': {
+                title: '三月市場風險分析',
+                english: `March Market Sentiment: Sticky Inflation Solidifies "Higher for Longer" Rate Reality\nDespite strong corporate earnings, equity markets have experienced volatility as 10-year U.S. Treasury yields reached approximately 4.3%. The policy stance of the Federal Reserve continues to emphasize the “Higher for Longer” interest rate environment amid persistent inflationary pressures. Macroscopically, capital allocation in 2026 is increasingly selective, favoring companies with clear earnings validation and sustainable cash flows, while heavily leveraged firms face rising refinancing risks.`,
+                chinese: `三月市場風險：聯準會「Higher for Longer」與通膨黏性之再掛鉤\n儘管企業獲利強勁，但隨著美國 10 年期公債殖利率達到約 4.3%，股市經歷了波動。在通膨壓力持續存在（通膨黏性）的情況下，聯準會（Fed）的政策立場繼續強調「長期高利率（Higher for Longer）」環境。從宏觀角度看，2026 年的資本配置正變得日益具備「選擇性」，偏好那些有明確獲利證實與永續現金流的公司；與此同時，高槓桿（heavily leveraged）企業則面臨日益增長的再融資風險與信貸緊縮挑戰。`,
+                vocabulary: [
+                    'Market sentiment (n.phr.): 市場情緒', 'Sticky inflation (n.phr.): 黏性通膨 (難以降低的通膨)', 'Higher for Longer (phr.): 長期高利率', 'Corporate earnings (n.phr.): 企業獲利',
+                    'Equity markets (n.phr.): 股市/股票市場', 'Volatility (n.): 波動', '10-year Treasury yields (n.phr.): 10 年期公債殖利率', 'Policy stance (n.phr.): 政策立場',
+                    'Persistent (adj.): 持續的/頑固的', 'Liquidity baseline (n.phr.): 流動性基準', 'Capital allocation (n.phr.): 資本配置', 'Selective (adj.): 有選擇性的',
+                    'Earnings validation (n.phr.): 獲利證實', 'Sustainable cash flows (n.phr.): 永續現金流', 'Heavily leveraged (adj.phr.): 高槓桿的', 'Refinancing risks (n.phr.): 再融資風險',
+                    'Refinancing (v.ger.): 再融資', 'Yield (n.): 殖利率/產量', 'Treasury (n.): 國庫/公債', 'Sentiment (n.): 情緒',
+                    'Sticky (adj.): 黏的/難處理的', 'Inflation (n.): 通膨', 'Consolidation (n.): 鞏固', 'Benchmark (n.): 基準',
+                    'Allocation (n.): 分配', 'Equity (n.): 權益/股票', 'Credit conditions (n.phr.): 信貸條件', 'Constraint (n.): 限制',
+                    'Leveraged (adj.): 槓桿化的', 'Divergence (n.): 分歧', 'Prerequisite (n.): 前提', 'Sustained (adj.): 持續的'
+                ],
+                quiz: [
+                    { q: 'What is the current yield level for the 10-year U.S. Treasury mentioned?', options: ['1.5%', '3.5%', '4.3%', '5.0%'], answer: '4.3%' },
+                    { q: 'What is the term for inflation that is difficult to lower?', options: ['Easy inflation', 'Sticky inflation', 'Fast inflation', 'Zero inflation'], answer: 'Sticky inflation' },
+                    { q: 'The Fed\'s policy stance is described as "______ for Longer."', options: ['Lower', 'Higher', 'Faster', 'Better'], answer: 'Higher' },
+                    { q: 'How is capital allocation in 2026 being described?', options: ['Random', 'Increasingly selective', 'Everyone is buying gold', 'Only for banks'], answer: 'Increasingly selective' },
+                    { q: 'Which type of companies are currently favored by investors?', options: ['High-risk startups', 'Companies with clear earnings validation and cash flow', 'Companies with no profits', 'Only oil companies'], answer: 'Companies with clear earnings validation and cash flow' },
+                    { q: 'What kind of risk is increasing for "heavily leveraged" firms?', options: ['Marketing risk', 'Refinancing risks', 'Weather risk', 'Shipping risk'], answer: 'Refinancing risks' },
+                    { q: 'The term "equity market" is a synonym for ______.', options: ['Bond market', 'Stock market', 'Real estate', 'Grocery store'], answer: 'Stock market' },
+                    { q: 'What does "volatility" mean?', options: ['Stability', 'A state of rapid and unpredictable change', 'Zero price movement', 'A high price'], answer: 'A state of rapid and unpredictable change' },
+                    { q: 'U.S. Treasury yields refer to the return on ______.', options: ['Buying gold', 'Government bonds', 'Buying a car', 'Saving in a local bank'], answer: 'Government bonds' },
+                    { q: 'The policy stance emphasizes a "______ environment."', options: ['Low interest rate', 'High interest rate', 'No tax', 'Silent'], answer: 'High interest rate' },
+                    { q: 'What does "heavily leveraged" mean in finance?', options: ['Having a lot of cash', 'Having a high level of debt relative to equity', 'Using a lot of tools', 'Being very light'], answer: 'Having a high level of debt relative to equity' },
+                    { q: 'The word "sentiment" in "market sentiment" refers to ______.', options: ['The logic of computers', 'The general attitude or mood of investors', 'The price of bread', 'A type of fuel'], answer: 'The general attitude or mood of investors' },
+                    { q: 'Investors are looking for "sustainable ______," meaning consistent income.', options: ['Rain', 'Cash flows', 'Energy', 'Holidays'], answer: 'Cash flows' },
+                    { q: 'The environment established a new "______ baseline."', options: ['Water', 'Liquidity', 'Air', 'Road'], answer: 'Liquidity' },
+                    { q: 'Refinancing means ______.', options: ['Ending a business', 'Obtaining a new loan to pay off an existing one', 'Finding a new office', 'Paying taxes'], answer: 'Obtaining a new loan to pay off an existing one' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
