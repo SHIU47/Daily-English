@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 12 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 12 日：能源韌性、經濟自由與自動化前沿</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Optimized for Linguistic and Strategic Insights.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] Taipower to Submit Plan to Restart Ma-anshan Nuclear Plant Amid Wartime Energy Fears\nTaipower will submit a proposal to restart the decommissioned Ma-anshan nuclear plant in Pingtung, according to the Ministry of Economic Affairs. The targeted restart timeline is 2028, following legislative concerns that Taiwan’s natural gas reserves could last only around 10 days during a blockade scenario. Macroscopically, the move signals a strategic recalibration of energy policy toward national security and baseload stability.\n\n[2] Taiwan Ranks 5th Globally in 2026 Index of Economic Freedom\nAccording to the latest report from The Heritage Foundation, Taiwan ranked 5th among 184 economies in the 2026 Index of Economic Freedom. The top five economies include Singapore, Switzerland, Ireland, Australia, and Taiwan. This ranking reflects regulatory improvements in property rights protection and digital governance frameworks.\n\n[3] Danjiang Bridge Set for May 12 Inauguration; Northern Logistics Upgrade\nThe 920-meter Danjiang Bridge, linking Tamsui and Bali, will open on May 12. The bridge is expected to reduce congestion on Provincial Highway 2 by roughly 25%. Macroscopically, the bridge represents a structural upgrade for northern Taiwan logistics and strengthens the tourism corridor.`,
+                chinese: `【1】台電擬重啟核三廠馬鞍山機組：經濟部因應戰爭斷能模擬\n據經濟部透露，台電將提交一項重啟位於屏東、已除役的核三廠（馬鞍山機組）的計畫。重啟目標時程設定在 2028 年，此前立法院對台灣天然氣儲備在被封鎖情境下僅能維持約 10 天表示擔憂。從宏觀角度看，此舉標誌著「非核家園」政策的策略性重新校準。能源政策正轉向國家安全與基載穩定，核能日益被視為韌性資產而非單純的環保爭議。\n\n【2】台灣 2026 經濟自由度全球排名第五：法規改革與電子簽章法加持\n根據傳統基金會（The Heritage Foundation）的最新報告，台灣在 2026 年經濟自由度指數中，於 184 個經濟體內排名第 5。前五名分別為新加坡、瑞士、愛爾蘭、澳洲與台灣。從宏觀角度看，這一排名反映了 2024 至 2025 年間實施的法規改善，包括更強大的產權保護與數位治理框架。對投資者而言，台灣在東亞持續發揮著基於規則的資本避風港功能。\n\n【3】淡江大橋 5 月開通：北台灣交通與觀光工程進入倒數\n連接淡水與八里的 920 公尺長淡江大橋將於 5 月 12 日正式開通。根據地方規劃估計，該橋預計將緩解台 2 線約 25% 的擁堵情況。從宏觀角度看，這座大橋代表了北台灣物流的結構性升級。除了緩解交通外，它還將強化連接淡水河口至機場及大都會基礎設施的觀光走廊，提升區域流動性與經濟整合。`,
+                vocabulary: [
+                    'Decommissioned (v.pp.): 除役的', 'Wartime energy fears (n.phr.): 戰爭能源擔憂', 'Blockade scenario (n.phr.): 封鎖情境', 'Strategic recalibration (n.phr.): 戰略重新校準',
+                    'Baseload stability (n.phr.): 基載穩定', 'Resilience asset (n.phr.): 韌性資產', 'Economic Freedom (n. proper): 經濟自由', 'The Heritage Foundation (n. proper): 傳統基金會',
+                    'Regulatory improvements (n.phr.): 法規改善', 'Property rights (n.phr.): 產權', 'Digital governance (n.phr.): 數位治理', 'Capital safe haven (n.phr.): 資本避風港',
+                    'Inauguration (n.): 開幕/落成典禮', 'Congestion (n.): 擁堵', 'Structural upgrade (n.phr.): 結構性升級', 'Logistics (n.): 物流',
+                    'Estuary (n.): 河口', 'Regional mobility (n.phr.): 區域流動性', 'Recalibration (n.): 重新校準', 'Blockade (n.): 封鎖',
+                    'Reserves (n.): 儲備', 'Legislative (adj.): 立法的', 'Framework (n.): 框架/準則', 'Inaugurate (v.): 舉行就職/落成典禮',
+                    'Mandate (n.): 授權/命令', 'Consolidation (n.): 鞏固', 'Indispensable (adj.): 不可或缺的', 'Infrastructure (n.): 基礎建設',
+                    'Sovereignty (n.): 主權', 'Differentiator (n.): 區分因素', 'Strategic (adj.): 戰略的', 'Bilateral (adj.): 雙邊的'
+                ],
+                quiz: [
+                    { q: 'In which year does Taipower target to restart the Ma-anshan nuclear plant?', options: ['2026', '2027', '2028', '2030'], answer: '2028' },
+                    { q: 'Why is there a move to restart the nuclear plant according to the text?', options: ['Low cost only', 'Wartime energy fears and limited natural gas reserves', 'Lack of sunlight for solar', 'Global nuclear rally'], answer: 'Wartime energy fears and limited natural gas reserves' },
+                    { q: 'In a blockade scenario, how many days could Taiwan’s natural gas last?', options: ['3 days', '10 days', '30 days', '100 days'], answer: '10 days' },
+                    { q: 'What is Taiwan’s global rank in the 2026 Index of Economic Freedom?', options: ['1st', '3rd', '5th', '10th'], answer: '5th' },
+                    { q: 'Which organization issues the Index of Economic Freedom?', options: ['The UN', 'The Heritage Foundation', 'The IMF', 'The World Bank'], answer: 'The Heritage Foundation' },
+                    { q: 'Name the top economy in the 2026 Index of Economic Freedom.', options: ['Singapore', 'Switzerland', 'USA', 'Taiwan'], answer: 'Singapore' },
+                    { q: 'When is the inauguration date for the Danjiang Bridge?', options: ['April 1', 'May 12', 'June 30', 'Late 2026'], answer: 'May 12' },
+                    { q: 'How long is the Danjiang Bridge?', options: ['500 meters', '920 meters', '1.4 kilometers', '3 kilometers'], answer: '920 meters' },
+                    { q: 'By what percentage is the bridge expected to reduce congestion on Highway 2?', options: ['10%', '25%', '50%', '75%'], answer: '25' },
+                    { q: 'The term "baseload" in energy refers to ______.', options: ['Maximum peak load', 'The minimum amount of power a grid must provide consistently', 'Only solar energy', 'Battery backup'], answer: 'The minimum amount of power a grid must provide consistently' },
+                    { q: 'What does "inauguration" mean?', options: ['Cancellation', 'The formal beginning or opening of a system/policy', 'A type of tool', 'A hidden plan'], answer: 'The formal beginning or opening of a system/policy' },
+                    { q: 'The ranking reflects improvements in "______ rights protection."', options: ['Property', 'Voting', 'Animal', 'Internet'], answer: 'Property' },
+                    { q: 'The bridge links Tamsui and which other district?', options: ['Keelung', 'Bali', 'Xinyi', 'Nangang'], answer: 'Bali' },
+                    { q: 'What does "recalibration" mean in "strategic recalibration"?', options: ['Ending a plan', 'Correcting or adjusting a strategy', 'Copying a plan', 'Starting a war'], answer: 'Correcting or adjusting a strategy' },
+                    { q: 'The bridge connects the Tamsui ______ to infrastructure.', options: ['Mountain', 'Estuary (river mouth)', 'Forest', 'Desert'], answer: 'Estuary (river mouth)' }
+                ]
+            },
+            'imf-forecast': {
+                title: 'IMF 調升全球成長預測',
+                english: `The International Monetary Fund (IMF) has raised its 2026 global growth forecast to 3.3% in its latest World Economic Outlook. The increase reflects strong technology capital expenditures, especially in AI infrastructure. Macroscopically, the global economy is entering a “two-speed system” where high-tech sectors drive productivity while traditional industries struggle amid trade friction and higher interest rates. Policymakers are increasingly focused on rebuilding fiscal buffers while adapting to a prolonged higher-interest-rate environment to ensure long-term stability.`,
+                chinese: `IMF 調升 2026 全球成長預測至 3.3%：技術投資對沖貿易風險\n國際貨幣基金組織（IMF）在最新的《世界經濟展望》中，將 2026 年全球成長預測調升至 3.3%。這一增幅反映了強勁的科技資本支出，特別是在 AI 基礎設施領域。從宏觀角度看，全球經濟正進入一個「雙速系統」：高科技部門推動生產力與投資，而傳統產業則在貿易摩擦與高利率中苦苦掙扎。政策制定者正日益專注於重建財政緩衝（fiscal buffers），同時適應長期的利率高位環境以確保長期穩定。`,
+                vocabulary: [
+                    'IMF (International Monetary Fund) (n. proper): 國際貨幣基金組織', 'World Economic Outlook (n. proper): 世界經濟展望', 'Global growth forecast (n.phr.): 全球成長預測', 'Revises upward (v.phr.): 上調',
+                    'Capital expenditures (Capex) (n.phr.): 資本支出', 'Two-speed system (n.phr.): 雙速系統/二元化系統', 'Productivity (n.): 生產力', 'High-tech sectors (n.phr.): 高科技部門',
+                    'Traditional industries (n.phr.): 傳統產業', 'Trade friction (n.phr.): 貿易摩擦', 'Higher interest rates (n.phr.): 較高利率', 'Fiscal buffers (n.phr.): 財政緩衝',
+                    'Prolonged (adj.): 長期的', 'Stability (n.): 穩定', 'Expenditure (n.): 支出', 'Projection (n.): 預測/投影',
+                    'Optimization (n.): 優化', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Logic (n.): 邏輯', 'Divergence (n.): 分歧',
+                    'Stagnation (n.): 停滯', 'Infrastructure (n.): 基礎建設', 'Billion (n.): 十億', 'Constraint (n.): 限制',
+                    'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略的', 'Consolidation (n.): 鞏固', 'Capacity (n.): 產能'
+                ],
+                quiz: [
+                    { q: 'What is the IMF\'s revised global growth forecast for 2026?', options: ['2.5%', '3.0%', '3.3%', '5.0%'], answer: '3.3%' },
+                    { q: 'What is the primary reason for the upward revision?', options: ['Low oil prices', 'Strong technology capital expenditures', 'Peace in the Middle East', 'Lower taxes'], answer: 'Strong technology capital expenditures' },
+                    { q: 'The global economy is described as a "______ system."', options: ['One-way', 'Two-speed', 'Broken', 'Fast-track'], answer: 'Two-speed' },
+                    { q: 'Which sector is driving productivity and investment?', options: ['Agriculture', 'Traditional manufacturing', 'High-tech sectors', 'Tourism'], answer: 'High-tech sectors' },
+                    { q: 'What are traditional industries struggling with?', options: ['Too many workers', 'Trade friction and higher interest rates', 'Lack of software', 'Low demand for cars'], answer: 'Trade friction and higher interest rates' },
+                    { q: 'Policymakers are focused on rebuilding "fiscal ______."', options: ['Taxes', 'Buffers', 'Debts', 'Offices'], answer: 'Buffers' },
+                    { q: 'How is the interest rate environment described?', options: ['Falling rapidly', 'Prolonged higher-interest-rate', 'Zero interest', 'Unstable and low'], answer: 'Prolonged higher-interest-rate' },
+                    { q: 'The term "Outlook" in the IMF context refers to ______.', options: ['A view from a window', 'A prediction or prospect', 'A summary of past years', 'A type of money'], answer: 'A prediction or prospect' },
+                    { q: 'What does "fiscal" mean?', options: ['Physical strength', 'Related to government revenue and spending', 'Related to the forest', 'Related to the moon'], answer: 'Related to government revenue and spending' },
+                    { q: 'A "buffer" is intended to ______.', options: ['Cause harm', 'Provide protection or cushion', 'Increase noise', 'Delete data'], answer: 'Provide protection or cushion' },
+                    { q: 'The word "prolonged" means ______.', options: ['Very short', 'Continuing for a long time', 'Ending tomorrow', 'Extremely fast'], answer: 'Continuing for a long time' },
+                    { q: 'Which report is the source of this news?', options: ['Daily News', 'World Economic Outlook', 'IMF Morning Call', 'Global Tech Review'], answer: 'World Economic Outlook' },
+                    { q: 'What is "capital expenditure"?', options: ['Paying for food', 'Money spent by businesses on fixed assets', 'Personal savings', 'Taxes paid to the UN'], answer: 'Money spent by businesses on fixed assets' },
+                    { q: 'The economy is split into high-tech and traditional. This is a ______.', options: ['Agreement', 'Divergence/Two-speed system', 'Merger', 'Closure'], answer: 'Divergence/Two-speed system' },
+                    { q: 'What is the ultimate goal mentioned by the IMF?', options: ['Total wealth', 'Long-term stability', 'Buying all gold', 'Starting a trade war'], answer: 'Long-term stability' }
+                ]
+            },
+            'lucid-uber': {
+                title: 'Lucid 與 Uber 開發 Robotaxi',
+                english: `Lucid Group and Uber revealed plans on Wednesday to collaborate on an L4-ready robotaxi platform. The companies aim for a commercial launch in late 2026. Macroscopically, the autonomous driving industry is shifting from single-company development models to platform alliances. By combining Lucid’s EV hardware efficiency with Uber’s global ride network, the partnership attempts to accelerate real-world robotaxi deployment. The deal would integrate Lucid’s proprietary “DreamDrive” sensor suite with Uber’s fleet management software.`,
+                chinese: `Lucid 與 Uber 合作開發 Robotaxi：自動駕駛商業化加速\nLucid 集團與 Uber 週三公布了在 L4 等級自駕計程車（Robotaxi）平台上進行合作的計畫。兩家公司目標是在 2026 年底進行商業化發布。從宏觀角度看，自動駕駛產業正從單一公司的開發模式轉向平台聯盟。透過結合 Lucid 的電動車硬體效率與 Uber 的全球叫車網路，這項夥伴關係企圖加速現實世界的 Robotaxi 部署。該交易將把 Lucid 專有的「DreamDrive」感測器套件與 Uber 的車隊管理軟體整合。`,
+                vocabulary: [
+                    'Robotaxi (n.): 自駕計程車', 'L4-ready (adj.): 具備 L4 等級自駕能力的', 'Collaborate (v.): 合作', 'Commercial launch (n.phr.): 商業發布',
+                    'Autonomous driving (n.phr.): 自動駕駛', 'Platform alliances (n.phr.): 平台聯盟', 'EV (Electric Vehicle) (n.): 電動車', 'Hardware efficiency (n.phr.): 硬體效率',
+                    'Ride network (n.phr.): 叫車網路', 'Deployment (n.): 部署', 'Proprietary (adj.): 專有的', 'Sensor suite (n.phr.): 感測器套件',
+                    'Fleet management (n.phr.): 車隊管理', 'Accelerate (v.): 加速', 'Unveiled (v.pt.): 揭曉/展示', 'Integration (n.): 整合',
+                    'DreamDrive (n. proper): Lucid 自駕系統名稱', 'Robotaxi Readiness (n.phr.): 自駕計程車就緒度', 'Sub-second (adj.): 秒級以下的', 'Latency (n.): 延遲',
+                    'Infrastructure (n.): 基礎建設', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Logic (n.): 邏輯', 'Divergence (n.): 分歧',
+                    'Stagnation (n.): 停滯', 'Ambition (n.): 野心', 'Protocol (n.): 協議', 'Jurisdiction (n.): 管轄權'
+                ],
+                quiz: [
+                    { q: 'Which two companies are partnering on a Robotaxi platform?', options: ['Tesla and Lyft', 'Lucid and Uber', 'NIO and DiDi', 'Ford and Amazon'], answer: 'Lucid and Uber' },
+                    { q: 'What is the target date for the commercial launch?', options: ['Early 2025', 'Late 2026', 'Mid 2027', '2030'], answer: 'Late 2026' },
+                    { q: 'The Robotaxi platform is described as "______-ready."', options: ['L2', 'L3', 'L4', 'L5'], answer: 'L4' },
+                    { q: 'What does Lucid provide to the partnership?', options: ['Ride network', 'EV hardware efficiency and DreamDrive sensor suite', 'Only money', 'Factory space in London'], answer: 'EV hardware efficiency and DreamDrive sensor suite' },
+                    { q: 'What does Uber provide to the partnership?', options: ['EV batteries', 'Global ride network and fleet management software', 'The car design', 'Legal defense'], answer: 'Global ride network and fleet management software' },
+                    { q: 'The industry is shifting from single-company models to ______ ______.', options: ['Local sales', 'Platform alliances', 'Secret projects', 'Manual driving'], answer: 'Platform alliances' },
+                    { q: 'What is the goal of the partnership in the real world?', options: ['To build more buses', 'To accelerate Robotaxi deployment', 'To lower insurance', 'To stop car sales'], answer: 'To accelerate Robotaxi deployment' },
+                    { q: 'The word "proprietary" means ______.', options: ['Free for all', 'Owned exclusively by a company', 'Publicly available', 'Broken'], answer: 'Owned exclusively by a company' },
+                    { q: 'What is a "fleet" in this context?', options: ['A group of ships', 'A group of vehicles (taxis) operating together', 'A bird family', 'A high speed'], answer: 'A group of vehicles (taxis) operating together' },
+                    { q: 'The term "autonomous" means ______.', options: ['Controlled by humans', 'Self-governing or acting independently', 'Slow-moving', 'Electric'], answer: 'Self-governing or acting independently' },
+                    { q: 'What does "L4" refer to in self-driving levels?', options: ['Level 4 (high automation)', 'Level 4 (no automation)', 'Level 4 (parking only)', 'Level 4 (speed limit)'], answer: 'Level 4 (high automation)' },
+                    { q: 'The companies "revealed" plans. What is "revealed"?', options: ['Hid', 'Showed or made known', 'Cancelled', 'Forgot'], answer: 'Showed or made known' },
+                    { q: 'Lucid and Uber are trying to "accelerate" deployment. What is "accelerate"?', options: ['To slow down', 'To increase speed or progress', 'To stop', 'To copy'], answer: 'To increase speed or progress' },
+                    { q: 'Is the Robotaxi intended for city streets or private tracks?', options: ['Private tracks only', 'Real-world deployment', 'Only underwater', 'The text doesn\'t say'], answer: 'Real-world deployment' },
+                    { q: 'Which leader discussed these plans during Investor Day?', options: ['Elon Musk', 'Jensen Huang', 'Lucid Group representatives', 'Uber CEO only'], answer: 'Lucid Group representatives' }
+                ]
+            },
+            'nebius-ai-factory': {
+                title: 'Nebius 在密蘇里州建 AI 工廠',
+                english: `Nebius Group has received approval to build a major AI facility in Independence, Missouri. This project reflects the emerging “Silicon Heartland” trend where lower electricity costs and abundant land in the American Midwest are attracting massive compute infrastructure investments. Macroscopically, the AI boom is redrawing the geographic distribution of U.S. technology infrastructure, shifting economic growth beyond traditional coastal tech hubs like Silicon Valley. Nebius aims to utilize this site for training next-generation large language models.`,
+                chinese: `Nebius 在密蘇里州建最大 AI 工廠：美國算力版圖向內陸移動\nNebius 集團已獲得批准，將在美國密蘇里州獨立城（Independence）建設一座大型 AI 設施。該專案反映了新興的「矽核心地帶（Silicon Heartland）」趨勢：美國中西部較低的電費與豐富的土地資源，正吸引著大規模的算力基礎設施投資。從宏觀角度看，AI 熱潮正在重繪美國技術基礎設施的地理分布，將經濟成長從矽谷等傳統沿海技術中心向內陸轉移。Nebius 旨在利用該站點訓練次世代大型語言模型。`,
+                vocabulary: [
+                    'Nebius Group (n. proper): Nebius 集團', 'Approval (n.): 批准/核准', 'Independence, Missouri (n. proper): 獨立城 (位於密蘇里州)', 'Silicon Heartland (n. phr.): 矽核心地帶',
+                    'American Midwest (n. proper): 美國中西部', 'Electricity costs (n.phr.): 電費', 'Abundant land (n.phr.): 豐富的土地', 'Compute infrastructure (n.phr.): 算力基礎設施',
+                    'Redrawing (v.ger.): 重繪/重新定義', 'Geographic distribution (n.phr.): 地理分布', 'Coastal tech hubs (n.phr.): 沿海技術中心', 'Silicon Valley (n. proper): 矽谷',
+                    'Large language models (n.phr.): 大型語言模型', 'Investment (n.): 投資', 'Shift (v./n.): 轉移', 'Infrastructure (n.): 基礎建設',
+                    'Constraint (n.): 限制', 'Scalability (n.): 可擴展性', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Logic (n.): 邏輯', 'Divergence (n.): 分歧',
+                    'Heartland (n.): 核心地帶/心臟地帶', 'Facility (n.): 設施', 'Abundant (adj.): 豐富的', 'Geographic (adj.): 地理的',
+                    'Distribution (n.): 分布', 'Coastal (adj.): 沿海的', 'Assault (n.): 襲擊', 'Infrastructure (n.): 基礎設施'
+                ],
+                quiz: [
+                    { q: 'Which company received approval to build an AI facility in Missouri?', options: ['Google', 'NVIDIA', 'Nebius Group', 'Microsoft'], answer: 'Nebius Group' },
+                    { q: 'In which city and state is the new AI facility located?', options: ['San Francisco, California', 'Austin, Texas', 'Independence, Missouri', 'Seattle, Washington'], answer: 'Independence, Missouri' },
+                    { q: 'What trend does this project reflect?', options: ['Silicon Valley Expansion', 'Silicon Heartland', 'Coastal Concentration', 'Offshore Computing'], answer: 'Silicon Heartland' },
+                    { q: 'What are the two main reasons the Midwest is attracting AI investments?', options: ['Better weather and higher taxes', 'Lower electricity costs and abundant land', 'Proximity to the ocean', 'Large population'], answer: 'Lower electricity costs and abundant land' },
+                    { q: 'The AI boom is "redrawing" the ______ distribution of tech infrastructure.', options: ['Legal', 'Geographic', 'Emotional', 'Financial'], answer: 'Geographic' },
+                    { q: 'Economic growth is shifting away from traditional ______ tech hubs.', options: ['Desert', 'Coastal', 'Mountain', 'Rural'], answer: 'Coastal' },
+                    { q: 'What is a "Heartland"?', options: ['A type of heart surgery', 'The central or most important part of a region', 'A beach area', 'A cold forest'], answer: 'The central or most important part of a region' },
+                    { q: 'The term "abundant" means ______.', options: ['Very little', 'Existing in large quantities; plentiful', 'Broken', 'Hidden'], answer: 'Existing in large quantities; plentiful' },
+                    { q: 'Independence, Missouri is part of the American "______."', options: ['Deep South', 'West Coast', 'Midwest', 'Northeast'], answer: 'Midwest' },
+                    { q: 'What does "redrawing" mean in this context?', options: ['Deleting a map', 'Changing the pattern or boundary of something', 'Drawing a picture of a car', 'Signing a new deal'], answer: 'Changing the pattern or boundary of something' },
+                    { q: 'The facility will be used to train what kind of models?', options: ['Car models', 'Large language models', 'Weather models', 'Fashion models'], answer: 'Large language models' },
+                    { q: 'What is "compute infrastructure"?', options: ['Roads for cars', 'The technical facilities used for computing and data processing', 'A new type of school', 'Buying computers for kids'], answer: 'The technical facilities used for computing and data processing' },
+                    { q: 'Coastal tech hubs like ______ are seeing growth shift away.', options: ['Texas', 'Silicon Valley', 'Independence', 'Chicago'], answer: 'Silicon Valley' },
+                    { q: 'The project is described as a "______ AI facility," meaning large.', options: ['Minor', 'Major', 'Temporary', 'Small'], answer: 'Major' },
+                    { q: 'When was the approval received?', options: ['Recently (revealed on Wednesday/Thursday context)', 'Ten years ago', 'In 2024', 'The text doesn\'t say'], answer: 'Recently (revealed on Wednesday/Thursday context)' }
+                ]
+            },
+            'oracle-earnings': {
+                title: 'Oracle 財報與 AI 溢價',
+                english: `Oracle Surges on Strong Q3 Earnings: AI Capex Spillover Confirmed\nOracle reported strong quarterly results, with its Oracle Cloud Infrastructure (OCI) business growing 52% year-over-year. The company highlighted multi-billion-dollar contracts with NVIDIA and Microsoft. Macroscopically, this confirms the “AI Capex Spillover” phenomenon. As hyperscalers exhaust internal data-center capacity, firms like Oracle become the new "landlords of the internet," leasing compute power to the expanding AI ecosystem. Analysts believe this secures Oracle’s high-margin growth through 2027.`,
+                chinese: `Oracle 財報超預期：雲端基礎設施需求爆發與「AI 資本溢出」\n甲骨文（Oracle）公布了強勁的第三季財報，其雲端基礎設施（OCI）業務年增達 52%。該公司強調了與 NVIDIA 和微軟簽署的價值數十億美元的合約。從宏觀角度看，這證實了「AI 資本支出溢出（AI Capex Spillover）」現象。隨著超大規模服務商耗盡內部數據中心產能，像 Oracle 這樣先前大舉投資基礎設施的公司，正成為網路的「新房東」，將運算能力租賃給不斷擴張的 AI 生態系統。分析師認為，這確保了 Oracle 到 2027 年的高毛利成長。`,
+                vocabulary: [
+                    'Q3 Earnings (n.phr.): 第三季財報', 'OCI (Oracle Cloud Infrastructure) (n. proper): 甲骨文雲端基礎設施', 'Year-over-year (adj./adv.): 年增/與去年同期相比', 'Multi-billion-dollar (adj.): 數十億美元的',
+                    'Contracts (n.): 合約', 'AI Capex Spillover (n.phr.): AI 資本支出溢出', 'Phenomenon (n.): 現象', 'Hyperscalers (n.): 超大規模服務商',
+                    'Exhaust (v.): 耗盡/用完', 'Data-center capacity (n.phr.): 數據中心產能', 'Landlords of the internet (n.phr.): 網路房東', 'Leasing (v.ger.): 租賃',
+                    'Expanding AI ecosystem (n.phr.): 擴張中的 AI 生態系統', 'High-margin growth (n.phr.): 高毛利成長', 'Surges (v.): 飆升', 'Verification (n.): 驗證',
+                    'Optimization (n.): 優化', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Logic (n.): 邏輯', 'Divergence (n.): 分歧',
+                    'Stagnation (n.): 停滯', 'Infrastructure (n.): 基礎建設', 'Billion (n.): 十億', 'Constraint (n.): 限制',
+                    'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略的', 'Consolidation (n.): 鞏固', 'Capacity (n.): 產能'
+                ],
+                quiz: [
+                    { q: 'By what percentage did Oracle\'s OCI business grow year-over-year?', options: ['8%', '33%', '52%', '70%'], answer: '52%' },
+                    { q: 'Which two tech giants signed multi-billion-dollar contracts with Oracle?', options: ['Apple and Google', 'NVIDIA and Microsoft', 'Tesla and SpaceX', 'Intel and Amazon'], answer: 'NVIDIA and Microsoft' },
+                    { q: 'The term "AI Capex Spillover" means what?', options: ['Losing all money', 'Extra spending flowing from large firms to infrastructure providers', 'A type of oil spill', 'Cutting taxes'], answer: 'Extra spending flowing from large firms to infrastructure providers' },
+                    { q: 'Firms like Oracle are described as the "______ of the internet."', options: ['Workers', 'Farmers', 'Landlords', 'Police'], answer: 'Landlords' },
+                    { q: 'What are hyperscalers "exhausting" currently?', options: ['Their water supply', 'Internal data-center capacity', 'Their fuel', 'Their marketing budget'], answer: 'Internal data-center capacity' },
+                    { q: 'Analysts believe Oracle’s growth is "secured" through which year?', options: ['2026', '2027', '2028', '2030'], answer: '2027' },
+                    { q: 'The quarterly results were described as "______," meaning better than expected.', options: ['Weak', 'Strong', 'Boring', 'Average'], answer: 'Strong' },
+                    { q: 'What does "leasing" mean in a business sense?', options: ['Selling a car', 'Renting out property or equipment for a fee', 'Giving something for free', 'Buying shares'], answer: 'Renting out property or equipment for a fee' },
+                    { q: 'The word "phenomenon" means ______.', options: ['A type of tool', 'A remarkable person or thing/event', 'A mistake', 'A hidden plan'], answer: 'A remarkable person or thing/event' },
+                    { q: 'What does "year-over-year" compare?', options: ['Today vs Yesterday', 'This month vs Next month', 'This year vs Previous year (same period)', 'This year vs 10 years ago'], answer: 'This year vs Previous year (same period)' },
+                    { q: 'What is a "hyperscaler"?', options: ['A large scale', 'A massive cloud computing service provider', 'A high-speed rocket', 'A type of screen'], answer: 'A massive cloud computing service provider' },
+                    { q: 'The term "high-margin" refers to what?', options: ['Low profit', 'High profit relative to cost', 'Wide roads', 'Big offices'], answer: 'High profit relative to cost' },
+                    { q: 'Which part of Oracle\'s business grew by 52%?', options: ['Sales of hardware', 'Cloud Infrastructure (OCI)', 'Consulting', 'Advertising'], answer: 'Cloud Infrastructure (OCI)' },
+                    { q: 'Oracle is "surging," meaning its stock price is ______.', options: ['Falling', 'Rising suddenly and strongly', 'Staying level', 'Vanishing'], answer: 'Rising suddenly and strongly' },
+                    { q: 'Contracts worth ______ of dollars were highlighted.', options: ['Millions', 'Billions', 'Trillions', 'Thousands'], answer: 'Billions' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
