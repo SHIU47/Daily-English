@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 16 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 16 日：台海重啟、AI 垂直整合與金融預警</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. March 16th Global Intelligence Edition.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] Large-scale PLA Air Activities Resume Near Taiwan After Unexplained 12-day Lull\nThe Ministry of National Defense (MND) reported a significant return of Chinese military aviation activity over the past 24 hours, ending a rare nearly two-week period of silence. Analysts had speculated that the previous lull was due to bad weather and the "Two Sessions" in Beijing. Macroscopically, this "return to the status quo" signals that China’s strategy of persistent gray-zone pressure remains institutionalized.\n\n[2] Micron Completes Acquisition of PSMC’s Tongluo P5 Site to Expand AI Mega Campus\nMicron Technology officially assumed ownership of PSMC’s P5 site in Tongluo today, integrating the 300,000-square-foot facility into its Taichung-based "Mega Campus." This industrial shift consolidates Taiwan's role as Micron's primary global hub for high-bandwidth memory (HBM), addressing the "Memory Wall" bottleneck in AI compute.\n\n[3] Eight State-run Banks to Deploy AI Facial Recognition at ATMs to Combat Fraud\nAt the direction of the Ministry of Finance, Taiwan's eight state-run banks are beginning the rollout of AI-powered facial recognition systems at ATMs. The systems are designed to detect suspicious behavior, such as individuals wearing helmets or masks during high-value withdrawals. This signifies a move toward "Biometric Sovereignty" in financial security.`,
+                chinese: `【1】台海軍事活動重啟：中共共機結束兩週靜默大規模擾台\n國防部（MND）報告指出，過去 24 小時內中國軍機活動顯著回歸，結束了罕見的近兩週沈默期。分析人士曾推測，先前的間歇是由於天氣惡劣及北京「兩會」政治會議所致。從宏觀角度看，這種「回歸現狀」信號顯示中國持續性的「灰色地帶」壓力策略已制度化。此恢復動作迫使台灣防禦機制重回高戒備狀態，強調了對近期提出的 1.25 兆新台幣「T-Dome」多層次防禦傘的持續需求。\n\n【2】美光完成收購力積電銅鑼 P5 廠：加速 AI 記憶體垂直整合\n美光科技（Micron）今日正式接管力積電（PSMC）位於銅鑼的 P5 廠區，將這座 30 萬平方英尺的設施整合進其台中的「超大校園（Mega Campus）」。機台進場儀式預計於 3 月 26 日舉行。此產業轉型鞏固了台灣作為美光全球高頻寬記憶體（HBM）首要樞紐的角色。從宏觀角度看，這種垂直整合解決了 AI 運算中的「記憶體牆」瓶頸，確保兆級參數模型的關鍵硬體在台灣統一的高效率生態系中生產。\n\n【3】八大行庫 ATM 將導入 AI 面部識別：科技防詐進入實名化階段\n在財政部的指示下，台灣八大公股銀行正開始在 ATM 部署 AI 驅動的面部識別系統。該系統旨在偵測異常行為，例如在高額提款時配戴安全帽或口罩的人士。這標誌著金融安全向「生物識別主權」邁進。從宏觀角度看，此計畫旨在減少每年高達 100 億新台幣的詐騙損失，儘管這也需要健全的治理框架來管理從公眾收集的大量生物識別數據集。`,
+                vocabulary: [
+                    'Unexplained (adj.): 未經解釋的', 'Lull (n.): 間歇/暫時平靜', 'Aviation (n.): 航空', 'Speculated (v.pt.): 推測',
+                    'Two Sessions (n. proper): 兩會 (中國政協與人大)', 'Status quo (n.): 現狀', 'Persistent (adj.): 持續的', 'Gray-zone pressure (n.phr.): 灰色地帶壓力',
+                    'Institutionalized (v.pp.): 制度化的', 'Apparatus (n.): 機制/設備/機構', 'High-readiness posture (n.phr.): 高戒備姿態', 'Acquisition (n.): 收購',
+                    'Assumed ownership (phr.): 取得所有權', 'Mega Campus (n. phr.): 超大校園/園區', 'Vertical integration (n.phr.): 垂直整合', 'Consolidates (v.): 鞏固',
+                    'High-bandwidth memory (HBM) (n. phr.): 高頻寬記憶體', 'Memory Wall (n. proper): 記憶體牆 (傳輸瓶頸)', 'Bottleneck (n.): 瓶頸', 'Trillion-parameter (adj.): 兆級參數的',
+                    'State-run banks (n.phr.): 公股銀行', 'Rollout (n.): 推出/部署', 'Suspicious behavior (n.phr.): 可疑行為', 'Withdrawals (n.): 提款',
+                    'Biometric Sovereignty (n.phr.): 生物識別主權', 'Datasets (n.): 數據集', 'Governance framework (n.phr.): 治理框架', 'Necessitates (v.): 使...成為必要',
+                    'Combat (v.): 對抗/打擊', 'Fraud (n.): 詐騙', 'Strategic (adj.): 戰略的', 'Bilateral (adj.): 雙邊的'
+                ],
+                quiz: [
+                    { q: 'How long was the "lull" in PLA aviation activity before it resumed?', options: ['3 days', '7 days', '12 days', 'One month'], answer: '12 days' },
+                    { q: 'What political event in Beijing was speculated to be a reason for the lull?', options: ['G20 Summit', 'The Two Sessions', 'Lunar New Year', 'Belt and Road Forum'], answer: 'The Two Sessions' },
+                    { q: 'Which company sold its P5 site in Tongluo to Micron?', options: ['TSMC', 'PSMC (力積電)', 'UMC', 'Nanya Tech'], answer: 'PSMC (力積電)' },
+                    { q: 'The acquisition of the P5 site focuses on which type of technology?', options: ['Solar cells', 'High-bandwidth memory (HBM)', 'Consumer LCDs', 'Audio processors'], answer: 'High-bandwidth memory (HBM)' },
+                    { q: 'How many state-run banks in Taiwan are deploying facial recognition at ATMs?', options: ['Two', 'Five', 'Eight', 'Twelve'], answer: 'Eight' },
+                    { q: 'The ATM recognition system targets people wearing what during withdrawals?', options: ['Business suits', 'Helmets or masks', 'Glasses', 'Wristwatches'], answer: 'Helmets or masks' },
+                    { q: 'What is the budget for the proposed "T-Dome" defense umbrella?', options: ['NT$10 billion', 'NT$122 billion', 'NT$1.25 trillion', 'NT$400 billion'], answer: 'NT$1.25 trillion' },
+                    { q: 'The term "Memory Wall" refers to a ______ in AI compute.', options: ['Hardware wall built for security', 'Bottleneck between processor and memory', 'Type of building material', 'New storage software'], answer: 'Bottleneck between processor and memory' },
+                    { q: 'What does "Biometric Sovereignty" refer to in the text?', options: ['Owning all people\'s passports', 'Security through unique biological data', 'Controlling the border with soldiers', 'Selling DNA data'], answer: 'Security through unique biological data' },
+                    { q: 'What is the estimated annual loss to fraud in Taiwan?', options: ['NT$100 million', 'NT$1 billion', 'NT$10 billion', 'NT$1 trillion'], answer: 'NT$10 billion' },
+                    { q: 'Which ministry directed the bank AI rollout?', options: ['MND', 'Ministry of Finance', 'MOEA', 'MOL'], answer: 'Ministry of Finance' },
+                    { q: 'When is the tool move-in ceremony for Micron’s new site?', options: ['Today', 'March 26', 'April 1', 'Next year'], answer: 'March 26' },
+                    { q: 'The resumption of PLA flights forces Taiwan into a ______ readiness posture.', options: ['Low', 'Medium', 'High', 'Zero'], answer: 'High' },
+                    { q: 'The Micron P5 facility size is how many square feet?', options: ['10,000', '100,000', '300,000', '1,000,000'], answer: '300,000' },
+                    { q: 'Which term is used to describe persistent, non-combat military pressure?', options: ['Hot war', 'Gray-zone pressure', 'Peace treaty', 'Cold front'], answer: 'Gray-zone pressure' }
+                ]
+            },
+            'maritime-coalition': {
+                title: '川普護航聯盟',
+                english: `Reports indicate the White House will announce a coalition of nations this week to provide military escorts for commercial tankers in the Persian Gulf. This represents a pivot from "sanctions-led pressure" to "direct military safeguarding." Macroscopically, this "Operation Prosperity Guardian II" aims to stabilize oil prices that have spiked near $100 per barrel around the Strait of Hormuz. However, the requirement for allies to contribute naval assets creates an institutional strain on the defense budgets of energy-dependent nations in Europe and Asia. Critics warn that direct military presence increases the risk of accidental escalation in a volatile region.`,
+                chinese: `川普政府擬組建「多國護航聯盟」：確保荷姆茲海峽航行自由\n據報導，白宮本週將宣布成立一個多國聯盟，為波斯灣的商業油輪提供軍事護航。這代表了從「制裁導向壓力」向「直接軍事保護」的轉向。從宏觀角度看，這項名為「繁榮守護者行動 II（Operation Prosperity Guardian II）」的計畫旨在穩定因荷姆茲海峽局勢而飆升至每桶近 100 美元的油價。然而，要求盟國貢獻海軍資產的要求，對歐洲與亞洲依賴能源國家的國防預算造成了制度性壓力。批評人士警告，直接的軍事存在增加了在動盪區域發生意外衝突升級的風險。`,
+                vocabulary: [
+                    'Coalition (n.): 聯盟', 'Military escorts (n.phr.): 軍事護航', 'Commercial tankers (n.phr.): 商業油輪', 'Persian Gulf (n. proper): 波斯灣',
+                    'Pivot (n./v.): 轉向/樞紐', 'Safeguarding (v.ger.): 保護/捍衛', 'Operation Prosperity Guardian (n. proper): 繁榮守護者行動', 'Spiked (v.pt.): 飆升',
+                    'Per barrel (phr.): 每桶', 'Strait of Hormuz (n. proper): 荷姆茲海峽', 'Naval assets (n.phr.): 海軍資產', 'Institutional strain (n.phr.): 制度性壓力/負擔',
+                    'Energy-dependent (adj.): 能源依賴的', 'Accidental escalation (n.phr.): 意外升級(衝突)', 'Volatile region (n.phr.): 動盪地區', 'Redundancy (n.): 備援',
+                    'Maritime (adj.): 海事的', 'Concessions (n.): 讓步', 'Transactional (adj.): 交易型的', 'Intervention (n.): 干預',
+                    'Premium (n.): 溢價', 'Transit (n.): 運輸', 'Sovereignty (n.): 主權', 'Integrity (n.): 完整性',
+                    'Alliance (n.): 聯盟', 'Budget (n.): 預算', 'Constraint (n.): 限制', 'Navigate (v.): 導航'
+                ],
+                quiz: [
+                    { q: 'What is the name of the military operation mentioned?', options: ['Desert Storm', 'Prosperity Guardian II', 'Epic Fury', 'Red Sea Resolve'], answer: 'Prosperity Guardian II' },
+                    { q: 'The operation aims to provide escorts for tankers in which body of water?', options: ['The Red Sea', 'The Persian Gulf', 'The Atlantic Ocean', 'The South China Sea'], answer: 'The Persian Gulf' },
+                    { q: 'Oil prices have spiked near which level per barrel?', options: ['$50', '$82', '$100', '$150'], answer: '$100' },
+                    { q: 'The policy has shifted from "sanctions-led pressure" to ______.', options: ['Peace talks', 'Economic aid', 'Direct military safeguarding', 'Total retreat'], answer: 'Direct military safeguarding' },
+                    { q: 'What are allies required to contribute to the coalition?', options: ['Money only', 'Naval assets (ships)', 'Soldiers on the ground', 'Oil reserves'], answer: 'Naval assets (ships)' },
+                    { q: 'Which strait is a critical chokepoint for oil transit in this news?', options: ['Strait of Malacca', 'Strait of Hormuz', 'Bering Strait', 'Strait of Gibraltar'], answer: 'Strait of Hormuz' },
+                    { q: 'What is a primary concern for energy-dependent nations in Europe and Asia?', options: ['Institutional strain on defense budgets', 'Lack of technology', 'Low oil demand', 'Too many tourists'], answer: 'Institutional strain on defense budgets' },
+                    { q: 'Critics fear that a direct military presence might lead to ______.', options: ['Lower prices forever', 'Accidental escalation', 'Peace in one day', 'Boredom'], answer: 'Accidental escalation' },
+                    { q: 'The term "tanker" refers to a ship carrying ______.', options: ['Tanks for war', 'Liquid goods like oil', 'Containers of clothes', 'Passengers'], answer: 'Liquid goods like oil' },
+                    { q: 'What does "volatile" mean in describing a region?', options: ['Extremely cold', 'Stable and quiet', 'Likely to change suddenly and for the worse', 'Very rich'], answer: 'Likely to change suddenly and for the worse' },
+                    { q: 'The word "pivot" is a synonym for ______.', options: ['Continuation', 'Fundamental change or turn', 'End', 'Mistake'], answer: 'Fundamental change or turn' },
+                    { q: 'A "coalition" is a group of ______.', options: ['One person', 'Many nations/parties working together', 'Only enemies', 'Only tech companies'], answer: 'Many nations/parties working together' },
+                    { q: 'What is "naval" related to?', options: ['Airplanes', 'The sea and navy', 'The forest', 'The stars'], answer: 'The sea and navy' },
+                    { q: 'The White House is expected to announce this plan ______.', options: ['Next year', 'This week', 'Last month', 'Never'], answer: 'This week' },
+                    { q: 'The term "assets" in a military context refers to ______.', options: ['Money only', 'Military equipment like ships or planes', 'Secret files', 'Pensions'], answer: 'Military equipment like ships or planes' }
+                ]
+            },
+            'iea-oil-release': {
+                title: 'IEA 釋放緊急儲油',
+                english: `The International Energy Agency (IEA) confirmed today that it is coordinating the largest emergency oil release in its history, totaling 400 million barrels. This strategic intervention is intended to counteract the "war premium" currently baked into crude prices. Macroscopically, while this provides a short-term liquidity buffer for the global economy, it also depletes the world's strategic reserves. If the conflict in Iran extends beyond 90 days, the global economy faces a structural energy deficit that could trigger a 1970s-style stagflationary cycle.`,
+                chinese: `IEA 將釋放 4 億桶緊急儲油：應對伊朗戰爭引發之供應衝擊\n國際能源總署（IEA）今日證實，正協調其歷史上規模最大的緊急儲油釋放行動，總計 4 億桶。這是一項策略性干預，旨在抵銷目前已計入原油價格的「戰爭溢價」。從宏觀角度看，雖然這為全球經濟提供了短期的流動性緩衝（liquidity buffer），但也耗盡了世界的戰略儲備。若伊朗衝突持續超過 90 天，全球經濟將面臨結構性能源短缺，可能引發類似 1970 年代風格的滯脹（stagflationary）循環。`,
+                vocabulary: [
+                    'IEA (International Energy Agency) (n. proper): 國際能源總署', 'Emergency oil release (n.phr.): 緊急儲油釋放', '400 million barrels (n.phr.): 4億桶', 'Coordinating (v.ger.): 協調',
+                    'Strategic intervention (n.phr.): 策略性干預', 'Counteract (v.): 抵銷/對抗', 'War premium (n.phr.): 戰爭溢價', 'Baked into (phr.): 已計入/融入',
+                    'Liquidity buffer (n.phr.): 流動性緩衝', 'Depletes (v.): 耗盡/枯竭', 'Strategic reserves (n.phr.): 戰略儲備', 'Conflict (n.): 衝突',
+                    'Structural energy deficit (n.phr.): 結構性能源短缺', 'Trigger (v.): 引發', 'Stagflationary cycle (n.phr.): 滯脹循環', '1970s-style (adj.): 1970年代風格的',
+                    'Crude prices (n.phr.): 原油價格', 'Coordination (n.): 協調/配合', 'Disinflation (n.): 通膨放緩', 'Benchmark (n.): 基準',
+                    'Buffer (n.): 緩衝', 'Deficit (n.): 赤字/短缺', 'Premium (n.): 溢價', 'Liquidity (n.): 流動性',
+                    'Sustained (adj.): 持續的', 'Stagnation (n.): 停滯', 'Commodity (n.): 商品', 'Recalibration (n.): 重新校準',
+                    'Resilience (n.): 韌性', 'Diversification (n.): 多元化', 'Milestone (n.): 里程碑', 'Aviation (n.): 航空'
+                ],
+                quiz: [
+                    { q: 'How many barrels of oil does the IEA plan to release?', options: ['100 million', '250 million', '400 million', '1 billion'], answer: '400 million' },
+                    { q: 'What is the primary goal of the oil release?', options: ['To start a new company', 'To counteract the "war premium" in prices', 'To sell oil to China only', 'To increase the cost of energy'], answer: 'To counteract the "war premium" in prices' },
+                    { q: 'The release is described as the "largest in ______."', options: ['Ten years', 'This month', 'IEA history', 'Only 2026'], answer: 'IEA history' },
+                    { q: 'What does the release do to the global economy in the short-term?', options: ['Causes immediate crash', 'Provides a liquidity buffer', 'Stops all transport', 'Increases taxes'], answer: 'Provides a liquidity buffer' },
+                    { q: 'What is a major negative consequence of the release?', options: ['It increases the oil price.', 'It depletes strategic reserves.', 'It causes too much rain.', 'It creates too many jobs.'], answer: 'It depletes strategic reserves.' },
+                    { q: 'If the conflict lasts longer than ______ days, a structural deficit may occur.', options: ['30', '60', '90', '365'], answer: '90' },
+                    { q: 'What style of economic cycle could be triggered?', options: ['1990s-style growth', '1970s-style stagflationary cycle', '2008-style housing crash only', 'Great Depression style'], answer: '1970s-style stagflationary cycle' },
+                    { q: 'The term "baked into" means prices already ______ the risk.', options: ['Ignore', 'Include/Account for', 'Delete', 'Hide'], answer: 'Include/Account for' },
+                    { q: 'What does "depletes" mean?', options: ['To fill up', 'To use up the supply or resources of', 'To make stronger', 'To clean'], answer: 'To use up the supply or resources of' },
+                    { q: 'A "deficit" refers to a ______ of something.', options: ['Surplus', 'Shortage or lack', 'Peak', 'New discovery'], answer: 'Shortage or lack' },
+                    { q: 'The IEA confirmed it is "coordinating" the move, which means ______.', options: ['Fighting it', 'Organizing different parts to work together', 'Watching it happen', 'Ignoring it'], answer: 'Organizing different parts to work together' },
+                    { q: 'What is "stagflation"?', options: ['High growth and high inflation', 'Economic stagnation and high inflation', 'No growth and no inflation', 'Fast price drops'], answer: 'Economic stagnation and high inflation' },
+                    { q: 'The word "counteract" means ______.', options: ['To support', 'To act against something in order to reduce its force', 'To follow', 'To count numbers'], answer: 'To act against something in order to reduce its force' },
+                    { q: 'Strategic ______ are being used up by this action.', options: ['Buildings', 'Reserves', 'Passwords', 'Holidays'], answer: 'Reserves' },
+                    { q: 'IEA stands for International ______ Agency.', options: ['Economic', 'Energy', 'Educational', 'Electronics'], answer: 'Energy' }
+                ]
+            },
+            'tesla-terafab': {
+                title: '特斯拉 Terafab 計畫',
+                english: `Tesla CEO Elon Musk announced that the company’s massive internal AI chip fabrication project will break ground in seven days. The "Terafab" is designed to produce the "AI5" chip, intended to power future Robotaxis and Optimus robots. This signifies an industrial shift toward "Full-Stack Autonomy." Macroscopically, Tesla’s move to become its own foundry partner represents a strategic hedge against the pricing power of NVIDIA and the capacity bottlenecks of the global merchant silicon market.`,
+                chinese: `特斯拉「Terafab」計畫倒數 7 天：馬斯克擬自研 AI5 晶片以擺脫供應限制\n特斯拉（Tesla）執行長伊隆·馬斯克宣布，該公司大規模的內部 AI 晶片製造專案將於 7 天後動工。「Terafab」旨在生產「AI5」晶片，預計將用於未來的自駕計程車（Robotaxi）與 Optimus 人形機器人。這標誌著產業向「全棧自主（Full-Stack Autonomy）」的轉型。從宏觀角度看，特斯拉轉向成為自有的代工夥伴（可能與台積電或英特爾合作），代表了對 NVIDIA 定價權與全球商用晶片市場產能瓶頸的策略性避險（hedge）。`,
+                vocabulary: [
+                    'Break ground (phr.v.): 動工/開挖', 'Fabrication project (n.phr.): 製造專案/計畫', 'Terafab (n. proper): 特斯拉晶圓廠名稱', 'AI5 chip (n. proper): 特斯拉下一代晶片代號',
+                    'Intended to (phr.): 旨在/打算', 'Robotaxis (n.): 自駕計程車', 'Optimus robots (n. proper): 特斯拉人型機器人', 'Full-stack autonomy (n.phr.): 全棧自主',
+                    'Foundry partner (n.phr.): 代工夥伴', 'Strategic hedge (n.phr.): 策略性避險', 'Pricing power (n.phr.): 定價權', 'Capacity bottlenecks (n.phr.): 產能瓶頸',
+                    'Merchant silicon (n.phr.): 商用晶片', 'Industrial shift (n.phr.): 產業轉移/轉型', 'Architecture (n.): 架構', 'Optimization (n.): 優化',
+                    'Autonomous (adj.): 自主的', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Logic (n.): 邏輯', 'Divergence (n.): 分歧',
+                    'Foundry (n.): 鑄造廠/代工廠', 'Constraint (n.): 限制', 'Scalability (n.): 可擴展性', 'Infrastructure (n.): 基礎建設',
+                    'Integration (n.): 整合', 'Backbone (n.): 骨幹', 'Prowess (n.): 實力', 'Propelling (v.ger.): 推進'
+                ],
+                quiz: [
+                    { q: 'What is the name of Tesla\'s new chip fabrication project?', options: ['Gigafab', 'Terafab', 'Megafab', 'TeslaOne'], answer: 'Terafab' },
+                    { q: 'What is the name of the new chip that will be produced at Terafab?', options: ['A18', 'H100', 'AI5', 'Blackwell'], answer: 'AI5' },
+                    { q: 'In how many days will the Terafab project break ground?', options: ['1 day', '3 days', '7 days', '30 days'], answer: '7 days' },
+                    { q: 'Which two future products will be powered by the AI5 chip?', options: ['Model S and Model 3', 'Robotaxis and Optimus robots', 'SpaceX rockets and Starlink', 'Powerwalls only'], answer: 'Robotaxis and Optimus robots' },
+                    { q: 'The move represents an industrial shift toward "Full-Stack ______."', options: ['Economy', 'Autonomy', 'Integration', 'Marketing'], answer: 'Autonomy' },
+                    { q: 'Tesla’s move is a "strategic hedge" against whose pricing power?', options: ['Apple', 'Intel', 'NVIDIA', 'Microsoft'], answer: 'NVIDIA' },
+                    { q: 'Tesla is looking to avoid "______ bottlenecks" in the global market.', options: ['Labor', 'Water', 'Capacity', 'Transportation'], answer: 'Capacity' },
+                    { q: 'The term "foundry" refers to a factory that ______ chips.', options: ['Designs only', 'Manufactures', 'Sells in stores', 'Hacks'], answer: 'Manufactures' },
+                    { q: 'What does "break ground" mean?', options: ['To fail a project', 'To start construction', 'To discover oil', 'To end a meeting'], answer: 'To start construction' },
+                    { q: 'The word "autonomy" in a tech context refers to ______.', options: ['High cost', 'The ability to operate independently/self-driving', 'Manual control', 'Government ownership'], answer: 'The ability to operate independently/self-driving' },
+                    { q: 'Tesla might collaborate with which two companies for fabrication?', options: ['Google and Amazon', 'TSMC or Intel', 'Samsung or Sony', 'Toyota or Ford'], answer: 'TSMC or Intel' },
+                    { q: 'What is "merchant silicon"?', options: ['Chips made of silver', 'Chips available for general purchase on the market', 'Old computer screens', 'Secret government chips'], answer: 'Chips available for general purchase on the market' },
+                    { q: 'A "hedge" in business is a strategy to ______.', options: ['Increase risk', 'Reduce or offset potential loss/risk', 'Start a garden', 'Borrow more money'], answer: 'Reduce or offset potential loss/risk' },
+                    { q: 'Who announced the Terafab project?', options: ['Jensen Huang', 'Tim Cook', 'Elon Musk', 'Sam Altman'], answer: 'Elon Musk' },
+                    { q: 'What is the scale of the fabrication project described as?', options: ['Minor', 'Small', 'Massive', 'Temporary'], answer: 'Massive' }
+                ]
+            },
+            'bofa-warning': {
+                title: '華爾街危機警示',
+                english: `Strategists at Bank of America warned today that current market conditions—surging oil prices, falling household savings, and systemic risks in private credit—mirror the lead-up to the 2008 Global Financial Crisis. This signifies an institutional move toward "Defensive Hedging." Macroscopically, the markets are testing the "Trump Put": the belief that the administration will intervene if the S&P 500 dips below 6,600 or if 30-year Treasury yields exceed 5% due to the Middle East conflict. Many traders remain cautious as the "War Inflation" narrative continues to gain traction.`,
+                chinese: `華爾街警示：伊朗戰爭影子下之金融危機徵兆與 2008 年雷同\n美銀（Bank of America）以 Michael Hartnett 為首的策略師今日發出警告，稱當前的市場狀況——油價飆升、家庭儲蓄下降以及私募信貸中的系統性風險——與 2008 年全球金融危機爆發前的徵兆雷同。這標誌著機構法人正轉向「防禦性避險」。從宏觀角度看，市場正在測試所謂的「川普賣權（Trump Put）」：即投資者相信，若標普 500 指數跌破 6,600 點，或 30 年期公債殖利率因中東衝突而突破 5%，川普政府將會出手干預。隨著「戰爭通膨（War Inflation）」的論述持續發酵，多數交易員仍保持謹慎。`,
+                vocabulary: [
+                    'Strategists (n.): 策略師', 'Bank of America (n. proper): 美國銀行 (美銀)', 'Mirror (v.): 映照/與...相似', 'Lead-up (n.): 準備階段/前奏',
+                    'Global Financial Crisis (n. proper): 全球金融危機', 'Surging (adj.): 飆升的', 'Household savings (n.phr.): 家庭儲蓄', 'Systemic risks (n.phr.): 系統性風險',
+                    'Private credit (n.phr.): 私募信貸', 'Defensive Hedging (n.phr.): 防禦性避險', 'Trump Put (n. proper): 川普賣權 (預期政府護盤)', 'Intervene (v.): 干預',
+                    'Treasury yields (n.phr.): 公債殖利率', 'Exceed (v.): 超過', 'War Inflation (n.phr.): 戰爭通膨', 'Gain traction (phr.): 獲得支持/進展',
+                    'S&P 500 (n. proper): 標普 500 指數', 'Volatility (n.): 波動性', 'Sentiment (n.): 情緒', 'Recession (n.): 衰退',
+                    'Benchmark (n.): 基準', 'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件', 'Refining (v.ger.): 提煉',
+                    'Optimization (n.): 優化', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Logic (n.): 邏輯', 'Divergence (n.): 分歧'
+                ],
+                quiz: [
+                    { q: 'Which bank issued a warning about "2008 parallels"?', options: ['Goldman Sachs', 'Bank of America', 'JPMorgan', 'Wells Fargo'], answer: 'Bank of America' },
+                    { q: 'Who is the lead strategist mentioned in the text?', options: ['Jerome Powell', 'Michael Hartnett', 'Elon Musk', 'Kevin Hassett'], answer: 'Michael Hartnett' },
+                    { q: 'What are the three market conditions mirroring 2008?', options: ['Low oil, high savings, low risk', 'Surging oil, falling savings, systemic risks in credit', 'High taxes, low debt, peace', 'New technology, more jobs, low prices'], answer: 'Surging oil, falling savings, systemic risks in credit' },
+                    { q: 'What is the "Trump Put"?', options: ['A type of golf move', 'The belief that the administration will intervene to stop a market crash', 'A new tax on stocks', 'A trade agreement with Iran'], answer: 'The belief that the administration will intervene to stop a market crash' },
+                    { q: 'At what S&P 500 level might the administration intervene according to the text?', options: ['3,000', '5,000', '6,600', '10,000'], answer: '6,600' },
+                    { q: 'What is the trigger level for 30-year Treasury yields?', options: ['1%', '3%', '5%', '10%'], answer: '5%' },
+                    { q: 'The current narrative mentioned is "______ Inflation."', options: ['Food', 'Tech', 'War', 'Service'], answer: 'War' },
+                    { q: 'What does "gain traction" mean?', options: ['To lose speed', 'To become more popular or accepted', 'To fail', 'To hide'], answer: 'To become more popular or accepted' },
+                    { q: 'The term "parallels" means what?', options: ['Differences', 'Similarities', 'Numbers', 'Borders'], answer: 'Similarities' },
+                    { q: 'What does "signify" mean?', options: ['To hide', 'To be a sign of/Mean', 'To break', 'To fix'], answer: 'To be a sign of/Mean' },
+                    { q: 'The word "cautious" means being ______.', options: ['Brave', 'Careful and wary', 'Angry', 'Lazy'], answer: 'Careful and wary' },
+                    { q: 'Private ______ is mentioned as a systemic risk.', options: ['Equity', 'Credit', 'Property', 'Education'], answer: 'Credit' },
+                    { q: 'The situation is described as "mirroring" 2008, meaning it is ______.', options: ['The opposite', 'Very similar to', 'Exactly the same as', 'Better than'], answer: 'Very similar to' },
+                    { q: 'Michael Hartnett is a ______ at BofA.', options: ['Teller', 'Strategist', 'Customer', 'Security Guard'], answer: 'Strategist' },
+                    { q: 'Where are the "surging oil prices" causing concern?', options: ['Only in Russia', 'In global markets', 'Only in Taipei', 'Only at gas stations'], answer: 'In global markets' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${data.title}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
