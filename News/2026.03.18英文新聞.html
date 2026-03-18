@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 18 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 18 日：地緣壓力、算力定錨與合規新紀元</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for advanced learners.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] Brahma Chellaney Warns of "Cuba Model" as CCP Blueprint for Taiwan\nStrategic expert Brahma Chellaney argues that China is observing President Trump’s "Cuba strategy" — using economic strangulation — as a potential blueprint for Taiwan. He notes that Taiwan’s heavy reliance on imported fuel makes its power grid the primary strategic vulnerability. Macroscopically, this analysis shifts the focus to a slow-motion "energy siege," necessitating an acceleration of energy sovereignty.\n\n[2] FAPA Relaunches Petition to Rename Taiwan’s De Facto U.S. Embassy\nThe Formosa Association for Public Affairs (FAPA) has relaunched its campaign to rename the "Taipei Economic and Cultural Representative Office (TECRO)" to the "Taiwan Representative Office." Macroscopically, this represents a move toward "nominal normalization," used to erode the "One China" framework.\n\n[3] February ICT Export Data Confirms "Compute Anchoring" of Taiwan's Economy\nData confirms that Taiwan's ICT exports continue to grow at triple-digit year-on-year rates. Macroscopically, this validates a structural "decoupling" within the domestic economy; Taiwan is no longer just a hardware factory but the "Central Clearinghouse" for global AI infrastructure.`,
+                chinese: `【1】媒體頭版：布拉瑪·切拉尼示警「古巴模式」成為中共收台藍圖\n戰略專家布拉瑪·切拉尼（Brahma Chellaney）在今日的專欄中指出，中國正密切觀察川普總統的「古巴策略」——即利用經濟絞殺強迫屈服——將其作為對台的潛在藍圖。他指出，台灣對進口燃料的重度依賴，使得電網成為主要的戰略脆弱點。從宏觀角度看，這項分析將焦點從武力登陸轉向「慢動作能源圍困」，使台灣必須制度性加速能源主權與分布式電網韌性，以應對潛在的封鎖情境。\n\n【2】軟實力轉向：在美遊說團體重新推動「台灣代表處」更名案\n台灣人公共事務會（FAPA）正式重啟遊說活動，要求美國國務院將「駐美國台北經濟文化代表處（TECRO）」更名為「台灣代表處」。此舉恰逢《台灣代表處法案》一週年。從宏觀角度看，這代表了向「名義正常化」的邁進，透過外交禮節中的微小語言變動來侵蝕「一個中國」框架，並提升台灣作為華盛頓主權功能節點的能見度。\n\n【3】科技出口：二月資通訊出口數據驗證「算力定錨」效應\n過去 24 小時內公佈的經濟數據證實，台灣的資通訊（ICT）出口持續以三位數的年增率成長，即便傳統產業依然停滯。從宏觀角度看，這驗證了國內經濟的結構性「脫鉤」：台灣不再僅是硬體工廠，而是全球 AI 基礎設施的「中央清算所」。然而，這種財富集中化需要策略性的「分配審計」，以確保科技帶動的財政盈餘能穩定舊有產業受到的社會經濟衝擊。`,
+                vocabulary: [
+                    'Meticulously (adv.): 精確地/細緻地', 'Strangulation (n.): 絞殺/勒死', 'Submission (n.): 屈服/提交', 'Blueprint (n.): 藍圖',
+                    'Vulnerability (n.): 脆弱性', 'Siege (n.): 圍困/圍攻', 'Sovereignty (n.): 主權', 'Decentralized (adj.): 分散式的',
+                    'Petition (n./v.): 請願', 'De facto (adj./adv.): 事實上的', 'Anniversary (n.): 週年', 'Nominal (adj.): 名義上的',
+                    'Normalization (n.): 正常化', 'Incremental (adj.): 漸進的/增量的', 'Erode (v.): 侵蝕', 'Framework (n.): 框架',
+                    'ICT (Information and Communications Technology) (n.): 資通訊技術', 'Triple-digit (adj.): 三位數的', 'Decoupling (n.): 脫鉤', 'Clearinghouse (n.): 清算所',
+                    'Fiscal surplus (n.phr.): 財政盈餘', 'Audit (n./v.): 審核/審計', 'Legacy industries (n.phr.): 傳統/舊有產業', 'Anchoring (v.ger.): 定錨',
+                    'Macroscopically (adv.): 從宏觀角度', 'Necessitating (v.ger.): 使...成為必要', 'Functional node (n.phr.): 功能節點', 'Redistribution (n.): 重新分配',
+                    'Stagnate (v.): 停滯', 'Blockade (n.): 封鎖', 'Coincide (v.): 巧合/同時發生', 'Preemptive (adj.): 先發制人的'
+                ],
+                quiz: [
+                    { q: 'What strategy is China reportedly observing as a blueprint for Taiwan?', options: ['The Hong Kong Model', 'The Cuba Strategy (economic strangulation)', 'The Ukraine Scenario', 'The Singapore Method'], answer: 'The Cuba Strategy (economic strangulation)' },
+                    { q: 'According to Chellaney, what is Taiwan’s primary strategic vulnerability?', options: ['The internet', 'The power grid (due to fuel reliance)', 'The banking system', 'Agriculture'], answer: 'The power grid (due to fuel reliance)' },
+                    { q: 'FAPA is pressuring the U.S. State Department to do what?', options: ['Sell more weapons', 'Rename TECRO to "Taiwan Representative Office"', 'End all trade with China', 'Build a new factory'], answer: 'Rename TECRO to "Taiwan Representative Office"' },
+                    { q: 'What is the year-on-year growth rate for Taiwan’s ICT exports in February?', options: ['Double-digit', 'Single-digit', 'Triple-digit', 'Zero'], answer: 'Triple-digit' },
+                    { q: 'The ICT data suggests Taiwan is becoming the global ______ for AI infrastructure.', options: ['Raw material source', 'Central Clearinghouse', 'Retail market', 'Waste manager'], answer: 'Central Clearinghouse' },
+                    { q: 'What is "nominal normalization" used to erode?', options: ['The dollar value', 'The "One China" framework', 'The internet speed', 'The manufacturing cost'], answer: 'The "One China" framework' },
+                    { q: 'A "redistribution audit" aims to use tech-driven surplus for what?', options: ['Buying more gold', 'Stabilizing legacy industries', 'Funding space travel', 'Cutting all taxes'], answer: 'Stabilizing legacy industries' },
+                    { q: 'The analysis shifts focus from a "D-Day" invasion to what?', options: ['A slow-motion "energy siege"', 'A cyber-only war', 'A diplomatic dinner', 'A cultural exchange'], answer: 'A slow-motion "energy siege"' },
+                    { q: 'Which association is pushing for the name change in Washington?', options: ['TSMC', 'FAPA', 'UN', 'AIT'], answer: 'FAPA' },
+                    { q: 'The ICT export growth validates a "structural ______" in the domestic economy.', options: ['Coupling', 'Decoupling', 'Recession', 'Stagnation'], answer: 'Decoupling' },
+                    { q: 'What does "strangulation" mean in an economic sense?', options: ['Free trade', 'Killing through economic pressure/cutting supplies', 'Lending money', 'Providing aid'], answer: 'Killing through economic pressure/cutting supplies' },
+                    { q: 'How many satellites are mentioned in the SpaceX story (for later reference)?', options: ['1,000', '5,000', '9,900', '50,000'], answer: '9,900' },
+                    { q: 'What is an "incremental" change?', options: ['A massive sudden change', 'A small, step-by-step change', 'No change at all', 'A mistake'], answer: 'A small, step-by-step change' },
+                    { q: 'The term "de facto" means ______.', options: ['According to law', 'In fact or in reality', 'By accident', 'In the future'], answer: 'In fact or in reality' },
+                    { q: 'What is a "fiscal surplus"?', options: ['Government debt', 'Excess of revenue over spending', 'A type of tax', 'A financial crisis'], answer: 'Excess of revenue over spending' }
+                ]
+            },
+            'nvidia-gtc': {
+                title: 'NVIDIA GTC 2026',
+                english: `NVIDIA CEO Jensen Huang Forecasts $1 Trillion in AI Processor Sales by 2027\nAt the heart of the GTC keynote in San Jose, Jensen Huang unveiled the "Vera Rubin" architecture and predicted a massive expansion into central processing units (CPUs) and orbital data centers (Space-1). Macroscopically, NVIDIA is moving from a "GPU provider" to a "Universal Compute Fabric." This forces a restructuring of the entire data center economy, where legacy servers are being devalued in favor of integrated "AI Factories" that combine logic, memory, and networking into a single system.`,
+                chinese: `NVIDIA GTC 2026：黃仁勳預測 AI 處理器將創造 1 兆美元銷售額\n在聖荷西舉行的 GTC 主題演講核心，黃仁勳揭曉了「薇拉·魯賓（Vera Rubin）」架構，並預測公司將大規模擴張至中央處理器（CPU）與軌道數據中心（Space-1）。從宏觀角度看，NVIDIA 正從「GPU 供應商」轉向「通用運算架構（Universal Compute Fabric）」。這迫使整個數據中心經濟進行重組，傳統的 Intel/AMD 伺服器正面臨貶值，取而代之的是將邏輯、記憶體與網路整合為單一高頻寬系統的「AI 工廠」。`,
+                vocabulary: [
+                    'Keynote (n.): 主題演講', 'Unveiled (v.pt.): 揭幕/公佈', 'Architecture (n.): 架構', 'Expansion (n.): 擴張',
+                    'Orbital (adj.): 軌道的', 'Universal Compute Fabric (n.phr.): 通用運算架構', 'Restructuring (n.): 重組', 'Legacy (adj.): 舊有的/遺留的',
+                    'Devalued (v.pp.): 貶值的', 'Integrated (adj.): 整合的', 'High-bandwidth (adj.): 高頻寬的', 'Arbiter (n.): 決定者/仲裁者',
+                    'Trillion (n.): 兆', 'Hyperscaler (n.): 超大型服務商', 'Spillover (n.): 溢出效應', 'Utility (n.): 公用事業',
+                    'Foundational (adj.): 基礎性的', 'Processor (n.): 處理器', 'Fabric (n.): 結構/織物', 'Data center (n.phr.): 數據中心',
+                    'Optimizing (v.ger.): 優化', 'Sustained (adj.): 持續的', 'Unprecedented (adj.): 史無前例的', 'Capital expenditure (Capex) (n.phr.): 資本支出',
+                    'Dominance (n.): 主導', 'Milestone (n.): 里程碑', 'Billion (n.): 十億', 'Allocation (n.): 分配',
+                    'Constraint (n.): 限制', 'Verification (n.): 驗證', 'Implementation (n.): 執行', 'Discourse (n.): 論述'
+                ],
+                quiz: [
+                    { q: 'How much in sales does Jensen Huang forecast for AI processors by 2027?', options: ['$100 billion', '$500 billion', '$1 trillion', '$5 trillion'], answer: '$1 trillion' },
+                    { q: 'What is the name of the new NVIDIA architecture revealed at GTC 2026?', options: ['Blackwell', 'Hopper', 'Vera Rubin', 'Ada Lovelace'], answer: 'Vera Rubin' },
+                    { q: 'NVIDIA is expanding into which two new areas besides GPUs?', options: ['Software and Mobile', 'CPUs and orbital data centers', 'Farming and Textiles', 'Auto and Health'], answer: 'CPUs and orbital data centers' },
+                    { q: 'What term does the text use to describe NVIDIA’s transition?', options: ['GPU store', 'Universal Compute Fabric', 'Software hub', 'Logic factory'], answer: 'Universal Compute Fabric' },
+                    { q: 'What is happening to legacy servers from Intel and AMD?', options: ['They are rising in price', 'They are being devalued', 'They are being banned', 'They are being integrated into cars'], answer: 'They are being devalued' },
+                    { q: 'The future data centers are described as "______ Factories."', options: ['Logic', 'AI', 'Cloud', 'Data'], answer: 'AI' },
+                    { q: 'Where was the GTC keynote held?', options: ['San Francisco', 'San Jose', 'Taipei', 'Austin'], answer: 'San Jose' },
+                    { q: 'What three components are combined into a single high-bandwidth system in the new architecture?', options: ['Logic, memory, and networking', 'Sound, video, and text', 'Cars, trucks, and planes', 'Land, water, and power'], answer: 'Logic, memory, and networking' },
+                    { q: 'The term "trillion" represents how many billions?', options: ['10', '100', '1,000', '10,000'], answer: '1,000' },
+                    { q: 'What does "devalued" mean?', options: ['To increase in value', 'To reduce or underestimate the worth of something', 'To fix something', 'To hide something'], answer: 'To reduce or underestimate the worth of something' },
+                    { q: 'A "keynote" speech is usually delivered at the ______ of an event.', options: ['End', 'Middle', 'Beginning/Heart', 'Secret part'], answer: 'Beginning/Heart' },
+                    { q: 'What does "fabric" mean in "Universal Compute Fabric"?', options: ['Cloth for shirts', 'Basic structure or framework', 'A new type of plastic', 'The color of the chip'], answer: 'Basic structure or framework' },
+                    { q: 'The term "orbital" refers to ______.', options: ['Underground', 'Space orbit', 'Underwater', 'City center'], answer: 'Space orbit' },
+                    { q: 'Restructuring means ______.', options: ['Staying the same', 'Significant reorganization', 'Complete closure', 'A small gift'], answer: 'Significant reorganization' },
+                    { q: 'The forecast targets which year for the $1T sales?', options: ['2026', '2027', '2028', '2030'], answer: '2027' }
+                ]
+            },
+            'spacex-starlink': {
+                title: 'SpaceX 衛星霸權',
+                english: `SpaceX achieved its 31st launch of 2026 today, deploying another 25 satellites and bringing the Starlink constellation near the 10,000 mark. This illustrates the "Orbital Utility" phase of the space economy. Macroscopically, with nearly 10,000 active satellites, SpaceX now controls the "Physical Layer" of the global internet. This creates a "Satellite Hegemony" that effectively bypasses terrestrial censorship, forcing national governments to negotiate "Data Access Sovereignty" directly with a private corporation.`,
+                chinese: `SpaceX 成功完成 2026 年第 31 次星鏈發射：全球衛星數突破 9,900 顆\nSpaceX 今日從佛羅里達州成功部署了另外 25 顆星鏈（Starlink）衛星，這使其衛星群規模接近 10,000 顆大關。這種結構性的發射節奏說明了太空經濟已進入「軌道公用事業（Orbital Utility）」階段。從宏觀角度看，擁有近萬顆活躍衛星的 SpaceX，現已掌控全球網路的「物理層（Physical Layer）」。這創造了一種「衛星霸權（Satellite Hegemony）」，有效地繞過了地面審查與傳統電信邊界，迫使各國政府必須直接與一家私人公司談判「數據存取主權」。`,
+                vocabulary: [
+                    'Launch (n./v.): 發射', 'Deploy (v.): 部署/展開', 'Constellation (n.): 星座/衛星群', 'Cadence (n.): 節奏/頻率',
+                    'Orbital Utility (n.phr.): 軌道公用事業', 'Active satellites (n.phr.): 活躍衛星', 'Physical Layer (n.phr.): 物理層', 'Hegemony (n.): 霸權',
+                    'Bypasses (v.): 繞過', 'Terrestrial (adj.): 地面的/陸地的', 'Censorship (n.): 審查制度', 'Telecom boundaries (n.phr.): 電信邊界',
+                    'Data Access Sovereignty (n.phr.): 數據存取主權', 'Corporation (n.): 公司/企業', 'Infrastructure (n.): 基礎建設', 'Deployment (n.): 部署',
+                    'Hegemonic (adj.): 霸權的', 'Terrestrially (adv.): 地面地', 'Censor (v.): 審查', 'Bypass (n.): 旁路',
+                    'Sovereign (adj.): 主權的', 'Hegemony (n.): 支配/霸權', 'Negotiate (v.): 談判', 'Infrastructure (n.): 基礎設施',
+                    'Billion (n.): 十億', 'Cadence (n.): 韻律/發射節奏', 'Milestone (n.): 里程碑', 'Resilience (n.): 韌性',
+                    'Satellite (n.): 衛星', 'Connectivity (n.): 連接性', 'Sub-second (adj.): 秒級以下的', 'Latency (n.): 延遲'
+                ],
+                quiz: [
+                    { q: 'How many Starlink launches has SpaceX completed in 2026 so far?', options: ['10', '25', '31', '100'], answer: '31' },
+                    { q: 'The Starlink constellation is nearing which total satellite mark?', options: ['1,000', '5,000', '10,000', '50,000'], answer: '10,000' },
+                    { q: 'SpaceX now controls which part of the global internet?', options: ['The Software Layer', 'The Physical Layer', 'The User Interface', 'The Content Layer'], answer: 'The Physical Layer' },
+                    { q: 'What term describes the control SpaceX has over global connectivity?', options: ['Internet Democracy', 'Satellite Hegemony', 'Terrestrial Monopoly', 'Orbital Waste'], answer: 'Satellite Hegemony' },
+                    { q: 'Starlink effectively bypasses what terrestrial restriction?', options: ['Taxes', 'Censorship', 'Gravity', 'Weather'], answer: 'Censorship' },
+                    { q: 'Governments must now negotiate "Data Access ______" with SpaceX.', options: ['Tax', 'Sovereignty', 'Speed', 'Limit'], answer: 'Sovereignty' },
+                    { q: 'SpaceX is a ______ corporation.', options: ['Public/Government', 'Private', 'Military only', 'Non-profit'], answer: 'Private' },
+                    { q: 'What phase of the space economy does the current cadence illustrate?', options: ['Exploration', 'Orbital Utility', 'Marketing', 'Silence'], answer: 'Orbital Utility' },
+                    { q: 'The word "cadence" in the text refers to ______.', options: ['A musical term only', 'The regular rhythm or frequency of launches', 'A mistake in flight', 'A type of satellite'], answer: 'The regular rhythm or frequency of launches' },
+                    { q: 'What does "terrestrial" mean?', options: ['Related to the stars', 'Related to the Earth or land', 'Related to water', 'Related to AI'], answer: 'Related to the Earth or land' },
+                    { q: 'The word "hegemony" means ______.', options: ['Leadership or dominance, especially by one state/group', 'A type of flower', 'A small team', 'Financial failure'], answer: 'Leadership or dominance, especially by one state/group' },
+                    { q: 'SpaceX deployed another ______ satellites today.', options: ['10', '25', '31', '10,000'], answer: '25' },
+                    { q: 'National governments are being ______ to negotiate.', options: ['Forbidden', 'Forced', 'Ignoring', 'Thanked'], answer: 'Forced' },
+                    { q: 'What is a "constellation" in this context?', options: ['A group of stars', 'A large group of satellites working together', 'A drawing', 'A type of rocket'], answer: 'A large group of satellites working together' },
+                    { q: 'Does Starlink rely on traditional telecom boundaries?', options: ['Yes', 'No, it effectively bypasses them', 'Only in Florida', 'The text doesn\'t say'], answer: 'No' }
+                ]
+            },
+            'micron-earnings': {
+                title: '美光財報與 AI 記憶體',
+                english: `Micron Q2 Earnings Today: Analysts Expect AI Server Demand to Drive $19B Revenue\nMicron (MU) is scheduled to report its fiscal Q2 2026 results today. Investors are looking for proof that HBM3E and 1β DRAM ramps can sustain record-level margins. Macroscopically, Micron’s report will serve as a "Reality Check" for the AI super-cycle. If Micron beats estimates, it validates the "Compute Inflation" narrative, where memory remains the primary bottleneck for AI scaling. Hardware profits remain hyper-concentrated at the top of the value chain.`,
+                chinese: `美光（Micron）今日公佈財報：市場預期 AI 記憶體將推動 137% 營收增長\n美光科技（MU）預計將在今日美股收盤後公佈 2026 財年第二季財報。分析師預期 AI 伺服器需求將推動營收達 190 億美元（年增約 137%）。投資者正尋求 HBM3E 與 1β DRAM 產能提升能否維持紀錄級利潤率的證據。從宏觀角度看，美光的財報將作為 AI 超級週期的「現實檢驗」。若美光表現優於預期，將驗證「算力通膨（Compute Inflation）」的論述，即記憶體仍是 AI 擴張的主要瓶頸，確保硬體利潤高度集中在價值鏈頂端。`,
+                vocabulary: [
+                    'Earnings (n.): 財報/獲利', 'Revenue (n.): 營收/收入', 'Fiscal (adj.): 財政的/會計的', 'HBM3E (n. proper): 高頻寬記憶體技術規格',
+                    'DRAM (n. abbreviation): 動態隨機存取記憶體', 'Ramp (n./v.): 產能提升/坡道', 'Margins (n.): 利潤率/邊際', 'Reality Check (n.phr.): 現實檢驗',
+                    'Super-cycle (n.): 超級週期', 'Estimates (n.): 估計值/預期', 'Validates (v.): 驗證/證實', 'Compute Inflation (n.phr.): 算力通膨',
+                    'Narrative (n.): 論述/敘事', 'Bottleneck (n.): 瓶頸', 'Hyper-concentrated (adj.): 高度集中的', 'Value chain (n.phr.): 價值鏈',
+                    'Scaling (v.ger.): 擴張/縮放', 'Trillion-parameter (adj.): 兆級參數的', 'Sustained (adj.): 持續的', 'Squeeze (n.): 擠壓',
+                    'Allocation (n.): 分配', 'Yield (n.): 良率', 'Shortage (n.): 短缺', 'Divergence (n.): 分歧',
+                    'Prerequisite (n.): 前提條件', 'Refining (v.ger.): 提煉', 'Incentivize (v.): 激勵', 'Markup (n.): 漲價',
+                    'Consolidation (n.): 鞏固', 'Aviation (n.): 航空', 'Maritime (adj.): 海事的', 'Sub-second (adj.): 秒級以下的'
+                ],
+                quiz: [
+                    { q: 'What is the expected revenue for Micron in its Q2 report?', options: ['$1 billion', '$10 billion', '$19 billion', '$50 billion'], answer: '$19 billion' },
+                    { q: 'Investors want proof that which two technologies can sustain margins?', options: ['7nm and 5nm', 'HBM3E and 1β DRAM', 'Flash and SSD', 'WiFi and Bluetooth'], answer: 'HBM3E and 1β DRAM' },
+                    { q: 'The Micron report is described as a "______ Check" for the AI super-cycle.', options: ['System', 'Reality', 'Security', 'Price'], answer: 'Reality' },
+                    { q: 'What narrative does the report aim to validate?', options: ['"Compute Deflation"', '"Compute Inflation"', '"Software Only"', '"Global Cooling"'], answer: '"Compute Inflation"' },
+                    { q: 'What remains the primary bottleneck for AI scaling according to the text?', options: ['Energy', 'Memory', 'Land', 'Water'], answer: 'Memory' },
+                    { q: 'Where are hardware profits "hyper-concentrated"?', options: ['At the bottom of the value chain', 'At the top of the value chain', 'Only in Europe', 'Only in China'], answer: 'At the top of the value chain' },
+                    { q: 'Micron Technology is listed under which ticker?', options: ['NVDA', 'TSM', 'MU', 'AAPL'], answer: 'MU' },
+                    { q: 'The report follows the close of which market?', options: ['Taiwan market', 'US market', 'London market', 'Tokyo market'], answer: 'US market' },
+                    { q: 'What does "fiscal" mean?', options: ['Physical strength', 'Related to government/company financial year', 'Related to the stars', 'A type of fuel'], answer: 'Related to government/company financial year' },
+                    { q: 'The term "ramp" in manufacturing means ______.', options: ['Closing a factory', 'Increasing the production level', 'Slowing down', 'A type of car part'], answer: 'Increasing the production level' },
+                    { q: 'What does "validate" mean?', options: ['To prove something is wrong', 'To confirm or prove the truth of something', 'To hide', 'To delete'], answer: 'To confirm or prove the truth of something' },
+                    { q: 'A "bottleneck" is a point that ______ a process.', options: ['Speeds up', 'Restricts or slows down', 'Finishes', 'Hides'], answer: 'Restricts or slows down' },
+                    { q: 'Margins refer to ______ in this context.', options: ['The edge of a paper', 'Profit levels', 'The length of a road', 'The number of people'], answer: 'Profit levels' },
+                    { q: 'The "value chain" describes the process of ______.', options: ['Eating food', 'Creating and adding value to a product', 'Selling old items', 'Buying gold'], answer: 'Creating and adding value to a product' },
+                    { q: 'How is the demand for AI servers described?', options: ['Decreasing', 'Surging/Strong', 'Stable and low', 'Non-existent'], answer: 'Surging/Strong' }
+                ]
+            },
+            'sec-hfiaa': {
+                title: 'SEC 內部交易申報新制',
+                english: `Effective March 18, 2026, directors and officers of Foreign Private Issuers (FPIs) with U.S.-registered securities must report transactions to the SEC. Macroscopically, this represents the "Global Harmonization of Compliance." By placing foreign insiders on the same legal footing as U.S. corporate insiders, the SEC is attempting to eliminate the "Arbitrage of Secrecy," potentially leading to increased transparency for major foreign tech giants listed on the NYSE and Nasdaq. Companies failing to comply may face legal sanctions and investor skepticism.`,
+                chinese: `歷史性新制：外國公司高階主管自今日起須向 SEC 申報內部交易\n自 2026 年 3 月 18 日起，擁有在美註冊證券的外國私人發行體（FPIs）的董事與高階主管，必須向美國證券交易委員會（SEC）申報其交易行為（Form 3, 4, 5）。從宏觀角度看，這代表了「合規全球一致化」。透過讓外國內部人士與美國公司內部人士處於相同的法律地位，SEC 企圖消除「秘密套利（Arbitrage of Secrecy）」，這可能導致在紐交所（NYSE）與那斯達克上市的大型外國科技巨頭透明度增加。未能合規的公司可能面臨法律制裁與投資者的質疑。`,
+                vocabulary: [
+                    'Effective (adj.): 生效的/有效的', 'Foreign Private Issuers (FPIs) (n.phr.): 外國私人發行體', 'Securities (n.): 證券', 'Transactions (n.): 交易',
+                    'SEC (Securities and Exchange Commission) (n. proper): 美國證券交易委員會', 'Harmonization (n.): 一致化/和諧', 'Compliance (n.): 合規/順從', 'Legal footing (n.phr.): 法律地位/立足點',
+                    'Insiders (n.): 內部人士', 'Eliminate (v.): 消除/排除', 'Arbitrage of Secrecy (n.phr.): 秘密套利', 'Transparency (n.): 透明度',
+                    'NYSE (New York Stock Exchange) (n. proper): 紐約證券交易所', 'Nasdaq (n. proper): 那斯達克', 'Sanctions (n.): 制裁', 'Skepticism (n.): 懷疑/質疑',
+                    'Directive (n.): 指示', 'Corporate governance (n.phr.): 公司治理', 'Mandatory (adj.): 強制性的', 'Filing (n.): 申報/存檔',
+                    'Footing (n.): 立足點', 'Arbitrage (n.): 套利', 'Harmonize (v.): 使一致', 'Comply (v.): 遵守',
+                    'Regulation (n.): 規章', 'Authority (n.): 權威/機關', 'Asset (n.): 資產', 'Broker (n.): 經紀人',
+                    'Volatility (n.): 波動', 'Disclosure (n.): 揭露/公開', 'Statute (n.): 法令', 'Accountability (n.): 問責制'
+                ],
+                quiz: [
+                    { q: 'On what date did the new SEC reporting requirement take effect?', options: ['Jan 1, 2026', 'March 18, 2026', 'June 30, 2026', 'Dec 31, 2026'], answer: 'March 18, 2026' },
+                    { q: 'Who is required to report transactions to the SEC under this rule?', options: ['Only U.S. citizens', 'Directors and officers of Foreign Private Issuers (FPIs)', 'Only retail investors', 'All bank customers'], answer: 'Directors and officers of Foreign Private Issuers (FPIs)' },
+                    { q: 'The SEC is attempting to eliminate what practice?', options: ['Free trade', 'Arbitrage of Secrecy', 'Online shopping', 'Space travel'], answer: 'Arbitrage of Secrecy' },
+                    { q: 'The goal of the rule is "Global ______ of Compliance."', options: ['Isolation', 'Harmonization', 'Destruction', 'Complication'], answer: 'Harmonization' },
+                    { q: 'Which two major U.S. exchanges are mentioned?', options: ['LSE and TSE', 'NYSE and Nasdaq', 'TAIEX and Nikkei', 'HKEX and SSE'], answer: 'NYSE and Nasdaq' },
+                    { q: 'What is an "FPI"?', options: ['Financial Power Institute', 'Foreign Private Issuer', 'Federal Policy Initiative', 'Fast Profit Indicator'], answer: 'Foreign Private Issuer' },
+                    { q: 'Failure to comply may lead to ______ and ______.', options: ['Prizes and rewards', 'Legal sanctions and investor skepticism', 'Lower taxes and free ads', 'Nothing at all'], answer: 'Legal sanctions and investor skepticism' },
+                    { q: 'The rule puts foreign insiders on the same "______ ______" as U.S. insiders.', options: ['High building', 'Legal footing', 'Short list', 'Private plane'], answer: 'Legal footing' },
+                    { q: 'What does "transparency" mean in business?', options: ['The state of being hidden', 'The state of being open and clear', 'The price of a share', 'The color of the office'], answer: 'The state of being open and clear' },
+                    { q: 'What are "securities" in this context?', options: ['Bodyguards', 'Financial instruments like stocks and bonds', 'Door locks', 'Secret passwords'], answer: 'Financial instruments like stocks and bonds' },
+                    { q: 'The word "effective" means ______.', options: ['Banned', 'Coming into operation or use', 'Broken', 'Successful only in the past'], answer: 'Coming into operation or use' },
+                    { q: 'What does "compliance" involve?', options: ['Acting in accordance with rules or laws', 'Fighting against the government', 'Selling products', 'Writing books'], answer: 'Acting in accordance with rules or laws' },
+                    { q: 'The term "insider" refers to someone ______.', options: ['Outside the company', 'Within an organization who has access to private info', 'In the hospital', 'In a foreign country'], answer: 'Within an organization who has access to private info' },
+                    { q: 'What does "eliminate" mean?', options: ['To add', 'To get rid of or remove', 'To paint', 'To study'], answer: 'To get rid of or remove' },
+                    { q: 'SEC stands for ______ and Exchange Commission.', options: ['Secret', 'Securities', 'System', 'Social'], answer: 'Securities' }
+                ]
+            }
+        };
+
+        // --- STATE & UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1] || ''}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
