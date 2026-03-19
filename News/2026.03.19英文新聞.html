@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 19 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 19 日：身份主權、軌道資本與代理人 AI</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. March 19th Insight Edition.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] Taiwan–South Korea Naming Dispute Escalates: MOFA Sets March 31 Deadline\nThe Ministry of Foreign Affairs (MOFA) issued a stern warning to Seoul, demanding that Taiwan's designation on South Korea's e-Arrival card be changed from "China (Taiwan)" to a more appropriate title. If no action is taken by March 31, Taiwan will retaliate by altering the labeling of South Korea on its own online systems. Macroscopically, this friction underscores an "assertive identity" policy to defend international standing.\n\n[2] Analysts Link 20-Day PLAAF Lull to Internal Politics and Fuel Scarcity\nMilitary scholars noted that the PLAAF has ceased sorties into Taiwan’s ADIZ since late February. This "atmospheric pause" is attributed to military purges following China’s "Two Sessions" and fuel conservation due to the Strait of Hormuz blockade. Macroscopically, the MND warns that this "quiet phase" may erode readiness before an asymmetric tactical shift.\n\n[3] Taipei Metro Launches QR Code Single-Journey Tickets to Accelerate Digital Transition\nBeginning March 18, the TRTC officially phased in QR code single-journey tickets, replacing legacy plastic tokens. This shift aims to reduce maintenance costs and integrate mobile payments. Macroscopically, this move reflects the "Digitization of Public Life" in Taiwan, catering to the professional demographic and international travelers.`,
+                chinese: `【1】台韓命名爭議升級：外交部限期 3/31 前更正，否則採取對等反制\n外交部（MOFA）昨日向首爾發出嚴厲警告，要求將南韓電子入境卡系統上對台灣的稱呼由「中國（台灣）」更改為更合適的名稱。若 3 月 31 日前未採取更正行動，台灣將採取報復措施，更改其線上入境系統對南韓的標註，可能由「大韓民國」改回「南韓」。從宏觀角度看，這場外交摩擦凸顯了台北日益增長的「積極身份」政策，政府越來越願意利用行政對等原則，在區域旅遊與技術協定中捍衛主權地位。\n\n【2】智庫分析：解放軍台海「戰機靜默」已逾 20 日，政治與能源因素交織\n台北軍事學者指出，自 2 月底以來，共機幾乎完全停止進入台灣防空識別區（ADIZ），創下多年來最長的間歇期。這種「大氣停頓」被歸因於中國「兩會」後的高層軍事清洗，以及因荷姆茲海峽封鎖引發的燃料節約措施。從宏觀角度看，儘管這為台灣攔截機隊提供了短暫喘息，但國防部警告不要因「威脅衰退」而掉以輕心。這種突然的灰色地帶活動真空，可能是旨在侵蝕戒備狀態的戰略「寧靜期」，隨後可能出現不對稱戰術轉向或大規模活動恢復。\n\n【3】台北捷運 3/18 起全面導入 QR Code：智慧票務邁入無紙化里程碑\n從 3 月 18 日起，台北捷運公司（TRTC）正式分階段導入 QR Code 單程票，取代傳統的塑膠代幣。這項技術轉型是更廣泛「智慧交通」計畫的一部分，旨在降低維護成本並更無縫地整合行動支付系統。從宏觀角度看，此舉反映了台灣「公共生活數位化」的趨勢。隨著城市中心轉向無紙化基礎設施，這創造了一個更具韌性、能夠進行即時負載平衡的數據驅動運輸網絡，同時滿足了 22 至 35 歲專業族群與國際旅客的高數位期待。`,
+                vocabulary: [
+                    'Naming Dispute (n.phr.): 命名爭議', 'Escalates (v.): 升級', 'Designation (n.): 稱號/指定', 'e-Arrival card (n.phr.): 電子入境卡',
+                    'Corrective action (n.phr.): 更正行動', 'Retaliate (v.): 報復/反擊', 'Reciprocity (n.): 對等/互惠', 'Sovereignty erosion (n.phr.): 主權侵蝕',
+                    'Assertive (adj.): 堅定的/積極的', 'Protocols (n.): 協定/協議', 'Lull (n.): 間歇/暫時平靜', 'Sorties (n.): (軍機)出擊',
+                    'ADIZ (Air Defense Identification Zone) (n.): 防空識別區', 'Hiatus (n.): 停滯/中斷', 'Atmospheric pause (n.phr.): 大氣停頓(形容安靜期)', 'Purges (n.): 清洗/整肅',
+                    'Fuel scarcity (n.phr.): 燃料稀缺', 'Blockade (n.): 封鎖', 'Reprieve (n.): 喘息/暫緩', 'Readiness (n.): 戒備狀態',
+                    'Precursor (n.): 先兆/前驅', 'Asymmetric (adj.): 不對稱的', 'Transition (n.): 轉型', 'Legacy (adj.): 舊有的/遺留的',
+                    'Tokens (n.): 代幣', 'Paperless (adj.): 無紙化的', 'Load balancing (n.phr.): 負載平衡', 'Demographic (n.): 族群/人口統計',
+                    'Catering to (v.phr.): 迎合/滿足', 'Digitization (n.): 數位化', 'Resilient (adj.): 具韌性的', 'Milestone (n.): 里程碑'
+                ],
+                quiz: [
+                    { q: 'What is the deadline set by MOFA for South Korea to correct Taiwan’s designation?', options: ['March 18', 'March 20', 'March 31', 'April 1'], answer: 'March 31' },
+                    { q: 'What is the current incorrect designation used by South Korea mentioned in the text?', options: ['Chinese Taipei', 'China (Taiwan)', 'Republic of China', 'Province of China'], answer: 'China (Taiwan)' },
+                    { q: 'How long has the PLAAF lull in the ADIZ lasted according to the text?', options: ['12 days', 'Over 20 days', 'One month', 'One week'], answer: 'Over 20 days' },
+                    { q: 'What are the two factors linked to the PLAAF silence?', options: ['Weather and lack of pilots', 'Internal politics and fuel scarcity', 'International pressure and engine failure', 'Holiday break and satellite tests'], answer: 'Internal politics and fuel scarcity' },
+                    { q: 'What does the term "atmospheric pause" refer to in the text?', options: ['A break in heavy rain', 'The lack of military flight activity', 'A space mission delay', 'A decrease in air pollution'], answer: 'The lack of military flight activity' },
+                    { q: 'When did Taipei Metro officially start phasing in QR code tickets?', options: ['January 1', 'March 18', 'March 19', 'Next month'], answer: 'March 18' },
+                    { q: 'QR code tickets are replacing which legacy item in the metro system?', options: ['Paper tickets', 'Plastic tokens', 'Smart cards only', 'Cash'], answer: 'Plastic tokens' },
+                    { q: 'The term "reciprocity" in the diplomatic context refers to ______.', options: ['Giving up sovereignty', 'Mutual exchange of actions (responding in kind)', 'Starting a war', 'Lowering taxes'], answer: 'Mutual exchange of actions (responding in kind)' },
+                    { q: 'What is "ADIZ"?', options: ['Aviation Defense Zone', 'Air Defense Identification Zone', 'Area of Digital Information', 'Airport District Intelligence'], answer: 'Air Defense Identification Zone' },
+                    { q: 'The PLAAF lull is partly attributed to "purges" after which event?', options: ['G20 Summit', 'China\'s "Two Sessions"', 'Lunar New Year', 'Beijing Olympics'], answer: 'China\'s "Two Sessions"' },
+                    { q: 'What does the word "assertive" mean in the text?', options: ['Weak and quiet', 'Confident and strong in defending position', 'Aggressive only in words', 'Confused'], answer: 'Confident and strong in defending position' },
+                    { q: 'What is the goal of the "Smart Transit" initiative for TRTC?', options: ['Increasing prices', 'Reducing maintenance costs and integrating mobile payments', 'Removing all trains', 'Building more tunnels'], answer: 'Reducing maintenance costs and integrating mobile payments' },
+                    { q: 'The transport network is capable of "real-time load ______."', options: ['Management', 'Balancing', 'Reduction', 'Increase'], answer: 'Balancing' },
+                    { q: 'Who is the "professional demographic" specifically mentioned?', options: ['Elderly citizens', '22–35 year olds', 'School children', 'Retired officials'], answer: '22–35 year olds' },
+                    { q: 'The naming dispute is about the "______ card" system in South Korea.', options: ['e-Arrival', 'Credit', 'ID', 'Security'], answer: 'e-Arrival' }
+                ]
+            },
+            'fed-rates': {
+                title: '聯準會利率決策',
+                english: `The Federal Open Market Committee (FOMC) concluded its March meeting by maintaining the benchmark rate at 3.5%-3.75%, citing persistent "Supply-Side Shocks" from the Middle East conflict. Chair Jerome Powell noted that while the labor market is resilient, the risk of a "Second Wave" of inflation from surging energy prices cannot be ignored. This signifies a move toward "Geopolitical Dependency" in monetary policy. Macroscopically, the Fed is signaling a "Higher for Longer" baseline, effectively cooling the 2026 credit cycle and forcing markets to prioritize cash flow over speculative growth.`,
+                chinese: `聯準會 (Fed) 利率決策公佈：維持利率不變，鮑爾示警「戰火通膨」長期化\n聯準會公開市場委員會（FOMC）結束三月會議，宣布維持基準利率於 3.5%–3.75% 區間，理由是中東衝突引發的持續性「供應端衝擊」。主席鮑爾指出，儘管勞動力市場具備韌性，但能源價格飆升引發「第二波」通膨的風險不容忽視。這標誌著貨幣政策正轉向「地緣政治依賴型」。從宏觀角度看，聯準會正發出「長期維持高位」的基準信號，有效地冷卻了 2026 年的信貸週期，並迫使市場在今年剩餘時間內，將現金流置於投機性的成長（如 AI 泡沫）之上。`,
+                vocabulary: [
+                    'FOMC (n. abbreviation): 聯邦公開市場委員會', 'Benchmark rate (n.phr.): 基準利率', 'Supply-Side Shocks (n.phr.): 供應端衝擊', 'Persistent (adj.): 持續的/頑固的',
+                    'Resilient (adj.): 具韌性的', 'Second Wave (n.phr.): 第二波', 'Inflation (n.): 通膨', 'Surging (adj.): 飆升的',
+                    'Monetary policy (n.phr.): 貨幣政策', 'Geopolitical Dependency (n.phr.): 地緣政治依賴', 'Higher for Longer (phr.): 長期高利率', 'Baseline (n.): 基準',
+                    'Credit cycle (n.phr.): 信貸週期', 'Speculative growth (n.phr.): 投機性成長', 'Cash flow (n.phr.): 現金流', 'Prioritize (v.): 優先考慮',
+                    'Cooling (v.ger.): 冷卻/降溫', 'Remainder (n.): 剩餘部分', 'Stubbornly (adv.): 頑固地', 'Volatility (n.): 波動',
+                    'Sustained (adj.): 持續的', 'Constraint (n.): 限制', 'Liquidity (n.): 流動性', 'Equity (n.): 股權/股票',
+                    'Refinancing (v.ger.): 再融資', 'Leveraged (adj.): 槓桿化的', 'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件',
+                    'Stagnation (n.): 停滯', 'Infrastructure (n.): 基礎建設', 'Billion (n.): 十億', 'Mandate (n.): 授權'
+                ],
+                quiz: [
+                    { q: 'What is the Fed\'s benchmark rate after the March meeting?', options: ['1.5%-1.75%', '2.5%-2.75%', '3.5%-3.75%', '5.0%-5.25%'], answer: '3.5%-3.75%' },
+                    { q: 'What specific reason did the FOMC cite for maintaining the rate?', options: ['Low unemployment', 'Supply-side shocks from Middle East conflict', 'Lack of consumer spending', 'Strong dollar only'], answer: 'Supply-side shocks from Middle East conflict' },
+                    { q: 'Chair Jerome Powell warned of a ______ of inflation.', options: ['Ending', 'Second Wave', 'Final Wave', 'Zero Wave'], answer: 'Second Wave' },
+                    { q: 'What kind of dependency is monetary policy moving toward?', options: ['Data dependency only', 'Geopolitical dependency', 'Tech dependency', 'Political dependency'], answer: 'Geopolitical dependency' },
+                    { q: 'The term "Higher for Longer" refers to keeping ______ high.', options: ['Stock prices', 'Interest rates', 'Taxes', 'Oil output'], answer: 'Interest rates' },
+                    { q: 'What is the Fed effectively "cooling" in 2026?', options: ['The weather', 'The credit cycle', 'AI research', 'Space exploration'], answer: 'The credit cycle' },
+                    { q: 'Markets are now forced to prioritize what over speculative growth?', options: ['Marketing', 'Cash flow', 'New buildings', 'Hiring'], answer: 'Cash flow' },
+                    { q: 'The word "resilient" means ______.', options: ['Fragile', 'Able to withstand or recover quickly from difficulties', 'Slow-moving', 'Boring'], answer: 'Able to withstand or recover quickly from difficulties' },
+                    { q: 'A "benchmark rate" is used as a ______ for other rates.', options: ['Maximum', 'Minimum', 'Reference/Standard', 'Replacement'], answer: 'Reference/Standard' },
+                    { q: 'The Fed is the ______ ______ of the United States.', options: ['Central Clearinghouse', 'Central Bank', 'Retail Bank', 'Financial Jail'], answer: 'Central Bank' },
+                    { q: 'The term "speculative" refers to what kind of activity?', options: ['Guaranteed safe', 'High-risk but potential for high reward', 'Free from tax', 'Banned'], answer: 'High-risk but potential for high reward' },
+                    { q: 'What is happening to energy prices?', options: ['Dropping', 'Stabilizing at low levels', 'Surging (rising quickly)', 'Vanishing'], answer: 'Surging (rising quickly)' },
+                    { q: 'How is the labor market described?', options: ['Weakening', 'Resilient', 'Closed', 'Unstable'], answer: 'Resilient' },
+                    { q: 'The news suggests the Fed is "ignoring" or "not ignoring" energy risks?', options: ['Ignoring', 'Cannot be ignored', 'Supporting', 'Celebrating'], answer: 'Cannot be ignored' },
+                    { q: 'What does "monetary" relate to?', options: ['The moon', 'Money and its supply/circulation', 'Art', 'Military'], answer: 'Money and its supply/circulation' }
+                ]
+            },
+            'spacex-ipo': {
+                title: 'SpaceX IPO 與軌道基建',
+                english: `SpaceX IPO Rumors Intensify: Targeting $1.75 Trillion Valuation via Starshield and Orbital Logistics\nReports indicate SpaceX is finalizing its IPO filing, with a valuation target that would make it one of the world's most valuable entities. The primary drivers are the "Starshield" defense program and the "Starlink V3" mesh, which now supports 10 million subscribers. Macroscopically, this represents the "Institutionalization of the Space Economy." A SpaceX listing would provide the liquid capital necessary for interplanetary infrastructure.`,
+                chinese: `SpaceX IPO 前夕估值上探 1.75 兆美元：軌道基建與「星盾」防衛成核心動能\n傳聞指出 SpaceX 正完成首次公開募股（IPO）的申報工作，目標估值達 1.75 兆美元，將使其躋身全球最有價值實體之列。核心驅動力為「星盾（Starshield）」國防計畫及「星鏈（Starlink）V3」網路，後者目前已支援 1,000 萬用戶。從宏觀角度看，這代表了「太空經濟的制度化」。SpaceX 的上市將為跨行星基礎設施提供必要的流動資金，有效地將「太空」轉化為機構投資組合中的「公用事業級資產類別」。`,
+                vocabulary: [
+                    'IPO (Initial Public Offering) (n.): 首次公開募股/上市', 'Valuation (n.): 估值', 'Intensify (v.): 加劇/強化', 'Finalizing (v.ger.): 完成/定案',
+                    'Filing (n.): 申報/存檔', 'Entity (n.): 實體', 'Starshield (n. proper): 星盾 (國防計畫)', 'Mesh (n.): 網狀網絡',
+                    'Subscribers (n.): 訂閱者/用戶', 'Institutionalization (n.): 制度化', 'Liquid capital (n.phr.): 流動資金', 'Interplanetary (adj.): 行星間的',
+                    'Infrastructure (n.): 基礎建設', 'Utility-grade (adj.): 公用事業級的', 'Asset class (n.phr.): 資產類別', 'Portfolios (n.): 投資組合',
+                    'Orbital Logistics (n.phr.): 軌道物流', 'Milestone (n.): 里程碑', 'Billion (n.): 十億', 'Trillion (n.): 兆',
+                    'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Scalability (n.): 可擴展性',
+                    'Offloading (v.ger.): 卸載/分擔', 'Edge inference (n.phr.): 邊緣推論', 'Scaling (v.ger.): 規模化', 'Revenue (n.): 營收',
+                    'Constellation (n.): 衛星群', 'Satellite (n.): 衛星', 'Hegemony (n.): 霸權', 'Hedge (n.): 避險'
+                ],
+                quiz: [
+                    { q: 'What is the target valuation for the rumored SpaceX IPO?', options: ['$500 billion', '$1 trillion', '$1.75 trillion', '$5 trillion'], answer: '$1.75 trillion' },
+                    { q: 'Which defense program is a primary driver for the SpaceX valuation?', options: ['Starlink V1', 'Starshield', 'Rocket Lab', 'Mars Base Alpha'], answer: 'Starshield' },
+                    { q: 'How many subscribers does Starlink V3 now support?', options: ['1 million', '5 million', '10 million', '50 million'], answer: '10 million' },
+                    { q: 'What does a SpaceX listing provide for the company\'s space missions?', options: ['More rockets only', 'Liquid capital for interplanetary infrastructure', 'Free internet for employees', 'New office buildings'], answer: 'Liquid capital for interplanetary infrastructure' },
+                    { q: 'Space is being turned into a "______ asset class" for portfolios.', options: ['Speculative', 'Utility-grade', 'Temporary', 'Hidden'], answer: 'Utility-grade' },
+                    { q: 'The term "IPO" stands for ______.', options: ['Independent Public Organization', 'Initial Public Offering', 'International Policy Order', 'Internal Profit Option'], answer: 'Initial Public Offering' },
+                    { q: 'What is "interplanetary" infrastructure?', options: ['Roads between cities', 'Facilities built between or on different planets', 'Deep sea cables', 'Airplanes'], answer: 'Facilities built between or on different planets' },
+                    { q: 'What does "valuation" mean?', options: ['The color of a logo', 'The estimated worth of a company', 'The amount of debt', 'The number of owners'], answer: 'The estimated worth of a company' },
+                    { q: 'A "mesh" in networking refers to ______.', options: ['A single point', 'A net-like pattern where nodes connect to each other', 'A complete block', 'A radio signal'], answer: 'A net-like pattern where nodes connect to each other' },
+                    { q: 'The "Institutionalization of the Space Economy" means it is becoming ______.', options: ['Illegal', 'A standard part of established financial systems', 'Only for governments', 'A scientific secret'], answer: 'A standard part of established financial systems' },
+                    { q: 'SpaceX is described as "finalizing its IPO filing," meaning ______.', options: ['Starting from zero', 'Completing the paperwork to go public', 'Cancelling the plan', 'Closing the office'], answer: 'Completing the paperwork to go public' },
+                    { q: 'The term "liquid capital" refers to ______.', options: ['Frozen money', 'Assets that can be quickly converted to cash', 'Water supply', 'Oil reserves'], answer: 'Assets that can be quickly converted to cash' },
+                    { q: 'What kind of "logistics" is SpaceX expanding into?', options: ['Road logistics', 'Orbital logistics', 'Postal services', 'Food delivery'], answer: 'Orbital logistics' },
+                    { q: 'Is the IPO definitely happening next week?', options: ['Yes', 'No, it is in the "finalizing" and "reports indicate" stage', 'Only in Mars', 'The text doesn\'t say'], answer: 'No' },
+                    { q: 'SpaceX is aiming to become one of the world\'s most valuable ______.', options: ['Nations', 'Entities', 'Farms', 'Schools'], answer: 'Entities' }
+                ]
+            },
+            'ai-competition': {
+                title: '蘋果與谷歌 AI 競爭',
+                english: `Apple and Google Pivot Toward "Local Inference" to Mitigate Soaring Cloud Energy Costs\nIn their latest developer updates, Apple and Google unveiled "Agentic Frameworks" that allow smartphones to execute complex AI tasks locally using new NPU (Neural Processing Unit) architectures. This represents a shift toward "Hardware-Enabled Efficiency." Macroscopically, this move is a defensive response to the rising energy costs of centralized AI. By offloading compute to the user's device, giants aim to maintain scalability while protecting their margins from electricity and hardware costs.`,
+                chinese: `蘋果、谷歌之「代理人 AI」競爭：邊緣端推理技術旨在降低 60% 雲端成本\n在最新的開發者大會更新中，蘋果（Apple）與 Google 分別揭曉了「代理人框架（Agentic Frameworks）」，允許智慧型手機利用全新的 NPU（神經處理單元）架構在本地端執行複雜的 AI 任務。這代表了向「硬體賦能效率」的轉向。從宏觀角度看，此舉是對集中式 AI 持續攀升之能源成本的防禦性應對。透過將運算「卸載」到用戶裝置，這些科技巨頭旨在維持 AI 服務的可擴展性，同時保護利潤免受飆升的電力與第三方硬體成本侵蝕。`,
+                vocabulary: [
+                    'Pivot (v./n.): 轉向/樞紐', 'Local Inference (n.phr.): 本地端推論', 'Mitigate (v.): 緩解/減輕', 'Soaring (adj.): 飆升的',
+                    'Cloud energy costs (n.phr.): 雲端能源成本', 'Agentic Frameworks (n.phr.): 代理人框架', 'Execute (v.): 執行', 'NPU (Neural Processing Unit) (n.): 神經處理單元',
+                    'Architectures (n.): 架構', 'Hardware-Enabled (adj.): 硬體賦能的', 'Efficiency (n.): 效率', 'Defensive response (n.phr.): 防禦性應對',
+                    'Centralized AI (n.phr.): 集中式 AI', 'Offloading (v.ger.): 卸載/轉移', 'Scalability (n.): 可擴展性', 'Margins (n.): 利潤/邊際',
+                    'Scalable (adj.): 可擴展的', 'Inference (n.): 推論', 'Proprietary (adj.): 專有的', 'Architecture (n.): 架構/設計',
+                    'Neural (adj.): 神經的', 'Optimization (n.): 優化', 'Performance (n.): 表現/性能', 'Offload (v.): 卸下/轉嫁',
+                    'Compute (n.): 運算', 'Scalability (n.): 規模化能力', 'Infrastructure (n.): 基礎建設', 'Deployment (n.): 部署',
+                    'Sustained (adj.): 持續的', 'Constraint (n.): 限制', 'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略的'
+                ],
+                quiz: [
+                    { q: 'What technology are Apple and Google pivoting toward?', options: ['Cloud-only AI', 'Local Inference', 'Paper documentation', 'Manual data entry'], answer: 'Local Inference' },
+                    { q: 'What is the primary reason for moving to local inference?', options: ['To sell more phones only', 'To mitigate soaring cloud energy costs', 'Because cloud is faster', 'Government command'], answer: 'To mitigate soaring cloud energy costs' },
+                    { q: 'What kind of frameworks did they unveil for developers?', options: ['Gaming Frameworks', 'Agentic Frameworks', 'Old-style HTML', 'Database frameworks'], answer: 'Agentic Frameworks' },
+                    { q: 'What hardware component allows smartphones to execute AI tasks locally?', options: ['Battery', 'Screen', 'NPU (Neural Processing Unit)', 'Speaker'], answer: 'NPU (Neural Processing Unit)' },
+                    { q: 'The move is described as a "defensive response" to which cost?', options: ['Labor cost', 'Centralized AI energy costs', 'Shipping cost', 'Taxes'], answer: 'Centralized AI energy costs' },
+                    { q: 'By "offloading" compute, where does the task happen?', options: ['On the company server', 'On the user\'s device', 'In space', 'At a local store'], answer: 'On the user\'s device' },
+                    { q: 'The giants aim to protect their ______ from rising electricity costs.', options: ['Offices', 'Margins (profits)', 'Cars', 'Passwords'], answer: 'Margins (profits)' },
+                    { q: 'What does "mitigate" mean?', options: ['To make worse', 'To make something less severe', 'To ignore', 'To build'], answer: 'To make something less severe' },
+                    { q: 'The term "agentic" refers to AI that can ______.', options: ['Only read', 'Act on behalf of the user/perform tasks', 'Only calculate math', 'Turn off its own power'], answer: 'Act on behalf of the user/perform tasks' },
+                    { q: 'What does "inference" mean in AI?', options: ['Learning from data', 'Executing or using a trained model to get results', 'Buying more RAM', 'Writing code'], answer: 'Executing or using a trained model to get results' },
+                    { q: 'NPU stands for ______ Processing Unit.', options: ['Network', 'Neural', 'Numerical', 'Node'], answer: 'Neural' },
+                    { q: 'The word "soaring" is a synonym for ______.', options: ['Dropping', 'Rising rapidly', 'Staying steady', 'Boring'], answer: 'Rising rapidly' },
+                    { q: 'What is "scalability" in business?', options: ['The ability to grow or expand smoothly', 'The weight of a product', 'The price of a share', 'The number of offices'], answer: 'The ability to grow or expand smoothly' },
+                    { q: 'Waiters are using "local inference" to save energy. Is this hardware or software enabled?', options: ['Hardware-enabled', 'Only software', 'Only internet', 'The text doesn\'t say'], answer: 'Hardware-enabled' },
+                    { q: 'The news mentioned "Hardware-Enabled ______."', options: ['Luxury', 'Efficiency', 'Stagnation', 'Conflict'], answer: 'Efficiency' }
+                ]
+            },
+            'global-markets': {
+                title: '全球股市與能源市場',
+                english: `Global Equities Rebound as Peace Rhetoric Calms Markets; Energy Stocks Outperform\nDespite the broader tech rally, energy stocks like Chevron and Exxon Mobil rose over 1% yesterday as investors hedged against ongoing Hormuz volatility. This signifies a "Dual-Track" market sentiment. Macroscopically, while AI remains the growth story, "Real Assets" are being utilized as a "War Hedge." This suggests that institutional capital is pricing in a permanent "Geopolitical Risk Premium" for the remainder of the 2026 fiscal year.`,
+                chinese: `全球股市因中東戰火緩和而反彈：油氣板塊逆勢上揚，雪佛龍大漲 3%\n儘管科技股出現廣泛反彈，但由於投資者針對持續的荷姆茲海峽波動進行避險，雪佛龍（Chevron）與艾克森美孚（Exxon Mobil）等能源股昨日上漲超過 1%。這標誌著市場進入了「雙軌式」情緒。從宏觀角度看，雖然 AI 仍是成長的主軸，但石油、天然氣與黃金等「實體資產」正被用作「戰爭對沖（War Hedge）」。這顯示機構資金不再押注於「重返常態」，而是在 2026 財年的剩餘時間內，將永久性的「地緣政治風險溢價」計入價格中。`,
+                vocabulary: [
+                    'Equities (n.): 股票/權益', 'Rebound (v.): 反彈/回升', 'Rhetoric (n.): 修辭/辭令', 'Outperform (v.): 表現優於',
+                    'Energy stocks (n.phr.): 能源股', 'Chevron / Exxon Mobil (n. proper): 雪佛龍/艾克森美孚 (能源巨頭)', 'Hedged against (v.phr.): 對沖/避險', 'Volatility (n.): 波動性',
+                    'Signifies (v.): 標誌著/預示', 'Dual-Track (adj.): 雙軌的', 'Market sentiment (n.phr.): 市場情緒', 'Real Assets (n.phr.): 實體資產',
+                    'War Hedge (n.phr.): 戰爭對沖', 'Institutional capital (n.phr.): 機構資金', 'Pricing in (phr.v.): 計入(價格/預期)', 'Geopolitical Risk Premium (n.phr.): 地緣政治風險溢價',
+                    'Fiscal year (n.phr.): 財年', 'Remainder (n.): 剩餘部分', 'Consolidated (adj.): 綜合的', 'Rally (n.): (股市) 漲勢',
+                    'Optimism (n.): 樂觀', 'Sustained (adj.): 持續的', 'Stagnation (n.): 停滯', 'Commodity (n.): 商品',
+                    'Benchmark (n.): 基準', 'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件', 'Refining (v.ger.): 提煉',
+                    'Incentivize (v.): 激勵', 'Markup (n.): 漲價', 'Stark (adj.): 鮮明的', 'Consolidation (n.): 鞏固'
+                ],
+                quiz: [
+                    { q: 'Which sector outperformed yesterday along with the tech rally?', options: ['Retail', 'Energy stocks', 'Tourism', 'Textiles'], answer: 'Energy stocks' },
+                    { q: 'Name two energy companies mentioned in the text.', options: ['Apple and Google', 'NVIDIA and AMD', 'Chevron and Exxon Mobil', 'Tesla and SpaceX'], answer: 'Chevron and Exxon Mobil' },
+                    { q: 'What kind of market sentiment is described?', options: ['Single-track', 'Dual-track', 'Zero-growth', 'Total panic'], answer: 'Dual-track' },
+                    { q: 'What are "Real Assets" (like oil and gas) being used as?', options: ['A tax', 'A "War Hedge"', 'A gift', 'Waste material'], answer: 'A War Hedge' },
+                    { q: 'What term describes the permanent extra cost added due to geopolitics?', options: ['Safety fee', 'Geopolitical Risk Premium', 'Trading bonus', 'Fuel discount'], answer: 'Geopolitical Risk Premium' },
+                    { q: 'The market is "rebounding," meaning it is ______.', options: ['Falling', 'Recovering after a fall', 'Staying the same', 'Closing down'], answer: 'Recovering after a fall' },
+                    { q: 'What does "outperform" mean in finance?', options: ['To do worse than the average', 'To do better than others or the market average', 'To quit the market', 'To copy the average'], answer: 'To do better than others or the market average' },
+                    { q: 'What is "peace rhetoric"?', options: ['A physical weapon', 'Speeches or words about peace intended to influence', 'A type of rocket', 'A financial report'], answer: 'Speeches or words about peace intended to influence' },
+                    { q: 'The word "volatility" refers to which condition?', options: ['Complete stability', 'Large and rapid price changes', 'Zero movement', 'A low price'], answer: 'Large and rapid price changes' },
+                    { q: 'What does "hedged against" mean?', options: ['Took on more risk', 'Protected against potential loss/risk', 'Ignored the risk', 'Celebrated the risk'], answer: 'Protected against potential loss/risk' },
+                    { q: 'The term "equities" is a synonym for ______.', options: ['Bonds', 'Stocks', 'Land', 'Cash'], answer: 'Stocks' },
+                    { q: 'Institutional capital refers to money from ______.', options: ['Individuals', 'Large organizations like banks or funds', 'Only the President', 'Children'], answer: 'Large organizations like banks or funds' },
+                    { q: 'The "remainder of the fiscal year" refers to ______.', options: ['The start', 'The time left in the financial year', 'Next year', '10 years ago'], answer: 'The time left in the financial year' },
+                    { q: 'What is a "War Hedge"?', options: ['A type of weapon', 'An investment used to protect against war-related risks', 'A peace treaty', 'A radio signal'], answer: 'An investment used to protect against war-related risks' },
+                    { q: 'Is the market betting on a "Return to Normal"?', options: ['Yes', 'No, it is pricing in permanent risks', 'Maybe', 'The text doesn\'t say'], answer: 'No' }
+                ]
+            }
+        };
+
+        // --- STATE & RENDERING ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.split('：')[0];
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 border-l-8 border-blue-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-slate-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${option.replace(/'/g, "\\'")}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-slate-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗分數</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>提交答案並評分</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '已完成所有作答' : `已回答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
