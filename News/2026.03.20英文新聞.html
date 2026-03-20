@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 20 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 20 日：主權自立、算力金融與市場巨震</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Global Strategic Insight Edition.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] Taiwan Rejects China’s Energy Security "Reunification" Offer Amid Middle East War\nThe Taiwanese government officially dismissed a proposal from Beijing that promised "energy security" under a "strong motherland" framework. This signifies an escalation in cross-strait cognitive warfare. Macroscopically, Taiwan has successfully diversified its LNG sources to the United States and Australia. This rejection underscores Taipei's institutional resolve to maintain strategic autonomy.\n\n[2] Cabinet Allocates NT$6.25B to Expand Services for Elderly Living Alone\nAs Taiwan enters a "super-aged" society, the Cabinet approved a two-year, NT$6.25 billion plan to enhance care for seniors living alone. The program includes emergency alert subsidies for 70,000 seniors. Macroscopically, thisAddresses the demographic structural shift by building a social safety net to reduce caregiving burdens on the younger professional class.\n\n[3] Smart City Expo and Yushan Forum Showcase Taiwan’s AI and Digital Diplomacy\nThe 2026 Net Zero City Expo and Yushan Forum concluded in Taipei, bringing together leaders from 22 countries. Taiwan is transitioning from a "hardware vendor" to a "solution architect" for global challenges. This "functional diplomacy" creates deep institutional ties that are harder to sever under diplomatic pressure.`,
+                chinese: `【1】能源主權之爭：台灣拒絕中國以「統一」換取能源安全的提議\n台灣政府正式回絕了北京方面在一項「強大祖國」框架下承諾提供「能源與資源安全」的提議。這標誌著在美伊衝突引發全球能源危機之際，兩岸認知作戰的升級。從宏觀角度看，台灣已成功實現液化天然氣（LNG）來源多元化，將依賴從卡達轉向美國與澳洲。此次拒絕凸顯了台北維持戰略自主的制度性決心，認為該提議並非外交橄欖枝，而是旨在利用全球供應鏈脆弱性的心理壓力。\n\n【2】內政部撥款 62.5 億元：強化「超高齡社會」與單身長者服務計畫\n隨著台灣步入「超高齡」社會，行政院核定了一項為期兩年、耗資 62.5 億新台幣（約 1.95 億美元）的計畫，以加強對獨居長者的照顧。該計畫包括為 7 萬名長者提供緊急救援連線補助，並擴大送餐服務。從宏觀角度看，此舉旨在應對威脅社會穩定的「人口結構轉型」。透過優先考慮 75 歲以上長者的到府訪視與數位健康監測，政府正建立一套社會安全網，旨在減輕 22 至 35 歲專業族群的經濟與照護負擔。\n\n【3】軟實力與國際參與：2026 智慧城市展與 Yushan Forum 展現 AI 外交\n2026 淨零城市展與史上規模最大的「玉山論壇（Yushan Forum）」本週在台北圓滿落幕，匯集了來自 22 個國家的領袖。活動聚焦於台灣利用 AI 與半導體專業知識推動綠色轉型。從宏觀角度看，台灣正成功從「硬體供應商」轉型為全球挑戰的「方案架構師」。這種「功能性外交」與國際夥伴建立了更深層的制度性聯繫，在中國外交壓力下更難被切斷，有效地擴大了台灣的國際呼吸空間。`,
+                vocabulary: [
+                    'Dismissed (v.pt.): 駁回/拒絕', 'Reunification (n.): 統一', 'Cognitive warfare (n.phr.): 認知作戰', 'Diversified (v.pp.): 多元化的',
+                    'LNG (Liquefied Natural Gas) (n.): 液化天然氣', 'Reliance (n.): 依賴', 'Strategic autonomy (n.phr.): 戰略自主', 'Olive branch (n.phr.): 橄欖枝 (和平意圖)',
+                    'Vulnerabilities (n.): 脆弱性', 'Cabinet (n.): 內閣/行政院', 'Super-aged society (n.phr.): 超高齡社會', 'Allocates (v.): 撥款/分配',
+                    'Seniors living alone (n.phr.): 獨居長者', 'Emergency alert (n.phr.): 緊急救援連線/警報', 'Subsidies (n.): 補助金', 'Demographic shift (n.phr.): 人口結構轉型',
+                    'Social safety net (n.phr.): 社會安全網', 'Caregiving burdens (n.phr.): 照護負擔', 'Smart City Expo (n. proper): 智慧城市展', 'Digital diplomacy (n.phr.): 數位外交',
+                    'Net Zero (adj./n.): 淨零', 'Hardware vendor (n.phr.): 硬體供應商', 'Solution architect (n.phr.): 方案架構師', 'Functional diplomacy (n.phr.): 功能性外交',
+                    'Sever (v.): 切斷', 'Breathing space (n.phr.): 呼吸空間/餘地', 'Expertise (n.): 專業知識', 'Institutional ties (n.phr.): 制度性聯繫',
+                    'Proactive (adj.): 主動的', 'Resilience (n.): 韌性', 'Decouple (v.): 脫鉤', 'Constraint (n.): 限制'
+                ],
+                quiz: [
+                    { q: 'What was Beijing\'s specific proposal to Taiwan regarding the energy crisis?', options: ['Free oil for 10 years', 'Energy security under a "strong motherland" framework', 'A joint solar project', 'Lowering LNG prices by 50%'], answer: 'Energy security under a "strong motherland" framework' },
+                    { q: 'Which countries has Taiwan shifted its LNG reliance to?', options: ['Russia and Qatar', 'United States and Australia', 'China and Japan', 'Norway and Brazil'], answer: 'United States and Australia' },
+                    { q: 'How much budget did the Cabinet allocate for elderly care services?', options: ['NT$1 billion', 'NT$6.25 billion', 'NT$45 billion', 'NT$400 billion'], answer: 'NT$6.25 billion' },
+                    { q: 'The elderly care program provides emergency alert subsidies for how many seniors?', options: ['10,000', '22,000', '70,000', '100,000'], answer: '70,000' },
+                    { q: 'How many countries sent leaders to the Yushan Forum and Smart City Expo?', options: ['10', '15', '22', '50'], answer: '22' },
+                    { q: 'Taiwan is transitioning from a "hardware vendor" to what?', options: ['A software buyer', 'A solution architect for global challenges', 'A food exporter', 'A military base'], answer: 'A solution architect for global challenges' },
+                    { q: 'What term describes the diplomatic strategy of building deep ties through tech expertise?', options: ['Cognitive warfare', 'Functional diplomacy', 'Nuclear deterrence', 'Trade embargo'], answer: 'Functional diplomacy' },
+                    { q: 'Taipei views Beijing\'s offer as ______ rather than an olive branch.', options: ['Helpful advice', 'Psychological pressure', 'Financial aid', 'Scientific collaboration'], answer: 'Psychological pressure' },
+                    { q: 'The term "super-aged society" refers to a specific ______ shift.', options: ['Climatic', 'Demographic', 'Technological', 'Currency'], answer: 'Demographic' },
+                    { q: 'Who is the primary beneficiary of the reduced caregiving burden?', options: ['The 22–35 professional class', 'High-school students', 'Foreign investors', 'Government officials'], answer: 'The 22–35 professional class' },
+                    { q: 'What does "dismissed" mean in the trade news?', options: ['Accepted', 'Rejected or treated as unworthy', 'Delayed', 'Studied'], answer: 'Rejected or treated as unworthy' },
+                    { q: 'The word "sever" in the diplomacy news means to ______.', options: ['Join', 'Cut off or end', 'Improve', 'Rename'], answer: 'Cut off or end' },
+                    { q: 'Taiwan is using its ______ expertise to drive green transformation.', options: ['Semiconductor', 'Textile', 'Farming', 'Mining'], answer: 'Semiconductor' },
+                    { q: 'What is "LNG"?', options: ['Light Nitrogen Gas', 'Liquefied Natural Gas', 'Local Network Grid', 'Low Nature Gravity'], answer: 'Liquefied Natural Gas' },
+                    { q: 'The term "strategic autonomy" refers to the ability to ______.', options: ['Borrow money', 'Make independent decisions in national interest', 'Control the weather', 'Win a war alone'], answer: 'Make independent decisions in national interest' }
+                ]
+            },
+            'dni-threat-2026': {
+                title: '美情報總監 2026 威脅評估',
+                english: `Tulsi Gabbard, Director of National Intelligence (DNI), released the 2026 Annual Threat Assessment on Friday, highlighting the rapid development of hypersonic delivery systems by China and Russia designed to bypass U.S. missile defenses. This signifies a move toward "Integrated Deterrence." Macroscopically, the report underscores the fragility of the "Rules-Based Order," as state actors like Iran and North Korea target critical infrastructure. For global governance, this necessitates a shift from passive defense to active "cyber-resilience" and pre-emptive hardening of global communication nodes.`,
+                chinese: `美國國家情報總監發布 2026 威脅評估：聚焦中俄導彈與網路攻擊\n國家情報總監（DNI）塔爾西·加巴德（Tulsi Gabbard）週五發布了 2026 年度威脅評估報告，強調中國與俄羅斯正迅速開發旨在繞過美國導彈防禦系統的「極音速（hypersonic）」運載系統。這標誌著防禦策略轉向「整合威懾（Integrated Deterrence）」。從宏觀角度看，該報告凸顯了「基於規則的秩序」之脆弱性，尤其是伊朗與北韓等國家行為者日益針對關鍵基礎設施進行勒索軟體與網路攻擊。對於全球治理而言，這使得策略必須從被動防禦轉向主動的「網路韌性」，以及對全球通訊節點進行先發制人的強化（hardening）。`,
+                vocabulary: [
+                    'DNI (Director of National Intelligence) (n. proper): 國家情報總監', 'Threat Assessment (n.phr.): 威脅評估', 'Hypersonic (adj.): 極音速的 (5馬赫以上)', 'Delivery systems (n.phr.): 運載/投射系統',
+                    'Bypass (v.): 繞過/避開', 'Integrated Deterrence (n.phr.): 整合威懾', 'Fragility (n.): 脆弱性', 'Rules-Based Order (n.phr.): 基於規則的秩序',
+                    'State actors (n.phr.): 國家行為者', 'Critical infrastructure (n.phr.): 關鍵基礎設施', 'Governance (n.): 治理/管理', 'Cyber-resilience (n.phr.): 網路韌性',
+                    'Pre-emptive (adj.): 先發制人的', 'Hardening (n.): 強化/硬化 (防禦)', 'Communication nodes (n.phr.): 通訊節點', 'Ransomware (n.): 勒索軟體',
+                    'Prioritizing (v.ger.): 優先處理', 'Deterrence (n.): 威懾/震懾', 'Vulnerability (n.): 脆弱性', 'Assault (n.): 攻擊',
+                    'Signifies (v.): 標誌著', 'Necessitates (v.): 使...成為必要', 'Passive (adj.): 被動的', 'Active (adj.): 主動的',
+                    'Strategic (adj.): 戰略的', 'Bilateral (adj.): 雙邊的', 'Consolidated (adj.): 綜合的/鞏固的', 'Surpass (v.): 超過',
+                    'Infrastructure (n.): 基礎建設', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的'
+                ],
+                quiz: [
+                    { q: 'Who is the current U.S. Director of National Intelligence?', options: ['Donald Trump', 'Tulsi Gabbard', 'Jerome Powell', 'Marco Rubio'], answer: 'Tulsi Gabbard' },
+                    { q: 'What specific type of delivery systems are China and Russia developing rapidly?', options: ['Steam-powered', 'Hypersonic', 'Underwater only', 'Paper-based'], answer: 'Hypersonic' },
+                    { q: 'What defence concept is the U.S. moving toward in response?', options: ['Isolated Defense', 'Integrated Deterrence', 'Passive Observation', 'Total Retreat'], answer: 'Integrated Deterrence' },
+                    { q: 'The report underscores the ______ of the "Rules-Based Order."', options: ['Strength', 'Fragility', 'Success', 'Ending'], answer: 'Fragility' },
+                    { q: 'Which countries are mentioned as state actors targeting infrastructure?', options: ['Japan and Germany', 'Iran and North Korea', 'UK and France', 'Canada and Mexico'], answer: 'Iran and North Korea' },
+                    { q: 'The strategy shift is from passive defense to "active ______."', options: ['Aggression', 'Cyber-resilience', 'Surrender', 'Marketing'], answer: 'Cyber-resilience' },
+                    { q: 'What is being "hardened" pre-emptively?', options: ['Office floors', 'Communication nodes', 'Food supplies', 'Car tires'], answer: 'Communication nodes' },
+                    { q: 'What does "hypersonic" mean?', options: ['Faster than light', 'Traveling at least five times the speed of sound', 'Silent', 'Very slow'], answer: 'Traveling at least five times the speed of sound' },
+                    { q: 'A "threat assessment" is a report that ______.', options: ['Ignores risks', 'Analyzes and evaluates potential dangers', 'Promotes peace only', 'Calculates taxes'], answer: 'Analyzes and evaluates potential dangers' },
+                    { q: 'What does "pre-emptive" mean?', options: ['Waiting until after an attack', 'Taken as a measure against something anticipated', 'Never happening', 'Hidden'], answer: 'Taken as a measure against something anticipated' },
+                    { q: 'The term "deterrence" refers to ______.', options: ['Encouraging an attack', 'Discouraging an action through fear of consequences', 'Giving a gift', 'Helping a friend'], answer: 'Discouraging an action through fear of consequences' },
+                    { q: 'What is "ransomware"?', options: ['New software for free', 'Malware that demands payment to restore data access', 'A type of clothing', 'A cloud storage service'], answer: 'Malware that demands payment to restore data access' },
+                    { q: 'The "Physical Layer" (from previous news) and "Communication nodes" are types of ______.', options: ['Software', 'Infrastructure', 'Movies', 'Food'], answer: 'Infrastructure' },
+                    { q: 'What does "fragility" imply?', options: ['Extreme strength', 'Being easily broken or damaged', 'Being very expensive', 'Being new'], answer: 'Being easily broken or damaged' },
+                    { q: 'DNI stands for Director of ______ Intelligence.', options: ['Digital', 'National', 'Defense', 'Data'], answer: 'National' }
+                ]
+            },
+            'hedge-fund-rotation': {
+                title: '對沖基金轉向：美光獲利爆發',
+                english: `Hedge Funds Rotate from NVIDIA to Micron as AI Chip Dynamics Evolve\nProminent fund managers like Israel Englander have reportedly exited NVIDIA positions to acquire shares in Micron Technology. This signifies a transition from "Logic" to "Memory" as the primary value driver in the AI stack. Macroscopically, with NVIDIA’s hardware footprint already mature, capital is seeking the next "bottleneck"—memory bandwidth. This rotation reflects a market consensus that the "Memory Wall" is the most profitable barrier to overcome in the 2026–2027 infrastructure cycle.`,
+                chinese: `對沖基金轉向：美光（Micron）獲利爆發後，資金正從 NVIDIA 流向記憶體\n據報導，包括艾瑟列·英格蘭德（Israel Englander）在內的知名基金經理人已出清 NVIDIA 部位，轉而買入美光科技（Micron）的股票。這標誌著 AI 價值鏈的主軸正從「邏輯運算」轉向「記憶體」。從宏觀角度看，隨著 NVIDIA 的硬體佈局趨於成熟，資本正在尋找下一個「瓶頸」——即記憶體頻寬。這種輪動反映了市場共識：在 2026 至 2027 年的基礎設施週期中，「記憶體牆（Memory Wall）」是獲利最豐厚的突破點。`,
+                vocabulary: [
+                    'Hedge Funds (n.phr.): 對沖基金', 'Rotate (v.): 輪動/旋轉', 'Dynamics (n.): 動態/動力', 'Prominent (adj.): 著名的/傑出的',
+                    'Exited positions (phr.): 出清部位/賣出持股', 'Acquire (v.): 收購/獲得', 'Transition (n.): 轉型/過渡', 'AI stack (n.phr.): AI 技術堆棧',
+                    'Primary value driver (n.phr.): 主要價值驅動力', 'Footprint (n.): 佈局/足跡', 'Bottleneck (n.): 瓶頸', 'Memory bandwidth (n.phr.): 記憶體頻寬',
+                    'Market consensus (n.phr.): 市場共識', 'Memory Wall (n. proper): 記憶體牆', 'Infrastructure cycle (n.phr.): 基礎設施週期', 'Allocated (v.pp.): 分配的',
+                    'Evolve (v.): 演變', 'Compute (n.): 運算', 'Bandwidth (n.): 頻寬', 'Barrier (n.): 障礙/屏障',
+                    'Overcome (v.): 克服', 'Mature (adj.): 成熟的', 'Capital (n.): 資本/資金', 'Segment (n.): 部分/領域',
+                    'Profitability (n.): 盈利能力', 'Margin (n.): 邊際/利潤', 'Sustained (adj.): 持續的', 'Unprecedented (adj.): 史無前例的',
+                    'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Logic (n.): 邏輯', 'Divergence (n.): 分歧'
+                ],
+                quiz: [
+                    { q: 'Prominent hedge funds are rotating their investments from ______ to ______.', options: ['Apple to Google', 'NVIDIA to Micron', 'Gold to Bitcoin', 'Oil to Solar'], answer: 'NVIDIA to Micron' },
+                    { q: 'Who is one of the prominent fund managers mentioned?', options: ['Elon Musk', 'Israel Englander', 'Jensen Huang', 'Jerome Powell'], answer: 'Israel Englander' },
+                    { q: 'AI value is shifting from "Logic" to which component?', options: ['Software', 'Memory', 'Screen', 'Battery'], answer: 'Memory' },
+                    { q: 'What is the "next bottleneck" capital is seeking to address?', options: ['CPU speed', 'Memory bandwidth', 'Delivery trucks', 'Office space'], answer: 'Memory bandwidth' },
+                    { q: 'The term "Memory Wall" refers to what in this context?', options: ['A literal wall in a factory', 'The technological barrier/bottleneck in memory', 'A bank\'s security system', 'A storage room'], answer: 'The technological barrier/bottleneck in memory' },
+                    { q: 'This rotation is happening during the 2026–2027 ______ cycle.', options: ['Election', 'Infrastructure', 'Holiday', 'Fashion'], answer: 'Infrastructure' },
+                    { q: 'Hedge funds "exited positions," meaning they ______.', options: ['Bought more shares', 'Sold their shares', 'Changed their company name', 'Hired new staff'], answer: 'Sold their shares' },
+                    { q: 'What does "prominent" mean?', options: ['Small and unknown', 'Important or famous', 'Very fast', 'Broken'], answer: 'Important or famous' },
+                    { q: 'The word "consensus" in "market consensus" means ______.', options: ['A loud argument', 'General agreement among a group', 'A secret deal', 'A type of tax'], answer: 'General agreement among a group' },
+                    { q: 'Micron Technology is primarily in which industry?', options: ['Auto', 'Semiconductor/Memory', 'Clothing', 'Food'], answer: 'Semiconductor/Memory' },
+                    { q: 'What does "bandwidth" refer to in computing?', options: ['The weight of a computer', 'The capacity for data transfer', 'The price of a server', 'The color of a chip'], answer: 'The capacity for data transfer' },
+                    { q: 'The term "AI stack" refers to the ______ of AI technology.', options: ['Price', 'Full layers/components', 'History', 'Waste'], answer: 'Full layers/components' },
+                    { q: 'What does "overcome" mean?', options: ['To give up', 'To succeed in dealing with a problem/barrier', 'To fail', 'To hide'], answer: 'To succeed in dealing with a problem/barrier' },
+                    { q: 'A "hedge fund" is an investment fund that ______.', options: ['Only plants trees', 'Uses complex strategies to protect or gain capital', 'Is for children', 'Only buys gold'], answer: 'Uses complex strategies to protect or gain capital' },
+                    { q: 'NVIDIA’s hardware footprint is described as "mature," meaning ______.', options: ['Just starting', 'Fully developed or established', 'Broken', 'Hidden'], answer: 'Fully developed or established' }
+                ]
+            },
+            'gold-flash-crash': {
+                title: '黃金慘遭「血洗」與美債優勢',
+                english: `Gold Plunges as Hawkish Fed and Resilient Dollar Trigger Mass Liquidation of Safe Havens\nFollowing the Federal Reserve’s refusal to pivot and surprisingly strong U.S. manufacturing data, gold prices plunged over $200 in a single session, breaching the $4,600 mark. Macroscopically, this "flash crash" signals a shift where gold is temporarily losing its "store of value" status to high-yield U.S. Treasuries. This creates a "liquidity trap" where even traditional hedges are sold to meet dollar-denominated obligations, highlighting USD dominance.`,
+                chinese: `黃金慘遭「血洗」：失守 4,600 美元關卡，錄得三年來最大單日跌幅\n隨聯準會（Fed）拒絕轉向（pivot）以及出人意料強勁的美國製造業數據，黃金價格在單一交易日內暴跌超過 200 美元，跌破 4,600 美元的關鍵支撐位。從宏觀角度看，這次「閃崩（flash crash）」標誌著一種轉變：黃金暫時失去了其「價值儲存」地位，取而代之的是高收益的美國公債。這創造了一個「流動性陷阱（liquidity trap）」，即使是傳統的對沖資產（如黃金）也被拋售以履行以美元計價的債務義務，凸顯了美元在高利率、高波動地緣環境中的統治地位。`,
+                vocabulary: [
+                    'Plunges (v.): 暴跌', 'Hawkish (adj.): 鷹派的 (支持高利率)', 'Resilient (adj.): 具韌性的', 'Liquidation (n.): 清算/拋售變現',
+                    'Safe havens (n.phr.): 避險資產', 'Single session (n.phr.): 單一交易日', 'Breaching (v.ger.): 跌破/突破', 'Mark (n.): 標記/關卡',
+                    'Flash crash (n.phr.): 閃崩', 'Store of value (n.phr.): 價值儲存', 'High-yield (adj.): 高收益的', 'U.S. Treasuries (n.phr.): 美國公債',
+                    'Liquidity trap (n.phr.): 流動性陷阱', 'Dollar-denominated (adj.): 以美元計價的', 'Obligations (n.): 義務/債務', 'Dominance (n.): 統治/優勢',
+                    'Refusal (n.): 拒絕', 'Pivot (v.): 轉向', 'Volatility (n.): 波動性', 'Instability (n.): 不穩定',
+                    'Liquidation (n.): (資產) 清償', 'denominated (v.pp.): 以...命名/計價', 'Hedge (n.): 避險', 'Surprising (adj.): 令人驚訝的',
+                    'manufacturing (n.): 製造業', 'critical (adj.): 關鍵的', 'support (n.): 支撐位/支持', 'session (n.): 會議/盤',
+                    'temporary (adj.): 暫時的', 'status (n.): 地位/狀態', 'trapping (v.ger.): 陷阱', 'highlighting (v.ger.): 凸顯'
+                ],
+                quiz: [
+                    { q: 'By how much did gold prices drop in a single session?', options: ['$50', '$100', 'Over $200', '$500'], answer: 'Over $200' },
+                    { q: 'Gold breached which critical price mark?', options: ['$3,000', '$4,600', '$5,000', '$10,000'], answer: '$4,600' },
+                    { q: 'What is gold temporarily losing its "status" as?', options: ['A cheap metal', 'A "store of value"', 'A military weapon', 'A new currency'], answer: 'A "store of value"' },
+                    { q: 'What is replacing gold as a preferred safe asset according to the text?', options: ['Bitcoin', 'High-yield U.S. Treasuries', 'Real estate', 'Silver'], answer: 'High-yield U.S. Treasuries' },
+                    { q: 'The term "flash crash" refers to ______.', options: ['A slow decline', 'An extremely rapid drop in price', 'A power outage', 'A fast car accident'], answer: 'An extremely rapid drop in price' },
+                    { q: 'What kind of US data was "surprisingly strong"?', options: ['Farming data', 'Manufacturing data', 'Tourism data', 'Space data'], answer: 'Manufacturing data' },
+                    { q: 'The situation highlights the dominance of which currency?', options: ['Euro', 'Yuan', 'USD (U.S. Dollar)', 'Bitcoin'], answer: 'USD (U.S. Dollar)' },
+                    { q: 'What does "liquidation" mean in finance?', options: ['Turning solid gold to liquid', 'Selling assets for cash', 'Buying a new company', 'Closing a factory only'], answer: 'Selling assets for cash' },
+                    { q: 'A "hawkish" Fed refers to one that is likely to ______.', options: ['Keep interest rates high', 'Lower interest rates quickly', 'Ignore inflation', 'Print more money'], answer: 'Keep interest rates high' },
+                    { q: 'What is a "liquidity trap" mentioned in the text?', options: ['A place with too much water', 'A situation where assets are sold to meet cash obligations', 'A bank robbery', 'A fast trading algorithm'], answer: 'A situation where assets are sold to meet cash obligations' },
+                    { q: 'The word "breaching" means ______.', options: ['Repairing', 'Breaking through or falling below a level', 'Supporting', 'Hiding'], answer: 'Breaking through or falling below a level' },
+                    { q: 'Traditional "______" are being sold to meet obligations.', options: ['Hedges', 'Factories', 'Offices', 'Schools'], answer: 'Hedges' },
+                    { q: 'What does "dollar-denominated" mean?', options: ['Free dollars', 'Expressed or calculated in U.S. Dollars', 'Fake dollars', 'Secret dollars'], answer: 'Expressed or calculated in U.S. Dollars' },
+                    { q: 'The word "resilient" is used to describe the ______.', options: ['Gold price', 'U.S. Dollar', 'Oil price', 'Weather'], answer: 'U.S. Dollar' },
+                    { q: 'When did the flash crash occur?', options: ['Monday', 'Tuesday', 'Friday', 'The text doesn\'t say the exact day'], answer: 'The text doesn\'t say the exact day (Context is Friday report)' }
+                ]
+            },
+            'compute-backed-securities': {
+                title: '算力資產證券化 (ASO)',
+                english: `Compute-Backed Securities Gain Institutional Traction as a New Defensive Credit Class\nWall Street has seen the first wave of investment-grade Asset-Backed Securities (ABS) where the collateral is future lease revenue from high-end GPU clusters. This marks the "financialization of compute." Macroscopically, compute capacity is now treated as a stable, yield-generating asset similar to real estate. This provides a stable funding vehicle for the $700 billion infrastructure spending expected from the "Big Five" tech companies in 2026.`,
+                chinese: `算力資產證券化 (ASO)：新興金融工具鎖定資料中心長期收益\n華爾街出現了第一波投資級「資產抵押證券（ABS）」，其抵押品（collateral）是來自高端 GPU 集群的未來租賃收益。這標誌著「算力的金融化（financialization of compute）」。從宏觀角度看，算力產能現在被視為一種穩定的、能產生收益的資產，類似於房地產或公用事業基礎設施。這為 2026 年預計來自「五大（Big Five）」科技公司 7,000 億美元的基礎設施支出提供了一個穩定的融資工具，同時為機構投資者提供了一個進入 AI 超級週期的低波動切入點。`,
+                vocabulary: [
+                    'Compute-Backed Securities (n.phr.): 算力抵押證券', 'Institutional Traction (n.phr.): 機構吸引力/動能', 'Defensive Credit Class (n.phr.): 防禦性信用類別', 'Asset-Backed Securities (ABS) (n. proper): 資產抵押證券',
+                    'Collateral (n.): 抵押品', 'Future lease revenue (n.phr.): 未來租賃收益', 'GPU clusters (n.phr.): GPU 集群', 'Financialization (n.): 金融化',
+                    'Yield-generating (adj.): 產生收益的', 'Utility infrastructure (n.phr.): 公用事業基礎設施', 'Funding vehicle (n.phr.): 融資工具', 'Big Five (n. phr.): 五大科技巨頭 (MAMAA/FAANG等)',
+                    'Infrastructure spending (n.phr.): 基礎設施支出', 'Super-cycle (n.): 超級週期', 'Investment-grade (adj.): 投資級的', 'Capacity (n.): 產能',
+                    'Securities (n.): 證券', 'Traction (n.): 牽引/推動力', 'Collateral (adj.): 併行的', 'Financialize (v.): 金融化',
+                    'Stable (adj.): 穩定的', 'Revenue (n.): 收入', 'Architecture (n.): 架構', 'Deployment (n.): 部署',
+                    'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑', 'Investment (n.): 投資',
+                    'Billion (n.): 十億', 'Constraint (n.): 限制', 'Scalability (n.): 可擴展性', 'Infrastructure (n.): 基礎建設'
+                ],
+                quiz: [
+                    { q: 'What is the collateral for the new wave of Asset-Backed Securities (ABS) on Wall Street?', options: ['Residential houses', 'Future lease revenue from high-end GPU clusters', 'Oil reserves', 'Gold bars'], answer: 'Future lease revenue from high-end GPU clusters' },
+                    { q: 'This development marks the "______ of compute."', options: ['Hacking', 'Financialization', 'Destruction', 'Sale'], answer: 'Financialization' },
+                    { q: 'Compute capacity is now being treated similarly to which other asset class?', options: ['Toys', 'Real estate or utility infrastructure', 'Used cars', 'Agricultural seeds'], answer: 'Real estate or utility infrastructure' },
+                    { q: 'How much infrastructure spending is expected from the "Big Five" in 2026?', options: ['$10 billion', '$100 billion', '$700 billion', '$1 trillion'], answer: '$700 billion' },
+                    { q: 'What does this provide for institutional investors?', options: ['High risk only', 'A lower-volatility entry point into the AI super-cycle', 'Free computers', 'No taxes'], answer: 'A lower-volatility entry point into the AI super-cycle' },
+                    { q: 'The new securities are described as "______-grade."', options: ['Speculative', 'Investment', 'Low', 'Unknown'], answer: 'Investment' },
+                    { q: 'A "funding vehicle" is a ______.', options: ['Fast truck', 'Method or structure used to raise money for a project', 'Space shuttle', 'Type of electric car'], answer: 'Method or structure used to raise money for a project' },
+                    { q: 'What does "collateral" mean in finance?', options: ['A type of agreement', 'Asset pledged as security for a loan', 'A coworker', 'Total profit'], answer: 'Asset pledged as security for a loan' },
+                    { q: 'The "Big Five" refers to large ______ companies.', options: ['Oil', 'Technology', 'Farming', 'Banking'], answer: 'Technology' },
+                    { q: 'What is a "security" in this context?', options: ['A bodyguard', 'A tradable financial asset', 'A door lock', 'A secret password'], answer: 'A tradable financial asset' },
+                    { q: 'The term "yield-generating" means an asset that ______.', options: ['Loses money', 'Produces a financial return or income', 'Is broken', 'Uses a lot of power'], answer: 'Produces a financial return or income' },
+                    { q: 'The term "ASO" stands for "Compute-Backed ______."', options: ['Options', 'Securities', 'Operations', 'Offsets'], answer: 'Securities' },
+                    { q: 'Wall Street is seeing the "first ______" of these securities.', options: ['Wall', 'Wave', 'Hole', 'End'], answer: 'Wave' },
+                    { q: 'Institutional ______ means large organizations are interested.', options: ['Friction', 'Traction', 'Avoidance', 'Boredom'], answer: 'Traction' },
+                    { q: 'ASO is considered a new "______ credit class."', options: ['Aggressive', 'Defensive', 'Zero', 'Risky'], answer: 'Defensive' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz.length;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 border-l-8 border-blue-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-slate-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-slate-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
