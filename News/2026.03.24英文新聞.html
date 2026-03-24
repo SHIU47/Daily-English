@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 24 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 24 日：資安堡壘、垂直主權與市場閃崩</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] Leaked Chinese Database Reveals Massive Spying Network on Taiwan\nDoublethink Lab has exposed a comprehensive Chinese database containing detailed profiles of nearly 170 high-ranking Taiwanese politicians, alongside 23 million household records. This signifies a move toward "Precision Social Engineering." Macroscopically, the leak underscores the urgent need for Taiwan to harden its data sovereignty laws and institutionalize robust cybersecurity countermeasures.\n\n[2] First Indigenous-Flight F-16V Completed; AIDC Pivots Toward Robotic Integration\nThe MND confirmed that the first of 66 newly purchased F-16V fighter jets completed its initial flight test. Concurrently, the military revealed plans to procure hundreds of robotic quadruped platforms. Macroscopically, this represents a "High-Low Capability Mix," signaling the "Automation of the First Mile" in asymmetric defense to address manpower shortages.\n\n[3] MOFA Issues Reciprocity Ultimatum to Seoul Over "China (Taiwan)" Naming Spat\nMinister Lin Chia-lung reiterated that if South Korea does not correct the labeling of Taiwan in its e-Arrival system by March 31, Taiwan will implement reciprocal measures. This includes changing South Korea’s designation to "Korea (South)." Macroscopically, this signifies the "Securitization of Identity," using administrative reciprocity as a tool of sovereign defense.`,
+                chinese: `【1】兩岸認知作戰警訊：中共「台灣政治人物數據庫」遭披露\n「雙重思考實驗室（Doublethink Lab）」披露了一個全面的中國數據庫，包含近 170 名台灣高階政治人物（包括賴清德總統與林佳龍部長）的詳細檔案，以及 2,300 萬筆戶籍記錄。這標誌著轉向「精準社交工程」。從宏觀角度看，此次洩漏凸顯了台灣加強數據主權法制化並建立更強大網絡安全對策的緊迫性，以保護民主論述的完整性。\n\n【2】國防技術躍進：首架 F-16V 完成首飛，漢翔擬大規模量產機械犬\n國防部證實，66 架新購 F-16V 戰機中的首架已在南卡羅來納州完成首飛測試。同時，軍方透露計畫採購數百個四足機器人平台（機械犬）以增強城市偵察。從宏觀角度看，這代表了「高低能力組合」：高階平台如 F-16V 確保「動力層」安全，而機器人犬的整合則信號了不對稱防禦中「最後一哩路自動化」，利用本土機械工程解決基層戰鬥部隊長期的人力短缺。\n\n【3】台韓命名糾紛：外交部限期 3/31 前更正「中國台灣」，否則採取對等制裁\n外交部長林佳龍週日重申，若南韓未在 3 月 31 日前更正其電子入境系統對台灣的標註，台灣將實施對等措施。這包括將其線上入境卡對南韓的稱呼由「大韓民國」改為「韓國（南）」。從宏觀角度看，這標誌著「身份安全化」：台北正展現出將行政對等原則作為主權防禦工具的新意願，向區域夥伴發出信號，即功能性合作取決於對台灣國家地位的尊重。`,
+                vocabulary: [
+                    'Security Breach (n.phr.): 安全漏洞', 'Leaked (adj.): 洩漏的', 'Politicians (n.): 政治人物', 'Profiles (n.): 檔案/概況',
+                    'Precision Social Engineering (n.phr.): 精準社交工程', 'Hardening (v.ger.): 強化/加固', 'Data sovereignty (n.phr.): 數據主權', 'Institutionalize (v.): 使制度化',
+                    'Cybersecurity countermeasures (n.phr.): 網絡安全對策', 'Integrity (n.): 完整性', 'Democratic discourse (n.phr.): 民主論述', 'Indigenous-flight (n.phr.): 本土首飛',
+                    'Quadruped platforms (n.phr.): 四足平台 (機械犬)', 'Reconnaissance (n.): 偵察', 'Asymmetric defense (n.phr.): 不對稱防禦', 'Manpower shortages (n.phr.): 人力短缺',
+                    'Reciprocity (n.): 對等/互惠', 'Ultimatum (n.): 最後通牒', 'Spat (n.): 糾紛/小爭執', 'Designation (n.): 稱號/指定',
+                    'Reciprocal measures (n.phr.): 對等措施', 'Contingent upon (phr.): 取決於', 'Securitization of Identity (n.phr.): 身份安全化', 'Sovereign defense (n.phr.): 主權防禦',
+                    'High-ranking (adj.): 高階的', 'Household records (n.phr.): 戶籍記錄', 'First Mile (n.phr.): 第一哩路 (指前線)', 'Chronicle (adj.): 長期的',
+                    'Reiterated (v.pt.): 重申', 'Designated (v.pp.): 指定的', 'Functional cooperation (n.phr.): 功能性合作', 'Representation (n.): 代表/表述'
+                ],
+                quiz: [
+                    { q: 'How many Taiwanese politicians are profiled in the leaked Chinese database?', options: ['50', '170', '1,000', '23 million'], answer: '170' },
+                    { q: 'What does the term "Precision Social Engineering" refer to in the text?', options: ['Building bridges', 'Using leaked data for targeted manipulation', 'Farming technology', 'Designing airplanes'], answer: 'Using leaked data for targeted manipulation' },
+                    { q: 'What is the "High-Low Capability Mix" mentioned in the military news?', options: ['Mixing old and new guns', 'Combining high-end jets with low-cost robots', 'Hiring tall and short soldiers', 'Air and sea coordination only'], answer: 'Combining high-end jets with low-cost robots' },
+                    { q: 'Where did the first F-16V fighter jet complete its initial flight test?', options: ['Taipei', 'South Carolina', 'Austin', 'Hsinchu'], answer: 'South Carolina' },
+                    { q: 'What is the purpose of the robotic quadruped platforms?', options: ['Cooking food', 'Urban reconnaissance', 'Cleaning oceans', 'Space travel'], answer: 'Urban reconnaissance' },
+                    { q: 'What is the deadline set by MOFA for South Korea to fix the naming spat?', options: ['March 18', 'March 24', 'March 31', 'April 1'], answer: 'March 31' },
+                    { q: 'If the deadline is missed, how will Taiwan refer to South Korea on arrival cards?', options: ['Republic of Korea', 'Korea (South)', 'Seoul District', 'No name used'], answer: 'Korea (South)' },
+                    { q: 'The term "Data Sovereignty" refers to what?', options: ['Selling data to others', 'A nation\'s right to control its own data', 'Having the fastest internet', 'Free data for everyone'], answer: 'A nation\'s right to control its own data' },
+                    { q: 'The integration of robotic dogs addresses which chronic problem?', options: ['High taxes', 'Manpower shortages', 'Water scarcity', 'Lack of fuel'], answer: 'Manpower shortages' },
+                    { q: 'What kind of defense strategy does Taiwan prioritize as mentioned?', options: ['Conventional', 'Asymmetric', 'Offensive only', 'Nuclear'], answer: 'Asymmetric' },
+                    { q: 'The word "reciprocity" means what in diplomacy?', options: ['Giving gifts', 'Responding to an action with a similar action', 'Total surrender', 'A secret deal'], answer: 'Responding to an action with a similar action' },
+                    { q: 'Doublethink Lab is the entity that ______ the database.', options: ['Created', 'Exposed', 'Bought', 'Deleted'], answer: 'Exposed' },
+                    { q: 'F-16V represents the ______ layer of defense.', options: ['Cyber', 'Kinetic', 'Economic', 'Social'], answer: 'Kinetic' },
+                    { q: 'What does the term "Securitization of Identity" imply?', options: ['Identity is treated as a security issue', 'Everyone gets a new ID', 'Deleting names from cards', 'Selling identity data'], answer: 'Identity is treated as a security issue' },
+                    { q: 'Functional cooperation with partners is ______ upon respectful representation.', options: ['Independent', 'Contingent (dependent)', 'Ignoring', 'Forbidden'], answer: 'Contingent (dependent)' }
+                ]
+            },
+            'korea-poland': {
+                title: '韓波國防夥伴關係',
+                english: `South Korea and Poland Deepen Strategic Ties; Poland Emerges as Seoul’s Key Defense Pivot\nMarcin Przydacz confirmed that South Korea is now Warsaw’s second-largest arms partner after the United States. This signifies a "Geopolitical Re-alignment" in the global arms trade. Macroscopically, the Seoul–Warsaw axis is creating a new "Middle-Power Arsenal." By providing high-quality kinetic hardware with faster delivery times than traditional Western providers, South Korea is effectively arming the "Eastern Flank" of Europe, decentralizing global defense manufacturing and reducing European dependency on the U.S. industrial base during regional crises.`,
+                chinese: `韓波戰略夥伴關係深化：波蘭成為韓國在歐第二大國防合作夥伴\n波蘭官員馬爾欽·普日達奇（Marcin Przydacz）證實，韓國現已成為華沙繼美國之後的第二大軍事夥伴。這標誌著全球軍事貿易中的「地緣政治重新對齊」。從宏觀角度看，首爾-華沙軸心正創造一個全新的「中等強國軍火庫」。藉由提供高品質、且交貨速度快於傳統西方供應商的「動力硬體（實體武器）」，韓國正有效地武裝歐洲的「東翼」，使全球國防製造去中心化，並減少歐洲在區域危機期間對美國工業基地的依賴。`,
+                vocabulary: [
+                    'Strategic Ties (n.phr.): 戰略聯繫', 'Emerges (v.): 浮現/出現', 'Defense Pivot (n.phr.): 國防樞紐', 'Arms partner (n.phr.): 軍事/武器夥伴',
+                    'Geopolitical Re-alignment (n.phr.): 地緣政治重新對齊', 'Arms trade (n.phr.): 武器貿易', 'Seoul-Warsaw axis (n.phr.): 首爾-華沙軸心', 'Middle-Power Arsenal (n.phr.): 中等強國軍火庫',
+                    'Kinetic hardware (n.phr.): 動力硬體 (實體武器)', 'Delivery times (n.phr.): 交貨時間', 'Eastern Flank (n. proper): 東翼 (指北約東部)', 'Decentralizing (v.ger.): 去中心化',
+                    'Industrial base (n.phr.): 工業基地', 'Dependency (n.): 依賴', 'Regional crises (n.phr.): 區域危機', 'Strategic (adj.): 戰略的',
+                    'Alignment (n.): 結盟/對齊', 'Arsenal (n.): 軍火庫', 'Flank (n.): 側翼', 'Infrastructure (n.): 基礎建設',
+                    'Collaboration (n.): 合作', 'Procure (v.): 採購', 'Munition (n.): 彈藥', 'Asymmetric (adj.): 不對稱的',
+                    'Resilience (n.): 韌性', 'Preemptive (adj.): 先發制人的', 'Sovereignty (n.): 主權', 'Integrity (n.): 完整性',
+                    'Bilateral (adj.): 雙邊的', 'Mandate (n.): 授權', 'Volatility (n.): 波動', 'Deployment (n.): 部署'
+                ],
+                quiz: [
+                    { q: 'Which country is South Korea’s largest arms partner in Poland?', options: ['Germany', 'USA', 'UK', 'France'], answer: 'USA' },
+                    { q: 'South Korea is now the ______ largest arms partner for Warsaw.', options: ['1st', '2nd', '3rd', '10th'], answer: '2nd' },
+                    { q: 'The Seoul-Warsaw axis is creating a new "______ Arsenal."', options: ['Superpower', 'Middle-Power', 'Nuclear', 'Small-Scale'], answer: 'Middle-Power' },
+                    { q: 'What is a major advantage of South Korean hardware over Western providers?', options: ['Lower quality', 'Faster delivery times', 'Cheaper food', 'More colors'], answer: 'Faster delivery times' },
+                    { q: 'The partnership is effectively arming the "______ Flank" of Europe.', options: ['Western', 'Southern', 'Eastern', 'Northern'], answer: 'Eastern' },
+                    { q: 'What is the "Geopolitical Re-alignment" mentioned in the text?', options: ['Changing maps', 'Shifts in global alliances and trade', 'New weather patterns', 'Moving capitals'], answer: 'Shifts in global alliances and trade' },
+                    { q: 'The move "decentralizes" global ______ manufacturing.', options: ['Phone', 'Defense', 'Food', 'Car'], answer: 'Defense' },
+                    { q: 'What is Warsaw the capital of?', options: ['Germany', 'Poland', 'Ukraine', 'Czechia'], answer: 'Poland' },
+                    { q: 'The term "kinetic hardware" refers to ______.', options: ['Software code', 'Physical weapons and equipment', 'Digital money', 'Radio signals'], answer: 'Physical weapons and equipment' },
+                    { q: 'South Korea is helping Europe reduce ______ on the U.S. industrial base.', options: ['Taxes', 'Dependency', 'Tourism', 'Communication'], answer: 'Dependency' },
+                    { q: 'What does "pivot" mean in this context?', options: ['A failure', 'A central point on which a mechanism turns/A key role', 'A type of rocket', 'A sports move'], answer: 'A key role' },
+                    { q: 'The partnership is described as "deepening strategic ______."', options: ['Rivalries', 'Ties', 'Problems', 'Debts'], answer: 'Ties' },
+                    { q: 'When is this alignment particularly important?', options: ['During holidays', 'During regional crises', 'During winter only', 'On weekends'], answer: 'During regional crises' },
+                    { q: 'Seoul is the capital of which country?', options: ['North Korea', 'South Korea', 'Japan', 'Vietnam'], answer: 'South Korea' },
+                    { q: 'The word "arsenal" refers to a ______ of weapons.', options: ['Store/Collection', 'Type', 'Target', 'Factory only'], answer: 'Store/Collection' }
+                ]
+            },
+            'tesla-terafab': {
+                title: '特斯拉 Terafab 計畫',
+                english: `Elon Musk Unveils "Terafab": A $25B Joint Venture Between Tesla, SpaceX, and xAI\nElon Musk announced "Terafab," a massive semiconductor facility designed to produce 1 terawatt per year of computing power. The fab will utilize a 2-nanometer process to manufacture "D3" chips for orbital AI satellites and inference chips for Optimus robots. Macroscopically, this is a "Vertical Sovereignty" bet. By moving toward in-house fabrication, Musk is attempting to escape the pricing power of NVIDIA and the capacity bottlenecks of TSMC and Micron Technology.`,
+                chinese: `馬斯克宣佈啟動「Terafab」計畫：美光、台積電供不應求後的晶片自主之路\n伊隆·馬斯克在奧斯汀舉行直播活動，宣布啟動「Terafab」計畫。這是一項由 Tesla、SpaceX 和 xAI 共同投資 250 億美元的合資項目，旨在建設一座每年能生產 1 兆瓦（1 terawatt）運算能力的巨型半導體設施。該晶圓廠將採用 2 奈米製程，生產用於軌道 AI 衛星的「D3」晶片以及用於 Optimus 機器人的推論晶片。從宏觀角度看，這是一場「垂直主權（Vertical Sovereignty）」的豪賭。透過轉向內部製造，馬斯克正試圖擺脫 NVIDIA 的定價權，以及台積電與美光的產能瓶頸，有效地將其生態系統轉化為垂直整合的「銀河文明」基礎設施。`,
+                vocabulary: [
+                    'Unveils (v.): 揭幕/公佈', 'Joint Venture (n.phr.): 合資企業', 'Semiconductor facility (n.phr.): 半導體設施', 'Terawatt (n.): 兆瓦 (功率單位)',
+                    'Computing power (n.phr.): 算力', '2-nanometer process (n.phr.): 2奈米製程', 'Orbital satellites (n.phr.): 軌道衛星', 'Inference chips (n.phr.): 推論晶片',
+                    'Vertical Sovereignty (n.phr.): 垂直主權', 'In-house fabrication (n.phr.): 內部製造/自研代工', 'Pricing power (n.phr.): 定價權', 'Capacity bottlenecks (n.phr.): 產能瓶頸',
+                    'Vertical integration (n.phr.): 垂直整合', 'Galactic Civilization (n.phr.): 銀河文明', 'Infrastructure (n.): 基礎建設', 'Proprietary (adj.): 專有的',
+                    'Architecture (n.): 架構', 'Optimization (n.): 優化', 'Performance (n.): 性能', 'Capacity (n.): 產能',
+                    'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑',
+                    'Investment (n.): 投資', 'Billion (n.): 十億', 'Trillion (n.): 兆', 'Primary (adj.): 主要的',
+                    'Alternative (n.): 替代方案', 'Transition (n.): 轉型', 'Strategic (adj.): 戰略的', 'Consolidation (n.): 鞏固'
+                ],
+                quiz: [
+                    { q: 'How much is the total investment for the "Terafab" joint venture?', options: ['$1 billion', '$10 billion', '$25 billion', '$100 billion'], answer: '$25 billion' },
+                    { q: 'Which three companies are involved in the Terafab project?', options: ['Apple, Google, and Meta', 'Tesla, SpaceX, and xAI', 'NVIDIA, TSMC, and Intel', 'Amazon, Microsoft, and Dell'], answer: 'Tesla, SpaceX, and xAI' },
+                    { q: 'What is the target computing power production per year?', options: ['1 gigawatt', '1 terawatt', '10 terawatts', '100 watts'], answer: '1 terawatt' },
+                    { q: 'What manufacturing process will the Terafab utilize?', options: ['7nm', '5nm', '3nm', '2nm'], answer: '2nm' },
+                    { q: 'What are the names of the chips for satellites and robots?', options: ['M1 and M2', 'D3 and Optimus inference chips', 'H100 and B200', 'Exynos and Snapdragon'], answer: 'D3 and Optimus inference chips' },
+                    { q: 'Musk is trying to escape the pricing power of which company?', options: ['Apple', 'NVIDIA', 'Google', 'Ford'], answer: 'NVIDIA' },
+                    { q: 'The project represents a bet on "______ Sovereignty."', options: ['Digital', 'Vertical', 'Horizontal', 'Global'], answer: 'Vertical' },
+                    { q: 'What does "in-house fabrication" mean?', options: ['Buying chips from others', 'Manufacturing chips within the company itself', 'Building houses with chips', 'Selling chips to homes'], answer: 'Manufacturing chips within the company itself' },
+                    { q: 'A "joint venture" is a business arrangement where ______.', options: ['One person owns everything', 'Two or more parties agree to pool resources for a task', 'A company goes bankrupt', 'The government takes control'], answer: 'Two or more parties agree to pool resources for a task' },
+                    { q: 'What is a "terawatt"?', options: ['A type of computer', 'A unit of power equal to one trillion watts', 'A very small battery', 'A secret code'], answer: 'A unit of power equal to one trillion watts' },
+                    { q: 'The term "bottleneck" refers to a ______ in production.', options: ['Speed increase', 'Restriction or blockage', 'New discovery', 'Large storage tank'], answer: 'Restriction or blockage' },
+                    { q: 'Where was the live event held to announce Terafab?', options: ['New York', 'Austin', 'San Jose', 'Taipei'], answer: 'Austin' },
+                    { q: 'Musk aims to turn his ecosystem into "______ Civilization" infrastructure.', options: ['Solar', 'Galactic', 'Underwater', 'City-level'], answer: 'Galactic' },
+                    { q: 'In-house fabrication helps avoid ______ bottlenecks.', options: ['Labor', 'Capacity', 'Transportation', 'Water'], answer: 'Capacity' },
+                    { q: 'The chips for satellites are called "______."', options: ['Orbiters', 'D3', 'Space-Chips', 'Net-Link'], answer: 'D3' }
+                ]
+            },
+            'china-space-plus': {
+                title: '中國「航天+」計畫',
+                english: `China Launches "Space+" Industrial Initiative; Prioritizing Space Mining and Orbital Tourism\nThe State Council in Beijing has issued a work plan to accelerate "Space+" future industries, aiming to make orbital flights and lunar resource extraction a regularized part of the national economy. This signifies a move toward "Extraterrestrial Resource Sovereignty." Macroscopically, the U.S.–China space race is shifting from "Exploration" to "Extraction." As both superpowers target lunar Helium-3, the legal framework for "Space Property Rights" will become the next major front in international law.`,
+                chinese: `中國啟動「航天+」未來產業計畫：加速佈局太空採礦與太空旅遊\n北京國務院發布了一項工作方案，旨在加速發展「航天+」未來產業，將軌道飛行與月球資源開採常態化，使其成為國民經濟的一部分。這標誌著向「地外資源主權（Extraterrestrial Resource Sovereignty）」的邁進。從宏觀角度看，美中太空競賽正從「探索」轉向「開採」。隨著兩大強權都瞄準月球的氦-3（Helium-3）與軌道製造，有關「太空產權」的法律框架將成為國際法與全球資源治理的下一個主戰場。`,
+                vocabulary: [
+                    'Space+ (n. proper): 航天+ (產業計畫)', 'Industrial Initiative (n.phr.): 產業倡議/計畫', 'Prioritizing (v.ger.): 優先考慮', 'Space Mining (n.phr.): 太空採礦',
+                    'Orbital Tourism (n.phr.): 軌道旅遊', 'State Council (n. proper): 國務院', 'Lunar resource extraction (n.phr.): 月球資源開採', 'Regularized (adj.): 常態化的/規則化的',
+                    'Extraterrestrial (adj.): 地外的/地球外的', 'Resource Sovereignty (n.phr.): 資源主權', 'Helium-3 (n. proper): 氦-3 (月球資源)', 'Legal framework (n.phr.): 法律框架',
+                    'Space Property Rights (n.phr.): 太空產權', 'International law (n.phr.): 國際法', 'Global resource governance (n.phr.): 全球資源治理', 'Superpowers (n.): 超級強權',
+                    'Frontier (n.): 前沿', 'Extraction (n.): 提取/開採', 'Exploration (n.): 探索', 'Initiative (n.): 倡議',
+                    'Economic expansion (n.phr.): 經濟擴張', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Billion (n.): 十億', 'Trillion (n.): 兆', 'Primary (adj.): 主要的',
+                    'Alternative (n.): 替代方案', 'Transition (n.): 轉型', 'Strategic (adj.): 戰略的', 'Consolidation (n.): 鞏固'
+                ],
+                quiz: [
+                    { q: 'What is the name of the new Chinese industrial initiative for space?', options: ['China Space One', '"Space+"', 'Moon Mining 2026', 'Star Explorer'], answer: '"Space+"' },
+                    { q: 'Which two activities are prioritized in the "Space+" plan?', options: ['Farming and Fishing', 'Space mining and orbital tourism', 'Only building rockets', 'Searching for aliens'], answer: 'Space mining and orbital tourism' },
+                    { q: 'What specific lunar resource are superpowers targeting?', options: ['Water ice only', 'Helium-3', 'Gold dust', 'Lunar cheese'], answer: 'Helium-3' },
+                    { q: 'The initiative moves from space "Exploration" to what?', options: ['Vacation', 'Extraction (Resource gathering)', 'Isolation', 'Zero-gravity sports'], answer: 'Extraction (Resource gathering)' },
+                    { q: 'The plan aims to make space activities a ______ part of the economy.', options: ['Secret', 'Regularized', 'Temporary', 'Illegal'], answer: 'Regularized' },
+                    { q: 'What kind of "sovereignty" is mentioned in the text?', options: ['Digital Sovereignty', 'Extraterrestrial Resource Sovereignty', 'Only Terrestrial Sovereignty', 'Food Sovereignty'], answer: 'Extraterrestrial Resource Sovereignty' },
+                    { q: 'What will be the "next major front" in international law?', options: ['Tax laws', 'Space Property Rights', 'Driving laws', 'Human rights only'], answer: 'Space Property Rights' },
+                    { q: 'The term "extraterrestrial" refers to ______.', options: ['Deep ocean', 'Anything outside of Earth', 'Ancient history', 'Digital worlds'], answer: 'Anything outside of Earth' },
+                    { q: 'The "State Council" is the highest administrative body of which country?', options: ['USA', 'China', 'Russia', 'Japan'], answer: 'China' },
+                    { q: 'What does "regularized" mean?', options: ['Made normal or part of a regular system', 'Stopped forever', 'Changed every day', 'Secretive'], answer: 'Made normal or part of a regular system' },
+                    { q: 'The space race is described as being between which two groups?', options: ['NVIDIA and TSMC', 'U.S. and China', 'Apple and Google', 'The UN and NATO'], answer: 'U.S. and China' },
+                    { q: 'What is "Helium-3" used for (implied by context of resources)?', options: ['Balloons only', 'Clean energy/Future fuel', 'Cooking', 'Painting'], answer: 'Clean energy/Future fuel' },
+                    { q: 'The word "initiative" means an ______.', options: ['Ending', 'Act or strategy intended to resolve a difficulty or improve a situation', 'Old book', 'Accident'], answer: 'Act or strategy intended to resolve a difficulty or improve a situation' },
+                    { q: 'Extraction refers to the process of ______.', options: ['Adding things', 'Removing or taking out (e.g. resources)', 'Hiding things', 'Destroying things'], answer: 'Removing or taking out (e.g. resources)' },
+                    { q: 'Governance refers to the way a system is ______.', options: ['Hated', 'Controlled or managed', 'Sold', 'Forgotten'], answer: 'Controlled or managed' }
+                ]
+            },
+            'gold-market-shock': {
+                title: '黃金市場劇震',
+                english: `Gold Plummeted to $4,400 Zone; Worst Weekly Performance Since 1983\nSpot gold suffered a catastrophic sell-off in the last 24 hours, plunging below the $4,400 support level to touch 2026 lows near $4,150. Macroscopically, this "Flash Crash" is a result of "Liquidity Siphoning." As the Federal Reserve maintains higher rates and Trump backs away from immediate strikes, the "War Premium" and "Inflation Hedge" narratives have disintegrated. Investors are liquidating gold to rotate into high-yielding U.S. Treasuries, treating non-yielding metals as overcrowded liabilities.`,
+                chinese: `黃金市場劇震：金價崩跌至 $4,400 關卡，創 40 年來最慘烈週跌幅\n現貨金價在過去 24 小時內遭遇了災難性的拋售，跌破 4,400 美元的支撐位，觸及 2026 年低點 4,150 美元附近。從宏觀角度看，這次「閃崩」是「流動性吸走（Liquidity Siphoning）」的結果。由於聯準會維持高利率，且川普總統避開了立即的武力打擊，原先支撐金價的「戰爭溢價」與「通膨避險」論述同時瓦解。投資者正積極出清黃金部位，轉向高收益的美國公債，將不具利息收益的貴金屬視為過度擁擠的負債。`,
+                vocabulary: [
+                    'Plummeted (v.pt.): 暴跌', 'Support level (n.phr.): 支撐位/支撐水準', 'Catastrophic (adj.): 災難性的', 'Sell-off (n.): 拋售',
+                    'Touch lows (phr.): 觸及低點', 'Flash Crash (n.phr.): 閃崩', 'Liquidity Siphoning (n.phr.): 流動性吸走/抽走', 'Maintains higher rates (phr.): 維持高利率',
+                    'Immediate strikes (n.phr.): 立即的打擊/襲擊', 'War Premium (n.phr.): 戰爭溢價', 'Inflation Hedge (n.phr.): 通膨避險', 'Disintegrated (v.pt.): 瓦解/崩解',
+                    'Liquidating (v.ger.): 清算/出清', 'High-yielding (adj.): 高收益的', 'U.S. Treasuries (n. proper): 美國公債', 'Non-yielding (adj.): 無收益/無利息的',
+                    'Overcrowded (adj.): 過度擁擠的', 'Liabilities (n.): 負債', 'Carry (n.): 套利收益', 'Volatility (n.): 波動性',
+                    'Sustained (adj.): 持續的', 'Slump (v.): 暴跌', 'Bullion (n.): 實體金銀', 'Instability (n.): 不穩定',
+                    'Squeeze (n.): 擠壓', 'Allocation (n.): 分配', 'Margin call (n.phr.): 追繳保證金', 'Defensive (adj.): 防禦性的',
+                    'Recession (n.): 衰退', 'Benchmark (n.): 基準', 'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件'
+                ],
+                quiz: [
+                    { q: 'What price level did spot gold plunge below in the last 24 hours?', options: ['$5,000', '$4,800', '$4,400', '$4,100'], answer: '$4,400' },
+                    { q: 'The weekly performance of gold was the worst since which year?', options: ['1970', '1983', '2008', '2024'], answer: '1983' },
+                    { q: 'What is the "low" reached by gold mentioned in the text?', options: ['$4,500', '$4,486', '$4,150', '$4,000'], answer: '$4,150' },
+                    { q: 'The term "Flash Crash" is attributed to what in the news?', options: ['High taxes', 'Liquidity Siphoning', 'A new mine discovery', 'Fake gold news'], answer: 'Liquidity Siphoning' },
+                    { q: 'Which two narratives for holding gold have "disintegrated"?', options: ['"Safe Haven" and "Low Price"', '"War Premium" and "Inflation Hedge"', '"Luxury" and "Style"', '"Old" and "Historical"'], answer: '"War Premium" and "Inflation Hedge"' },
+                    { q: 'Investors are rotating out of gold and into what?', options: ['Real estate', 'High-yielding U.S. Treasuries', 'Cryptocurrency only', 'Cash under the bed'], answer: 'High-yielding U.S. Treasuries' },
+                    { q: 'Non-yielding metals are being treated as "______ liabilities."', options: ['Small', 'Overcrowded', 'Safe', 'Temporary'], answer: 'Overcrowded' },
+                    { q: 'The Fed is maintaining ______ ______.', options: ['Low interest', 'Higher rates', 'Zero rates', 'Negative rates'], answer: 'Higher rates' },
+                    { q: 'What does "plummeted" mean?', options: ['Rose slowly', 'Dropped sharply and quickly', 'Stayed same', 'Vanished into thin air'], answer: 'Dropped sharply and quickly' },
+                    { q: 'A "sell-off" refers to a ______.', options: ['Sale at a store', 'Period of heavy selling of stocks or assets', 'New product launch', 'A type of rocket'], answer: 'Period of heavy selling of stocks or assets' },
+                    { q: 'What is a "support level" in trading?', options: ['The roof of a building', 'A price level where a downtrend tends to pause', 'A government grant', 'A type of bank account'], answer: 'A price level where a downtrend tends to pause' },
+                    { q: 'The word "catastrophic" means ______.', options: ['Minor', 'Funny', 'Involving great damage or disaster', 'Beneficial'], answer: 'Involving great damage or disaster' },
+                    { q: 'What does "liquidating" mean in finance?', options: ['Turning to water', 'Converting assets into cash', 'Buying new items', 'Closing a book'], answer: 'Converting assets into cash' },
+                    { q: 'The "War Premium" refers to extra cost due to ______.', options: ['Peace', 'Conflict/War risks', 'Luxury', 'Education'], answer: 'Conflict/War risks' },
+                    { q: 'The market now considers "______" to be king.', options: ['Gold', 'Carry (yield)', 'Bonds only', 'Cash only'], answer: 'Carry (yield)' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1] || ''}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
