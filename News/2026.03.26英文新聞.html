@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 26 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 26 日：供應鏈傳導、垂直主權與和平框架</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] Rising Petrochemical Costs Impact Agriculture as Mideast War Disrupts Supply Chains\nLawmakers highlighted a severe shortage and price hike of plastic packaging materials for agricultural produce, a direct result of the global spike in oil and gas prices triggered by the Iran conflict. Some distributors are reportedly hoarding supplies, straining the margins of local farmers. Macroscopically, this reflects the "Supply-Chain Contagion" of the regional war.\n\n[2] Taiwanese Officials Inspect First F-16V in U.S.; Delivery Expected by September\nA Ministry of National Defense delegation was shown the first of 66 F-16V fighter jets in South Carolina, which has successfully completed its initial flight tests. Minister Wellington Koo confirmed that the aircraft are on track for their first domestic delivery later this year. Macroscopically, this represents a significant upgrade to Taiwan's "Kinetic Deterrence."\n\n[3] Taiwan Aims for UAV Dominance with Massive R&D Budget and Industry Incentives\nThe Executive Yuan revealed a multi-year plan to transform Taiwan into a global hub for the "Non-Red" UAV supply chain. The plan includes specialized "Drone Parks" and massive subsidies. Macroscopically, this strategic pivot addresses asymmetric defense needs by leveraging Taiwan's electronics manufacturing prowess to decouple from Chinese components.`,
+                chinese: `【1】農業產銷衝擊：中東戰火導致石化包材大漲，農民生計受挫\n立法委員強調，受伊朗衝突引發的全球油氣價格飆升影響，農產品塑膠包裝材料出現嚴重短缺與價格上漲。據報導，部分經銷商正囤積物資，進一步壓縮了本土農民微薄的利潤空間。從宏觀角度看，這反映了區域戰爭的「供應鏈傳導（Contagion）」效應。經濟部已設立專線打擊哄抬物價，這標誌著政府採取制度性行動，保護初級產業免受全球能源危機的波及。\n\n【2】國防技術進程：首架 F-16V 完成首飛測試，預計 9 月正式抵台\n國防部代表團在南卡羅來納州視察了 66 架新購 F-16V 戰機中的第一架，該機已成功完成初步飛行測試。國防部長顧立雄證實，戰機將按計畫於今年稍晚進行首批國內交付。從宏觀角度看，這代表台灣「動力威懾（Kinetic Deterrence）」能力的重大升級。雖然官員坦言必須加速訓練與作戰整合，但這些先進平台的到來將使台灣老舊的防空架構邁向現代化。\n\n【3】無人機產業願景：政府擬投入百億元預算，目標成為全球 UAV 供應鏈核心\n行政院披露了一項多年期計畫，旨在將台灣打造為「非紅」無人機（UAV）供應鏈的全球樞紐。該計畫包括開發專門的「無人機園區」以及對本土航太企業提供巨額補貼。從宏觀角度看，這是應對不對稱防禦需求的策略性轉向。藉由槓桿其電子製造實力，台灣旨在使國防機器人與中國零組件脫鉤，建立一個既能服務國安又能供應國際市場的高韌性本土產業。`,
+                vocabulary: [
+                    'Petrochemical (adj.): 石化工業的', 'Price hike (n.phr.): 價格上漲', 'Agricultural produce (n.phr.): 農產品', 'Spike (v./n.): 激增/突升',
+                    'Hoarding (v.ger.): 囤積', 'Straining (v.ger.): 使吃緊/承受壓力', 'Thin margins (n.phr.): 微薄利潤', 'Supply-chain contagion (n.phr.): 供應鏈傳導/蔓延',
+                    'Price gouging (n.phr.): 哄抬物價', 'Collateral damage (n.phr.): 附帶損害/波及', 'Kinetic Deterrence (n.phr.): 動力威懾 (武力震懾)', 'Initial flight tests (n.phr.): 初步飛行測試',
+                    'On track (phr.): 按計畫進行', 'Modernize (v.): 現代化', 'Aerial capabilities (n.phr.): 航空/空中能力', 'Hub (n.): 樞紐/中心',
+                    'Non-Red (adj.): 非紅 (非中國供應鏈)', 'UAV (Unmanned Aerial Vehicle) (n.): 無人機', 'Executive Yuan (n. proper): 行政院', 'Incentives (n.): 獎勵/激勵措施',
+                    'Strategic pivot (n.phr.): 策略性轉向', 'Asymmetric defense (n.phr.): 不對稱防禦', 'Prowess (n.): 實力/高超技術', 'Decouple (v.): 脫鉤',
+                    'High-resilience (adj.): 高韌性的', 'Export markets (n.phr.): 出口市場', 'Delegation (n.): 代表團', 'Procure (v.): 採購',
+                    'Subsidies (n.): 補貼', 'Aerospace (n.): 航太', 'Logistics (n.): 物流', 'Sophisticated (adj.): 複雜的/精密的'
+                ],
+                quiz: [
+                    { q: 'What is the direct cause of the plastic packaging shortage for Taiwan’s farmers?', options: ['A local strike', 'Global spike in oil and gas prices', 'A fire in a factory', 'New recycling laws'], answer: 'Global spike in oil and gas prices' },
+                    { q: 'The government established a hotline to combat ______ in packaging materials.', options: ['Theft', 'Price gouging (hike)', 'Pollution', 'Recycling'], answer: 'Price gouging (hike)' },
+                    { q: 'In which U.S. state is the first F-16V being tested?', options: ['Texas', 'South Carolina', 'California', 'Florida'], answer: 'South Carolina' },
+                    { q: 'By when is the first F-16V expected to be delivered to Taiwan?', options: ['March', 'June', 'September', 'December'], answer: 'September' },
+                    { q: 'The F-16V arrival represents an upgrade to Taiwan’s "______ Deterrence."', options: ['Cyber', 'Kinetic', 'Economic', 'Soft-power'], answer: 'Kinetic' },
+                    { q: 'What is the main goal of the "Non-Red" UAV supply chain initiative?', options: ['To buy more from China', 'To transform Taiwan into a global UAV hub', 'To ban all drones', 'To use drones for farming only'], answer: 'To transform Taiwan into a global UAV hub' },
+                    { q: 'Taiwan wants to decouple its defense robotics from which country’s components?', options: ['USA', 'Japan', 'China', 'Germany'], answer: 'China' },
+                    { q: 'The term "asymmetric defense" refers to ______.', options: ['Traditional tank battles', 'Unconventional tactics against a larger force', 'Peace treaties', 'Building more airports'], answer: 'Unconventional tactics against a larger force' },
+                    { q: 'What does the word "hoarding" mean?', options: ['Giving away', 'Accumulating and hiding supplies for future use', 'Cleaning up', 'Failing to buy'], answer: 'Accumulating and hiding supplies for future use' },
+                    { q: 'What is a "conveyance" or "contagion" effect in supply chains?', options: ['A good thing for everyone', 'The spreading of harmful effects across a network', 'A total stop of all production', 'A fast delivery service'], answer: 'The spreading of harmful effects across a network' },
+                    { q: 'The word "prowess" means ______.', options: ['Weakness', 'Skill or expertise in a particular field', 'Old age', 'Secret plan'], answer: 'Skill or expertise in a particular field' },
+                    { q: 'A "strategic pivot" is a ______ in direction.', options: ['Mistake', 'Significant change', 'Continuation', 'Minor update'], answer: 'Significant change' },
+                    { q: 'Minister Wellington Koo is the head of which ministry?', options: ['MOEA', 'MOFA', 'MND', 'MOL'], answer: 'MND' },
+                    { q: 'What kind of parks will be developed under the UAV plan?', options: ['Nature parks', 'Amusement parks', '"Drone Parks"', 'Water parks'], answer: '"Drone Parks"' },
+                    { q: 'The F-16V will modernize Taiwan’s "______ air defense architecture."', options: ['New', 'Aging', 'Secret', 'Underwater'], answer: 'Aging' }
+                ]
+            },
+            'us-nuclear-waste': {
+                title: '美國核廢料清理政策',
+                english: `The U.S. Government Accountability Office (GAO) published a report suggesting that redefining specific types of nuclear waste could save the Department of Energy (DOE) tens of billions of dollars in cleanup costs. This represents an "Institutional Efficiency" pivot. Macroscopically, as the U.S. looks to expand nuclear capacity for AI energy needs, resolving the fiscal and technical bottlenecks of legacy waste management is becoming a prerequisite. For global governance, this sets a precedent for how nuclear-enabled nations can manage the long-term liabilities of the atomic fuel cycle.`,
+                chinese: `美國 GAO 報告：核廢料清理定義之澄清可為政府節省數百億美元\n美國政府問責署（GAO）發布報告指出，重新定義特定類型的核廢料，可為能源部（DOE）節省數百億美元的清理成本。這代表了一種「制度效率（Institutional Efficiency）」的轉向。從宏觀角度看，隨著美國尋求擴大核能發電量以滿足 AI 產業的海量能源需求，解決過往核廢料管理的財政與技術瓶頸已成為一項前提（prerequisite）。對於全球治理而言，這為擁有核能的國家如何管理原子燃料週期的長期負債（liabilities）開創了先例。`,
+                vocabulary: [
+                    'GAO (Government Accountability Office) (n. proper): 政府問責署', 'Redefining (v.ger.): 重新定義', 'Department of Energy (DOE) (n. proper): 能源部', 'Cleanup costs (n.phr.): 清理成本',
+                    'Institutional Efficiency (n.phr.): 制度效率', 'Nuclear capacity (n.phr.): 核能產能', 'Fiscal (adj.): 財政的', 'Bottlenecks (n.): 瓶頸',
+                    'Legacy waste (n.phr.): 遺留/舊有廢料', 'Prerequisite (n.): 前提條件', 'Global governance (n.phr.): 全球治理', 'Precedent (n.): 先例',
+                    'Liabilities (n.): 負債/責任', 'Atomic fuel cycle (n.phr.): 原子燃料週期', 'Accountability (n.): 問責制', 'High-level radioactive (adj.phr.): 高放射性的',
+                    'Clarification (n.): 澄清', 'Sovereignty (n.): 主權', 'Infrastructure (n.): 基礎建設', 'Sustained (adj.): 持續的',
+                    'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略的', 'Consolidation (n.): 鞏固', 'Deployment (n.): 部署',
+                    'Optimization (n.): 優化', 'Performance (n.): 性能', 'Billion (n.): 十億', 'Mandate (n.): 授權',
+                    'Erosion (n.): 侵蝕', 'Volatility (n.): 波動', 'Discourse (n.): 論述', 'Verification (n.): 驗證'
+                ],
+                quiz: [
+                    { q: 'Which office published the report about nuclear waste?', options: ['The White House', 'The GAO', 'The FBI', 'NASA'], answer: 'The GAO' },
+                    { q: 'The report suggests redefining what to save money?', options: ['Tax laws', 'Specific types of nuclear waste', 'Staff salaries', 'Building safety rules'], answer: 'Specific types of nuclear waste' },
+                    { q: 'How much money could the government potentially save?', options: ['Millions', 'Tens of billions', 'Hundreds', 'Nothing'], answer: 'Tens of billions' },
+                    { q: 'What is the primary reason the U.S. wants to expand nuclear capacity?', options: ['To heat homes only', 'AI energy needs', 'To sell uranium', 'For space travel'], answer: 'AI energy needs' },
+                    { q: 'The report represents a pivot toward what concept?', options: ['"Institutional Efficiency"', '"Military Expansion"', '"Environmental Neglect"', '"Retail Growth"'], answer: '"Institutional Efficiency"' },
+                    { q: 'Resolving legacy waste bottlenecks is described as a ______ for expansion.', options: ['Barrier', 'Prerequisite', 'Conclusion', 'Choice'], answer: 'Prerequisite' },
+                    { q: 'The long-term cycle of nuclear material is called the ______ fuel cycle.', options: ['Solar', 'Atomic', 'Liquid', 'Wind'], answer: 'Atomic' },
+                    { q: 'The word "liabilities" refers to long-term ______.', options: ['Profits', 'Obligations or debts', 'Workers', 'Awards'], answer: 'Obligations or debts' },
+                    { q: 'The term "precedent" means ______.', options: ['A mistake', 'A previous action used as a guide', 'A future plan', 'A new law'], answer: 'A previous action used as a guide' },
+                    { q: 'What does "accountability" mean?', options: ['Hiding money', 'Being responsible for actions or decisions', 'Fast accounting', 'A type of rule'], answer: 'Being responsible for actions or decisions' },
+                    { q: 'The DOE stands for Department of ______.', options: ['Earth', 'Energy', 'Environment', 'Education'], answer: 'Energy' },
+                    { q: 'What are "cleanup costs"?', options: ['Cost of soap', 'Expense to remove hazardous or waste materials', 'Cost to paint a building', 'Taxes on water'], answer: 'Expense to remove hazardous or waste materials' },
+                    { q: 'The waste is described as "radioactive," meaning ______.', options: ['It plays music', 'It emits harmful radiation', 'It is very old', 'It is made of wood'], answer: 'It emits harmful radiation' },
+                    { q: 'The report targets "legacy" waste. What is legacy?', options: ['New', 'Handed down from the past', 'Small', 'Theoretical'], answer: 'Handed down from the past' },
+                    { q: 'Is the expansion of nuclear power part of a current trend?', options: ['Yes, for AI energy', 'No, it is decreasing', 'Only in Europe', 'The text doesn\'t say'], answer: 'Yes, for AI energy' }
+                ]
+            },
+            'tesla-terafab': {
+                title: '特斯拉 TERAFAB 計畫',
+                english: `Elon Musk officially launched the "TERAFAB" initiative, a massive $25 billion joint venture aimed at manufacturing custom "AI5" and "D3" chips for Tesla’s robots and SpaceX’s satellites. This represents a "Vertical Sovereignty" bet. Macroscopically, by building its own foundry capacity, Musk is attempting to decouple his companies from the pricing and capacity constraints of the global merchant silicon market. If successful, this would turn Tesla into a vertically integrated robotics giant, controlling its intelligence layer from design to physical fabrication within 18 months.`,
+                chinese: `馬斯克宣佈「TERAFAB」計畫：特斯拉擬 18 個月內實現 AI5 晶片國產化\n伊隆·馬斯克今日正式啟動了「TERAFAB」倡議，這是一項耗資 250 億美元的巨型合資項目，旨在為特斯拉的機器人及 SpaceX 的衛星製造專屬的「AI5」與「D3」晶片。這代表了一場「垂直主權（Vertical Sovereignty）」的豪賭。從宏觀角度看，透過建立自有的代工產能，馬斯克正試圖使旗下公司與全球商用晶片市場的價格及產能限制脫鉤。如果成功，這將在 18 個月內使特斯拉轉型為一家垂直整合的機器人巨頭，掌控從設計到實體製造的整個智能層。`,
+                vocabulary: [
+                    'TERAFAB (n. proper): 特斯拉晶圓廠計畫名', 'Initiative (n.): 倡議/首創', 'Joint venture (n.phr.): 合資企業', 'Internalize (v.): 內部化',
+                    'AI5 chip (n. proper): 特斯拉下一代晶片代號', 'D3 chip (n. proper): SpaceX 專用晶片代號', 'Vertical Sovereignty (n.phr.): 垂直主權', 'Foundry capacity (n.phr.): 代工產能',
+                    'Decouple (v.): 脫鉤', 'Pricing constraints (n.phr.): 價格限制', 'Merchant silicon market (n.phr.): 商用晶片市場', 'Vertically integrated (adj.phr.): 垂直整合的',
+                    'Intelligence layer (n.phr.): 智能層', 'Physical fabrication (n.phr.): 實體製造', 'Billion (n.): 十億', 'Satellite (n.): 衛星',
+                    'Architecture (n.): 架構', 'Optimization (n.): 優化', 'Performance (n.): 性能', 'Deployment (n.): 部署',
+                    'In-house (adj.): 內部的', 'Prowess (n.): 實力/造詣', 'Constraint (n.): 限制', 'Scalability (n.): 可擴展性',
+                    'Infrastructure (n.): 基礎建設', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑', 'Investment (n.): 投資',
+                    'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略的', 'Autonomy (n.): 自主性', 'Unprecedented (adj.): 史無前例的'
+                ],
+                quiz: [
+                    { q: 'How much is the investment for the "TERAFAB" initiative?', options: ['$1 billion', '$10 billion', '$25 billion', '$100 billion'], answer: '$25 billion' },
+                    { q: 'Which two chips will the TERAFAB primarily manufacture?', options: ['M1 and M2', 'AI5 and D3', 'H100 and B200', 'Snapdragon only'], answer: 'AI5 and D3' },
+                    { q: 'Which two companies under Musk are collaborating on this venture?', options: ['Tesla and Twitter', 'Tesla and SpaceX', 'Tesla and Ford', 'Tesla and NASA'], answer: 'Tesla and SpaceX' },
+                    { q: 'Within how many months does Musk aim to achieve internalization?', options: ['6 months', '12 months', '18 months', '36 months'], answer: '18 months' },
+                    { q: 'What is the strategic concept behind building an in-house foundry?', options: ['Horizontal integration', 'Vertical Sovereignty', 'Global outsourcing', 'Retail marketing'], answer: 'Vertical Sovereignty' },
+                    { q: 'Musk is trying to decouple his companies from the ______ silicon market.', options: ['Private', 'Merchant', 'Local', 'Legacy'], answer: 'Merchant' },
+                    { q: 'If successful, Tesla will control its "intelligence layer" from design to ______.', options: ['Packaging only', 'Marketing', 'Physical fabrication', 'Selling'], answer: 'Physical fabrication' },
+                    { q: 'The term "joint venture" refers to a partnership where ______.', options: ['One person owns everything', 'Two or more parties agree to pool resources', 'A company goes bankrupt', 'The government takes control'], answer: 'Two or more parties agree to pool resources' },
+                    { q: 'What are the two main constraints of the merchant market Musk is avoiding?', options: ['Pricing and capacity', 'Weather and traffic', 'Language and culture', 'Software and apps'], answer: 'Pricing and capacity' },
+                    { q: 'The word "vertical" in integration means controlling ______.', options: ['Only the end product', 'Multiple stages of production', 'Only the raw materials', 'Only the marketing'], answer: 'Multiple stages of production' },
+                    { q: 'A "foundry" is a facility that ______.', options: ['Designs chips only', 'Manufactures chips', 'Sells cars', 'Launches rockets'], answer: 'Manufactures chips' },
+                    { q: 'The "D3" chip is specifically intended for what?', options: ['Tesla cars only', 'SpaceX’s satellites', 'Optimus robots only', 'Smartphone cameras'], answer: 'SpaceX’s satellites' },
+                    { q: 'What does "decouple" mean?', options: ['To join together', 'To separate or disconnect', 'To double something', 'To hide something'], answer: 'To separate or disconnect' },
+                    { q: 'Musk aims to turn Tesla into a ______ giant.', options: ['Retail', 'Robotics', 'Farming', 'Fossil fuel'], answer: 'Robotics' },
+                    { q: 'The term "merchant silicon" refers to chips that are ______.', options: ['Sold to anyone on the open market', 'Used only for ships', 'Made of gold', 'Broken'], answer: 'Sold to anyone on the open market' }
+                ]
+            },
+            'arm-holdings': {
+                title: 'ARM 戰略轉型：進軍資料中心',
+                english: `Arm Holdings announced a strategic pivot toward designing its own data center chips, targeting a massive revenue increase by fiscal 2031. This signifies a move from "Licensor" to "Competitor." Macroscopically, Arm is leveraging its power-efficiency lead to challenge Intel and AMD in the server market. As hyperscalers seek to lower their electricity bills, Arm-based architectures are becoming the preferred baseline for customized "Sovereign Silicon," further fragmenting the global CPU market into diverse clusters.`,
+                chinese: `ARM 獲利指引強勁：預期 2031 年資料中心晶片營收將達 150 億美元\n安謀（Arm Holdings）宣布了一項策略性轉向，將開始自行設計資料中心晶片，並設定了到 2031 財年實現營收大幅增長的目標。這標誌著該公司從「授權商（Licensor）」轉變為「競爭者（Competitor）」。從宏觀角度看，Arm 正利用其在功耗效率方面的領先優勢，在伺服器市場挑戰 Intel 與 AMD。隨著超大規模服務商（hyperscalers）尋求降低電費，基於 Arm 的架構正成為定制「主權矽（Sovereign Silicon）」的首選基準，這將全球 CPU 市場進一步碎片化為多元化、針對特定應用的集群。`,
+                vocabulary: [
+                    'Arm Holdings (n. proper): 安謀', 'Strategic pivot (n.phr.): 策略性轉向', 'Data center chips (n.phr.): 資料中心晶片', 'Fiscal 2031 (n.phr.): 2031財年',
+                    'Licensor (n.): 授權商', 'Competitor (n.): 競爭者', 'Power-efficiency (n.phr.): 功耗效率', 'Server market (n.phr.): 伺服器市場',
+                    'Hyperscalers (n.): 超大規模雲端服務商', 'Electricity bills (n.phr.): 電費', 'Sovereign Silicon (n. proper): 主權矽 (自主研發晶片)', 'Fragmenting (v.ger.): 碎片化/分裂',
+                    'Diversified clusters (n.phr.): 多元化集群', 'Architecture (n.): 架構', 'Revenue (n.): 營收/收入', 'Baseline (n.): 基準/底線',
+                    'Constraint (n.): 限制', 'Scalability (n.): 可擴展性', 'Infrastructure (n.): 基礎建設', 'Deployment (n.): 部署',
+                    'Performance (n.): 性能', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑', 'Investment (n.): 投資',
+                    'Logic (n.): 邏輯', 'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件', 'Refining (v.ger.): 提煉',
+                    'Markup (n.): 漲價', 'Consolidation (n.): 鞏固', 'Bilateral (adj.): 雙邊的', 'Strategic (adj.): 戰略的'
+                ],
+                quiz: [
+                    { q: 'What is the major strategic change announced by Arm Holdings?', options: ['Closing its mobile division', 'Designing its own data center chips', 'Moving to China', 'Banning all licensing'], answer: 'Designing its own data center chips' },
+                    { q: 'Arm is moving from being a "Licensor" to being a "______."', options: ['Farmer', 'Competitor', 'Customer', 'Regulator'], answer: 'Competitor' },
+                    { q: 'What is Arm’s target year for the massive revenue increase?', options: ['2026', '2028', '2030', '2031'], answer: '2031' },
+                    { q: 'Arm is leveraging its lead in what area to challenge Intel and AMD?', options: ['Low cost only', 'Power-efficiency', 'Size', 'Marketing budget'], answer: 'Power-efficiency' },
+                    { q: 'Who are the "hyperscalers" trying to reduce electricity bills for?', options: ['Schools', 'Data centers', 'Farms', 'Homes'], answer: 'Data centers' },
+                    { q: 'The term "Sovereign Silicon" refers to ______.', options: ['Generic chips', 'Customized chips designed by companies/nations for autonomy', 'Chips made of gold', 'Broken hardware'], answer: 'Customized chips designed by companies/nations for autonomy' },
+                    { q: 'The global CPU market is becoming more "______," according to the text.', options: ['United', 'Fragmented', 'Small', 'Simple'], answer: 'Fragmented' },
+                    { q: 'What does "licensor" mean?', options: ['A company that buys products', 'A company that gives legal permission to use its intellectual property', 'A type of military pilot', 'A retail store'], answer: 'A company that gives legal permission to use its intellectual property' },
+                    { q: 'How much did Arm Holdings shares rise after the announcement?', options: ['5%', '13%', '50%', 'Zero'], answer: '13%' },
+                    { q: 'What is a "fiscal" year?', options: ['A calendar year', 'A company’s financial reporting year', 'A leap year', 'A year of vacation'], answer: 'A company’s financial reporting year' },
+                    { q: 'The word "revenue" is a synonym for ______.', options: ['Expense', 'Income or earnings', 'Debt', 'Taxes paid'], answer: 'Income or earnings' },
+                    { q: 'What does "leveraging" mean?', options: ['Losing something', 'Using something to its maximum advantage', 'Breaking a machine', 'Ignoring a problem'], answer: 'Using something to its maximum advantage' },
+                    { q: 'A "hyperscaler" is a large-scale ______.', options: ['Farming company', 'Cloud service provider', 'Toy maker', 'Airline'], answer: 'Cloud service provider' },
+                    { q: 'Fragmenting means ______ into smaller pieces.', options: ['Joining', 'Breaking or dividing', 'Cleaning', 'Building'], answer: 'Breaking or dividing' },
+                    { q: 'Waiters are using "Arm-based architectures" because they are ______.', options: ['Heavy', 'Power-efficient', 'Fragile', 'Old'], answer: 'Power-efficient' }
+                ]
+            },
+            'oil-price-fall': {
+                title: '原油價格回落與和平傳聞',
+                english: `Oil prices fell sharply from their highs on Wednesday on reports of a potential U.S.–Iran peace framework. WTI crude fell toward $88 per barrel, down significantly from its wartime highs, as media reports suggested a 15-point peace plan is under discussion. This signifies the "Deflation of the War Premium." Macroscopically, while energy markets remain volatile, the immediate fear of a total Hormuz blockade has subsided. This provides temporary relief for global inflation targets, though institutional portfolios remain defensively positioned.`,
+                chinese: `原油價格顯著回落：美伊談判進展傳聞緩解供應中斷擔憂\n原油價格週三從高位大幅回落，主因是關於美伊潛在和平框架的報導。西德州原油（WTI）跌向每桶 88 美元，較戰爭期間的高點顯著下降，媒體報導指出一套 15 點和平計畫正進行討論。這標誌著「戰爭溢價（War Premium）」的消退。從宏觀角度看，雖然能源市場依然波動，但對於荷姆茲海峽全面封鎖的立即恐懼已經平息。這為全球通膨目標提供了暫時緩解，儘管在正式停火協議批准（ratified）前，機構投資組合仍保持防禦性配置。`,
+                vocabulary: [
+                    'Fell sharply (phr.): 大幅下跌', 'WTI Crude (n. proper): 西德州原油', 'Peace framework (n.phr.): 和平框架', '15-point plan (n.phr.): 15點計畫',
+                    'Deflation of the War Premium (phr.): 戰爭溢價的消退', 'Volatile (adj.): 波動的/不穩定的', 'Hormuz blockade (n.phr.): 荷姆茲海峽封鎖', 'Subsided (v.pt.): 平息/消退',
+                    'Temporary relief (n.phr.): 暫時緩解', 'Global inflation targets (n.phr.): 全球通膨目標', 'Institutional portfolios (n.phr.): 機構投資組合', 'Defensively positioned (adj.phr.): 防禦性配置的',
+                    'Ratified (v.pp.): 批准/認可', 'Ceasefire (n.): 停火', 'Supply disruptions (n.phr.): 供應中斷', 'Premium (n.): 溢價',
+                    'Instability (n.): 不穩定', 'Recalibration (n.): 重新校準', 'Volatility (n.): 揮發性/不穩定', 'Disinflation (n.): 通膨減緩',
+                    'Benchmark (n.): 基準', 'Commodity (n.): 商品', 'Divergence (n.): 分歧', 'Prerequisite (n.): 前提',
+                    'Optimization (n.): 優化', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Logic (n.): 邏輯', 'Divergence (n.): 分歧'
+                ],
+                quiz: [
+                    { q: 'What is the current price level for WTI crude mentioned in the text?', options: ['$50', '$88', '$100', '$120'], answer: '$88' },
+                    { q: 'What caused oil prices to fall from their highs?', options: ['A large oil spill', 'Reports of a potential U.S.–Iran peace framework', 'A global ban on cars', 'A huge discovery of new oil'], answer: 'Reports of a potential U.S.–Iran peace framework' },
+                    { q: 'How many points are in the peace plan currently under discussion?', options: ['5', '10', '15', '50'], answer: '15' },
+                    { q: 'The fall in prices signifies the "______ of the War Premium."', options: ['Inflation', 'Deflation', 'Stabilization', 'Acceleration'], answer: 'Deflation' },
+                    { q: 'Which major waterway was feared to be under a total blockade?', options: ['Suez Canal', 'Strait of Hormuz', 'Panama Canal', 'Bering Strait'], answer: 'Strait of Hormuz' },
+                    { q: 'How are institutional portfolios currently described?', options: ['Aggressively buying', 'Defensively positioned', 'Selling everything', 'Inactive'], answer: 'Defensively positioned' },
+                    { q: 'What provides "temporary relief" for global inflation targets?', options: ['Higher taxes', 'The fall in oil prices', 'More military spending', 'A new space launch'], answer: 'The fall in oil prices' },
+                    { q: 'The term "War Premium" refers to what?', options: ['A medal for soldiers', 'Extra cost in commodity prices due to conflict risks', 'Free fuel for allies', 'A type of tax'], answer: 'Extra cost in commodity prices due to conflict risks' },
+                    { q: 'What does "subsided" mean?', options: ['Increased', 'Became less intense or quieted down', 'Exploded', 'Changed color'], answer: 'Became less intense or quieted down' },
+                    { q: 'A "framework" in diplomacy is a ______.', options: ['Picture frame', 'Basic structure or system for a deal', 'A military tank', 'A border wall'], answer: 'Basic structure or system for a deal' },
+                    { q: 'The word "ratified" means ______.', options: ['Cancelled', 'Formally approved or signed into law', 'Hated', 'Ignored'], answer: 'Formally approved or signed into law' },
+                    { q: 'What is "WTI" an abbreviation for?', options: ['World Trade Institute', 'West Texas Intermediate', 'Water Transit International', 'Winter Tech Inc.'], answer: 'West Texas Intermediate' },
+                    { q: 'Energy markets remain "volatile," meaning they are ______.', options: ['Stable', 'Unpredictable and subject to sudden change', 'Zero price', 'Frozen'], answer: 'Unpredictable and subject to sudden change' },
+                    { q: 'What is a "portfolio" in finance?', options: ['A collection of investments', 'A type of car', 'A school bag', 'A government office'], answer: 'A collection of investments' },
+                    { q: 'The news suggests a "ceasefire" is ______, but not yet ratified.', options: ['Impossible', 'Under discussion', 'Finished years ago', 'Already active'], answer: 'Under discussion' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            document.querySelectorAll('.quiz-option').forEach(el => {
+                const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                el.classList.remove('selected');
+                if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+            });
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
