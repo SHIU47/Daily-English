@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 3 月 30 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05); 
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 3 月 30 日：戰略韌性、算力主權與監管合流</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Future Leaders.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] Think Tank: Growing Gap Between US Elites and Public on Taiwan Defense\nNew research from the Brookings Institution suggests a widening divergence between Washington’s foreign policy establishment and the American public regarding military intervention. While an elite bipartisan consensus remains tough on China, public caution is increasing. Macroscopically, this signifies a "Political Risk Premium" for Taiwan, necessitating accelerated domestic defense self-reliance.\n\n[2] TSMC Arizona Completes First Blackwell Wafer; Revitalizing US Manufacturing\nTSMC's Arizona facility has successfully produced its first Blackwell-architecture wafer on U.S. soil. This milestone addresses the "Single Point of Failure" risk associated with concentrated production. Macroscopically, Taiwan must now transition from a sole manufacturing hub to an indispensable "Knowledge and IP Hub" for the global ecosystem.\n\n[3] NSTC Reports 15% Surge in Returning Talent Driven by AI Leadership\nThe National Science and Technology Council (NSTC) revealed that high-level R&D personnel returning to Taiwan hit a record high last year. Key motivators include the maturation of the AI ecosystem and the "Yushan Scholar" program. Macroscopically, this indicates a "Brain Gain" cycle, rebranding Taiwan as a "Global Innovation Anchor."`,
+                chinese: `【1】美國對台政策分歧：華府精英與大眾對華韌性之差距評估\n布魯金斯學會（Brookings Institution）發布的新研究顯示，華盛頓外交政策圈與美國大眾在軍事干預問題上的分歧正在擴大。儘管精英階層維持強硬的跨黨派對華共識，但公眾的謹慎情緒正日益增加。從宏觀角度看，這標誌著台灣長遠安全的「政治風險溢價」，使台灣有必要加速國防自主的腳步。\n\n【2】供應鏈分散化：台積電亞利桑那廠首片 Blackwell 晶圓完成生產\n台積電亞利桑那廠已成功在美國本土生產出首片 Blackwell 架構晶圓，這標誌著「美國製造業復興」的里程碑。此舉解決了台海生產過度集中引發的「單點故障（Single Point of Failure）」風險。從宏觀角度看，雖然這強化了美國供應鏈安全，但台灣必須從唯一的「製造中心」轉型為全球半導體生態系中不可或缺的「知識與智財（IP）樞紐」。\n\n【3】高科技人才回流：科技部指出 2025 年海外研發人才回歸率增長 15%\n國家科學及技術委員會（NSTC）透露，去年回流台灣的高階研發人員創下歷史新高。許多人將 AI 硬體生態系的成熟與「玉山學者」計畫視為主要誘因。從宏觀角度看，這預示著「人才入流（Brain Gain）」循環，將台灣從「製造代工廠」重新包裝為「全球創新錨點」，藉此對抗區域性的人才挖角壓力。`,
+                vocabulary: [
+                    'Divergence (n.): 分歧/差異', 'Foreign policy establishment (n. phr.): 外交政策圈/建制派', 'Bipartisan consensus (n. phr.): 跨黨派共識', 'Intervention (n.): 干預',
+                    'Strategic ambiguity (n. phr.): 戰略模糊', 'Transactional model (n. phr.): 交易型模式', 'Self-reliance (n.): 自立/自主', 'Revitalizing (v. ger.): 振興/恢復活力',
+                    'Wafer (n.): 晶圓', 'Single Point of Failure (n. phr.): 單點故障', 'Geographic Redundancy (n. phr.): 地理備援', 'Silicon Shield (n. proper): 矽盾',
+                    'Indispensable (adj.): 不可或缺的', 'IP Hub (n. phr.): 智財權樞紐', 'Ecosystem (n.): 生態系統', 'Surge (n./v.): 飆升',
+                    'R&D personnel (n. phr.): 研發人員', 'Maturation (n.): 成熟', 'Motivators (n.): 誘因/動力', 'Brain Gain (n. phr.): 人才入流 (反義詞為 Brain Drain)',
+                    'Innovation Anchor (n. phr.): 創新錨點', 'Professional diaspora (n. phr.): 海外專業人才', 'Poaching (v. ger.): 挖角', 'Sovereign (adj.): 主權的',
+                    'Macroscopically (adv.): 從宏觀角度', 'Necessitating (v. ger.): 使...成為必要', 'Milestone (n.): 里程碑', 'Bilateral (adj.): 雙邊的',
+                    'Preemptive (adj.): 先發制人的', 'Robust (adj.): 強健的', 'Integrity (n.): 完整性', 'Protocol (n.): 協議'
+                ],
+                quiz: [
+                    { q: 'Which institution released research on the gap between US elites and the public?', options: ['The Heritage Foundation', 'The Brookings Institution', 'CSIS', 'AIT'], answer: 'The Brookings Institution' },
+                    { q: 'What is increasing among the American public regarding military intervention?', options: ['Enthusiasm', 'Caution', 'Indifference', 'Bipartisan consensus'], answer: 'Caution' },
+                    { q: 'TSMC Arizona successfully produced its first wafer based on which architecture?', options: ['Hopper', 'Blackwell', 'Ada Lovelace', 'Zen 5'], answer: 'Blackwell' },
+                    { q: 'What risk does the Arizona facility aim to address?', options: ['Inflation', 'Single Point of Failure', 'Water shortage', 'Labor unions'], answer: 'Single Point of Failure' },
+                    { q: 'Taiwan is rebranding itself from a "Foundry" to a "Global ______ Anchor."', options: ['Manufacturing', 'Innovation', 'Financial', 'Military'], answer: 'Innovation' },
+                    { q: 'The surge in returning R&D talent reported by NSTC is ______.', options: ['5%', '10%', '15%', '37%'], answer: '15%' },
+                    { q: 'The term "Political Risk Premium" for Taiwan refers to ______.', options: ['High taxes', 'Extra security needed due to policy shifts', 'The cost of election campaigns', 'Free trade deals'], answer: 'Extra security needed due to policy shifts' },
+                    { q: 'Which program is cited as a key motivator for returning scholars?', options: ['The Green Card', 'The Yushan Scholar program', 'The TSMC Bonus', 'The UN Grant'], answer: 'The Yushan Scholar program' },
+                    { q: 'What does "Strategic Ambiguity" refer to in the text?', options: ['US policy toward Taiwan', 'The cost of chips', 'Weather patterns', 'Corporate mergers'], answer: 'US policy toward Taiwan' },
+                    { q: 'The word "Diaspora" refers to people who ______.', options: ['Never travel', 'Have been dispersed outside their homeland', 'Only work in factories', 'Study space technology'], answer: 'Have been dispersed outside their homeland' },
+                    { q: 'What is "Geographic Redundancy"?', options: ['Having no map', 'Multiple production sites in different regions for safety', 'Moving everything to one island', 'Closing factories'], answer: 'Multiple production sites in different regions for safety' },
+                    { q: 'The term "Brain Gain" is the opposite of ______.', options: ['Brain Power', 'Brain Drain', 'Brainstorm', 'Brain Surgery'], answer: 'Brain Drain' },
+                    { q: 'TSMC\'s move to the US bolsters U.S. ______ security.', options: ['Food', 'Supply chain', 'Water', 'Education'], answer: 'Supply chain' },
+                    { q: 'The "Silicon Shield" is related to which sector?', options: ['Farming', 'Semiconductor', 'Textiles', 'Finance'], answer: 'Semiconductor' },
+                    { q: 'The word "verdict" from previous news (Mar 28) refers to a ______.', options: ['Legal decision', 'New product', 'Weather report', 'Tax cut'], answer: 'Legal decision' }
+                ]
+            },
+            'spacex-transporter': {
+                title: 'SpaceX 軌道物流革命',
+                english: `SpaceX is targeting a launch today from Vandenberg Space Force Base, deploying 119 payloads including microsatellites and reentry vehicles as part of the Transporter-16 mission. Macroscopically, this signifies the "Commoditization of Space Access." By providing reliable, low-cost access to Sun-synchronous orbit, SpaceX is industrializing the orbital layer. Participation from 25 separate companies and government agencies shows that "Orbital Logistics" has evolved into a standardized component of global communication and sensing infrastructure. This mission also tests the new "Auto-Deploy" sequence for improved efficiency.`,
+                chinese: `SpaceX Transporter-16 任務：今日發射 119 枚衛星進入太陽同步軌道\nSpaceX 今日預計從范登堡太空軍基地發射 Transporter-16 任務，部署 119 枚酬載（payloads），包括微型衛星與重返大氣層載具。從宏觀角度看，這標誌著「太空進入能力的商品化」。透過提供可靠且低成本的途徑進入太陽同步軌道，SpaceX 正將軌道層工業化。來自 25 家不同公司與政府機構的參與，顯示出「軌道物流」已演變為全球通訊與感測基礎設施的標準化組件。此次任務還將測試全新的「自動部署（Auto-Deploy）」程序以提升效率。`,
+                vocabulary: [
+                    'Payloads (n.): 酬載/負擔', 'Vandenberg Space Force Base (n. proper): 范登堡太空軍基地', 'Microsatellites (n.): 微型衛星', 'Reentry vehicles (n. phr.): 重返大氣層載具',
+                    'Transporter-16 (n. proper): 運輸者16號任務', 'Sun-synchronous orbit (SSO) (n. phr.): 太陽同步軌道', 'Commoditization (n.): 商品化 (指變得普遍且廉價)', 'Space Access (n. phr.): 太空進入能力',
+                    'Industrializing (v. ger.): 工業化', 'Orbital layer (n. phr.): 軌道層', 'Logistics (n.): 物流', 'Standardized (adj.): 標準化的',
+                    'Sensing infrastructure (n. phr.): 感測基礎設施', 'Auto-Deploy (adj.): 自動部署的', 'Cadence (n.): 節奏/頻率', 'Constellation (n.): 衛星群/星座',
+                    'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑',
+                    'Infrastructural (adj.): 基礎建設的', 'Billion (n.): 十億', 'Trillion (n.): 兆', 'Primary (adj.): 主要的',
+                    'Alternative (n.): 替代方案', 'Transition (n.): 轉型', 'Strategic (adj.): 戰略的', 'Consolidation (n.): 鞏固'
+                ],
+                quiz: [
+                    { q: 'How many payloads is SpaceX launching in the Transporter-16 mission?', options: ['25', '100', '119', '200'], answer: '119' },
+                    { q: 'From which base is the launch scheduled?', options: ['Cape Canaveral', 'Kennedy Space Center', 'Vandenberg Space Force Base', 'Hsinchu Base'], answer: 'Vandenberg Space Force Base' },
+                    { q: 'What is the target orbit for this mission?', options: ['Geostationary orbit', 'Medium Earth orbit', 'Sun-synchronous orbit (SSO)', 'Lunar orbit'], answer: 'Sun-synchronous orbit (SSO)' },
+                    { q: 'How many companies and agencies are participating in this rideshare?', options: ['10', '25', '50', '119'], answer: '25' },
+                    { q: 'What term describes the shift toward low-cost, common access to space?', options: ['Digitalization', 'Commoditization', 'Exploration', 'Privatization only'], answer: 'Commoditization' },
+                    { q: 'SpaceX is turning "Orbital ______" into a standardized component.', options: ['Farming', 'Logistics', 'Fashions', 'Taxes'], answer: 'Logistics' },
+                    { q: 'What new sequence is being tested for improved efficiency?', options: ['Manual Launch', 'Auto-Deploy', 'Emergency Stop', 'Solar Charging'], answer: 'Auto-Deploy' },
+                    { q: 'The term "payload" refers to which of the following?', options: ['The weight of the rocket', 'The cargo or satellites carried', 'The price of fuel', 'The speed of light'], answer: 'The cargo or satellites carried' },
+                    { q: 'What kind of satellites are "microsatellites"?', options: ['Very large ones', 'Small, lightweight satellites', 'Satellites made of gold', 'Broken satellites'], answer: 'Small, lightweight satellites' },
+                    { q: 'Transporter-16 is a "Rideshare" mission. What is a rideshare?', options: ['A taxi service in a city', 'A mission carrying payloads for multiple clients', 'Sharing a car with coworkers', 'A racing event'], answer: 'A mission carrying payloads for multiple clients' },
+                    { q: 'The word "industrializing" means ______.', options: ['Closing all factories', 'Turning an activity into a systematic industry', 'Starting a war', 'Buying old tools'], answer: 'Turning an activity into a systematic industry' },
+                    { q: 'Vandenberg Base is located in which U.S. state?', options: ['Florida', 'Texas', 'California', 'New York'], answer: 'California' },
+                    { q: 'The mission involves "reentry vehicles." What are they?', options: ['Cars returning to a garage', 'Craft designed to return to Earth from space', 'Old rockets', 'Toy boats'], answer: 'Craft designed to return to Earth from space' },
+                    { q: 'What is "sensing infrastructure"?', options: ['Roads with eyes', 'Systems using sensors to collect global data', 'A type of bank', 'A new school'], answer: 'Systems using sensors to collect global data' },
+                    { q: 'Is SpaceX a government-owned agency?', options: ['Yes', 'No, it is a private company', 'It is owned by the UN', 'The text doesn\'t say'], answer: 'No' }
+                ]
+            },
+            'tesla-robotics': {
+                title: '特斯拉轉型機器人巨頭',
+                english: `Tesla officially notified customers on Monday that production of its flagship Model S and Model X will end to reallocate manufacturing capacity in Fremont for Optimus and Robotaxi. Macroscopically, this represents the "Death of the Traditional EV Manufacturer." Tesla is pivoting toward becoming a robotics and AI company, betting that labor-replacement technology will surpass luxury EVs as its primary growth driver. The move has polarized investors, with some cheering the long-term potential of physical AI while others worry about the loss of stable high-end automotive revenue.`,
+                chinese: `特斯拉正式宣布淘汰 Model S/X：全面轉向 Optimus 機器人與 Robotaxi 產線\n特斯拉週一正式通知客戶，將終止旗艦車型 Model S 與 Model X 的生產，以便將弗里蒙特（Fremont）廠區的產能重新分配給 Optimus 人形機器人與 Robotaxi 計畫。從宏觀角度看，這代表了「傳統電動車製造商的終結」。特斯拉正全力轉型為一家機器人與 AI 公司，押注「勞動力替代技術」將超越豪華電動車，成為其主要的成長引擎。此舉引發了投資者的兩極化反應：部分人歡呼實體 AI 的長期潛力，部分人則擔心失去穩定的高階汽車營收。`,
+                vocabulary: [
+                    'Sunsets (v.): 終止/淘汰 (名詞為日落)', 'Flagship (adj./n.): 旗艦/最領先的', 'Reallocate (v.): 重新分配', 'Manufacturing capacity (n. phr.): 製造產能',
+                    'Labor-replacement (adj.): 替代勞動力的', 'Primary growth driver (n. phr.): 主要成長引擎', 'Polarized (adj.): 兩極化的', 'Cheering (v. ger.): 歡呼/支持',
+                    'Physical AI (n. phr.): 實體人工智慧', 'High-end (adj.): 高階的', 'Automotive revenue (n. phr.): 汽車營收', 'Pivoting (v. ger.): 轉向',
+                    'Model S/X (n. proper): 特斯拉旗艦車型', 'Fremont (n. proper): 弗里蒙特 (特斯拉廠址)', 'Optimus (n. proper): 特斯拉機器人名', 'Robotaxi (n.): 自駕計程車',
+                    'Autonomous (adj.): 自主的', 'Inference (n.): 推論', 'Proprietary (adj.): 專有的', 'Architecture (n.): 架構',
+                    'Neural (adj.): 神經的', 'Optimization (n.): 優化', 'Performance (n.): 表現/性能', 'Scalability (n.): 規模化',
+                    'Infrastructure (n.): 基礎建設', 'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的',
+                    'Milestone (n.): 里程碑', 'Investment (n.): 投資', 'Logic (n.): 邏輯', 'Divergence (n.): 分歧'
+                ],
+                quiz: [
+                    { q: 'Which two Tesla models are being discontinued?', options: ['Model 3 and Model Y', 'Model S and Model X', 'Cybertruck and Roadster', 'Model 1 and Model 2'], answer: 'Model S and Model X' },
+                    { q: 'In which city is the facility located where production will be reallocated?', options: ['Austin', 'Berlin', 'Fremont', 'Shanghai'], answer: 'Fremont' },
+                    { q: 'What is Tesla prioritizing over luxury EVs?', options: ['Solar panels', 'Optimus robots and Robotaxi platforms', 'Farming tools', 'Clothing'], answer: 'Optimus robots and Robotaxi platforms' },
+                    { q: 'The move is described macroscopically as the "______ of the traditional EV manufacturer."', options: ['Birth', 'Success', 'Death', 'Renaming'], answer: 'Death' },
+                    { q: 'What kind of technology does Tesla bet will be its primary growth driver?', options: ['Fast charging', 'Labor-replacement technology', 'Better sound systems', 'Leather seats'], answer: 'Labor-replacement technology' },
+                    { q: 'How have investors reacted to this news?', options: ['Everyone agreed.', 'They were indifferent.', 'Their reactions were polarized.', 'They were all angry.'], answer: 'Their reactions were polarized.' },
+                    { q: 'The "Optimus" is what kind of robot?', options: ['A robotic vacuum', 'A humanoid robot', 'A flying drone', 'An industrial arm only'], answer: 'A humanoid robot' },
+                    { q: 'What does the word "sunset" mean as a verb in business?', options: ['To start at night', 'To gradually phase out or terminate a product', 'To paint something orange', 'To increase production'], answer: 'To gradually phase out or terminate a product' },
+                    { q: 'What does "reallocate" mean?', options: ['To keep things the same', 'To assign to a different purpose or place', 'To sell everything', 'To buy more land'], answer: 'To assign to a different purpose or place' },
+                    { q: 'The term "flagship" refers to ______.', options: ['A literal ship', 'The best or most important product of a company', 'A low-cost option', 'An old version'], answer: 'The best or most important product of a company' },
+                    { q: 'Cheering investors are looking at the potential of "______ AI."', options: ['Virtual', 'Physical', 'Text-only', 'Boring'], answer: 'Physical' },
+                    { q: 'What does "polarized" mean?', options: ['United', 'Divided into two sharp opposites', 'Frozen', 'Very fast'], answer: 'Divided into two sharp opposites' },
+                    { q: 'Tesla is shifting to become a "______ and ______" company.', options: ['Farming and Energy', 'Robotics and AI', 'Social Media and News', 'Retail and Clothing'], answer: 'Robotics and AI' },
+                    { q: 'Model S and X are described as "______ EVs."', options: ['Cheap', 'Luxury', 'Utility', 'Experimental'], answer: 'Luxury' },
+                    { q: 'Fremont is a location in which country?', options: ['Japan', 'China', 'USA', 'Germany'], answer: 'USA' }
+                ]
+            },
+            'gold-retreat': {
+                title: '金價失守 4,400 美元關卡',
+                english: `Spot gold prices retreated sharply on Monday, falling below the critical $4,400 support level as "War Premium" eroded following reports of diplomatic progress between Washington and Tehran. Macroscopically, this represents "Volatility Compression." As the 5-day truce window is monitored, capital is rotating between precious metals and the USD, highlighting market sensitivity to geopolitical signals in a "Higher-for-Longer" interest rate environment. Many traders have liquidated safe-haven positions to reinvest in high-growth tech shares following the latest AI milestones.`,
+                chinese: `黃金與美元博弈：金價失守 $4,400 關卡，受美伊談判傳聞影響而劇震\n現貨金價週一大幅回落，跌破了 4,400 美元的關鍵支撐位。隨華盛頓與德黑蘭之間傳出外交進展，原本推高金價的「戰爭溢價（War Premium）」正在消退。從宏觀角度看，這代表了「波動性壓縮（Volatility Compression）」。隨著市場密切觀察 5 天停火窗口，資金正於貴金屬與美元之間輪動，凸顯了在「長期高利率」環境下，市場對地緣政治信號的高度敏感。許多交易員已清空避險部位，轉而投入最新 AI 里程碑帶動的高成長科技股。`,
+                vocabulary: [
+                    'Retreated (v. pt.): 回落/撤退', 'Critical support level (n. phr.): 關鍵支撐位', 'Eroded (v. pt.): 侵蝕/消退', 'Diplomatic progress (n. phr.): 外交進展',
+                    'War Premium (n. phr.): 戰爭溢價', 'Volatility Compression (n. phr.): 波動性壓縮', 'Truce window (n. phr.): 停火窗口/期間', 'Rotating (v. ger.): 輪動',
+                    'Precious metals (n. phr.): 貴金屬', 'Market sensitivity (n. phr.): 市場敏感度', 'Geopolitical signals (n. phr.): 地緣政治信號', 'Higher-for-Longer (phr.): 長期高利率',
+                    'Liquidated (v. pt.): 清算/結清(頭寸)', 'Safe-haven positions (n. phr.): 避險部位', 'High-growth tech shares (n. phr.): 高成長科技股', 'Spot gold (n. phr.): 現貨黃金',
+                    'Retreat (v.): 後退/掉頭', 'Premium (n.): 溢價/保險費', 'Volatility (n.): 波動性', 'Instability (n.): 不穩定',
+                    'Sustained (adj.): 持續的', 'Slump (v.): 暴跌', 'Bullion (n.): 實體金銀', 'Deficit (n.): 赤字/短缺',
+                    'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件', 'Verification (n.): 驗證', 'Discourse (n.): 論述',
+                    'Refining (v.ger.): 提煉', 'Munition (n.): 彈藥', 'Reparation (n.): 賠償', 'Meteorologist (n.): 氣象員'
+                ],
+                quiz: [
+                    { q: 'What critical price level did spot gold fall below on Monday?', options: ['$5,000', '$4,540', '$4,400', '$4,150'], answer: '$4,400' },
+                    { q: 'What caused the "War Premium" to erode according to the text?', options: ['A new gold mine', 'Diplomatic progress between Washington and Tehran', 'A rise in oil prices', 'A technical error'], answer: 'Diplomatic progress between Washington and Tehran' },
+                    { q: 'What does "Volatility Compression" represent in this context?', options: ['Rising prices', 'A narrowing of price fluctuations as market cools', 'Total price crash', 'No trading at all'], answer: 'A narrowing of price fluctuations as market cools' },
+                    { q: 'How long is the truce window mentioned?', options: ['24 hours', '48 hours', '5 days', 'One month'], answer: '5 days' },
+                    { q: 'Capital is rotating between precious metals and which other asset?', options: ['Bitcoin', 'The USD', 'Oil', 'Real Estate'], answer: 'The USD' },
+                    { q: 'Why are traders liquidating safe-haven positions?', options: ['To buy gold bars', 'To reinvest in high-growth tech shares', 'To pay taxes', 'To go on holiday'], answer: 'To reinvest in high-growth tech shares' },
+                    { q: 'The interest rate environment is described as "______-for-______."', options: ['Lower, Shorter', 'Higher, Longer', 'Steady, Better', 'High, Now'], answer: 'Higher, Longer' },
+                    { q: 'The term "spot gold" refers to gold for ______.', options: ['Future delivery', 'Immediate delivery', 'Jewelry only', 'Digital use'], answer: 'Immediate delivery' },
+                    { q: 'What does "eroded" mean?', options: ['Grown stronger', 'Gradually worn away or reduced', 'Exploded', 'Fixed'], answer: 'Gradually worn away or reduced' },
+                    { q: 'A "support level" in trading is where the price ______.', options: ['Tends to stop falling', 'Tends to stop rising', 'Is zero', 'Is fixed by the government'], answer: 'Tends to stop falling' },
+                    { q: 'What are "precious metals"?', options: ['Iron and Copper', 'Gold and Silver', 'Plastic and Wood', 'Steel and Aluminum'], answer: 'Gold and Silver' },
+                    { q: 'Geopolitical signals refer to news from ______.', options: ['The weather office', 'International politics and relationships', 'A movie studio', 'A small shop'], answer: 'International politics and relationships' },
+                    { q: 'What does "liquidated" mean in finance?', options: ['Turning to water', 'Closing a position or selling an asset for cash', 'Buying more stock', 'Winning a prize'], answer: 'Closing a position or selling an asset for cash' },
+                    { q: 'The word "retreat" is a synonym for which word?', options: ['Advance', 'Fall back/Move away', 'Stay still', 'Improve'], answer: 'Fall back/Move away' },
+                    { q: 'Tehran is the capital of which country?', options: ['Iraq', 'Iran', 'Israel', 'Lebanon'], answer: 'Iran' }
+                ]
+            },
+            'crypto-regulation': {
+                title: '美 CFTC 與 SEC 監管合作',
+                english: `The U.S. CFTC and SEC have signed a landmark Memorandum of Understanding (MOU) on Monday to coordinate risk monitoring and surveillance for on-chain systems. Macroscopically, this signifies the "Institutionalization of Crypto." By reducing regulatory fragmentation, the framework aims to unlock institutional capital inflows, providing clearer guidance on how federal securities laws apply to digital assets. The deal effectively ends years of jurisdictional disputes between the two agencies, creating a more stable environment for digital asset investment.`,
+                chinese: `美國 CFTC 與 SEC 達成歷史性合作：確立「加密資產」監管之新時代\n美國商品期貨交易委員會（CFTC）與證券交易委員會（SEC）週一簽署了一份具里程碑意義的諒解備忘錄（MOU），旨在協調對鏈上系統（on-chain systems）的風險監測與監管。從宏觀角度看，這標誌著「加密貨幣的制度化」。透過減少監管碎片化，該框架旨在釋放機構資金的流入，並針對聯邦證券法如何適用於數位資產提供更清晰的指引。此協議有效地結束了兩家機構多年來的管轄權之爭，為數位資產投資創造了更穩定的環境。`,
+                vocabulary: [
+                    'CFTC (n. proper): 商品期貨交易委員會', 'SEC (n. proper): 證券交易委員會', 'MOU (Memorandum of Understanding) (n.): 諒解備忘錄', 'Harmonize (v.): 使一致/協調',
+                    'Digital asset (n. phr.): 數位資產', 'Risk monitoring (n. phr.): 風險監測', 'Surveillance (n.): 監管/監視', 'On-chain systems (n. phr.): 鏈上系統',
+                    'Institutionalization (n.): 制度化', 'Regulatory fragmentation (n. phr.): 監管碎片化', 'Capital inflows (n. phr.): 資金流入', 'Securities laws (n. phr.): 證券法',
+                    'Jurisdictional disputes (n. phr.): 管轄權之爭', 'MOU (n.): 備忘錄', 'Fragmentation (n.): 碎片化', 'Inflow (n.): 流入',
+                    'Guidance (n.): 指引', 'Framework (n.): 框架/準則', 'Sovereignty (n.): 主權', 'Integrity (n.): 完整性',
+                    'Compliance (n.): 合規', 'Verification (n.): 驗證', 'Implementation (n.): 執行', 'Discourse (n.): 論述',
+                    'Regulation (n.): 規定/監管', 'Surveillance (n.): 監視/監督', 'Institutional (adj.): 機構的', 'Asset (n.): 資產',
+                    'Stabilizing (v. ger.): 使穩定', 'Ecosystem (n.): 生態系', 'Federal (adj.): 聯邦的', 'Agency (n.): 機構'
+                ],
+                quiz: [
+                    { q: 'Which two U.S. agencies signed the landmark MOU on Monday?', options: ['FBI and CIA', 'CFTC and SEC', 'NASA and NOAA', 'DOE and DOT'], answer: 'CFTC and SEC' },
+                    { q: 'What is the primary goal of the MOU?', options: ['To ban Bitcoin', 'To coordinate risk monitoring and surveillance for on-chain systems', 'To lower taxes on cars', 'To build a new bank'], answer: 'To coordinate risk monitoring and surveillance for on-chain systems' },
+                    { q: 'The term "on-chain" refers to activities on which technology?', options: ['Traditional banking', 'Blockchain', 'Social media', 'Radio'], answer: 'Blockchain' },
+                    { q: 'What does "Regulatory Fragmentation" mean?', options: ['Unified rules everywhere', 'Laws that are split or inconsistent between different agencies', 'No laws at all', 'Fast growing laws'], answer: 'Laws that are split or inconsistent between different agencies' },
+                    { q: 'The MOU aims to unlock ______ capital inflows into crypto.', options: ['Student', 'Institutional', 'Only retail', 'Foreign aid'], answer: 'Institutional' },
+                    { q: 'The deal effectively ends "______ disputes" between the two agencies.', options: ['Financial', 'Jurisdictional (legal power)', 'Political only', 'Personal'], answer: 'Jurisdictional (legal power)' },
+                    { q: 'The term "Institutionalization" of crypto implies it is becoming ______.', options: ['Illegal', 'A standardized part of the official financial system', 'Only for kids', 'Secretive'], answer: 'A standardized part of the official financial system' },
+                    { q: 'What is an "MOU"?', options: ['A legal contract for marriage', 'Memorandum of Understanding', 'Military Operating Unit', 'Modern Online User'], answer: 'Memorandum of Understanding' },
+                    { q: 'CFTC stands for ______ Futures Trading Commission.', options: ['Commercial', 'Commodity', 'Central', 'Credit'], answer: 'Commodity' },
+                    { q: 'What does "surveillance" mean in this context?', options: ['Giving away gifts', 'Close observation/monitoring', 'Buying stocks', 'Writing code'], answer: 'Close observation/monitoring' },
+                    { q: 'The word "harmonize" means ______.', options: ['To fight', 'To bring into agreement or coordination', 'To sing alone', 'To break'], answer: 'To bring into agreement or coordination' },
+                    { q: 'Digital assets include which of the following?', options: ['Physical gold bars', 'Cryptocurrencies and tokens', 'Paper money', 'Real estate'], answer: 'Cryptocurrencies and tokens' },
+                    { q: 'Federal ______ laws are at the center of the guidance.', options: ['Security', 'Securities (Investment)', 'Space', 'Environmental'], answer: 'Securities (Investment)' },
+                    { q: 'Does the MOU mean more or less cooperation between agencies?', options: ['Less', 'More', 'None', 'The text doesn\'t say'], answer: 'More' },
+                    { q: 'The framework aims to provide "______ guidance."', options: ['Vague', 'Clearer', 'No', 'Secret'], answer: 'Clearer' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1] || ''}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
