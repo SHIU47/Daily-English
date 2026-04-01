@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 01, 2026：台灣經濟、地緣政治 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 央行示警通膨逼近2%，中東戰事恐推升油價民生 (Central Bank Warns of Inflation Nearing 2%; Mideast Conflict May Hike Oil Prices)\nTaiwan's Central Bank issued a warning on April 1, 2026, stating that inflation is approaching its 2% target. The bank noted that escalating tensions in the Middle East pose a significant risk, potentially driving up global oil prices. This increase would inevitably translate into higher domestic consumer costs, impacting household budgets and challenging Taiwan's economic stability. The Central Bank emphasizes close monitoring of international developments to mitigate these risks.\n\n[2] 台積電股價大漲引領台股反彈，半導體樂觀情緒濃 (TSMC Stock Surge Leads Taiwan Market Rebound Amid Semiconductor Optimism)\nOn April 1, 2026, TSMC's stock price surged significantly, spearheading a strong rebound in the Taiwan stock market. This impressive performance reflects a growing and widespread optimism within the global semiconductor industry. Analysts attribute the rally to increasing demand for advanced chips and positive future outlooks from major technology companies. The robust rally boosted investor confidence across various sectors, signaling a potential sustained recovery for key technology and manufacturing industries.\n\n[3] 中東危機衝擊氦氣供應，台半導體業面臨原料挑戰 (Mideast Crisis Impacts Helium Supply; Taiwan Chipmakers Face Material Challenges)\nThe ongoing Mideast crisis is significantly disrupting global helium supply chains. This situation presents considerable challenges for Taiwan's semiconductor industry, which heavily depends on helium for critical chip manufacturing processes. Industry experts caution that a prolonged scarcity of this vital gas could potentially affect production capacity and elevate operational costs, prompting companies to explore alternative supply sources.",
+    "chinese": "【1】央行示警通膨逼近2%，中東戰事恐推升油價民生 (Central Bank Warns of Inflation Nearing 2%; Mideast Conflict May Hike Oil Prices)\n台灣中央銀行於2026年4月1日發出警告，指出通膨正逼近其2%的目標。央行指出，中東地區日益升級的緊張局勢構成重大風險，可能推升全球油價。油價上漲將不可避免地轉嫁為國內民生消費成本的提高，影響家庭預算，並對台灣的經濟穩定構成挑戰。中央銀行強調將密切關注國際情勢發展，以減輕這些風險。\n\n【2】台積電股價大漲引領台股反彈，半導體樂觀情緒濃 (TSMC Stock Surge Leads Taiwan Market Rebound Amid Semiconductor Optimism)\n2026年4月1日，台積電股價大幅上漲，引領台灣股市強勁反彈。這項令人矚目的表現反映了全球半導體產業日益增長的普遍樂觀情緒。分析師將此次上漲歸因於對先進晶片日益增長的需求，以及主要科技公司對未來前景的積極預期。這次強勁的反彈提振了各行各業的投資者信心，預示著關鍵科技和製造產業可能持續復甦。\n\n【3】中東危機衝擊氦氣供應，台半導體業面臨原料挑戰 (Mideast Crisis Impacts Helium Supply; Taiwan Chipmakers Face Material Challenges)\n持續中的中東危機正嚴重擾亂全球氦氣供應鏈。這一情況對台灣的半導體產業構成了相當大的挑戰，因為該產業在關鍵的晶片製造過程中高度依賴氦氣。業界專家警告，這種重要氣體的長期短缺可能會影響生產能力並提高營運成本，促使企業探索替代供應來源。",
+    "vocabulary": [
+      "Central Bank (n.): 中央銀行",
+      "warn (v.): 警告",
+      "inflation (n.): 通貨膨脹",
+      "approaching (v.): 逼近，接近",
+      "target (n.): 目標",
+      "escalating (adj.): 日益升級的",
+      "tensions (n.): 緊張局勢",
+      "Middle East (n.): 中東",
+      "pose a risk (phr.): 構成風險",
+      "significant (adj.): 重大的，顯著的",
+      "drive up (phr. v.): 推升，提高",
+      "global (adj.): 全球的",
+      "oil prices (n.): 油價",
+      "inevitably (adv.): 不可避免地",
+      "translate into (phr. v.): 轉化為，轉嫁為",
+      "domestic (adj.): 國內的",
+      "consumer costs (n.): 消費者成本，民生消費",
+      "impact (v.): 影響",
+      "household budgets (n.): 家庭預算",
+      "economic stability (n.): 經濟穩定",
+      "emphasize (v.): 強調",
+      "monitoring (n.): 監控，密切關注",
+      "mitigate (v.): 減輕，緩和",
+      "risks (n.): 風險",
+      "TSMC (n.): 台積電",
+      "stock price (n.): 股價",
+      "surge (v.): 大幅上漲；飆升",
+      "spearhead (v.): 帶頭；率先",
+      "rebound (n.): 反彈",
+      "Taiwan stock market (n.): 台灣股市",
+      "impressive (adj.): 令人印象深刻的",
+      "performance (n.): 表現；業績",
+      "reflect (v.): 反映",
+      "widespread (adj.): 普遍的；廣泛的",
+      "optimism (n.): 樂觀情緒",
+      "semiconductor industry (n.): 半導體產業",
+      "attribute (v.): 歸因於",
+      "rally (n.): (股市) 上漲；反彈",
+      "advanced chips (n.): 先進晶片",
+      "future outlook (n.): 未來前景",
+      "major technology companies (n.): 主要科技公司",
+      "robust (adj.): 強勁的；穩健的",
+      "boost (v.): 提振；促進",
+      "sustained recovery (n.): 持續復甦",
+      "Mideast crisis (n.): 中東危機",
+      "disrupting (v.): 擾亂",
+      "helium (n.): 氦氣",
+      "supply chains (n.): 供應鏈",
+      "considerable (adj.): 相當大的",
+      "challenges (n.): 挑戰",
+      "semiconductor industry (n.): 半導體產業",
+      "heavily depends on (phr.): 高度依賴",
+      "critical (adj.): 關鍵的",
+      "manufacturing processes (n.): 製造過程",
+      "industry experts (n.): 業界專家",
+      "caution (v.): 警告",
+      "prolonged (adj.): 長期的",
+      "scarcity (n.): 短缺",
+      "vital (adj.): 至關重要的",
+      "production capacity (n.): 生產能力",
+      "elevate (v.): 提高",
+      "operational costs (n.): 營運成本",
+      "explore (v.): 探索",
+      "alternative supply sources (phr.): 替代供應來源"
+    ],
+    "quiz": [
+      {
+        "q": "What is the primary concern raised by Taiwan's Central Bank?",
+        "options": [
+          "A. Economic growth",
+          "B. Deflation",
+          "C. Inflation",
+          "D. Trade surplus"
+        ],
+        "answer": "C. Inflation"
+      },
+      {
+        "q": "What is the inflation target mentioned in the news?",
+        "options": [
+          "A. 1%",
+          "B. 2%",
+          "C. 3%",
+          "D. 4%"
+        ],
+        "answer": "B. 2%"
+      },
+      {
+        "q": "Which region is identified as a source of potential economic risk?",
+        "options": [
+          "A. Europe",
+          "B. South America",
+          "C. Middle East",
+          "D. East Asia"
+        ],
+        "answer": "C. Middle East"
+      },
+      {
+        "q": "What specific issue in the Middle East is causing concern?",
+        "options": [
+          "A. Economic recession",
+          "B. Political elections",
+          "C. Escalating tensions",
+          "D. Natural disasters"
+        ],
+        "answer": "C. Escalating tensions"
+      },
+      {
+        "q": "What is the direct consequence of the Middle East situation on global markets?",
+        "options": [
+          "A. Lower interest rates",
+          "B. Higher stock prices",
+          "C. Driving up global oil prices",
+          "D. Increased tourism"
+        ],
+        "answer": "C. Driving up global oil prices"
+      },
+      {
+        "q": "How would higher global oil prices affect Taiwan domestically?",
+        "options": [
+          "A. Lower consumer costs",
+          "B. Increased exports",
+          "C. Higher domestic consumer costs",
+          "D. Stable prices"
+        ],
+        "answer": "C. Higher domestic consumer costs"
+      },
+      {
+        "q": "What aspect of household finances is expected to be impacted?",
+        "options": [
+          "A. Savings accounts",
+          "B. Investment portfolios",
+          "C. Household budgets",
+          "D. Property values"
+        ],
+        "answer": "C. Household budgets"
+      },
+      {
+        "q": "What is considered to be challenged by these economic developments?",
+        "options": [
+          "A. Social welfare",
+          "B. Educational system",
+          "C. Taiwan's economic stability",
+          "D. Public transportation"
+        ],
+        "answer": "C. Taiwan's economic stability"
+      },
+      {
+        "q": "What action does the Central Bank emphasize regarding international developments?",
+        "options": [
+          "A. Ignoring them",
+          "B. Reducing trade",
+          "C. Close monitoring",
+          "D. Increasing foreign aid"
+        ],
+        "answer": "C. Close monitoring"
+      },
+      {
+        "q": "What is the purpose of monitoring international developments?",
+        "options": [
+          "A. To increase profits",
+          "B. To mitigate these risks",
+          "C. To predict election outcomes",
+          "D. To promote cultural exchange"
+        ],
+        "answer": "B. To mitigate these risks"
+      },
+      {
+        "q": "When was this warning issued?",
+        "options": [
+          "A. March 1, 2026",
+          "B. April 1, 2026",
+          "C. May 1, 2026",
+          "D. June 1, 2026"
+        ],
+        "answer": "B. April 1, 2026"
+      },
+      {
+        "q": "Which of the following is NOT a direct impact mentioned in the news due to rising oil prices?",
+        "options": [
+          "A. Higher domestic consumer costs",
+          "B. Impacting household budgets",
+          "C. Challenging Taiwan's economic stability",
+          "D. Reducing unemployment rates"
+        ],
+        "answer": "D. Reducing unemployment rates"
+      },
+      {
+        "q": "What date did TSMC's stock price surge occur?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What did TSMC's stock surge lead in the Taiwan market?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "The impressive performance of TSMC reflects optimism in which industry?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What is one reason analysts attribute the rally to?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What kind of outlooks did major technology companies have?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "D"
+      },
+      {
+        "q": "What did the robust rally boost?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "Which sectors are signaling a potential sustained recovery?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "The word 'spearheading' in the text is closest in meaning to:",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What does 'optimism' primarily refer to in the context of the news?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "Which of the following best describes the style of the news report?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What does 'rebound' mean in the context of a stock market?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "The news suggests that the rally in the Taiwan market was:",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What is the main cause of the current helium supply disruption?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "Which industry in Taiwan is primarily affected by the helium supply issue?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "Why is helium important for Taiwan's chipmakers?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What does \"disrupting\" mean in the context of \"disrupting global helium supply chains\"?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "According to industry experts, what could be a consequence of prolonged helium scarcity?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What does \"heavily depends on\" imply about Taiwan's semiconductor industry and helium?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What action are companies encouraged to take due to the helium challenges?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "The term \"operational costs\" refers to:",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What is \"scarcity\"?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What is the tone of the news report?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "The news suggests that the Mideast crisis is:",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What does \"elevate\" mean in \"elevate operational costs\"?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "伊朗戰局外溢效應顯現，全球地緣經濟現多米諾骨牌 (Iran Conflict Spillover Triggers Global Geopolitical, Economic Domino Effect)",
+    "tabTitle": "地緣政治",
+    "english": "April 1, 2026 – The ongoing conflict in Iran has begun to show significant spillover effects, impacting global stability. Geopolitical tensions are escalating across various regions, leading to a complex domino effect on international relations. Economically, major supply chains face disruption, and commodity prices, especially oil, are experiencing unprecedented volatility. Experts warn that prolonged instability could reshape global trade routes and alliance structures, demanding urgent diplomatic efforts to mitigate widespread consequences.",
+    "chinese": "2026年4月1日 – 伊朗持續的衝突已開始顯現顯著的外溢效應，影響全球穩定。地緣政治緊張局勢正在各區域升級，導致國際關係出現複雜的多米諾骨牌效應。經濟上，主要供應鏈面臨中斷，而大宗商品價格，特別是石油，正經歷前所未有的波動。專家警告，長期不穩定可能重塑全球貿易路線和聯盟結構，需要緊急外交努力以減輕廣泛的後果。",
+    "vocabulary": [
+      "conflict (n.): 衝突",
+      "spillover effect (n. phr.): 外溢效應",
+      "stability (n.): 穩定",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張局勢",
+      "escalate (v.): 升級",
+      "domino effect (n. phr.): 多米諾骨牌效應",
+      "international relations (n. phr.): 國際關係",
+      "economically (adv.): 經濟上",
+      "supply chain (n. phr.): 供應鏈",
+      "disruption (n.): 中斷",
+      "commodity (n.): 大宗商品",
+      "unprecedented (adj.): 前所未有的",
+      "volatility (n.): 波動性",
+      "prolonged (adj.): 長期的",
+      "reshape (v.): 重塑",
+      "trade route (n. phr.): 貿易路線",
+      "alliance structure (n. phr.): 聯盟結構",
+      "diplomatic effort (n. phr.): 外交努力",
+      "mitigate (v.): 減輕"
+    ],
+    "quiz": [
+      {
+        "q": "What is the primary focus of the news article?",
+        "options": [
+          "A. Iran's internal politics",
+          "B. The impact of the Iran conflict on global stability",
+          "C. New global trade agreements",
+          "D. The history of geopolitical tensions"
+        ],
+        "answer": "B. The impact of the Iran conflict on global stability"
+      },
+      {
+        "q": "According to the article, what is a direct consequence of the ongoing conflict in Iran?",
+        "options": [
+          "A. Increased tourism to the region",
+          "B. Significant spillover effects on global stability",
+          "C. A decrease in commodity prices worldwide",
+          "D. New technological advancements"
+        ],
+        "answer": "B. Significant spillover effects on global stability"
+      },
+      {
+        "q": "The article mentions a \"complex domino effect\" on international relations. What does this phrase imply?",
+        "options": [
+          "A. Relations are becoming simpler",
+          "B. One event triggers a series of related events",
+          "C. Countries are playing more games",
+          "D. International sports competitions"
+        ],
+        "answer": "B. One event triggers a series of related events"
+      },
+      {
+        "q": "What economic sector is explicitly mentioned as facing disruption?",
+        "options": [
+          "A. Tourism industry",
+          "B. Financial markets",
+          "C. Major supply chains",
+          "D. Real estate development"
+        ],
+        "answer": "C. Major supply chains"
+      },
+      {
+        "q": "Which specific commodity is highlighted for experiencing \"unprecedented volatility\"?",
+        "options": [
+          "A. Gold",
+          "B. Wheat",
+          "C. Oil",
+          "D. Natural Gas"
+        ],
+        "answer": "C. Oil"
+      },
+      {
+        "q": "What does the term \"unprecedented volatility\" most closely suggest about commodity prices?",
+        "options": [
+          "A. They are stable and predictable",
+          "B. They are experiencing fluctuations never seen before",
+          "C. They are gradually decreasing",
+          "D. They are fixed at a high level"
+        ],
+        "answer": "B. They are experiencing fluctuations never seen before"
+      },
+      {
+        "q": "What do experts warn could happen if instability is prolonged?",
+        "options": [
+          "A. A global economic boom",
+          "B. Reshaping of global trade routes and alliance structures",
+          "C. A new era of peace",
+          "D. Increased international cooperation on environmental issues"
+        ],
+        "answer": "B. Reshaping of global trade routes and alliance structures"
+      },
+      {
+        "q": "What kind of efforts are deemed \"urgent\" to \"mitigate widespread consequences\"?",
+        "options": [
+          "A. Military interventions",
+          "B. Economic sanctions",
+          "C. Diplomatic efforts",
+          "D. Humanitarian aid"
+        ],
+        "answer": "C. Diplomatic efforts"
+      },
+      {
+        "q": "In the context of \"geopolitical tensions are escalating,\" what does \"escalating\" mean?",
+        "options": [
+          "A. Decreasing gradually",
+          "B. Remaining stable",
+          "C. Increasing rapidly",
+          "D. Shifting locations"
+        ],
+        "answer": "C. Increasing rapidly"
+      },
+      {
+        "q": "If instability could \"reshape\" global trade routes, what would it do to them?",
+        "options": [
+          "A. Make them more efficient",
+          "B. Fundamentally change their form or direction",
+          "C. Eliminate them entirely",
+          "D. Make them shorter"
+        ],
+        "answer": "B. Fundamentally change their form or direction"
+      },
+      {
+        "q": "Which of the following best defines a \"spillover effect\" as used in the article?",
+        "options": [
+          "A. A localized incident with no external impact",
+          "B. A positive outcome from a specific event",
+          "C. The indirect consequences of an event spreading beyond its initial scope",
+          "D. A planned strategic move by an international body"
+        ],
+        "answer": "C. The indirect consequences of an event spreading beyond its initial scope"
+      },
+      {
+        "q": "What is the overall tone of the news article?",
+        "options": [
+          "A. Optimistic and hopeful",
+          "B. Neutral and informative, with a cautious outlook",
+          "C. Alarmist and sensational",
+          "D. Humorous and lighthearted"
+        ],
+        "answer": "B. Neutral and informative, with a cautious outlook"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "全球通膨、美債、戰事三重風暴，投資人尋資產配置 (Triple Threat: Global Inflation, US Debt, War; Investors Seek Asset Strategies)",
+    "tabTitle": "金融市場",
+    "english": "As of April 1, 2026, global financial markets are navigating a challenging \"triple threat.\" Persistent global inflation, the growing U.S. national debt, and ongoing geopolitical conflicts are creating significant uncertainty. In response, investors are actively seeking new asset allocation strategies to safeguard their portfolios amidst these pressures. The confluence of these factors prompts a cautious outlook for economic stability and growth worldwide, driving demand for diversified investment approaches and a re-evaluation of traditional holdings.",
+    "chinese": "截至2026年4月1日，全球金融市場正應對一項艱鉅的「三重威脅」。持續的全球通膨、不斷增長的美國國債，以及持續的地緣政治衝突，正造成巨大的不確定性。為此，投資者正積極尋求新的資產配置策略，以在這些壓力下保護他們的投資組合。這些因素的匯流促使全球對經濟穩定和增長持謹慎態度，推動了多元化投資方法的需求，並重新評估傳統持股。",
+    "vocabulary": [
+      "Global (adj.): 全球的",
+      "Inflation (n.): 通貨膨脹",
+      "US Debt (n.): 美國國債",
+      "War (n.): 戰爭",
+      "Triple Threat (n. phrase): 三重威脅",
+      "Financial markets (n. phrase): 金融市場",
+      "Persistent (adj.): 持續的",
+      "Geopolitical conflicts (n. phrase): 地緣政治衝突",
+      "Uncertainty (n.): 不確定性",
+      "Investors (n.): 投資者",
+      "Asset allocation (n. phrase): 資產配置",
+      "Strategies (n.): 策略",
+      "Safeguard (v.): 保護，保衛",
+      "Portfolios (n.): 投資組合",
+      "Amidst (prep.): 在...之中",
+      "Pressures (n.): 壓力",
+      "Confluence (n.): 匯流，合流",
+      "Cautious outlook (n. phrase): 謹慎的展望",
+      "Economic stability (n. phrase): 經濟穩定",
+      "Diversified investment (n. phrase): 多元化投資"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news report?",
+        "options": [
+          "A. The rise of new investment technologies",
+          "B. Global financial challenges and investor responses",
+          "C. The impact of climate change on markets",
+          "D. Specific stock market performance in 2026"
+        ],
+        "answer": "B. Global financial challenges and investor responses"
+      },
+      {
+        "q": "When is this financial news report dated?",
+        "options": [
+          "A. March 1, 2026",
+          "B. April 1, 2026",
+          "C. January 1, 2026",
+          "D. December 1, 2025"
+        ],
+        "answer": "B. April 1, 2026"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as part of the \"triple threat\"?",
+        "options": [
+          "A. Persistent global inflation",
+          "B. Growing U.S. national debt",
+          "C. Ongoing geopolitical conflicts",
+          "D. Rapid technological advancements"
+        ],
+        "answer": "D. Rapid technological advancements"
+      },
+      {
+        "q": "What is the immediate effect of these three factors on financial markets?",
+        "options": [
+          "A. Increased predictability",
+          "B. Significant uncertainty",
+          "C. Stable growth",
+          "D. Reduced investor activity"
+        ],
+        "answer": "B. Significant uncertainty"
+      },
+      {
+        "q": "How are investors responding to these pressures?",
+        "options": [
+          "A. Withdrawing all investments",
+          "B. Ignoring the threats",
+          "C. Actively seeking new asset allocation strategies",
+          "D. Investing only in U.S. bonds"
+        ],
+        "answer": "C. Actively seeking new asset allocation strategies"
+      },
+      {
+        "q": "What is the primary goal for investors seeking new strategies?",
+        "options": [
+          "A. To maximize short-term gains",
+          "B. To safeguard their portfolios",
+          "C. To speculate on new markets",
+          "D. To fund government projects"
+        ],
+        "answer": "B. To safeguard their portfolios"
+      },
+      {
+        "q": "What kind of outlook do these factors prompt for economic stability worldwide?",
+        "options": [
+          "A. Optimistic",
+          "B. Indifferent",
+          "C. Cautious",
+          "D. Highly positive"
+        ],
+        "answer": "C. Cautious"
+      },
+      {
+        "q": "What kind of investment approaches are in demand due to these factors?",
+        "options": [
+          "A. Concentrated",
+          "B. Speculative",
+          "C. Traditional",
+          "D. Diversified"
+        ],
+        "answer": "D. Diversified"
+      },
+      {
+        "q": "In the context of the news, what does \"confluence\" refer to?",
+        "options": [
+          "A. A disagreement between market players",
+          "B. A meeting of financial experts",
+          "C. The coming together of multiple factors",
+          "D. A decline in market values"
+        ],
+        "answer": "C. The coming together of multiple factors"
+      },
+      {
+        "q": "What does it mean for investors to \"safeguard\" their portfolios?",
+        "options": [
+          "A. To put them at risk",
+          "B. To protect them from harm or loss",
+          "C. To make them publicly available",
+          "D. To exchange them for cash"
+        ],
+        "answer": "B. To protect them from harm or loss"
+      },
+      {
+        "q": "What is the meaning of \"persistent\" in \"persistent global inflation\"?",
+        "options": [
+          "A. Temporary",
+          "B. Sporadic",
+          "C. Continuing for a long time",
+          "D. Mild"
+        ],
+        "answer": "C. Continuing for a long time"
+      },
+      {
+        "q": "What are investors re-evaluating?",
+        "options": [
+          "A. Their personal spending habits",
+          "B. Traditional holdings",
+          "C. Government policies",
+          "D. The definition of inflation"
+        ],
+        "answer": "B. Traditional holdings"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "科技巨頭裁員潮持續，甲骨文因AI成本裁撤數千人 (Tech Layoffs Continue: Oracle Cuts Thousands Due to Soaring AI Costs)",
+    "tabTitle": "科技",
+    "english": "April 1, 2026. Tech Layoffs Continue: Oracle Cuts Thousands Due to Soaring AI Costs. Technology giant Oracle has announced thousands of layoffs globally, effective immediately. The company stated that these significant job cuts are a direct consequence of the immense capital investment and operational expenses required for developing and integrating advanced artificial intelligence technologies. This decision highlights a growing challenge within the tech industry, as companies balance rapid AI innovation with the pressing need for cost efficiency and workforce optimization amidst a competitive market.",
+    "chinese": "2026年4月1日。科技裁員潮持續：甲骨文因AI成本飆升裁撤數千人。科技巨頭甲骨文已宣布在全球範圍內裁員數千人，即刻生效。該公司表示，這些大規模的裁員是開發和整合先進人工智慧技術所需龐大資本投入和營運費用的直接結果。這項決定凸顯了科技產業內日益嚴峻的挑戰，因為企業在快速的AI創新與在競爭激烈的市場中對成本效益和勞動力優化的迫切需求之間尋求平衡。",
+    "vocabulary": [
+      "Tech giant (n.phr.): 科技巨頭",
+      "Layoffs (n.pl.): 裁員",
+      "Soaring (adj.): 飆升的，急劇上漲的",
+      "Costs (n.pl.): 成本，費用",
+      "Globally (adv.): 全球範圍內",
+      "Effective immediately (phr.): 即刻生效",
+      "Announced (v.): 宣布",
+      "Significant (adj.): 重大的，顯著的",
+      "Expenses (n.pl.): 開支，費用",
+      "Associated with (phr.): 與...相關聯",
+      "Developing (v.gerund): 開發",
+      "Integrating (v.gerund): 整合",
+      "Advanced (adj.): 先進的",
+      "Artificial intelligence (n.phr.): 人工智慧 (AI)",
+      "Capital investment (n.phr.): 資本投資",
+      "Operational expenses (n.phr.): 營運費用",
+      "Consequence (n.): 結果，後果",
+      "Highlights (v.): 凸顯",
+      "Cost efficiency (n.phr.): 成本效益",
+      "Workforce optimization (n.phr.): 勞動力優化"
+    ],
+    "quiz": [
+      {
+        "q": "What company is mentioned in the news for cutting thousands of jobs?",
+        "options": [
+          "A: Microsoft",
+          "B: Apple",
+          "C: Oracle",
+          "D: Google"
+        ],
+        "answer": "C: Oracle"
+      },
+      {
+        "q": "When are the layoffs at Oracle effective?",
+        "options": [
+          "A: Next quarter",
+          "B: Next year",
+          "C: Immediately",
+          "D: Undetermined"
+        ],
+        "answer": "C: Immediately"
+      },
+      {
+        "q": "What is the primary reason Oracle is cutting jobs?",
+        "options": [
+          "A: Decreased market demand for their products.",
+          "B: High costs associated with AI development and integration.",
+          "C: A shift to remote work.",
+          "D: Mergers and acquisitions."
+        ],
+        "answer": "B: High costs associated with AI development and integration."
+      },
+      {
+        "q": "The news describes Oracle as a 'major technology ____'.",
+        "options": [
+          "A: startup",
+          "B: giant",
+          "C: consultant",
+          "D: research firm"
+        ],
+        "answer": "B: giant"
+      },
+      {
+        "q": "What kind of technology is specifically mentioned as being expensive for Oracle?",
+        "options": [
+          "A: Cloud computing",
+          "B: Cybersecurity",
+          "C: Advanced artificial intelligence",
+          "D: Virtual reality"
+        ],
+        "answer": "C: Advanced artificial intelligence"
+      },
+      {
+        "q": "What does 'soaring AI costs' imply?",
+        "options": [
+          "A: AI costs are decreasing rapidly.",
+          "B: AI costs are stable.",
+          "C: AI costs are increasing significantly.",
+          "D: AI costs are irrelevant."
+        ],
+        "answer": "C: AI costs are increasing significantly."
+      },
+      {
+        "q": "The news states the layoffs are happening 'globally'. What does this mean?",
+        "options": [
+          "A: Only in one specific country.",
+          "B: Across all continents.",
+          "C: Limited to North America.",
+          "D: Only in their headquarters."
+        ],
+        "answer": "B: Across all continents."
+      },
+      {
+        "q": "What is one of the challenges highlighted in the tech industry, according to the news?",
+        "options": [
+          "A: Lack of skilled workers.",
+          "B: Balancing rapid AI innovation with cost efficiency.",
+          "C: Too much government regulation.",
+          "D: Difficulty in finding new markets."
+        ],
+        "answer": "B: Balancing rapid AI innovation with cost efficiency."
+      },
+      {
+        "q": "What does 'capital investment' refer to in the context of AI?",
+        "options": [
+          "A: Investment in human resources only.",
+          "B: Money spent on long-term assets like equipment and infrastructure.",
+          "C: Daily operational spending.",
+          "D: Marketing budget."
+        ],
+        "answer": "B: Money spent on long-term assets like equipment and infrastructure."
+      },
+      {
+        "q": "The term 'workforce optimization' suggests companies are trying to:",
+        "options": [
+          "A: Increase their total number of employees.",
+          "B: Make their existing employees work longer hours.",
+          "C: Improve the efficiency and effectiveness of their staff.",
+          "D: Reduce employee benefits."
+        ],
+        "answer": "C: Improve the efficiency and effectiveness of their staff."
+      },
+      {
+        "q": "According to the article, Oracle's decision is a 'direct consequence' of what?",
+        "options": [
+          "A: A global economic recession.",
+          "B: Immense capital investment and operational expenses for AI.",
+          "C: A hostile takeover attempt.",
+          "D: A change in company leadership."
+        ],
+        "answer": "B: Immense capital investment and operational expenses for AI."
+      },
+      {
+        "q": "What is the overall tone of the news article?",
+        "options": [
+          "A: Optimistic and hopeful.",
+          "B: Alarmist and sensational.",
+          "C: Factual and informative.",
+          "D: Sarcastic and humorous."
+        ],
+        "answer": "C: Factual and informative."
+      }
+    ]
+  },
+  "article-6": {
+    "title": "資訊科技業無懼地緣衝突，S&P 500盈餘年增率估37% (IT Sector Resilient Amid Geopolitical Strife; S&P 500 Earnings Up 37%)",
+    "tabTitle": "金融市場",
+    "english": "April 1, 2026 – The Information Technology (IT) sector is demonstrating remarkable resilience despite ongoing geopolitical conflicts. Analysts predict a robust 37% year-over-year earnings growth for the S&P 500's IT constituents. This strong performance is driven by sustained demand for digital transformation and cloud services, alongside innovation in artificial intelligence. Experts suggest the sector's adaptability and global reach are key factors in its ability to navigate challenging economic landscapes.",
+    "chinese": "2026年4月1日 – 儘管地緣政治衝突持續不斷，資訊科技（IT）產業仍展現出卓越的韌性。分析師預測，標準普爾500指數中的資訊科技成分股將實現37%的強勁年度盈餘成長。這一強勁表現得益於對數位轉型和雲端服務的持續需求，以及人工智慧領域的創新。專家們認為，該產業的適應性和全球影響力是其應對充滿挑戰的經濟環境的關鍵因素。",
+    "vocabulary": [
+      "Information Technology (n.): 資訊科技",
+      "sector (n.): 產業；部門",
+      "demonstrate (v.): 展現；證明",
+      "remarkable (adj.): 卓越的；顯著的",
+      "resilience (n.): 韌性；彈性",
+      "despite (prep.): 儘管；雖然",
+      "ongoing (adj.): 持續進行的",
+      "geopolitical (adj.): 地緣政治的",
+      "conflict (n.): 衝突",
+      "analyst (n.): 分析師",
+      "predict (v.): 預測",
+      "robust (adj.): 強勁的；穩健的",
+      "year-over-year (adj.): 年度同比的",
+      "earnings growth (n. phrase): 盈餘成長",
+      "constituent (n.): 成分股；構成要素",
+      "sustained (adj.): 持續的",
+      "demand (n.): 需求",
+      "digital transformation (n. phrase): 數位轉型",
+      "cloud services (n. phrase): 雲端服務",
+      "innovation (n.): 創新"
+    ],
+    "quiz": [
+      {
+        "q": "What date is mentioned in the news?",
+        "options": [
+          "A. April 1, 2025",
+          "B. April 1, 2026",
+          "C. March 1, 2026",
+          "D. January 4, 2026"
+        ],
+        "answer": "B. April 1, 2026"
+      },
+      {
+        "q": "Which sector is the main subject of this news report?",
+        "options": [
+          "A. Financial sector",
+          "B. Manufacturing sector",
+          "C. Information Technology sector",
+          "D. Healthcare sector"
+        ],
+        "answer": "C. Information Technology sector"
+      },
+      {
+        "q": "What challenge is the IT sector facing?",
+        "options": [
+          "A. Economic recession",
+          "B. Geopolitical conflicts",
+          "C. Lack of innovation",
+          "D. Decreased demand"
+        ],
+        "answer": "B. Geopolitical conflicts"
+      },
+      {
+        "q": "How is the IT sector described in the face of these challenges?",
+        "options": [
+          "A. Struggling",
+          "B. Vulnerable",
+          "C. Resilient",
+          "D. Declining"
+        ],
+        "answer": "C. Resilient"
+      },
+      {
+        "q": "What is the predicted year-over-year earnings growth for S&P 500's IT constituents?",
+        "options": [
+          "A. 27%",
+          "B. 30%",
+          "C. 37%",
+          "D. 40%"
+        ],
+        "answer": "C. 37%"
+      },
+      {
+        "q": "Who made the prediction about the earnings growth?",
+        "options": [
+          "A. Government officials",
+          "B. Economists",
+          "C. Analysts",
+          "D. CEOs"
+        ],
+        "answer": "C. Analysts"
+      },
+      {
+        "q": "What is one of the drivers for the IT sector's strong performance?",
+        "options": [
+          "A. Reduced operating costs",
+          "B. Decreased competition",
+          "C. Sustained demand for digital transformation",
+          "D. Government subsidies"
+        ],
+        "answer": "C. Sustained demand for digital transformation"
+      },
+      {
+        "q": "Besides digital transformation, what other service is mentioned as a driver?",
+        "options": [
+          "A. E-commerce platforms",
+          "B. Cloud services",
+          "C. Social media",
+          "D. Cybersecurity"
+        ],
+        "answer": "B. Cloud services"
+      },
+      {
+        "q": "What technological advancement is contributing to the sector's strength?",
+        "options": [
+          "A. Biotechnology",
+          "B. Renewable energy",
+          "C. Artificial intelligence",
+          "D. Space exploration"
+        ],
+        "answer": "C. Artificial intelligence"
+      },
+      {
+        "q": "What are considered key factors in the sector's ability to navigate challenging economic landscapes?",
+        "options": [
+          "A. Low labor costs and government support",
+          "B. Adaptability and global reach",
+          "C. Monopoly and market dominance",
+          "D. Historical performance and brand recognition"
+        ],
+        "answer": "B. Adaptability and global reach"
+      },
+      {
+        "q": "The term \"robust\" in the context of earnings growth means:",
+        "options": [
+          "A. Weak",
+          "B. Moderate",
+          "C. Strong",
+          "D. Unstable"
+        ],
+        "answer": "C. Strong"
+      },
+      {
+        "q": "What does \"geopolitical strife\" refer to?",
+        "options": [
+          "A. Economic competition between companies",
+          "B. Conflicts and tensions between countries",
+          "C. Internal company disputes",
+          "D. Environmental challenges"
+        ],
+        "answer": "B. Conflicts and tensions between countries"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
