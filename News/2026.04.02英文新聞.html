@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 02, 2026：台灣經濟、金融市場 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電三月營收破1952億新台幣，年增34.3% (TSMC March Revenue Exceeds NT$195.2 Billion, Up 34.3% YoY)\nTSMC announced its March revenue reached over NT$195.2 billion, marking a significant 34.3% increase compared to the same period last year. This impressive performance reflects strong global demand for advanced semiconductors. The company's robust sales figures suggest a healthy recovery in the technology sector, further solidifying its leading position in the industry.\n\n[2] 台灣再生能源發展加速，離岸風電專案獲重大進展 (Taiwan Accelerates Renewable Energy, Offshore Wind Projects Advance)\nTaiwan is significantly accelerating its renewable energy development, with a strong focus on offshore wind power. On April 2, 2026, major progress was reported in several key offshore wind projects, moving closer to their operational phases. This advancement underscores Taiwan's commitment to transitioning towards a greener energy future and boosting its clean energy capacity. The government's proactive policies are actively supporting these initiatives to meet ambitious renewable energy targets.\n\n[3] 台灣勞動市場穩健成長，企業預期今年薪資有望提升 (Taiwan's Labor Market Grows Steadily, Wage Hikes Expected)\nTaiwan's labor market is experiencing robust growth, as a recent government report for the first quarter of 2026 indicates steady job creation and declining unemployment rates. Businesses across various sectors anticipate a general wage increase this year, driven by a positive economic outlook, persistent inflation, and the strong need to attract and retain skilled talent. This optimistic forecast suggests improved purchasing power for employees, which is expected to further bolster domestic consumption and overall economic stability.",
+    "chinese": "【1】台積電三月營收破1952億新台幣，年增34.3% (TSMC March Revenue Exceeds NT$195.2 Billion, Up 34.3% YoY)\n台積電宣布其三月營收達到超過新台幣1952億元，較去年同期顯著增長34.3%。這項令人印象深刻的表現反映了全球對先進半導體產品的強勁需求。該公司強勁的銷售數字顯示科技業正在穩健復甦，進一步鞏固了其在業界的領先地位。\n\n【2】台灣再生能源發展加速，離岸風電專案獲重大進展 (Taiwan Accelerates Renewable Energy, Offshore Wind Projects Advance)\n台灣正大幅加速其再生能源的發展，其中以離岸風力發電為重點。2026年4月2日，數個關鍵離岸風電專案取得了重大進展，使其更接近營運階段。這項進展突顯了台灣致力於轉型至更環保的能源未來，並提升其潔淨能源的產能。政府的積極政策正大力支持這些倡議，以實現其雄心勃勃的再生能源目標。\n\n【3】台灣勞動市場穩健成長，企業預期今年薪資有望提升 (Taiwan's Labor Market Grows Steadily, Wage Hikes Expected)\n台灣勞動市場正經歷強勁成長，一份政府最新報告指出，2026年第一季就業機會穩健增加，失業率持續下降。各行各業的企業預期今年將普遍調升薪資，其驅動力來自於樂觀的經濟前景、持續性的通膨，以及吸引和留住專業人才的強烈需求。這項樂觀的預測意味著員工的購買力將有所提升，預計將進一步提振國內消費並鞏固整體經濟穩定。",
+    "vocabulary": [
+      "TSMC (n.): 台積電",
+      "revenue (n.): 營收；收益",
+      "exceeds (v.): 超過；超出",
+      "billion (n.): 十億",
+      "YoY (abbr.): 年增率；同比",
+      "announced (v.): 宣布；公布",
+      "reached (v.): 達到",
+      "marking (v.): 標誌著",
+      "significant (adj.): 顯著的；重要的",
+      "increase (n.): 增長；增加",
+      "compared to (phr.): 與...相比",
+      "impressive (adj.): 令人印象深刻的",
+      "performance (n.): 表現；業績",
+      "reflects (v.): 反映",
+      "global (adj.): 全球的",
+      "demand (n.): 需求",
+      "advanced (adj.): 先進的",
+      "semiconductors (n.): 半導體",
+      "robust (adj.): 強勁的；穩健的",
+      "recovery (n.): 復甦；恢復",
+      "accelerate (v.): 加速",
+      "renewable energy (n.phr.): 再生能源",
+      "offshore wind power (n.phr.): 離岸風力發電",
+      "project (n.): 專案；計畫",
+      "advance (v.): 進展；推進",
+      "progress (n.): 進展；進步",
+      "operational phase (n.phr.): 營運階段",
+      "underscore (v.): 強調；突顯",
+      "commitment (n.): 承諾；致力",
+      "transition (v.): 轉型；過渡",
+      "greener energy (n.phr.): 更環保的能源",
+      "boost (v.): 提升；促進",
+      "clean energy (n.phr.): 潔淨能源",
+      "capacity (n.): 產能；容量",
+      "proactive (adj.): 積極主動的",
+      "policy (n.): 政策",
+      "initiative (n.): 倡議；計畫",
+      "ambitious (adj.): 雄心勃勃的",
+      "target (n.): 目標",
+      "development (n.): 發展",
+      "labor market (n.): 勞動市場",
+      "robust (adj.): 強勁的",
+      "steady (adj.): 穩定的",
+      "job creation (n.): 創造就業機會",
+      "declining (adj.): 下降的",
+      "unemployment rate (n.): 失業率",
+      "first quarter (n.): 第一季",
+      "sector (n.): 行業，部門",
+      "anticipate (v.): 預期",
+      "wage increase (n.): 薪資調升",
+      "driven by (phr.): 受...驅動",
+      "economic outlook (n.): 經濟前景",
+      "persistent (adj.): 持續的",
+      "inflation (n.): 通貨膨脹",
+      "attract (v.): 吸引",
+      "retain (v.): 留住",
+      "skilled talent (n.): 專業人才",
+      "optimistic forecast (n.): 樂觀預測",
+      "purchasing power (n.): 購買力",
+      "bolster (v.): 提振"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "TSMC's new product launch",
+          "TSMC's March financial results",
+          "Global economic slowdown",
+          "Taiwan's stock market trends"
+        ],
+        "answer": "TSMC's March financial results"
+      },
+      {
+        "q": "What was TSMC's March revenue?",
+        "options": [
+          "Over NT$195.2 billion",
+          "Exactly NT$195.2 billion",
+          "Under NT$195.2 billion",
+          "About NT$34.3 billion"
+        ],
+        "answer": "Over NT$195.2 billion"
+      },
+      {
+        "q": "By what percentage did TSMC's March revenue increase year-over-year?",
+        "options": [
+          "19.52%",
+          "34.3%",
+          "195.2%",
+          "3.43%"
+        ],
+        "answer": "34.3%"
+      },
+      {
+        "q": "What does 'YoY' primarily stand for in business contexts?",
+        "options": [
+          "Year of Yield",
+          "Year over Year",
+          "Your Own Year",
+          "Youthful Old Youth"
+        ],
+        "answer": "Year over Year"
+      },
+      {
+        "q": "According to the article, what is a key factor behind TSMC's impressive performance?",
+        "options": [
+          "Reduced production costs",
+          "Strong global demand for advanced semiconductors",
+          "Government subsidies",
+          "New marketing strategies"
+        ],
+        "answer": "Strong global demand for advanced semiconductors"
+      },
+      {
+        "q": "What does the phrase 'robust recovery in the technology sector' indicate?",
+        "options": [
+          "The technology sector is facing major challenges.",
+          "The technology sector is experiencing a strong period of growth after a downturn.",
+          "The technology sector is stagnant.",
+          "The technology sector is becoming less important."
+        ],
+        "answer": "The technology sector is experiencing a strong period of growth after a downturn."
+      },
+      {
+        "q": "The word 'significant' in 'significant 34.3% increase' is closest in meaning to:",
+        "options": [
+          "Minor",
+          "Slight",
+          "Noticeable and important",
+          "Irrelevant"
+        ],
+        "answer": "Noticeable and important"
+      },
+      {
+        "q": "What does the article suggest about TSMC's position in its industry?",
+        "options": [
+          "It is a new entrant.",
+          "It is struggling to compete.",
+          "It is a market leader.",
+          "It is a small niche player."
+        ],
+        "answer": "It is a market leader."
+      },
+      {
+        "q": "What does 'revenue' refer to?",
+        "options": [
+          "The total amount of money a company takes in from sales",
+          "The profit a company makes after expenses",
+          "The company's total assets",
+          "The number of employees a company has"
+        ],
+        "answer": "The total amount of money a company takes in from sales"
+      },
+      {
+        "q": "The phrase 'solidifying its leading position' implies that TSMC is:",
+        "options": [
+          "Losing market share rapidly",
+          "Maintaining and strengthening its top status",
+          "Just starting to gain recognition",
+          "Considering a merger with another company"
+        ],
+        "answer": "Maintaining and strengthening its top status"
+      },
+      {
+        "q": "Which of these is an example of an 'advanced semiconductor'?",
+        "options": [
+          "An old vacuum tube",
+          "A basic light bulb",
+          "A cutting-edge computer chip",
+          "A simple resistor"
+        ],
+        "answer": "A cutting-edge computer chip"
+      },
+      {
+        "q": "Based on the news, the overall sentiment regarding TSMC's financial health is:",
+        "options": [
+          "Negative",
+          "Neutral",
+          "Positive",
+          "Uncertain"
+        ],
+        "answer": "Positive"
+      },
+      {
+        "q": "What is the main focus of Taiwan's accelerated renewable energy development?",
+        "options": [
+          "Solar power",
+          "Hydropower",
+          "Offshore wind power",
+          "Geothermal energy"
+        ],
+        "answer": "Offshore wind power"
+      },
+      {
+        "q": "What specific date is mentioned for the reported progress?",
+        "options": [
+          "April 2, 2025",
+          "April 2, 2026",
+          "March 15, 2026",
+          "May 1, 2026"
+        ],
+        "answer": "April 2, 2026"
+      },
+      {
+        "q": "What kind of progress was reported for several key offshore wind projects?",
+        "options": [
+          "They were completed",
+          "They moved closer to their operational phases",
+          "They faced significant delays",
+          "They secured new funding"
+        ],
+        "answer": "They moved closer to their operational phases"
+      },
+      {
+        "q": "What does this advancement underscore about Taiwan?",
+        "options": [
+          "Its economic challenges",
+          "Its commitment to a greener energy future",
+          "Its reliance on fossil fuels",
+          "Its technological limitations"
+        ],
+        "answer": "Its commitment to a greener energy future"
+      },
+      {
+        "q": "What is one of the goals of Taiwan's transition mentioned in the news?",
+        "options": [
+          "To reduce manufacturing output",
+          "To decrease energy consumption",
+          "To boost its clean energy capacity",
+          "To stop all energy imports"
+        ],
+        "answer": "To boost its clean energy capacity"
+      },
+      {
+        "q": "What role do government policies play in these initiatives?",
+        "options": [
+          "They are hindering progress",
+          "They are actively supporting them",
+          "They are under review",
+          "They are irrelevant"
+        ],
+        "answer": "They are actively supporting them"
+      },
+      {
+        "q": "What does the word \"accelerating\" mean in the context of the news?",
+        "options": [
+          "Slowing down",
+          "Speeding up",
+          "Halting",
+          "Maintaining"
+        ],
+        "answer": "Speeding up"
+      },
+      {
+        "q": "If a project is moving closer to its \"operational phase,\" what does that imply?",
+        "options": [
+          "It's facing design issues",
+          "It's nearing completion and ready to start working",
+          "It's being dismantled",
+          "It's just starting planning"
+        ],
+        "answer": "It's nearing completion and ready to start working"
+      },
+      {
+        "q": "What does \"underscore\" mean in the sentence \"This advancement underscores Taiwan's commitment...\"?",
+        "options": [
+          "Hide",
+          "Weaken",
+          "Emphasize",
+          "Ignore"
+        ],
+        "answer": "Emphasize"
+      },
+      {
+        "q": "What does \"greener energy future\" primarily refer to?",
+        "options": [
+          "More colorful energy sources",
+          "Energy from environmentally friendly sources",
+          "Energy that is cheaper to produce",
+          "Energy that is less efficient"
+        ],
+        "answer": "Energy from environmentally friendly sources"
+      },
+      {
+        "q": "What are \"ambitious renewable energy targets\"?",
+        "options": [
+          "Easy-to-achieve goals for energy",
+          "Challenging and high goals for renewable energy",
+          "Goals that are not well-defined",
+          "Targets that focus on traditional energy"
+        ],
+        "answer": "Challenging and high goals for renewable energy"
+      },
+      {
+        "q": "The news states the government is supporting \"these initiatives.\" What is an \"initiative\" in this context?",
+        "options": [
+          "A problem or obstacle",
+          "A new plan or program",
+          "A financial debt",
+          "A political debate"
+        ],
+        "answer": "A new plan or program"
+      },
+      {
+        "q": "What is the main subject of this news article?",
+        "options": [
+          "Taiwan's political stability",
+          "Taiwan's labor market and wage expectations",
+          "Taiwan's technological advancements",
+          "Taiwan's tourism industry trends"
+        ],
+        "answer": "Taiwan's labor market and wage expectations"
+      },
+      {
+        "q": "According to the article, what describes the state of Taiwan's labor market?",
+        "options": [
+          "Stagnant",
+          "Declining",
+          "Robust growth",
+          "Uncertain"
+        ],
+        "answer": "Robust growth"
+      },
+      {
+        "q": "The government report mentioned covers which period?",
+        "options": [
+          "The last quarter of 2025",
+          "The first quarter of 2026",
+          "The entire year of 2026",
+          "The second quarter of 2026"
+        ],
+        "answer": "The first quarter of 2026"
+      },
+      {
+        "q": "What trend is observed regarding job creation in Taiwan?",
+        "options": [
+          "It is decreasing rapidly.",
+          "It is stagnant.",
+          "It is showing steady growth.",
+          "It is only happening in the tech sector."
+        ],
+        "answer": "It is showing steady growth."
+      },
+      {
+        "q": "What is happening to unemployment rates in Taiwan?",
+        "options": [
+          "They are rising.",
+          "They are stable.",
+          "They are declining.",
+          "The article does not mention them."
+        ],
+        "answer": "They are declining."
+      },
+      {
+        "q": "What are businesses across various sectors anticipating for this year?",
+        "options": [
+          "A decrease in profits",
+          "A general wage increase",
+          "A reduction in workforce",
+          "Increased foreign competition"
+        ],
+        "answer": "A general wage increase"
+      },
+      {
+        "q": "Which of the following is NOT listed as a driver for the anticipated wage increases?",
+        "options": [
+          "A positive economic outlook",
+          "Persistent inflation",
+          "The need to attract and retain skilled talent",
+          "A decrease in production costs"
+        ],
+        "answer": "A decrease in production costs"
+      },
+      {
+        "q": "What does 'a positive economic outlook' refer to in the article?",
+        "options": [
+          "A gloomy view of the economy",
+          "An optimistic perspective on future economic conditions",
+          "A stable exchange rate",
+          "A balanced trade surplus"
+        ],
+        "answer": "An optimistic perspective on future economic conditions"
+      },
+      {
+        "q": "What is the expected impact of the optimistic forecast on employees?",
+        "options": [
+          "Reduced job security",
+          "Improved purchasing power",
+          "Increased working hours",
+          "Lower benefits"
+        ],
+        "answer": "Improved purchasing power"
+      },
+      {
+        "q": "What is expected to be further bolstered by improved purchasing power?",
+        "options": [
+          "Government debt",
+          "Export volume",
+          "Domestic consumption and overall economic stability",
+          "Foreign investment"
+        ],
+        "answer": "Domestic consumption and overall economic stability"
+      },
+      {
+        "q": "What does the term 'retain' mean in the context of 'attract and retain skilled talent'?",
+        "options": [
+          "To dismiss",
+          "To keep or continue to have",
+          "To train new employees",
+          "To relocate"
+        ],
+        "answer": "To keep or continue to have"
+      },
+      {
+        "q": "The style of this news article can be best described as:",
+        "options": [
+          "Subjective and opinionated",
+          "Narrative and anecdotal",
+          "Factual and objective",
+          "Persuasive and argumentative"
+        ],
+        "answer": "Factual and objective"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "日本央行終結負利率政策，結束八年超寬鬆時代 (Bank of Japan Ends Negative Rates, Concludes Eight-Year Ultra-Loose Policy)",
+    "tabTitle": "金融市場",
+    "english": "The Bank of Japan (BOJ) announced on April 2, 2026, the end of its negative interest rate policy. This historic decision concludes an eight-year period of ultra-loose monetary policy, marking a significant shift in the nation's economic strategy. The BOJ also scrapped its yield curve control program and discontinued purchases of exchange-traded funds (ETFs). This move comes as inflation has steadily approached the central bank's 2% target, suggesting a more stable economic outlook for Japan.",
+    "chinese": "日本銀行 (BOJ) 於 2026 年 4 月 2 日宣布結束其負利率政策。這項歷史性決定終結了長達八年的超寬鬆貨幣政策，標誌著該國經濟戰略的重大轉變。日本央行還取消了其殖利率曲線控制計畫，並停止購買交易所交易基金 (ETFs)。此舉正值通膨穩定接近央行 2% 的目標，預示著日本經濟前景將更加穩定。",
+    "vocabulary": [
+      "Bank of Japan (n.): 日本銀行 (日本央行)",
+      "negative interest rate policy (n.): 負利率政策",
+      "ultra-loose monetary policy (n.): 超寬鬆貨幣政策",
+      "conclude (v.): 結束，終結",
+      "historic (adj.): 歷史性的",
+      "decision (n.): 決定",
+      "significant (adj.): 重大的",
+      "shift (n.): 轉變",
+      "economic strategy (n.): 經濟戰略",
+      "scrap (v.): 取消，廢除",
+      "yield curve control (n.): 殖利率曲線控制",
+      "discontinue (v.): 停止，中止",
+      "purchase (v.): 購買",
+      "exchange-traded funds (ETFs) (n.): 交易所交易基金",
+      "inflation (n.): 通貨膨脹",
+      " steadily (adv.): 穩定地，持續地",
+      "approach (v.): 接近",
+      "central bank (n.): 中央銀行",
+      "target (n.): 目標",
+      "economic outlook (n.): 經濟前景"
+    ],
+    "quiz": [
+      {
+        "q": "When did the Bank of Japan announce the end of its negative interest rate policy?",
+        "options": [
+          "A) March 2, 2026",
+          "B) April 2, 2026",
+          "C) May 2, 2026",
+          "D) April 2, 2025"
+        ],
+        "answer": "B) April 2, 2026"
+      },
+      {
+        "q": "What policy did the Bank of Japan end?",
+        "options": [
+          "A) Quantitative easing",
+          "B) Negative interest rate policy",
+          "C) Fiscal stimulus",
+          "D) Export subsidies"
+        ],
+        "answer": "B) Negative interest rate policy"
+      },
+      {
+        "q": "How long had the ultra-loose monetary policy been in place?",
+        "options": [
+          "A) Five years",
+          "B) Six years",
+          "C) Seven years",
+          "D) Eight years"
+        ],
+        "answer": "D) Eight years"
+      },
+      {
+        "q": "What does the end of the negative interest rate policy signify for Japan's economic strategy?",
+        "options": [
+          "A) A minor adjustment",
+          "B) No change",
+          "C) A significant shift",
+          "D) A temporary pause"
+        ],
+        "answer": "C) A significant shift"
+      },
+      {
+        "q": "Besides ending negative rates, what other program did the BOJ scrap?",
+        "options": [
+          "A) Quantitative easing",
+          "B) Asset purchasing program",
+          "C) Yield curve control",
+          "D) Direct foreign investment"
+        ],
+        "answer": "C) Yield curve control"
+      },
+      {
+        "q": "What type of funds did the BOJ discontinue purchasing?",
+        "options": [
+          "A) Mutual funds",
+          "B) Hedge funds",
+          "C) Private equity funds",
+          "D) Exchange-traded funds (ETFs)"
+        ],
+        "answer": "D) Exchange-traded funds (ETFs)"
+      },
+      {
+        "q": "What was the central bank's inflation target mentioned in the news?",
+        "options": [
+          "A) 1%",
+          "B) 2%",
+          "C) 3%",
+          "D) 4%"
+        ],
+        "answer": "B) 2%"
+      },
+      {
+        "q": "The term 'ultra-loose monetary policy' refers to:",
+        "options": [
+          "A) Policies that tighten money supply",
+          "B) Policies that encourage borrowing and spending",
+          "C) Policies that focus on fiscal responsibility",
+          "D) Policies that restrict international trade"
+        ],
+        "answer": "B) Policies that encourage borrowing and spending"
+      },
+      {
+        "q": "What does 'scrap' mean in the context of the news?",
+        "options": [
+          "A) To create",
+          "B) To maintain",
+          "C) To abolish or cancel",
+          "D) To strengthen"
+        ],
+        "answer": "C) To abolish or cancel"
+      },
+      {
+        "q": "What does 'economic outlook' mean?",
+        "options": [
+          "A) Past economic performance",
+          "B) Current economic challenges",
+          "C) Future economic prospects",
+          "D) Government economic reports"
+        ],
+        "answer": "C) Future economic prospects"
+      },
+      {
+        "q": "What suggests a more stable economic outlook for Japan, according to the news?",
+        "options": [
+          "A) Decreasing inflation",
+          "B) Increasing unemployment",
+          "C) Inflation steadily approaching the 2% target",
+          "D) A weaker yen"
+        ],
+        "answer": "C) Inflation steadily approaching the 2% target"
+      },
+      {
+        "q": "The Bank of Japan's actions are considered a 'historic decision' because:",
+        "options": [
+          "A) It's the first time they've changed any policy",
+          "B) It marks a major reversal of a long-standing policy",
+          "C) It was unexpected by all economists",
+          "D) It only affects international markets"
+        ],
+        "answer": "B) It marks a major reversal of a long-standing policy"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "中國三月製造業PMI升至50.4，創一年新高 (China's March Manufacturing PMI Rises to 50.4, Hits One-Year High)",
+    "tabTitle": "金融市場",
+    "english": "China's official manufacturing Purchasing Managers' Index (PMI) rose to 50.4 in March 2026, marking its highest level in a year. This figure, released on April 2nd, indicates an expansion in factory activity, as any reading above 50 suggests growth. The increase signals a strengthening recovery in the world's second-largest economy, potentially boosting global trade and investor confidence. Analysts suggest that robust domestic demand and improving export orders contributed to this positive trend.",
+    "chinese": "中國官方製造業採購經理人指數（PMI）在2026年3月升至50.4，達到一年來的新高。這項於4月2日發布的數據顯示工廠活動正在擴張，因為任何高於50的讀數都代表增長。這一增長預示著世界第二大經濟體的復甦正在加強，可能提振全球貿易和投資者信心。分析師指出，強勁的國內需求和改善的出口訂單是促成這一積極趨勢的因素。",
+    "vocabulary": [
+      "official (adj.): 官方的",
+      "manufacturing (n.): 製造業",
+      "Purchasing Managers' Index (n.): 採購經理人指數 (PMI)",
+      "rose (v.): 上升 (rise 的過去式)",
+      "marking (v.): 標誌著",
+      "highest level (n.phr.): 最高水準",
+      "released (v.): 發布 (release 的過去式)",
+      "indicates (v.): 指示，表明",
+      "expansion (n.): 擴張",
+      "factory activity (n.phr.): 工廠活動",
+      "reading (n.): 讀數",
+      "suggests (v.): 暗示，表明",
+      "growth (n.): 增長",
+      "signals (v.): 發出信號，預示",
+      "strengthening recovery (n.phr.): 正在加強的復甦",
+      "second-largest economy (n.phr.): 第二大經濟體",
+      "potentially (adv.): 可能地",
+      "boosting (v.): 提振，促進",
+      "global trade (n.phr.): 全球貿易",
+      "investor confidence (n.phr.): 投資者信心"
+    ],
+    "quiz": [
+      {
+        "q": "What was China's official manufacturing PMI in March 2026?",
+        "options": [
+          "A. 50.0",
+          "B. 50.4",
+          "C. 49.6",
+          "D. 51.2"
+        ],
+        "answer": "B. 50.4"
+      },
+      {
+        "q": "The March 2026 PMI reading represents what for the past year?",
+        "options": [
+          "A. Its lowest point",
+          "B. A slight decline",
+          "C. Its highest level",
+          "D. A stable period"
+        ],
+        "answer": "C. Its highest level"
+      },
+      {
+        "q": "According to the article, what does a PMI reading above 50 suggest?",
+        "options": [
+          "A. Contraction in factory activity",
+          "B. Stagnation in factory activity",
+          "C. Expansion in factory activity",
+          "D. Uncertainty in factory activity"
+        ],
+        "answer": "C. Expansion in factory activity"
+      },
+      {
+        "q": "When was the data for China's March 2026 manufacturing PMI released?",
+        "options": [
+          "A. February 2026",
+          "B. March 2026",
+          "C. April 2nd",
+          "D. April 1st"
+        ],
+        "answer": "C. April 2nd"
+      },
+      {
+        "q": "What does the increase in PMI signal for the world's second-largest economy?",
+        "options": [
+          "A. A slowdown in recovery",
+          "B. A strengthening recovery",
+          "C. A period of stagnation",
+          "D. Increased inflation risks"
+        ],
+        "answer": "B. A strengthening recovery"
+      },
+      {
+        "q": "China is described in the article as which of the following?",
+        "options": [
+          "A. The world's largest economy",
+          "B. The world's third-largest economy",
+          "C. The world's second-largest economy",
+          "D. A developing economy"
+        ],
+        "answer": "C. The world's second-largest economy"
+      },
+      {
+        "q": "What is one potential positive impact of the increased PMI mentioned in the article?",
+        "options": [
+          "A. Decreased global trade",
+          "B. Lower investor confidence",
+          "C. Boosting global trade",
+          "D. Reduced domestic demand"
+        ],
+        "answer": "C. Boosting global trade"
+      },
+      {
+        "q": "Besides global trade, what other factor might be boosted by the strengthening recovery?",
+        "options": [
+          "A. Government spending",
+          "B. Investor confidence",
+          "C. Unemployment rates",
+          "D. Interest rates"
+        ],
+        "answer": "B. Investor confidence"
+      },
+      {
+        "q": "What did analysts suggest contributed to this positive trend?",
+        "options": [
+          "A. Weak domestic demand and declining export orders",
+          "B. Robust domestic demand and improving export orders",
+          "C. Government subsidies and foreign investment",
+          "D. Reduced production and inventory buildup"
+        ],
+        "answer": "B. Robust domestic demand and improving export orders"
+      },
+      {
+        "q": "The term \"expansion\" in the context of factory activity means:",
+        "options": [
+          "A. A decrease in production",
+          "B. A period of no change",
+          "C. An increase in activity",
+          "D. A shift to different industries"
+        ],
+        "answer": "C. An increase in activity"
+      },
+      {
+        "q": "How long had it been since China's manufacturing PMI reached this level?",
+        "options": [
+          "A. Six months",
+          "B. One year",
+          "C. Two years",
+          "D. Five years"
+        ],
+        "answer": "B. One year"
+      },
+      {
+        "q": "Which of the following best describes the nature of the news content?",
+        "options": [
+          "A. Opinion piece",
+          "B. Speculative analysis",
+          "C. Factual report",
+          "D. Personal anecdote"
+        ],
+        "answer": "C. Factual report"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "國際太空站成功完成關鍵擴建任務，提升科研能力 (International Space Station Completes Key Expansion, Boosting Research Capabilities)",
+    "tabTitle": "國際大事",
+    "english": "The International Space Station (ISS) successfully completed a crucial expansion mission on April 2, 2026. Astronauts installed a new module, significantly increasing the station's habitable volume and laboratory space. This upgrade is expected to boost the ISS's scientific research capabilities, allowing for more complex experiments in microgravity. The expanded facilities will support longer-duration missions and accommodate a greater number of international scientific payloads, marking a significant milestone in space exploration.",
+    "chinese": "國際太空站（ISS）於2026年4月2日成功完成了一項關鍵的擴建任務。太空人安裝了一個新艙段，顯著增加了太空站的居住體積和實驗室空間。這次升級預計將提升ISS的科學研究能力，使其能夠進行更複雜的微重力實驗。擴大的設施將支持更長時間的任務並容納更多國際科學酬載，標誌著太空探索的一個重要里程碑。",
+    "vocabulary": [
+      "International Space Station (n.): 國際太空站",
+      "successfully (adv.): 成功地",
+      "crucial (adj.): 關鍵的；重要的",
+      "expansion (n.): 擴建；擴張",
+      "mission (n.): 任務",
+      "installed (v.): 安裝",
+      "module (n.): 艙段；模組",
+      "significantly (adv.): 顯著地",
+      "habitable (adj.): 可居住的",
+      "volume (n.): 體積",
+      "laboratory space (n.): 實驗室空間",
+      "upgrade (n.): 升級",
+      "boost (v.): 提升；促進",
+      "scientific research (n.): 科學研究",
+      "capabilities (n.): 能力",
+      "complex (adj.): 複雜的",
+      "microgravity (n.): 微重力",
+      "accommodate (v.): 容納",
+      "scientific payloads (n.): 科學酬載",
+      "milestone (n.): 里程碑"
+    ],
+    "quiz": [
+      {
+        "q": "What organization successfully completed a crucial expansion mission?",
+        "options": [
+          "A. NASA",
+          "B. ESA",
+          "C. International Space Station",
+          "D. SpaceX"
+        ],
+        "answer": "International Space Station"
+      },
+      {
+        "q": "When did the expansion mission take place?",
+        "options": [
+          "A. March 2, 2026",
+          "B. April 2, 2026",
+          "C. May 2, 2026",
+          "D. June 2, 2026"
+        ],
+        "answer": "April 2, 2026"
+      },
+      {
+        "q": "What did astronauts install during the mission?",
+        "options": [
+          "A. A new telescope",
+          "B. A new module",
+          "C. A new antenna",
+          "D. A new solar panel"
+        ],
+        "answer": "A new module"
+      },
+      {
+        "q": "What two things did the new installation significantly increase?",
+        "options": [
+          "A. Power supply and communication",
+          "B. Speed and altitude",
+          "C. Habitable volume and laboratory space",
+          "D. Crew size and fuel capacity"
+        ],
+        "answer": "Habitable volume and laboratory space"
+      },
+      {
+        "q": "What is the primary expectation of this upgrade?",
+        "options": [
+          "A. To attract more tourists",
+          "B. To reduce operational costs",
+          "C. To boost scientific research capabilities",
+          "D. To prepare for Mars mission"
+        ],
+        "answer": "To boost scientific research capabilities"
+      },
+      {
+        "q": "What kind of experiments will the ISS be able to conduct more of after the upgrade?",
+        "options": [
+          "A. Simple experiments",
+          "B. Complex experiments in microgravity",
+          "C. Atmospheric experiments",
+          "D. Geological experiments"
+        ],
+        "answer": "Complex experiments in microgravity"
+      },
+      {
+        "q": "What will the expanded facilities support?",
+        "options": [
+          "A. Shorter-duration missions",
+          "B. Longer-duration missions",
+          "C. Only manned missions",
+          "D. Only unmanned missions"
+        ],
+        "answer": "Longer-duration missions"
+      },
+      {
+        "q": "What else will the expanded facilities accommodate?",
+        "options": [
+          "A. Fewer international scientific payloads",
+          "B. A greater number of international scientific payloads",
+          "C. More private companies",
+          "D. Only military equipment"
+        ],
+        "answer": "A greater number of international scientific payloads"
+      },
+      {
+        "q": "How is this expansion described in relation to space exploration?",
+        "options": [
+          "A. A minor setback",
+          "B. An unexpected challenge",
+          "C. A significant milestone",
+          "D. A temporary solution"
+        ],
+        "answer": "A significant milestone"
+      },
+      {
+        "q": "What is the meaning of \"crucial\" in the context of the news?",
+        "options": [
+          "A. Minor",
+          "B. Unimportant",
+          "C. Essential",
+          "D. Optional"
+        ],
+        "answer": "Essential"
+      },
+      {
+        "q": "Which of the following was NOT directly increased by the new module?",
+        "options": [
+          "A. Habitable volume",
+          "B. Laboratory space",
+          "C. Research capabilities",
+          "D. Astronauts' salaries"
+        ],
+        "answer": "Astronauts' salaries"
+      },
+      {
+        "q": "The news implies that the ISS's ability to perform scientific work will:",
+        "options": [
+          "A. Remain the same",
+          "B. Decrease slightly",
+          "C. Improve considerably",
+          "D. Be outsourced"
+        ],
+        "answer": "Improve considerably"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "全球加密貨幣市場監管趨嚴，各國政府加強投資者保護 (Global Cryptocurrency Market Faces Stricter Regulation, Enhanced Investor Protection)",
+    "tabTitle": "金融市場",
+    "english": "On April 2, 2026, global financial authorities significantly intensified efforts to regulate the volatile cryptocurrency market. Governments worldwide are actively implementing stricter rules and comprehensive frameworks to enhance investor protection, directly addressing growing concerns over fraud, market manipulation, and illicit activities. These new measures aim to ensure greater transparency and stability within digital asset trading platforms. This reflects a growing international consensus among nations to mitigate inherent risks associated with decentralized finance and effectively safeguard consumers from potential losses.",
+    "chinese": "2026年4月2日，全球金融主管機關顯著加強了對不穩定加密貨幣市場的監管力度。世界各國政府正積極實施更嚴格的規定和全面性的框架，以提升投資者保護，直接處理日益增長的詐欺、市場操縱和非法活動等擔憂。這些新措施旨在確保數位資產交易平台內具有更高的透明度和穩定性。這反映了各國之間日益增長的國際共識，即減輕與去中心化金融相關的固有風險，並有效保護消費者免受潛在損失。",
+    "vocabulary": [
+      "financial authorities (n.): 金融主管機關",
+      "intensified (v.): 加強；強化",
+      "regulate (v.): 監管；規範",
+      "volatile (adj.): 不穩定的；波動的",
+      "cryptocurrency market (n.): 加密貨幣市場",
+      "implementing (v.): 實施；執行",
+      "stricter rules (n.): 更嚴格的規定",
+      "comprehensive frameworks (n.): 全面性框架",
+      "enhance (v.): 提升；加強",
+      "investor protection (n.): 投資者保護",
+      "addressing concerns (phr.): 處理擔憂",
+      "fraud (n.): 詐欺",
+      "market manipulation (n.): 市場操縱",
+      "illicit activities (n.): 非法活動",
+      "transparency (n.): 透明度",
+      "stability (n.): 穩定性",
+      "digital asset trading platforms (n.): 數位資產交易平台",
+      "international consensus (n.): 國際共識",
+      "mitigate (v.): 減輕；緩和",
+      "decentralized finance (n.): 去中心化金融 (DeFi)"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news on April 2, 2026?",
+        "options": [
+          "A. The rise of new cryptocurrencies",
+          "B. Global efforts to regulate the cryptocurrency market",
+          "C. New investment opportunities in digital assets",
+          "D. The decrease in cryptocurrency prices"
+        ],
+        "answer": "B. Global efforts to regulate the cryptocurrency market"
+      },
+      {
+        "q": "Which entities have intensified efforts to regulate the cryptocurrency market?",
+        "options": [
+          "A. Individual investors",
+          "B. Cryptocurrency exchanges",
+          "C. Global financial authorities",
+          "D. Technology companies"
+        ],
+        "answer": "C. Global financial authorities"
+      },
+      {
+        "q": "What characteristic describes the cryptocurrency market, according to the news?",
+        "options": [
+          "A. Stable",
+          "B. Predictable",
+          "C. Volatile",
+          "D. Stagnant"
+        ],
+        "answer": "C. Volatile"
+      },
+      {
+        "q": "What are governments worldwide implementing to enhance investor protection?",
+        "options": [
+          "A. Marketing campaigns",
+          "B. Stricter rules and comprehensive frameworks",
+          "C. New cryptocurrency tokens",
+          "D. Decentralized investment funds"
+        ],
+        "answer": "B. Stricter rules and comprehensive frameworks"
+      },
+      {
+        "q": "What are some of the concerns that new regulations aim to address?",
+        "options": [
+          "A. High transaction fees",
+          "B. Slow processing times",
+          "C. Fraud, market manipulation, and illicit activities",
+          "D. Lack of innovation"
+        ],
+        "answer": "C. Fraud, market manipulation, and illicit activities"
+      },
+      {
+        "q": "What do the new measures aim to ensure within digital asset trading platforms?",
+        "options": [
+          "A. Higher returns",
+          "B. Greater transparency and stability",
+          "C. Faster transactions",
+          "D. Anonymity"
+        ],
+        "answer": "B. Greater transparency and stability"
+      },
+      {
+        "q": "What does the move towards stricter regulation reflect among nations?",
+        "options": [
+          "A. A disagreement",
+          "B. A growing international consensus",
+          "C. A lack of understanding",
+          "D. A desire for less regulation"
+        ],
+        "answer": "B. A growing international consensus"
+      },
+      {
+        "q": "What is the purpose of mitigating risks associated with decentralized finance?",
+        "options": [
+          "A. To eliminate all cryptocurrencies",
+          "B. To encourage more speculative trading",
+          "C. To effectively safeguard consumers from potential losses",
+          "D. To increase government control over all financial assets"
+        ],
+        "answer": "C. To effectively safeguard consumers from potential losses"
+      },
+      {
+        "q": "The term \"illicit activities\" most likely refers to:",
+        "options": [
+          "A. Legal business operations",
+          "B. Creative marketing strategies",
+          "C. Unlawful or forbidden actions",
+          "D. Charitable endeavors"
+        ],
+        "answer": "C. Unlawful or forbidden actions"
+      },
+      {
+        "q": "What does \"enhance\" mean in the context of \"enhance investor protection\"?",
+        "options": [
+          "A. To decrease",
+          "B. To weaken",
+          "C. To improve or intensify",
+          "D. To ignore"
+        ],
+        "answer": "C. To improve or intensify"
+      },
+      {
+        "q": "The news suggests that global financial authorities are moving towards:",
+        "options": [
+          "A. Deregulation of the crypto market",
+          "B. A hands-off approach",
+          "C. More active supervision and control",
+          "D. Promoting anonymity in transactions"
+        ],
+        "answer": "C. More active supervision and control"
+      },
+      {
+        "q": "What is \"decentralized finance\" (DeFi) mentioned in the news?",
+        "options": [
+          "A. Traditional banking systems",
+          "B. Financial services built on blockchain technology, independent of central intermediaries",
+          "C. Government-controlled financial institutions",
+          "D. A new type of stock market"
+        ],
+        "answer": "B. Financial services built on blockchain technology, independent of central intermediaries"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
