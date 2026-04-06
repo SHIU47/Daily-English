@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 07, 2026：科技、地緣政治 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 面板業轉型「光進銅退」，AI帶動光通訊新商機 (Panel Industry Shifts to Photonics, AI Drives Optical Communication)\nThe panel industry is undergoing a significant transformation, moving from traditional copper-based technologies to photonics, a trend often described as \"light in, copper out.\" This shift is primarily driven by the increasing demands for higher bandwidth and faster data transmission. Furthermore, the rapid development of Artificial Intelligence (AI) is creating new and substantial business opportunities within the optical communication sector, as AI applications require robust and high-speed networks.\n\n[2] 台積電Q1法說會將登場，市場聚焦未來營運展望 (TSMC Q1 Earnings Call Upcoming, Market Eyes Outlook)\nOn April 7, 2026, TSMC's first-quarter earnings call is highly anticipated. Investors and analysts are keenly observing the event for insights into the company's future operational outlook. The semiconductor giant is expected to discuss its performance, capital expenditure plans, and market trends. Focus will be on potential impacts from global economic shifts and technological advancements, which could significantly influence TSMC's revenue and profitability in the coming quarters.\n\n[3] AI熱潮延燒，台灣科技股2026年後市持續看俏 (AI Boom Continues, Taiwan Tech Stocks Outlook Bright for 2026)\nTaipei, Taiwan – April 7, 2026. The global artificial intelligence (AI) boom is expected to sustain its momentum throughout 2026, significantly boosting Taiwan's technology sector. Analysts predict a bright outlook for Taiwanese tech stocks, driven by strong demand for advanced chips and AI-related hardware. Major Taiwanese companies, key suppliers in the global AI supply chain, are poised for continued growth. This sustained demand is anticipated to fuel robust earnings and investment in the sector.",
+    "chinese": "【1】面板業轉型「光進銅退」，AI帶動光通訊新商機 (Panel Industry Shifts to Photonics, AI Drives Optical Communication)\n面板產業正經歷一場重大轉型，從傳統的銅基技術轉向光子學，這趨勢常被描述為「光進銅退」。此轉變主要由對更高頻寬和更快數據傳輸日益增長的需求所驅動。此外，人工智慧（AI）的快速發展正在光通訊領域創造新的、實質性的商機，因為AI應用需要強大且高速的網路。\n\n【2】台積電Q1法說會將登場，市場聚焦未來營運展望 (TSMC Q1 Earnings Call Upcoming, Market Eyes Outlook)\n2026年4月7日，台積電第一季法說會備受期待。投資者和分析師正密切關注此次活動，以了解該公司未來的營運展望。這家半導體巨頭預計將討論其業績表現、資本支出計劃以及市場趨勢。市場焦點將放在全球經濟變動和技術進步可能帶來的潛在影響，這些因素可能在未來幾個季度顯著影響台積電的營收和獲利能力。\n\n【3】AI熱潮延燒，台灣科技股2026年後市持續看俏 (AI Boom Continues, Taiwan Tech Stocks Outlook Bright for 2026)\n台北，台灣 – 2026年4月7日。全球人工智慧（AI）熱潮預計將在2026年全年持續其發展勢頭，顯著提振台灣的科技產業。分析師預測，在對先進晶片和AI相關硬體強勁需求的推動下，台灣科技股前景看好。作為全球AI供應鏈中的主要供應商，台灣主要企業有望實現持續增長。預計這種持續的需求將推動該行業的強勁盈利和投資。",
+    "vocabulary": [
+      "panel industry (n.): 面板產業",
+      "undergoing (v.): 經歷；承受",
+      "significant (adj.): 重大的；顯著的",
+      "transformation (n.): 轉型；轉變",
+      "copper-based (adj.): 銅基的",
+      "photonics (n.): 光子學",
+      "trend (n.): 趨勢",
+      "described as (phr.): 被描述為",
+      "primarily (adv.): 主要地",
+      "driven by (phr.): 由...驅動",
+      "increasing demands (n. phr.): 日益增長的需求",
+      "bandwidth (n.): 頻寬",
+      "data transmission (n. phr.): 數據傳輸",
+      "rapid development (n. phr.): 快速發展",
+      "Artificial Intelligence (AI) (n.): 人工智慧",
+      "creating (v.): 創造",
+      "substantial (adj.): 實質的；大量的",
+      "business opportunities (n. phr.): 商機",
+      "optical communication (n.): 光通訊",
+      "robust (adj.): 強大的；穩健的",
+      "TSMC (n.): 台積電",
+      "first-quarter (adj.): 第一季的",
+      "earnings call (n.): 法說會 (財報電話會議)",
+      "anticipated (adj.): 備受期待的",
+      "investors (n.): 投資者",
+      "analysts (n.): 分析師",
+      "keenly (adv.): 敏銳地；熱切地",
+      "insights (n.): 深入了解；洞察",
+      "operational outlook (n.): 營運展望",
+      "semiconductor giant (n.): 半導體巨頭",
+      "expected (v.): 預計",
+      "discuss (v.): 討論",
+      "performance (n.): 業績表現",
+      "capital expenditure (n.): 資本支出",
+      "market trends (n.): 市場趨勢",
+      "potential impacts (n.): 潛在影響",
+      "global economic shifts (n.): 全球經濟變動",
+      "technological advancements (n.): 技術進步",
+      "revenue (n.): 營收",
+      "profitability (n.): 獲利能力",
+      "AI boom (n.): AI熱潮",
+      "sustain (v.): 維持；持續",
+      "momentum (n.): 勢頭；動能",
+      "significantly (adv.): 顯著地",
+      "boost (v.): 提振；促進",
+      "sector (n.): 行業；部門",
+      "analysts (n.): 分析師",
+      "predict (v.): 預測",
+      "outlook (n.): 前景",
+      "driven by (phr.): 受...驅動",
+      "advanced chips (n.): 先進晶片",
+      "hardware (n.): 硬體",
+      "major companies (n.): 主要公司",
+      "key suppliers (n.): 主要供應商",
+      "supply chain (n.): 供應鏈",
+      "poised for (phr.): 準備好；蓄勢待發",
+      "continued growth (n.): 持續增長",
+      "anticipated (adj.): 預期的",
+      "fuel (v.): 助長；刺激",
+      "robust earnings (n.): 強勁盈利"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of this news report?",
+        "options": [
+          "A. New AI applications",
+          "B. The decline of copper mining",
+          "C. The transformation of the panel industry",
+          "D. The history of data transmission"
+        ],
+        "answer": "C. The transformation of the panel industry"
+      },
+      {
+        "q": "The panel industry is transitioning from what kind of technology?",
+        "options": [
+          "A. Photonics",
+          "B. Optical communication",
+          "C. Copper-based",
+          "D. AI-driven"
+        ],
+        "answer": "C. Copper-based"
+      },
+      {
+        "q": "To what new technology is the panel industry primarily shifting?",
+        "options": [
+          "A. Artificial Intelligence",
+          "B. Photonics",
+          "C. Data transmission",
+          "D. Business opportunities"
+        ],
+        "answer": "B. Photonics"
+      },
+      {
+        "q": "The trend of the panel industry's shift is often described using which phrase?",
+        "options": [
+          "A. \"AI in, copper out\"",
+          "B. \"Light in, copper out\"",
+          "C. \"Data in, light out\"",
+          "D. \"Copper in, light out\""
+        ],
+        "answer": "B. \"Light in, copper out\""
+      },
+      {
+        "q": "What is one of the primary drivers for this industry shift?",
+        "options": [
+          "A. Decreasing demand for data",
+          "B. Lower costs of copper",
+          "C. Need for higher bandwidth",
+          "D. Slower data transmission"
+        ],
+        "answer": "C. Need for higher bandwidth"
+      },
+      {
+        "q": "How does Artificial Intelligence (AI) impact the optical communication sector?",
+        "options": [
+          "A. It reduces the need for networks",
+          "B. It creates new business opportunities",
+          "C. It slows down data transmission",
+          "D. It replaces photonics"
+        ],
+        "answer": "B. It creates new business opportunities"
+      },
+      {
+        "q": "What do AI applications specifically require, according to the news?",
+        "options": [
+          "A. Traditional copper wiring",
+          "B. Less robust networks",
+          "C. Slower data speeds",
+          "D. Robust and high-speed networks"
+        ],
+        "answer": "D. Robust and high-speed networks"
+      },
+      {
+        "q": "What does \"photonics\" refer to in the context of the news?",
+        "options": [
+          "A. A type of metal",
+          "B. The science of light",
+          "C. A slow data transfer method",
+          "D. A new form of AI"
+        ],
+        "answer": "B. The science of light"
+      },
+      {
+        "q": "What is \"bandwidth\" in the context of data transmission?",
+        "options": [
+          "A. The physical size of a cable",
+          "B. The cost of data",
+          "C. The capacity for data transfer",
+          "D. The speed of light"
+        ],
+        "answer": "C. The capacity for data transfer"
+      },
+      {
+        "q": "The word \"substantial\" in \"substantial business opportunities\" most closely means:",
+        "options": [
+          "A. Small",
+          "B. Insignificant",
+          "C. Significant or large",
+          "D. Temporary"
+        ],
+        "answer": "C. Significant or large"
+      },
+      {
+        "q": "What does it mean for a network to be \"robust\"?",
+        "options": [
+          "A. It is old-fashioned",
+          "B. It is weak and unreliable",
+          "C. It is strong and reliable",
+          "D. It is very expensive"
+        ],
+        "answer": "C. It is strong and reliable"
+      },
+      {
+        "q": "Which type of communication is becoming increasingly important due to AI's rapid development?",
+        "options": [
+          "A. Wireless communication",
+          "B. Optical communication",
+          "C. Satellite communication",
+          "D. Copper-wire communication"
+        ],
+        "answer": "B. Optical communication"
+      },
+      {
+        "q": "What is scheduled for April 7, 2026?",
+        "options": [
+          "TSMC's annual shareholder meeting",
+          "TSMC's first-quarter earnings call",
+          "A new product launch by TSMC",
+          "A global semiconductor conference"
+        ],
+        "answer": "TSMC's first-quarter earnings call"
+      },
+      {
+        "q": "Who is keenly observing TSMC's upcoming event?",
+        "options": [
+          "Government officials and educators",
+          "Competitors and suppliers",
+          "Investors and analysts",
+          "Customers and employees"
+        ],
+        "answer": "Investors and analysts"
+      },
+      {
+        "q": "What are investors and analysts hoping to gain from the earnings call?",
+        "options": [
+          "Information about new CEO appointments",
+          "Insights into the company's future operational outlook",
+          "Details about employee benefits",
+          "Updates on environmental policies"
+        ],
+        "answer": "Insights into the company's future operational outlook"
+      },
+      {
+        "q": "How is TSMC described in the news article?",
+        "options": [
+          "A tech startup",
+          "A manufacturing powerhouse",
+          "A semiconductor giant",
+          "A software innovator"
+        ],
+        "answer": "A semiconductor giant"
+      },
+      {
+        "q": "Which of the following topics is TSMC expected to discuss during the call?",
+        "options": [
+          "Its marketing strategies and advertising campaigns",
+          "Its performance, capital expenditure plans, and market trends",
+          "Its charity work and community involvement",
+          "Its history and founding principles"
+        ],
+        "answer": "Its performance, capital expenditure plans, and market trends"
+      },
+      {
+        "q": "What does \"capital expenditure\" refer to in a business context?",
+        "options": [
+          "Money spent on employee salaries",
+          "Funds invested in long-term assets like equipment",
+          "Revenue generated from sales",
+          "Profits distributed to shareholders"
+        ],
+        "answer": "Funds invested in long-term assets like equipment"
+      },
+      {
+        "q": "What kind of factors could significantly influence TSMC's revenue and profitability?",
+        "options": [
+          "Local weather patterns and sports events",
+          "Global economic shifts and technological advancements",
+          "Changes in school curricula and public holidays",
+          "Political elections in minor countries"
+        ],
+        "answer": "Global economic shifts and technological advancements"
+      },
+      {
+        "q": "What does \"operational outlook\" primarily refer to?",
+        "options": [
+          "The company's past financial reports",
+          "The company's future business prospects and plans",
+          "The company's current stock price",
+          "The company's employee satisfaction rates"
+        ],
+        "answer": "The company's future business prospects and plans"
+      },
+      {
+        "q": "The word \"anticipated\" in the context of the article means:",
+        "options": [
+          "Unexpected",
+          "Overlooked",
+          "Foreseen or expected",
+          "Delayed"
+        ],
+        "answer": "Foreseen or expected"
+      },
+      {
+        "q": "How long do the potential impacts mentioned in the article primarily relate to?",
+        "options": [
+          "The previous fiscal year",
+          "The current month",
+          "The coming quarters",
+          "The next decade"
+        ],
+        "answer": "The coming quarters"
+      },
+      {
+        "q": "What is the main purpose of an earnings call for a publicly traded company?",
+        "options": [
+          "To announce new product designs to consumers",
+          "To provide financial results and future guidance to investors and analysts",
+          "To recruit new employees",
+          "To celebrate company milestones with staff"
+        ],
+        "answer": "To provide financial results and future guidance to investors and analysts"
+      },
+      {
+        "q": "Which term describes the financial gain an individual or business makes, especially the difference between the amount earned and the amount spent?",
+        "options": [
+          "Revenue",
+          "Capital",
+          "Expenditure",
+          "Profitability"
+        ],
+        "answer": "Profitability"
+      },
+      {
+        "q": "What is the primary focus of this news report?",
+        "options": [
+          "Taiwan's political situation",
+          "The global tourism industry",
+          "The AI boom and Taiwan's tech sector",
+          "Agricultural developments in Taiwan"
+        ],
+        "answer": "The AI boom and Taiwan's tech sector"
+      },
+      {
+        "q": "According to the article, when is the AI boom expected to maintain its strength?",
+        "options": [
+          "Only until mid-2026",
+          "Throughout 2026",
+          "Starting from 2027",
+          "It has already peaked"
+        ],
+        "answer": "Throughout 2026"
+      },
+      {
+        "q": "What is the predicted outlook for Taiwanese tech stocks?",
+        "options": [
+          "Uncertain",
+          "Negative",
+          "Bright",
+          "Declining"
+        ],
+        "answer": "Bright"
+      },
+      {
+        "q": "What is identified as a key factor driving the positive outlook for tech stocks?",
+        "options": [
+          "Increased domestic consumption",
+          "Strong demand for advanced chips and AI hardware",
+          "Government subsidies for all industries",
+          "A decrease in global competition"
+        ],
+        "answer": "Strong demand for advanced chips and AI hardware"
+      },
+      {
+        "q": "How are major Taiwanese companies described in relation to the global AI supply chain?",
+        "options": [
+          "Minor participants",
+          "Key suppliers",
+          "New entrants",
+          "Consumers only"
+        ],
+        "answer": "Key suppliers"
+      },
+      {
+        "q": "What are these major Taiwanese companies \"poised for\"?",
+        "options": [
+          "Significant downsizing",
+          "A shift to traditional manufacturing",
+          "Continued growth",
+          "Mergers with non-tech companies"
+        ],
+        "answer": "Continued growth"
+      },
+      {
+        "q": "What is anticipated to fuel robust earnings and investment in the sector?",
+        "options": [
+          "Decreased production costs",
+          "Government regulations",
+          "Sustained demand",
+          "New political leadership"
+        ],
+        "answer": "Sustained demand"
+      },
+      {
+        "q": "In the phrase \"sustain its momentum,\" what does \"sustain\" most closely mean?",
+        "options": [
+          "Reduce",
+          "Maintain",
+          "End",
+          "Change"
+        ],
+        "answer": "Maintain"
+      },
+      {
+        "q": "The word \"boost\" in the context of \"boosting Taiwan's technology sector\" means to:",
+        "options": [
+          "Harm or damage",
+          "Slow down",
+          "Improve or increase",
+          "Ignore"
+        ],
+        "answer": "Improve or increase"
+      },
+      {
+        "q": "What type of hardware is mentioned as being in strong demand, besides advanced chips?",
+        "options": [
+          "Agricultural equipment",
+          "Household appliances",
+          "AI-related hardware",
+          "Textile machinery"
+        ],
+        "answer": "AI-related hardware"
+      },
+      {
+        "q": "What does \"outlook\" refer to in \"bright outlook for Taiwanese tech stocks\"?",
+        "options": [
+          "Their current stock prices",
+          "Their past performance",
+          "Their future prospects",
+          "Their company headquarters"
+        ],
+        "answer": "Their future prospects"
+      },
+      {
+        "q": "If earnings are \"robust,\" what does that imply about them?",
+        "options": [
+          "They are weak and unstable",
+          "They are strong and healthy",
+          "They are unpredictable",
+          "They are barely breaking even"
+        ],
+        "answer": "They are strong and healthy"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "伊朗拒絕臨時停火，提出10項永久解決條款 (Iran Rejects Temporary Ceasefire, Proposes 10 Permanent Terms)",
+    "tabTitle": "地緣政治",
+    "english": "On April 7, 2026, Iran officially rejected an international proposal for a temporary ceasefire in the ongoing regional conflict. Citing the need for a lasting resolution, Iranian officials instead presented a comprehensive list of ten permanent terms. These terms aim to establish long-term stability and address core issues, rather than just pausing hostilities. The proposal was shared with international mediators, indicating Iran's firm stance on a permanent geopolitical settlement.",
+    "chinese": "2026年4月7日，伊朗正式拒絕了一項關於該地區持續衝突的臨時停火國際提案。伊朗官員表示，鑑於需要持久的解決方案，他們轉而提出了一份包含十項永久條款的全面清單。這些條款旨在建立長期穩定並解決核心問題，而非僅僅暫停敵對行動。該提案已提交給國際調解員，表明伊朗在永久地緣政治解決方案上的堅定立場。",
+    "vocabulary": [
+      "reject (v.): 拒絕",
+      "temporary (adj.): 臨時的",
+      "ceasefire (n.): 停火",
+      "propose (v.): 提出，建議",
+      "permanent (adj.): 永久的",
+      "term (n.): 條款；期限",
+      "geopolitical (adj.): 地緣政治的",
+      "conflict (n.): 衝突",
+      "lasting (adj.): 持久的，永恆的",
+      "resolution (n.): 解決方案；決議",
+      "comprehensive (adj.): 全面的，綜合的",
+      "list (n.): 清單",
+      "aim to (phr.v.): 旨在",
+      "establish (v.): 建立，設立",
+      "stability (n.): 穩定",
+      "address (v.): 處理，解決",
+      "core issues (n.phr.): 核心問題",
+      "hostilities (n.pl.): 敵對行動",
+      "international mediators (n.phr.): 國際調解員",
+      "firm stance (n.phr.): 堅定立場"
+    ],
+    "quiz": [
+      {
+        "q": "What did Iran officially reject on April 7, 2026?",
+        "options": [
+          "A) A permanent peace treaty",
+          "B) A temporary ceasefire",
+          "C) An economic aid package",
+          "D) A military alliance"
+        ],
+        "answer": "B) A temporary ceasefire"
+      },
+      {
+        "q": "How many permanent terms did Iran propose?",
+        "options": [
+          "A) Five",
+          "B) Seven",
+          "C) Ten",
+          "D) Twelve"
+        ],
+        "answer": "C) Ten"
+      },
+      {
+        "q": "What is the main goal of Iran's proposed terms?",
+        "options": [
+          "A) To pause hostilities temporarily",
+          "B) To establish long-term stability",
+          "C) To gain military advantage",
+          "D) To impose sanctions on other nations"
+        ],
+        "answer": "B) To establish long-term stability"
+      },
+      {
+        "q": "Who received Iran's proposal?",
+        "options": [
+          "A) Regional military leaders",
+          "B) Local community organizers",
+          "C) International mediators",
+          "D) UN peacekeepers"
+        ],
+        "answer": "C) International mediators"
+      },
+      {
+        "q": "The word \"reject\" in the headline is closest in meaning to:",
+        "options": [
+          "A) Accept",
+          "B) Approve",
+          "C) Decline",
+          "D) Consider"
+        ],
+        "answer": "C) Decline"
+      },
+      {
+        "q": "A \"ceasefire\" primarily means a:",
+        "options": [
+          "A) Military exercise",
+          "B) Suspension of fighting",
+          "C) Diplomatic negotiation",
+          "D) Trade agreement"
+        ],
+        "answer": "B) Suspension of fighting"
+      },
+      {
+        "q": "If something is \"permanent,\" it means it is:",
+        "options": [
+          "A) Short-lived",
+          "B) Unchanging",
+          "C) Flexible",
+          "D) Conditional"
+        ],
+        "answer": "B) Unchanging"
+      },
+      {
+        "q": "\"Geopolitical\" refers to the study of:",
+        "options": [
+          "A) Earth's geology",
+          "B) Political and geographical influences",
+          "C) Planetary movements",
+          "D) Economic growth"
+        ],
+        "answer": "B) Political and geographical influences"
+      },
+      {
+        "q": "What does \"aim to\" mean in the context of the news?",
+        "options": [
+          "A) To avoid",
+          "B) To target",
+          "C) To intend to",
+          "D) To miss"
+        ],
+        "answer": "C) To intend to"
+      },
+      {
+        "q": "\"Hostilities\" in the news refers to:",
+        "options": [
+          "A) Hospitality",
+          "B) Friendly gestures",
+          "C) Acts of warfare",
+          "D) Peaceful discussions"
+        ],
+        "answer": "C) Acts of warfare"
+      },
+      {
+        "q": "Iran's \"firm stance\" implies:",
+        "options": [
+          "A) Flexibility",
+          "B) Uncertainty",
+          "C) A strong and unyielding position",
+          "D) Willingness to compromise"
+        ],
+        "answer": "C) A strong and unyielding position"
+      },
+      {
+        "q": "What kind of solution does Iran seek, according to the news?",
+        "options": [
+          "A) A short-term solution",
+          "B) An immediate humanitarian aid",
+          "C) A lasting geopolitical settlement",
+          "D) A temporary truce"
+        ],
+        "answer": "C) A lasting geopolitical settlement"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "日本擬5月再度釋放石油儲備，應對油價飆升壓力 (Japan to Release Oil Reserves Again in May Amid Soaring Prices)",
+    "tabTitle": "金融市場",
+    "english": "Japan announced plans on April 7, 2026, to release additional crude oil reserves in May. This decision aims to alleviate the significant pressure from soaring global oil prices, which are impacting the nation's economy and consumer spending. It marks another strategic effort by Tokyo to help stabilize energy markets and combat domestic inflation. The government hopes this measure will mitigate the financial burden on businesses and households facing rising energy costs.",
+    "chinese": "日本於2026年4月7日宣布，計劃在5月再次釋出原油儲備。這項決定旨在緩解全球油價飆升帶來的巨大壓力，這些壓力正影響著日本經濟和消費者支出。這標誌著東京穩定能源市場和對抗國內通膨的又一項戰略性努力。政府希望這項措施能減輕企業和家庭面對能源成本上漲時的財政負擔。",
+    "vocabulary": [
+      "release (v.): 釋出，釋放",
+      "oil reserves (n.phr.): 石油儲備",
+      "amid (prep.): 在…之中，在…情況下",
+      "soaring (adj.): 飆升的，急劇上漲的",
+      "crude oil (n.phr.): 原油",
+      "alleviate (v.): 緩解，減輕",
+      "significant (adj.): 顯著的，重大的",
+      "pressure (n.): 壓力",
+      "impact (v.): 影響",
+      "economy (n.): 經濟",
+      "consumer spending (n.phr.): 消費者支出",
+      "strategic (adj.): 戰略性的",
+      "effort (n.): 努力",
+      "stabilize (v.): 穩定",
+      "energy markets (n.phr.): 能源市場",
+      "combat (v.): 對抗，打擊",
+      "domestic (adj.): 國內的",
+      "inflation (n.): 通貨膨脹",
+      "mitigate (v.): 減輕，緩和",
+      "financial burden (n.phr.): 財政負擔"
+    ],
+    "quiz": [
+      {
+        "q": "What did Japan announce on April 7, 2026?",
+        "options": [
+          "A. A new economic policy",
+          "B. Plans to release crude oil reserves",
+          "C. A trade agreement",
+          "D. Changes to its tax system"
+        ],
+        "answer": "B. Plans to release crude oil reserves"
+      },
+      {
+        "q": "When does Japan plan to release the additional oil reserves?",
+        "options": [
+          "A. April",
+          "B. May",
+          "C. June",
+          "D. July"
+        ],
+        "answer": "B. May"
+      },
+      {
+        "q": "What is the primary type of reserve Japan plans to release?",
+        "options": [
+          "A. Natural gas",
+          "B. Coal",
+          "C. Crude oil",
+          "D. Strategic minerals"
+        ],
+        "answer": "C. Crude oil"
+      },
+      {
+        "q": "What is the main reason behind Japan's decision to release oil reserves?",
+        "options": [
+          "A. To increase its export volume",
+          "B. To test its reserve capacity",
+          "C. To alleviate pressure from soaring global oil prices",
+          "D. To comply with international agreements"
+        ],
+        "answer": "C. To alleviate pressure from soaring global oil prices"
+      },
+      {
+        "q": "Which of the following are being impacted by the soaring oil prices, according to the news?",
+        "options": [
+          "A. Japan's tourism industry",
+          "B. Its technological advancements",
+          "C. The nation's economy and consumer spending",
+          "D. Its agricultural output"
+        ],
+        "answer": "C. The nation's economy and consumer spending"
+      },
+      {
+        "q": "What does the word \"soaring\" mean in the context of \"soaring global oil prices\"?",
+        "options": [
+          "A. Decreasing rapidly",
+          "B. Remaining stable",
+          "C. Rising sharply",
+          "D. Fluctuating mildly"
+        ],
+        "answer": "C. Rising sharply"
+      },
+      {
+        "q": "This decision is described as \"another strategic effort\" by Tokyo to achieve what?",
+        "options": [
+          "A. Expand its military",
+          "B. Stabilize energy markets",
+          "C. Promote cultural exchange",
+          "D. Develop new technologies"
+        ],
+        "answer": "B. Stabilize energy markets"
+      },
+      {
+        "q": "What domestic issue does Japan aim to \"combat\" with this action?",
+        "options": [
+          "A. Unemployment",
+          "B. Deflation",
+          "C. Inflation",
+          "D. Population decline"
+        ],
+        "answer": "C. Inflation"
+      },
+      {
+        "q": "What does the government hope this measure will \"mitigate\"?",
+        "options": [
+          "A. International trade disputes",
+          "B. The financial burden on businesses and households",
+          "C. Environmental pollution",
+          "D. The spread of diseases"
+        ],
+        "answer": "B. The financial burden on businesses and households"
+      },
+      {
+        "q": "Who is explicitly mentioned as facing rising energy costs?",
+        "options": [
+          "A. Only large corporations",
+          "B. Only government agencies",
+          "C. Businesses and households",
+          "D. Foreign investors"
+        ],
+        "answer": "C. Businesses and households"
+      },
+      {
+        "q": "What is the overall goal of Japan's action regarding its oil reserves?",
+        "options": [
+          "A. To increase its national wealth",
+          "B. To demonstrate international power",
+          "C. To alleviate economic pressure and stabilize markets",
+          "D. To deplete its reserves quickly"
+        ],
+        "answer": "C. To alleviate economic pressure and stabilize markets"
+      },
+      {
+        "q": "The news states that the decision aims to \"alleviate the significant pressure.\" What kind of pressure is being referred to?",
+        "options": [
+          "A. Social pressure",
+          "B. Political pressure",
+          "C. Environmental pressure",
+          "D. Economic pressure from oil prices"
+        ],
+        "answer": "D. Economic pressure from oil prices"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "韓國2025財年國家債務創新高，財政壓力持續升高 (South Korea's 2025 National Debt Hits Record High, Fiscal Pressure Rises)",
+    "tabTitle": "金融市場",
+    "english": "South Korea's national debt is projected to reach an unprecedented level in the 2025 fiscal year, significantly increasing the nation's financial burden. This surge in debt, attributed to various factors including increased welfare spending and economic stimulus packages, highlights growing concerns over the country's long-term fiscal sustainability. Experts warn that without robust revenue generation or expenditure cuts, the government faces sustained pressure to manage its budget effectively.",
+    "chinese": "韓國的國家債務預計將在2025財年達到前所未有的水平，顯著增加了該國的財政負擔。這筆債務的激增，歸因於包括福利支出增加和經濟刺激方案在內的多種因素，凸顯了人們對該國長期財政可持續性的日益擔憂。專家警告說，如果沒有強勁的稅收收入或支出削減，政府將面臨持續的壓力來有效管理其預算。",
+    "vocabulary": [
+      "South Korea (n.): 韓國",
+      "national debt (n.): 國家債務",
+      "record high (n. phrase): 歷史新高",
+      "fiscal pressure (n. phrase): 財政壓力",
+      "fiscal year (n. phrase): 財政年度",
+      "projected (adj.): 預計的",
+      "unprecedented (adj.): 前所未有的",
+      "significantly (adv.): 顯著地",
+      "financial burden (n. phrase): 財政負擔",
+      "surge (n.): 激增",
+      "attributed to (phr. v.): 歸因於",
+      "welfare spending (n. phrase): 福利支出",
+      "economic stimulus package (n. phrase): 經濟刺激方案",
+      "highlight (v.): 凸顯",
+      "growing concern (n. phrase): 日益增長的擔憂",
+      "long-term (adj.): 長期的",
+      "fiscal sustainability (n. phrase): 財政可持續性",
+      "robust (adj.): 強勁的",
+      "revenue generation (n. phrase): 稅收收入產生",
+      "expenditure cuts (n. phrase): 支出削減"
+    ],
+    "quiz": [
+      {
+        "q": "The main topic of this news article is:",
+        "options": [
+          "A. South Korea's economic growth strategies.",
+          "B. South Korea's national debt and rising fiscal pressure.",
+          "C. The success of South Korea's welfare programs.",
+          "D. International trade agreements involving South Korea."
+        ],
+        "answer": "B. South Korea's national debt and rising fiscal pressure."
+      },
+      {
+        "q": "When is South Korea's national debt projected to reach an unprecedented level?",
+        "options": [
+          "A. In the current fiscal year.",
+          "B. In the 2026 fiscal year.",
+          "C. In the 2025 fiscal year.",
+          "D. In the past fiscal year."
+        ],
+        "answer": "C. In the 2025 fiscal year."
+      },
+      {
+        "q": "Which country is the subject of this news report?",
+        "options": [
+          "A. Japan",
+          "B. China",
+          "C. South Korea",
+          "D. North Korea"
+        ],
+        "answer": "C. South Korea"
+      },
+      {
+        "q": "What is the primary concern highlighted by the surge in national debt?",
+        "options": [
+          "A. A decrease in international trade.",
+          "B. Growing concerns over the country's long-term fiscal sustainability.",
+          "C. The need for more economic stimulus packages.",
+          "D. A reduction in welfare spending."
+        ],
+        "answer": "B. Growing concerns over the country's long-term fiscal sustainability."
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a factor contributing to the surge in debt?",
+        "options": [
+          "A. Increased welfare spending.",
+          "B. Economic stimulus packages.",
+          "C. Decreased foreign investment.",
+          "D. Various factors."
+        ],
+        "answer": "C. Decreased foreign investment."
+      },
+      {
+        "q": "What does the word \"unprecedented\" most closely mean in the context of the article?",
+        "options": [
+          "A. Predicted",
+          "B. Seen before",
+          "C. Never happened before",
+          "D. Easily managed"
+        ],
+        "answer": "C. Never happened before"
+      },
+      {
+        "q": "\"Fiscal pressure\" refers to:",
+        "options": [
+          "A. Pressure from physical exercise.",
+          "B. Financial strain on a government's budget.",
+          "C. Pressure to increase military spending.",
+          "D. Social pressure from citizens."
+        ],
+        "answer": "B. Financial strain on a government's budget."
+      },
+      {
+        "q": "What does \"fiscal sustainability\" mean for a country?",
+        "options": [
+          "A. Its ability to sustain economic growth indefinitely.",
+          "B. Its ability to maintain sound financial health without jeopardizing future generations.",
+          "C. Its capacity to fund all welfare programs without cuts.",
+          "D. Its power to influence global financial markets."
+        ],
+        "answer": "B. Its ability to maintain sound financial health without jeopardizing future generations."
+      },
+      {
+        "q": "What do experts warn the government needs to do to manage its budget effectively?",
+        "options": [
+          "A. Increase borrowing from international organizations.",
+          "B. Implement robust revenue generation or expenditure cuts.",
+          "C. Reduce all forms of public spending immediately.",
+          "D. Focus solely on economic stimulus."
+        ],
+        "answer": "B. Implement robust revenue generation or expenditure cuts."
+      },
+      {
+        "q": "The increase in national debt is described as significantly increasing the nation's:",
+        "options": [
+          "A. Economic growth.",
+          "B. Financial burden.",
+          "C. International reputation.",
+          "D. Job opportunities."
+        ],
+        "answer": "B. Financial burden."
+      },
+      {
+        "q": "If a debt is \"attributed to\" certain factors, it means those factors are:",
+        "options": [
+          "A. Irrelevant to the debt.",
+          "B. The causes or reasons for the debt.",
+          "C. The solutions to the debt.",
+          "D. The consequences of the debt."
+        ],
+        "answer": "B. The causes or reasons for the debt."
+      },
+      {
+        "q": "Which type of spending is explicitly mentioned as a factor contributing to the national debt surge?",
+        "options": [
+          "A. Infrastructure spending.",
+          "B. Education spending.",
+          "C. Welfare spending.",
+          "D. Defense spending."
+        ],
+        "answer": "C. Welfare spending."
+      }
+    ]
+  },
+  "article-6": {
+    "title": "中國阿里千問模型日調用量破萬億，創全球新高 (Alibaba's Qwen Model Daily Calls Exceed Trillion, Global Record)",
+    "tabTitle": "科技",
+    "english": "Alibaba's Qwen large language model has achieved a remarkable milestone, with its daily invocation volume surpassing one trillion calls. This unprecedented achievement sets a new global record for a single AI model's daily usage. The surge in usage highlights the model's widespread adoption and China's significant advancements in artificial intelligence technology, solidifying its position as a leading force in the global AI landscape.",
+    "chinese": "阿里巴巴的通義千問大型語言模型已達成一個顯著的里程碑，其每日調用量突破了一萬億次。這項前所未有的成就創下了單一AI模型每日使用量的全球新紀錄。使用量的激增突顯了該模型的廣泛應用以及中國在人工智慧技術方面的重大進展，鞏固了其在全球AI領域作為領先力量的地位。",
+    "vocabulary": [
+      "remarkable (adj.): 顯著的，非凡的",
+      "milestone (n.): 里程碑",
+      "invocation (n.): 調用，呼叫",
+      "volume (n.): 數量，容量",
+      "surpassing (v.): 超過，超越",
+      "unprecedented (adj.): 前所未有的",
+      "achievement (n.): 成就，功績",
+      "sets a record (phr.): 創下紀錄",
+      "daily usage (n.): 日常使用量",
+      "surge (n.): 激增，遽增",
+      "highlights (v.): 突顯，強調",
+      "widespread adoption (phr.): 廣泛應用/採納",
+      "significant (adj.): 重大的，顯著的",
+      "advancements (n.): 進展，進步",
+      "artificial intelligence (n.): 人工智慧",
+      "technology (n.): 技術",
+      "solidifying (v.): 鞏固，加強",
+      "position (n.): 地位，位置",
+      "leading force (phr.): 領先力量",
+      "global landscape (phr.): 全球格局/領域"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "Alibaba's new product launch",
+          "The global economy's growth",
+          "Qwen model's daily call volume record",
+          "China's internet regulations"
+        ],
+        "answer": "Qwen model's daily call volume record"
+      },
+      {
+        "q": "What specific number did Qwen model's daily invocation volume surpass?",
+        "options": [
+          "One billion calls",
+          "One trillion calls",
+          "One million calls",
+          "One hundred billion calls"
+        ],
+        "answer": "One trillion calls"
+      },
+      {
+        "q": "What kind of record did Alibaba's Qwen model set?",
+        "options": [
+          "A national sales record",
+          "A global record for daily AI model usage",
+          "A company profit record",
+          "A record for the fastest development"
+        ],
+        "answer": "A global record for daily AI model usage"
+      },
+      {
+        "q": "What does the 'surge in usage' highlight?",
+        "options": [
+          "Decreased interest in AI",
+          "The model's limited availability",
+          "Widespread adoption and China's AI advancements",
+          "The need for more human interaction"
+        ],
+        "answer": "Widespread adoption and China's AI advancements"
+      },
+      {
+        "q": "The word 'milestone' in the context of the news most closely means:",
+        "options": [
+          "A large stone marker",
+          "A significant stage or event in the development of something",
+          "A type of measurement unit",
+          "A common obstacle"
+        ],
+        "answer": "A significant stage or event in the development of something"
+      },
+      {
+        "q": "What does 'unprecedented' mean?",
+        "options": [
+          "Done many times before",
+          "Never done or known before",
+          "Easy to achieve",
+          "Predictable and common"
+        ],
+        "answer": "Never done or known before"
+      },
+      {
+        "q": "The term 'widespread adoption' implies that the Qwen model is:",
+        "options": [
+          "Used by a small, exclusive group",
+          "Only available in China",
+          "Being used by many people or organizations",
+          "Still in its testing phase"
+        ],
+        "answer": "Being used by many people or organizations"
+      },
+      {
+        "q": "What does 'solidifying its position' mean in the article?",
+        "options": [
+          "Making its location harder to find",
+          "Weakening its standing in the industry",
+          "Strengthening or making its status more secure",
+          "Changing its role frequently"
+        ],
+        "answer": "Strengthening or making its status more secure"
+      },
+      {
+        "q": "Which entity developed the Qwen large language model mentioned?",
+        "options": [
+          "Google",
+          "Microsoft",
+          "Alibaba",
+          "Baidu"
+        ],
+        "answer": "Alibaba"
+      },
+      {
+        "q": "The phrase 'leading force' suggests that Alibaba's Qwen model is:",
+        "options": [
+          "Struggling to keep up with competitors",
+          "At the forefront of AI development and influence",
+          "A minor player in the AI market",
+          "Only relevant in specific local markets"
+        ],
+        "answer": "At the forefront of AI development and influence"
+      },
+      {
+        "q": "What kind of technology is the Qwen model associated with?",
+        "options": [
+          "Biotechnology",
+          "Renewable energy technology",
+          "Artificial intelligence technology",
+          "Space exploration technology"
+        ],
+        "answer": "Artificial intelligence technology"
+      },
+      {
+        "q": "The phrase 'global AI landscape' refers to:",
+        "options": [
+          "Physical scenery around AI data centers",
+          "The worldwide competitive and developmental environment for AI",
+          "A specific type of AI graphic design",
+          "The history of AI development"
+        ],
+        "answer": "The worldwide competitive and developmental environment for AI"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
