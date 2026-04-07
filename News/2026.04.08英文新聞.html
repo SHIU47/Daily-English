@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 08, 2026：台灣經濟、地緣政治 與 國際大事</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 美國超越中國，成台灣最大出口市場，AI需求是主因 (US Overtakes China as Taiwan's Top Export Market, Driven by AI)\nOn April 8, 2026, the United States officially surpassed China to become Taiwan's largest export market. This significant shift is primarily driven by the surging global demand for Artificial Intelligence (AI) related products and components. Taiwanese semiconductor manufacturers and tech companies have seen a substantial increase in orders from US firms, highlighting Taiwan's crucial role in the advanced technology supply chain. This development marks a notable change in Taiwan's trade dynamics, reflecting evolving geopolitical and economic landscapes.\n\n[2] 台積電3奈米產能遭AI客戶搶佔，2奈米需求同步爆發 (TSMC 3nm Capacity Fully Booked by AI, 2nm Demand Surges)\nTaipei, April 8, 2026 – Taiwan Semiconductor Manufacturing Company (TSMC) is experiencing unprecedented demand for its advanced chip technologies. Its 3-nanometer (3nm) production capacity is now fully booked, primarily by leading Artificial Intelligence (AI) clients. This strong uptake is driven by the booming AI market, leading to a significant increase in orders. Furthermore, TSMC is also seeing a simultaneous surge in demand for its next-generation 2-nanometer (2nm) chips, indicating a robust future for high-performance computing components.\n\n[3] 工研院與美合作，台灣成無人機「非紅供應鏈」測試中心 (ITRI & US Partner, Taiwan Becomes Non-Red Drone Hub)\nOn April 8, 2026, Taiwan's Industrial Technology Research Institute (ITRI) announced a strategic partnership with the United States. This collaboration aims to establish Taiwan as a key testing and development hub for unmanned aerial vehicles (UAVs) within a 'non-red' supply chain. This initiative positions Taiwan as a trusted partner for drone technology, promoting secure and reliable solutions independent of certain geopolitical influences. The move strengthens Taiwan's role in global tech innovation and supply chain diversification.",
+    "chinese": "【1】美國超越中國，成台灣最大出口市場，AI需求是主因 (US Overtakes China as Taiwan's Top Export Market, Driven by AI)\n2026年4月8日，美國正式超越中國，成為台灣最大的出口市場。這一顯著轉變主要由全球對人工智慧（AI）相關產品和組件的強勁需求所驅動。台灣半導體製造商和科技公司來自美國企業的訂單大幅增加，突顯了台灣在先進技術供應鏈中的關鍵作用。這一發展標誌著台灣貿易動態的顯著變化，反映了不斷演變的地緣政治和經濟格局。\n\n【2】台積電3奈米產能遭AI客戶搶佔，2奈米需求同步爆發 (TSMC 3nm Capacity Fully Booked by AI, 2nm Demand Surges)\n台北，2026年4月8日 – 台灣積體電路製造公司（台積電）正經歷其先進晶片技術前所未有的需求。其3奈米（3nm）的生產產能現已全部被預訂，主要由領先的人工智慧（AI）客戶搶佔。這種強勁的需求增長是由蓬勃發展的AI市場所推動，導致訂單顯著增加。此外，台積電也同時看到其下一代2奈米（2nm）晶片的需求激增，預示著高效能運算組件的強勁未來。\n\n【3】工研院與美合作，台灣成無人機「非紅供應鏈」測試中心 (ITRI & US Partner, Taiwan Becomes Non-Red Drone Hub)\n2026年4月8日，台灣工業技術研究院（ITRI）宣布與美國建立戰略夥伴關係。這項合作旨在將台灣打造成「非紅供應鏈」中無人機（UAVs）的關鍵測試與開發中心。此舉將台灣定位為值得信賴的無人機技術合作夥伴，推動獨立於特定地緣政治影響的安全可靠解決方案。這項行動強化了台灣在全球科技創新和供應鏈多元化中的角色。",
+    "vocabulary": [
+      "surpass (v.): 超越",
+      "export market (n. phr.): 出口市場",
+      "significant (adj.): 顯著的",
+      "shift (n.): 轉變",
+      "primarily (adv.): 主要地",
+      "driven by (phr. v.): 由...驅動",
+      "surging (adj.): 激增的",
+      "global demand (n. phr.): 全球需求",
+      "Artificial Intelligence (AI) (n.): 人工智慧",
+      "related products (n. phr.): 相關產品",
+      "components (n.): 零組件",
+      "semiconductor (n.): 半導體",
+      "manufacturer (n.): 製造商",
+      "substantial (adj.): 大幅的；實質的",
+      "increase (n.): 增加",
+      "crucial (adj.): 關鍵的",
+      "supply chain (n. phr.): 供應鏈",
+      "trade dynamics (n. phr.): 貿易動態",
+      "evolving (adj.): 不斷演變的",
+      "geopolitical (adj.): 地緣政治的",
+      "Taiwan Semiconductor Manufacturing Company (n.): 台灣積體電路製造公司",
+      "TSMC (n.): 台積電 (縮寫)",
+      "unprecedented (adj.): 前所未有的",
+      "advanced (adj.): 先進的",
+      "chip technologies (n.): 晶片技術",
+      "nanometer (n.): 奈米",
+      "production capacity (n.): 生產產能",
+      "fully booked (phr.): 全部被預訂；產能滿載",
+      "primarily (adv.): 主要地",
+      "leading (adj.): 領先的",
+      "Artificial Intelligence (AI) (n.): 人工智慧",
+      "clients (n.): 客戶",
+      "strong uptake (n.): 強勁需求增長",
+      "booming (adj.): 蓬勃發展的",
+      "driven by (phr.): 由...驅動",
+      "significant (adj.): 顯著的",
+      "simultaneous (adj.): 同步的",
+      "surge (n.): 激增",
+      "next-generation (adj.): 下一代的",
+      "robust (adj.): 強勁的；穩健的",
+      "Industrial Technology Research Institute (n.): 工業技術研究院",
+      "ITRI (abbr.): 工研院 (縮寫)",
+      "strategic partnership (n.): 戰略夥伴關係",
+      "unmanned aerial vehicle (n.): 無人機 (UAV)",
+      "UAV (abbr.): 無人機 (縮寫)",
+      "hub (n.): 中心；樞紐",
+      "non-red supply chain (n.): 非紅供應鏈",
+      "testing center (n.): 測試中心",
+      "collaboration (n.): 合作",
+      "establish (v.): 建立；設立",
+      "initiative (n.): 倡議；計畫",
+      "position (v.): 定位",
+      "trusted partner (n.): 值得信賴的夥伴",
+      "promote (v.): 推動；促進",
+      "secure (adj.): 安全的",
+      "reliable (adj.): 可靠的",
+      "independent of (phr.): 獨立於...之外",
+      "geopolitical influences (n.): 地緣政治影響",
+      "strengthen (v.): 強化；鞏固",
+      "supply chain diversification (n.): 供應鏈多元化"
+    ],
+    "quiz": [
+      {
+        "q": "According to the news, on what date did the United States become Taiwan's largest export market?",
+        "options": [
+          "April 8, 2025",
+          "April 8, 2026",
+          "March 8, 2026",
+          "May 8, 2026"
+        ],
+        "answer": "April 8, 2026"
+      },
+      {
+        "q": "What is identified as the primary driver for the shift in Taiwan's export market?",
+        "options": [
+          "Increased agricultural exports",
+          "Global demand for AI-related products",
+          "Lower shipping costs to the US",
+          "New trade agreements with Europe"
+        ],
+        "answer": "Global demand for AI-related products"
+      },
+      {
+        "q": "Which country has surpassed China to become Taiwan's top export market?",
+        "options": [
+          "Japan",
+          "South Korea",
+          "The United States",
+          "Germany"
+        ],
+        "answer": "The United States"
+      },
+      {
+        "q": "What type of companies in Taiwan are experiencing a substantial increase in orders from US firms?",
+        "options": [
+          "Textile manufacturers and food producers",
+          "Automobile assemblers and construction firms",
+          "Semiconductor manufacturers and tech companies",
+          "Tourism agencies and airlines"
+        ],
+        "answer": "Semiconductor manufacturers and tech companies"
+      },
+      {
+        "q": "What role does Taiwan play in the advanced technology supply chain, according to the article?",
+        "options": [
+          "A minor role",
+          "A supportive role",
+          "A crucial role",
+          "An outdated role"
+        ],
+        "answer": "A crucial role"
+      },
+      {
+        "q": "The news states this development marks a \"notable change\" in what?",
+        "options": [
+          "Taiwan's domestic politics",
+          "Taiwan's educational system",
+          "Taiwan's trade dynamics",
+          "Taiwan's cultural exchanges"
+        ],
+        "answer": "Taiwan's trade dynamics"
+      },
+      {
+        "q": "What does \"surging\" global demand for AI products imply?",
+        "options": [
+          "A stable demand",
+          "A decreasing demand",
+          "A rapidly increasing demand",
+          "An unpredictable demand"
+        ],
+        "answer": "A rapidly increasing demand"
+      },
+      {
+        "q": "The shift in trade dynamics reflects evolving geopolitical and what other landscapes?",
+        "options": [
+          "Social",
+          "Environmental",
+          "Technological",
+          "Economic"
+        ],
+        "answer": "Economic"
+      },
+      {
+        "q": "What does \"components\" refer to in the context of AI-related products?",
+        "options": [
+          "Finished consumer goods",
+          "Raw materials",
+          "Parts that make up a larger system",
+          "Marketing strategies"
+        ],
+        "answer": "Parts that make up a larger system"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a reason for the US becoming Taiwan's top export market?",
+        "options": [
+          "Global AI demand",
+          "Increased orders for semiconductors",
+          "Taiwan's crucial role in tech supply chain",
+          "Reduced tariffs on Taiwanese goods"
+        ],
+        "answer": "Reduced tariffs on Taiwanese goods"
+      },
+      {
+        "q": "The term \"geopolitical\" primarily relates to:",
+        "options": [
+          "The study of Earth's physical features",
+          "The influence of geography on politics and international relations",
+          "The science of mapping the Earth",
+          "The history of global trade routes"
+        ],
+        "answer": "The influence of geography on politics and international relations"
+      },
+      {
+        "q": "What does \"substantial increase\" imply about the orders from US firms?",
+        "options": [
+          "A small, insignificant rise",
+          "A moderate but noticeable growth",
+          "A significant and large growth",
+          "A temporary fluctuation"
+        ],
+        "answer": "A significant and large growth"
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A) TSMC's new factory locations",
+          "B) The increasing demand for TSMC's advanced chip technologies",
+          "C) The decline of the AI market",
+          "D) TSMC's financial earnings report"
+        ],
+        "answer": "B) The increasing demand for TSMC's advanced chip technologies"
+      },
+      {
+        "q": "Which company is mentioned in the news?",
+        "options": [
+          "A) Intel",
+          "B) Samsung",
+          "C) Taiwan Semiconductor Manufacturing Company",
+          "D) NVIDIA"
+        ],
+        "answer": "C) Taiwan Semiconductor Manufacturing Company"
+      },
+      {
+        "q": "What is the current status of TSMC's 3-nanometer production capacity?",
+        "options": [
+          "A) It is decreasing.",
+          "B) It is fully booked.",
+          "C) It is being expanded.",
+          "D) It is experiencing low demand."
+        ],
+        "answer": "B) It is fully booked."
+      },
+      {
+        "q": "Who are the primary clients booking TSMC's 3nm capacity?",
+        "options": [
+          "A) Smartphone manufacturers",
+          "B) Automotive companies",
+          "C) Artificial Intelligence (AI) clients",
+          "D) Gaming console developers"
+        ],
+        "answer": "C) Artificial Intelligence (AI) clients"
+      },
+      {
+        "q": "What is driving the strong uptake in 3nm orders?",
+        "options": [
+          "A) A new government subsidy program",
+          "B) The booming AI market",
+          "C) Increased demand for personal computers",
+          "D) A shortage of raw materials"
+        ],
+        "answer": "B) The booming AI market"
+      },
+      {
+        "q": "Besides 3nm chips, what other type of chip is seeing a surge in demand?",
+        "options": [
+          "A) 5-nanometer chips",
+          "B) Older generation chips",
+          "C) 2-nanometer chips",
+          "D) Memory chips"
+        ],
+        "answer": "C) 2-nanometer chips"
+      },
+      {
+        "q": "The phrase \"unprecedented demand\" most closely means:",
+        "options": [
+          "A) Demand that is easily met.",
+          "B) Demand that has never been seen before.",
+          "C) Demand that is expected to decrease.",
+          "D) Demand for older technology."
+        ],
+        "answer": "B) Demand that has never been seen before."
+      },
+      {
+        "q": "What does \"fully booked\" imply about TSMC's 3nm capacity?",
+        "options": [
+          "A) It is currently available for new orders.",
+          "B) It is completely reserved by existing customers.",
+          "C) It is under maintenance.",
+          "D) It has been canceled."
+        ],
+        "answer": "B) It is completely reserved by existing customers."
+      },
+      {
+        "q": "The news indicates a robust future for what kind of components?",
+        "options": [
+          "A) Low-power components",
+          "B) High-performance computing components",
+          "C) Analog components",
+          "D) Passive components"
+        ],
+        "answer": "B) High-performance computing components"
+      },
+      {
+        "q": "What is the meaning of \"simultaneous surge\"?",
+        "options": [
+          "A) A slow but steady increase.",
+          "B) A sudden, large increase happening at the same time.",
+          "C) A decrease followed by an increase.",
+          "D) An expected decrease in demand."
+        ],
+        "answer": "B) A sudden, large increase happening at the same time."
+      },
+      {
+        "q": "The word \"primarily\" suggests that AI clients are:",
+        "options": [
+          "A) The only clients.",
+          "B) The main clients, but not necessarily the only ones.",
+          "C) The least important clients.",
+          "D) Clients who are leaving TSMC."
+        ],
+        "answer": "B) The main clients, but not necessarily the only ones."
+      },
+      {
+        "q": "What does \"indicating a robust future\" suggest about the demand for 2nm chips?",
+        "options": [
+          "A) The demand is uncertain.",
+          "B) The demand is likely to be strong and stable.",
+          "C) The demand is expected to decline soon.",
+          "D) The demand is irrelevant to TSMC's future."
+        ],
+        "answer": "B) The demand is likely to be strong and stable."
+      },
+      {
+        "q": "According to the news, when was the strategic partnership announced?",
+        "options": [
+          "April 8, 2025",
+          "April 8, 2026",
+          "March 8, 2026",
+          "May 8, 2026"
+        ],
+        "answer": "April 8, 2026"
+      },
+      {
+        "q": "Which Taiwanese institution is collaborating with the United States?",
+        "options": [
+          "TSMC",
+          "ITRI",
+          "Foxconn",
+          "Academia Sinica"
+        ],
+        "answer": "ITRI"
+      },
+      {
+        "q": "Taiwan's ITRI is partnering with which country?",
+        "options": [
+          "Japan",
+          "South Korea",
+          "The United States",
+          "Germany"
+        ],
+        "answer": "The United States"
+      },
+      {
+        "q": "What specific technology is the main focus of this new partnership?",
+        "options": [
+          "Artificial Intelligence",
+          "Semiconductors",
+          "Unmanned Aerial Vehicles",
+          "Electric Vehicles"
+        ],
+        "answer": "Unmanned Aerial Vehicles"
+      },
+      {
+        "q": "What role is Taiwan expected to play in the 'non-red' drone supply chain?",
+        "options": [
+          "Manufacturing hub",
+          "Sales and distribution center",
+          "Key testing and development hub",
+          "Software development only"
+        ],
+        "answer": "Key testing and development hub"
+      },
+      {
+        "q": "What does the term 'non-red supply chain' primarily imply in this context?",
+        "options": [
+          "Environmentally friendly production",
+          "Excluding certain geopolitical influences",
+          "Focusing on red-colored drones",
+          "Using only new technologies"
+        ],
+        "answer": "Excluding certain geopolitical influences"
+      },
+      {
+        "q": "One of the goals of this initiative is to promote solutions that are __________.",
+        "options": [
+          "Cost-effective and fast",
+          "Complex and innovative",
+          "Secure and reliable",
+          "Global and diverse"
+        ],
+        "answer": "Secure and reliable"
+      },
+      {
+        "q": "The partnership aims for drone solutions to be independent of certain __________.",
+        "options": [
+          "Economic pressures",
+          "Technological limitations",
+          "Geopolitical influences",
+          "Market demands"
+        ],
+        "answer": "Geopolitical influences"
+      },
+      {
+        "q": "In the phrase 'key testing and development hub,' what does 'hub' mean?",
+        "options": [
+          "A wheel part",
+          "A central point of activity",
+          "A small office",
+          "A type of network device"
+        ],
+        "answer": "A central point of activity"
+      },
+      {
+        "q": "What is the meaning of 'diversification' in 'supply chain diversification'?",
+        "options": [
+          "Making things more complicated",
+          "Reducing the number of suppliers",
+          "Spreading investments or operations across different areas",
+          "Focusing on a single product line"
+        ],
+        "answer": "Spreading investments or operations across different areas"
+      },
+      {
+        "q": "How does this move strengthen Taiwan's role?",
+        "options": [
+          "By increasing its military power",
+          "By making it a leader in agricultural technology",
+          "By solidifying its position in global tech innovation and supply chain diversification",
+          "By attracting more tourism"
+        ],
+        "answer": "By solidifying its position in global tech innovation and supply chain diversification"
+      },
+      {
+        "q": "What kind of partner does this initiative position Taiwan as for drone technology?",
+        "options": [
+          "A competitor",
+          "A trusted partner",
+          "A minor contributor",
+          "A research-only partner"
+        ],
+        "answer": "A trusted partner"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "東南亞報告：逾半受訪者憂特朗普治下美國，更傾向中國 (SE Asia Report: Trump's US Worries Many, China Favored)",
+    "tabTitle": "地緣政治",
+    "english": "A new report reveals that over half of respondents in Southeast Asia are concerned about the United States under a potential Trump administration. The survey indicates a growing inclination towards China in the region. Many fear that a second Trump term could lead to increased instability and reduced US engagement, prompting countries to strengthen ties with Beijing. This shift reflects evolving geopolitical dynamics and regional priorities.",
+    "chinese": "一份新報告顯示，超過半數的東南亞受訪者對潛在的特朗普政府下的美國感到擔憂。該調查指出，該地區對中國的傾向日益增長。許多人擔心特朗普的第二個任期可能導致不穩定性增加和美國參與度降低，促使各國加強與北京的關係。這一轉變反映了不斷演變的地緣政治動態和地區優先事項。",
+    "vocabulary": [
+      "report (n.): 報告",
+      "respondent (n.): 受訪者",
+      "concerned (adj.): 擔憂的",
+      "potential (adj.): 潛在的",
+      "administration (n.): 政府；行政部門",
+      "survey (n.): 調查",
+      "indicate (v.): 指出；表明",
+      "growing (adj.): 日益增長的",
+      "inclination (n.): 傾向",
+      "region (n.): 地區",
+      "fear (v.): 擔心",
+      "second term (n.): 第二個任期",
+      "instability (n.): 不穩定性",
+      "reduced (adj.): 減少的",
+      "engagement (n.): 參與；介入",
+      "prompt (v.): 促使；引起",
+      "strengthen (v.): 加強",
+      "ties (n.): 關係；聯繫",
+      "geopolitical (adj.): 地緣政治的",
+      "dynamics (n.): 動態"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the report mentioned in the news?",
+        "options": [
+          "A) Economic growth in Southeast Asia.",
+          "B) Southeast Asian views on a potential Trump administration and China.",
+          "C) Environmental issues in the region.",
+          "D) Cultural exchange programs."
+        ],
+        "answer": "B) Southeast Asian views on a potential Trump administration and China."
+      },
+      {
+        "q": "According to the report, what proportion of Southeast Asian respondents are concerned about the US under a potential Trump administration?",
+        "options": [
+          "A) Less than half.",
+          "B) Exactly half.",
+          "C) Over half.",
+          "D) A small minority."
+        ],
+        "answer": "C) Over half."
+      },
+      {
+        "q": "Which country is favored by Southeast Asian respondents, according to the survey?",
+        "options": [
+          "A) The United States.",
+          "B) Japan.",
+          "C) China.",
+          "D) European Union."
+        ],
+        "answer": "C) China."
+      },
+      {
+        "q": "What is one of the fears associated with a potential second Trump term?",
+        "options": [
+          "A) Increased US economic aid.",
+          "B) Decreased instability.",
+          "C) Increased instability.",
+          "D) Stronger US engagement."
+        ],
+        "answer": "C) Increased instability."
+      },
+      {
+        "q": "What might happen to US engagement in the region under a second Trump term?",
+        "options": [
+          "A) It might increase.",
+          "B) It might be reduced.",
+          "C) It might remain the same.",
+          "D) It might shift to Europe."
+        ],
+        "answer": "B) It might be reduced."
+      },
+      {
+        "q": "What does 'prompting countries to strengthen ties with Beijing' mean?",
+        "options": [
+          "A) Countries are being forced to cut ties with Beijing.",
+          "B) Countries are encouraged to improve their relationship with Beijing.",
+          "C) Countries are becoming less interested in Beijing.",
+          "D) Countries are forming a new military alliance against Beijing."
+        ],
+        "answer": "B) Countries are encouraged to improve their relationship with Beijing."
+      },
+      {
+        "q": "The shift in regional priorities reflects what?",
+        "options": [
+          "A) A decrease in global trade.",
+          "B) Evolving geopolitical dynamics.",
+          "C) Stable political environments.",
+          "D) A decline in military spending."
+        ],
+        "answer": "B) Evolving geopolitical dynamics."
+      },
+      {
+        "q": "What does 'administration' refer to in the context of 'Trump administration'?",
+        "options": [
+          "A) A building.",
+          "B) A group of managers.",
+          "C) The government in power.",
+          "D) A type of bureaucracy."
+        ],
+        "answer": "C) The government in power."
+      },
+      {
+        "q": "If someone has a 'growing inclination' towards something, what does that mean?",
+        "options": [
+          "A) They are becoming less interested.",
+          "B) Their preference for it is increasing.",
+          "C) They are forced to accept it.",
+          "D) They are growing tired of it."
+        ],
+        "answer": "B) Their preference for it is increasing."
+      },
+      {
+        "q": "What do 'geopolitical dynamics' primarily involve?",
+        "options": [
+          "A) The study of Earth's geology.",
+          "B) The influence of geography on politics and international relations.",
+          "C) The movement of tectonic plates.",
+          "D) The study of ancient civilizations."
+        ],
+        "answer": "B) The influence of geography on politics and international relations."
+      },
+      {
+        "q": "The news article is described as having a 'factual style.' What does this imply?",
+        "options": [
+          "A) It contains many opinions and personal views.",
+          "B) It presents information objectively, based on evidence.",
+          "C) It uses highly emotional language.",
+          "D) It is primarily fictional."
+        ],
+        "answer": "B) It presents information objectively, based on evidence."
+      },
+      {
+        "q": "The term 'respondent' in a survey context refers to:",
+        "options": [
+          "A) The person conducting the survey.",
+          "B) A person who answers the questions in a survey.",
+          "C) The organization that publishes the survey.",
+          "D) A statistical analysis of the survey data."
+        ],
+        "answer": "B) A person who answers the questions in a survey."
+      }
+    ]
+  },
+  "article-4": {
+    "title": "中東局勢緊張威脅全球醫療供應鏈穩定 (Mideast Tensions Threaten Global Medical Supply Chains)",
+    "tabTitle": "國際大事",
+    "english": "Escalating tensions in the Middle East are causing significant concern for the stability of global medical supply chains. Disruptions to vital shipping routes, particularly through the Red Sea, are leading to increased transit times and freight costs for essential pharmaceuticals and medical equipment. Experts warn that prolonged instability could result in shortages of critical supplies, impacting healthcare systems worldwide. International bodies are urging de-escalation to prevent a potential humanitarian crisis and safeguard the uninterrupted flow of life-saving goods.",
+    "chinese": "中東地區日益升級的緊張局勢正對全球醫療供應鏈的穩定性造成重大擔憂。對關鍵航運路線，特別是紅海航線的干擾，導致基本藥品和醫療設備的運輸時間和運費增加。專家警告，長期不穩定可能導致關鍵物資短缺，影響全球醫療系統。國際機構正呼籲局勢降級，以防止潛在的人道危機並確保救生醫療物資的不間斷流動。",
+    "vocabulary": [
+      "Mideast (n.): 中東",
+      "Tensions (n.): 緊張局勢",
+      "Threaten (v.): 威脅",
+      "Global (adj.): 全球的",
+      "Supply chain (n. phr.): 供應鏈",
+      "Escalating (adj.): 正在升級的",
+      "Significant (adj.): 重大的",
+      "Stability (n.): 穩定性",
+      "Disruptions (n.): 中斷；干擾",
+      "Vital (adj.): 至關重要的",
+      "Shipping routes (n. phr.): 航運路線",
+      "Transit times (n. phr.): 運輸時間",
+      "Freight costs (n. phr.): 運費",
+      "Pharmaceuticals (n.): 藥品；製藥",
+      "Medical equipment (n. phr.): 醫療設備",
+      "Prolonged (adj.): 長期的",
+      "Shortages (n.): 短缺",
+      "Healthcare systems (n. phr.): 醫療系統",
+      "De-escalation (n.): 降級；緩和",
+      "Humanitarian crisis (n. phr.): 人道危機"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news article?",
+        "options": [
+          "A) New medical breakthroughs",
+          "B) The impact of Mideast tensions on global medical supplies",
+          "C) Shipping route expansions",
+          "D) International aid for humanitarian crises"
+        ],
+        "answer": "B) The impact of Mideast tensions on global medical supplies"
+      },
+      {
+        "q": "According to the article, what specific region's tensions are causing concern?",
+        "options": [
+          "A) East Asia",
+          "B) Europe",
+          "C) The Middle East",
+          "D) South America"
+        ],
+        "answer": "C) The Middle East"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a consequence of disruptions to shipping routes?",
+        "options": [
+          "A) Increased transit times",
+          "B) Lower freight costs",
+          "C) Shortages of critical supplies",
+          "D) Impact on healthcare systems"
+        ],
+        "answer": "B) Lower freight costs"
+      },
+      {
+        "q": "What types of goods are specifically mentioned as being affected by the disruptions?",
+        "options": [
+          "A) Agricultural products and electronics",
+          "B) Oil and gas",
+          "C) Pharmaceuticals and medical equipment",
+          "D) Textiles and consumer goods"
+        ],
+        "answer": "C) Pharmaceuticals and medical equipment"
+      },
+      {
+        "q": "What specific shipping route is highlighted as being particularly affected?",
+        "options": [
+          "A) The Panama Canal",
+          "B) The Suez Canal",
+          "C) The Red Sea",
+          "D) The Strait of Malacca"
+        ],
+        "answer": "C) The Red Sea"
+      },
+      {
+        "q": "What do experts warn could happen if instability is prolonged?",
+        "options": [
+          "A) A boost in local economies",
+          "B) Development of new shipping technologies",
+          "C) Shortages of critical supplies",
+          "D) A decrease in global healthcare demand"
+        ],
+        "answer": "C) Shortages of critical supplies"
+      },
+      {
+        "q": "What is the primary suggestion from international bodies?",
+        "options": [
+          "A) To increase military presence",
+          "B) To build more medical factories",
+          "C) To urge de-escalation",
+          "D) To find alternative land routes"
+        ],
+        "answer": "C) To urge de-escalation"
+      },
+      {
+        "q": "The word \"escalating\" in the first sentence is closest in meaning to:",
+        "options": [
+          "A) Decreasing",
+          "B) Intensifying",
+          "C) Stabilizing",
+          "D) Preventing"
+        ],
+        "answer": "B) Intensifying"
+      },
+      {
+        "q": "What does the article imply about the scope of the problem?",
+        "options": [
+          "A) It's a regional issue",
+          "B) It primarily affects one country",
+          "C) It has global implications",
+          "D) It's a temporary inconvenience"
+        ],
+        "answer": "C) It has global implications"
+      },
+      {
+        "q": "What is the ultimate goal of international bodies in urging de-escalation?",
+        "options": [
+          "A) To reduce shipping company profits",
+          "B) To prevent a humanitarian crisis and safeguard the flow of goods",
+          "C) To promote new trade agreements",
+          "D) To redesign global healthcare systems"
+        ],
+        "answer": "B) To prevent a humanitarian crisis and safeguard the flow of goods"
+      },
+      {
+        "q": "The phrase \"uninterrupted flow\" suggests that goods should move:",
+        "options": [
+          "A) Slowly and carefully",
+          "B) Without stopping or hindrance",
+          "C) Only during daytime",
+          "D) Through new, untried routes"
+        ],
+        "answer": "B) Without stopping or hindrance"
+      },
+      {
+        "q": "Which of the following best describes the tone of the article?",
+        "options": [
+          "A) Optimistic and hopeful",
+          "B) Neutral and objective",
+          "C) Alarmist and exaggerated",
+          "D) Amusing and lighthearted"
+        ],
+        "answer": "B) Neutral and objective"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "美國232條款晶片關稅，促台灣半導體戰略轉型 (US Section 232 Tariffs Drive Taiwan Chip Shift)",
+    "tabTitle": "地緣政治",
+    "english": "The US recently imposed Section 232 tariffs on certain semiconductor imports, impacting global supply chains. This move by the United States aims to bolster its domestic chip manufacturing and national security. In response, Taiwan, a major player in the semiconductor industry, is accelerating a strategic shift. The island nation plans to diversify its production bases and strengthen its resilience against geopolitical pressures, moving beyond its traditional concentration.",
+    "chinese": "美國近期對特定半導體進口實施了232條款關稅，影響了全球供應鏈。美國此舉旨在增強其國內晶片製造能力和國家安全。作為回應，台灣這個半導體產業的主要參與者，正在加速一項戰略轉型。這個島嶼國家計劃使其生產基地多元化，並增強其抵禦地緣政治壓力的韌性，超越其傳統的集中模式。",
+    "vocabulary": [
+      "Section 232 (n.): 232條款",
+      "tariff (n.): 關稅",
+      "semiconductor (n.): 半導體",
+      "import (n.): 進口",
+      "impact (v.): 影響",
+      "global supply chain (n.): 全球供應鏈",
+      "bolster (v.): 增強；支持",
+      "domestic (adj.): 國內的",
+      "manufacturing (n.): 製造業",
+      "national security (n.): 國家安全",
+      "in response (phr.): 作為回應",
+      "major player (n.): 主要參與者",
+      "accelerate (v.): 加速",
+      "strategic shift (n.): 戰略轉型",
+      "island nation (n.): 島嶼國家",
+      "diversify (v.): 多元化",
+      "production base (n.): 生產基地",
+      "strengthen (v.): 加強",
+      "resilience (n.): 韌性；彈性",
+      "geopolitical pressure (n.): 地緣政治壓力"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main reason for the US imposing Section 232 tariffs?",
+        "options": [
+          "A. To increase trade with Taiwan",
+          "B. To bolster its domestic manufacturing and national security",
+          "C. To lower chip prices globally",
+          "D. To promote free trade agreements"
+        ],
+        "answer": "B. To bolster its domestic manufacturing and national security"
+      },
+      {
+        "q": "What does 'tariff' mean in the context of the news?",
+        "options": [
+          "A. A type of trade agreement",
+          "B. A tax on imported goods or services",
+          "C. A manufacturing process",
+          "D. A subsidy for exports"
+        ],
+        "answer": "B. A tax on imported goods or services"
+      },
+      {
+        "q": "How is Taiwan responding to the US tariffs?",
+        "options": [
+          "A. By reducing its overall semiconductor production",
+          "B. By accelerating a strategic shift in its industry",
+          "C. By imposing its own tariffs on US goods",
+          "D. By stopping all chip exports to the US"
+        ],
+        "answer": "B. By accelerating a strategic shift in its industry"
+      },
+      {
+        "q": "Which word is closest in meaning to 'bolster'?",
+        "options": [
+          "A. Weaken",
+          "B. Undermine",
+          "C. Strengthen",
+          "D. Reduce"
+        ],
+        "answer": "C. Strengthen"
+      },
+      {
+        "q": "What specific industry is primarily affected by these Section 232 tariffs?",
+        "options": [
+          "A. Automotive industry",
+          "B. Agriculture sector",
+          "C. Semiconductor industry",
+          "D. Textile manufacturing"
+        ],
+        "answer": "C. Semiconductor industry"
+      },
+      {
+        "q": "What does Taiwan plan to do with its production bases?",
+        "options": [
+          "A. To concentrate them in one main location",
+          "B. To diversify them to various locations",
+          "C. To reduce the number of them significantly",
+          "D. To move all of them to the US"
+        ],
+        "answer": "B. To diversify them to various locations"
+      },
+      {
+        "q": "What is Taiwan aiming to strengthen against geopolitical pressures?",
+        "options": [
+          "A. Its traditional concentration",
+          "B. Its dependency on a single market",
+          "C. Its resilience",
+          "D. Its reliance on foreign aid"
+        ],
+        "answer": "C. Its resilience"
+      },
+      {
+        "q": "The phrase 'major player' in the semiconductor industry refers to Taiwan as:",
+        "options": [
+          "A. A small, insignificant competitor",
+          "B. A highly influential and important entity",
+          "C. A new entrant with limited impact",
+          "D. A country primarily consuming semiconductors"
+        ],
+        "answer": "B. A highly influential and important entity"
+      },
+      {
+        "q": "What is the US's objective regarding its domestic chip manufacturing?",
+        "options": [
+          "A. To decrease its output",
+          "B. To bolster its capabilities",
+          "C. To outsource all production",
+          "D. To maintain the status quo without changes"
+        ],
+        "answer": "B. To bolster its capabilities"
+      },
+      {
+        "q": "What does 'geopolitical pressure' primarily relate to?",
+        "options": [
+          "A. Changes in global weather patterns",
+          "B. Political and economic influences between countries",
+          "C. Internal corporate management challenges",
+          "D. Local community and urban development issues"
+        ],
+        "answer": "B. Political and economic influences between countries"
+      },
+      {
+        "q": "The US tariffs mentioned in the news are imposed under which specific section?",
+        "options": [
+          "A. Section 101",
+          "B. Section 232",
+          "C. Section 301",
+          "D. Section 404"
+        ],
+        "answer": "B. Section 232"
+      },
+      {
+        "q": "If a country has 'resilience' against challenges, it means it can:",
+        "options": [
+          "A. Easily break or collapse under pressure",
+          "B. Quickly recover from difficulties and adapt",
+          "C. Avoid all problems entirely through isolation",
+          "D. Only rely on external help to overcome obstacles"
+        ],
+        "answer": "B. Quickly recover from difficulties and adapt"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "Google AI Edge Gallery推動手機離線AI，Gemma 4上線 (Google AI Edge Gallery Brings Offline AI to Phones)",
+    "tabTitle": "科技",
+    "english": "Google is expanding its AI capabilities directly onto smartphones with the launch of the AI Edge Gallery. Announced on April 8, 2026, this initiative aims to bring powerful offline AI features to mobile devices, enabling advanced processing without an internet connection. A key highlight is the introduction of Gemma 4, a new generation of Google's lightweight AI models, optimized for on-device performance. This development promises enhanced user privacy and faster AI experiences for a wide range of applications.",
+    "chinese": "Google 正透過推出 AI Edge Gallery，將其人工智慧能力直接擴展到智慧型手機上。該計畫於 2026 年 4 月 8 日宣布，旨在為行動裝置帶來強大的離線 AI 功能，使其無需網路連線即可進行進階處理。一個主要亮點是 Gemma 4 的推出，這是 Google 新一代輕量級 AI 模型，專為裝置上的效能而優化。這項發展預示著更強的使用者隱私和更快的 AI 體驗，適用於廣泛的應用。",
+    "vocabulary": [
+      "expand (v.): 擴展",
+      "capability (n.): 能力",
+      "directly (adv.): 直接地",
+      "smartphone (n.): 智慧型手機",
+      "launch (v.): 推出；發布",
+      "initiative (n.): 倡議；計畫",
+      "aim (v.): 旨在",
+      "powerful (adj.): 強大的",
+      "offline (adj.): 離線的",
+      "feature (n.): 功能；特色",
+      "mobile device (n.): 行動裝置",
+      "enable (v.): 使能夠",
+      "advanced (adj.): 進階的",
+      "processing (n.): 處理",
+      "internet connection (n.): 網路連線",
+      "highlight (n.): 亮點",
+      "optimized (adj.): 優化的",
+      "on-device (adj.): 裝置上的",
+      "performance (n.): 效能",
+      "privacy (n.): 隱私"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of Google's AI Edge Gallery?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "When was the AI Edge Gallery initiative announced?",
+        "options": [
+          "A. April 8, 2024",
+          "B. April 8, 2025",
+          "C. April 8, 2026",
+          "D. The date is not mentioned."
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What does 'offline AI' mean in the context of this news?",
+        "options": [
+          "A. AI that works only when connected to the internet.",
+          "B. AI that needs no internet connection for processing.",
+          "C. AI that is not yet fully developed.",
+          "D. AI that is stored on a server."
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "Which new AI model is highlighted in the announcement?",
+        "options": [
+          "A. Google Brain",
+          "B. AI Edge",
+          "C. Gemma 4",
+          "D. DeepMind"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "Gemma 4 is described as a 'new generation' of what kind of AI model?",
+        "options": [
+          "A. Heavy-duty AI models.",
+          "B. Cloud-based AI models.",
+          "C. Lightweight AI models.",
+          "D. Experimental AI models."
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "For what is Gemma 4 optimized?",
+        "options": [
+          "A. Cloud performance.",
+          "B. Server processing.",
+          "C. On-device performance.",
+          "D. Internet speed."
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What is one benefit promised by this development?",
+        "options": [
+          "A. Reduced battery life.",
+          "B. Slower AI experiences.",
+          "C. Enhanced user privacy.",
+          "D. More reliance on cloud services."
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What kind of processing can mobile devices do without an internet connection, thanks to this initiative?",
+        "options": [
+          "A. Basic processing.",
+          "B. Advanced processing.",
+          "C. Only text processing.",
+          "D. Only image processing."
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "The AI Edge Gallery is expanding Google's AI capabilities onto which devices?",
+        "options": [
+          "A. Desktop computers.",
+          "B. Smart TVs.",
+          "C. Smartphones.",
+          "D. Smart home devices."
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What does 'initiative' refer to in the sentence 'this initiative aims to bring powerful offline AI features...'?",
+        "options": [
+          "A. A single product.",
+          "B. A specific app.",
+          "C. A new plan or program.",
+          "D. A type of hardware."
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "According to the text, what will be faster due to this development?",
+        "options": [
+          "A. Internet connections.",
+          "B. AI experiences.",
+          "C. Smartphone charging.",
+          "D. Software updates."
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "The AI Edge Gallery development is expected to be useful for a 'wide range of applications.' What does this imply?",
+        "options": [
+          "A. It will only work for Google's own apps.",
+          "B. It will be limited to a few specific uses.",
+          "C. It can be used in many different types of software.",
+          "D. It is only for gaming applications."
+        ],
+        "answer": "C"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
