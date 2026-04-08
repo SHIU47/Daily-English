@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 09, 2026：科技、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電宣布與歐洲車廠合作，開發車用AI晶片 (TSMC Partners with European Automaker for Automotive AI Chip Development)\nTSMC announced on April 9, 2026, a significant partnership with a leading European automaker. This collaboration aims to jointly develop advanced artificial intelligence (AI) chips specifically designed for future automotive applications. The new chips are expected to enhance vehicle safety, autonomous driving capabilities, and in-car entertainment systems. This strategic move strengthens TSMC's position in the rapidly expanding automotive semiconductor market and signifies a major step towards intelligent vehicle technology.\n\n[2] 台灣半導體材料供應鏈在地化，降低國際依賴 (Taiwan's Semiconductor Material Supply Chain Localizes, Reducing International Reliance)\nTaiwan's semiconductor industry is significantly strengthening its local material supply chain. This strategic move aims to reduce the island's historical reliance on international suppliers for critical components. By fostering domestic production and R&D, Taiwan expects to enhance supply stability and resilience against global disruptions. This localization effort positions the nation to maintain its leading role in the global semiconductor market, ensuring long-term competitiveness and technological independence.\n\n[3] 立法院三讀通過《氣候變遷因應法》修正案，強化減碳目標 (Legislature Passes Climate Change Response Act Amendment, Strengthening Carbon Reduction Goals)\nTaipei, April 9, 2026 – Taiwan’s Legislature has successfully passed a significant amendment to the Climate Change Response Act. This crucial legislative action strengthens the nation's commitment to tackling climate change. The revised law introduces more ambitious carbon reduction goals, aiming for net-zero emissions by 2050, and establishes clearer pathways for implementation. It also mandates regular reviews of progress, enhancing Taiwan's climate resilience and sustainable development efforts.",
+    "chinese": "【1】台積電宣布與歐洲車廠合作，開發車用AI晶片 (TSMC Partners with European Automaker for Automotive AI Chip Development)\n台積電於2026年4月9日宣布與一家領先的歐洲汽車製造商建立重要合作夥伴關係。此次合作旨在共同開發專為未來汽車應用設計的先進人工智慧（AI）晶片。預計這些新晶片將提升車輛安全、自動駕駛能力以及車內娛樂系統。這項策略性舉措鞏固了台積電在快速擴張的車用半導體市場中的地位，並標誌著邁向智慧車輛技術的重要一步。\n\n【2】台灣半導體材料供應鏈在地化，降低國際依賴 (Taiwan's Semiconductor Material Supply Chain Localizes, Reducing International Reliance)\n台灣半導體產業正顯著強化其在地材料供應鏈。這項戰略舉措旨在降低台灣過去對關鍵零組件國際供應商的依賴。透過扶植國內生產和研發，台灣預計將提升供應穩定性及抵禦全球中斷的能力。這項在地化努力使台灣能夠維持其在全球半導體市場的領先地位，確保長期的競爭力和技術獨立性。\n\n【3】立法院三讀通過《氣候變遷因應法》修正案，強化減碳目標 (Legislature Passes Climate Change Response Act Amendment, Strengthening Carbon Reduction Goals)\n台北，2026年4月9日 – 台灣立法院已成功三讀通過《氣候變遷因應法》的重大修正案。這項關鍵的立法行動顯著強化了國家應對氣候變遷的承諾。修訂後的法律引入了更具雄心的減碳目標，旨在2050年前實現淨零排放，並建立了更明確的實施途徑。它還要求定期審查進展，以提升台灣的氣候韌性及永續發展工作。",
+    "vocabulary": [
+      "TSMC (n.): 台積電",
+      "partner (v.): 合作",
+      "partnership (n.): 合作夥伴關係",
+      "European (adj.): 歐洲的",
+      "automaker (n.): 汽車製造商",
+      "automotive (adj.): 汽車的；車用的",
+      "AI (n.): 人工智慧 (Artificial Intelligence)",
+      "chip (n.): 晶片",
+      "development (n.): 開發；發展",
+      "announce (v.): 宣布",
+      "significant (adj.): 重要的；重大的",
+      "collaboration (n.): 合作",
+      "jointly (adv.): 共同地",
+      "advanced (adj.): 先進的",
+      "specifically (adv.): 特別地",
+      "enhance (v.): 提升；加強",
+      "safety (n.): 安全",
+      "autonomous driving (phr.): 自動駕駛",
+      "semiconductor (n.): 半導體",
+      "strategic move (phr.): 策略性舉措",
+      "semiconductor (n.): 半導體",
+      "material (n.): 材料",
+      "supply chain (n.): 供應鏈",
+      "localize (v.): 在地化；本土化",
+      "reliance (n.): 依賴",
+      "industry (n.): 產業",
+      "significantly (adv.): 顯著地",
+      "strengthen (v.): 強化；加強",
+      "strategic (adj.): 戰略性的",
+      "aim (v.): 旨在；目標是",
+      "critical (adj.): 關鍵的",
+      "component (n.): 零組件",
+      "foster (v.): 扶植；培養",
+      "domestic production (n.): 國內生產",
+      "R&D (n.): 研發 (Research and Development)",
+      "enhance (v.): 提升；加強",
+      "stability (n.): 穩定性",
+      "resilience (n.): 韌性；彈性",
+      "leading role (n.): 領先地位",
+      "technological independence (n.): 技術獨立性",
+      "Legislature (n.): 立法院",
+      "Pass (v.): 通過（法案等）",
+      "Amendment (n.): 修正案",
+      "Climate Change Response Act (n.): 氣候變遷因應法",
+      "Strengthen (v.): 強化，加強",
+      "Carbon reduction goals (n. phr.): 減碳目標",
+      "Crucial (adj.): 關鍵的，重要的",
+      "Legislative action (n. phr.): 立法行動",
+      "Commitment (n.): 承諾",
+      "Tackle (v.): 處理，應對",
+      "Revised (adj.): 修訂過的",
+      "Ambitious (adj.): 雄心勃勃的",
+      "Net-zero emissions (n. phr.): 淨零排放",
+      "Establish (v.): 建立，制定",
+      "Pathway (n.): 途徑",
+      "Implementation (n.): 實施",
+      "Mandate (v.): 規定，要求",
+      "Regular reviews (n. phr.): 定期審查",
+      "Climate resilience (n. phr.): 氣候韌性",
+      "Sustainable development (n. phr.): 永續發展"
+    ],
+    "quiz": [
+      {
+        "q": "When did TSMC announce its partnership with a European automaker?",
+        "options": [
+          "April 9, 2025",
+          "March 15, 2026",
+          "April 9, 2026",
+          "May 1, 2027"
+        ],
+        "answer": "April 9, 2026"
+      },
+      {
+        "q": "What kind of company did TSMC partner with?",
+        "options": [
+          "An Asian electronics manufacturer",
+          "A North American software developer",
+          "A leading European automaker",
+          "A global logistics provider"
+        ],
+        "answer": "A leading European automaker"
+      },
+      {
+        "q": "What is the main goal of this collaboration?",
+        "options": [
+          "To develop new smartphone components.",
+          "To jointly develop advanced AI chips for automotive applications.",
+          "To expand TSMC's operations in Europe for general electronics.",
+          "To create a new line of electric vehicles."
+        ],
+        "answer": "To jointly develop advanced AI chips for automotive applications."
+      },
+      {
+        "q": "What does \"AI\" stand for in the context of the news?",
+        "options": [
+          "Automated Industry",
+          "Artificial Intelligence",
+          "Advanced Integration",
+          "Automotive Innovation"
+        ],
+        "answer": "Artificial Intelligence"
+      },
+      {
+        "q": "What are the new chips specifically designed for?",
+        "options": [
+          "Home appliances",
+          "Future automotive applications",
+          "Medical devices",
+          "Space exploration"
+        ],
+        "answer": "Future automotive applications"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as an expected enhancement from the new chips?",
+        "options": [
+          "Vehicle safety",
+          "Reduced fuel consumption",
+          "Autonomous driving capabilities",
+          "In-car entertainment systems"
+        ],
+        "answer": "Reduced fuel consumption"
+      },
+      {
+        "q": "How does this partnership affect TSMC's market position?",
+        "options": [
+          "It weakens its position in the semiconductor market.",
+          "It strengthens its position in the automotive semiconductor market.",
+          "It shifts its focus away from semiconductors.",
+          "It has no impact on its market position."
+        ],
+        "answer": "It strengthens its position in the automotive semiconductor market."
+      },
+      {
+        "q": "What market is described as \"rapidly expanding\"?",
+        "options": [
+          "The smartphone market",
+          "The general consumer electronics market",
+          "The automotive semiconductor market",
+          "The home appliance market"
+        ],
+        "answer": "The automotive semiconductor market"
+      },
+      {
+        "q": "What does this strategic move signify for intelligent vehicle technology?",
+        "options": [
+          "A minor setback",
+          "A major step",
+          "A complete overhaul",
+          "No significant change"
+        ],
+        "answer": "A major step"
+      },
+      {
+        "q": "The collaboration aims to develop chips that will improve:",
+        "options": [
+          "Only vehicle safety.",
+          "Only in-car entertainment.",
+          "Vehicle safety, autonomous driving, and in-car entertainment.",
+          "Only the manufacturing process."
+        ],
+        "answer": "Vehicle safety, autonomous driving, and in-car entertainment."
+      },
+      {
+        "q": "What kind of chips are being developed?",
+        "options": [
+          "Memory chips",
+          "Power management chips",
+          "Advanced artificial intelligence (AI) chips",
+          "Standard microcontrollers"
+        ],
+        "answer": "Advanced artificial intelligence (AI) chips"
+      },
+      {
+        "q": "The phrase \"strategic move\" in the text refers to:",
+        "options": [
+          "A random decision by TSMC.",
+          "A planned action to achieve a specific business goal.",
+          "A marketing campaign.",
+          "A change in product design."
+        ],
+        "answer": "A planned action to achieve a specific business goal."
+      },
+      {
+        "q": "What is Taiwan's semiconductor industry primarily strengthening?",
+        "options": [
+          "Its international market share.",
+          "Its local material supply chain.",
+          "Its global sales network.",
+          "Its diplomatic ties with other nations."
+        ],
+        "answer": "Its local material supply chain."
+      },
+      {
+        "q": "What is the main goal of this strategic move?",
+        "options": [
+          "To increase profits for international suppliers.",
+          "To reduce reliance on international suppliers.",
+          "To expand into new product categories.",
+          "To attract more foreign investment."
+        ],
+        "answer": "To reduce reliance on international suppliers."
+      },
+      {
+        "q": "What kind of components is Taiwan historically reliant on international suppliers for?",
+        "options": [
+          "Marketing materials.",
+          "Critical components.",
+          "Consumer electronics.",
+          "Finished semiconductor products."
+        ],
+        "answer": "Critical components."
+      },
+      {
+        "q": "How does Taiwan plan to enhance supply stability?",
+        "options": [
+          "By importing more materials.",
+          "By fostering domestic production and R&D.",
+          "By signing more international trade agreements.",
+          "By reducing its overall production volume."
+        ],
+        "answer": "By fostering domestic production and R&D."
+      },
+      {
+        "q": "What does \"resilience against global disruptions\" mean in this context?",
+        "options": [
+          "The ability to cause global disruptions.",
+          "The ability to recover quickly from global problems.",
+          "The ability to ignore global events.",
+          "The ability to increase global trade."
+        ],
+        "answer": "The ability to recover quickly from global problems."
+      },
+      {
+        "q": "What role does this localization effort aim to help Taiwan maintain?",
+        "options": [
+          "A minor role in the global economy.",
+          "Its leading role in the global semiconductor market.",
+          "A supporting role for other countries.",
+          "A purely domestic market role."
+        ],
+        "answer": "Its leading role in the global semiconductor market."
+      },
+      {
+        "q": "What does \"technological independence\" imply for Taiwan?",
+        "options": [
+          "Relying more on foreign technology.",
+          "Being able to develop and produce technology without external control.",
+          "Isolating itself from global technological advancements.",
+          "Focusing solely on basic research."
+        ],
+        "answer": "Being able to develop and produce technology without external control."
+      },
+      {
+        "q": "The news states the localization effort ensures long-term ______ and technological independence.",
+        "options": [
+          "expense",
+          "competition",
+          "competitiveness",
+          "reliance"
+        ],
+        "answer": "competitiveness"
+      },
+      {
+        "q": "What is the primary focus of the news article?",
+        "options": [
+          "Taiwan's tourism industry.",
+          "Taiwan's agricultural exports.",
+          "Taiwan's semiconductor material supply chain.",
+          "Taiwan's international political relations."
+        ],
+        "answer": "Taiwan's semiconductor material supply chain."
+      },
+      {
+        "q": "The phrase \"historical reliance\" suggests that Taiwan has been dependent on international suppliers for:",
+        "options": [
+          "a short period.",
+          "a significant amount of time in the past.",
+          "only recently.",
+          "only specific types of finished products."
+        ],
+        "answer": "a significant amount of time in the past."
+      },
+      {
+        "q": "What is NOT mentioned as a benefit of fostering domestic production and R&D?",
+        "options": [
+          "Enhanced supply stability.",
+          "Reduced international competition.",
+          "Resilience against global disruptions.",
+          "Maintaining leading role in the market."
+        ],
+        "answer": "Reduced international competition."
+      },
+      {
+        "q": "What is the overall tone of the news article regarding Taiwan's semiconductor industry?",
+        "options": [
+          "Pessimistic.",
+          "Neutral.",
+          "Optimistic and proactive.",
+          "Critical."
+        ],
+        "answer": "Optimistic and proactive."
+      },
+      {
+        "q": "What is the main subject of the news report?",
+        "options": [
+          "A) Taiwan's economic growth",
+          "B) A new education reform",
+          "C) An amendment to the Climate Change Response Act",
+          "D) International trade agreements"
+        ],
+        "answer": "C) An amendment to the Climate Change Response Act"
+      },
+      {
+        "q": "When was the amendment passed?",
+        "options": [
+          "A) April 9, 2025",
+          "B) April 9, 2026",
+          "C) March 15, 2026",
+          "D) May 1, 2026"
+        ],
+        "answer": "B) April 9, 2026"
+      },
+      {
+        "q": "Which body passed the amendment?",
+        "options": [
+          "A) The Executive Yuan",
+          "B) The Judicial Yuan",
+          "C) Taiwan's Legislature",
+          "D) The Control Yuan"
+        ],
+        "answer": "C) Taiwan's Legislature"
+      },
+      {
+        "q": "What is one of the key outcomes of the revised law?",
+        "options": [
+          "A) Decreased focus on environmental protection",
+          "B) Introduction of more ambitious carbon reduction goals",
+          "C) Relaxation of emission standards",
+          "D) Postponement of climate action"
+        ],
+        "answer": "B) Introduction of more ambitious carbon reduction goals"
+      },
+      {
+        "q": "What is the target year for achieving net-zero emissions mentioned in the law?",
+        "options": [
+          "A) 2030",
+          "B) 2040",
+          "C) 2050",
+          "D) 2060"
+        ],
+        "answer": "C) 2050"
+      },
+      {
+        "q": "The word \"crucial\" in the text is closest in meaning to:",
+        "options": [
+          "A) Minor",
+          "B) Unimportant",
+          "C) Essential",
+          "D) Optional"
+        ],
+        "answer": "C) Essential"
+      },
+      {
+        "q": "What does the revised law establish for achieving its goals?",
+        "options": [
+          "A) Public debates",
+          "B) Clearer pathways for implementation",
+          "C) International conferences",
+          "D) Economic sanctions"
+        ],
+        "answer": "B) Clearer pathways for implementation"
+      },
+      {
+        "q": "The law \"mandates regular reviews of progress.\" What does \"mandates\" mean?",
+        "options": [
+          "A) Suggests",
+          "B) Allows",
+          "C) Requires",
+          "D) Discourages"
+        ],
+        "answer": "C) Requires"
+      },
+      {
+        "q": "What does \"climate resilience\" refer to?",
+        "options": [
+          "A) The ability to resist climate change effects",
+          "B) The ability to adapt to and recover from climate change impacts",
+          "C) The study of climate patterns",
+          "D) The global climate temperature"
+        ],
+        "answer": "B) The ability to adapt to and recover from climate change impacts"
+      },
+      {
+        "q": "What is the primary purpose of strengthening the Climate Change Response Act?",
+        "options": [
+          "A) To attract more foreign investment",
+          "B) To improve public transportation",
+          "C) To enhance Taiwan's climate resilience and sustainable development efforts",
+          "D) To promote cultural exchange"
+        ],
+        "answer": "C) To enhance Taiwan's climate resilience and sustainable development efforts"
+      },
+      {
+        "q": "What is meant by \"net-zero emissions\"?",
+        "options": [
+          "A) Emitting no carbon at all",
+          "B) Emitting less carbon than neighboring countries",
+          "C) Balancing the amount of greenhouse gases released with the amount removed from the atmosphere",
+          "D) Only using renewable energy sources"
+        ],
+        "answer": "C) Balancing the amount of greenhouse gases released with the amount removed from the atmosphere"
+      },
+      {
+        "q": "Which of the following is NOT a direct outcome of the amendment according to the text?",
+        "options": [
+          "A) Strengthening commitment to tackling climate change",
+          "B) Introducing more ambitious carbon reduction goals",
+          "C) Eliminating all industrial pollution immediately",
+          "D) Establishing clearer implementation pathways"
+        ],
+        "answer": "C) Eliminating all industrial pollution immediately"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "Google DeepMind發布全新生成式AI模型，具多模態理解能力 (Google DeepMind Releases New Multimodal Generative AI Model)",
+    "tabTitle": "科技",
+    "english": "Google DeepMind announced a significant technological advancement on April 9, 2026. The company officially released a brand-new generative Artificial Intelligence model. This innovative AI possesses advanced multimodal understanding capabilities, meaning it can process and interpret information from various sources like text, images, and audio simultaneously. This development marks a major step forward in AI research, potentially leading to more intuitive and versatile AI applications across different industries.",
+    "chinese": "Google DeepMind 於 2026 年 4 月 9 日宣布了一項重大的技術進展。該公司正式發布了一款全新的生成式人工智慧模型。這款創新的 AI 具備先進的多模態理解能力，意味著它能同時處理和解讀來自文本、圖像和音訊等多種來源的資訊。這項發展標誌著 AI 研究的一大步，潛力在於為各行各業帶來更直觀、更多功能的 AI 應用。",
+    "vocabulary": [
+      "Google DeepMind (n.): Google DeepMind (公司名稱)",
+      "announced (v.): 宣布",
+      "significant (adj.): 重大的，顯著的",
+      "technological advancement (n. phr.): 技術進步",
+      "officially released (v. phr.): 正式發布",
+      "brand-new (adj.): 全新的",
+      "generative (adj.): 生成式的",
+      "Artificial Intelligence (AI) (n.): 人工智慧",
+      "innovative (adj.): 創新的",
+      "possesses (v.): 擁有，具備",
+      "advanced (adj.): 先進的",
+      "multimodal (adj.): 多模態的",
+      "understanding capabilities (n. phr.): 理解能力",
+      "process (v.): 處理",
+      "interpret (v.): 解讀，解釋",
+      "simultaneously (adv.): 同時地",
+      "development (n.): 發展，進展",
+      "marks (v.): 標誌著",
+      "major step forward (n. phr.): 一大步進展",
+      "versatile (adj.): 多功能的，用途廣泛的"
+    ],
+    "quiz": [
+      {
+        "q": "What did Google DeepMind announce on April 9, 2026?",
+        "options": [
+          "A) A new smartphone",
+          "B) A significant technological advancement",
+          "C) A new CEO",
+          "D) A financial report"
+        ],
+        "answer": "B) A significant technological advancement"
+      },
+      {
+        "q": "What kind of AI model did Google DeepMind release?",
+        "options": [
+          "A) A predictive analytics model",
+          "B) A statistical analysis model",
+          "C) A brand-new generative AI model",
+          "D) A traditional machine learning model"
+        ],
+        "answer": "C) A brand-new generative AI model"
+      },
+      {
+        "q": "What is a key feature of this new AI model?",
+        "options": [
+          "A) It only understands text.",
+          "B) It has advanced multimodal understanding capabilities.",
+          "C) It specializes in numerical calculations.",
+          "D) It requires human supervision for every task."
+        ],
+        "answer": "B) It has advanced multimodal understanding capabilities."
+      },
+      {
+        "q": "What does \"multimodal understanding capabilities\" mean for the AI?",
+        "options": [
+          "A) It can only understand one type of data at a time.",
+          "B) It understands multiple languages.",
+          "C) It can process information from various sources like text, images, and audio simultaneously.",
+          "D) It can only create new content."
+        ],
+        "answer": "C) It can process information from various sources like text, images, and audio simultaneously."
+      },
+      {
+        "q": "When was this technological advancement announced?",
+        "options": [
+          "A) April 9, 2025",
+          "B) April 9, 2026",
+          "C) March 9, 2026",
+          "D) April 19, 2026"
+        ],
+        "answer": "B) April 9, 2026"
+      },
+      {
+        "q": "The release of this AI model is considered a \"major step forward\" in what area?",
+        "options": [
+          "A) Space exploration",
+          "B) Medical research",
+          "C) AI research",
+          "D) Renewable energy"
+        ],
+        "answer": "C) AI research"
+      },
+      {
+        "q": "What is the potential impact of this development?",
+        "options": [
+          "A) It will reduce the use of AI in industries.",
+          "B) It could lead to more intuitive and versatile AI applications.",
+          "C) It will only benefit the entertainment industry.",
+          "D) It will replace all human jobs immediately."
+        ],
+        "answer": "B) It could lead to more intuitive and versatile AI applications."
+      },
+      {
+        "q": "Which word best describes the new AI model's ability to process different data types?",
+        "options": [
+          "A) Monomodal",
+          "B) Unimodal",
+          "C) Multimodal",
+          "D) Bimodal"
+        ],
+        "answer": "C) Multimodal"
+      },
+      {
+        "q": "The term \"generative AI\" implies that the AI can:",
+        "options": [
+          "A) Only analyze existing data.",
+          "B) Create new content or data.",
+          "C) Generate financial reports.",
+          "D) Generate electricity."
+        ],
+        "answer": "B) Create new content or data."
+      },
+      {
+        "q": "What does the word \"simultaneously\" mean in the context of the news?",
+        "options": [
+          "A) One after another",
+          "B) At different times",
+          "C) At the same time",
+          "D) Rarely"
+        ],
+        "answer": "C) At the same time"
+      },
+      {
+        "q": "The AI model can interpret information from which of the following sources?",
+        "options": [
+          "A) Text only",
+          "B) Images only",
+          "C) Audio only",
+          "D) Text, images, and audio"
+        ],
+        "answer": "D) Text, images, and audio"
+      },
+      {
+        "q": "The overall tone of the news article is:",
+        "options": [
+          "A) Speculative",
+          "B) Critical",
+          "C) Factual and optimistic",
+          "D) Humorous"
+        ],
+        "answer": "C) Factual and optimistic"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "微軟宣布投資量子運算新創公司，加速技術突破 (Microsoft Invests in Quantum Computing Startup to Accelerate Tech Breakthroughs)",
+    "tabTitle": "科技",
+    "english": "On April 9, 2026, Microsoft announced a significant investment in a promising quantum computing startup. This strategic move aims to accelerate the development of cutting-edge quantum technologies and push the boundaries of computational power. The partnership is expected to foster innovation, bringing new solutions to complex problems in various industries faster. This investment highlights Microsoft's commitment to leading the next era of technological advancement.",
+    "chinese": "2026年4月9日，微軟宣布對一家前景看好的量子運算新創公司進行了重大投資。這項戰略舉措旨在加速尖端量子技術的發展，並推動運算能力的極限。預計這項合作將促進創新，更快地為各行各業的複雜問題帶來新的解決方案。這項投資突顯了微軟引領下一波科技進步的決心。",
+    "vocabulary": [
+      "announce (v.): 宣布",
+      "invest (v.): 投資",
+      "investment (n.): 投資",
+      "quantum computing (n.): 量子運算",
+      "startup (n.): 新創公司",
+      "accelerate (v.): 加速",
+      "breakthrough (n.): 突破",
+      "significant (adj.): 重大的",
+      "promising (adj.): 有前景的",
+      "strategic (adj.): 戰略性的",
+      "aim to (phr.): 旨在",
+      "development (n.): 發展",
+      "cutting-edge (adj.): 尖端的",
+      "technology (n.): 技術",
+      "push the boundaries (phr.): 推動極限",
+      "computational power (n.): 運算能力",
+      "foster (v.): 促進；培養",
+      "innovation (n.): 創新",
+      "commitment (n.): 承諾；決心",
+      "technological advancement (n.): 科技進步"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A. Microsoft's new operating system launch.",
+          "B. The latest trends in quantum computing research.",
+          "C. Microsoft's investment in a quantum computing startup.",
+          "D. The history of technological advancements."
+        ],
+        "answer": "C. Microsoft's investment in a quantum computing startup."
+      },
+      {
+        "q": "Who made a significant investment?",
+        "options": [
+          "A. A quantum computing startup.",
+          "B. Microsoft.",
+          "C. Various industries.",
+          "D. An unnamed technology company."
+        ],
+        "answer": "B. Microsoft."
+      },
+      {
+        "q": "What kind of company did Microsoft invest in?",
+        "options": [
+          "A. An artificial intelligence firm.",
+          "B. A software development company.",
+          "C. A quantum computing startup.",
+          "D. A semiconductor manufacturer."
+        ],
+        "answer": "C. A quantum computing startup."
+      },
+      {
+        "q": "What is the primary goal of this investment?",
+        "options": [
+          "A. To acquire the startup completely.",
+          "B. To slow down quantum technology development.",
+          "C. To accelerate the development of cutting-edge quantum technologies.",
+          "D. To solve current financial problems."
+        ],
+        "answer": "C. To accelerate the development of cutting-edge quantum technologies."
+      },
+      {
+        "q": "What is expected to be fostered by this partnership?",
+        "options": [
+          "A. Competition among startups.",
+          "B. Innovation.",
+          "C. Traditional computing methods.",
+          "D. Economic recession."
+        ],
+        "answer": "B. Innovation."
+      },
+      {
+        "q": "When was this announcement made?",
+        "options": [
+          "A. On April 9, 2025.",
+          "B. On April 9, 2026.",
+          "C. On March 9, 2026.",
+          "D. The date is not mentioned."
+        ],
+        "answer": "B. On April 9, 2026."
+      },
+      {
+        "q": "In the phrase \"cutting-edge quantum technologies,\" what does \"cutting-edge\" mean?",
+        "options": [
+          "A. Outdated and old.",
+          "B. Simple and basic.",
+          "C. Advanced and innovative.",
+          "D. Cheap and affordable."
+        ],
+        "answer": "C. Advanced and innovative."
+      },
+      {
+        "q": "The partnership is expected to \"foster innovation.\" What is a synonym for \"foster\"?",
+        "options": [
+          "A. Hinder.",
+          "B. Discourage.",
+          "C. Promote.",
+          "D. Suppress."
+        ],
+        "answer": "C. Promote."
+      },
+      {
+        "q": "What does Microsoft's investment suggest about its strategy?",
+        "options": [
+          "A. It is withdrawing from future technologies.",
+          "B. It is focusing solely on traditional software.",
+          "C. It aims to be a leader in future technological advancements.",
+          "D. It is struggling financially."
+        ],
+        "answer": "C. It aims to be a leader in future technological advancements."
+      },
+      {
+        "q": "What kind of problems are new solutions expected to address faster?",
+        "options": [
+          "A. Simple daily tasks.",
+          "B. Complex problems in various industries.",
+          "C. Only software bugs.",
+          "D. Marketing challenges."
+        ],
+        "answer": "B. Complex problems in various industries."
+      },
+      {
+        "q": "What does it mean to \"push the boundaries of computational power\"?",
+        "options": [
+          "A. To limit computational power.",
+          "B. To reduce computational capabilities.",
+          "C. To explore and expand the limits of what is possible with computing.",
+          "D. To ignore computational advancements."
+        ],
+        "answer": "C. To explore and expand the limits of what is possible with computing."
+      },
+      {
+        "q": "What is the overall tone of this news article?",
+        "options": [
+          "A. Skeptical.",
+          "B. Pessimistic.",
+          "C. Optimistic and forward-looking.",
+          "D. Neutral and indifferent."
+        ],
+        "answer": "C. Optimistic and forward-looking."
+      }
+    ]
+  },
+  "article-5": {
+    "title": "新興市場債務危機風險升高，IMF發布預警 (Emerging Market Debt Crisis Risk Rises, IMF Issues Warning)",
+    "tabTitle": "金融市場",
+    "english": "On April 9, 2026, the International Monetary Fund (IMF) issued a significant warning about the increasing risk of a debt crisis in emerging markets. Rising global interest rates and a strong U.S. dollar are making it harder for these countries to repay their foreign currency debts. The IMF urged governments to implement stronger fiscal policies and seek international cooperation to avoid severe economic instability.",
+    "chinese": "國際貨幣基金組織（IMF）於2026年4月9日發布了一項重要預警，指出新興市場債務危機的風險正在升高。全球利率上升和美元走強，使得這些國家償還外幣債務變得更加困難。IMF敦促各國政府實施更強健的財政政策，並尋求國際合作，以避免嚴重的經濟不穩定。",
+    "vocabulary": [
+      "International Monetary Fund (IMF) (n.): 國際貨幣基金組織",
+      "emerging markets (n.phr.): 新興市場",
+      "debt crisis (n.phr.): 債務危機",
+      "issue a warning (v.phr.): 發布預警",
+      "risk (n.): 風險",
+      "rise (v.): 升高；增加",
+      "global interest rates (n.phr.): 全球利率",
+      "strong U.S. dollar (n.phr.): 強勢美元",
+      "repay (v.): 償還",
+      "foreign currency debts (n.phr.): 外幣債務",
+      "urge (v.): 敦促；力勸",
+      "implement (v.): 實施；執行",
+      "fiscal policies (n.phr.): 財政政策",
+      "seek (v.): 尋求",
+      "international cooperation (n.phr.): 國際合作",
+      "avoid (v.): 避免",
+      "severe (adj.): 嚴重的",
+      "economic instability (n.phr.): 經濟不穩定",
+      "significant (adj.): 重要的；重大的",
+      "financial market (n.phr.): 金融市場"
+    ],
+    "quiz": [
+      {
+        "q": "What organization issued the warning on April 9, 2026?",
+        "options": [
+          "A. World Bank",
+          "B. International Monetary Fund",
+          "C. European Central Bank",
+          "D. United Nations"
+        ],
+        "answer": "International Monetary Fund"
+      },
+      {
+        "q": "What is the primary concern highlighted in the news regarding emerging markets?",
+        "options": [
+          "A. Stock market volatility",
+          "B. Debt crisis risk",
+          "C. Trade imbalances",
+          "D. High unemployment rates"
+        ],
+        "answer": "Debt crisis risk"
+      },
+      {
+        "q": "According to the news, what are two factors making debt repayment harder for emerging markets?",
+        "options": [
+          "A. Low global interest rates and a weak U.S. dollar",
+          "B. Rising global interest rates and a strong U.S. dollar",
+          "C. Stable global interest rates and a weak U.S. dollar",
+          "D. Falling global interest rates and a strong U.S. dollar"
+        ],
+        "answer": "Rising global interest rates and a strong U.S. dollar"
+      },
+      {
+        "q": "What type of debts are specifically mentioned as becoming harder for emerging markets to repay?",
+        "options": [
+          "A. Domestic currency debts",
+          "B. Corporate bonds",
+          "C. Foreign currency debts",
+          "D. Personal loans"
+        ],
+        "answer": "Foreign currency debts"
+      },
+      {
+        "q": "What did the IMF urge governments to implement?",
+        "options": [
+          "A. Looser monetary policies",
+          "B. Stronger fiscal policies",
+          "C. Trade tariffs",
+          "D. Currency devaluation"
+        ],
+        "answer": "Stronger fiscal policies"
+      },
+      {
+        "q": "Besides stronger fiscal policies, what else did the IMF suggest governments seek?",
+        "options": [
+          "A. Military alliances",
+          "B. Bilateral trade agreements",
+          "C. International cooperation",
+          "D. Technological innovation"
+        ],
+        "answer": "International cooperation"
+      },
+      {
+        "q": "What is the ultimate goal of the IMF's recommendations?",
+        "options": [
+          "A. To increase foreign investment",
+          "B. To avoid severe economic instability",
+          "C. To boost exports",
+          "D. To lower unemployment rates"
+        ],
+        "answer": "To avoid severe economic instability"
+      },
+      {
+        "q": "The word 'implement' in the news is closest in meaning to:",
+        "options": [
+          "A. delay",
+          "B. ignore",
+          "C. execute",
+          "D. prevent"
+        ],
+        "answer": "execute"
+      },
+      {
+        "q": "What does the term 'emerging markets' generally refer to in economics?",
+        "options": [
+          "A. Highly developed economies",
+          "B. Countries with rapidly growing economies",
+          "C. Countries with stagnant economies",
+          "D. Countries that are net exporters of oil"
+        ],
+        "answer": "Countries with rapidly growing economies"
+      },
+      {
+        "q": "What is the meaning of 'fiscal policies'?",
+        "options": [
+          "A. Policies related to military spending",
+          "B. Policies related to government spending and taxation",
+          "C. Policies related to social welfare",
+          "D. Policies related to environmental protection"
+        ],
+        "answer": "Policies related to government spending and taxation"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a factor contributing to the difficulty of debt repayment?",
+        "options": [
+          "A. Rising global interest rates",
+          "B. A strong U.S. dollar",
+          "C. Increased domestic consumption",
+          "D. Foreign currency debts"
+        ],
+        "answer": "Increased domestic consumption"
+      },
+      {
+        "q": "The IMF's warning is described as 'significant'. What does 'significant' mean in this context?",
+        "options": [
+          "A. Small and unimportant",
+          "B. Minor but interesting",
+          "C. Important and noticeable",
+          "D. Confusing and unclear"
+        ],
+        "answer": "Important and noticeable"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "自動駕駛技術獲重大進展，多家車廠宣布量產時程 (Autonomous Driving Tech Sees Major Progress, Automakers Announce Production Timelines)",
+    "tabTitle": "科技",
+    "english": "Date: 2026.04.09\nSignificant breakthroughs in autonomous driving technology have been reported, marking a new era for the automotive industry. Several leading car manufacturers, including Tesla, Mercedes-Benz, and Waymo, have announced ambitious timelines for the mass production of Level 3 and Level 4 self-driving vehicles. These advancements are largely due to improved sensor fusion, AI algorithms, and robust testing protocols. Consumers can expect to see these advanced autonomous features integrated into new car models hitting the market as early as late 2027, with wider availability projected for 2028. This development promises enhanced safety and efficiency on roads worldwide.",
+    "chinese": "日期：2026.04.09\n自動駕駛技術取得了重大突破，為汽車產業開啟了新紀元。包括特斯拉、賓士和Waymo在內的多家領先汽車製造商，已宣布了雄心勃勃的L3和L4級自駕車大規模生產時程。這些進步主要歸功於改進的感測器融合、人工智慧演算法和強健的測試協議。消費者預計最快在2027年末就能看到這些先進的自動駕駛功能整合到上市的新車型中，並預計在2028年更廣泛地普及。這項發展預示著全球道路安全和效率的提升。",
+    "vocabulary": [
+      "Autonomous (adj.): 自動的",
+      "Driving technology (n.phr.): 駕駛技術",
+      "Major (adj.): 重大的",
+      "Progress (n.): 進展",
+      "Automakers (n.): 汽車製造商",
+      "Announce (v.): 宣布",
+      "Production timelines (n.phr.): 生產時程表",
+      "Significant (adj.): 顯著的",
+      "Breakthroughs (n.): 突破",
+      "Automotive industry (n.phr.): 汽車產業",
+      "Leading (adj.): 領先的",
+      "Mass production (n.phr.): 大規模生產",
+      "Self-driving vehicles (n.phr.): 自動駕駛車輛",
+      "Advancements (n.): 進步",
+      "Sensor fusion (n.phr.): 感測器融合",
+      "AI algorithms (n.phr.): 人工智慧演算法",
+      "Robust testing protocols (n.phr.): 強健的測試協議",
+      "Integrated (v.): 整合",
+      "Wider availability (n.phr.): 更廣泛的普及",
+      "Enhanced safety and efficiency (n.phr.): 提升的安全與效率"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A. New car models",
+          "B. Autonomous driving technology",
+          "C. Car sales",
+          "D. AI in general"
+        ],
+        "answer": "B. Autonomous driving technology"
+      },
+      {
+        "q": "Which companies are mentioned as leading car manufacturers?",
+        "options": [
+          "A. Honda, Ford, Toyota",
+          "B. Tesla, Mercedes-Benz, Waymo",
+          "C. BMW, Audi, Nissan",
+          "D. Hyundai, Kia, Volvo"
+        ],
+        "answer": "B. Tesla, Mercedes-Benz, Waymo"
+      },
+      {
+        "q": "What levels of self-driving vehicles are car manufacturers announcing production timelines for?",
+        "options": [
+          "A. Level 1 and Level 2",
+          "B. Level 3 and Level 4",
+          "C. Level 5 only",
+          "D. All levels"
+        ],
+        "answer": "B. Level 3 and Level 4"
+      },
+      {
+        "q": "What are the advancements in autonomous driving technology largely due to?",
+        "options": [
+          "A. Cheaper materials",
+          "B. Improved sensor fusion, AI algorithms, and robust testing protocols",
+          "C. Government subsidies",
+          "D. Increased consumer demand"
+        ],
+        "answer": "B. Improved sensor fusion, AI algorithms, and robust testing protocols"
+      },
+      {
+        "q": "When can consumers expect to see advanced autonomous features integrated into new car models?",
+        "options": [
+          "A. As early as late 2026",
+          "B. As early as late 2027",
+          "C. As early as late 2028",
+          "D. Not until 2030"
+        ],
+        "answer": "B. As early as late 2027"
+      },
+      {
+        "q": "What is the projected timeline for wider availability of these autonomous features?",
+        "options": [
+          "A. 2026",
+          "B. 2027",
+          "C. 2028",
+          "D. 2029"
+        ],
+        "answer": "C. 2028"
+      },
+      {
+        "q": "What does this development promise for roads worldwide?",
+        "options": [
+          "A. Faster travel times",
+          "B. Enhanced safety and efficiency",
+          "C. More traffic jams",
+          "D. Lower car prices"
+        ],
+        "answer": "B. Enhanced safety and efficiency"
+      },
+      {
+        "q": "What does \"autonomous\" mean in the context of driving?",
+        "options": [
+          "A. Manual",
+          "B. Self-governing",
+          "C. Electric",
+          "D. Fast"
+        ],
+        "answer": "B. Self-governing"
+      },
+      {
+        "q": "What does \"mass production\" refer to?",
+        "options": [
+          "A. Producing a small number of items",
+          "B. Producing items individually",
+          "C. Producing a large quantity of standardized items",
+          "D. Producing luxury items only"
+        ],
+        "answer": "C. Producing a large quantity of standardized items"
+      },
+      {
+        "q": "The term \"breakthroughs\" implies:",
+        "options": [
+          "A. Minor changes",
+          "B. Significant new discoveries or developments",
+          "C. Failures",
+          "D. Delays"
+        ],
+        "answer": "B. Significant new discoveries or developments"
+      },
+      {
+        "q": "\"Robust testing protocols\" suggests that the testing procedures are:",
+        "options": [
+          "A. Weak and unreliable",
+          "B. Strong and thorough",
+          "C. Expensive and slow",
+          "D. Simple and quick"
+        ],
+        "answer": "B. Strong and thorough"
+      },
+      {
+        "q": "What is the meaning of \"integrated\" in this context?",
+        "options": [
+          "A. Separated",
+          "B. Removed",
+          "C. Combined or incorporated",
+          "D. Delayed"
+        ],
+        "answer": "C. Combined or incorporated"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
