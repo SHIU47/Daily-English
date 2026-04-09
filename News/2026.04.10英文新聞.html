@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 10, 2026：科技、金融市場 與 地緣政治</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電公布三月營收，AI需求動能受關注 (TSMC Releases March Revenue, AI Demand in Focus)\nTaiwan Semiconductor Manufacturing Company (TSMC) announced its March revenue on April 10, 2026. The company reported strong figures, indicating robust performance. Analysts are particularly keen to observe how much of this growth is driven by the increasing global demand for Artificial Intelligence (AI) chips. TSMC, as a leading chipmaker, is a key supplier for many AI innovators. Therefore, its financial results offer significant insights into the current health and future trajectory of the AI industry.\n\n[2] 中東戰事衝擊，台灣經濟面臨能源供應壓力測試 (Mideast Conflict Tests Taiwan's Energy Stability)\nTaiwan's economy is facing a significant challenge due to the escalating Mideast conflict. As a highly industrialized nation heavily reliant on imported energy, particularly oil and natural gas, the ongoing instability poses a critical threat to its supply chains. This situation could lead to increased energy costs and potential disruptions, putting immense pressure on Taiwan's economic stability and industrial output. Policymakers are now evaluating contingency plans to mitigate these risks and ensure energy security amidst global uncertainties.\n\n[3] 全球醫學創新峰會台北開幕，聚焦工程與醫療整合 (Global Medical Innovation Summit Opens in Taipei)\nThe Global Medical Innovation Summit officially opened in Taipei today, April 10, 2026. Bringing together leading experts and researchers worldwide, the event focuses on the crucial integration of engineering and medical science. Participants will discuss leveraging advanced technologies, including artificial intelligence and robotics, to revolutionize healthcare. Key topics include innovative diagnostic tools, personalized treatment approaches, and smart medical devices. The summit aims to foster international collaboration and accelerate breakthroughs in medical technology.",
+    "chinese": "【1】台積電公布三月營收，AI需求動能受關注 (TSMC Releases March Revenue, AI Demand in Focus)\n台灣積體電路製造公司（台積電）於2026年4月10日公布了其三月份營收。該公司報告了強勁的數據，顯示出穩健的業績表現。分析師們特別關注，這些增長有多少是由於全球對人工智慧（AI）晶片日益增長的需求所驅動。作為領先的晶片製造商，台積電是許多AI創新者的主要供應商。因此，其財務結果為AI產業目前的健康狀況和未來發展軌跡提供了重要的見解。\n\n【2】中東戰事衝擊，台灣經濟面臨能源供應壓力測試 (Mideast Conflict Tests Taiwan's Energy Stability)\n台灣經濟正因中東衝突升級而面臨嚴峻挑戰。作為一個高度工業化且嚴重依賴進口能源（特別是石油和天然氣）的國家，持續的不穩定對其供應鏈構成關鍵威脅。這種情況可能導致能源成本上升和潛在的中斷，對台灣的經濟穩定和工業產出造成巨大壓力。政策制定者目前正在評估應變計畫，以在全球不確定性中減輕這些風險並確保能源安全。\n\n【3】全球醫學創新峰會台北開幕，聚焦工程與醫療整合 (Global Medical Innovation Summit Opens in Taipei)\n全球醫學創新峰會於今日，2026年4月10日，在台北正式開幕。本次盛會匯聚了來自世界各地的頂尖專家和研究人員，重點聚焦於工程學與醫學科學的關鍵整合。與會者將討論如何運用包括人工智慧和機器人技術在內的先進科技，以徹底改變醫療保健。主要議題涵蓋創新的診斷工具、個人化治療方案以及智慧醫療設備的開發。此次峰會旨在促進國際合作，加速醫療技術的突破性進展。",
+    "vocabulary": [
+      "Taiwan Semiconductor Manufacturing Company (n.): 台灣積體電路製造公司",
+      "TSMC (abbr.): 台積電",
+      "announced (v.): 公布",
+      "March revenue (n. phrase): 三月營收",
+      "reported (v.): 報告",
+      "strong figures (n. phrase): 強勁數據",
+      "indicating (v.): 表明；顯示",
+      "robust performance (n. phrase): 穩健的業績表現",
+      "analysts (n.): 分析師",
+      "particularly (adv.): 特別是；尤其",
+      "keen to observe (phrase): 密切關注",
+      "driven by (phrase): 由...驅動",
+      "increasing demand (n. phrase): 日益增長的需求",
+      "Artificial Intelligence (AI) (n. phrase): 人工智慧",
+      "chips (n.): 晶片",
+      "leading chipmaker (n. phrase): 領先的晶片製造商",
+      "key supplier (n. phrase): 主要供應商",
+      "innovators (n.): 創新者",
+      "financial results (n. phrase): 財務結果",
+      "future trajectory (n. phrase): 未來發展軌跡",
+      "Mideast (n.): 中東",
+      "conflict (n.): 衝突",
+      "stability (n.): 穩定性",
+      "economy (n.): 經濟",
+      "significant (adj.): 顯著的，重大的",
+      "escalating (adj.): 正在升級的",
+      "reliant (adj.): 依賴的",
+      "imported (adj.): 進口的",
+      "energy (n.): 能源",
+      "particularly (adv.): 尤其，特別是",
+      "ongoing (adj.): 持續進行的",
+      "instability (n.): 不穩定性",
+      "poses a threat (phr.): 構成威脅",
+      "critical (adj.): 關鍵的，嚴峻的",
+      "supply chains (n.phr.): 供應鏈",
+      "disruptions (n.): 中斷，擾亂",
+      "immense pressure (n.phr.): 巨大壓力",
+      "industrial output (n.phr.): 工業產出",
+      "contingency plans (n.phr.): 應變計畫",
+      "mitigate (v.): 減輕，緩和",
+      "Summit (n.): 峰會",
+      "Innovation (n.): 創新",
+      "Officially (adv.): 正式地",
+      "Integration (n.): 整合，結合",
+      "Engineering (n.): 工程學",
+      "Medical science (n.phr.): 醫學科學",
+      "Leading (adj.): 領先的，主要的",
+      "Experts (n.): 專家",
+      "Researchers (n.): 研究人員",
+      "Crucial (adj.): 關鍵的，至關重要的",
+      "Participants (n.): 與會者",
+      "Leverage (v.): 利用，發揮",
+      "Advanced technologies (n.phr.): 先進科技",
+      "Artificial intelligence (n.phr.): 人工智慧",
+      "Robotics (n.): 機器人技術",
+      "Revolutionize (v.): 徹底改變，革新",
+      "Healthcare (n.): 醫療保健",
+      "Diagnostic tools (n.phr.): 診斷工具",
+      "Personalized treatment (n.phr.): 個人化治療",
+      "Breakthroughs (n.): 突破性進展"
+    ],
+    "quiz": [
+      {
+        "q": "What did TSMC announce on April 10, 2026?",
+        "options": [
+          "A. Its annual financial report",
+          "B. Its March revenue",
+          "C. A new AI chip",
+          "D. A partnership with an AI innovator"
+        ],
+        "answer": "B. Its March revenue"
+      },
+      {
+        "q": "How did TSMC's reported figures for March appear?",
+        "options": [
+          "A. Weak",
+          "B. Average",
+          "C. Strong",
+          "D. Undisclosed"
+        ],
+        "answer": "C. Strong"
+      },
+      {
+        "q": "What does 'robust performance' in the text indicate about TSMC's business?",
+        "options": [
+          "A. It is struggling financially.",
+          "B. It is stable and doing well.",
+          "C. It is expanding into new markets.",
+          "D. It is facing significant challenges."
+        ],
+        "answer": "B. It is stable and doing well."
+      },
+      {
+        "q": "What are analysts particularly interested in regarding TSMC's growth?",
+        "options": [
+          "A. The impact of new competitors",
+          "B. The influence of global economic downturns",
+          "C. The role of AI chip demand",
+          "D. The effectiveness of its marketing strategies"
+        ],
+        "answer": "C. The role of AI chip demand"
+      },
+      {
+        "q": "What kind of company is TSMC described as in the news?",
+        "options": [
+          "A. A leading software developer",
+          "B. A major AI innovator",
+          "C. A leading chipmaker",
+          "D. A financial services firm"
+        ],
+        "answer": "C. A leading chipmaker"
+      },
+      {
+        "q": "Who is TSMC a key supplier for, according to the text?",
+        "options": [
+          "A. Government agencies",
+          "B. Many AI innovators",
+          "C. Retail consumers",
+          "D. Agricultural companies"
+        ],
+        "answer": "B. Many AI innovators"
+      },
+      {
+        "q": "What do TSMC's financial results offer significant insights into?",
+        "options": [
+          "A. The stock market's volatility",
+          "B. The current health and future trajectory of the AI industry",
+          "C. Global energy prices",
+          "D. Consumer spending habits"
+        ],
+        "answer": "B. The current health and future trajectory of the AI industry"
+      },
+      {
+        "q": "What does the abbreviation 'AI' stand for?",
+        "options": [
+          "A. Advanced Industry",
+          "B. Artificial Intelligence",
+          "C. Automated Information",
+          "D. Analytical Insights"
+        ],
+        "answer": "B. Artificial Intelligence"
+      },
+      {
+        "q": "What is another way to say 'keen to observe'?",
+        "options": [
+          "A. Indifferent to",
+          "B. Eager to watch",
+          "C. Reluctant to analyze",
+          "D. Unable to see"
+        ],
+        "answer": "B. Eager to watch"
+      },
+      {
+        "q": "If something is 'driven by' a factor, what does that mean?",
+        "options": [
+          "A. It is hindered by that factor.",
+          "B. It is caused or propelled by that factor.",
+          "C. It is unrelated to that factor.",
+          "D. It is separate from that factor."
+        ],
+        "answer": "B. It is caused or propelled by that factor."
+      },
+      {
+        "q": "What part of speech is 'particularly' in the sentence 'Analysts are particularly keen to observe...'?",
+        "options": [
+          "A. Noun",
+          "B. Verb",
+          "C. Adjective",
+          "D. Adverb"
+        ],
+        "answer": "D. Adverb"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a detail in the news?",
+        "options": [
+          "A. TSMC's March revenue.",
+          "B. The date of the announcement.",
+          "C. The specific amount of TSMC's revenue.",
+          "D. The demand for AI chips."
+        ],
+        "answer": "C. The specific amount of TSMC's revenue."
+      },
+      {
+        "q": "What is the main subject of the news article?",
+        "options": [
+          "A) Taiwan's new industrial policies",
+          "B) The Mideast conflict's impact on global tourism",
+          "C) Taiwan's energy security challenge due to the Mideast conflict",
+          "D) The history of energy imports in Taiwan"
+        ],
+        "answer": "C) Taiwan's energy security challenge due to the Mideast conflict"
+      },
+      {
+        "q": "Taiwan is described as heavily reliant on what?",
+        "options": [
+          "A) Domestic renewable energy",
+          "B) Imported energy",
+          "C) Agricultural exports",
+          "D) Tourism revenue"
+        ],
+        "answer": "B) Imported energy"
+      },
+      {
+        "q": "Which specific energy sources are mentioned as crucial for Taiwan?",
+        "options": [
+          "A) Solar and wind power",
+          "B) Coal and hydroelectricity",
+          "C) Oil and natural gas",
+          "D) Geothermal and biomass"
+        ],
+        "answer": "C) Oil and natural gas"
+      },
+      {
+        "q": "The ongoing instability in the Mideast poses a critical threat to Taiwan's what?",
+        "options": [
+          "A) Political alliances",
+          "B) Educational system",
+          "C) Supply chains",
+          "D) Cultural heritage"
+        ],
+        "answer": "C) Supply chains"
+      },
+      {
+        "q": "What are the potential consequences of this situation mentioned in the article?",
+        "options": [
+          "A) Decreased energy costs and increased output",
+          "B) Increased energy costs and potential disruptions",
+          "C) Stable energy prices and expanded trade",
+          "D) Reduced reliance on imports"
+        ],
+        "answer": "B) Increased energy costs and potential disruptions"
+      },
+      {
+        "q": "What is under immense pressure due to the situation?",
+        "options": [
+          "A) Taiwan's military defense",
+          "B) Taiwan's economic stability and industrial output",
+          "C) Taiwan's public transportation",
+          "D) Taiwan's healthcare system"
+        ],
+        "answer": "B) Taiwan's economic stability and industrial output"
+      },
+      {
+        "q": "What are policymakers currently doing?",
+        "options": [
+          "A) Ignoring the issue",
+          "B) Investing in Mideast infrastructure",
+          "C) Evaluating contingency plans",
+          "D) Promoting international travel"
+        ],
+        "answer": "C) Evaluating contingency plans"
+      },
+      {
+        "q": "The purpose of contingency plans is to do what?",
+        "options": [
+          "A) Escalate the conflict",
+          "B) Increase global uncertainties",
+          "C) Mitigate risks and ensure energy security",
+          "D) Reduce industrial output"
+        ],
+        "answer": "C) Mitigate risks and ensure energy security"
+      },
+      {
+        "q": "In the sentence 'escalating Mideast conflict,' what does 'escalating' mean?",
+        "options": [
+          "A) Decreasing in intensity",
+          "B) Gradually increasing in intensity",
+          "C) Remaining stable",
+          "D) Suddenly ending"
+        ],
+        "answer": "B) Gradually increasing in intensity"
+      },
+      {
+        "q": "If a country is 'heavily reliant on imported energy,' what does it mean?",
+        "options": [
+          "A) It produces all its own energy",
+          "B) It depends a lot on energy from other countries",
+          "C) It exports a lot of energy",
+          "D) It has no need for energy"
+        ],
+        "answer": "B) It depends a lot on energy from other countries"
+      },
+      {
+        "q": "What is the closest meaning to 'mitigate' in this context?",
+        "options": [
+          "A) Worsen",
+          "B) Increase",
+          "C) Lessen",
+          "D) Create"
+        ],
+        "answer": "C) Lessen"
+      },
+      {
+        "q": "What is the overall tone of the news report?",
+        "options": [
+          "A) Optimistic",
+          "B) Humorous",
+          "C) Concerned and factual",
+          "D) Indifferent"
+        ],
+        "answer": "C) Concerned and factual"
+      },
+      {
+        "q": "What is the main focus of the Global Medical Innovation Summit?",
+        "options": [
+          "A. Discussing global economic trends.",
+          "B. Integrating engineering and medical science.",
+          "C. Promoting international tourism.",
+          "D. Launching new consumer electronics."
+        ],
+        "answer": "B. Integrating engineering and medical science."
+      },
+      {
+        "q": "Where is the Global Medical Innovation Summit taking place?",
+        "options": [
+          "A. New York",
+          "B. London",
+          "C. Taipei",
+          "D. Tokyo"
+        ],
+        "answer": "C. Taipei"
+      },
+      {
+        "q": "When did the summit officially open?",
+        "options": [
+          "A. April 10, 2025",
+          "B. April 10, 2026",
+          "C. May 10, 2026",
+          "D. March 10, 2026"
+        ],
+        "answer": "B. April 10, 2026"
+      },
+      {
+        "q": "Who are primarily gathering at the summit?",
+        "options": [
+          "A. Government officials only.",
+          "B. Business leaders and investors.",
+          "C. Leading experts and researchers.",
+          "D. Students and educators."
+        ],
+        "answer": "C. Leading experts and researchers."
+      },
+      {
+        "q": "Which advanced technologies are mentioned as being leveraged in healthcare?",
+        "options": [
+          "A. Blockchain and virtual reality.",
+          "B. Artificial intelligence and robotics.",
+          "C. Nanotechnology and biotechnology.",
+          "D. Renewable energy and quantum computing."
+        ],
+        "answer": "B. Artificial intelligence and robotics."
+      },
+      {
+        "q": "Which of the following is NOT listed as a key topic of discussion?",
+        "options": [
+          "A. Innovative diagnostic tools.",
+          "B. Personalized treatment approaches.",
+          "C. Space exploration technologies.",
+          "D. Smart medical devices."
+        ],
+        "answer": "C. Space exploration technologies."
+      },
+      {
+        "q": "What does \"summit\" most closely mean in this context?",
+        "options": [
+          "A. A mountain peak.",
+          "B. A formal meeting of leaders.",
+          "C. A type of sports competition.",
+          "D. A financial report."
+        ],
+        "answer": "B. A formal meeting of leaders."
+      },
+      {
+        "q": "The word \"integration\" refers to:",
+        "options": [
+          "A. Separation.",
+          "B. Combination.",
+          "C. Division.",
+          "D. Exclusion."
+        ],
+        "answer": "B. Combination."
+      },
+      {
+        "q": "To \"leverage\" advanced technologies means to:",
+        "options": [
+          "A. Avoid using them.",
+          "B. Critically analyze them.",
+          "C. Utilize them effectively.",
+          "D. Develop them from scratch."
+        ],
+        "answer": "C. Utilize them effectively."
+      },
+      {
+        "q": "If something \"revolutionizes\" healthcare, it means it:",
+        "options": [
+          "A. Slows down its progress.",
+          "B. Causes a dramatic and fundamental change.",
+          "C. Keeps it the same.",
+          "D. Makes minor improvements."
+        ],
+        "answer": "B. Causes a dramatic and fundamental change."
+      },
+      {
+        "q": "What is a primary goal of the summit regarding medical technology?",
+        "options": [
+          "A. To maintain current standards.",
+          "B. To slow down research.",
+          "C. To accelerate breakthroughs.",
+          "D. To reduce international cooperation."
+        ],
+        "answer": "C. To accelerate breakthroughs."
+      },
+      {
+        "q": "The style of this news report can best be described as:",
+        "options": [
+          "A. Emotional and persuasive.",
+          "B. Factual and informative.",
+          "C. Humorous and satirical.",
+          "D. Opinionated and subjective."
+        ],
+        "answer": "B. Factual and informative."
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美國三月消費者物價指數（CPI）即將公布，通膨數據受矚 (US March CPI Release Expected Today, Inflation Eyed)",
+    "tabTitle": "金融市場",
+    "english": "The highly anticipated US March Consumer Price Index (CPI) report is set for release today, April 10, 2026. Financial markets are closely watching these inflation figures, which are crucial for assessing the Federal Reserve's future monetary policy decisions. Economists widely expect the data to provide key insights into current inflationary pressures and their potential impact on interest rates. A higher-than-expected CPI could signal continued price increases, influencing investor sentiment.",
+    "chinese": "備受期待的美國三月消費者物價指數（CPI）報告定於今天，2026年4月10日公布。金融市場正密切關注這些通膨數據，它們對於評估聯邦儲備理事會未來的貨幣政策決策至關重要。經濟學家普遍預期這些數據將提供關於當前通膨壓力的關鍵見解，以及其對利率的潛在影響。若CPI高於預期，可能預示物價將持續上漲，從而影響投資者情緒。",
+    "vocabulary": [
+      "anticipated (adj.): 備受期待的",
+      "Consumer Price Index (n.): 消費者物價指數 (CPI)",
+      "set for release (phr.): 預計公布",
+      "financial markets (n.): 金融市場",
+      "closely watching (phr.): 密切關注",
+      "inflation figures (n.): 通膨數據",
+      "crucial (adj.): 至關重要的",
+      "assessing (v.): 評估",
+      "Federal Reserve (n.): 聯邦儲備理事會 (聯準會)",
+      "monetary policy (n.): 貨幣政策",
+      "decisions (n.): 決策",
+      "economists (n.): 經濟學家",
+      "widely expect (phr.): 普遍預期",
+      "provide (v.): 提供",
+      "key insights (n.): 關鍵見解",
+      "inflationary pressures (n.): 通膨壓力",
+      "potential impact (n.): 潛在影響",
+      "interest rates (n.): 利率",
+      "higher-than-expected (adj.): 高於預期的",
+      "investor sentiment (n.): 投資者情緒"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news report?",
+        "options": [
+          "US unemployment rates",
+          "US March CPI release",
+          "Federal Reserve interest rate hikes",
+          "Global trade agreements"
+        ],
+        "answer": "US March CPI release"
+      },
+      {
+        "q": "When is the US March CPI report scheduled for release?",
+        "options": [
+          "March 10, 2026",
+          "April 10, 2026",
+          "March 26, 2026",
+          "April 26, 2026"
+        ],
+        "answer": "April 10, 2026"
+      },
+      {
+        "q": "Why are financial markets closely watching the inflation figures?",
+        "options": [
+          "To understand global warming trends",
+          "To assess the Federal Reserve's future monetary policy",
+          "To predict presidential election results",
+          "To determine stock market dividends"
+        ],
+        "answer": "To assess the Federal Reserve's future monetary policy"
+      },
+      {
+        "q": "What does \"CPI\" stand for?",
+        "options": [
+          "Consumer Price Index",
+          "Corporate Profit Indicator",
+          "Current Production Information",
+          "Central Policy Initiative"
+        ],
+        "answer": "Consumer Price Index"
+      },
+      {
+        "q": "According to the news, what are economists widely expecting the data to provide?",
+        "options": [
+          "New job creation numbers",
+          "Insights into current inflationary pressures",
+          "Government spending reports",
+          "Quarterly earnings forecasts"
+        ],
+        "answer": "Insights into current inflationary pressures"
+      },
+      {
+        "q": "What could a \"higher-than-expected CPI\" signal?",
+        "options": [
+          "Economic recession",
+          "Continued price decreases",
+          "Continued price increases",
+          "Stable interest rates"
+        ],
+        "answer": "Continued price increases"
+      },
+      {
+        "q": "Which entity makes decisions on monetary policy in the US?",
+        "options": [
+          "The President",
+          "The Federal Reserve",
+          "The Treasury Department",
+          "The World Bank"
+        ],
+        "answer": "The Federal Reserve"
+      },
+      {
+        "q": "What is the potential impact of inflationary pressures mentioned in the report?",
+        "options": [
+          "On housing market supply",
+          "On interest rates",
+          "On international trade balances",
+          "On technological innovation"
+        ],
+        "answer": "On interest rates"
+      },
+      {
+        "q": "The style of the English news is described as:",
+        "options": [
+          "Opinionated",
+          "Humorous",
+          "Factual",
+          "Speculative"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "What does \"investor sentiment\" refer to?",
+        "options": [
+          "The financial health of companies",
+          "The general mood or feeling of investors",
+          "Government regulations on investments",
+          "The actual returns on investments"
+        ],
+        "answer": "The general mood or feeling of investors"
+      },
+      {
+        "q": "If CPI is high, what might the Federal Reserve consider doing to combat inflation?",
+        "options": [
+          "Lowering interest rates",
+          "Increasing interest rates",
+          "Printing more money",
+          "Decreasing taxes"
+        ],
+        "answer": "Increasing interest rates"
+      },
+      {
+        "q": "What does \"crucial\" mean in the context of the news?",
+        "options": [
+          "Unimportant",
+          "Minor",
+          "Essential",
+          "Optional"
+        ],
+        "answer": "Essential"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "普丁宣布烏克蘭東正教復活節停火32小時 (Putin Declares Ukraine Orthodox Easter Ceasefire)",
+    "tabTitle": "地緣政治",
+    "english": "On April 10, 2026, Russian President Vladimir Putin announced a 32-hour ceasefire in Ukraine. The temporary halt to hostilities is set to begin at 6 PM local time on Saturday, May 2nd, and last until midnight on Sunday, May 3rd, to coincide with Orthodox Easter celebrations. This declaration aims to allow Orthodox Christians to attend church services and observe the holy day safely across the conflict zones. International reactions to the announcement are anticipated.",
+    "chinese": "2026年4月10日，俄羅斯總統弗拉迪米爾·普丁宣布在烏克蘭實施為期32小時的停火。這次暫時停止敵對行動的安排，將於當地時間5月2日（星期六）下午6點開始，持續到5月3日（星期日）午夜，以配合東正教復活節的慶祝活動。此聲明旨在讓東正教徒能夠在衝突地區安全地參加教堂禮拜並慶祝這個聖日。國際社會對此宣布的反應預計將會出現。",
+    "vocabulary": [
+      "declare (v.): 宣布",
+      "ceasefire (n.): 停火",
+      "Orthodox Easter (n.): 東正教復活節",
+      "President (n.): 總統",
+      "temporary (adj.): 暫時的",
+      "halt (n.): 停止",
+      "hostilities (n.): 敵對行動",
+      "local time (n.phr.): 當地時間",
+      "coincide with (phr.v.): 與...同時發生",
+      "celebration (n.): 慶祝活動",
+      "declaration (n.): 聲明",
+      "aim to (phr.v.): 旨在",
+      "allow (v.): 允許",
+      "attend (v.): 參加",
+      "church services (n.phr.): 教堂禮拜",
+      "observe (v.): 遵守；慶祝",
+      "holy day (n.phr.): 聖日",
+      "conflict zones (n.phr.): 衝突地區",
+      "international reactions (n.phr.): 國際反應",
+      "anticipated (adj.): 預期的"
+    ],
+    "quiz": [
+      {
+        "q": "When was the ceasefire announced?",
+        "options": [
+          "A. May 2nd, 2026",
+          "B. April 10th, 2026",
+          "C. May 3rd, 2026",
+          "D. On Orthodox Easter"
+        ],
+        "answer": "B. April 10th, 2026"
+      },
+      {
+        "q": "Who announced the ceasefire?",
+        "options": [
+          "A. The Ukrainian President",
+          "B. The UN Secretary-General",
+          "C. Russian President Vladimir Putin",
+          "D. An international peacekeeping force"
+        ],
+        "answer": "C. Russian President Vladimir Putin"
+      },
+      {
+        "q": "What is the duration of the announced ceasefire?",
+        "options": [
+          "A. 24 hours",
+          "B. 32 hours",
+          "C. 48 hours",
+          "D. One week"
+        ],
+        "answer": "B. 32 hours"
+      },
+      {
+        "q": "When is the ceasefire scheduled to begin?",
+        "options": [
+          "A. Saturday, May 2nd, at 6 PM local time",
+          "B. Sunday, May 3rd, at midnight",
+          "C. April 10th, 2026",
+          "D. After Orthodox Easter"
+        ],
+        "answer": "A. Saturday, May 2nd, at 6 PM local time"
+      },
+      {
+        "q": "What religious holiday does the ceasefire coincide with?",
+        "options": [
+          "A. Christmas",
+          "B. New Year's Day",
+          "C. Orthodox Easter",
+          "D. Ramadan"
+        ],
+        "answer": "C. Orthodox Easter"
+      },
+      {
+        "q": "What is one stated purpose of the ceasefire?",
+        "options": [
+          "A. To facilitate prisoner exchanges",
+          "B. To allow Orthodox Christians to attend church services",
+          "C. To negotiate a permanent peace treaty",
+          "D. To withdraw troops from conflict zones"
+        ],
+        "answer": "B. To allow Orthodox Christians to attend church services"
+      },
+      {
+        "q": "What does \"halt to hostilities\" mean in the context of the news?",
+        "options": [
+          "A. An increase in military actions",
+          "B. A temporary stop to fighting",
+          "C. A permanent end to the war",
+          "D. A cultural exchange program"
+        ],
+        "answer": "B. A temporary stop to fighting"
+      },
+      {
+        "q": "Where is the ceasefire declared?",
+        "options": [
+          "A. In Russia",
+          "B. In Ukraine",
+          "C. In both Russia and Ukraine",
+          "D. Globally"
+        ],
+        "answer": "B. In Ukraine"
+      },
+      {
+        "q": "What kind of reactions are expected regarding the announcement?",
+        "options": [
+          "A. Local reactions",
+          "B. Military reactions",
+          "C. International reactions",
+          "D. No reactions"
+        ],
+        "answer": "C. International reactions"
+      },
+      {
+        "q": "What does \"observe the holy day\" imply in the text?",
+        "options": [
+          "A. To watch it from afar",
+          "B. To disrespect the day",
+          "C. To celebrate and respect the day",
+          "D. To ignore the day"
+        ],
+        "answer": "C. To celebrate and respect the day"
+      },
+      {
+        "q": "The ceasefire is described as \"temporary.\" What does this mean?",
+        "options": [
+          "A. It will last forever.",
+          "B. It is only for a limited period.",
+          "C. Its duration is unknown.",
+          "D. It is subject to change without notice."
+        ],
+        "answer": "B. It is only for a limited period."
+      },
+      {
+        "q": "In which part of Ukraine is the ceasefire primarily aimed at allowing safe observance?",
+        "options": [
+          "A. Only Kyiv",
+          "B. Only the western regions",
+          "C. Across the conflict zones",
+          "D. Specific neutral zones"
+        ],
+        "answer": "C. Across the conflict zones"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "巴基斯坦居中斡旋，美伊和平談判今日舉行 (US-Iran Peace Talks Held in Pakistan Today)",
+    "tabTitle": "地緣政治",
+    "english": "On April 10, 2026, crucial peace talks between the United States and Iran commenced in Islamabad, Pakistan. Pakistan is acting as a key mediator in these long-anticipated negotiations, aiming to de-escalate regional tensions. Diplomats from both nations are expected to discuss a range of issues, including nuclear ambitions and economic sanctions. This dialogue marks a significant effort to find common ground and foster stability in the Middle East, with global implications for peace and security.",
+    "chinese": "2026年4月10日，美國與伊朗之間關鍵的和平談判在巴基斯坦伊斯蘭堡展開。巴基斯坦在這些期待已久的談判中扮演著關鍵的斡旋者角色，旨在緩和地區緊張局勢。兩國外交官預計將討論一系列議題，包括核野心和經濟制裁。這次對話標誌著為尋找共同點並促進中東穩定所做的重大努力，對全球和平與安全具有深遠影響。",
+    "vocabulary": [
+      "crucial (adj.): 關鍵的；至關重要的",
+      "commenced (v.): 開始；著手",
+      "Islamabad (n.): 伊斯蘭堡 (巴基斯坦首都)",
+      "mediator (n.): 斡旋者；調解人",
+      "long-anticipated (adj.): 期待已久的",
+      "negotiations (n.): 談判",
+      "de-escalate (v.): 緩和；降低（緊張局勢）",
+      "regional tensions (n.): 地區緊張局勢",
+      "diplomats (n.): 外交官",
+      "expected to (phr.): 預計將",
+      "discuss (v.): 討論",
+      "range of issues (phr.): 一系列議題",
+      "nuclear ambitions (n.): 核野心",
+      "economic sanctions (n.): 經濟制裁",
+      "dialogue (n.): 對話",
+      "marks (v.): 標誌著",
+      "significant effort (phr.): 重大努力",
+      "common ground (n.): 共同點",
+      "foster stability (phr.): 促進穩定",
+      "global implications (n.): 全球影響"
+    ],
+    "quiz": [
+      {
+        "q": "When did the peace talks between the US and Iran begin?",
+        "options": [
+          "A. April 10, 2024",
+          "B. April 10, 2025",
+          "C. April 10, 2026",
+          "D. April 10, 2027"
+        ],
+        "answer": "C. April 10, 2026"
+      },
+      {
+        "q": "Where were the US-Iran peace talks held?",
+        "options": [
+          "A. Tehran, Iran",
+          "B. Washington D.C., USA",
+          "C. Islamabad, Pakistan",
+          "D. Dubai, UAE"
+        ],
+        "answer": "C. Islamabad, Pakistan"
+      },
+      {
+        "q": "What role is Pakistan playing in these negotiations?",
+        "options": [
+          "A. An observer",
+          "B. A host",
+          "C. A key mediator",
+          "D. A participant"
+        ],
+        "answer": "C. A key mediator"
+      },
+      {
+        "q": "What is one of the main goals of these talks?",
+        "options": [
+          "A. To impose more sanctions",
+          "B. To de-escalate regional tensions",
+          "C. To expand military alliances",
+          "D. To elect a new leader"
+        ],
+        "answer": "B. To de-escalate regional tensions"
+      },
+      {
+        "q": "Who is expected to discuss various issues during the talks?",
+        "options": [
+          "A. Presidents",
+          "B. Military generals",
+          "C. Diplomats",
+          "D. Journalists"
+        ],
+        "answer": "C. Diplomats"
+      },
+      {
+        "q": "Which of the following is an expected topic of discussion?",
+        "options": [
+          "A. Cultural exchange programs",
+          "B. Space exploration",
+          "C. Nuclear ambitions",
+          "D. Sports competitions"
+        ],
+        "answer": "C. Nuclear ambitions"
+      },
+      {
+        "q": "What other topic, besides nuclear ambitions, is mentioned for discussion?",
+        "options": [
+          "A. Trade tariffs",
+          "B. Economic sanctions",
+          "C. Climate change",
+          "D. Human rights"
+        ],
+        "answer": "B. Economic sanctions"
+      },
+      {
+        "q": "How are these negotiations described regarding their anticipation?",
+        "options": [
+          "A. Unexpected",
+          "B. Briefly mentioned",
+          "C. Long-anticipated",
+          "D. Recently announced"
+        ],
+        "answer": "C. Long-anticipated"
+      },
+      {
+        "q": "What does the dialogue aim to find between the two nations?",
+        "options": [
+          "A. New conflicts",
+          "B. Common ground",
+          "C. Political differences",
+          "D. Historical grievances"
+        ],
+        "answer": "B. Common ground"
+      },
+      {
+        "q": "What broader impact do these talks have?",
+        "options": [
+          "A. Local economic growth",
+          "B. Regional weather patterns",
+          "C. Global implications for peace and security",
+          "D. Development of new technologies"
+        ],
+        "answer": "C. Global implications for peace and security"
+      },
+      {
+        "q": "What region is specifically mentioned as benefiting from stability efforts?",
+        "options": [
+          "A. East Asia",
+          "B. Middle East",
+          "C. South America",
+          "D. Sub-Saharan Africa"
+        ],
+        "answer": "B. Middle East"
+      },
+      {
+        "q": "The phrase \"foster stability\" means to:",
+        "options": [
+          "A. Prevent stability",
+          "B. Encourage stability",
+          "C. Observe stability",
+          "D. Debate stability"
+        ],
+        "answer": "B. Encourage stability"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "地緣政治不確定性升高，聯準會維持利率不變 (Fed Holds Rates Steady Amid Geopolitical Woes)",
+    "tabTitle": "金融市場",
+    "english": "On April 10, 2026, the Federal Reserve announced its decision to keep interest rates unchanged. This move comes as global geopolitical uncertainties continue to rise, impacting economic outlooks worldwide. The central bank cited concerns over potential risks to inflation and economic stability, preferring a cautious approach. Analysts suggest the Fed aims to assess the full impact of ongoing international tensions before making any significant policy shifts. This decision was widely anticipated by financial markets.",
+    "chinese": "2026年4月10日，聯準會宣布維持利率不變。此舉是在全球地緣政治不確定性持續升高，影響全球經濟前景之際做出的。該中央銀行表示擔憂通膨和經濟穩定面臨潛在風險，因此傾向採取謹慎態度。分析師認為，聯準會旨在評估持續的國際緊張局勢的全面影響，然後再進行任何重大的政策轉變。金融市場普遍預期這項決定。",
+    "vocabulary": [
+      "Federal Reserve (n.): 聯準會",
+      "interest rates (n.): 利率",
+      "unchanged (adj.): 不變的",
+      "geopolitical (adj.): 地緣政治的",
+      "uncertainties (n.): 不確定性",
+      "rise (v.): 升高",
+      "impact (v.): 影響",
+      "economic outlook (n.): 經濟前景",
+      "worldwide (adv.): 全球地",
+      "central bank (n.): 中央銀行",
+      "cite (v.): 引述",
+      "concern (n.): 擔憂",
+      "potential risk (n.): 潛在風險",
+      "inflation (n.): 通貨膨脹",
+      "economic stability (n.): 經濟穩定",
+      "cautious approach (n.): 謹慎態度",
+      "analyst (n.): 分析師",
+      "assess (v.): 評估",
+      "policy shift (n.): 政策轉變",
+      "widely anticipated (adj. phr.): 普遍預期"
+    ],
+    "quiz": [
+      {
+        "q": "What was the Federal Reserve's main decision on April 10, 2026?",
+        "options": [
+          "A. To increase interest rates.",
+          "B. To decrease interest rates.",
+          "C. To keep interest rates unchanged.",
+          "D. To announce a new economic stimulus plan."
+        ],
+        "answer": "C. To keep interest rates unchanged."
+      },
+      {
+        "q": "What is cited as the primary reason for the Fed's decision?",
+        "options": [
+          "A. High domestic employment rates.",
+          "B. Rising global geopolitical uncertainties.",
+          "C. A sudden drop in inflation.",
+          "D. Strong economic growth."
+        ],
+        "answer": "B. Rising global geopolitical uncertainties."
+      },
+      {
+        "q": "What kind of approach did the central bank prefer regarding its policy?",
+        "options": [
+          "A. An aggressive approach.",
+          "B. A loose approach.",
+          "C. A cautious approach.",
+          "D. A hands-off approach."
+        ],
+        "answer": "C. A cautious approach."
+      },
+      {
+        "q": "According to analysts, what does the Fed aim to do before making significant policy shifts?",
+        "options": [
+          "A. Wait for a new presidential election.",
+          "B. Consult with other central banks.",
+          "C. Assess the full impact of international tensions.",
+          "D. Introduce new financial regulations."
+        ],
+        "answer": "C. Assess the full impact of international tensions."
+      },
+      {
+        "q": "How did financial markets generally view this decision by the Fed?",
+        "options": [
+          "A. It was a complete surprise.",
+          "B. It caused significant panic.",
+          "C. It was widely anticipated.",
+          "D. It led to a major stock market crash."
+        ],
+        "answer": "C. It was widely anticipated."
+      },
+      {
+        "q": "What does \"geopolitical\" primarily refer to?",
+        "options": [
+          "A. The study of Earth's physical features.",
+          "B. The influence of geography on politics and international relations.",
+          "C. Economic policies within a single country.",
+          "D. The science of mapping the globe."
+        ],
+        "answer": "B. The influence of geography on politics and international relations."
+      },
+      {
+        "q": "If interest rates are \"unchanged,\" what does that mean?",
+        "options": [
+          "A. They have gone up.",
+          "B. They have gone down.",
+          "C. They have remained the same.",
+          "D. They are no longer relevant."
+        ],
+        "answer": "C. They have remained the same."
+      },
+      {
+        "q": "What is the main function of a \"central bank\" like the Federal Reserve?",
+        "options": [
+          "A. To operate commercial banking services for individuals.",
+          "B. To control a nation's money supply and credit conditions.",
+          "C. To manage a country's national parks.",
+          "D. To regulate international trade agreements."
+        ],
+        "answer": "B. To control a nation's money supply and credit conditions."
+      },
+      {
+        "q": "The word \"cited\" in the article means:",
+        "options": [
+          "A. Ignored.",
+          "B. Denied.",
+          "C. Mentioned as a reason.",
+          "D. Criticized."
+        ],
+        "answer": "C. Mentioned as a reason."
+      },
+      {
+        "q": "What does \"inflation\" typically mean in economics?",
+        "options": [
+          "A. A general decrease in prices and purchasing power.",
+          "B. A general increase in prices and fall in the purchasing value of money.",
+          "C. A period of economic recession.",
+          "D. The stability of a currency's exchange rate."
+        ],
+        "answer": "B. A general increase in prices and fall in the purchasing value of money."
+      },
+      {
+        "q": "To \"assess\" the full impact means to:",
+        "options": [
+          "A. Ignore the impact.",
+          "B. Criticize the impact.",
+          "C. Evaluate or estimate the nature, ability, or quality of the impact.",
+          "D. Cause the impact."
+        ],
+        "answer": "C. Evaluate or estimate the nature, ability, or quality of the impact."
+      },
+      {
+        "q": "What are \"economic outlooks\"?",
+        "options": [
+          "A. Past economic performance data.",
+          "B. Current economic statistics.",
+          "C. Predictions or expectations about future economic conditions.",
+          "D. Government economic policies."
+        ],
+        "answer": "C. Predictions or expectations about future economic conditions."
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
