@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：2026 年 4 月 13 日</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05); 
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">2026 年 4 月 13 日：功能性聯通、垂直主權與資訊制度化</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Marching toward Linguistic Mastery.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+            'taiwan-combined': {
+                title: '台灣本地焦點',
+                english: `[1] Cross-Strait Business Travel Surges 25% Following Restoration of Key Flight Routes\nOne week after the resumption of regular flights to cities like Nanjing and Wuhan, data shows a 25% uptick in business-class bookings. Macroscopically, this signifies the "Normalization of Supply Chain Logistics." Despite political friction, this "Functional Connectivity" acts as a stabilizing economic layer.\n\n[2] First-Time Buyers Surge Ahead of Subsidy Expiration; March Housing Volume Hits 3-Year High\nAs the "New Youth" subsidized mortgage program nears its review period, real estate data shows a massive spike in transactions. Macroscopically, this represents a "Demographic Wealth Pull-Forward." The Central Bank has signaled potential "Macro-prudential Measures" in Q2 to prevent overheating.\n\n[3] Water Scarcity Alert: Reservoirs Fall Below 25% as Hsinchu Science Park Limits Usage\nThe Water Resources Agency upgraded the alert to "Yellow" today. Hsinchu and Tainan Science Parks initiated a 5% voluntary water reduction. Macroscopically, this highlights the "Environmental Ceiling" of the tech industry, necessitating water recycling technologies.`,
+                chinese: `【1】兩岸航點擴張後首週：商務往返人數大幅成長 25%\n在恢復南京、武漢等城市定期航班一週後，民航局數據顯示商務艙預訂量增長了 25%。從宏觀角度看，這標誌著「供應鏈物流的正常化」。儘管政治摩擦持續，專業人士與高科技主管正回歸戰前的旅行模式以管理跨岸製造集群。這種「功能性聯通」充當了穩定的經濟層，確保在官方外交管道基本沈默時，必要的技術交流得以持續。\n\n【2】房市動態：新青安貸款政策屆滿前夕，首購族湧現導致三月交易量創高\n隨著當前階段「新青安」補貼貸款計畫接近審核期，房地產數據顯示三月份交易量大幅飆升。從宏觀角度看，這代表了「人口結構財富提前透支（Pull-Forward）」。22 至 35 歲的年輕專業人士在廣泛的通膨擔憂中積極鎖定低利率。然而，央行已暗示這項信用擴張可能在第二季觸發新的「總體審慎措施」，以防止房市過熱並在地緣政治高度波動期動搖金融部門。\n\n【3】環境與資源：全台水情進入「黃燈」警戒，科學園區啟動自主節水\n由於春雨持續缺席，水利署今日正式將水情警報提升至「黃燈」。新竹與台南科學園區已主動啟動非生產用自願節水 5%。從宏觀角度看，這凸顯了科技產業的「環境天花板」。隨著台灣擴張 2 奈米與 HBM 產能，這些先進晶圓廠的海量用水需求正與氣候驅動的稀缺發生衝突。這使得工業水循環技術的制度化加速成為必要，以確保物理資源不成為 AI 成長的首要瓶頸。`,
+                vocabulary: [
+                    'Restoration (n.): 恢復/修復', 'Resumption (n.): 重新開始/恢復', 'Uptick (n.): 小幅增長', 'Logistics (n.): 物流',
+                    'Normalization (n.): 正常化', 'Friction (n.): 摩擦', 'Connectivity (n.): 聯通性', 'Clusters (n.): 叢集/聚落',
+                    'Silent (adj.): 沈默的/寂靜的', 'Expiration (n.): 屆滿/到期', 'Subsidized (adj.): 受補貼的', 'Mortgage (n.): 房貸',
+                    'Spike (n./v.): 飆升', 'Transactions (n.): 交易', 'Demographic (adj.): 人口結構的', 'Pull-forward (n./v.): 提前執行/透支',
+                    'Macro-prudential (adj.): 總體審慎的', 'Overheating (v.ger.): 過熱', 'Volatility (n.): 波動性', 'Scarcity (n.): 稀缺/短缺',
+                    'Reservoirs (n.): 水庫', 'Science Park (n. phr.): 科學園區', 'Proactively (adv.): 主動地', 'Initiated (v.pt.): 啟動',
+                    'Voluntary (adj.): 自願的', 'Ceiling (n.): 天花板/上限', 'Clashing (v.ger.): 衝突', 'Necessitates (v.): 使...成為必要',
+                    'Recycling (v.ger.): 循環利用', 'Bottleneck (n.): 瓶頸', 'Throughput (n.): 吞吐量/產出', 'Sovereignty (n.): 主權'
+                ],
+                quiz: [
+                    { q: 'By what percentage did business-class bookings increase after the flight restoration?', options: ['10%', '25%', '50%', '70%'], answer: '25%' },
+                    { q: 'Which two cities were specifically mentioned for resumed flights?', options: ['Beijing and Shanghai', 'Nanjing and Wuhan', 'Hong Kong and Macau', 'Tokyo and Seoul'], answer: 'Nanjing and Wuhan' },
+                    { q: 'The term "Functional Connectivity" in the text refers to ______.', options: ['Social media links', 'Stabilizing economic layers despite political friction', 'Faster internet speeds', 'Building new bridges'], answer: 'Stabilizing economic layers despite political friction' },
+                    { q: 'What is driving the March housing volume to a 3-year high?', options: ['Lower taxes', 'New Youth subsidy expiration fears', 'Decreasing population', 'Foreign investment only'], answer: 'New Youth subsidy expiration fears' },
+                    { q: 'What age group is described as locking in low mortgage rates?', options: ['18–22', '22–35', '40–60', 'Over 65'], answer: '22–35' },
+                    { q: 'The Central Bank may implement ______ measures in Q2.', options: ['Macro-prudential', 'Expansionary', 'Zero-interest', 'Dovish'], answer: 'Macro-prudential' },
+                    { q: 'What is the current color of the water scarcity alert?', options: ['Green', 'Yellow', 'Red', 'Blue'], answer: 'Yellow' },
+                    { q: 'Reservoir levels have fallen below what percentage?', options: ['10%', '25%', '50%', '75%'], answer: '25%' },
+                    { q: 'Hsinchu and Tainan Science Parks initiated a ______ voluntary water reduction.', options: ['2%', '5%', '10%', '15%'], answer: '5%' },
+                    { q: 'The "Environmental Ceiling" refers to the limits of ______.', options: ['Sky scrapers', 'Physical resources like water clashing with growth', 'Office design', 'Satellite altitude'], answer: 'Physical resources like water clashing with growth' },
+                    { q: 'What does "macroscopically" mean?', options: ['Looking at tiny cells', 'Taking a large-scale or overall view', 'Through a telescope only', 'In the past'], answer: 'Taking a large-scale or overall view' },
+                    { q: 'The word "normalization" is a synonym for ______.', options: ['Regularization', 'Destabilization', 'Conflict', 'Ending'], answer: 'Regularization' },
+                    { q: 'A "mortgage" is a loan used for ______.', options: ['Buying food', 'Buying property/houses', 'Space travel', 'Paying taxes'], answer: 'Buying property/houses' },
+                    { q: 'What does "scarcity" mean?', options: ['Abundance', 'Shortage or lack of something', 'Cleanliness', 'Noise'], answer: 'Shortage or lack of something' },
+                    { q: 'The 2nm and HBM facilities have "massive" ______ requirements.', options: ['Water', 'Paper', 'Staff', 'Travel'], answer: 'Water' }
+                ]
+            },
+            'islamabad-talks': {
+                title: '中東外交與核透明度',
+                english: `Leaked reports from the Pakistan-led summit in Islamabad suggest that Iran has tentatively agreed to restore full IAEA monitoring in exchange for a temporary lifting of sanctions on non-oil exports. Macroscopically, this is "Pragmatic De-escalation." While core Middle East issues remain, this agreement reduces the risk of catastrophic escalation. For global policy, this signals a move toward a "Segmented Peace," where specific technical risks are neutralized even as broader competition continues. Markets remain cautious, awaiting a formal announcement.`,
+                chinese: `伊斯蘭堡談判進入深水區：美伊雙方就「核武透明度」達成初步諒解\n從巴基斯坦主持的伊斯蘭堡峰會外洩的報告顯示，伊朗已初步同意恢復國際原子能總署（IAEA）的全方位監控，以換取暫時解除對其非石油產品出口的制裁。從宏觀角度看，這是「務實的降溫（Pragmatic De-escalation）」。雖然中東戰爭的核心問題仍未解決，但核領域的這項協議降低了立即爆發災難性區域升級的風險。對於全球政策而言，這標誌著向「片段式和平（Segmented Peace）」的邁進，即特定的技術性風險被中和，即便更廣泛的地緣政治競爭仍在持續。市場仍保持謹慎，等待正式公告。`,
+                vocabulary: [
+                    'Leaked (adj.): 洩漏的', 'Summit (n.): 峰會', 'Tentatively (adv.): 暫時地/初步地', 'IAEA (n. proper): 國際原子能總署',
+                    'Monitoring (n./v.): 監控', 'Sanctions (n.): 制裁', 'Non-oil exports (n. phr.): 非石油出口', 'Pragmatic (adj.): 務實的',
+                    'De-escalation (n.): (緊張局勢)降溫', 'Catastrophic (adj.): 災難性的', 'Neutralized (v.pp.): 中和/抵銷', 'Segmented Peace (n. phr.): 片段式和平',
+                    'Transparency (n.): 透明度', 'Diplomatic (adj.): 外交的', 'Breakthrough (n.): 突破', 'Preemptive (adj.): 先發制人的',
+                    'Recalibration (n.): 重新校準', 'Verification (n.): 驗證', 'Mandate (n.): 授權/命令', 'Bilateral (adj.): 雙邊的',
+                    'Discourse (n.): 論述', 'Sovereignty (n.): 主權', 'Integrity (n.): 完整性', 'Incursion (n.): 入侵',
+                    'Volatility (n.): 波動性', 'Disruption (n.): 中斷', 'Redundancy (n.): 備援', 'Constraint (n.): 限制',
+                    'Strategic (adj.): 戰略的', 'Navigate (v.): 導航/處理', 'Consolidated (adj.): 綜合的', 'Sustained (adj.): 持續的'
+                ],
+                quiz: [
+                    { q: 'Where was the summit on nuclear transparency held?', options: ['Tehran', 'Islamabad', 'Washington', 'Vienna'], answer: 'Islamabad' },
+                    { q: 'Which organization is responsible for the nuclear monitoring?', options: ['WHO', 'UNICEF', 'IAEA', 'OPEC'], answer: 'IAEA' },
+                    { q: 'What is Iran getting in exchange for restoring monitoring?', options: ['More weapons', 'Temporary lifting of sanctions on non-oil exports', 'Free internet', 'Space technology'], answer: 'Temporary lifting of sanctions on non-oil exports' },
+                    { q: 'What term describes the move toward reducing tension without solving all issues?', options: ['Total War', 'Pragmatic De-escalation', 'Silent Treatment', 'Economic Expansion'], answer: 'Pragmatic De-escalation' },
+                    { q: 'What kind of peace model is being signaled by this move?', options: ['Universal Peace', 'Segmented Peace', 'Binary Peace', 'Cold Peace'], answer: 'Segmented Peace' },
+                    { q: 'The term "IAEA" stands for International ______ Energy Agency.', options: ['Atmospheric', 'Atomic', 'Alternative', 'Advanced'], answer: 'Atomic' },
+                    { q: 'What does "neutralized" mean in the text?', options: ['Made stronger', 'Made ineffective or harmless', 'Painted gray', 'Forgotten'], answer: 'Made ineffective or harmless' },
+                    { q: 'What was leaked regarding the summit?', options: ['A recording', 'Leaked reports of a tentative agreement', 'A video of a fight', 'A shopping list'], answer: 'Leaked reports of a tentative agreement' },
+                    { q: 'Markets are "bracing" (awaiting) what before reacting fully?', options: ['A holiday', 'A formal announcement', 'A new tax', 'A rocket launch'], answer: 'A formal announcement' },
+                    { q: 'Does this agreement solve the core Middle East war issues?', options: ['Yes, completely', 'No, those remain unresolved', 'It wasn\'t discussed', 'Only for oil'], answer: 'No, those remain unresolved' },
+                    { q: 'The word "tentatively" means ______.', options: ['Permanently', 'Provisionally/Not fixed', 'Secretly', 'Loudly'], answer: 'Provisionally/Not fixed' },
+                    { q: 'What is a "sanction"?', options: ['A prize', 'A penalty or restriction', 'A law to help trade', 'A type of fuel'], answer: 'A penalty or restriction' },
+                    { q: 'The situation is described as reducing the risk of "catastrophic escalation." What is catastrophic?', options: ['Minor', 'Involving great damage or disaster', 'Beneficial', 'Historical'], answer: 'Involving great damage or disaster' },
+                    { q: 'What kind of "risks" are being addressed specifically in this news?', options: ['Weather risks', 'Technical nuclear risks', 'Fashion risks', 'Farming risks'], answer: 'Technical nuclear risks' },
+                    { q: 'Who is leading the summit mentioned?', options: ['USA', 'Iran', 'Pakistan', 'The UN'], answer: 'Pakistan' }
+                ]
+            },
+            'micron-hbm-strategy': {
+                title: 'AI 記憶體戰略與美光',
+                english: `Micron (MU) shares remain near record highs as reports confirm its entire 2026 High-Bandwidth Memory (HBM) supply is committed under fixed-price agreements. Macroscopically, this confirms "Memory as the Strategic Arbiter." As AI logic chips reach physical scaling limits, the bandwidth bottleneck has made HBM the most valuable "Hard Asset" in the semiconductor stack. This transition has turned Micron from a cyclical player into a "Top-Tier Utility," with growth pegged to the physical throughput requirements of AI server buildout.`,
+                chinese: `NVIDIA 與美光受益於「推理轉向」：HBM 產能售罄至 2027 年\n美光科技（Micron, MU）股價維持在歷史高位附近，報告證實其 2026 年全數高頻寬記憶體（HBM）供應已在固定價格協議下售罄。從宏觀角度看，這驗證了「記憶體作為策略仲裁者（Strategic Arbiter）」的地位。隨著 AI 邏輯晶片達到物理縮放極限，頻寬瓶頸使得 HBM 成為半導體堆棧中最具價值的「硬資產」。這一轉型使美光從週期性參與者轉變為「頂級公用事業（Top-Tier Utility）」，其成長直接掛鉤於全球 AI 伺服器建設的物理吞吐量需求。`,
+                vocabulary: [
+                    'MU (n. ticker): 美光科技股票代號', 'Record highs (n.phr.): 歷史高點', 'High-Bandwidth Memory (HBM) (n. phr.): 高頻寬記憶體', 'Committed (v.pp.): 承諾的/已定案的',
+                    'Fixed-price agreements (n.phr.): 固定價格協議', 'Strategic Arbiter (n.phr.): 戰略仲裁者', 'Scaling limits (n.phr.): 縮放極限', 'Bandwidth bottleneck (n.phr.): 頻寬瓶頸',
+                    'Hard Asset (n. phr.): 硬資產', 'Semiconductor stack (n.phr.): 半導體堆棧', 'Cyclical player (n.phr.): 週期性參與者', 'Top-Tier Utility (n. phr.): 頂級公用事業',
+                    'Throughput (n.): 吞吐量/產能速度', 'Buildout (n.): 擴建/建設', 'Pegged to (v.phr.): 掛鉤於', 'Inference (n.): 推論',
+                    'Architecture (n.): 架構', 'Optimization (n.): 優化', 'Performance (n.): 性能', 'Capacity (n.): 產能',
+                    'Deployment (n.): 部署', 'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑',
+                    'Logic chips (n.phr.): 邏輯晶片', 'DRAM (n. abbreviation): 動態隨機存取記憶體', 'Shortage (n.): 短缺', 'Divergence (n.): 分歧',
+                    'Prerequisite (n.): 前提條件', 'Refining (v.ger.): 提煉', 'Incentivize (v.): 激勵', 'Markup (n.): 漲價'
+                ],
+                quiz: [
+                    { q: 'For which year is Micron\'s HBM supply already fully committed?', options: ['2024', '2025', '2026', '2030'], answer: '2026' },
+                    { q: 'What kind of agreements is the HBM supply committed under?', options: ['Variable-price', 'Fixed-price agreements', 'Free gifts', 'Verbal only'], answer: 'Fixed-price agreements' },
+                    { q: 'Memory is now described as the "Strategic ______" in AI.', options: ['Enemy', 'Arbiter', 'Tool only', 'Backup'], answer: 'Arbiter' },
+                    { q: 'What is the current bottleneck as logic chips reach scaling limits?', options: ['Electricity', 'Bandwidth bottleneck', 'Land area', 'Software code'], answer: 'Bandwidth bottleneck' },
+                    { q: 'Micron has transitioned from a cyclical player into a "______-______ Utility."', options: ['Low-Tier', 'Top-Tier', 'Temporary', 'Local'], answer: 'Top-Tier' },
+                    { q: 'What is growth now pegged to for Micron?', options: ['Price of oil', 'Physical throughput requirements of AI server buildout', 'Consumer phone sales only', 'Food prices'], answer: 'Physical throughput requirements of AI server buildout' },
+                    { q: 'What does HBM stand for?', options: ['High Battery Management', 'High-Bandwidth Memory', 'Home Building Module', 'Heavy Binary Method'], answer: 'High-Bandwidth Memory' },
+                    { q: 'Why is HBM called a "Hard Asset"?', options: ['It is made of metal', 'It is physically necessary and extremely valuable in the stack', 'It is hard to break', 'It is an old term'], answer: 'It is physically necessary and extremely valuable in the stack' },
+                    { q: 'The word "committed" in the text means ______.', options: ['Losing money', 'Assigned or promised for a specific purpose', 'Hiding a secret', 'Going to jail'], answer: 'Assigned or promised for a specific purpose' },
+                    { q: 'What is an "arbiter"?', options: ['A type of computer mouse', 'A person or thing that has ultimate authority in a matter', 'A small bug', 'A new law'], answer: 'A person or thing that has ultimate authority in a matter' },
+                    { q: 'What does "throughput" mean?', options: ['The amount of material passing through a system', 'The height of a building', 'The speed of light', 'The color of a wire'], answer: 'The amount of material passing through a system' },
+                    { q: 'Logic chips are reaching "scaling limits," meaning they ______.', options: ['Cannot be made any smaller easily', 'Are getting larger', 'Are becoming free', 'Are banned'], answer: 'Cannot be made any smaller easily' },
+                    { q: 'The term "cyclical" means ______.', options: ['Linear', 'Happening in regular repeating cycles', 'Random', 'Permanent'], answer: 'Happening in regular repeating cycles' },
+                    { q: 'Which stock ticker is used for Micron?', options: ['NVDA', 'TSM', 'MU', 'AAPL'], answer: 'MU' },
+                    { q: 'The news suggests HBM is indispensable for what kind of models?', options: ['Simple text editors', 'Trillion-parameter AI models', 'Weather maps', 'Farming charts'], answer: 'Trillion-parameter AI models' }
+                ]
+            },
+            'tesla-ai5-chip': {
+                title: '特斯拉 AI5 與垂直主權',
+                english: `Elon Musk confirmed that the proprietary "AI5" processor has cleared initial validation. Designed to power Optimus robots and Robotaxis, the silicon is specifically optimized for vision-based inference. Macroscopically, this is a "Vertical Sovereignty" bet. By designing chips in-house, Tesla aims to decouple its future margins from NVIDIA’s hardware premiums. This signifies a move toward "Application-Specific Silicon Dominance," where hardware becomes a specialized container for proprietary AI models, ensuring 100% control over the intelligence supply chain.`,
+                chinese: `特斯拉「Terafab」計畫進度披露：馬斯克稱 AI5 晶片已進入最後驗證階段\n伊隆·馬斯克更新了市場訊息，表示專為 Optimus 機器人與 Robotaxi 設計的專有「AI5」處理器已通過初步驗證。該晶片針對基於視覺的推論（vision-based inference）進行了專門優化。從宏觀角度看，這是一場「垂直主權（Vertical Sovereignty）」的豪賭。透過自研晶片，特斯拉旨在使其未來的利潤與 NVIDIA 的硬體溢價脫鉤。這標誌著向「針對特定應用的晶片主導權（Application-Specific Silicon Dominance）」邁進，硬體成為專有 AI 模型的專用容器，確保對智能供應鏈的 100% 掌控。`,
+                vocabulary: [
+                    'Proprietary (adj.): 專有的', 'Validation (n.): 驗證', 'Silicon (n.): 矽 (晶片)', 'Optimized (v.pp.): 優化過的',
+                    'Vision-based inference (n.phr.): 基於視覺的推論', 'Vertical Sovereignty (n.phr.): 垂直主權', 'Decouple (v.): 脫鉤', 'Margins (n.): 利潤率/邊際',
+                    'Hardware premiums (n.phr.): 硬體溢價', 'Application-Specific (adj.): 針對特定應用的', 'Dominance (n.): 主導地位', 'Container (n.): 容器/載體',
+                    'Intelligence supply chain (n.phr.): 智能供應鏈', 'Cleared (v.pt.): 通過', 'In-house (adj.): 內部的', 'Fabrication (n.): 製造',
+                    'Architecture (n.): 架構', 'Scalability (n.): 可擴展性', 'Infrastructure (n.): 基礎建設', 'Deployment (n.): 部署',
+                    'Efficiency (n.): 效率', 'Sustained (adj.): 持續的', 'Milestone (n.): 里程碑', 'Investment (n.): 投資',
+                    'Constraint (n.): 限制', 'Verification (n.): 驗證', 'Discourse (n.): 論述', 'Mandate (n.): 授權',
+                    'Vertical (adj.): 垂直的', 'Sovereign (adj.): 主權的', 'Hedge (v./n.): 避險', 'Benchmark (n.): 基準'
+                ],
+                quiz: [
+                    { q: 'What is the name of Tesla’s next-generation AI chip?', options: ['Blackwell', 'AI5', 'M4', 'Grok'], answer: 'AI5' },
+                    { q: 'What two platforms will be powered by the AI5 processor?', options: ['Model 3 and Model S', 'Optimus robots and Robotaxis', 'Starlink and SpaceX', 'iPhone and Mac'], answer: 'Optimus robots and Robotaxis' },
+                    { q: 'The silicon is specifically optimized for what?', options: ['Audio editing', 'Vision-based inference', 'Mining Bitcoin', 'Farming simulation'], answer: 'Vision-based inference' },
+                    { q: 'What strategic concept is Musk betting on with in-house chips?', options: ['Horizontal integration', 'Vertical Sovereignty', 'Global outsourcing', 'Price matching'], answer: 'Vertical Sovereignty' },
+                    { q: 'Tesla aims to decouple its margins from ______\'s hardware premiums.', options: ['Apple', 'Intel', 'NVIDIA', 'TSMC'], answer: 'NVIDIA' },
+                    { q: 'The move signifies a shift toward "______-Specific Silicon Dominance."', options: ['General', 'Application', 'Random', 'Global'], answer: 'Application' },
+                    { q: 'What percentage of control over its intelligence supply chain does Tesla want?', options: ['10%', '50%', '80%', '100%'], answer: '100%' },
+                    { q: 'What does "proprietary" mean?', options: ['Free for all', 'Owned exclusively by an individual or company', 'Publicly available', 'Broken'], answer: 'Owned exclusively by an individual or company' },
+                    { q: 'What does "inference" mean in AI?', options: ['Learning from data', 'Using a trained model to make predictions', 'Buying more hardware', 'Writing code'], answer: 'Using a trained model to make predictions' },
+                    { q: 'The term "silicon" in this context refers to ______.', options: ['Glass making', 'Semiconductor chips', 'Beach sand', 'Plastic toys'], answer: 'Semiconductor chips' },
+                    { q: 'What does "decouple" mean?', options: ['To join together', 'To separate or disconnect', 'To double something', 'To hide something'], answer: 'To separate or disconnect' },
+                    { q: 'A "premium" in this context refers to ______.', options: ['A discount', 'An additional amount of money added to the basic price', 'A prize', 'A type of fuel'], answer: 'An additional amount of money added to the basic price' },
+                    { q: 'The chip has "cleared initial validation." What is validation?', options: ['Deleting the design', 'The process of checking or proving something is accurate/effective', 'A type of engine', 'A new law'], answer: 'The process of checking or proving something is accurate/effective' },
+                    { q: 'Who confirmed the AI5 design was finalized?', options: ['Jerome Powell', 'Jensen Huang', 'Elon Musk', 'Tim Cook'], answer: 'Elon Musk' },
+                    { q: 'When is volume production of AI5 targeted?', options: ['Early 2026', 'Mid-2027', 'Late 2028', '2030'], answer: 'Mid-2027' }
+                ]
+            },
+            'prediction-markets': {
+                title: '預測市場與合規調查',
+                english: `SDNY Prosecutors are examining AML compliance in decentralized prediction markets, with Polymarket recently added to the scrutiny list. Macroscopically, this marks the "Institutionalization of Information Markets." As prediction platforms become a "Single Source of Truth" for geopolitical risk, regulators aim to impose oversight standards similar to stock exchanges, signaling the end of the "Wild West" era for decentralized intelligence. This forces platforms to choose between global liquidity and U.S. regulatory accessibility.`,
+                chinese: `南區聯邦法院調查「預測市場」：Polymarket 列入反洗錢審查名單\n紐約南區（SDNY）檢察官正審查去中心化預測市場的反洗錢（AML）合規性，Polymarket 最近被列入審查名單。從宏觀角度看，這標誌著「資訊市場的制度化（Institutionalization of Information Markets）」。隨著預測平台成為地緣政治風險的「單一事實來源」，監管機構正著手施加與證券交易所類似的監督標準，預示著去中心化情報與政治博弈平台「大西部（Wild West）」時代的結束。這迫使平台在全球流動性與美國監管准入之間做出選擇。`,
+                vocabulary: [
+                    'SDNY (n. abbreviation): 紐約南區聯邦檢察署', 'Prosecutors (n.): 檢察官', 'AML (Anti-Money Laundering) (n. phr.): 反洗錢', 'Compliance (n.): 合規/遵守',
+                    'Decentralized (adj.): 去中心化的', 'Prediction markets (n.phr.): 預測市場', 'Scrutiny list (n.phr.): 審查名單', 'Institutionalization (n.): 制度化',
+                    'Single Source of Truth (n.phr.): 單一事實來源', 'Geopolitical risk (n.phr.): 地緣政治風險', 'Impose (v.): 施加/徵收', 'Oversight standards (n.phr.): 監督標準',
+                    'Wild West era (n.phr.): 大西部時代 (指混亂無規則)', 'Liquidity (n.): 流動性', 'Regulatory accessibility (n.phr.): 監管准入', 'Statutes (n.): 法令/法規',
+                    'Bets (n.): 賭注', 'Manipulation (n.): 操縱', 'Oversight (n.): 監督', 'Differentiator (n.): 區別因素',
+                    'Indispensable (adj.): 不可或缺的', 'Sovereign (adj.): 主權的', 'Monetary (adj.): 貨幣的', 'Inflationary (adj.): 通膨的',
+                    'Expansion (n.): 擴張', 'Resilience (n.): 韌性', 'Unprecedented (adj.): 史無前例的', 'Capacity (n.): 容量',
+                    'Divergence (n.): 分歧', 'Prerequisite (n.): 前提條件', 'Refining (v.ger.): 提煉', 'Consolidation (n.): 鞏固'
+                ],
+                quiz: [
+                    { q: 'Which organization is investigating AML compliance in prediction markets?', options: ['The UN', 'SDNY Prosecutors', 'NVIDIA', 'The CWA'], answer: 'SDNY Prosecutors' },
+                    { q: 'What does "AML" stand for?', options: ['Advanced Machine Learning', 'Anti-Money Laundering', 'Alternative Market Link', 'Annual Money List'], answer: 'Anti-Money Laundering' },
+                    { q: 'Which decentralized prediction market was added to the scrutiny list?', options: ['Bitcoin', 'Polymarket', 'Ethereal', 'WallStreetBets'], answer: 'Polymarket' },
+                    { q: 'The news marks the "______ of Information Markets."', options: ['Destruction', 'Institutionalization', 'Hiding', 'Randomization'], answer: 'Institutionalization' },
+                    { q: 'Prediction platforms are becoming a "Single Source of ______" for geopolitical risk.', options: ['Lies', 'Truth', 'Money', 'Noise'], answer: 'Truth' },
+                    { q: 'Regulators aim to impose standards similar to which institutions?', options: ['Public schools', 'Stock exchanges', 'Libraries', 'Farms'], answer: 'Stock exchanges' },
+                    { q: 'What era is ending for decentralized intelligence according to the text?', options: ['The Golden Age', 'The "Wild West" era', 'The Stone Age', 'The Space Era'], answer: 'The "Wild West" era' },
+                    { q: 'What choice are platforms forced to make?', options: ['Between colors', 'Between global liquidity and U.S. regulatory accessibility', 'Between water and oil', 'Between staff and robots'], answer: 'Between global liquidity and U.S. regulatory accessibility' },
+                    { q: 'The term "decentralized" refers to a system that is ______.', options: ['Controlled by one boss', 'Not controlled by a single central authority', 'Closed to the public', 'Very old'], answer: 'Not controlled by a single central authority' },
+                    { q: 'What is a "statute"?', options: ['A large stone statue', 'A written law passed by a legislative body', 'A type of stock', 'A financial loss'], answer: 'A written law passed by a legislative body' },
+                    { q: 'The word "scrutiny" means ______.', options: ['Approval', 'Critical observation or examination', 'Ignoring something', 'Cleaning something'], answer: 'Critical observation or examination' },
+                    { q: 'What does "compliance" involve?', options: ['Breaking rules', 'Meeting rules or standards', 'Losing money', 'Changing a name'], answer: 'Meeting rules or standards' },
+                    { q: 'A "prosecutor" is a legal official who ______.', options: ['Defends a criminal', 'Brings a case against a defendant', 'Writes the law', 'Is the judge'], answer: 'Brings a case against a defendant' },
+                    { q: 'The "Institutionalization" means making something part of an established ______.', options: ['Forest', 'System or institution', 'Playground', 'Shopping mall'], answer: 'System or institution' },
+                    { q: 'Prediction markets allow people to ______ on future events.', options: ['Sleep', 'Bet', 'Ignore', 'Forget'], answer: 'Bet' }
+                ]
+            }
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentTopicId = 'taiwan-combined'; 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            const submitButton = result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${submitButton}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(\d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
