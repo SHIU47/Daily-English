@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 15, 2026：台灣經濟、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] IMF上修台灣2026年GDP成長率至5.2%，領先先進國家 (IMF Raises Taiwan's 2026 GDP Growth to 5.2%, Leading Developed Nations)\nOn April 15, 2026, the International Monetary Fund (IMF) announced an upward revision for Taiwan's Gross Domestic Product (GDP) growth rate in 2026, now projected at 5.2%. This significant forecast places Taiwan's economic expansion ahead of most developed nations, highlighting its robust performance. The IMF attributed this strong outlook primarily to resilient global demand for technology exports and effective domestic policy support. This revision underscores Taiwan's dynamic economy and its crucial role in the global supply chain.\n\n[2] 高階半導體檢測設備廠倍利科受AI需求推升，產能全開 (Pericom, Advanced Inspection Equipment Maker, Boosted by AI, Full Capacity)\nPericom, a leading manufacturer of advanced semiconductor inspection equipment, is currently operating at full capacity. This surge in production is primarily driven by the robust global demand for artificial intelligence (AI) technologies. The company's high-tech solutions are crucial for ensuring the quality and performance of next-generation AI chips. Industry analysts anticipate that this strong demand will continue, further solidifying Pericom's market position and contributing to its sustained growth.\n\n[3] 台積電領軍半導體股走強，高含積量ETF績效噴發 (TSMC Leads Semiconductor Rally, High-TSMC ETFs Soar)\nTaipei, April 15, 2026 – Taiwan's stock market saw a significant boost today, primarily driven by the robust performance of semiconductor shares. Taiwan Semiconductor Manufacturing Company (TSMC) led this rally, pushing related stocks higher. Consequently, Exchange Traded Funds (ETFs) with a substantial holding in TSMC experienced exceptional growth, with their values soaring. This surge reflects strong investor confidence in the semiconductor sector and TSMC's continued market dominance.",
+    "chinese": "【1】IMF上修台灣2026年GDP成長率至5.2%，領先先進國家 (IMF Raises Taiwan's 2026 GDP Growth to 5.2%, Leading Developed Nations)\n2026年4月15日，國際貨幣基金組織（IMF）宣布上修台灣2026年的國內生產毛額（GDP）成長率，目前預計為5.2%。這項重要的預測使台灣的經濟擴張領先大多數先進國家，凸顯其強勁的表現。IMF將此強勁展望主要歸因於全球對科技出口的韌性需求以及有效的國內政策支持。這次上修突顯了台灣充滿活力的經濟及其在全球供應鏈中的關鍵作用。\n\n【2】高階半導體檢測設備廠倍利科受AI需求推升，產能全開 (Pericom, Advanced Inspection Equipment Maker, Boosted by AI, Full Capacity)\n倍利科，一家領先的高階半導體檢測設備製造商，目前正以滿載產能運作。此次產能激增主要受全球對人工智慧（AI）技術的強勁需求所推動。該公司的高科技解決方案對於確保下一代AI晶片的品質和性能至關重要。產業分析師預計，這種強勁需求將持續下去，進一步鞏固倍利科的市場地位並促進其持續成長。\n\n【3】台積電領軍半導體股走強，高含積量ETF績效噴發 (TSMC Leads Semiconductor Rally, High-TSMC ETFs Soar)\n台北，2026年4月15日 – 台灣股市今日顯著上揚，主要受半導體類股強勁表現的推動。台灣積體電路製造股份有限公司（台積電）引領此次漲勢，帶動相關股票走高。結果，那些持有大量台積電股票的指數股票型基金（ETF）表現出色，其價值大幅飆升。這次上漲反映了投資者對半導體產業以及台積電持續市場主導地位的強烈信心。",
+    "vocabulary": [
+      "International Monetary Fund (n.): 國際貨幣基金組織",
+      "upward revision (n.): 上修",
+      "Gross Domestic Product (n.): 國內生產毛額 (GDP)",
+      "growth rate (n.): 成長率",
+      "projected (adj.): 預計的；預測的",
+      "significant (adj.): 顯著的；重要的",
+      "forecast (n.): 預測",
+      "economic expansion (n.): 經濟擴張",
+      "developed nations (n.phr.): 先進國家",
+      "robust (adj.): 強勁的；穩健的",
+      "performance (n.): 表現",
+      "attributed (v.): 歸因於",
+      "primarily (adv.): 主要地",
+      "resilient (adj.): 有韌性的；復原力強的",
+      "global demand (n.phr.): 全球需求",
+      "technology exports (n.phr.): 科技出口",
+      "effective (adj.): 有效的",
+      "domestic policy (n.phr.): 國內政策",
+      "underscore (v.): 強調；突顯",
+      "global supply chain (n.phr.): 全球供應鏈",
+      "Pericom (n.): 倍利科 (公司名稱)",
+      "advanced (adj.): 高階的；先進的",
+      "semiconductor (n.): 半導體",
+      "inspection (n.): 檢測；檢查",
+      "equipment (n.): 設備",
+      "manufacturer (n.): 製造商",
+      "operating (v.): 運作；營運",
+      "full capacity (phr.): 滿載產能；全速生產",
+      "surge (n.): 激增；遽增",
+      "production (n.): 生產",
+      "primarily (adv.): 主要地",
+      "driven by (phr.): 受...所驅動",
+      "robust (adj.): 強勁的；健全的",
+      "global demand (phr.): 全球需求",
+      "artificial intelligence (AI) (n.): 人工智慧",
+      "crucial (adj.): 至關重要的",
+      "ensuring (v.): 確保",
+      "quality (n.): 品質",
+      "performance (n.): 性能；表現",
+      "solidify (v.): 鞏固",
+      "significant (adj.): 顯著的",
+      "boost (n.): 提振；提升",
+      "primarily (adv.): 主要地",
+      "robust (adj.): 強勁的；穩健的",
+      "performance (n.): 表現；績效",
+      "semiconductor (n.): 半導體",
+      "shares (n.): 股票",
+      "Taiwan Semiconductor Manufacturing Company (n.): 台灣積體電路製造股份有限公司 (台積電)",
+      "lead (v.): 引領；帶領",
+      "rally (n.): 股市回升；反彈",
+      "related (adj.): 相關的",
+      "consequently (adv.): 因此；結果",
+      "Exchange Traded Funds (ETFs) (n.): 指數股票型基金",
+      "substantial (adj.): 大量的；實質的",
+      "holding (n.): 持股；持有",
+      "experienced (v.): 經歷；體驗",
+      "exceptional (adj.): 卓越的；非凡的",
+      "growth (n.): 成長",
+      "soaring (v.): 飆升；猛漲",
+      "dominance (n.): 主導地位"
+    ],
+    "quiz": [
+      {
+        "q": "What organization made the announcement about Taiwan's GDP growth?",
+        "options": [
+          "A. World Bank",
+          "B. IMF",
+          "C. WTO",
+          "D. UN"
+        ],
+        "answer": "B. IMF"
+      },
+      {
+        "q": "What year is Taiwan's GDP growth rate being projected for?",
+        "options": [
+          "A. 2025",
+          "B. 2026",
+          "C. 2027",
+          "D. 2024"
+        ],
+        "answer": "B. 2026"
+      },
+      {
+        "q": "What is the revised GDP growth rate for Taiwan?",
+        "options": [
+          "A. 4.2%",
+          "B. 5.2%",
+          "C. 6.2%",
+          "D. 5.0%"
+        ],
+        "answer": "B. 5.2%"
+      },
+      {
+        "q": "How does Taiwan's projected growth compare to most developed nations?",
+        "options": [
+          "A. It is lower",
+          "B. It is similar",
+          "C. It is ahead",
+          "D. It is irrelevant"
+        ],
+        "answer": "C. It is ahead"
+      },
+      {
+        "q": "What does \"upward revision\" mean in this context?",
+        "options": [
+          "A. The rate was lowered",
+          "B. The rate was confirmed",
+          "C. The rate was increased",
+          "D. The rate was initially wrong"
+        ],
+        "answer": "C. The rate was increased"
+      },
+      {
+        "q": "What is one of the primary reasons for the strong outlook, according to the IMF?",
+        "options": [
+          "A. Increased tourism",
+          "B. Resilient global demand for technology exports",
+          "C. Higher domestic consumption",
+          "D. New trade agreements"
+        ],
+        "answer": "B. Resilient global demand for technology exports"
+      },
+      {
+        "q": "What is another reason mentioned for the strong outlook?",
+        "options": [
+          "A. Reduced imports",
+          "B. Effective domestic policy support",
+          "C. Foreign aid",
+          "D. Natural resource discoveries"
+        ],
+        "answer": "B. Effective domestic policy support"
+      },
+      {
+        "q": "The news highlights Taiwan's \"robust performance.\" What does \"robust\" mean?",
+        "options": [
+          "A. Weak",
+          "B. Unstable",
+          "C. Strong and healthy",
+          "D. Average"
+        ],
+        "answer": "C. Strong and healthy"
+      },
+      {
+        "q": "What does \"Gross Domestic Product (GDP)\" measure?",
+        "options": [
+          "A. A country's total population",
+          "B. The total value of goods and services produced in a country",
+          "C. The average income of citizens",
+          "D. A country's export volume"
+        ],
+        "answer": "B. The total value of goods and services produced in a country"
+      },
+      {
+        "q": "The article states that the revision \"underscores Taiwan's dynamic economy.\" What does \"underscore\" mean?",
+        "options": [
+          "A. To hide",
+          "B. To doubt",
+          "C. To emphasize",
+          "D. To complicate"
+        ],
+        "answer": "C. To emphasize"
+      },
+      {
+        "q": "What is Taiwan's crucial role mentioned in the article?",
+        "options": [
+          "A. As a major tourist destination",
+          "B. In global supply chain",
+          "C. As a leader in agriculture",
+          "D. In space exploration"
+        ],
+        "answer": "B. In global supply chain"
+      },
+      {
+        "q": "Which of the following best describes the overall tone of the news report regarding Taiwan's economy?",
+        "options": [
+          "A. Concerned",
+          "B. Neutral",
+          "C. Pessimistic",
+          "D. Optimistic"
+        ],
+        "answer": "D. Optimistic"
+      },
+      {
+        "q": "What is Pericom primarily known for manufacturing?",
+        "options": [
+          "A: Advanced AI software",
+          "B: Advanced semiconductor inspection equipment",
+          "C: Basic computer components",
+          "D: Consumer electronics"
+        ],
+        "answer": "B: Advanced semiconductor inspection equipment"
+      },
+      {
+        "q": "At what capacity is Pericom currently operating?",
+        "options": [
+          "A: Half capacity",
+          "B: Below capacity",
+          "C: Full capacity",
+          "D: Reduced capacity"
+        ],
+        "answer": "C: Full capacity"
+      },
+      {
+        "q": "What is the main reason for the surge in Pericom's production?",
+        "options": [
+          "A: Increased government contracts",
+          "B: New marketing strategies",
+          "C: Strong global demand for AI technologies",
+          "D: Expansion into new markets"
+        ],
+        "answer": "C: Strong global demand for AI technologies"
+      },
+      {
+        "q": "What role do Pericom's high-tech solutions play regarding AI chips?",
+        "options": [
+          "A: They design the AI chips.",
+          "B: They ensure the quality and performance of AI chips.",
+          "C: They assemble the AI chips.",
+          "D: They distribute the AI chips."
+        ],
+        "answer": "B: They ensure the quality and performance of AI chips."
+      },
+      {
+        "q": "What do industry analysts anticipate regarding the strong demand for Pericom's products?",
+        "options": [
+          "A: It will decrease soon.",
+          "B: It will remain stable.",
+          "C: It will continue.",
+          "D: It is unpredictable."
+        ],
+        "answer": "C: It will continue."
+      },
+      {
+        "q": "What is the expected outcome for Pericom due to the sustained demand?",
+        "options": [
+          "A: A decline in market share.",
+          "B: A shift in product focus.",
+          "C: Solidification of its market position and sustained growth.",
+          "D: A temporary halt in production."
+        ],
+        "answer": "C: Solidification of its market position and sustained growth."
+      },
+      {
+        "q": "The word \"surge\" in the text is closest in meaning to:",
+        "options": [
+          "A: a slight decrease",
+          "B: a sudden large increase",
+          "C: a stable condition",
+          "D: a slow decline"
+        ],
+        "answer": "B: a sudden large increase"
+      },
+      {
+        "q": "What type of chips does Pericom's equipment help with?",
+        "options": [
+          "A: Next-generation AI chips",
+          "B: Older generation computer chips",
+          "C: Memory chips only",
+          "D: Graphics cards for gaming"
+        ],
+        "answer": "A: Next-generation AI chips"
+      },
+      {
+        "q": "According to the news, what kind of company is Pericom?",
+        "options": [
+          "A: An AI software developer",
+          "B: A semiconductor manufacturing plant",
+          "C: An advanced inspection equipment maker",
+          "D: A consumer electronics retailer"
+        ],
+        "answer": "C: An advanced inspection equipment maker"
+      },
+      {
+        "q": "The phrase \"driven by\" implies:",
+        "options": [
+          "A: controlled by",
+          "B: caused by",
+          "C: ignored by",
+          "D: separate from"
+        ],
+        "answer": "B: caused by"
+      },
+      {
+        "q": "What does \"full capacity\" mean for Pericom?",
+        "options": [
+          "A: They are producing at their maximum possible output.",
+          "B: They have excess production capability.",
+          "C: They are operating below their potential.",
+          "D: They are expanding their facilities."
+        ],
+        "answer": "A: They are producing at their maximum possible output."
+      },
+      {
+        "q": "What is the overall tone of the news report regarding Pericom's future?",
+        "options": [
+          "A: Pessimistic",
+          "B: Neutral",
+          "C: Optimistic",
+          "D: Cautious"
+        ],
+        "answer": "C: Optimistic"
+      },
+      {
+        "q": "What was the main reason for Taiwan's stock market boost on April 15, 2026?",
+        "options": [
+          "A) Strong performance of tech startups",
+          "B) Robust performance of semiconductor shares",
+          "C) Government economic stimulus",
+          "D) Increased foreign investment in real estate"
+        ],
+        "answer": "B) Robust performance of semiconductor shares"
+      },
+      {
+        "q": "Which company primarily led the stock market rally?",
+        "options": [
+          "A) Foxconn",
+          "B) MediaTek",
+          "C) Taiwan Semiconductor Manufacturing Company (TSMC)",
+          "D) Acer"
+        ],
+        "answer": "C) Taiwan Semiconductor Manufacturing Company (TSMC)"
+      },
+      {
+        "q": "What happened to ETFs with a substantial holding in TSMC?",
+        "options": [
+          "A) Their values slightly decreased.",
+          "B) They experienced exceptional growth.",
+          "C) They remained stable.",
+          "D) They were delisted from the market."
+        ],
+        "answer": "B) They experienced exceptional growth."
+      },
+      {
+        "q": "The term \"rally\" in the news refers to:",
+        "options": [
+          "A) A political gathering.",
+          "B) A significant increase in stock prices after a decline.",
+          "C) A public protest.",
+          "D) A sports competition."
+        ],
+        "answer": "B) A significant increase in stock prices after a decline."
+      },
+      {
+        "q": "What does the surge in stock values reflect?",
+        "options": [
+          "A) Weakening investor confidence.",
+          "B) Strong investor confidence in the semiconductor sector.",
+          "C) A general market downturn.",
+          "D) Uncertainty about TSMC's future."
+        ],
+        "answer": "B) Strong investor confidence in the semiconductor sector."
+      },
+      {
+        "q": "According to the news, what is TSMC's position in the market?",
+        "options": [
+          "A) It is facing strong competition.",
+          "B) It is losing market share.",
+          "C) It maintains continued market dominance.",
+          "D) It is a new entrant to the market."
+        ],
+        "answer": "C) It maintains continued market dominance."
+      },
+      {
+        "q": "What does \"robust\" mean in the context of \"robust performance\"?",
+        "options": [
+          "A) Weak",
+          "B) Average",
+          "C) Strong and healthy",
+          "D) Unpredictable"
+        ],
+        "answer": "C) Strong and healthy"
+      },
+      {
+        "q": "What does \"consequently\" mean?",
+        "options": [
+          "A) In contrast",
+          "B) As a result",
+          "C) Additionally",
+          "D) However"
+        ],
+        "answer": "B) As a result"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a factor in Taiwan's stock market boost?",
+        "options": [
+          "A) Semiconductor shares",
+          "B) TSMC's leadership",
+          "C) High-TSMC ETFs",
+          "D) Real estate investments"
+        ],
+        "answer": "D) Real estate investments"
+      },
+      {
+        "q": "What does \"substantial holding\" mean for an ETF?",
+        "options": [
+          "A) It holds a small amount of shares.",
+          "B) It has a significant amount of shares.",
+          "C) It sells all its shares quickly.",
+          "D) It has no shares in that company."
+        ],
+        "answer": "B) It has a significant amount of shares."
+      },
+      {
+        "q": "The news implies that investor confidence is particularly high in which sector?",
+        "options": [
+          "A) Financial services",
+          "B) Energy",
+          "C) Semiconductor",
+          "D) Tourism"
+        ],
+        "answer": "C) Semiconductor"
+      },
+      {
+        "q": "The word \"soaring\" in \"values soaring\" is closest in meaning to:",
+        "options": [
+          "A) falling rapidly",
+          "B) decreasing slowly",
+          "C) increasing sharply",
+          "D) staying flat"
+        ],
+        "answer": "C) increasing sharply"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "Anthropic新AI模型恐引網絡攻擊，IMF警告金融穩定風險 (Anthropic's New AI Model Poses Cyber Attack Threat, IMF Warns Financial Stability)",
+    "tabTitle": "科技",
+    "english": "Anthropic recently unveiled a new advanced AI model, raising concerns among cybersecurity experts. This powerful model, designed for various applications, reportedly possesses capabilities that could be exploited to launch sophisticated cyber attacks, including phishing and malware development. The International Monetary Fund (IMF) has issued a serious warning, highlighting potential risks to global financial stability if these AI-driven threats are not adequately addressed. Authorities are urged to develop robust safeguards and international cooperation to mitigate these emerging dangers.",
+    "chinese": "Anthropic 最近發布了一款新的先進人工智慧模型，引發了網路安全專家的擔憂。這款功能強大的模型設計用於多種應用，據報其能力可能被利用來發動複雜的網路攻擊，包括網路釣魚和惡意軟體開發。國際貨幣基金組織（IMF）已發出嚴正警告，強調如果這些由人工智慧驅動的威脅未能得到充分處理，可能對全球金融穩定構成潛在風險。當局被敦促制定強健的防護措施並加強國際合作，以減輕這些新興危險。",
+    "vocabulary": [
+      "unveil (v.): 發布；揭幕",
+      "advanced (adj.): 先進的",
+      "AI model (n. phr.): 人工智慧模型",
+      "raise concerns (v. phr.): 引發擔憂",
+      "cybersecurity (n.): 網路安全",
+      "expert (n.): 專家",
+      "powerful (adj.): 強大的",
+      "application (n.): 應用；應用程式",
+      "reportedly (adv.): 據報導",
+      "possess (v.): 擁有",
+      "capability (n.): 能力；功能",
+      "exploit (v.): 利用；剝削",
+      "sophisticated (adj.): 複雜精密的",
+      "cyber attack (n. phr.): 網路攻擊",
+      "phishing (n.): 網路釣魚",
+      "malware (n.): 惡意軟體",
+      "International Monetary Fund (IMF) (n. phr.): 國際貨幣基金組織",
+      "financial stability (n. phr.): 金融穩定",
+      "robust (adj.): 強健的；堅固的",
+      "mitigate (v.): 減輕；緩和"
+    ],
+    "quiz": [
+      {
+        "q": "What company recently unveiled a new AI model?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Anthropic"
+      },
+      {
+        "q": "Who is concerned about Anthropic's new AI model?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Cybersecurity experts"
+      },
+      {
+        "q": "What kind of attacks could the AI model be exploited for?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Cyber attacks"
+      },
+      {
+        "q": "Which of the following is an example of a cyber attack mentioned?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Phishing"
+      },
+      {
+        "q": "What organization issued a serious warning?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "International Monetary Fund (IMF)"
+      },
+      {
+        "q": "What specific risk did the IMF highlight?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Global financial stability"
+      },
+      {
+        "q": "What is urged to be developed to address these threats?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Robust safeguards"
+      },
+      {
+        "q": "What kind of cooperation is mentioned as necessary?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "International cooperation"
+      },
+      {
+        "q": "What is the purpose of developing robust safeguards and international cooperation?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "To mitigate these emerging dangers"
+      },
+      {
+        "q": "The AI model is described as being \"designed for various applications.\" What does \"applications\" refer to in this context?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Software uses or purposes"
+      },
+      {
+        "q": "What does \"adequately addressed\" mean in the context of AI-driven threats?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Fully and properly handled"
+      },
+      {
+        "q": "The news article is primarily about:",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "The launch of a new AI model and its potential risks."
+      }
+    ]
+  },
+  "article-4": {
+    "title": "英偉達發佈全球首個開源量子AI模型，擴大AI布局 (Nvidia Releases World's First Open-Source Quantum AI Model, Expands AI Reach)",
+    "tabTitle": "科技",
+    "english": "On April 15, 2026, Nvidia announced the release of the world's first open-source quantum AI model. This significant development marks a strategic expansion of the company's artificial intelligence initiatives. The model integrates quantum computing principles with AI, aiming to accelerate breakthroughs in complex computational challenges. By making it open-source, Nvidia enables global researchers and developers to access and contribute to this innovative technology, fostering wider collaboration and potentially revolutionizing fields from medicine to materials science.",
+    "chinese": "2026年4月15日，英偉達宣布發布全球首個開源量子AI模型。這項重大發展標誌著該公司在人工智慧領域的戰略性擴張。該模型將量子計算原理與人工智慧相結合，旨在加速解決複雜計算挑戰的突破。通過開源，英偉達使全球研究人員和開發者能夠訪問並貢獻這項創新技術，促進更廣泛的合作，並可能徹底改變從醫學到材料科學等領域。",
+    "vocabulary": [
+      "Nvidia (n.): 英偉達 (公司名)",
+      "release (v.): 發布",
+      "world's first (phr.): 全球首個",
+      "open-source (adj.): 開源的",
+      "quantum (adj.): 量子的",
+      "AI (n.): 人工智慧 (Artificial Intelligence)",
+      "model (n.): 模型",
+      "expand (v.): 擴大",
+      "reach (n.): 範圍；影響力",
+      "announce (v.): 宣布",
+      "significant (adj.): 重大的",
+      "development (n.): 發展",
+      "strategic (adj.): 戰略性的",
+      "initiative (n.): 倡議；計畫",
+      "integrate (v.): 整合；結合",
+      "principle (n.): 原理",
+      "accelerate (v.): 加速",
+      "breakthrough (n.): 突破",
+      "computational (adj.): 計算的",
+      "collaborate (v.): 合作"
+    ],
+    "quiz": [
+      {
+        "q": "What company released the new AI model?",
+        "options": [
+          "A) Google",
+          "B) Microsoft",
+          "C) Nvidia",
+          "D) IBM"
+        ],
+        "answer": "C) Nvidia"
+      },
+      {
+        "q": "What is the date of this news report?",
+        "options": [
+          "A) April 15, 2025",
+          "B) April 15, 2026",
+          "C) May 15, 2026",
+          "D) March 15, 2026"
+        ],
+        "answer": "B) April 15, 2026"
+      },
+      {
+        "q": "What unique feature does Nvidia's new AI model have?",
+        "options": [
+          "A) It's the cheapest",
+          "B) It's the smallest",
+          "C) It's open-source",
+          "D) It's proprietary"
+        ],
+        "answer": "C) It's open-source"
+      },
+      {
+        "q": "What type of AI model did Nvidia release?",
+        "options": [
+          "A) Traditional AI",
+          "B) Quantum AI",
+          "C) Robotic AI",
+          "D) Neural Network AI"
+        ],
+        "answer": "B) Quantum AI"
+      },
+      {
+        "q": "What is the main goal of this new model's release for Nvidia?",
+        "options": [
+          "A) To reduce costs",
+          "B) To expand its AI reach",
+          "C) To enter the gaming market",
+          "D) To sell more hardware"
+        ],
+        "answer": "B) To expand its AI reach"
+      },
+      {
+        "q": "The model integrates quantum computing ________ with AI.",
+        "options": [
+          "A) hardware",
+          "B) principles",
+          "C) history",
+          "D) employees"
+        ],
+        "answer": "B) principles"
+      },
+      {
+        "q": "What is one expected benefit of making the model open-source?",
+        "options": [
+          "A) Limiting access to experts",
+          "B) Fostering wider collaboration",
+          "C) Increasing competition",
+          "D) Reducing research funding"
+        ],
+        "answer": "B) Fostering wider collaboration"
+      },
+      {
+        "q": "The news states this development is a ________ expansion of Nvidia's AI initiatives.",
+        "options": [
+          "A) minor",
+          "B) temporary",
+          "C) strategic",
+          "D) accidental"
+        ],
+        "answer": "C) strategic"
+      },
+      {
+        "q": "What kind of challenges is the model aimed at accelerating breakthroughs in?",
+        "options": [
+          "A) Simple daily tasks",
+          "B) Artistic expression",
+          "C) Complex computational challenges",
+          "D) Basic arithmetic"
+        ],
+        "answer": "C) Complex computational challenges"
+      },
+      {
+        "q": "Which of the following fields might be revolutionized by this technology, according to the text?",
+        "options": [
+          "A) Agriculture and fishing",
+          "B) Medicine and materials science",
+          "C) Fashion and entertainment",
+          "D) Sports and recreation"
+        ],
+        "answer": "B) Medicine and materials science"
+      },
+      {
+        "q": "What does \"open-source\" primarily mean in this context?",
+        "options": [
+          "A) The software is free to buy",
+          "B) The source code is publicly available for use and modification",
+          "C) It's only for academic use",
+          "D) It works on any operating system"
+        ],
+        "answer": "B) The source code is publicly available for use and modification"
+      },
+      {
+        "q": "The news describes this development as \"significant.\" What does \"significant\" mean here?",
+        "options": [
+          "A) Small and unimportant",
+          "B) Large and meaningful",
+          "C) Quick and temporary",
+          "D) Secret and hidden"
+        ],
+        "answer": "B) Large and meaningful"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "白宮暗示美伊將進行第二輪和談，油價大幅下跌 (White House Hints at Second Round US-Iran Talks, Oil Prices Drop)",
+    "tabTitle": "地緣政治",
+    "english": "On April 15, 2026, the White House strongly suggested that a second round of crucial talks between the United States and Iran is imminent. This highly anticipated announcement, aimed at de-escalating persistent regional tensions and fostering stability, immediately triggered a notable decline in global oil prices. Market analysts quickly attributed the sharp drop to the increased prospect of renewed diplomatic engagement, which could potentially lead to a future increase in Iran's oil exports. Investors are now closely monitoring for official confirmation and further specifics regarding the agenda and precise timing of these pivotal negotiations.",
+    "chinese": "2026年4月15日，白宮強烈暗示美國與伊朗之間即將舉行第二輪關鍵和談。這項備受期待的聲明，旨在緩解持續的地區緊張局勢並促進穩定，立即引發了全球油價的顯著下跌。市場分析師迅速將油價急劇下跌歸因於外交接觸重啟的可能性增加，這可能導致伊朗未來石油出口的增長。投資者目前正密切關注官方確認以及有關這些關鍵談判議程和確切時間的更多具體細節。",
+    "vocabulary": [
+      "White House (n.): 白宮",
+      "hint (v.): 暗示",
+      "second round (phr.): 第二輪",
+      "talks (n.): 和談；談判",
+      "oil prices (phr.): 油價",
+      "drop (v.): 下跌",
+      "imminent (adj.): 即將發生的",
+      "crucial (adj.): 關鍵的",
+      "highly anticipated (phr.): 備受期待的",
+      "announcement (n.): 聲明；宣布",
+      "de-escalate (v.): 緩和；降級",
+      "persistent (adj.): 持續的",
+      "regional tensions (phr.): 地區緊張局勢",
+      "fostering stability (phr.): 促進穩定",
+      "triggered (v.): 引發",
+      "notable decline (phr.): 顯著下跌",
+      "attributed to (phr.): 歸因於",
+      "diplomatic engagement (phr.): 外交接觸",
+      "oil exports (phr.): 石油出口",
+      "pivotal negotiations (phr.): 關鍵談判"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news report?",
+        "options": [
+          "A) Iran's new oil production methods.",
+          "B) The White House's economic policies.",
+          "C) Upcoming US-Iran talks and their market impact.",
+          "D) Global warming's effect on oil reserves."
+        ],
+        "answer": "C) Upcoming US-Iran talks and their market impact."
+      },
+      {
+        "q": "What did the White House suggest?",
+        "options": [
+          "A) A new trade agreement with Iran.",
+          "B) Military action against Iran.",
+          "C) A second round of talks with Iran.",
+          "D) Sanctions relief for Iran."
+        ],
+        "answer": "C) A second round of talks with Iran."
+      },
+      {
+        "q": "What was the immediate effect of the announcement on oil prices?",
+        "options": [
+          "A) They remained stable.",
+          "B) They slightly increased.",
+          "C) They experienced a notable decline.",
+          "D) They fluctuated unpredictably."
+        ],
+        "answer": "C) They experienced a notable decline."
+      },
+      {
+        "q": "According to market analysts, why did oil prices drop?",
+        "options": [
+          "A) Concerns about global economic recession.",
+          "B) The prospect of increased diplomatic engagement and potential Iranian oil exports.",
+          "C) A sudden decrease in global oil demand.",
+          "D) New discoveries of oil fields in other countries."
+        ],
+        "answer": "B) The prospect of increased diplomatic engagement and potential Iranian oil exports."
+      },
+      {
+        "q": "What is one stated aim of these talks?",
+        "options": [
+          "A) To impose new sanctions on Iran.",
+          "B) To increase regional tensions.",
+          "C) To de-escalate persistent regional tensions.",
+          "D) To discuss cultural exchanges."
+        ],
+        "answer": "C) To de-escalate persistent regional tensions."
+      },
+      {
+        "q": "What does \"imminent\" mean in the context of the news?",
+        "options": [
+          "A) Far in the future.",
+          "B) Unlikely to happen.",
+          "C) Happening very soon.",
+          "D) Already happened."
+        ],
+        "answer": "C) Happening very soon."
+      },
+      {
+        "q": "Which word is closest in meaning to \"notable decline\"?",
+        "options": [
+          "A) Significant increase.",
+          "B) Minor fluctuation.",
+          "C) Remarkable drop.",
+          "D) Steady rise."
+        ],
+        "answer": "C) Remarkable drop."
+      },
+      {
+        "q": "What does \"fostering stability\" imply?",
+        "options": [
+          "A) Creating instability.",
+          "B) Promoting peace and order.",
+          "C) Ignoring regional issues.",
+          "D) Escalating conflicts."
+        ],
+        "answer": "B) Promoting peace and order."
+      },
+      {
+        "q": "Who is closely monitoring for further specifics?",
+        "options": [
+          "A) Only Iranian officials.",
+          "B) Only White House staff.",
+          "C) Investors.",
+          "D) Regional military leaders."
+        ],
+        "answer": "C) Investors."
+      },
+      {
+        "q": "The phrase \"attributed to\" means:",
+        "options": [
+          "A) Caused by.",
+          "B) Unrelated to.",
+          "C) In contrast with.",
+          "D) Predicted by."
+        ],
+        "answer": "A) Caused by."
+      },
+      {
+        "q": "If the talks are \"crucial\" and \"pivotal,\" what does this suggest about their importance?",
+        "options": [
+          "A) They are minor and inconsequential.",
+          "B) They are of great importance and could significantly influence future events.",
+          "C) They are routine diplomatic procedures.",
+          "D) They are primarily symbolic."
+        ],
+        "answer": "B) They are of great importance and could significantly influence future events."
+      },
+      {
+        "q": "What kind of tensions are the talks aiming to de-escalate?",
+        "options": [
+          "A) Economic tensions within the US.",
+          "B) Internal political tensions in Iran.",
+          "C) Persistent regional tensions.",
+          "D) Global trade tensions."
+        ],
+        "answer": "C) Persistent regional tensions."
+      }
+    ]
+  },
+  "article-6": {
+    "title": "中國近期外交活動頻繁，多國政要密集訪華 (China's Diplomatic Surge, Numerous Foreign Dignitaries Visit Beijing)",
+    "tabTitle": "地緣政治",
+    "english": "China has experienced a significant increase in diplomatic engagements recently. Numerous high-ranking foreign dignitaries have visited Beijing, signaling a surge in international relations. These visits include leaders from various continents, discussing topics ranging from economic cooperation to regional stability. This intensified diplomatic activity underscores China's growing global influence and its efforts to strengthen bilateral ties with multiple nations. The frequent exchanges highlight a dynamic period in China's foreign policy.",
+    "chinese": "中國近期外交活動顯著增加。多位高層外國政要密集訪問北京，這預示著國際關係的活躍。這些訪問包括來自不同大洲的領導人，討論議題涵蓋經濟合作到區域穩定。此次加強的外交活動突顯了中國日益增長的全球影響力及其加強與多國雙邊關係的努力。頻繁的交流標誌著中國外交政策的一個活躍時期。",
+    "vocabulary": [
+      "Diplomatic (adj.): 外交的",
+      "Surge (n.): 激增；湧現",
+      "Numerous (adj.): 許多的",
+      "Dignitaries (n.): 顯要人物；政要",
+      "Engagements (n.): 約會；外交活動",
+      "High-ranking (adj.): 高層次的；高級的",
+      "Signaling (v.): 發出信號；預示",
+      "Intensified (adj.): 加強的；強化的",
+      "Underscores (v.): 強調；突顯",
+      "Global (adj.): 全球的",
+      "Influence (n.): 影響力",
+      "Strengthen (v.): 加強；鞏固",
+      "Bilateral (adj.): 雙邊的",
+      "Ties (n.): 關係；聯繫",
+      "Nations (n.): 國家",
+      "Exchanges (n.): 交流；交換",
+      "Dynamic (adj.): 活躍的；有活力的",
+      "Foreign policy (n. phr.): 外交政策",
+      "Regional stability (n. phr.): 區域穩定",
+      "Economic cooperation (n. phr.): 經濟合作"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A. China's economic growth",
+          "B. China's military expansion",
+          "C. China's recent diplomatic activities",
+          "D. China's cultural exchanges"
+        ],
+        "answer": "C. China's recent diplomatic activities"
+      },
+      {
+        "q": "What does the term \"diplomatic surge\" refer to in the title?",
+        "options": [
+          "A. A sudden increase in military power",
+          "B. A rapid increase in diplomatic activities",
+          "C. A decrease in international relations",
+          "D. A surge in domestic tourism"
+        ],
+        "answer": "B. A rapid increase in diplomatic activities"
+      },
+      {
+        "q": "Who has been visiting Beijing recently?",
+        "options": [
+          "A. Only business leaders",
+          "B. High-ranking foreign dignitaries",
+          "C. Mostly tourists",
+          "D. Students from abroad"
+        ],
+        "answer": "B. High-ranking foreign dignitaries"
+      },
+      {
+        "q": "From which regions have leaders been visiting China?",
+        "options": [
+          "A. Only Asia",
+          "B. Only Europe",
+          "C. Various continents",
+          "D. Only North America"
+        ],
+        "answer": "C. Various continents"
+      },
+      {
+        "q": "What kinds of topics are being discussed during these visits?",
+        "options": [
+          "A. Only sports events",
+          "B. Economic cooperation and regional stability",
+          "C. Historical research",
+          "D. Local weather patterns"
+        ],
+        "answer": "B. Economic cooperation and regional stability"
+      },
+      {
+        "q": "What does \"intensified diplomatic activity\" highlight about China?",
+        "options": [
+          "A. Its shrinking global influence",
+          "B. Its growing global influence",
+          "C. Its isolation from the world",
+          "D. Its focus on internal affairs"
+        ],
+        "answer": "B. Its growing global influence"
+      },
+      {
+        "q": "What is China trying to strengthen through these visits?",
+        "options": [
+          "A. Its internal borders",
+          "B. Its military alliances",
+          "C. Bilateral ties with multiple nations",
+          "D. Its language programs"
+        ],
+        "answer": "C. Bilateral ties with multiple nations"
+      },
+      {
+        "q": "The word \"numerous\" is closest in meaning to:",
+        "options": [
+          "A. Few",
+          "B. Many",
+          "C. Important",
+          "D. Secret"
+        ],
+        "answer": "B. Many"
+      },
+      {
+        "q": "What does \"underscores\" mean in the context of the article?",
+        "options": [
+          "A. To hide",
+          "B. To emphasize",
+          "C. To ignore",
+          "D. To criticize"
+        ],
+        "answer": "B. To emphasize"
+      },
+      {
+        "q": "The phrase \"foreign policy\" refers to:",
+        "options": [
+          "A. A country's domestic laws",
+          "B. A country's strategy for dealing with other nations",
+          "C. A policy for attracting foreign investment",
+          "D. A policy regarding foreign languages"
+        ],
+        "answer": "B. A country's strategy for dealing with other nations"
+      },
+      {
+        "q": "What kind of period does the article describe China's foreign policy as currently being in?",
+        "options": [
+          "A. A stagnant period",
+          "B. A period of decline",
+          "C. A dynamic period",
+          "D. A period of isolation"
+        ],
+        "answer": "C. A dynamic period"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a topic of discussion during the visits?",
+        "options": [
+          "A. Economic cooperation",
+          "B. Regional stability",
+          "C. Cultural festivals",
+          "D. Bilateral ties"
+        ],
+        "answer": "C. Cultural festivals"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
