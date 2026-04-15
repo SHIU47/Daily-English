@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 16, 2026：科技、地緣政治 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電法說會揭露AI強勁需求，2奈米進度受矚\nTSMC's Q1 earnings conference on April 16, 2026, highlighted a significant surge in demand for Artificial Intelligence (AI) related chips. The world's largest contract chipmaker reported robust financial performance, exceeding analyst expectations. Investors and industry observers are closely monitoring the company's advancements in 2-nanometer process technology, which is crucial for future high-performance computing and AI applications. This progress is seen as vital for maintaining TSMC's competitive edge and meeting future market needs.\n\n[2] 日月光投控購群創南科廠，擴充AI先進封裝產能\nASE Technology Holding Co., a leading semiconductor testing and packaging provider, announced on April 16, 2026, its acquisition of InnoLux Corporation's Fab5 plant in Southern Taiwan Science Park. This strategic move aims to significantly boost ASE's production capacity for advanced AI packaging technologies. The expansion is crucial for meeting the surging global demand for high-performance computing components essential for artificial intelligence applications. This acquisition underscores ASE's commitment to strengthening its leadership in the evolving semiconductor industry.\n\n[3] 國發會評估中東戰事影響，台灣經濟衝擊有限\nOn April 16, 2026, Taiwan's National Development Council (NDC) announced its assessment regarding the potential economic repercussions of the ongoing Middle East conflict. The NDC concluded that the direct impact on Taiwan's economy is expected to be limited. While global energy prices might see some volatility, Taiwan's robust economic fundamentals and diversified trade relationships are anticipated to mitigate significant adverse effects. The government will continue to monitor the situation closely to ensure national economic stability.",
+    "chinese": "【1】台積電法說會揭露AI強勁需求，2奈米進度受矚\n台積電於2026年4月16日舉行的第一季法說會，揭示了人工智慧（AI）相關晶片需求的顯著飆升。這家全球最大的晶圓代工廠報告了強勁的財務表現，超出分析師預期。投資者和業界觀察家正密切關注該公司在2奈米製程技術方面的進展，這對於未來的高效能運算和AI應用至關重要。這項進展被視為維持台積電競爭優勢並滿足未來市場需求的關鍵。\n\n【2】日月光投控購群創南科廠，擴充AI先進封裝產能\n日月光投控，一家領先的半導體測試與封裝供應商，於2026年4月16日宣布收購群創光電位於南部科學園區的五廠。此一策略性舉措旨在顯著提升日月光在先進AI封裝技術方面的生產能力。此次擴張對於滿足全球對人工智慧應用所需高性能運算元件不斷增長的需求至關重要。這次收購突顯了日月光投控致力於強化其在不斷發展的半導體產業中的領導地位。\n\n【3】國發會評估中東戰事影響，台灣經濟衝擊有限\n2026年4月16日，台灣國家發展委員會（國發會）公布了對中東持續衝突可能帶來的經濟影響評估。國發會總結指出，預計對台灣經濟的直接衝擊有限。儘管全球能源價格可能出現一些波動，但台灣穩健的經濟基本面和多元化的貿易關係，預計將減輕重大的負面影響。政府將繼續密切關注局勢，以確保國家經濟的穩定。",
+    "vocabulary": [
+      "earnings conference (n.): 法說會",
+      "reveal (v.): 揭露",
+      "strong demand (n.): 強勁需求",
+      "Artificial Intelligence (AI) (n.): 人工智慧",
+      "progress (n.): 進度",
+      "eyed (v.): 受矚目",
+      "significant surge (n.): 顯著飆升",
+      "related chips (n.): 相關晶片",
+      "contract chipmaker (n.): 晶圓代工廠",
+      "robust (adj.): 強勁的",
+      "financial performance (n.): 財務表現",
+      "exceed (v.): 超出",
+      "analyst expectations (n.): 分析師預期",
+      "investor (n.): 投資者",
+      "industry observer (n.): 業界觀察家",
+      "closely monitoring (v. phr.): 密切關注",
+      "advancements (n.): 進展",
+      "process technology (n.): 製程技術",
+      "crucial (adj.): 至關重要的",
+      "competitive edge (n.): 競爭優勢",
+      "ASE Technology Holding Co. (n.): 日月光投控",
+      "semiconductor (n.): 半導體",
+      "testing (n.): 測試",
+      "packaging (n.): 封裝",
+      "provider (n.): 供應商",
+      "announce (v.): 宣布",
+      "acquisition (n.): 收購",
+      "InnoLux Corporation (n.): 群創光電",
+      "Fab5 plant (n.): 五廠（晶圓廠）",
+      "Southern Taiwan Science Park (n.): 南部科學園區 (南科)",
+      "strategic (adj.): 策略性的",
+      "boost (v.): 提升，促進",
+      "production capacity (n.): 生產能力",
+      "advanced (adj.): 先進的",
+      "AI packaging technologies (n.): AI封裝技術",
+      "crucial (adj.): 至關重要的",
+      "surging (adj.): 激增的，不斷增長的",
+      "high-performance computing (n.): 高效能運算",
+      "artificial intelligence (n.): 人工智慧",
+      "underscore (v.): 強調，突顯",
+      "National Development Council (n.): 國家發展委員會",
+      "assess (v.): 評估",
+      "assessment (n.): 評估",
+      "potential (adj.): 潛在的",
+      "repercussion (n.): 影響；反響",
+      "ongoing (adj.): 持續進行的",
+      "conflict (n.): 衝突",
+      "conclude (v.): 總結；斷定",
+      "direct impact (n.phr.): 直接衝擊",
+      "limited (adj.): 有限的",
+      "global energy prices (n.phr.): 全球能源價格",
+      "volatility (n.): 波動性；不穩定性",
+      "robust (adj.): 穩健的；強勁的",
+      "economic fundamentals (n.phr.): 經濟基本面",
+      "diversified (adj.): 多元化的",
+      "trade relationship (n.phr.): 貿易關係",
+      "anticipate (v.): 預計；預期",
+      "mitigate (v.): 減輕；緩和",
+      "adverse effect (n.phr.): 負面影響",
+      "economic stability (n.phr.): 經濟穩定"
+    ],
+    "quiz": [
+      {
+        "q": "What was the main topic of TSMC's Q1 earnings conference mentioned in the news?",
+        "options": [
+          "A) New smartphone models",
+          "B) Strong AI chip demand",
+          "C) Company mergers",
+          "D) Employee benefits"
+        ],
+        "answer": "B) Strong AI chip demand"
+      },
+      {
+        "q": "When did TSMC's Q1 earnings conference take place, according to the article?",
+        "options": [
+          "A) March 16, 2026",
+          "B) April 16, 2026",
+          "C) May 16, 2026",
+          "D) June 16, 2026"
+        ],
+        "answer": "B) April 16, 2026"
+      },
+      {
+        "q": "How did TSMC's financial performance compare to analyst expectations?",
+        "options": [
+          "A) It fell short",
+          "B) It met expectations",
+          "C) It exceeded expectations",
+          "D) It was not reported"
+        ],
+        "answer": "C) It exceeded expectations"
+      },
+      {
+        "q": "What specific technology progress are investors and industry observers closely monitoring?",
+        "options": [
+          "A) 5-nanometer process",
+          "B) 3-nanometer process",
+          "C) 2-nanometer process",
+          "D) 1-nanometer process"
+        ],
+        "answer": "C) 2-nanometer process"
+      },
+      {
+        "q": "What does \"AI\" stand for in the context of the news?",
+        "options": [
+          "A) Advanced Innovations",
+          "B) Artificial Intelligence",
+          "C) Automated Industry",
+          "D) Applied Informatics"
+        ],
+        "answer": "B) Artificial Intelligence"
+      },
+      {
+        "q": "What role does TSMC play in the global chip industry, as described?",
+        "options": [
+          "A) Software developer",
+          "B) Largest contract chipmaker",
+          "C) Component retailer",
+          "D) Research institution"
+        ],
+        "answer": "B) Largest contract chipmaker"
+      },
+      {
+        "q": "The word \"robust\" in the text is closest in meaning to:",
+        "options": [
+          "A) weak",
+          "B) fragile",
+          "C) strong",
+          "D) moderate"
+        ],
+        "answer": "C) strong"
+      },
+      {
+        "q": "Why is the 2-nanometer process technology considered \"crucial\"?",
+        "options": [
+          "A) For cheaper production",
+          "B) For marketing purposes",
+          "C) For future high-performance computing and AI applications",
+          "D) For reducing energy consumption only"
+        ],
+        "answer": "C) For future high-performance computing and AI applications"
+      },
+      {
+        "q": "What is the primary goal of maintaining TSMC's competitive edge?",
+        "options": [
+          "A) To reduce staff",
+          "B) To increase advertising",
+          "C) To meet future market needs",
+          "D) To diversify products"
+        ],
+        "answer": "C) To meet future market needs"
+      },
+      {
+        "q": "What does an \"earnings conference\" primarily reveal?",
+        "options": [
+          "A) Employee satisfaction",
+          "B) Company's financial results and outlook",
+          "C) New product launch dates",
+          "D) Corporate social responsibility initiatives"
+        ],
+        "answer": "B) Company's financial results and outlook"
+      },
+      {
+        "q": "The phrase \"closely monitoring\" implies:",
+        "options": [
+          "A) Ignoring",
+          "B) Observing with great attention",
+          "C) Rarely checking",
+          "D) Criticizing"
+        ],
+        "answer": "B) Observing with great attention"
+      },
+      {
+        "q": "According to the article, what kind of demand saw a \"significant surge\"?",
+        "options": [
+          "A) Demand for consumer electronics",
+          "B) Demand for automotive chips",
+          "C) Demand for Artificial Intelligence (AI) related chips",
+          "D) Demand for memory chips"
+        ],
+        "answer": "C) Demand for Artificial Intelligence (AI) related chips"
+      },
+      {
+        "q": "What company acquired InnoLux's Fab5 plant?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. ASE Technology Holding Co."
+      },
+      {
+        "q": "When was the acquisition announced?",
+        "options": [
+          "A. April 16, 2024",
+          "B. April 16, 2025",
+          "C. April 16, 2026",
+          "D. The date is not mentioned."
+        ],
+        "answer": "C. April 16, 2026"
+      },
+      {
+        "q": "What is ASE Technology Holding Co. primarily known for?",
+        "options": [
+          "A. Manufacturing display panels",
+          "B. Developing AI software",
+          "C. Semiconductor testing and packaging",
+          "D. Operating science parks"
+        ],
+        "answer": "C. Semiconductor testing and packaging"
+      },
+      {
+        "q": "Where is InnoLux Corporation's Fab5 plant located?",
+        "options": [
+          "A. Northern Taiwan",
+          "B. Central Taiwan",
+          "C. Southern Taiwan Science Park",
+          "D. Outside of Taiwan"
+        ],
+        "answer": "C. Southern Taiwan Science Park"
+      },
+      {
+        "q": "What is the main goal of ASE's acquisition of Fab5?",
+        "options": [
+          "A. To enter the display panel market",
+          "B. To increase production capacity for advanced AI packaging technologies",
+          "C. To reduce competition in the semiconductor industry",
+          "D. To develop new science parks"
+        ],
+        "answer": "B. To increase production capacity for advanced AI packaging technologies"
+      },
+      {
+        "q": "The term \"strategic move\" implies that the acquisition is:",
+        "options": [
+          "A. Accidental",
+          "B. Unplanned",
+          "C. Part of a larger plan",
+          "D. A minor decision"
+        ],
+        "answer": "C. Part of a larger plan"
+      },
+      {
+        "q": "What kind of demand is the expansion crucial for meeting?",
+        "options": [
+          "A. Local demand for basic computer components",
+          "B. Declining demand for AI applications",
+          "C. Surging global demand for high-performance computing components",
+          "D. Demand for traditional packaging services"
+        ],
+        "answer": "C. Surging global demand for high-performance computing components"
+      },
+      {
+        "q": "What does \"underscore\" mean in the context of the news?",
+        "options": [
+          "A. To hide",
+          "B. To weaken",
+          "C. To emphasize",
+          "D. To forget"
+        ],
+        "answer": "C. To emphasize"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a component of ASE's business?",
+        "options": [
+          "A. Semiconductor testing",
+          "B. Semiconductor packaging",
+          "C. AI software development",
+          "D. Advanced AI packaging"
+        ],
+        "answer": "C. AI software development"
+      },
+      {
+        "q": "What industry is ASE strengthening its leadership in?",
+        "options": [
+          "A. Display panel industry",
+          "B. Artificial intelligence software industry",
+          "C. Semiconductor industry",
+          "D. Real estate industry"
+        ],
+        "answer": "C. Semiconductor industry"
+      },
+      {
+        "q": "What does \"capacity\" refer to in \"production capacity\"?",
+        "options": [
+          "A. The quality of products",
+          "B. The maximum amount that can be produced",
+          "C. The cost of production",
+          "D. The number of employees"
+        ],
+        "answer": "B. The maximum amount that can be produced"
+      },
+      {
+        "q": "The news article is primarily about:",
+        "options": [
+          "A. The financial performance of InnoLux.",
+          "B. A major acquisition in the semiconductor industry.",
+          "C. New developments in artificial intelligence software.",
+          "D. The establishment of a new science park."
+        ],
+        "answer": "B. A major acquisition in the semiconductor industry."
+      },
+      {
+        "q": "What organization made the assessment regarding the Middle East conflict's impact on Taiwan?",
+        "options": [
+          "Ministry of Economic Affairs",
+          "Central Bank",
+          "National Development Council",
+          "Ministry of Foreign Affairs"
+        ],
+        "answer": "National Development Council"
+      },
+      {
+        "q": "When was the assessment announced?",
+        "options": [
+          "March 16, 2026",
+          "April 16, 2026",
+          "May 16, 2026",
+          "June 16, 2026"
+        ],
+        "answer": "April 16, 2026"
+      },
+      {
+        "q": "What did the NDC conclude about the direct impact on Taiwan's economy?",
+        "options": [
+          "It would be severe.",
+          "It would be significant.",
+          "It would be limited.",
+          "It would be negligible."
+        ],
+        "answer": "It would be limited."
+      },
+      {
+        "q": "What potential issue is mentioned regarding global markets?",
+        "options": [
+          "Stock market crash",
+          "Commodity shortages",
+          "Energy price volatility",
+          "Currency fluctuations"
+        ],
+        "answer": "Energy price volatility"
+      },
+      {
+        "q": "What factors are expected to help Taiwan mitigate adverse effects?",
+        "options": [
+          "Government subsidies and tax cuts.",
+          "Robust economic fundamentals and diversified trade relationships.",
+          "Increased domestic consumption and tourism.",
+          "International aid and loans."
+        ],
+        "answer": "Robust economic fundamentals and diversified trade relationships."
+      },
+      {
+        "q": "What does the government plan to do moving forward?",
+        "options": [
+          "Implement new trade policies.",
+          "Increase military spending.",
+          "Monitor the situation closely.",
+          "Seek international mediation."
+        ],
+        "answer": "Monitor the situation closely."
+      },
+      {
+        "q": "The word \"repercussions\" in the text is closest in meaning to:",
+        "options": [
+          "Causes",
+          "Consequences",
+          "Origins",
+          "Solutions"
+        ],
+        "answer": "Consequences"
+      },
+      {
+        "q": "What does \"volatility\" imply about global energy prices?",
+        "options": [
+          "They will remain stable.",
+          "They will decrease steadily.",
+          "They will fluctuate unpredictably.",
+          "They will increase sharply and consistently."
+        ],
+        "answer": "They will fluctuate unpredictably."
+      },
+      {
+        "q": "If an economy has \"robust economic fundamentals,\" it means it is:",
+        "options": [
+          "Weak and unstable.",
+          "Strong and healthy.",
+          "Dependent on foreign aid.",
+          "Prone to collapse."
+        ],
+        "answer": "Strong and healthy."
+      },
+      {
+        "q": "What is the main purpose of the NDC's assessment?",
+        "options": [
+          "To criticize the Middle East conflict.",
+          "To provide investment advice.",
+          "To evaluate economic risks for Taiwan.",
+          "To promote international trade."
+        ],
+        "answer": "To evaluate economic risks for Taiwan."
+      },
+      {
+        "q": "The phrase \"mitigate significant adverse effects\" means to:",
+        "options": [
+          "Increase positive outcomes.",
+          "Reduce serious negative impacts.",
+          "Highlight major problems.",
+          "Avoid all consequences."
+        ],
+        "answer": "Reduce serious negative impacts."
+      },
+      {
+        "q": "The news suggests that Taiwan's economy is generally:",
+        "options": [
+          "Highly vulnerable to external shocks.",
+          "Isolated from global events.",
+          "Resilient to some international disturbances.",
+          "Heavily reliant on Middle East stability."
+        ],
+        "answer": "Resilient to some international disturbances."
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美伊和談現曙光，荷姆茲海峽封鎖與制裁成焦點",
+    "tabTitle": "地緣政治",
+    "english": "Hope for peace between the US and Iran has appeared, with talks beginning on April 16, 2026. These discussions primarily address the critical issues of the Hormuz Strait blockade and international sanctions. Both sides seek a diplomatic solution to ease regional tensions and ensure global oil supply stability. The Strait's status, vital for world energy, remains a central point of negotiation, alongside the lifting or modification of various economic penalties. Experts believe these initial dialogues could pave the way for a more stable future in the Middle East.",
+    "chinese": "美伊之間和平的曙光已經出現，雙方於2026年4月16日開始會談。這些討論主要針對荷姆茲海峽的封鎖以及國際制裁這兩個關鍵議題。雙方都尋求透過外交途徑解決區域緊張局勢，並確保全球石油供應的穩定。該海峽作為世界能源命脈的地位，與解除或修改各項經濟制裁，仍是談判的核心。專家們認為，這些初步對話可能為中東地區帶來更穩定的未來鋪路。",
+    "vocabulary": [
+      "geopolitical (adj.): 地緣政治的",
+      "emerge (v.): 出現；浮現",
+      "peace talks (n. phr.): 和平會談",
+      "Hormuz Strait (n. phr.): 荷姆茲海峽",
+      "blockade (n.): 封鎖",
+      "sanction (n.): 制裁",
+      "primarily (adv.): 主要地",
+      "address (v.): 處理；解決",
+      "critical (adj.): 關鍵的；嚴峻的",
+      "issue (n.): 議題；問題",
+      "seek (v.): 尋求",
+      "diplomatic solution (n. phr.): 外交解決方案",
+      "ease (v.): 緩解；減輕",
+      "regional tensions (n. phr.): 區域緊張局勢",
+      "ensure (v.): 確保",
+      "global oil supply (n. phr.): 全球石油供應",
+      "stability (n.): 穩定性",
+      "negotiation (n.): 談判",
+      "lifting (n.): 解除",
+      "pave the way for (phr.): 為...鋪平道路"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news article?",
+        "options": [
+          "A. Global warming crisis",
+          "B. US-Iran peace talks",
+          "C. New oil discoveries",
+          "D. Middle East tourism growth"
+        ],
+        "answer": "B. US-Iran peace talks"
+      },
+      {
+        "q": "According to the article, when did the peace talks between the US and Iran begin?",
+        "options": [
+          "A. April 16, 2025",
+          "B. March 1, 2026",
+          "C. April 16, 2026",
+          "D. May 1, 2027"
+        ],
+        "answer": "C. April 16, 2026"
+      },
+      {
+        "q": "What are the two primary issues being addressed in the discussions?",
+        "options": [
+          "A. Trade tariffs and cultural exchange",
+          "B. Hormuz Strait blockade and international sanctions",
+          "C. Human rights and technological cooperation",
+          "D. Border disputes and military exercises"
+        ],
+        "answer": "B. Hormuz Strait blockade and international sanctions"
+      },
+      {
+        "q": "What do both the US and Iran aim to achieve through these talks?",
+        "options": [
+          "A. Increased military presence",
+          "B. A diplomatic solution",
+          "C. New trade agreements",
+          "D. Cultural festivals"
+        ],
+        "answer": "B. A diplomatic solution"
+      },
+      {
+        "q": "What is one of the key outcomes a diplomatic solution is expected to achieve regarding regional dynamics?",
+        "options": [
+          "A. Escalate regional conflicts",
+          "B. Ease regional tensions",
+          "C. Introduce new sanctions",
+          "D. Expand military alliances"
+        ],
+        "answer": "B. Ease regional tensions"
+      },
+      {
+        "q": "Besides easing tensions, what else does a diplomatic solution aim to ensure globally?",
+        "options": [
+          "A. Global food security",
+          "B. Global oil supply stability",
+          "C. Global technological advancement",
+          "D. Global space exploration"
+        ],
+        "answer": "B. Global oil supply stability"
+      },
+      {
+        "q": "Why is the Hormuz Strait considered \"vital\" according to the article?",
+        "options": [
+          "A. For tourism",
+          "B. For world energy",
+          "C. For fishing",
+          "D. For military bases"
+        ],
+        "answer": "B. For world energy"
+      },
+      {
+        "q": "What kind of penalties are mentioned as a central point of negotiation alongside the Strait's status?",
+        "options": [
+          "A. Environmental fines",
+          "B. Traffic violations",
+          "C. Economic penalties",
+          "D. Sports bans"
+        ],
+        "answer": "C. Economic penalties"
+      },
+      {
+        "q": "What do experts believe these initial dialogues could achieve for the Middle East?",
+        "options": [
+          "A. Increase instability",
+          "B. Pave the way for a more stable future",
+          "C. Halt all regional development",
+          "D. Lead to immediate conflict"
+        ],
+        "answer": "B. Pave the way for a more stable future"
+      },
+      {
+        "q": "In the sentence \"Both sides seek a diplomatic solution to ease regional tensions,\" what does \"ease\" mean?",
+        "options": [
+          "A. Intensify",
+          "B. Reduce",
+          "C. Create",
+          "D. Ignore"
+        ],
+        "answer": "B. Reduce"
+      },
+      {
+        "q": "What does the word \"primarily\" mean in \"These discussions primarily address the critical issues...\"?",
+        "options": [
+          "A. Rarely",
+          "B. Accidentally",
+          "C. Mainly",
+          "D. Secretly"
+        ],
+        "answer": "C. Mainly"
+      },
+      {
+        "q": "What is the overall outlook presented in the news article regarding the US-Iran talks?",
+        "options": [
+          "A. Pessimistic and hopeless",
+          "B. Neutral and indifferent",
+          "C. Optimistic and hopeful",
+          "D. Critical and condemnatory"
+        ],
+        "answer": "C. Optimistic and hopeful"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "標普500指數首破7000點，AI相關交易推動美股上揚",
+    "tabTitle": "金融市場",
+    "english": "On April 16, 2026, the S&P 500 index achieved a historic milestone, closing above 7000 points for the first time ever. This significant surge was primarily driven by robust trading activities in artificial intelligence (AI) related stocks across various sectors. Investor confidence in the technology sector, particularly in AI innovations and applications, continues to fuel the broader U.S. stock market rally. Market analysts attribute this sustained upward trend to strong corporate earnings reports and ongoing technological advancements shaping the economy.",
+    "chinese": "2026年4月16日，標普500指數達成歷史性里程碑，首次收盤突破7000點。此次顯著上漲主要由各行業中與人工智慧（AI）相關股票的強勁交易活動推動。投資者對科技產業，特別是AI創新及應用的信心，持續推動美國股市整體上揚。市場分析師將這股持續的上升趨勢歸因於強勁的企業財報和正在重塑經濟的技術進步。",
+    "vocabulary": [
+      "S&P 500 index (n.): 標普500指數",
+      "historic milestone (n.): 歷史性里程碑",
+      "close above (v. phr.): 收盤突破",
+      "for the first time ever (phr.): 史上首次",
+      "significant (adj.): 顯著的",
+      "surge (n.): 急升，飆升",
+      "primarily (adv.): 主要地",
+      "robust (adj.): 強勁的，穩健的",
+      "trading activities (n. phr.): 交易活動",
+      "artificial intelligence (AI) (n.): 人工智慧",
+      "related stocks (n. phr.): 相關股票",
+      "investor confidence (n. phr.): 投資者信心",
+      "technology sector (n. phr.): 科技產業",
+      "innovations (n.): 創新",
+      "fuel (v.): 推動，助長",
+      "broader (adj.): 更廣泛的，整體的",
+      "stock market rally (n. phr.): 股市上漲/反彈",
+      "attribute to (v. phr.): 歸因於",
+      "corporate earnings (n. phr.): 企業財報",
+      "technological advancements (n. phr.): 技術進步"
+    ],
+    "quiz": [
+      {
+        "q": "What date did the S&P 500 index reach its historic milestone?",
+        "options": [
+          "A. April 16, 2025",
+          "B. April 16, 2026",
+          "C. May 16, 2026",
+          "D. January 1, 2026"
+        ],
+        "answer": "B. April 16, 2026"
+      },
+      {
+        "q": "What was the historic milestone achieved by the S&P 500 index?",
+        "options": [
+          "A. It closed below 7000 points.",
+          "B. It reached 700 points.",
+          "C. It closed above 7000 points for the first time.",
+          "D. It experienced a significant drop."
+        ],
+        "answer": "C. It closed above 7000 points for the first time."
+      },
+      {
+        "q": "What was the primary driver of this significant surge in the S&P 500?",
+        "options": [
+          "A. A decrease in technology stocks.",
+          "B. Robust trading in AI-related stocks.",
+          "C. Government subsidies for traditional industries.",
+          "D. A decline in investor confidence."
+        ],
+        "answer": "B. Robust trading in AI-related stocks."
+      },
+      {
+        "q": "Which sector's innovations are specifically mentioned as fueling the stock market rally?",
+        "options": [
+          "A. Manufacturing sector",
+          "B. Healthcare sector",
+          "C. Technology sector, particularly AI",
+          "D. Energy sector"
+        ],
+        "answer": "C. Technology sector, particularly AI"
+      },
+      {
+        "q": "What does the term 'fuel' mean in the context of 'fuel the broader U.S. stock market rally'?",
+        "options": [
+          "A. To reduce",
+          "B. To stop",
+          "C. To power or encourage",
+          "D. To ignore"
+        ],
+        "answer": "C. To power or encourage"
+      },
+      {
+        "q": "What does 'broader U.S. stock market rally' imply?",
+        "options": [
+          "A. Only a few specific stocks are doing well.",
+          "B. The rally is limited to non-tech stocks.",
+          "C. The upward trend is affecting a wide range of U.S. stocks.",
+          "D. The market is declining globally."
+        ],
+        "answer": "C. The upward trend is affecting a wide range of U.S. stocks."
+      },
+      {
+        "q": "According to market analysts, what is one reason for the sustained upward trend?",
+        "options": [
+          "A. Weak corporate earnings reports.",
+          "B. Ongoing technological advancements.",
+          "C. High inflation rates.",
+          "D. Political instability."
+        ],
+        "answer": "B. Ongoing technological advancements."
+      },
+      {
+        "q": "The trading activities in AI-related stocks are occurring across which types of areas?",
+        "options": [
+          "A. Only the technology sector.",
+          "B. Only in specific regional markets.",
+          "C. Various sectors.",
+          "D. International markets only."
+        ],
+        "answer": "C. Various sectors."
+      },
+      {
+        "q": "What is 'investor confidence' doing in relation to the technology sector?",
+        "options": [
+          "A. Decreasing",
+          "B. Remaining stagnant",
+          "C. Continuing to fuel the market",
+          "D. Shifting to traditional industries"
+        ],
+        "answer": "C. Continuing to fuel the market"
+      },
+      {
+        "q": "What does 'historic milestone' refer to in this news?",
+        "options": [
+          "A. A minor market fluctuation.",
+          "B. The S&P 500 closing above 7000 for the first time.",
+          "C. A new government policy.",
+          "D. A decrease in stock prices."
+        ],
+        "answer": "B. The S&P 500 closing above 7000 for the first time."
+      },
+      {
+        "q": "What kind of reports are mentioned as contributing to the upward trend?",
+        "options": [
+          "A. Negative economic forecasts.",
+          "B. Strong corporate earnings reports.",
+          "C. Declining consumer spending reports.",
+          "D. Reports of technological stagnation."
+        ],
+        "answer": "B. Strong corporate earnings reports."
+      },
+      {
+        "q": "What is AI (Artificial Intelligence) referred to in the context of the stock market rally?",
+        "options": [
+          "A. A cause for concern.",
+          "B. A sector experiencing a decline.",
+          "C. A key area of innovation and application fueling the market.",
+          "D. An unrelated factor."
+        ],
+        "answer": "C. A key area of innovation and application fueling the market."
+      }
+    ]
+  },
+  "article-5": {
+    "title": "亞馬遜115.7億美元收購Globalstar，搶攻衛星網路市場",
+    "tabTitle": "科技",
+    "english": "Date: April 16, 2026\nAmazon announced today a significant acquisition, purchasing satellite communications company Globalstar for $11.57 billion. This strategic move aims to substantially boost Amazon's ambitions in the rapidly expanding satellite network market. The deal is expected to enhance Amazon's capabilities in providing global internet connectivity, particularly to underserved and remote regions worldwide. This acquisition clearly signals Amazon's intent to become a leading provider in the competitive space internet industry, leveraging Globalstar's existing infrastructure and expertise.",
+    "chinese": "日期：2026年4月16日\n亞馬遜今日宣布一項重大收購案，以115.7億美元收購衛星通訊公司Globalstar。此策略性舉動旨在大幅提升亞馬遜在快速擴張的衛星網路市場中的雄心。預計這項交易將增強亞馬遜提供全球網路連接的能力，特別是針對全球服務不足和偏遠地區。此次收購明確表明亞馬遜意圖成為競爭激烈太空網路產業中的領導供應商，將利用Globalstar現有的基礎設施和專業知識。",
+    "vocabulary": [
+      "Acquire (v.): 收購",
+      "Acquisition (n.): 收購案",
+      "Satellite (n.): 衛星",
+      "Communications (n.): 通訊",
+      "Strategic (adj.): 策略性的",
+      "Boost (v.): 提升，促進",
+      "Ambition (n.): 雄心，抱負",
+      "Expand (v.): 擴張，擴大",
+      "Network (n.): 網路",
+      "Market (n.): 市場",
+      "Deal (n.): 交易",
+      "Enhance (v.): 增強，提升",
+      "Capability (n.): 能力",
+      "Provide (v.): 提供",
+      "Connectivity (n.): 連接性",
+      "Underserved (adj.): 服務不足的",
+      "Remote (adj.): 偏遠的",
+      "Signal (v.): 表明，示意",
+      "Infrastructure (n.): 基礎設施",
+      "Expertise (n.): 專業知識"
+    ],
+    "quiz": [
+      {
+        "q": "What company did Amazon acquire?",
+        "options": [
+          "A) Starlink",
+          "B) Globalstar",
+          "C) SpaceX",
+          "D) Blue Origin"
+        ],
+        "answer": "B) Globalstar"
+      },
+      {
+        "q": "How much did Amazon pay for Globalstar?",
+        "options": [
+          "A) $1.157 billion",
+          "B) $11.57 million",
+          "C) $11.57 billion",
+          "D) $115.7 billion"
+        ],
+        "answer": "C) $11.57 billion"
+      },
+      {
+        "q": "What is the primary purpose of this acquisition for Amazon?",
+        "options": [
+          "A) To sell more books",
+          "B) To expand its satellite network market presence",
+          "C) To develop new smartphones",
+          "D) To launch more rockets"
+        ],
+        "answer": "B) To expand its satellite network market presence"
+      },
+      {
+        "q": "Which word best describes Amazon's move to buy Globalstar?",
+        "options": [
+          "A) Accidental",
+          "B) Strategic",
+          "C) Minor",
+          "D) Unplanned"
+        ],
+        "answer": "B) Strategic"
+      },
+      {
+        "q": "The deal is expected to enhance Amazon's capabilities in providing what?",
+        "options": [
+          "A) Faster delivery services",
+          "B) Global internet connectivity",
+          "C) Cloud computing",
+          "D) Online entertainment"
+        ],
+        "answer": "B) Global internet connectivity"
+      },
+      {
+        "q": "To which areas will Amazon particularly focus on providing internet connectivity?",
+        "options": [
+          "A) Major cities",
+          "B) Corporate offices",
+          "C) Underserved and remote regions",
+          "D) Shopping malls"
+        ],
+        "answer": "C) Underserved and remote regions"
+      },
+      {
+        "q": "What does the term \"acquisition\" mean in this context?",
+        "options": [
+          "A) A sale",
+          "B) A merger",
+          "C) A purchase",
+          "D) A partnership"
+        ],
+        "answer": "C) A purchase"
+      },
+      {
+        "q": "The news states Amazon aims to \"boost\" its ambitions. What is a synonym for \"boost\"?",
+        "options": [
+          "A) Decrease",
+          "B) Hinder",
+          "C) Promote",
+          "D) Limit"
+        ],
+        "answer": "C) Promote"
+      },
+      {
+        "q": "What kind of company is Globalstar?",
+        "options": [
+          "A) An e-commerce giant",
+          "B) A satellite communications company",
+          "C) A logistics firm",
+          "D) A social media platform"
+        ],
+        "answer": "B) A satellite communications company"
+      },
+      {
+        "q": "Amazon's acquisition of Globalstar signals its intent to become a leading provider in which industry?",
+        "options": [
+          "A) Automotive industry",
+          "B) Fashion industry",
+          "C) Space internet industry",
+          "D) Food delivery industry"
+        ],
+        "answer": "C) Space internet industry"
+      },
+      {
+        "q": "What does Amazon plan to leverage from Globalstar?",
+        "options": [
+          "A) Its customer service",
+          "B) Its existing infrastructure and expertise",
+          "C) Its marketing team",
+          "D) Its financial assets"
+        ],
+        "answer": "B) Its existing infrastructure and expertise"
+      },
+      {
+        "q": "What is the meaning of \"connectivity\" as used in the news?",
+        "options": [
+          "A) Physical connection",
+          "B) The ability to connect to the internet",
+          "C) Social networking",
+          "D) Business relationships"
+        ],
+        "answer": "B) The ability to connect to the internet"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "ASML首季財報優於預期，上調全年展望但Q2預測遜色",
+    "tabTitle": "科技",
+    "english": "ASML, the leading supplier of semiconductor manufacturing equipment, reported stronger-than-expected first-quarter earnings on April 16, 2026. The company also raised its full-year revenue and profit outlook, signaling optimism for 2026 despite current market challenges. However, ASML's forecast for the second quarter fell short of analyst expectations, leading to some investor concerns. This mixed outlook highlights the volatile nature of the chip industry's recovery.",
+    "chinese": "ASML，這家領先的半導體製造設備供應商，於2026年4月16日公佈了優於預期的第一季度財報。該公司同時上調了全年營收和利潤展望，儘管當前市場面臨挑戰，仍預示著2026年的樂觀前景。然而，ASML對第二季度的預測未能達到分析師預期，引發了一些投資者擔憂。這種喜憂參半的展望凸顯了晶片產業復甦的波動性。",
+    "vocabulary": [
+      "ASML (n.): 艾司摩爾 (公司名)",
+      "Q1 (n.): 第一季度",
+      "earnings (n.): 收益；財報",
+      "outlook (n.): 展望；前景",
+      "disappoint (v.): 使失望",
+      "supplier (n.): 供應商",
+      "semiconductor (n.): 半導體",
+      "manufacturing equipment (n.): 製造設備",
+      "report (v.): 報告；公布",
+      "stronger-than-expected (adj.): 優於預期的",
+      "raise (v.): 上調；提高",
+      "revenue (n.): 營收",
+      "profit (n.): 利潤",
+      "full-year (adj.): 全年的",
+      "signal (v.): 預示",
+      "optimism (n.): 樂觀情緒",
+      "market challenges (n.): 市場挑戰",
+      "fall short of (phr.): 未達到；遜於",
+      "analyst (n.): 分析師",
+      "volatile (adj.): 波動的；不穩定的"
+    ],
+    "quiz": [
+      {
+        "q": "What company is the news about?",
+        "options": [
+          "A. Samsung",
+          "B. ASML",
+          "C. Intel",
+          "D. TSMC"
+        ],
+        "answer": "B. ASML"
+      },
+      {
+        "q": "When did ASML report its first-quarter earnings?",
+        "options": [
+          "A. April 1, 2026",
+          "B. March 31, 2026",
+          "C. April 16, 2026",
+          "D. January 1, 2026"
+        ],
+        "answer": "C. April 16, 2026"
+      },
+      {
+        "q": "How did ASML's first-quarter earnings compare to expectations?",
+        "options": [
+          "A. They were much lower than expected.",
+          "B. They were exactly as expected.",
+          "C. They were stronger than expected.",
+          "D. The report didn't mention expectations."
+        ],
+        "answer": "C. They were stronger than expected."
+      },
+      {
+        "q": "What did ASML do with its full-year outlook?",
+        "options": [
+          "A. Lowered it.",
+          "B. Kept it the same.",
+          "C. Raised it.",
+          "D. Withdrew it."
+        ],
+        "answer": "C. Raised it."
+      },
+      {
+        "q": "What kind of equipment does ASML primarily supply?",
+        "options": [
+          "A. Consumer electronics",
+          "B. Automotive manufacturing equipment",
+          "C. Semiconductor manufacturing equipment",
+          "D. Medical devices"
+        ],
+        "answer": "C. Semiconductor manufacturing equipment"
+      },
+      {
+        "q": "What does 'signaling optimism for 2026' refer to in the context of ASML's full-year outlook?",
+        "options": [
+          "A. The company is worried about the future.",
+          "B. The company sees a positive future for 2026.",
+          "C. The company is unsure about 2026.",
+          "D. The company expects challenges in 2026."
+        ],
+        "answer": "B. The company sees a positive future for 2026."
+      },
+      {
+        "q": "What was the reaction to ASML's forecast for the second quarter?",
+        "options": [
+          "A. It exceeded analyst expectations.",
+          "B. It met analyst expectations.",
+          "C. It fell short of analyst expectations.",
+          "D. The company didn't provide a Q2 forecast."
+        ],
+        "answer": "C. It fell short of analyst expectations."
+      },
+      {
+        "q": "What did the disappointing Q2 forecast lead to?",
+        "options": [
+          "A. Increased investor confidence.",
+          "B. Some investor concerns.",
+          "C. A stock market boom.",
+          "D. New product launches."
+        ],
+        "answer": "B. Some investor concerns."
+      },
+      {
+        "q": "The news describes ASML's overall outlook as:",
+        "options": [
+          "A. Entirely positive.",
+          "B. Entirely negative.",
+          "C. Mixed.",
+          "D. Unclear."
+        ],
+        "answer": "C. Mixed."
+      },
+      {
+        "q": "What industry is mentioned as having a 'volatile nature'?",
+        "options": [
+          "A. Automotive industry",
+          "B. Consumer electronics industry",
+          "C. Chip industry",
+          "D. Manufacturing industry in general"
+        ],
+        "answer": "C. Chip industry"
+      },
+      {
+        "q": "What challenge did ASML acknowledge despite its optimism for 2026?",
+        "options": [
+          "A. Employee shortages",
+          "B. Current market challenges",
+          "C. New competitor entry",
+          "D. Regulatory hurdles"
+        ],
+        "answer": "B. Current market challenges"
+      },
+      {
+        "q": "The word 'volatile' in the text suggests the chip industry's recovery is:",
+        "options": [
+          "A. Stable and predictable.",
+          "B. Slow but steady.",
+          "C. Subject to rapid and unpredictable changes.",
+          "D. Consistently improving."
+        ],
+        "answer": "C. Subject to rapid and unpredictable changes."
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
