@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 17, 2026：台灣經濟、金融市場 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣離岸風電區塊開發加速，政策轉向ESG驅動新商機。\nTaiwan's offshore wind energy sector is experiencing rapid growth, driven by new government policies. As of April 17, 2026, block development strategies are being fast-tracked to expand renewable energy capacity. This acceleration is largely fueled by an increasing focus on Environmental, Social, and Governance (ESG) principles, which are now central to policy-making. These ESG-driven initiatives are not only boosting green energy projects but also opening significant new business opportunities for both domestic and international investors committed to sustainable development goals.\n\n[2] 台灣政府推動數位服務創新，提升民眾體驗與行政效率。\nTaipei, April 17, 2026 – The Taiwan government is actively promoting significant digital service innovation to improve public engagement and administrative efficiency. This initiative aims to streamline various government services, making them more accessible and user-friendly for citizens. Key strategies include developing advanced online platforms and integrating AI-powered tools to enhance responsiveness and personalized support. Officials emphasize that these efforts will lead to a more effective and citizen-centric public administration, ultimately boosting overall national competitiveness and convenience for residents across the island.\n\n[3] 台灣推次世代深層地熱政策，高躉購費率引導基載電源。\nTaiwan has unveiled a new policy to promote next-generation deep geothermal energy, aiming to establish it as a stable baseload power source. This initiative includes a significantly high feed-in tariff (FIT) to attract investment and accelerate development in this promising renewable sector. The move underscores Taiwan's commitment to enhancing energy security and achieving its ambitious carbon reduction goals by diversifying its energy mix. This deep geothermal technology could provide a continuous and reliable power supply, crucial for industrial stability.",
+    "chinese": "【1】台灣離岸風電區塊開發加速，政策轉向ESG驅動新商機。\n台灣的離岸風電產業在政府新政策的推動下，正經歷快速成長。截至2026年4月17日，區塊開發策略正被加速推動，以擴大再生能源產能。這項加速主要得益於對環境、社會和治理（ESG）原則日益增長的關注，這些原則現已成為政策制定的核心。這些由ESG驅動的措施不僅推動了綠色能源項目，也為致力於永續發展目標的國內外投資者開啟了重大的新商機。\n\n【2】台灣政府推動數位服務創新，提升民眾體驗與行政效率。\n台北，2026年4月17日 – 台灣政府正積極推動重大的數位服務創新，以提升民眾參與度及行政效率。這項措施旨在簡化各項政府服務，使其對公民而言更易於使用且更友善。關鍵策略包括開發先進的線上平台，並整合人工智慧工具以增強回應速度和個人化支援。官員們強調，這些努力將帶來更有效率、以公民為中心的公共行政，最終提升全國競爭力並為全島居民帶來便利。\n\n【3】台灣推次世代深層地熱政策，高躉購費率引導基載電源。\n台灣已公布一項新政策，旨在推動次世代深層地熱能，目標是將其建立為穩定的基載電源。這項倡議包括大幅提高躉購費率（FIT），以吸引投資並加速這個有前景的再生能源領域的發展。此舉突顯了台灣透過多元化能源結構，以提升能源安全並實現其雄心勃勃的碳減排目標的決心。這項深層地熱技術能提供連續且可靠的電力供應，對產業穩定至關重要。",
+    "vocabulary": [
+      "offshore wind energy (n.phr.): 離岸風電",
+      "sector (n.): 產業；部門",
+      "rapid growth (n.phr.): 快速成長",
+      "driven by (phr.v.): 由...推動",
+      "government policies (n.phr.): 政府政策",
+      "as of (phr.): 截至",
+      "block development strategies (n.phr.): 區塊開發策略",
+      "fast-tracked (v.): 加速推動",
+      "expand (v.): 擴大",
+      "renewable energy capacity (n.phr.): 再生能源產能",
+      "acceleration (n.): 加速",
+      "fueled by (phr.v.): 由...推動；得益於",
+      "increasing focus on (phr.): 日益增長的關注",
+      "ESG principles (n.phr.): ESG原則（環境、社會、治理原則）",
+      "central to (adj.phr.): 核心的",
+      "policy-making (n.): 政策制定",
+      "initiatives (n.): 措施；倡議",
+      "boosting (v.): 推動；促進",
+      "business opportunities (n.phr.): 商機",
+      "sustainable development goals (n.phr.): 永續發展目標",
+      "actively (adv.): 積極地",
+      "promoting (v.): 推動；促進",
+      "significant (adj.): 重大的；顯著的",
+      "digital service innovation (n. phr.): 數位服務創新",
+      "public engagement (n. phr.): 民眾參與度",
+      "administrative efficiency (n. phr.): 行政效率",
+      "initiative (n.): 措施；倡議",
+      "streamline (v.): 簡化；使流程更順暢",
+      "accessible (adj.): 易於使用的；可近用的",
+      "user-friendly (adj.): 使用者友善的",
+      "key strategies (n. phr.): 關鍵策略",
+      "developing (v.): 開發",
+      "advanced (adj.): 先進的",
+      "online platforms (n. phr.): 線上平台",
+      "integrating (v.): 整合",
+      "AI-powered tools (n. phr.): 人工智慧工具",
+      "responsiveness (n.): 回應速度；反應能力",
+      "personalized support (n. phr.): 個人化支援",
+      "citizen-centric (adj.): 以公民為中心的",
+      "national competitiveness (n. phr.): 全國競爭力",
+      "next-gen (adj.): 次世代的",
+      "geothermal (adj.): 地熱的",
+      "policy (n.): 政策",
+      "feed-in tariff (FIT) (n.): 躉購費率",
+      "baseload power (n.): 基載電源",
+      "unveil (v.): 公布；揭示",
+      "stable (adj.): 穩定的",
+      "source (n.): 來源",
+      "initiative (n.): 倡議；計畫",
+      "significantly (adv.): 大幅地；顯著地",
+      "attract (v.): 吸引",
+      "investment (n.): 投資",
+      "accelerate (v.): 加速",
+      "promising (adj.): 有前景的；有希望的",
+      "renewable sector (n.): 再生能源領域",
+      "underscore (v.): 強調",
+      "commitment (n.): 承諾；決心",
+      "energy security (n.): 能源安全",
+      "carbon reduction goals (n.): 碳減排目標",
+      "energy mix (n.): 能源結構"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A. Taiwan's economic recession",
+          "B. Taiwan's offshore wind energy development",
+          "C. New government housing policies",
+          "D. International trade agreements"
+        ],
+        "answer": "B. Taiwan's offshore wind energy development"
+      },
+      {
+        "q": "According to the article, what is happening to Taiwan's offshore wind energy sector?",
+        "options": [
+          "A. It is slowing down",
+          "B. It is experiencing rapid growth",
+          "C. It is facing major setbacks",
+          "D. It is being phased out"
+        ],
+        "answer": "B. It is experiencing rapid growth"
+      },
+      {
+        "q": "What is driving the growth in the offshore wind energy sector?",
+        "options": [
+          "A. International sanctions",
+          "B. New government policies",
+          "C. Decreased global demand",
+          "D. Rising oil prices"
+        ],
+        "answer": "B. New government policies"
+      },
+      {
+        "q": "What specific strategy is being fast-tracked as of April 17, 2026?",
+        "options": [
+          "A. Importing more fossil fuels",
+          "B. Developing nuclear power plants",
+          "C. Block development strategies",
+          "D. Reducing energy consumption"
+        ],
+        "answer": "C. Block development strategies"
+      },
+      {
+        "q": "What is the purpose of fast-tracking these strategies?",
+        "options": [
+          "A. To decrease energy production",
+          "B. To expand renewable energy capacity",
+          "C. To limit foreign investment",
+          "D. To reduce government spending"
+        ],
+        "answer": "B. To expand renewable energy capacity"
+      },
+      {
+        "q": "What principles are becoming central to policy-making in this sector?",
+        "options": [
+          "A. Financial accounting standards",
+          "B. Environmental, Social, and Governance (ESG) principles",
+          "C. Global marketing strategies",
+          "D. Public relations campaigns"
+        ],
+        "answer": "B. Environmental, Social, and Governance (ESG) principles"
+      },
+      {
+        "q": "What does 'ESG' stand for?",
+        "options": [
+          "A. Energy, Security, and Growth",
+          "B. Environmental, Social, and Governance",
+          "C. Economic, Strategic, and Global",
+          "D. Education, Science, and Geography"
+        ],
+        "answer": "B. Environmental, Social, and Governance"
+      },
+      {
+        "q": "What are these ESG-driven initiatives doing for green energy projects?",
+        "options": [
+          "A. Hindering them",
+          "B. Postponing them",
+          "C. Boosting them",
+          "D. Canceling them"
+        ],
+        "answer": "C. Boosting them"
+      },
+      {
+        "q": "Besides boosting green energy projects, what else are ESG-driven initiatives creating?",
+        "options": [
+          "A. New environmental regulations",
+          "B. Significant new business opportunities",
+          "C. Increased taxes for investors",
+          "D. Reduced public interest"
+        ],
+        "answer": "B. Significant new business opportunities"
+      },
+      {
+        "q": "Who are these new business opportunities for?",
+        "options": [
+          "A. Only government agencies",
+          "B. Only international organizations",
+          "C. Domestic and international investors",
+          "D. Only small local businesses"
+        ],
+        "answer": "C. Domestic and international investors"
+      },
+      {
+        "q": "What are the investors committed to?",
+        "options": [
+          "A. Short-term profits",
+          "B. Traditional energy sources",
+          "C. Sustainable development goals",
+          "D. Market speculation"
+        ],
+        "answer": "C. Sustainable development goals"
+      },
+      {
+        "q": "The word 'accelerates' in the title suggests the development is:",
+        "options": [
+          "A. Slowing down",
+          "B. Speeding up",
+          "C. Stopping",
+          "D. Remaining stagnant"
+        ],
+        "answer": "B. Speeding up"
+      },
+      {
+        "q": "What is the main focus of the Taiwan government's recent initiative?",
+        "options": [
+          "A. Promoting traditional public services",
+          "B. Investing in cultural events",
+          "C. Driving digital service innovation",
+          "D. Expanding physical government offices"
+        ],
+        "answer": "C. Driving digital service innovation"
+      },
+      {
+        "q": "According to the news, what two main aspects will be improved by this initiative?",
+        "options": [
+          "A. Economic growth and environmental protection",
+          "B. Public engagement and administrative efficiency",
+          "C. International relations and military strength",
+          "D. Tourism and agricultural output"
+        ],
+        "answer": "B. Public engagement and administrative efficiency"
+      },
+      {
+        "q": "What is one of the primary goals of streamlining government services?",
+        "options": [
+          "A. To reduce the number of government employees",
+          "B. To make services more accessible and user-friendly",
+          "C. To increase government revenue",
+          "D. To limit public access to information"
+        ],
+        "answer": "B. To make services more accessible and user-friendly"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a key strategy for digital innovation?",
+        "options": [
+          "A. Developing advanced online platforms",
+          "B. Integrating AI-powered tools",
+          "C. Organizing public forums",
+          "D. Enhancing personalized support"
+        ],
+        "answer": "C. Organizing public forums"
+      },
+      {
+        "q": "What kind of tools are being integrated to enhance responsiveness and personalized support?",
+        "options": [
+          "A. Manual processing systems",
+          "B. Traditional communication methods",
+          "C. AI-powered tools",
+          "D. Paper-based applications"
+        ],
+        "answer": "C. AI-powered tools"
+      },
+      {
+        "q": "What is the ultimate outcome officials emphasize regarding these efforts?",
+        "options": [
+          "A. A decrease in public participation",
+          "B. A more effective and citizen-centric public administration",
+          "C. A shift towards centralized decision-making",
+          "D. A reduction in national competitiveness"
+        ],
+        "answer": "B. A more effective and citizen-centric public administration"
+      },
+      {
+        "q": "The term \"streamline\" in the context of government services most closely means:",
+        "options": [
+          "A. To complicate",
+          "B. To simplify and make more efficient",
+          "C. To expand",
+          "D. To delay"
+        ],
+        "answer": "B. To simplify and make more efficient"
+      },
+      {
+        "q": "What does \"citizen-centric\" imply about the public administration?",
+        "options": [
+          "A. It focuses on government needs.",
+          "B. It prioritizes the needs and experiences of citizens.",
+          "C. It centralizes power within the government.",
+          "D. It limits citizen involvement."
+        ],
+        "answer": "B. It prioritizes the needs and experiences of citizens."
+      },
+      {
+        "q": "The news article suggests that these digital innovations will lead to:",
+        "options": [
+          "A. Increased bureaucracy",
+          "B. Reduced convenience for residents",
+          "C. Boosting overall national competitiveness",
+          "D. A decline in online services"
+        ],
+        "answer": "C. Boosting overall national competitiveness"
+      },
+      {
+        "q": "When did this news report take place?",
+        "options": [
+          "A. April 17, 2024",
+          "B. April 17, 2025",
+          "C. April 17, 2026",
+          "D. April 17, 2027"
+        ],
+        "answer": "C. April 17, 2026"
+      },
+      {
+        "q": "The phrase \"public engagement\" refers to:",
+        "options": [
+          "A. Government officials' meetings",
+          "B. The involvement and participation of citizens",
+          "C. International diplomatic efforts",
+          "D. Business sector collaborations"
+        ],
+        "answer": "B. The involvement and participation of citizens"
+      },
+      {
+        "q": "The overall tone of the news article is:",
+        "options": [
+          "A. Critical and skeptical",
+          "B. Enthusiastic and promotional",
+          "C. Factual and informative",
+          "D. Humorous and lighthearted"
+        ],
+        "answer": "C. Factual and informative"
+      },
+      {
+        "q": "What is the main purpose of Taiwan's new policy regarding deep geothermal energy?",
+        "options": [
+          "To reduce the cost of traditional energy sources.",
+          "To establish geothermal as a stable baseload power source.",
+          "To export geothermal technology to other countries.",
+          "To decrease the overall energy consumption."
+        ],
+        "answer": "To establish geothermal as a stable baseload power source."
+      },
+      {
+        "q": "What specific type of geothermal energy is Taiwan promoting?",
+        "options": [
+          "Shallow geothermal energy.",
+          "Next-generation deep geothermal energy.",
+          "Hydrothermal energy.",
+          "Volcanic geothermal energy."
+        ],
+        "answer": "Next-generation deep geothermal energy."
+      },
+      {
+        "q": "What mechanism is included in the policy to attract investment?",
+        "options": [
+          "Tax exemptions for all energy companies.",
+          "A significantly high feed-in tariff (FIT).",
+          "Government subsidies for fossil fuels.",
+          "International loans for energy projects."
+        ],
+        "answer": "A significantly high feed-in tariff (FIT)."
+      },
+      {
+        "q": "What does \"FIT\" stand for in the context of this news?",
+        "options": [
+          "Future Investment Target.",
+          "Financial Incentive for Technology.",
+          "Feed-in Tariff.",
+          "Fixed Interest Trend."
+        ],
+        "answer": "Feed-in Tariff."
+      },
+      {
+        "q": "What does the news imply about Taiwan's commitment?",
+        "options": [
+          "It is committed to reducing reliance on renewable energy.",
+          "It is committed to enhancing energy security and carbon reduction.",
+          "It is committed to maintaining the current energy mix.",
+          "It is committed to focusing solely on industrial development."
+        ],
+        "answer": "It is committed to enhancing energy security and carbon reduction."
+      },
+      {
+        "q": "How is the new policy expected to affect the development of the renewable sector?",
+        "options": [
+          "It will slow down development due to high costs.",
+          "It will accelerate development by attracting investment.",
+          "It will shift focus away from renewables.",
+          "It will only benefit international investors."
+        ],
+        "answer": "It will accelerate development by attracting investment."
+      },
+      {
+        "q": "What is a key characteristic of baseload power mentioned in the news?",
+        "options": [
+          "It is intermittent and unpredictable.",
+          "It is expensive and rarely used.",
+          "It is continuous and reliable.",
+          "It is primarily for residential use."
+        ],
+        "answer": "It is continuous and reliable."
+      },
+      {
+        "q": "Why is a continuous and reliable power supply considered \"crucial\" for industrial stability?",
+        "options": [
+          "Because industries require constant and uninterrupted power for operations.",
+          "Because industries can easily switch between different power sources.",
+          "Because industrial stability is not a priority for the government.",
+          "Because it helps to reduce the overall cost of production."
+        ],
+        "answer": "Because industries require constant and uninterrupted power for operations."
+      },
+      {
+        "q": "What is one of Taiwan's broader goals that this policy supports?",
+        "options": [
+          "Increasing fossil fuel imports.",
+          "Achieving ambitious carbon reduction goals.",
+          "Centralizing all power generation.",
+          "Reducing international energy cooperation."
+        ],
+        "answer": "Achieving ambitious carbon reduction goals."
+      },
+      {
+        "q": "The term \"diversifying its energy mix\" suggests that Taiwan is doing what?",
+        "options": [
+          "Relying more heavily on a single energy source.",
+          "Exploring and utilizing a variety of different energy sources.",
+          "Reducing its overall energy consumption.",
+          "Exporting its energy surplus to other countries."
+        ],
+        "answer": "Exploring and utilizing a variety of different energy sources."
+      },
+      {
+        "q": "What does the word \"promising\" imply about the deep geothermal sector?",
+        "options": [
+          "It is currently facing significant challenges.",
+          "It has a high potential for future success and development.",
+          "It is a technology that has already reached its full potential.",
+          "It is only suitable for small-scale projects."
+        ],
+        "answer": "It has a high potential for future success and development."
+      },
+      {
+        "q": "What is the overall tone of the news regarding Taiwan's new geothermal policy?",
+        "options": [
+          "Skeptical and critical.",
+          "Neutral and objective.",
+          "Optimistic and supportive.",
+          "Indifferent and unconcerned."
+        ],
+        "answer": "Optimistic and supportive."
+      }
+    ]
+  },
+  "article-3": {
+    "title": "SpaceX上市前夕引爆太空經濟熱潮，投資者聚焦ETF佈局。",
+    "tabTitle": "金融市場",
+    "english": "As of April 17, 2026, widespread anticipation for SpaceX's potential Initial Public Offering (IPO) has significantly amplified interest in the burgeoning space economy. This excitement is igniting a new wave of investment, particularly as investors increasingly focus on Exchange Traded Funds (ETFs) that track the aerospace and satellite sectors. These ETFs are seen as a strategic way to gain diversified exposure to the rapidly expanding space industry, allowing investors to capitalize on its growth even before SpaceX’s shares become publicly tradable.",
+    "chinese": "截至2026年4月17日，市場對SpaceX潛在首次公開募股（IPO）的普遍預期已顯著提升了人們對蓬勃發展的太空經濟的興趣。這股熱潮正點燃新一波的投資浪潮，尤其投資者日益將焦點轉向追蹤航空航天和衛星領域的交易所交易基金（ETF）。這些ETF被視為一種策略性方式，能讓投資者多元化地參與快速擴張的太空產業，即使在SpaceX股票公開交易之前，也能從其成長中獲益。",
+    "vocabulary": [
+      "anticipation (n.): 預期，期望",
+      "Initial Public Offering (IPO) (phr.): 首次公開募股",
+      "significantly (adv.): 顯著地",
+      "amplified (v.): 放大，增強 (在此指提升)",
+      "burgeoning (adj.): 迅速發展的，新興的",
+      "space economy (n.): 太空經濟",
+      "excitement (n.): 興奮，熱潮",
+      "igniting (v.): 點燃，引爆",
+      "investment (n.): 投資",
+      "increasingly (adv.): 越來越多地",
+      "focus on (phr. v.): 聚焦於",
+      "Exchange Traded Fund (ETF) (phr.): 交易所交易基金",
+      "track (v.): 追蹤",
+      "aerospace (n.): 航空航天",
+      "satellite sectors (n.): 衛星領域",
+      "strategic (adj.): 策略性的",
+      "gain exposure (phr.): 獲得曝險，參與",
+      "diversified (adj.): 多元化的",
+      "rapidly expanding (phr.): 快速擴張的",
+      "publicly tradable (phr.): 可公開交易的"
+    ],
+    "quiz": [
+      {
+        "q": "What is generating significant interest in the space economy?",
+        "options": [
+          "A: A new satellite launch.",
+          "B: SpaceX's potential IPO.",
+          "C: A government space program.",
+          "D: Recent technological breakthroughs."
+        ],
+        "answer": "B: SpaceX's potential IPO."
+      },
+      {
+        "q": "The term \"IPO\" stands for:",
+        "options": [
+          "A: International Public Opinion.",
+          "B: Initial Private Offering.",
+          "C: Initial Public Offering.",
+          "D: Investment Portfolio Opportunity."
+        ],
+        "answer": "C: Initial Public Offering."
+      },
+      {
+        "q": "What kind of investment vehicles are investors increasingly focusing on?",
+        "options": [
+          "A: Individual company stocks.",
+          "B: Real estate.",
+          "C: Exchange Traded Funds (ETFs).",
+          "D: Government bonds."
+        ],
+        "answer": "C: Exchange Traded Funds (ETFs)."
+      },
+      {
+        "q": "What sectors do these ETFs typically track?",
+        "options": [
+          "A: Automotive and energy.",
+          "B: Aerospace and satellite.",
+          "C: Healthcare and biotechnology.",
+          "D: Consumer goods and retail."
+        ],
+        "answer": "B: Aerospace and satellite."
+      },
+      {
+        "q": "Why are ETFs considered a strategic way to invest in the space industry?",
+        "options": [
+          "A: They offer direct ownership of SpaceX.",
+          "B: They provide diversified exposure.",
+          "C: They guarantee high returns.",
+          "D: They are only for institutional investors."
+        ],
+        "answer": "B: They provide diversified exposure."
+      },
+      {
+        "q": "According to the news, when can investors capitalize on the space industry's growth through ETFs?",
+        "options": [
+          "A: Only after SpaceX's shares are publicly tradable.",
+          "B: Before SpaceX's shares become publicly tradable.",
+          "C: Exclusively through direct stock purchases.",
+          "D: Only by investing in private equity."
+        ],
+        "answer": "B: Before SpaceX's shares become publicly tradable."
+      },
+      {
+        "q": "What does \"burgeoning\" mean in the context of \"burgeoning space economy\"?",
+        "options": [
+          "A: Declining.",
+          "B: Stagnant.",
+          "C: Rapidly developing.",
+          "D: Established."
+        ],
+        "answer": "C: Rapidly developing."
+      },
+      {
+        "q": "The word \"amplified\" is closest in meaning to:",
+        "options": [
+          "A: Decreased.",
+          "B: Weakened.",
+          "C: Increased.",
+          "D: Stabilized."
+        ],
+        "answer": "C: Increased."
+      },
+      {
+        "q": "What does \"igniting a new wave of investment\" imply?",
+        "options": [
+          "A: Investment in the sector is slowing down.",
+          "B: A lot of new money is starting to flow into the sector.",
+          "C: Investors are pulling money out of the sector.",
+          "D: The sector is experiencing a period of calm."
+        ],
+        "answer": "B: A lot of new money is starting to flow into the sector."
+      },
+      {
+        "q": "What does \"gain diversified exposure\" mean for investors?",
+        "options": [
+          "A: To put all their money into one company.",
+          "B: To spread their investments across different companies or assets within a sector.",
+          "C: To invest only in very risky ventures.",
+          "D: To avoid the space industry entirely."
+        ],
+        "answer": "B: To spread their investments across different companies or assets within a sector."
+      },
+      {
+        "q": "The news states that the space industry is \"rapidly expanding.\" This suggests it is:",
+        "options": [
+          "A: Shrinking quickly.",
+          "B: Growing at a fast pace.",
+          "C: Staying the same size.",
+          "D: Facing severe cutbacks."
+        ],
+        "answer": "B: Growing at a fast pace."
+      },
+      {
+        "q": "What is the main subject of the news article?",
+        "options": [
+          "A: The history of space travel.",
+          "B: The impact of SpaceX's potential IPO on space economy investment.",
+          "C: A new type of satellite technology.",
+          "D: Government regulations on space exploration."
+        ],
+        "answer": "B: The impact of SpaceX's potential IPO on space economy investment."
+      }
+    ]
+  },
+  "article-4": {
+    "title": "電動車次世代電池競爭白熱化，全固態與鈉離子電池成焦點。",
+    "tabTitle": "科技",
+    "english": "The competition for next-generation electric vehicle (EV) batteries is heating up significantly. Solid-state and sodium-ion batteries are emerging as key contenders in this intense technological race. Companies worldwide are heavily investing in research and development to overcome current battery limitations, aiming for longer ranges, faster charging, and lower costs. This fierce innovation battle is set to redefine the future of sustainable transportation.",
+    "chinese": "下一代電動車（EV）電池的競爭正顯著白熱化。全固態電池和鈉離子電池正成為這場激烈技術競賽中的主要競爭者。全球各地的公司正大量投資於研究與開發，以克服當前電池的限制，目標是實現更長的續航里程、更快的充電速度和更低的成本。這場激烈的創新戰役將重新定義永續交通的未來。",
+    "vocabulary": [
+      "next-generation (adj.): 下一代的",
+      "electric vehicle (EV) (n.): 電動車",
+      "battery (n.): 電池",
+      "competition (n.): 競爭",
+      "heat up (phr.v.): 升溫；白熱化",
+      "significantly (adv.): 顯著地",
+      "solid-state battery (n.): 全固態電池",
+      "sodium-ion battery (n.): 鈉離子電池",
+      "emerge (v.): 浮現；嶄露頭角",
+      "contender (n.): 競爭者",
+      "intense (adj.): 激烈的",
+      "technological race (n.): 技術競賽",
+      "worldwide (adv.): 全球各地",
+      "invest (v.): 投資",
+      "research and development (R&D) (n.): 研究與開發",
+      "overcome (v.): 克服",
+      "limitation (n.): 限制",
+      "aim for (phr.v.): 旨在；目標是",
+      "range (n.): 續航里程",
+      "sustainable transportation (n.): 永續交通"
+    ],
+    "quiz": [
+      {
+        "q": "What is the primary focus of the news article?",
+        "options": [
+          "The history of electric vehicles",
+          "Competition for next-generation EV batteries",
+          "Government regulations on battery production",
+          "The environmental impact of current batteries"
+        ],
+        "answer": "Competition for next-generation EV batteries"
+      },
+      {
+        "q": "Which two specific battery technologies are mentioned as key contenders?",
+        "options": [
+          "Lithium-ion and nickel-cadmium batteries",
+          "Solid-state and sodium-ion batteries",
+          "Fuel cells and supercapacitors",
+          "Lead-acid and zinc-air batteries"
+        ],
+        "answer": "Solid-state and sodium-ion batteries"
+      },
+      {
+        "q": "How is the competition for next-generation EV batteries described?",
+        "options": [
+          "Slightly increasing",
+          "Moderately stable",
+          "Heating up significantly",
+          "Decreasing steadily"
+        ],
+        "answer": "Heating up significantly"
+      },
+      {
+        "q": "Who is making heavy investments in research and development for new batteries?",
+        "options": [
+          "Only small startups",
+          "Government agencies only",
+          "Companies worldwide",
+          "Individual inventors"
+        ],
+        "answer": "Companies worldwide"
+      },
+      {
+        "q": "What are companies aiming to overcome with new battery technologies?",
+        "options": [
+          "Marketing challenges",
+          "Current battery limitations",
+          "Public skepticism",
+          "Manufacturing costs only"
+        ],
+        "answer": "Current battery limitations"
+      },
+      {
+        "q": "Which of the following is NOT listed as a goal for the next-generation batteries?",
+        "options": [
+          "Longer ranges",
+          "Faster charging",
+          "Lower costs",
+          "Improved aesthetic design"
+        ],
+        "answer": "Improved aesthetic design"
+      },
+      {
+        "q": "What does the acronym \"EV\" stand for in the context of the news?",
+        "options": [
+          "Electronic Vehicle",
+          "Electric Van",
+          "Energy Volatility",
+          "Electric Vehicle"
+        ],
+        "answer": "Electric Vehicle"
+      },
+      {
+        "q": "What is the ultimate purpose of this \"fierce innovation battle\"?",
+        "options": [
+          "To increase global oil consumption",
+          "To maintain current transportation methods",
+          "To redefine the future of sustainable transportation",
+          "To develop new military technologies"
+        ],
+        "answer": "To redefine the future of sustainable transportation"
+      },
+      {
+        "q": "In the phrase \"key contenders,\" what does \"contenders\" mean?",
+        "options": [
+          "Observers",
+          "Competitors",
+          "Supporters",
+          "Regulators"
+        ],
+        "answer": "Competitors"
+      },
+      {
+        "q": "The phrase \"heating up significantly\" suggests the competition is becoming:",
+        "options": [
+          "Less important",
+          "More intense",
+          "Easier to manage",
+          "Finishing soon"
+        ],
+        "answer": "More intense"
+      },
+      {
+        "q": "What kind of investment is being made by companies?",
+        "options": [
+          "Minor investments",
+          "Heavy investments",
+          "No investments",
+          "Only theoretical investments"
+        ],
+        "answer": "Heavy investments"
+      },
+      {
+        "q": "What specific aspect of transportation is expected to be redefined?",
+        "options": [
+          "Air travel",
+          "Public transit systems",
+          "Sustainable transportation",
+          "Maritime shipping"
+        ],
+        "answer": "Sustainable transportation"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "全球勞動力短缺持續，各國政府推動政策吸引與培訓人才。",
+    "tabTitle": "國際大事",
+    "english": "Global labor shortages continue to challenge economies worldwide, impacting various sectors from technology to healthcare. Governments are actively responding by implementing diverse strategies to attract and retain skilled professionals. These initiatives include streamlining immigration processes, investing in vocational training programs, and offering incentives for critical industries. The aim is to bridge the talent gap and ensure sustainable economic growth amidst demographic shifts and evolving job markets.",
+    "chinese": "全球勞動力短缺持續挑戰全球經濟，影響從科技到醫療保健等各行各業。各國政府正積極應對，實施多樣化策略以吸引和留住熟練專業人才。這些舉措包括簡化移民流程、投資職業培訓計畫，以及為關鍵產業提供激勵措施。其目標是在人口結構變化和不斷演變的就業市場中，彌補人才缺口並確保經濟的可持續增長。",
+    "vocabulary": [
+      "Global (adj.): 全球的",
+      "Labor shortage (n.): 勞動力短缺",
+      "Persist (v.): 持續",
+      "Challenge (v.): 挑戰",
+      "Economy (n.): 經濟",
+      "Worldwide (adv.): 全世界地",
+      "Impact (v.): 影響",
+      "Sector (n.): 行業；部門",
+      "Healthcare (n.): 醫療保健",
+      "Government (n.): 政府",
+      "Actively (adv.): 積極地",
+      "Implement (v.): 實施",
+      "Strategy (n.): 策略",
+      "Attract (v.): 吸引",
+      "Retain (v.): 留住",
+      "Skilled professional (n.): 熟練專業人才",
+      "Initiative (n.): 舉措",
+      "Streamline (v.): 簡化",
+      "Vocational training (n.): 職業培訓",
+      "Talent gap (n.): 人才缺口"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main challenge discussed in the article?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Global labor shortages"
+      },
+      {
+        "q": "Which sectors are mentioned as being impacted by labor shortages?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Technology and healthcare"
+      },
+      {
+        "q": "How are governments responding to the labor shortages?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "By implementing diverse strategies"
+      },
+      {
+        "q": "What is one strategy governments are using to attract professionals?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Streamlining immigration processes"
+      },
+      {
+        "q": "Besides attracting, what else are governments trying to do with skilled professionals?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Retain them"
+      },
+      {
+        "q": "What kind of training programs are governments investing in?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Vocational training"
+      },
+      {
+        "q": "What do governments offer for critical industries?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Incentives"
+      },
+      {
+        "q": "What is the ultimate aim of these government initiatives?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "To bridge the talent gap"
+      },
+      {
+        "q": "What kind of economic growth are governments aiming for?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Sustainable economic growth"
+      },
+      {
+        "q": "What factors are mentioned as contributing to the context of these efforts?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Demographic shifts and evolving job markets"
+      },
+      {
+        "q": "The word \"persist\" in the first sentence most likely means:",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "To continue to exist"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a government initiative?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "Increasing retirement age for all workers"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "全球新興疾病預警機制強化，國際合作應對未來大流行。",
+    "tabTitle": "國際大事",
+    "english": "April 17, 2026 – Global leaders have announced significant enhancements to the worldwide emerging disease alert system. This crucial initiative aims to improve early detection and rapid response capabilities for novel pathogens. International collaboration among health organizations and governments is being intensified to share data, resources, and expertise. The goal is to better prepare for and mitigate the impact of future pandemics, ensuring a more coordinated global health security strategy against new threats.",
+    "chinese": "2026年4月17日 – 全球領袖已宣布大幅強化全球新興疾病預警系統。這項關鍵倡議旨在提升對新型病原體的早期偵測及快速應變能力。各國衛生組織和政府之間的國際合作正被加強，以共享數據、資源和專業知識。目標是更好地為未來大流行做好準備並減輕其影響，確保針對新威脅能有更協調的全球健康安全策略。",
+    "vocabulary": [
+      "emerging (adj.): 新興的",
+      "disease (n.): 疾病",
+      "alert (n.): 警報；預警",
+      "strengthen (v.): 強化；加強",
+      "international (adj.): 國際的",
+      "pandemic (n.): 大流行病",
+      "cooperation (n.): 合作",
+      "leader (n.): 領袖",
+      "announce (v.): 宣布",
+      "significant (adj.): 顯著的；重要的",
+      "enhancement (n.): 強化；提升",
+      "worldwide (adj.): 全球的；世界範圍的",
+      "crucial (adj.): 關鍵的；至關重要的",
+      "initiative (n.): 倡議；計畫",
+      "early detection (phr.): 早期偵測",
+      "rapid response (phr.): 快速應變",
+      "novel pathogen (phr.): 新型病原體",
+      "intensify (v.): 加劇；強化",
+      "mitigate (v.): 減輕；緩和",
+      "global health security (phr.): 全球健康安全"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main focus of the news article?",
+        "options": [
+          "New economic policies",
+          "Space exploration discoveries",
+          "Global health security improvements",
+          "Environmental conservation efforts"
+        ],
+        "answer": "Global health security improvements"
+      },
+      {
+        "q": "According to the news, when were the enhancements announced?",
+        "options": [
+          "April 17, 2025",
+          "April 17, 2026",
+          "March 17, 2026",
+          "April 7, 2026"
+        ],
+        "answer": "April 17, 2026"
+      },
+      {
+        "q": "What is the primary aim of the strengthened alert system?",
+        "options": [
+          "To reduce global warming",
+          "To improve early detection and rapid response for novel pathogens",
+          "To fund new research in space",
+          "To develop new agricultural technologies"
+        ],
+        "answer": "To improve early detection and rapid response for novel pathogens"
+      },
+      {
+        "q": "Who is intensifying international collaboration?",
+        "options": [
+          "Only governments",
+          "Only health organizations",
+          "Health organizations and governments",
+          "Private corporations"
+        ],
+        "answer": "Health organizations and governments"
+      },
+      {
+        "q": "What is being shared through international cooperation?",
+        "options": [
+          "Military secrets, technology, and funds",
+          "Data, resources, and expertise",
+          "Cultural traditions, art, and music",
+          "Political ideologies, trade agreements, and travel routes"
+        ],
+        "answer": "Data, resources, and expertise"
+      },
+      {
+        "q": "The term \"novel pathogens\" most likely refers to:",
+        "options": [
+          "Old, well-known diseases",
+          "Newly discovered disease-causing agents",
+          "Types of beneficial bacteria",
+          "Advanced medical equipment"
+        ],
+        "answer": "Newly discovered disease-causing agents"
+      },
+      {
+        "q": "What does \"early detection\" help to achieve regarding diseases?",
+        "options": [
+          "Making diseases more severe",
+          "Identifying them quickly before they spread widely",
+          "Ignoring them until they become critical",
+          "Developing new types of vaccines for common colds"
+        ],
+        "answer": "Identifying them quickly before they spread widely"
+      },
+      {
+        "q": "What is the goal related to future pandemics?",
+        "options": [
+          "To ignore them completely",
+          "To exacerbate their effects",
+          "To better prepare for and mitigate their impact",
+          "To cause them intentionally"
+        ],
+        "answer": "To better prepare for and mitigate their impact"
+      },
+      {
+        "q": "The article mentions ensuring a \"more coordinated global health security strategy\" against what?",
+        "options": [
+          "Economic downturns",
+          "New threats",
+          "Climate change",
+          "Cyber attacks"
+        ],
+        "answer": "New threats"
+      },
+      {
+        "q": "What does \"significant enhancements\" suggest about the previous alert system?",
+        "options": [
+          "It was perfect and needed no changes.",
+          "It was completely non-existent.",
+          "It existed but needed substantial improvements.",
+          "It was only for local diseases."
+        ],
+        "answer": "It existed but needed substantial improvements."
+      },
+      {
+        "q": "Which word from the article is a synonym for \"strengthened\"?",
+        "options": [
+          "Weakened",
+          "Diminished",
+          "Enhanced",
+          "Neglected"
+        ],
+        "answer": "Enhanced"
+      },
+      {
+        "q": "The overall tone of this news report can be described as:",
+        "options": [
+          "Alarmist and fearful",
+          "Humorous and lighthearted",
+          "Factual and proactive",
+          "Skeptical and critical"
+        ],
+        "answer": "Factual and proactive"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
