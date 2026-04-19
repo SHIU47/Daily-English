@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 20, 2026：科技、地緣政治 與 地緣政治</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電揭露1奈米以下製程藍圖，蘋果有望成首批客戶\nTSMC officially unveiled its ambitious roadmap for sub-1 nanometer chip manufacturing on April 20, 2026. This groundbreaking technology is expected to significantly advance the capabilities of future electronic devices. Industry analysts widely anticipate Apple to be among the initial companies to adopt these ultra-small process nodes, leveraging TSMC's cutting-edge capabilities for its next-generation products. This development marks a major leap in semiconductor innovation.\n\n[2] Google資深副總裁肯定台灣AI轉型領導地位，關鍵戰略夥伴\nOn April 20, 2026, a Google Senior Vice President publicly praised Taiwan's significant leadership in AI transformation. The VP emphasized Taiwan's pivotal role as a key strategic partner for Google in advancing artificial intelligence technologies globally. This commendation highlights Taiwan's robust innovation ecosystem and its vital contributions to the international AI landscape. Google reaffirmed its strong commitment to deeper collaboration with Taiwan on future AI development and initiatives, recognizing its critical position.\n\n[3] IMF預估台灣人均GDP五年後超越韓國，半導體生態系成關鍵\nThe International Monetary Fund (IMF) projects Taiwan's per capita GDP will exceed South Korea's within five years, specifically by 2031. This optimistic forecast highlights Taiwan's robust economic growth, driven primarily by its advanced semiconductor industry. The nation's comprehensive semiconductor ecosystem, encompassing design, manufacturing, and packaging, is considered a crucial factor in this anticipated economic milestone. This development signifies Taiwan's increasing global economic influence.",
+    "chinese": "【1】台積電揭露1奈米以下製程藍圖，蘋果有望成首批客戶\n台積電於2026年4月20日正式揭露其雄心勃勃的1奈米以下晶片製造藍圖。這項突破性技術預計將顯著提升未來電子設備的能力。業界分析師普遍預期蘋果將成為首批採用這些超小型製程節點的公司之一，利用台積電的尖端技術來開發其下一代產品。這項發展標誌著半導體創新的一大飛躍。\n\n【2】Google資深副總裁肯定台灣AI轉型領導地位，關鍵戰略夥伴\n2026年4月20日，Google資深副總裁公開讚揚台灣在AI轉型方面的重要領導地位。該副總裁強調，台灣是Google在全球推進人工智慧技術的關鍵戰略夥伴。這項肯定突顯了台灣強大的創新生態系統及其對國際AI領域的重要貢獻。Google重申將堅定承諾與台灣在未來的AI發展和倡議上進行更深入的合作，認可其關鍵地位。\n\n【3】IMF預估台灣人均GDP五年後超越韓國，半導體生態系成關鍵\n國際貨幣基金組織（IMF）預計，台灣的人均GDP將在五年內，特別是到2031年，超越韓國。這項樂觀的預測突顯了台灣強勁的經濟成長，主要由其先進的半導體產業所驅動。台灣全面性的半導體生態系，涵蓋設計、製造和封裝，被視為達成這項預期經濟里程碑的關鍵因素。這項發展象徵著台灣日益增長的全球經濟影響力。",
+    "vocabulary": [
+      "unveil (v.): 揭露，公布",
+      "ambitious (adj.): 有雄心的，費力的",
+      "roadmap (n.): 藍圖，發展計畫",
+      "sub-1 nanometer (adj.): 1奈米以下",
+      "chip manufacturing (n. phrase): 晶片製造",
+      "groundbreaking (adj.): 突破性的，開創性的",
+      "significantly (adv.): 顯著地，意義重大地",
+      "advance (v.): 推進，進步",
+      "capabilities (n.): 能力，性能",
+      "electronic devices (n. phrase): 電子設備",
+      "industry analysts (n. phrase): 業界分析師",
+      "widely anticipate (v. phrase): 普遍預期",
+      "initial (adj.): 最初的，開始的",
+      "adopt (v.): 採用，採納",
+      "ultra-small (adj.): 超小型的",
+      "process nodes (n. phrase): 製程節點",
+      "leverage (v.): 利用，善用",
+      "cutting-edge (adj.): 尖端的，領先的",
+      "next-generation (adj.): 下一代的",
+      "semiconductor innovation (n. phrase): 半導體創新",
+      "Senior Vice President (n.phr.): 資深副總裁",
+      "publicly (adv.): 公開地",
+      "praised (v.): 讚揚",
+      "significant (adj.): 重要的，顯著的",
+      "leadership (n.): 領導地位",
+      "AI transformation (n.phr.): AI轉型",
+      "emphasized (v.): 強調",
+      "pivotal role (n.phr.): 關鍵角色",
+      "strategic partner (n.phr.): 戰略夥伴",
+      "advancing (v.): 推進",
+      "artificial intelligence (n.phr.): 人工智慧",
+      "globally (adv.): 全球地",
+      "commendation (n.): 讚揚，嘉許",
+      "highlights (v.): 突顯",
+      "robust (adj.): 強健的，堅固的",
+      "innovation ecosystem (n.phr.): 創新生態系統",
+      "vital contributions (n.phr.): 重要貢獻",
+      "international AI landscape (n.phr.): 國際AI領域",
+      "reaffirmed (v.): 重申",
+      "deeper collaboration (n.phr.): 更深入的合作",
+      "IMF (abbr.): 國際貨幣基金組織",
+      "forecast (v.): 預測；預報",
+      "per capita GDP (n. phr.): 人均國內生產毛額",
+      "surpass (v.): 超越；勝過",
+      "semiconductor (n.): 半導體",
+      "ecosystem (n.): 生態系",
+      "key (adj.): 關鍵的；主要的",
+      "project (v.): 預計；估計",
+      "robust (adj.): 強勁的；穩健的",
+      "economic growth (n. phr.): 經濟成長",
+      "advanced (adj.): 先進的",
+      "industry (n.): 產業；工業",
+      "comprehensive (adj.): 全面性的；綜合的",
+      "encompassing (v. pres.p.): 包含；涵蓋",
+      "manufacturing (n.): 製造業；生產",
+      "packaging (n.): 封裝；包裝",
+      "crucial (adj.): 至關重要的；關鍵的",
+      "factor (n.): 因素；要素",
+      "anticipated (adj.): 預期的",
+      "milestone (n.): 里程碑"
+    ],
+    "quiz": [
+      {
+        "q": "What technology did TSMC unveil on April 20, 2026?",
+        "options": [
+          "2 nanometer chip manufacturing",
+          "Sub-1 nanometer chip manufacturing",
+          "Quantum computing roadmap",
+          "Advanced battery technology"
+        ],
+        "answer": "Sub-1 nanometer chip manufacturing"
+      },
+      {
+        "q": "What is the expected impact of this new technology?",
+        "options": [
+          "To reduce energy consumption in homes",
+          "To improve agricultural output",
+          "To significantly advance the capabilities of future electronic devices",
+          "To revolutionize space travel"
+        ],
+        "answer": "To significantly advance the capabilities of future electronic devices"
+      },
+      {
+        "q": "Which company is widely anticipated to be among the initial adopters?",
+        "options": [
+          "Samsung",
+          "Intel",
+          "Apple",
+          "Microsoft"
+        ],
+        "answer": "Apple"
+      },
+      {
+        "q": "What does 'roadmap' refer to in this context?",
+        "options": [
+          "A physical map of TSMC's facilities",
+          "A detailed plan for future development",
+          "A travel guide for industry executives",
+          "A list of current products"
+        ],
+        "answer": "A detailed plan for future development"
+      },
+      {
+        "q": "What does 'groundbreaking' mean?",
+        "options": [
+          "Easy to understand",
+          "Starting from scratch",
+          "Innovative and unprecedented",
+          "Requiring physical excavation"
+        ],
+        "answer": "Innovative and unprecedented"
+      },
+      {
+        "q": "What are 'process nodes' in the context of chip manufacturing?",
+        "options": [
+          "Points where chips connect to power",
+          "Specific stages or sizes in the chip manufacturing process",
+          "Software packages for chip design",
+          "Locations of semiconductor factories"
+        ],
+        "answer": "Specific stages or sizes in the chip manufacturing process"
+      },
+      {
+        "q": "What does 'leveraging TSMC's cutting-edge capabilities' imply?",
+        "options": [
+          "Apple will compete with TSMC",
+          "Apple will borrow money from TSMC",
+          "Apple will utilize TSMC's advanced technology and expertise",
+          "Apple will buy TSMC's older equipment"
+        ],
+        "answer": "Apple will utilize TSMC's advanced technology and expertise"
+      },
+      {
+        "q": "What is the overall significance of this development?",
+        "options": [
+          "It's a minor update in chip technology",
+          "It marks a major leap in semiconductor innovation",
+          "It indicates a decline in the electronics market",
+          "It will only affect a small niche market"
+        ],
+        "answer": "It marks a major leap in semiconductor innovation"
+      },
+      {
+        "q": "Who are 'industry analysts'?",
+        "options": [
+          "People who work directly on the manufacturing line",
+          "Experts who study and report on specific industries",
+          "Government officials regulating the industry",
+          "Customers who purchase electronic devices"
+        ],
+        "answer": "Experts who study and report on specific industries"
+      },
+      {
+        "q": "What kind of products is Apple expected to use these new nodes for?",
+        "options": [
+          "Its current generation products",
+          "Its next-generation products",
+          "Products for other companies",
+          "Only experimental prototypes"
+        ],
+        "answer": "Its next-generation products"
+      },
+      {
+        "q": "The term 'ultra-small' describes what aspect of the process nodes?",
+        "options": [
+          "Their physical size",
+          "Their cost",
+          "Their power consumption",
+          "Their complexity"
+        ],
+        "answer": "Their physical size"
+      },
+      {
+        "q": "What does 'unveiled' mean in the context of TSMC's announcement?",
+        "options": [
+          "Concealed",
+          "Revealed or made public",
+          "Delayed",
+          "Withdrawn"
+        ],
+        "answer": "Revealed or made public"
+      },
+      {
+        "q": "What date did the Google Senior Vice President make the statement?",
+        "options": [
+          "April 20, 2025",
+          "April 20, 2026",
+          "April 20, 2027",
+          "March 20, 2026"
+        ],
+        "answer": "April 20, 2026"
+      },
+      {
+        "q": "Who praised Taiwan's AI leadership?",
+        "options": [
+          "A Google CEO",
+          "A Google Senior Vice President",
+          "A Taiwanese government official",
+          "An anonymous source"
+        ],
+        "answer": "A Google Senior Vice President"
+      },
+      {
+        "q": "What specific area of Taiwan's development was praised?",
+        "options": [
+          "Economic growth",
+          "Manufacturing capabilities",
+          "AI transformation",
+          "Educational system"
+        ],
+        "answer": "AI transformation"
+      },
+      {
+        "q": "How did Google view Taiwan's role in advancing AI technologies?",
+        "options": [
+          "A minor contributor",
+          "A potential competitor",
+          "A key strategic partner",
+          "A recipient of aid"
+        ],
+        "answer": "A key strategic partner"
+      },
+      {
+        "q": "What does 'pivotal role' mean in the context of the article?",
+        "options": [
+          "A small and insignificant part",
+          "A central and important part",
+          "A rotating responsibility",
+          "A challenging position"
+        ],
+        "answer": "A central and important part"
+      },
+      {
+        "q": "The commendation from Google highlights Taiwan's what?",
+        "options": [
+          "Large population",
+          "Agricultural output",
+          "Robust innovation ecosystem",
+          "Historical landmarks"
+        ],
+        "answer": "Robust innovation ecosystem"
+      },
+      {
+        "q": "What kind of contributions did Taiwan make to the international AI landscape?",
+        "options": [
+          "Financial donations",
+          "Military support",
+          "Vital contributions",
+          "Cultural exchanges"
+        ],
+        "answer": "Vital contributions"
+      },
+      {
+        "q": "Google reaffirmed its commitment to what with Taiwan?",
+        "options": [
+          "Reducing trade",
+          "Ending partnerships",
+          "Deeper collaboration",
+          "Establishing new headquarters"
+        ],
+        "answer": "Deeper collaboration"
+      },
+      {
+        "q": "What kind of projects will Google collaborate on with Taiwan?",
+        "options": [
+          "Infrastructure development",
+          "Future AI development and initiatives",
+          "Space exploration",
+          "Renewable energy"
+        ],
+        "answer": "Future AI development and initiatives"
+      },
+      {
+        "q": "The article suggests Taiwan's position in AI is considered:",
+        "options": [
+          "Minor",
+          "Critical",
+          "Declining",
+          "Undetermined"
+        ],
+        "answer": "Critical"
+      },
+      {
+        "q": "The Google VP's praise was given:",
+        "options": [
+          "Secretly",
+          "Privately",
+          "Publicly",
+          "Through a press release only"
+        ],
+        "answer": "Publicly"
+      },
+      {
+        "q": "What does 'globally' imply in the context of advancing AI technologies?",
+        "options": [
+          "Within Taiwan only",
+          "Within Google's headquarters",
+          "Across the world",
+          "In specific regions"
+        ],
+        "answer": "Across the world"
+      },
+      {
+        "q": "Who made the forecast about Taiwan's per capita GDP?",
+        "options": [
+          "A) The World Bank",
+          "B) The United Nations",
+          "C) The International Monetary Fund",
+          "D) The Taiwanese Government"
+        ],
+        "answer": "C) The International Monetary Fund"
+      },
+      {
+        "q": "According to the IMF, when is Taiwan's per capita GDP expected to surpass South Korea's?",
+        "options": [
+          "A) Within two years",
+          "B) By 2025",
+          "C) Within five years",
+          "D) By the end of this decade"
+        ],
+        "answer": "C) Within five years"
+      },
+      {
+        "q": "What is identified as the primary driver of Taiwan's robust economic growth?",
+        "options": [
+          "A) Tourism sector",
+          "B) Agricultural exports",
+          "C) Advanced semiconductor industry",
+          "D) Financial services"
+        ],
+        "answer": "C) Advanced semiconductor industry"
+      },
+      {
+        "q": "Which of the following is NOT explicitly mentioned as part of Taiwan's comprehensive semiconductor ecosystem in the text?",
+        "options": [
+          "A) Design",
+          "B) Manufacturing",
+          "C) Research & Development",
+          "D) Packaging"
+        ],
+        "answer": "C) Research & Development"
+      },
+      {
+        "q": "The forecast highlights Taiwan's _______ economic growth.",
+        "options": [
+          "A) declining",
+          "B) fluctuating",
+          "C) robust",
+          "D) stagnant"
+        ],
+        "answer": "C) robust"
+      },
+      {
+        "q": "What does \"per capita GDP\" represent?",
+        "options": [
+          "A) Gross Domestic Product per industry",
+          "B) Gross Domestic Product per person",
+          "C) Gross Domestic Product per region",
+          "D) Gross Domestic Product per company"
+        ],
+        "answer": "B) Gross Domestic Product per person"
+      },
+      {
+        "q": "What is considered a \"crucial factor\" in Taiwan achieving this economic milestone?",
+        "options": [
+          "A) Its strong currency",
+          "B) Its robust export of agricultural products",
+          "C) Its comprehensive semiconductor ecosystem",
+          "D) Its growing tourism industry"
+        ],
+        "answer": "C) Its comprehensive semiconductor ecosystem"
+      },
+      {
+        "q": "The term \"surpass\" in the context of GDP means to:",
+        "options": [
+          "A) Fall behind",
+          "B) Equal",
+          "C) Exceed",
+          "D) Maintain"
+        ],
+        "answer": "C) Exceed"
+      },
+      {
+        "q": "What does this development \"signify\" for Taiwan?",
+        "options": [
+          "A) Its decreasing global economic influence",
+          "B) Its stable regional economic position",
+          "C) Its increasing global economic influence",
+          "D) Its limited economic potential"
+        ],
+        "answer": "C) Its increasing global economic influence"
+      },
+      {
+        "q": "The news describes Taiwan's semiconductor ecosystem as:",
+        "options": [
+          "A) nascent",
+          "B) comprehensive",
+          "C) fragmented",
+          "D) struggling"
+        ],
+        "answer": "B) comprehensive"
+      },
+      {
+        "q": "The specific year mentioned in the forecast for Taiwan to surpass South Korea is:",
+        "options": [
+          "A) 2026",
+          "B) 2028",
+          "C) 2031",
+          "D) 2035"
+        ],
+        "answer": "C) 2031"
+      },
+      {
+        "q": "What does the word \"milestone\" refer to in the context of the news?",
+        "options": [
+          "A) A small setback",
+          "B) A significant achievement",
+          "C) A common occurrence",
+          "D) A future challenge"
+        ],
+        "answer": "B) A significant achievement"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "伊朗恢復荷姆茲海峽管制，中東地緣政治緊張再升",
+    "tabTitle": "地緣政治",
+    "english": "Iran has announced new restrictions on maritime traffic through the Strait of Hormuz, a critical global oil shipping route. Citing security concerns, Iranian authorities now require all vessels, especially tankers, to obtain prior authorization for passage and provide detailed manifests. This unprecedented move follows recent regional instability and increased military exercises in the Gulf. International observers fear this action will significantly escalate geopolitical tensions in the Middle East, potentially impacting global energy markets and trade.",
+    "chinese": "伊朗宣布對荷姆茲海峽的海上交通實施新的管制，該海峽是全球關鍵的石油運輸航線。伊朗當局以安全顧慮為由，現在要求所有船隻，特別是油輪，必須事先獲得通行許可並提供詳細的貨物清單。這項前所未有的舉動，發生在近期區域不穩定以及波斯灣軍事演習增加之後。國際觀察家擔心，此舉將顯著加劇中東地區的地緣政治緊張局勢，可能影響全球能源市場和貿易。",
+    "vocabulary": [
+      "restrict (v.): 限制，管制",
+      "Strait of Hormuz (n.): 荷姆茲海峽",
+      "passage (n.): 通行，通過",
+      "escalate (v.): （使）升級，加劇",
+      "Mideast (n.): 中東 (Middle East 的縮寫)",
+      "tension (n.): 緊張局勢",
+      "maritime traffic (n. phr.): 海上交通",
+      "critical (adj.): 關鍵的，重要的",
+      "global (adj.): 全球的",
+      "oil shipping route (n. phr.): 石油運輸航線",
+      "cite (v.): 引證，提及",
+      "security concern (n. phr.): 安全顧慮",
+      "authority (n.): 當局，官方",
+      "vessel (n.): 船隻，艦艇",
+      "prior authorization (n. phr.): 事先授權/許可",
+      "detailed manifest (n. phr.): 詳細貨物清單",
+      "unprecedented (adj.): 前所未有的",
+      "regional instability (n. phr.): 區域不穩定",
+      "geopolitical (adj.): 地緣政治的",
+      "energy market (n. phr.): 能源市場"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news report?",
+        "options": [
+          "A. New oil discoveries in the Middle East",
+          "B. Iran's restrictions on a key shipping route",
+          "C. International trade agreements",
+          "D. Military exercises in the Persian Gulf"
+        ],
+        "answer": "B. Iran's restrictions on a key shipping route"
+      },
+      {
+        "q": "Which body of water is specifically mentioned in the news?",
+        "options": [
+          "A. Suez Canal",
+          "B. Red Sea",
+          "C. Strait of Hormuz",
+          "D. Mediterranean Sea"
+        ],
+        "answer": "C. Strait of Hormuz"
+      },
+      {
+        "q": "What kind of traffic is Iran restricting?",
+        "options": [
+          "A. Air traffic",
+          "B. Land traffic",
+          "C. Maritime traffic",
+          "D. Internet traffic"
+        ],
+        "answer": "C. Maritime traffic"
+      },
+      {
+        "q": "Why did Iran impose these restrictions, according to the news?",
+        "options": [
+          "A. To increase revenue",
+          "B. Due to security concerns",
+          "C. To test new naval technology",
+          "D. As a response to climate change"
+        ],
+        "answer": "B. Due to security concerns"
+      },
+      {
+        "q": "What must vessels now obtain before passing through the Strait of Hormuz?",
+        "options": [
+          "A. A new crew",
+          "B. Prior authorization",
+          "C. A larger insurance policy",
+          "D. A different flag state"
+        ],
+        "answer": "B. Prior authorization"
+      },
+      {
+        "q": "Which type of vessel is specifically mentioned as needing authorization and a detailed manifest?",
+        "options": [
+          "A. Fishing boats",
+          "B. Submarines",
+          "C. Tankers",
+          "D. Cruise ships"
+        ],
+        "answer": "C. Tankers"
+      },
+      {
+        "q": "The news states that the Strait of Hormuz is a 'critical global oil shipping route.' What does 'critical' mean in this context?",
+        "options": [
+          "A. Dangerous",
+          "B. Important",
+          "C. Controversial",
+          "D. New"
+        ],
+        "answer": "B. Important"
+      },
+      {
+        "q": "What events preceded Iran's decision?",
+        "options": [
+          "A. A major international conference",
+          "B. Recent regional instability and increased military exercises",
+          "C. A change in government",
+          "D. New trade agreements with neighboring countries"
+        ],
+        "answer": "B. Recent regional instability and increased military exercises"
+      },
+      {
+        "q": "What do international observers fear will happen due to Iran's action?",
+        "options": [
+          "A. A decrease in oil prices",
+          "B. An improvement in regional relations",
+          "C. A significant escalation of geopolitical tensions",
+          "D. New tourism opportunities"
+        ],
+        "answer": "C. A significant escalation of geopolitical tensions"
+      },
+      {
+        "q": "What potential impact is mentioned regarding global energy markets?",
+        "options": [
+          "A. They will become more stable.",
+          "B. They might be positively affected.",
+          "C. They could be impacted.",
+          "D. They will see a surplus of oil."
+        ],
+        "answer": "C. They could be impacted."
+      },
+      {
+        "q": "The word 'unprecedented' suggests that this move by Iran is:",
+        "options": [
+          "A. Expected",
+          "B. Common",
+          "C. Never done before",
+          "D. Minor"
+        ],
+        "answer": "C. Never done before"
+      },
+      {
+        "q": "The headline 'Escalating Mideast Tensions' implies that the situation in the Middle East is:",
+        "options": [
+          "A. Becoming calmer",
+          "B. Getting worse",
+          "C. Remaining unchanged",
+          "D. Fully resolved"
+        ],
+        "answer": "B. Getting worse"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "韓國軍方證實朝鮮發射多枚彈道導彈，東北亞局勢受關注",
+    "tabTitle": "地緣政治",
+    "english": "On April 20, 2026, South Korea's Joint Chiefs of Staff confirmed that North Korea launched multiple ballistic missiles towards the East Sea. This series of launches, detected early in the morning, marks a significant escalation of military tensions on the Korean Peninsula. Seoul immediately condemned the provocations, calling for a unified international response from its allies. Regional security analysts are closely monitoring the situation, as such actions frequently destabilize Northeast Asia and pose a persistent threat to global peace and stability.",
+    "chinese": "2026年4月20日，韓國聯合參謀本部證實朝鮮向東海發射了多枚彈道導彈。這系列於清晨偵測到的發射，標誌著朝鮮半島軍事緊張局勢的顯著升級。首爾立即譴責了這些挑釁行為，呼籲其盟友採取統一的國際應對措施。區域安全分析師正密切關注局勢，因為此類行動經常破壞東北亞的穩定，並對全球和平與穩定構成持續的威脅。",
+    "vocabulary": [
+      "confirm (v.): 證實",
+      "launch (v.): 發射",
+      "ballistic missile (n.): 彈道導彈",
+      "East Sea (n.): 東海 (指日本海，韓國稱東海)",
+      "Joint Chiefs of Staff (n.): 聯合參謀本部",
+      "detect (v.): 偵測",
+      "escalation (n.): 升級",
+      "military tensions (n.phr.): 軍事緊張局勢",
+      "Korean Peninsula (n.): 朝鮮半島",
+      "condemn (v.): 譴責",
+      "provocation (n.): 挑釁行為",
+      "unified (adj.): 統一的，一致的",
+      "international response (n.phr.): 國際應對措施",
+      "ally (n.): 盟友",
+      "regional security (n.phr.): 區域安全",
+      "analyst (n.): 分析師",
+      "monitor (v.): 監測，關注",
+      "destabilize (v.): 破壞穩定",
+      "Northeast Asia (n.): 東北亞",
+      "persistent threat (n.phr.): 持續的威脅"
+    ],
+    "quiz": [
+      {
+        "q": "What date did the reported events occur?",
+        "options": [
+          "A) April 20, 2025",
+          "B) April 20, 2026",
+          "C) March 20, 2026",
+          "D) April 26, 2026"
+        ],
+        "answer": "B) April 20, 2026"
+      },
+      {
+        "q": "Which country's military confirmed the missile launches?",
+        "options": [
+          "A) North Korea",
+          "B) China",
+          "C) South Korea",
+          "D) Japan"
+        ],
+        "answer": "C) South Korea"
+      },
+      {
+        "q": "What type of missiles did North Korea launch?",
+        "options": [
+          "A) Cruise missiles",
+          "B) Anti-aircraft missiles",
+          "C) Ballistic missiles",
+          "D) Intercontinental missiles"
+        ],
+        "answer": "C) Ballistic missiles"
+      },
+      {
+        "q": "Towards which body of water were the missiles launched?",
+        "options": [
+          "A) Yellow Sea",
+          "B) East Sea",
+          "C) South China Sea",
+          "D) Pacific Ocean"
+        ],
+        "answer": "B) East Sea"
+      },
+      {
+        "q": "What did these launches signify regarding the Korean Peninsula?",
+        "options": [
+          "A) A decrease in tensions",
+          "B) A significant escalation of tensions",
+          "C) A new peace agreement",
+          "D) A joint military exercise"
+        ],
+        "answer": "B) A significant escalation of tensions"
+      },
+      {
+        "q": "Who immediately condemned North Korea's actions?",
+        "options": [
+          "A) Pyongyang",
+          "B) Moscow",
+          "C) Seoul",
+          "D) Beijing"
+        ],
+        "answer": "C) Seoul"
+      },
+      {
+        "q": "What did Seoul call for from its allies?",
+        "options": [
+          "A) Economic sanctions",
+          "B) A unified international response",
+          "C) Bilateral negotiations",
+          "D) Military aid"
+        ],
+        "answer": "B) A unified international response"
+      },
+      {
+        "q": "Who is closely monitoring the situation?",
+        "options": [
+          "A) Sports commentators",
+          "B) Regional security analysts",
+          "C) Environmental activists",
+          "D) Financial advisors"
+        ],
+        "answer": "B) Regional security analysts"
+      },
+      {
+        "q": "According to the news, what do such actions frequently do to Northeast Asia?",
+        "options": [
+          "A) Promote economic growth",
+          "B) Stabilize the region",
+          "C) Destabilize the region",
+          "D) Encourage tourism"
+        ],
+        "answer": "C) Destabilize the region"
+      },
+      {
+        "q": "What kind of threat do these provocations pose globally?",
+        "options": [
+          "A) A temporary inconvenience",
+          "B) A minor economic setback",
+          "C) A persistent threat to peace and stability",
+          "D) A cultural exchange opportunity"
+        ],
+        "answer": "C) A persistent threat to peace and stability"
+      },
+      {
+        "q": "Which South Korean entity confirmed the launches?",
+        "options": [
+          "A) Ministry of Foreign Affairs",
+          "B) National Intelligence Service",
+          "C) Joint Chiefs of Staff",
+          "D) Presidential Office"
+        ],
+        "answer": "C) Joint Chiefs of Staff"
+      },
+      {
+        "q": "When were the launches detected?",
+        "options": [
+          "A) Late at night",
+          "B) Early in the morning",
+          "C) In the afternoon",
+          "D) At midday"
+        ],
+        "answer": "B) Early in the morning"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "Meta因AI戰略調整，五月將啟動全球大規模裁員八千人",
+    "tabTitle": "科技",
+    "english": "Meta announced a significant global workforce reduction, planning to lay off 8,000 employees starting in May 2026. This decision stems from a major reorganization of its Artificial Intelligence (AI) strategy. The company aims to streamline operations and reallocate resources towards new AI priorities. These layoffs are part of a broader effort to enhance efficiency and focus on long-term growth in the competitive AI landscape.",
+    "chinese": "Meta宣布將啟動一項大規模的全球員工裁減計畫，預計自2026年5月起裁員8,000人。此決定源於其人工智慧（AI）策略的重大重組。該公司旨在精簡營運，並將資源重新分配至新的AI優先事項。這些裁員是為了提升效率並專注於競爭激烈的AI領域中長期成長的廣泛努力的一部分。",
+    "vocabulary": [
+      "lay off (phr.v.): 裁員",
+      "globally (adv.): 全球地",
+      "reorganization (n.): 重組；改組",
+      "Artificial Intelligence (n.): 人工智慧",
+      "strategy (n.): 策略；戰略",
+      "workforce (n.): 員工總數；勞動力",
+      "reduction (n.): 減少；裁減",
+      "stem from (phr.v.): 源於；來自",
+      "streamline (v.): 精簡；使效率更高",
+      "operations (n.): 營運；業務",
+      "reallocate (v.): 重新分配",
+      "resources (n.): 資源",
+      "priorities (n.): 優先事項",
+      "broader (adj.): 更廣泛的",
+      "enhance (v.): 提升；增強",
+      "efficiency (n.): 效率",
+      "competitive (adj.): 競爭激烈的",
+      "landscape (n.): 局面；形勢",
+      "significant (adj.): 重大的；顯著的",
+      "long-term growth (n.): 長期成長"
+    ],
+    "quiz": [
+      {
+        "q": "Which company is planning global layoffs?",
+        "options": [
+          "A) Google",
+          "B) Apple",
+          "C) Meta",
+          "D) Microsoft"
+        ],
+        "answer": "C) Meta"
+      },
+      {
+        "q": "When are the layoffs scheduled to begin?",
+        "options": [
+          "A) April 2026",
+          "B) May 2026",
+          "C) June 2026",
+          "D) July 2026"
+        ],
+        "answer": "B) May 2026"
+      },
+      {
+        "q": "Approximately how many employees will be laid off?",
+        "options": [
+          "A) 5,000",
+          "B) 6,000",
+          "C) 7,000",
+          "D) 8,000"
+        ],
+        "answer": "D) 8,000"
+      },
+      {
+        "q": "What is the primary reason for Meta's decision to lay off employees?",
+        "options": [
+          "A) Decreased profits",
+          "B) AI strategy reorganization",
+          "C) Expansion into new markets",
+          "D) Government regulations"
+        ],
+        "answer": "B) AI strategy reorganization"
+      },
+      {
+        "q": "What does Meta aim to do with its operations?",
+        "options": [
+          "A) Expand",
+          "B) Diversify",
+          "C) Streamline",
+          "D) Centralize"
+        ],
+        "answer": "C) Streamline"
+      },
+      {
+        "q": "The company plans to reallocate resources towards new _____.",
+        "options": [
+          "A) products",
+          "B) priorities",
+          "C) partnerships",
+          "D) personnel"
+        ],
+        "answer": "B) priorities"
+      },
+      {
+        "q": "What does \"reallocate\" most closely mean in this context?",
+        "options": [
+          "A) To sell off",
+          "B) To move to a different use",
+          "C) To combine",
+          "D) To increase"
+        ],
+        "answer": "B) To move to a different use"
+      },
+      {
+        "q": "What is the broader effort mentioned in the news aimed at?",
+        "options": [
+          "A) Reducing market share",
+          "B) Decreasing competitiveness",
+          "C) Enhancing efficiency and long-term growth",
+          "D) Expanding existing product lines"
+        ],
+        "answer": "C) Enhancing efficiency and long-term growth"
+      },
+      {
+        "q": "The AI landscape is described as _____.",
+        "options": [
+          "A) stagnant",
+          "B) cooperative",
+          "C) competitive",
+          "D) simple"
+        ],
+        "answer": "C) competitive"
+      },
+      {
+        "q": "Which of the following words is NOT a synonym for \"lay off\" in this context?",
+        "options": [
+          "A) Dismiss",
+          "B) Fire",
+          "C) Hire",
+          "D) Redundancy"
+        ],
+        "answer": "C) Hire"
+      },
+      {
+        "q": "What does \"stem from\" mean in the sentence \"This decision stems from a major reorganization...\"?",
+        "options": [
+          "A) Is caused by",
+          "B) Is unrelated to",
+          "C) Is separate from",
+          "D) Is an example of"
+        ],
+        "answer": "A) Is caused by"
+      },
+      {
+        "q": "If a company wants to \"enhance efficiency,\" what does it want to do?",
+        "options": [
+          "A) Make things slower",
+          "B) Make things work better and faster",
+          "C) Make things more complicated",
+          "D) Make things cheaper by cutting quality"
+        ],
+        "answer": "B) Make things work better and faster"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "黃仁勳史丹佛演講：AI不奪工作，懂用者將取代不懂者",
+    "tabTitle": "科技",
+    "english": "NVIDIA CEO Jensen Huang recently delivered a significant speech at Stanford University on April 20, 2026. He addressed widespread concerns about artificial intelligence impacting employment. Huang emphasized that AI itself will not eliminate jobs. Instead, he asserted that individuals proficient in using AI tools will ultimately replace those who lack these skills. His message highlights the critical importance of adapting to new technologies in the evolving job market.",
+    "chinese": "輝達執行長黃仁勳於2026年4月20日在史丹佛大學發表了一場重要的演講。他談及了人們普遍擔憂人工智慧對就業的影響。黃仁勳強調，人工智慧本身不會消滅工作機會。相反地，他斷言那些精通使用AI工具的人，最終將取代那些缺乏這些技能的人。他的訊息突顯了在不斷變化的就業市場中適應新技術的關鍵重要性。",
+    "vocabulary": [
+      "CEO (n.): 執行長",
+      "delivered (v.): 發表",
+      "significant (adj.): 重要的",
+      "addressed (v.): 談及，處理",
+      "widespread (adj.): 普遍的",
+      "concerns (n.): 擔憂，關切",
+      "artificial intelligence (n.): 人工智慧",
+      "impacting (v.): 影響",
+      "employment (n.): 就業",
+      "emphasized (v.): 強調",
+      "eliminate (v.): 消除，消滅",
+      "asserted (v.): 斷言，聲稱",
+      "proficient (adj.): 精通的，熟練的",
+      "tools (n.): 工具",
+      "ultimately (adv.): 最終，最後",
+      "replace (v.): 取代",
+      "lack (v.): 缺乏",
+      "critical (adj.): 關鍵的，重要的",
+      "adapting (v.): 適應",
+      "job market (n.): 就業市場"
+    ],
+    "quiz": [
+      {
+        "q": "Who delivered the significant speech at Stanford University?",
+        "options": [
+          "A. Elon Musk",
+          "B. Jensen Huang",
+          "C. Sundar Pichai",
+          "D. Mark Zuckerberg"
+        ],
+        "answer": "B. Jensen Huang"
+      },
+      {
+        "q": "Where did Jensen Huang deliver his speech?",
+        "options": [
+          "A. Harvard University",
+          "B. MIT",
+          "C. Stanford University",
+          "D. University of California, Berkeley"
+        ],
+        "answer": "C. Stanford University"
+      },
+      {
+        "q": "What was the main subject of Jensen Huang's speech?",
+        "options": [
+          "A. The future of gaming",
+          "B. Artificial intelligence and employment",
+          "C. NVIDIA's new products",
+          "D. Global economic trends"
+        ],
+        "answer": "B. Artificial intelligence and employment"
+      },
+      {
+        "q": "According to Jensen Huang, what is the primary reason for job displacement in the age of AI?",
+        "options": [
+          "A. AI itself will eliminate jobs.",
+          "B. Lack of AI development.",
+          "C. People proficient in AI tools will replace those who are not.",
+          "D. Automation of all tasks by robots."
+        ],
+        "answer": "C. People proficient in AI tools will replace those who are not."
+      },
+      {
+        "q": "What does the word 'emphasized' mean in the context of the news?",
+        "options": [
+          "A. Doubted",
+          "B. Suggested",
+          "C. Stressed or highlighted",
+          "D. Ignored"
+        ],
+        "answer": "C. Stressed or highlighted"
+      },
+      {
+        "q": "Which word is closest in meaning to 'proficient' as used in the news?",
+        "options": [
+          "A. Beginner",
+          "B. Skilled",
+          "C. Reluctant",
+          "D. Unaware"
+        ],
+        "answer": "B. Skilled"
+      },
+      {
+        "q": "What does 'widespread concerns' refer to in the article?",
+        "options": [
+          "A. Concerns shared by a small group of people.",
+          "B. Concerns about AI that are commonly held by many people.",
+          "C. Concerns specific to Stanford students.",
+          "D. Concerns about the economy in general."
+        ],
+        "answer": "B. Concerns about AI that are commonly held by many people."
+      },
+      {
+        "q": "What is the date mentioned for Jensen Huang's speech?",
+        "options": [
+          "A. April 20, 2024",
+          "B. April 20, 2025",
+          "C. April 20, 2026",
+          "D. April 20, 2023"
+        ],
+        "answer": "C. April 20, 2026"
+      },
+      {
+        "q": "What is the critical importance highlighted by Huang's message?",
+        "options": [
+          "A. Investing more in AI research.",
+          "B. Preventing AI development.",
+          "C. Adapting to new technologies.",
+          "D. Creating more traditional jobs."
+        ],
+        "answer": "C. Adapting to new technologies."
+      },
+      {
+        "q": "What does 'eliminate' most closely mean in the sentence 'AI itself will not eliminate jobs'?",
+        "options": [
+          "A. Create",
+          "B. Enhance",
+          "C. Get rid of",
+          "D. Transform"
+        ],
+        "answer": "C. Get rid of"
+      },
+      {
+        "q": "According to Huang, what kind of individuals will be replaced?",
+        "options": [
+          "A. Those who develop AI tools.",
+          "B. Those who understand AI's theoretical aspects.",
+          "C. Those who lack skills in using AI tools.",
+          "D. Those who are leaders in their fields."
+        ],
+        "answer": "C. Those who lack skills in using AI tools."
+      },
+      {
+        "q": "What does 'ultimately' mean in the sentence 'individuals proficient in using AI tools will ultimately replace those who lack these skills'?",
+        "options": [
+          "A. Immediately",
+          "B. Eventually or in the end",
+          "C. Rarely",
+          "D. Temporarily"
+        ],
+        "answer": "B. Eventually or in the end"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
