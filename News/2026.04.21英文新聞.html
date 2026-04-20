@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 21, 2026：台灣經濟、地緣政治 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電Q1獲利創高，法人上調目標價至2500元\nTaiwan Semiconductor Manufacturing Company (TSMC) announced record-high profits for the first quarter of 2026. The company's strong performance exceeded market expectations, driven by robust demand for advanced chips. Following this impressive financial report, institutional investors and analysts have significantly raised their target price for TSMC shares to NT$2500. This reflects strong confidence in TSMC's future growth trajectory and its dominant position in the global semiconductor industry.\n\n[2] 台塑巨型油輪抵台載原油，緩解能源供應壓力\nFormosa Plastics Corporation announced today, April 21, 2026, the arrival of its supertanker carrying a significant shipment of crude oil at a Taiwanese port. This crucial delivery is expected to substantially ease the nation's energy supply concerns amid rising global demands. The vessel, one of the largest in Formosa Plastics' fleet, completed its voyage, ensuring a stable influx of raw material for the company's refineries and contributing to Taiwan's overall energy security. This strategic move highlights efforts to bolster domestic reserves.\n\n[3] 特斯拉來台招募半導體工程師，瞄準先進製程人才\nTesla is actively recruiting semiconductor engineers in Taiwan, seeking talent for advanced manufacturing processes. This strategic move highlights Taiwan's crucial role in the global semiconductor industry. The recruitment drive aims to bolster Tesla's in-house chip development capabilities and accelerate innovation in its automotive and AI technologies. Positions are reportedly focused on design, verification, and process integration.",
+    "chinese": "【1】台積電Q1獲利創高，法人上調目標價至2500元\n台灣積體電路製造公司（台積電）宣布2026年第一季獲利創下歷史新高。該公司強勁的表現超出市場預期，主要受惠於對先進晶片旺盛的需求。在這份亮眼的財報公布後，法人和分析師已將台積電股票的目標價大幅上調至新台幣2500元。這反映了市場對台積電未來成長軌跡及其在全球半導體產業主導地位的強烈信心。\n\n【2】台塑巨型油輪抵台載原油，緩解能源供應壓力\n台塑企業今日（2026年4月21日）宣布，其巨型油輪已抵達台灣港口，載運大量原油。在全球需求不斷上升之際，這批關鍵的貨物預計將大幅緩解台灣的能源供應擔憂。這艘油輪是台塑船隊中最大的船隻之一，已完成其航程，確保了該公司煉油廠原物料的穩定流入，並為台灣的整體能源安全做出貢獻。這項戰略舉措突顯了加強國內儲備的努力。\n\n【3】特斯拉來台招募半導體工程師，瞄準先進製程人才\n特斯拉正在台灣積極招募半導體工程師，尋求先進製造製程的人才。此一策略性舉動突顯了台灣在全球半導體產業中的關鍵作用。本次招募旨在增強特斯拉的內部晶片開發能力，並加速其汽車和人工智慧技術的創新。據報導，職位主要集中在設計、驗證和製程整合方面。",
+    "vocabulary": [
+      "TSMC (abbr.): 台灣積體電路製造公司",
+      "Q1 (abbr.): 第一季",
+      "profit (n.): 獲利；利潤",
+      "soar (v.): 飆升；劇增",
+      "analyst (n.): 分析師",
+      "target price (n.phr.): 目標價",
+      "record-high (adj.): 創紀錄新高的",
+      "exceed (v.): 超過；超出",
+      "market expectation (n.phr.): 市場預期",
+      "driven by (phr.v.): 受...驅動；由...帶動",
+      "robust (adj.): 強勁的；旺盛的",
+      "demand (n.): 需求",
+      "advanced (adj.): 先進的",
+      "chip (n.): 晶片",
+      "impressive (adj.): 令人印象深刻的",
+      "financial report (n.phr.): 財報；財務報告",
+      "institutional investor (n.phr.): 法人投資者",
+      "significantly (adv.): 大幅地；顯著地",
+      "shares (n.): 股票",
+      "growth trajectory (n.phr.): 成長軌跡",
+      "Formosa Plastics Corporation (n.): 台塑企業",
+      "supertanker (n.): 巨型油輪",
+      "crude oil (n.): 原油",
+      "easing (v. -ing form): 緩解",
+      "energy supply (n.): 能源供應",
+      "significant (adj.): 大量的；重要的",
+      "shipment (n.): 貨物；運輸",
+      "Taiwanese port (n.): 台灣港口",
+      "crucial (adj.): 關鍵的",
+      "delivery (n.): 運送；交付",
+      "substantially (adv.): 大幅地；實質上地",
+      "amid (prep.): 在…之中",
+      "global demands (n.): 全球需求",
+      "vessel (n.): 船隻",
+      "fleet (n.): 船隊",
+      "completed (v.): 完成",
+      "voyage (n.): 航程",
+      "stable (adj.): 穩定的",
+      "influx (n.): 湧入；流入",
+      "energy security (n.): 能源安全",
+      "recruit (v.): 招募",
+      "semiconductor (n.): 半導體",
+      "engineer (n.): 工程師",
+      "advanced (adj.): 先進的",
+      "manufacturing (n.): 製造",
+      "process (n.): 製程",
+      "talent (n.): 人才",
+      "strategic (adj.): 策略性的",
+      "highlight (v.): 突顯",
+      "crucial (adj.): 關鍵的",
+      "global (adj.): 全球的",
+      "industry (n.): 產業",
+      "recruitment drive (n.): 招募活動",
+      "bolster (v.): 增強",
+      "in-house (adj.): 內部的",
+      "chip development (n.): 晶片開發",
+      "accelerate (v.): 加速",
+      "innovation (n.): 創新",
+      "automotive (adj.): 汽車的",
+      "AI technologies (n.): 人工智慧技術"
+    ],
+    "quiz": [
+      {
+        "q": "What company is the main subject of the news?",
+        "options": [
+          "A. Samsung",
+          "B. Intel",
+          "C. TSMC",
+          "D. Micron"
+        ],
+        "answer": "C. TSMC"
+      },
+      {
+        "q": "What period does the news report TSMC's record-high profits for?",
+        "options": [
+          "A. The entire year of 2026",
+          "B. The first quarter of 2026",
+          "C. The second quarter of 2026",
+          "D. The last quarter of 2025"
+        ],
+        "answer": "B. The first quarter of 2026"
+      },
+      {
+        "q": "What was a key factor driving TSMC's strong performance?",
+        "options": [
+          "A. Reduced operating costs",
+          "B. Robust demand for advanced chips",
+          "C. Government subsidies",
+          "D. Diversification into new markets"
+        ],
+        "answer": "B. Robust demand for advanced chips"
+      },
+      {
+        "q": "What action have analysts taken regarding TSMC's target price?",
+        "options": [
+          "A. Lowered it",
+          "B. Maintained it",
+          "C. Significantly raised it",
+          "D. Suspended their recommendation"
+        ],
+        "answer": "C. Significantly raised it"
+      },
+      {
+        "q": "What is the new target price for TSMC shares mentioned in the news?",
+        "options": [
+          "A. NT$1500",
+          "B. NT$2000",
+          "C. NT$2500",
+          "D. NT$3000"
+        ],
+        "answer": "C. NT$2500"
+      },
+      {
+        "q": "What does it mean if a company's performance 'exceeded market expectations'?",
+        "options": [
+          "A. It performed worse than predicted",
+          "B. It performed better than predicted",
+          "C. It met all predictions exactly",
+          "D. It had no impact on predictions"
+        ],
+        "answer": "B. It performed better than predicted"
+      },
+      {
+        "q": "The phrase 'robust demand' implies which of the following?",
+        "options": [
+          "A. Weak and unstable demand",
+          "B. Steady but unchanging demand",
+          "C. Strong and healthy demand",
+          "D. Rapidly decreasing demand"
+        ],
+        "answer": "C. Strong and healthy demand"
+      },
+      {
+        "q": "What is the Chinese translation for 'institutional investors'?",
+        "options": [
+          "A. 散戶投資者",
+          "B. 法人投資者",
+          "C. 個人投資者",
+          "D. 外國投資者"
+        ],
+        "answer": "B. 法人投資者"
+      },
+      {
+        "q": "Which word best describes TSMC's profit in Q1 2026 according to the news?",
+        "options": [
+          "A. Declined",
+          "B. Stagnant",
+          "C. Soared",
+          "D. Moderated"
+        ],
+        "answer": "C. Soared"
+      },
+      {
+        "q": "The news reflects strong confidence in TSMC's future ____.",
+        "options": [
+          "A. labor relations",
+          "B. marketing strategies",
+          "C. growth trajectory",
+          "D. competitor relationships"
+        ],
+        "answer": "C. growth trajectory"
+      },
+      {
+        "q": "What is a 'financial report'?",
+        "options": [
+          "A. A weather forecast",
+          "B. A document detailing a company's financial performance",
+          "C. A news article about politics",
+          "D. A personal diary"
+        ],
+        "answer": "B. A document detailing a company's financial performance"
+      },
+      {
+        "q": "Based on the news, what is TSMC's position in the global semiconductor industry?",
+        "options": [
+          "A. A minor player",
+          "B. A struggling company",
+          "C. A dominant position",
+          "D. A new entrant"
+        ],
+        "answer": "C. A dominant position"
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A. Formosa Plastics' new refinery",
+          "B. A supertanker delivering crude oil to Taiwan",
+          "C. Global oil price fluctuations",
+          "D. Taiwan's new port construction"
+        ],
+        "answer": "B. A supertanker delivering crude oil to Taiwan"
+      },
+      {
+        "q": "Which company is mentioned in the headline?",
+        "options": [
+          "A. Taiwan Power Company",
+          "B. CPC Corporation, Taiwan",
+          "C. Formosa Plastics Corporation",
+          "D. Evergreen Marine Corp."
+        ],
+        "answer": "C. Formosa Plastics Corporation"
+      },
+      {
+        "q": "What date did the event in the news take place?",
+        "options": [
+          "A. April 21, 2024",
+          "B. April 21, 2025",
+          "C. April 21, 2026",
+          "D. April 21, 2027"
+        ],
+        "answer": "C. April 21, 2026"
+      },
+      {
+        "q": "What cargo did the supertanker bring?",
+        "options": [
+          "A. Refined oil",
+          "B. Natural gas",
+          "C. Crude oil",
+          "D. Petroleum products"
+        ],
+        "answer": "C. Crude oil"
+      },
+      {
+        "q": "What is the expected impact of this delivery on Taiwan?",
+        "options": [
+          "A. It will increase global oil prices.",
+          "B. It will create new jobs in the shipping industry.",
+          "C. It will ease energy supply concerns.",
+          "D. It will cause environmental pollution."
+        ],
+        "answer": "C. It will ease energy supply concerns."
+      },
+      {
+        "q": "The term \"supertanker\" refers to:",
+        "options": [
+          "A. A large military vessel",
+          "B. A very large oil tanker",
+          "C. A small cargo ship",
+          "D. A passenger ferry"
+        ],
+        "answer": "B. A very large oil tanker"
+      },
+      {
+        "q": "What is \"crude oil\"?",
+        "options": [
+          "A. Oil that has been processed and refined.",
+          "B. Oil in its natural, unrefined state.",
+          "C. Oil used for cooking.",
+          "D. Oil derived from plants."
+        ],
+        "answer": "B. Oil in its natural, unrefined state."
+      },
+      {
+        "q": "\"Amid rising global demands\" suggests:",
+        "options": [
+          "A. Global demand for oil is decreasing.",
+          "B. Global demand for oil is stable.",
+          "C. Global demand for oil is increasing.",
+          "D. Global demand for oil is unpredictable."
+        ],
+        "answer": "C. Global demand for oil is increasing."
+      },
+      {
+        "q": "For which facilities is the crude oil a raw material?",
+        "options": [
+          "A. Power plants",
+          "B. Chemical factories",
+          "C. Refineries",
+          "D. Shipping ports"
+        ],
+        "answer": "C. Refineries"
+      },
+      {
+        "q": "What does \"energy security\" mean in this context?",
+        "options": [
+          "A. Protecting energy facilities from attacks.",
+          "B. Ensuring a reliable and sufficient supply of energy.",
+          "C. Reducing energy consumption.",
+          "D. Developing renewable energy sources."
+        ],
+        "answer": "B. Ensuring a reliable and sufficient supply of energy."
+      },
+      {
+        "q": "The phrase \"bolster domestic reserves\" implies:",
+        "options": [
+          "A. Reducing the amount of oil stored domestically.",
+          "B. Strengthening or increasing the country's stored energy resources.",
+          "C. Selling off domestic energy reserves.",
+          "D. Relying more on imported refined products."
+        ],
+        "answer": "B. Strengthening or increasing the country's stored energy resources."
+      },
+      {
+        "q": "What is the overall tone of the news article?",
+        "options": [
+          "A. Alarmist and negative",
+          "B. Neutral and factual",
+          "C. Humorous and lighthearted",
+          "D. Speculative and uncertain"
+        ],
+        "answer": "B. Neutral and factual"
+      },
+      {
+        "q": "Which company is actively recruiting semiconductor engineers in Taiwan?",
+        "options": [
+          "Google",
+          "Apple",
+          "Tesla",
+          "Microsoft"
+        ],
+        "answer": "Tesla"
+      },
+      {
+        "q": "What type of engineers is Tesla specifically looking for in Taiwan?",
+        "options": [
+          "Software Engineers",
+          "Mechanical Engineers",
+          "Semiconductor Engineers",
+          "Civil Engineers"
+        ],
+        "answer": "Semiconductor Engineers"
+      },
+      {
+        "q": "What kind of talent is Tesla seeking for its manufacturing processes?",
+        "options": [
+          "Entry-level",
+          "Administrative",
+          "Advanced process",
+          "Sales and marketing"
+        ],
+        "answer": "Advanced process"
+      },
+      {
+        "q": "According to the news, what role does Taiwan play in the global semiconductor industry?",
+        "options": [
+          "A minor role",
+          "A declining role",
+          "A crucial role",
+          "An emerging role"
+        ],
+        "answer": "A crucial role"
+      },
+      {
+        "q": "What is one of the main goals of Tesla's recruitment drive?",
+        "options": [
+          "To outsource chip development",
+          "To reduce its global workforce",
+          "To bolster its in-house chip development capabilities",
+          "To diversify into new industries"
+        ],
+        "answer": "To bolster its in-house chip development capabilities"
+      },
+      {
+        "q": "Which areas of Tesla's technology are expected to accelerate due to this recruitment?",
+        "options": [
+          "Battery production and charging stations",
+          "Automotive and AI technologies",
+          "Customer service and logistics",
+          "Supply chain management and procurement"
+        ],
+        "answer": "Automotive and AI technologies"
+      },
+      {
+        "q": "The word \"bolster\" in the text is closest in meaning to:",
+        "options": [
+          "Weaken",
+          "Support",
+          "Replace",
+          "Ignore"
+        ],
+        "answer": "Support"
+      },
+      {
+        "q": "What does \"in-house\" refer to in the context of chip development?",
+        "options": [
+          "Outsourced to another company",
+          "Developed internally by Tesla",
+          "Purchased from suppliers",
+          "Developed in collaboration with universities"
+        ],
+        "answer": "Developed internally by Tesla"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a reported focus for the engineering positions?",
+        "options": [
+          "Design",
+          "Verification",
+          "Process integration",
+          "Marketing strategy"
+        ],
+        "answer": "Marketing strategy"
+      },
+      {
+        "q": "What does \"recruitment drive\" imply about Tesla's hiring efforts?",
+        "options": [
+          "It's a small-scale, casual hiring",
+          "It's a focused and intensive hiring campaign",
+          "It's a temporary staffing solution",
+          "It's a global relocation program"
+        ],
+        "answer": "It's a focused and intensive hiring campaign"
+      },
+      {
+        "q": "The term \"advanced process talent\" suggests that Tesla is looking for engineers with:",
+        "options": [
+          "Basic knowledge of older technologies",
+          "Expertise in cutting-edge manufacturing techniques",
+          "Skills in human resources management",
+          "Experience in sales and distribution"
+        ],
+        "answer": "Expertise in cutting-edge manufacturing techniques"
+      },
+      {
+        "q": "What is the overall implication of Tesla's move to recruit in Taiwan?",
+        "options": [
+          "Tesla is struggling with chip development.",
+          "Tesla aims to reduce its reliance on external chip suppliers.",
+          "Taiwan's semiconductor industry is declining.",
+          "Tesla is shifting its entire manufacturing base to Taiwan."
+        ],
+        "answer": "Tesla aims to reduce its reliance on external chip suppliers."
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美伊第二輪和談巴基斯坦登場，停火延長成焦點",
+    "tabTitle": "地緣政治",
+    "english": "The second round of crucial peace talks between the United States and Iran officially commenced in Islamabad, Pakistan, on April 21, 2026. High-level diplomats from both nations are actively engaging to address persistent regional tensions and explore viable pathways to de-escalation. A central and critical focus of these discussions is the potential extension of the fragile current ceasefire agreement, which is vital for stabilizing security across the Middle East. International observers and global leaders are closely monitoring these negotiations, hoping they will lead to lasting peace and prevent further widespread conflict.",
+    "chinese": "美伊兩國間第二輪關鍵和平會談於2026年4月21日在巴基斯坦伊斯蘭堡正式展開。兩國高級外交官正積極參與，以解決持續的區域緊張局勢並探索可行的降級途徑。這些討論的一個核心且關鍵的焦點是延長脆弱的當前停火協議，這對於穩定整個中東地區的安全至關重要。國際觀察員和全球領導人正密切關注這些談判，希望它們能帶來持久和平並防止進一步的廣泛衝突。",
+    "vocabulary": [
+      "crucial (adj.): 關鍵的",
+      "peace talks (n. phr.): 和平會談",
+      "commenced (v.): 開始，展開",
+      "Islamabad (n.): 伊斯蘭堡 (地名)",
+      "diplomats (n.): 外交官",
+      "actively (adv.): 積極地",
+      "engaging (v.): 參與，從事",
+      "address (v.): 處理，解決",
+      "persistent (adj.): 持續的，頑固的",
+      "regional (adj.): 區域的",
+      "tensions (n.): 緊張局勢",
+      "explore (v.): 探索",
+      "viable (adj.): 可行的",
+      "pathways (n.): 途徑，道路",
+      "de-escalation (n.): 降級，緩和",
+      "central (adj.): 核心的，主要的",
+      "critical (adj.): 關鍵的，重要的",
+      "ceasefire agreement (n. phr.): 停火協議",
+      "stabilizing (v.): 穩定",
+      "widespread (adj.): 廣泛的"
+    ],
+    "quiz": [
+      {
+        "q": "When did the second round of peace talks begin?",
+        "options": [
+          "A. April 20, 2026",
+          "B. April 21, 2026",
+          "C. April 22, 2026",
+          "D. Not mentioned"
+        ],
+        "answer": "B. April 21, 2026"
+      },
+      {
+        "q": "Where are the peace talks taking place?",
+        "options": [
+          "A. Tehran, Iran",
+          "B. Washington D.C., USA",
+          "C. Islamabad, Pakistan",
+          "D. Dubai, UAE"
+        ],
+        "answer": "C. Islamabad, Pakistan"
+      },
+      {
+        "q": "Which two nations are involved in these peace talks?",
+        "options": [
+          "A. Pakistan and Iran",
+          "B. United States and Pakistan",
+          "C. United States and Iran",
+          "D. United Nations and Iran"
+        ],
+        "answer": "C. United States and Iran"
+      },
+      {
+        "q": "What is a central focus of the discussions?",
+        "options": [
+          "A. Trade agreements",
+          "B. Cultural exchange programs",
+          "C. Extension of the current ceasefire agreement",
+          "D. Military alliances"
+        ],
+        "answer": "C. Extension of the current ceasefire agreement"
+      },
+      {
+        "q": "Who is participating in these talks from both nations?",
+        "options": [
+          "A. Military generals",
+          "B. High-level diplomats",
+          "C. Business leaders",
+          "D. Religious figures"
+        ],
+        "answer": "B. High-level diplomats"
+      },
+      {
+        "q": "What is the purpose of extending the ceasefire agreement?",
+        "options": [
+          "A. To boost tourism",
+          "B. To stabilize security across the Middle East",
+          "C. To increase oil production",
+          "D. To elect new leaders"
+        ],
+        "answer": "B. To stabilize security across the Middle East"
+      },
+      {
+        "q": "What kind of tensions are the diplomats addressing?",
+        "options": [
+          "A. Economic tensions",
+          "B. Environmental tensions",
+          "C. Persistent regional tensions",
+          "D. Social tensions"
+        ],
+        "answer": "C. Persistent regional tensions"
+      },
+      {
+        "q": "What do international observers hope these negotiations will lead to?",
+        "options": [
+          "A. New technological advancements",
+          "B. Lasting peace",
+          "C. Increased tariffs",
+          "D. Space exploration"
+        ],
+        "answer": "B. Lasting peace"
+      },
+      {
+        "q": "What do the negotiations aim to prevent?",
+        "options": [
+          "A. Economic recession",
+          "B. Further widespread conflict",
+          "C. Climate change",
+          "D. Political debates"
+        ],
+        "answer": "B. Further widespread conflict"
+      },
+      {
+        "q": "The word \"commenced\" in the text is closest in meaning to:",
+        "options": [
+          "A. Ended",
+          "B. Continued",
+          "C. Began",
+          "D. Delayed"
+        ],
+        "answer": "C. Began"
+      },
+      {
+        "q": "The word \"viable\" suggests that the pathways to de-escalation are:",
+        "options": [
+          "A. Impossible",
+          "B. Unlikely",
+          "C. Practical and achievable",
+          "D. Theoretical only"
+        ],
+        "answer": "C. Practical and achievable"
+      },
+      {
+        "q": "Which of the following best describes the nature of the ceasefire agreement mentioned?",
+        "options": [
+          "A. Strong and stable",
+          "B. Fragile and critical",
+          "C. Unimportant and temporary",
+          "D. Permanent and unbreakable"
+        ],
+        "answer": "B. Fragile and critical"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "中東緊張局勢升溫，國際油價單日大漲逾5%",
+    "tabTitle": "金融市場",
+    "english": "International oil prices experienced a significant jump on April 21, 2026, rising over 5% in a single trading day. This sharp increase was primarily driven by escalating geopolitical tensions in the Middle East, leading to heightened market uncertainty. Reports indicate that recent developments in the region have intensified concerns about potential disruptions to global oil supplies. Consequently, crude oil benchmarks are being pushed higher as investors react to the perceived instability, impacting global economic outlooks.",
+    "chinese": "國際油價在2026年4月21日經歷了顯著上漲，單日交易內漲幅超過5%。這次急劇上漲主要受中東地區地緣政治緊張局勢升級的推動，導致市場不確定性加劇。報告指出，該地區的最新發展加劇了對全球石油供應可能中斷的擔憂。因此，由於投資者對感知到的不穩定性做出反應，原油基準價格被推高，影響了全球經濟前景。",
+    "vocabulary": [
+      "experienced (v.): 經歷",
+      "significant (adj.): 顯著的，重大的",
+      "jump (n.): 跳升，大漲",
+      "trading day (n. phr.): 交易日",
+      "primarily (adv.): 主要地",
+      "driven by (phr. v.): 受...驅動",
+      "escalating (adj.): 升級的",
+      "geopolitical (adj.): 地緣政治的",
+      "tensions (n.): 緊張局勢",
+      "heightened (adj.): 加劇的，升高的",
+      "market uncertainty (n. phr.): 市場不確定性",
+      "reports (n.): 報告，報導",
+      "developments (n.): 發展，事態",
+      "intensified (v.): 加劇，強化",
+      "concerns (n.): 擔憂",
+      "potential (adj.): 潛在的",
+      "disruptions (n.): 中斷，擾亂",
+      "global oil supplies (n. phr.): 全球石油供應",
+      "consequently (adv.): 因此，結果",
+      "crude oil benchmarks (n. phr.): 原油基準價格"
+    ],
+    "quiz": [
+      {
+        "q": "What was the main reason for the significant jump in international oil prices on April 21, 2026?",
+        "options": [
+          "A. Increased demand from China",
+          "B. Escalating geopolitical tensions in the Middle East",
+          "C. A new discovery of oil reserves",
+          "D. A decrease in global oil production"
+        ],
+        "answer": "B. Escalating geopolitical tensions in the Middle East"
+      },
+      {
+        "q": "By how much did international oil prices rise in a single day according to the news?",
+        "options": [
+          "A. Less than 3%",
+          "B. Exactly 5%",
+          "C. Over 5%",
+          "D. Around 2%"
+        ],
+        "answer": "C. Over 5%"
+      },
+      {
+        "q": "What specific region is mentioned as the source of the tensions?",
+        "options": [
+          "A. Eastern Europe",
+          "B. South America",
+          "C. The Middle East",
+          "D. Southeast Asia"
+        ],
+        "answer": "C. The Middle East"
+      },
+      {
+        "q": "What have recent developments in the region intensified concerns about?",
+        "options": [
+          "A. A drop in oil demand",
+          "B. Potential disruptions to global oil supplies",
+          "C. New trade agreements",
+          "D. Increased tourism"
+        ],
+        "answer": "B. Potential disruptions to global oil supplies"
+      },
+      {
+        "q": "How are crude oil benchmarks reacting to the perceived instability?",
+        "options": [
+          "A. They are falling",
+          "B. They are remaining stable",
+          "C. They are being pushed higher",
+          "D. They are fluctuating mildly"
+        ],
+        "answer": "C. They are being pushed higher"
+      },
+      {
+        "q": "What is the overall impact of these events on global economic outlooks?",
+        "options": [
+          "A. They are improving",
+          "B. They are unaffected",
+          "C. They are being positively influenced",
+          "D. They are being impacted"
+        ],
+        "answer": "D. They are being impacted"
+      },
+      {
+        "q": "What does \"escalating\" mean in the context of \"escalating geopolitical tensions\"?",
+        "options": [
+          "A. Decreasing",
+          "B. Stabilizing",
+          "C. Increasing",
+          "D. Resolving"
+        ],
+        "answer": "C. Increasing"
+      },
+      {
+        "q": "Which word is a synonym for \"significant\" as used in the news?",
+        "options": [
+          "A. Minor",
+          "B. Trivial",
+          "C. Notable",
+          "D. Slight"
+        ],
+        "answer": "C. Notable"
+      },
+      {
+        "q": "What is a \"trading day\"?",
+        "options": [
+          "A. A day off from work",
+          "B. A day when financial markets are open for business",
+          "C. A holiday",
+          "D. A day for social gatherings"
+        ],
+        "answer": "B. A day when financial markets are open for business"
+      },
+      {
+        "q": "What does \"disruptions\" refer to in \"potential disruptions to global oil supplies\"?",
+        "options": [
+          "A. Increases",
+          "B. Interruptions",
+          "C. Improvements",
+          "D. Discoveries"
+        ],
+        "answer": "B. Interruptions"
+      },
+      {
+        "q": "If something is \"primarily driven by\" a factor, what does that mean?",
+        "options": [
+          "A. It is slightly influenced by it",
+          "B. It is completely unrelated to it",
+          "C. It is mainly caused by it",
+          "D. It happens despite it"
+        ],
+        "answer": "C. It is mainly caused by it"
+      },
+      {
+        "q": "What is the meaning of \"heightened market uncertainty\"?",
+        "options": [
+          "A. The market is very stable",
+          "B. The market is less sure about the future",
+          "C. The market has clear predictions",
+          "D. The market is experiencing low volatility"
+        ],
+        "answer": "B. The market is less sure about the future"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "Google與Marvell洽談合作，開發新型AI晶片",
+    "tabTitle": "科技",
+    "english": "Google is reportedly in advanced discussions with Marvell Technology to develop a new generation of artificial intelligence (AI) chips. This potential partnership aims to enhance Google's capabilities in AI processing for its data centers and cloud services. The collaboration would leverage Marvell's expertise in custom silicon design and Google's growing demand for specialized hardware. Experts suggest this move could significantly impact the competitive AI hardware market, providing more efficient and powerful solutions. The companies are expected to finalize details soon.",
+    "chinese": "據報導，Google正與Marvell Technology進行深入洽談，以開發新一代人工智慧（AI）晶片。這項潛在的合作旨在提升Google在其資料中心和雲端服務中的AI處理能力。此次合作將利用Marvell在客製化晶片設計方面的專業知識，以及Google對專用硬體日益增長的需求。專家認為，此舉可能對競爭激烈的AI硬體市場產生重大影響，提供更高效、更強大的解決方案。預計兩家公司將很快敲定合作細節。",
+    "vocabulary": [
+      "in talks (phr.): 洽談中",
+      "develop (v.): 開發",
+      "artificial intelligence (n.): 人工智慧",
+      "chips (n.): 晶片",
+      "reportedly (adv.): 據報導",
+      "advanced discussions (phr.): 深入洽談",
+      "potential partnership (n.): 潛在合作關係",
+      "enhance (v.): 提升，增強",
+      "capabilities (n.): 能力",
+      "processing (n.): 處理",
+      "data centers (n.): 資料中心",
+      "cloud services (n.): 雲端服務",
+      "leverage (v.): 利用，善用",
+      "expertise (n.): 專業知識",
+      "custom silicon design (phr.): 客製化晶片設計",
+      "growing demand (phr.): 日益增長的需求",
+      "specialized hardware (n.): 專用硬體",
+      "significantly impact (phr.): 顯著影響",
+      "competitive market (n.): 競爭激烈的市場",
+      "finalize details (phr.): 敲定細節"
+    ],
+    "quiz": [
+      {
+        "q": "What is Google reportedly discussing with Marvell Technology?",
+        "options": [
+          "A: Developing new smartphones",
+          "B: Developing new AI chips",
+          "C: Expanding their marketing campaigns",
+          "D: Acquiring Marvell Technology"
+        ],
+        "answer": "B: Developing new AI chips"
+      },
+      {
+        "q": "What is the main goal of this potential partnership for Google?",
+        "options": [
+          "A: To reduce manufacturing costs",
+          "B: To improve its AI processing capabilities",
+          "C: To enter the consumer electronics market",
+          "D: To diversify its investment portfolio"
+        ],
+        "answer": "B: To improve its AI processing capabilities"
+      },
+      {
+        "q": "Where would these new AI chips primarily be used by Google?",
+        "options": [
+          "A: In personal computers and laptops",
+          "B: In its data centers and cloud services",
+          "C: In mobile devices only",
+          "D: In smart home appliances"
+        ],
+        "answer": "B: In its data centers and cloud services"
+      },
+      {
+        "q": "What expertise would Marvell bring to this collaboration?",
+        "options": [
+          "A: Software development",
+          "B: Custom silicon design",
+          "C: Marketing strategies",
+          "D: Renewable energy solutions"
+        ],
+        "answer": "B: Custom silicon design"
+      },
+      {
+        "q": "What kind of demand does Google have for hardware in this context?",
+        "options": [
+          "A: Decreasing demand for general hardware",
+          "B: Growing demand for specialized hardware",
+          "C: Stable demand for off-the-shelf components",
+          "D: No specific demand mentioned"
+        ],
+        "answer": "B: Growing demand for specialized hardware"
+      },
+      {
+        "q": "According to experts, what could be the impact of this move?",
+        "options": [
+          "A: A slight increase in chip prices",
+          "B: A significant impact on the competitive AI hardware market",
+          "C: No noticeable change in the market",
+          "D: A shift towards traditional computing"
+        ],
+        "answer": "B: A significant impact on the competitive AI hardware market"
+      },
+      {
+        "q": "What kind of solutions could this partnership provide?",
+        "options": [
+          "A: Slower and less efficient solutions",
+          "B: Only software-based solutions",
+          "C: More efficient and powerful solutions",
+          "D: Solutions for non-AI related tasks"
+        ],
+        "answer": "C: More efficient and powerful solutions"
+      },
+      {
+        "q": "What does \"in advanced discussions\" imply about the talks?",
+        "options": [
+          "A: They have just begun.",
+          "B: They are nearing a conclusion.",
+          "C: They are facing major disagreements.",
+          "D: They are informal chats."
+        ],
+        "answer": "B: They are nearing a conclusion."
+      },
+      {
+        "q": "What does \"leverage\" mean in the context of the news?",
+        "options": [
+          "A: To avoid using",
+          "B: To take advantage of",
+          "C: To complicate",
+          "D: To ignore"
+        ],
+        "answer": "B: To take advantage of"
+      },
+      {
+        "q": "What type of technology is at the center of the collaboration between Google and Marvell?",
+        "options": [
+          "A: Quantum computing",
+          "B: Virtual reality",
+          "C: Artificial intelligence",
+          "D: Blockchain technology"
+        ],
+        "answer": "C: Artificial intelligence"
+      },
+      {
+        "q": "What does \"finalize details\" mean?",
+        "options": [
+          "A: To delay the process",
+          "B: To make the final decisions and arrangements",
+          "C: To start preliminary discussions",
+          "D: To cancel the project"
+        ],
+        "answer": "B: To make the final decisions and arrangements"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a benefit of the potential partnership?",
+        "options": [
+          "A: Enhanced AI processing",
+          "B: More efficient solutions",
+          "C: Diversifying Google's product line for consumers",
+          "D: Powerful solutions"
+        ],
+        "answer": "C: Diversifying Google's product line for consumers"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "川普關稅判違法，美國啟動26兆日圓退還程序",
+    "tabTitle": "國際大事",
+    "english": "On April 21, 2026, a significant ruling declared the tariffs imposed by the Trump administration on various imported goods to be illegal. This landmark decision mandates the United States government to begin a massive refund process, estimated to involve approximately ¥26 trillion. Affected businesses and consumers are expected to receive these funds, marking a major reversal of previous trade policies. The implications of this judgment are far-reaching, potentially impacting global trade relations and future economic strategies.",
+    "chinese": "2026年4月21日，一項重要裁決宣布川普政府對各種進口商品徵收的關稅為非法。這項里程碑式的決定要求美國政府啟動一項大規模的退款程序，預計將涉及約26兆日圓。受影響的企業和消費者預計將收到這些資金，這標誌著先前貿易政策的重大逆轉。這項判決的影響深遠，可能影響全球貿易關係和未來的經濟戰略。",
+    "vocabulary": [
+      "Tariffs (n.): 關稅",
+      "Ruled (v.): 裁定",
+      "Illegal (adj.): 非法的",
+      "Refund (n.): 退款",
+      "Process (n.): 程序",
+      "Trillion (n.): 兆 (萬億)",
+      "Significant (adj.): 重大的",
+      "Ruling (n.): 裁決",
+      "Declared (v.): 宣布",
+      "Imposed (v.): 徵收；施加",
+      "Administration (n.): 政府；行政部門",
+      "Imported goods (n. phr.): 進口商品",
+      "Landmark (adj.): 里程碑式的",
+      "Mandates (v.): 命令；授權",
+      "Massive (adj.): 大規模的",
+      "Estimated (v.): 估計",
+      "Affected (adj.): 受影響的",
+      "Reversal (n.): 逆轉",
+      "Implications (n.): 影響；後果",
+      "Far-reaching (adj.): 影響深遠的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news report?",
+        "options": [
+          "A. Global warming policies",
+          "B. A new trade agreement",
+          "C. Tariffs imposed by the Trump administration",
+          "D. US domestic economic growth"
+        ],
+        "answer": "C. Tariffs imposed by the Trump administration"
+      },
+      {
+        "q": "According to the news, what was the legal status of the tariffs?",
+        "options": [
+          "A. Fully legal",
+          "B. Partially legal",
+          "C. Illegal",
+          "D. Under review"
+        ],
+        "answer": "C. Illegal"
+      },
+      {
+        "q": "Which entity is mandated to begin the refund process?",
+        "options": [
+          "A. The Trump administration",
+          "B. The United States government",
+          "C. International trade organizations",
+          "D. Affected businesses"
+        ],
+        "answer": "B. The United States government"
+      },
+      {
+        "q": "Approximately how much money is estimated to be refunded?",
+        "options": [
+          "A. ¥26 billion",
+          "B. $26 trillion",
+          "C. ¥26 trillion",
+          "D. ¥170 billion"
+        ],
+        "answer": "C. ¥26 trillion"
+      },
+      {
+        "q": "Who are the primary recipients of the refunds?",
+        "options": [
+          "A. Government employees",
+          "B. International investors",
+          "C. Affected businesses and consumers",
+          "D. Foreign governments"
+        ],
+        "answer": "C. Affected businesses and consumers"
+      },
+      {
+        "q": "What does the ruling signify regarding previous trade policies?",
+        "options": [
+          "A. A continuation",
+          "B. A minor adjustment",
+          "C. A major reversal",
+          "D. A new expansion"
+        ],
+        "answer": "C. A major reversal"
+      },
+      {
+        "q": "When was the significant ruling announced?",
+        "options": [
+          "A. March 21, 2026",
+          "B. April 21, 2026",
+          "C. May 21, 2026",
+          "D. April 21, 2025"
+        ],
+        "answer": "B. April 21, 2026"
+      },
+      {
+        "q": "The tariffs were imposed on what kind of goods?",
+        "options": [
+          "A. Domestically produced goods",
+          "B. Agricultural exports",
+          "C. Various imported goods",
+          "D. Luxury items only"
+        ],
+        "answer": "C. Various imported goods"
+      },
+      {
+        "q": "How is the decision described in terms of its importance?",
+        "options": [
+          "A. Insignificant",
+          "B. Routine",
+          "C. Minor",
+          "D. Significant and landmark"
+        ],
+        "answer": "D. Significant and landmark"
+      },
+      {
+        "q": "What kind of implications are mentioned for this judgment?",
+        "options": [
+          "A. Limited local implications",
+          "B. Far-reaching implications",
+          "C. Purely political implications",
+          "D. Short-term financial implications"
+        ],
+        "answer": "B. Far-reaching implications"
+      },
+      {
+        "q": "What aspects might be potentially impacted by this judgment?",
+        "options": [
+          "A. Only domestic tourism",
+          "B. Global trade relations and future economic strategies",
+          "C. Local charity organizations",
+          "D. Personal income tax rates"
+        ],
+        "answer": "B. Global trade relations and future economic strategies"
+      },
+      {
+        "q": "The word \"mandates\" in the text is closest in meaning to:",
+        "options": [
+          "A. Suggests",
+          "B. Permits",
+          "C. Requires",
+          "D. Prohibits"
+        ],
+        "answer": "C. Requires"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
