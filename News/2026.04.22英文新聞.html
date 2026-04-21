@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 22, 2026：台灣經濟、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣資安產值破千億，政府推動國際合作。\nTaiwan's cybersecurity industry has achieved a significant milestone, with its total output value surpassing NT$100 billion. This impressive growth reflects increasing demand for robust digital protection. To further strengthen its position, the Taiwanese government is actively promoting international cooperation, aiming to share expertise and develop advanced solutions. This initiative seeks to enhance national security and expand Taiwan's global influence in the cybersecurity domain. The focus is on fostering partnerships with key international players.\n\n[2] 台灣綠色科技投資創新高，聚焦能源轉型與淨零。\nTaiwan's green technology sector has secured a record-high investment, exceeding $20 billion USD in the past year. This significant surge highlights the nation's strong commitment to sustainable development. The investment primarily targets accelerating energy transition, focusing on renewable energy projects and smart grid infrastructure. Efforts to achieve net-zero emissions by 2050 are also a key driver. This strategic push, supported by both government policies and private capital, aims to establish Taiwan as a leading hub for green innovation and foster a greener economy.\n\n[3] 台灣邁向超高齡社會，政府推動高齡友善新法案。\nTaiwan is rapidly approaching a super-aged society, with its population aged 65 and over projected to exceed 20% by 2026. In response, the government announced new elder-friendly legislation on April 22, 2026. This initiative aims to enhance social welfare, healthcare services, and create accessible environments for seniors. The proposed laws focus on improving the quality of life for the elderly and ensuring sustainable long-term care.",
+    "chinese": "【1】台灣資安產值破千億，政府推動國際合作。\n台灣的資安產業已達成一個重要的里程碑，其總產值突破新台幣1,000億元。這項令人矚目的增長反映了對強大數位保護日益增加的需求。為了進一步鞏固其地位，台灣政府正積極推動國際合作，旨在分享專業知識並開發先進解決方案。此舉旨在提升國家安全，並擴大台灣在全球資安領域的影響力。重點在於與主要的國際參與者建立夥伴關係。\n\n【2】台灣綠色科技投資創新高，聚焦能源轉型與淨零。\n台灣的綠色科技產業在過去一年中獲得了創紀錄的投資，總額超過200億美元。這一顯著增長突顯了國家對永續發展的堅定承諾。這筆投資主要旨在加速能源轉型，重點放在再生能源專案和智慧電網基礎設施。實現2050年淨零排放的努力也是一個關鍵驅動力。這項由政府政策和私人資本共同支持的戰略性推動，旨在將台灣打造成綠色創新領域的領先樞紐，並培育一個更綠色的經濟。\n\n【3】台灣邁向超高齡社會，政府推動高齡友善新法案。\n台灣正迅速邁向超高齡社會，預計到2026年，65歲及以上人口將超過20%。為此，政府於2026年4月22日宣布了新的高齡友善法案。這項舉措旨在加強社會福利、醫療保健服務，並為老年人創造無障礙的環境。這些擬議的法律著重於改善老年人的生活品質，並確保永續的長期照護。",
+    "vocabulary": [
+      "cybersecurity (n.): 資安；網路安全",
+      "output value (n.phr.): 產值",
+      "exceeds (v.): 超過；超越",
+      "boosts (v.): 促進；提升",
+      "global cooperation (n.phr.): 全球合作；國際合作",
+      "industry (n.): 產業",
+      "achieved (v.): 達成；實現",
+      "significant (adj.): 重要的；顯著的",
+      "milestone (n.): 里程碑",
+      "impressive (adj.): 令人印象深刻的",
+      "reflects (v.): 反映",
+      "increasing demand (n.phr.): 日益增加的需求",
+      "robust (adj.): 強大的；穩健的",
+      "digital protection (n.phr.): 數位保護",
+      "strengthen (v.): 加強；鞏固",
+      "actively promoting (v.phr.): 積極推動",
+      "expertise (n.): 專業知識",
+      "advanced solutions (n.phr.): 先進解決方案",
+      "enhance (v.): 提升；加強",
+      "national security (n.phr.): 國家安全",
+      "green technology (n.): 綠色科技",
+      "sector (n.): 產業；部門",
+      "secured (v.): 獲得；取得",
+      "record-high (adj.): 創紀錄的；歷史新高",
+      "investment (n.): 投資",
+      "exceeding (prep.): 超過",
+      "significant (adj.): 顯著的；重要的",
+      "surge (n.): 激增；遽增",
+      "highlights (v.): 突顯；強調",
+      "commitment (n.): 承諾；投入",
+      "sustainable development (n.): 永續發展",
+      "primarily (adv.): 主要地",
+      "targets (v.): 旨在；目標是",
+      "accelerating (v. Gerund): 加速",
+      "energy transition (n.): 能源轉型",
+      "renewable energy (n.): 再生能源",
+      "smart grid (n.): 智慧電網",
+      "infrastructure (n.): 基礎設施",
+      "net-zero emissions (n.): 淨零排放",
+      "leading hub (n.): 領先樞紐",
+      "rapidly (adv.): 迅速地",
+      "approaching (v.): 接近；邁向",
+      "super-aged society (n.): 超高齡社會",
+      "population (n.): 人口",
+      "aged (adj.): 年齡在...的",
+      "projected (v.): 預計；估計",
+      "exceed (v.): 超過",
+      "in response (phr.): 作為回應；為此",
+      "announced (v.): 宣布",
+      "elder-friendly (adj.): 高齡友善的",
+      "legislation (n.): 法案；立法",
+      "initiative (n.): 舉措；倡議",
+      "aims to (phr.): 旨在",
+      "enhance (v.): 加強；提升",
+      "social welfare (n.): 社會福利",
+      "healthcare services (n.): 醫療保健服務",
+      "accessible environments (n.): 無障礙環境",
+      "seniors (n.): 老年人",
+      "proposed (adj.): 擬議的",
+      "sustainable long-term care (n.): 永續長期照護"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "Taiwan's economic crisis",
+          "The growth of Taiwan's cybersecurity industry",
+          "New government regulations on technology",
+          "International trade agreements"
+        ],
+        "answer": "The growth of Taiwan's cybersecurity industry"
+      },
+      {
+        "q": "What significant milestone has Taiwan's cybersecurity industry achieved?",
+        "options": [
+          "Winning an international award",
+          "Hiring 10,000 new employees",
+          "Its total output value surpassing NT$100 billion",
+          "Establishing a new research center"
+        ],
+        "answer": "Its total output value surpassing NT$100 billion"
+      },
+      {
+        "q": "What is the approximate output value of Taiwan's cybersecurity industry mentioned in the article?",
+        "options": [
+          "Less than NT$50 billion",
+          "Exactly NT$100 billion",
+          "Over NT$100 billion",
+          "NT$10 billion"
+        ],
+        "answer": "Over NT$100 billion"
+      },
+      {
+        "q": "What does the 'impressive growth' in the cybersecurity industry reflect?",
+        "options": [
+          "A decrease in cyber threats",
+          "Increasing demand for robust digital protection",
+          "A shift to physical security",
+          "Stagnant technological development"
+        ],
+        "answer": "Increasing demand for robust digital protection"
+      },
+      {
+        "q": "What is the Taiwanese government actively promoting to strengthen its position?",
+        "options": [
+          "Local tourism",
+          "Agricultural exports",
+          "International cooperation",
+          "New educational reforms"
+        ],
+        "answer": "International cooperation"
+      },
+      {
+        "q": "One of the aims of promoting international cooperation is to share what?",
+        "options": [
+          "Financial resources",
+          "Cultural traditions",
+          "Expertise",
+          "Political ideologies"
+        ],
+        "answer": "Expertise"
+      },
+      {
+        "q": "Besides sharing expertise, what else does the government aim to develop through international cooperation?",
+        "options": [
+          "New agricultural products",
+          "Advanced solutions",
+          "Faster transportation systems",
+          "Better public housing"
+        ],
+        "answer": "Advanced solutions"
+      },
+      {
+        "q": "What kind of protection is experiencing increasing demand, according to the article?",
+        "options": [
+          "Physical protection",
+          "Environmental protection",
+          "Digital protection",
+          "Animal protection"
+        ],
+        "answer": "Digital protection"
+      },
+      {
+        "q": "What is the initiative seeking to enhance?",
+        "options": [
+          "Economic stability",
+          "National security",
+          "Public health",
+          "Educational standards"
+        ],
+        "answer": "National security"
+      },
+      {
+        "q": "In which domain does Taiwan seek to expand its global influence?",
+        "options": [
+          "Manufacturing domain",
+          "Healthcare domain",
+          "Cybersecurity domain",
+          "Space exploration domain"
+        ],
+        "answer": "Cybersecurity domain"
+      },
+      {
+        "q": "What is the main focus for fostering partnerships?",
+        "options": [
+          "Local businesses",
+          "Academic institutions",
+          "Key international players",
+          "Non-profit organizations"
+        ],
+        "answer": "Key international players"
+      },
+      {
+        "q": "What does the word 'robust' mean in the phrase 'robust digital protection'?",
+        "options": [
+          "Weak and fragile",
+          "Colorful and attractive",
+          "Strong and reliable",
+          "Expensive and complex"
+        ],
+        "answer": "Strong and reliable"
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A) Taiwan's economic challenges",
+          "B) Taiwan's record-high green tech investment",
+          "C) Taiwan's new government policies",
+          "D) Taiwan's private capital growth"
+        ],
+        "answer": "B) Taiwan's record-high green tech investment"
+      },
+      {
+        "q": "How much investment did Taiwan's green technology sector secure in the past year?",
+        "options": [
+          "A) Exactly $20 billion USD",
+          "B) Less than $20 billion USD",
+          "C) Exceeding $20 billion USD",
+          "D) Around $10 billion USD"
+        ],
+        "answer": "C) Exceeding $20 billion USD"
+      },
+      {
+        "q": "What does the significant surge in investment highlight?",
+        "options": [
+          "A) A decline in traditional industries",
+          "B) The nation's strong commitment to sustainable development",
+          "C) Increased foreign investment in Taiwan",
+          "D) A decrease in energy consumption"
+        ],
+        "answer": "B) The nation's strong commitment to sustainable development"
+      },
+      {
+        "q": "Which of the following is NOT a primary target of the investment mentioned in the article?",
+        "options": [
+          "A) Renewable energy projects",
+          "B) Smart grid infrastructure",
+          "C) Accelerating energy transition",
+          "D) Boosting traditional manufacturing"
+        ],
+        "answer": "D) Boosting traditional manufacturing"
+      },
+      {
+        "q": "What is the long-term goal mentioned regarding emissions?",
+        "options": [
+          "A) Reducing emissions by 20% by 2030",
+          "B) Achieving net-zero emissions by 2050",
+          "C) Eliminating all emissions immediately",
+          "D) Increasing carbon capture technologies"
+        ],
+        "answer": "B) Achieving net-zero emissions by 2050"
+      },
+      {
+        "q": "Who supports this strategic push for green technology?",
+        "options": [
+          "A) Only private capital",
+          "B) Only government policies",
+          "C) Both government policies and private capital",
+          "D) International organizations"
+        ],
+        "answer": "C) Both government policies and private capital"
+      },
+      {
+        "q": "What does Taiwan aim to establish itself as through this investment?",
+        "options": [
+          "A) A major tourist destination",
+          "B) A leading hub for green innovation",
+          "C) A global financial center",
+          "D) A leader in agricultural technology"
+        ],
+        "answer": "B) A leading hub for green innovation"
+      },
+      {
+        "q": "What kind of economy does Taiwan aim to foster?",
+        "options": [
+          "A) A traditional manufacturing economy",
+          "B) A service-oriented economy",
+          "C) A greener economy",
+          "D) A knowledge-based economy"
+        ],
+        "answer": "C) A greener economy"
+      },
+      {
+        "q": "The word \"surge\" in the text is closest in meaning to:",
+        "options": [
+          "A) decrease",
+          "B) slight increase",
+          "C) rapid rise",
+          "D) stability"
+        ],
+        "answer": "C) rapid rise"
+      },
+      {
+        "q": "What does \"net-zero emissions\" imply?",
+        "options": [
+          "A) Only reducing emissions",
+          "B) Balancing greenhouse gas emissions with removal",
+          "C) Producing zero emissions in all sectors",
+          "D) Increasing fossil fuel use"
+        ],
+        "answer": "B) Balancing greenhouse gas emissions with removal"
+      },
+      {
+        "q": "According to the article, the investment in green technology is a \"strategic push.\" This suggests it is:",
+        "options": [
+          "A) A random event",
+          "B) A planned and intentional effort",
+          "C) A short-term solution",
+          "D) Driven by external pressures only"
+        ],
+        "answer": "B) A planned and intentional effort"
+      },
+      {
+        "q": "The article is primarily about:",
+        "options": [
+          "A) Environmental regulations",
+          "B) Economic development through green technology",
+          "C) International trade agreements",
+          "D) Social impacts of climate change"
+        ],
+        "answer": "B) Economic development through green technology"
+      },
+      {
+        "q": "According to the news, what demographic status is Taiwan rapidly approaching?",
+        "options": [
+          "A rapidly declining birth rate",
+          "A super-aged society",
+          "A young and growing workforce",
+          "A balanced population distribution"
+        ],
+        "answer": "A super-aged society"
+      },
+      {
+        "q": "By what year is Taiwan's population aged 65 and over projected to exceed 20%?",
+        "options": [
+          "2024",
+          "2025",
+          "2026",
+          "2027"
+        ],
+        "answer": "2026"
+      },
+      {
+        "q": "When did the Taiwanese government announce the new elder-friendly legislation?",
+        "options": [
+          "April 22, 2025",
+          "April 22, 2026",
+          "March 15, 2026",
+          "May 1, 2027"
+        ],
+        "answer": "April 22, 2026"
+      },
+      {
+        "q": "Which of the following is an aim of the government's new initiative?",
+        "options": [
+          "To decrease the national budget for elder care",
+          "To reduce the number of seniors in the population",
+          "To enhance social welfare and healthcare services",
+          "To encourage emigration of the elderly"
+        ],
+        "answer": "To enhance social welfare and healthcare services"
+      },
+      {
+        "q": "The proposed laws primarily focus on improving what aspect for the elderly?",
+        "options": [
+          "Their financial investments",
+          "Their quality of life and sustainable long-term care",
+          "Their political participation",
+          "Their travel opportunities abroad"
+        ],
+        "answer": "Their quality of life and sustainable long-term care"
+      },
+      {
+        "q": "Which of these is NOT explicitly mentioned as a focus of the elder-friendly legislation?",
+        "options": [
+          "Creating accessible environments",
+          "Improving healthcare services",
+          "Promoting youth employment",
+          "Enhancing social welfare"
+        ],
+        "answer": "Promoting youth employment"
+      },
+      {
+        "q": "What does the term \"super-aged society\" typically refer to?",
+        "options": [
+          "A society with excellent superhero services",
+          "A society where a very high percentage of the population is elderly",
+          "A society with a rapidly growing youth population",
+          "A society focused on technological advancements for all ages"
+        ],
+        "answer": "A society where a very high percentage of the population is elderly"
+      },
+      {
+        "q": "If a population figure is \"projected,\" what does it mean?",
+        "options": [
+          "It has already been counted accurately",
+          "It is a current, exact number",
+          "It is an estimate or forecast for the future",
+          "It refers to a historical data point"
+        ],
+        "answer": "It is an estimate or forecast for the future"
+      },
+      {
+        "q": "Which word is closest in meaning to \"enhance\"?",
+        "options": [
+          "Decrease",
+          "Worsen",
+          "Improve",
+          "Ignore"
+        ],
+        "answer": "Improve"
+      },
+      {
+        "q": "What does \"legislation\" refer to in the context of government actions?",
+        "options": [
+          "A type of public debate",
+          "A set of laws or the process of making them",
+          "A financial report",
+          "A marketing campaign"
+        ],
+        "answer": "A set of laws or the process of making them"
+      },
+      {
+        "q": "What are \"accessible environments\" designed to be, especially for seniors?",
+        "options": [
+          "Exclusive and private",
+          "Difficult to navigate",
+          "Easy for them to use and move around in",
+          "Expensive and luxurious"
+        ],
+        "answer": "Easy for them to use and move around in"
+      },
+      {
+        "q": "What is implied by \"sustainable long-term care\"?",
+        "options": [
+          "Care that is temporary and short-lived",
+          "Care that can be maintained over a long period without running out of resources",
+          "Care that is only for the very wealthy",
+          "Care that relies solely on family members"
+        ],
+        "answer": "Care that can be maintained over a long period without running out of resources"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "歐盟AI法案全面生效，全球科技企業面臨新挑戰。",
+    "tabTitle": "科技",
+    "english": "The European Union's landmark AI Act has officially come into full effect today, April 22, 2026. This comprehensive regulation establishes strict rules for the development and deployment of artificial intelligence systems, particularly those deemed high-risk. Global technology companies, including those outside the EU, must now ensure their AI products and services comply with these new standards. Non-compliance could lead to significant penalties, posing new operational and legal challenges across the industry.",
+    "chinese": "歐盟這項里程碑式的AI法案已於今日，2026年4月22日，正式全面生效。這項全面的法規為人工智慧系統的開發和部署，特別是那些被視為高風險的系統，設立了嚴格的規範。全球科技企業，包括歐盟以外的公司，現在必須確保其AI產品和服務符合這些新標準。不遵守規定可能導致巨額罰款，為整個行業帶來新的營運和法律挑戰。",
+    "vocabulary": [
+      "landmark (adj.): 里程碑式的",
+      "AI Act (n.): 人工智慧法案",
+      "fully effective (phr.): 全面生效",
+      "comprehensive (adj.): 全面的",
+      "regulation (n.): 法規",
+      "establish (v.): 設立，制定",
+      "strict (adj.): 嚴格的",
+      "development (n.): 開發",
+      "deployment (n.): 部署",
+      "artificial intelligence (n.): 人工智慧",
+      "high-risk (adj.): 高風險的",
+      "global (adj.): 全球的",
+      "technology companies (n.): 科技企業",
+      "comply with (phr.): 遵守",
+      "standards (n.): 標準",
+      "non-compliance (n.): 不遵守，違規",
+      "significant (adj.): 顯著的，重大的",
+      "penalties (n.): 罰款，懲罰",
+      "operational (adj.): 營運上的",
+      "legal challenges (n.): 法律挑戰"
+    ],
+    "quiz": [
+      {
+        "q": "When did the EU AI Act officially come into full effect?",
+        "options": [
+          "A: April 22, 2024",
+          "B: April 22, 2025",
+          "C: April 22, 2026",
+          "D: April 22, 2027"
+        ],
+        "answer": "C: April 22, 2026"
+      },
+      {
+        "q": "What is the primary purpose of the EU AI Act?",
+        "options": [
+          "A: To promote AI development without restrictions.",
+          "B: To establish strict rules for AI systems.",
+          "C: To ban all high-risk AI applications.",
+          "D: To fund European AI startups."
+        ],
+        "answer": "B: To establish strict rules for AI systems."
+      },
+      {
+        "q": "Which type of AI systems are particularly targeted by the new regulation?",
+        "options": [
+          "A: Low-cost systems.",
+          "B: Open-source systems.",
+          "C: High-risk systems.",
+          "D: Educational systems."
+        ],
+        "answer": "C: High-risk systems."
+      },
+      {
+        "q": "Who must comply with the EU AI Act?",
+        "options": [
+          "A: Only companies based in the EU.",
+          "B: Only companies developing AI for military use.",
+          "C: Global technology companies, including those outside the EU.",
+          "D: Only government agencies in the EU."
+        ],
+        "answer": "C: Global technology companies, including those outside the EU."
+      },
+      {
+        "q": "What could be a consequence of non-compliance with the AI Act?",
+        "options": [
+          "A: Receiving awards for innovation.",
+          "B: Significant penalties.",
+          "C: Increased market share.",
+          "D: Easier access to EU markets."
+        ],
+        "answer": "B: Significant penalties."
+      },
+      {
+        "q": "The word \"landmark\" in the context of \"landmark AI Act\" means:",
+        "options": [
+          "A: A geographical marker.",
+          "B: An important and significant event or achievement.",
+          "C: A common and ordinary law.",
+          "D: A temporary measure."
+        ],
+        "answer": "B: An important and significant event or achievement."
+      },
+      {
+        "q": "What kind of challenges does the AI Act pose for the industry?",
+        "options": [
+          "A: Only technological challenges.",
+          "B: Only financial challenges.",
+          "C: New operational and legal challenges.",
+          "D: Marketing and branding challenges."
+        ],
+        "answer": "C: New operational and legal challenges."
+      },
+      {
+        "q": "The regulation is described as \"comprehensive.\" What does this imply?",
+        "options": [
+          "A: It covers only a few aspects of AI.",
+          "B: It is easy to understand and implement.",
+          "C: It covers a wide range of aspects related to AI development and deployment.",
+          "D: It is optional for companies to follow."
+        ],
+        "answer": "C: It covers a wide range of aspects related to AI development and deployment."
+      },
+      {
+        "q": "What does \"deployment\" refer to in the context of AI systems?",
+        "options": [
+          "A: The initial idea generation phase.",
+          "B: The process of making an AI system available for use.",
+          "C: The research phase before development.",
+          "D: The marketing strategy for AI products."
+        ],
+        "answer": "B: The process of making an AI system available for use."
+      },
+      {
+        "q": "What is the tone of the news report?",
+        "options": [
+          "A: Opinionated and critical.",
+          "B: Humorous and lighthearted.",
+          "C: Factual and informative.",
+          "D: Speculative and uncertain."
+        ],
+        "answer": "C: Factual and informative."
+      },
+      {
+        "q": "Which phrase from the text indicates that the law applies beyond EU borders?",
+        "options": [
+          "A: \"landmark AI Act\"",
+          "B: \"particularly those deemed high-risk\"",
+          "C: \"including those outside the EU\"",
+          "D: \"significant penalties\""
+        ],
+        "answer": "C: \"including those outside the EU\""
+      },
+      {
+        "q": "What does \"comply with these new standards\" mean?",
+        "options": [
+          "A: To ignore the new standards.",
+          "B: To meet or obey the new rules and requirements.",
+          "C: To negotiate the new standards.",
+          "D: To develop new standards independently."
+        ],
+        "answer": "B: To meet or obey the new rules and requirements."
+      }
+    ]
+  },
+  "article-4": {
+    "title": "多國太空機構加速火星探測，尋找生命跡象成新目標。",
+    "tabTitle": "科技",
+    "english": "On April 22, 2026, multiple international space agencies announced accelerated plans for Mars exploration. New missions aim to intensively search for evidence of past or present microbial life on the Red Planet. This shift marks a significant evolution from previous goals focused primarily on geological and atmospheric studies. Agencies are deploying advanced rovers and orbiters, with future plans for sample return missions, highlighting a united effort in astrobiology.",
+    "chinese": "2026年4月22日，多個國際太空機構宣布加速火星探測計畫。新的任務旨在密集尋找火星上過去或現在微生物生命的證據。這一轉變標誌著與先前主要專注於地質和大氣研究目標的顯著演變。各機構正在部署先進的探測車和軌道飛行器，並計畫未來進行樣本返回任務，這突顯了天體生物學領域的共同努力。",
+    "vocabulary": [
+      "accelerate (v.): 加速",
+      "exploration (n.): 探測；探索",
+      "agency (n.): 機構；局",
+      "Mars (n.): 火星",
+      "evidence (n.): 證據",
+      "microbial life (n. phr.): 微生物生命",
+      "Red Planet (n. phr.): 紅色星球（指火星）",
+      "significant (adj.): 顯著的；重要的",
+      "evolution (n.): 演變；發展",
+      "previous (adj.): 先前的；以前的",
+      "primarily (adv.): 主要地",
+      "geological (adj.): 地質學的",
+      "atmospheric (adj.): 大氣的",
+      "deploy (v.): 部署；配置",
+      "advanced (adj.): 先進的",
+      "rover (n.): 探測車；漫遊車",
+      "orbiter (n.): 軌道飛行器",
+      "sample return (n. phr.): 樣本返回",
+      "astrobiology (n.): 天體生物學",
+      "united effort (n. phr.): 聯合努力；共同努力"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A) New discoveries on Jupiter",
+          "B) Accelerated Mars exploration and the search for life",
+          "C) The history of space travel",
+          "D) Funding for international space agencies"
+        ],
+        "answer": "B) Accelerated Mars exploration and the search for life"
+      },
+      {
+        "q": "According to the article, what is the *new* primary goal for Mars exploration?",
+        "options": [
+          "A) Mapping the planet's surface",
+          "B) Searching for signs of past or present microbial life",
+          "C) Studying Mars's volcanoes",
+          "D) Preparing for human colonization"
+        ],
+        "answer": "B) Searching for signs of past or present microbial life"
+      },
+      {
+        "q": "What were the *previous* primary goals of Mars exploration mentioned in the text?",
+        "options": [
+          "A) Developing new rocket technology",
+          "B) Primarily geological and atmospheric studies",
+          "C) Observing other galaxies",
+          "D) Building space stations"
+        ],
+        "answer": "B) Primarily geological and atmospheric studies"
+      },
+      {
+        "q": "Which entities are accelerating their plans for Mars exploration?",
+        "options": [
+          "A) Private companies only",
+          "B) Multiple international space agencies",
+          "C) University research teams",
+          "D) Individual scientists"
+        ],
+        "answer": "B) Multiple international space agencies"
+      },
+      {
+        "q": "What kind of evidence are new missions specifically looking for?",
+        "options": [
+          "A) Evidence of large oceans",
+          "B) Evidence of alien civilizations",
+          "C) Evidence of past or present microbial life",
+          "D) Evidence of human activity"
+        ],
+        "answer": "C) Evidence of past or present microbial life"
+      },
+      {
+        "q": "How is the current approach described compared to previous goals?",
+        "options": [
+          "A) As a minor adjustment",
+          "B) As a significant evolution",
+          "C) As a complete reversal",
+          "D) As a temporary phase"
+        ],
+        "answer": "B) As a significant evolution"
+      },
+      {
+        "q": "What tools are agencies currently deploying for exploration?",
+        "options": [
+          "A) Telescopes and satellites",
+          "B) Advanced rovers and orbiters",
+          "C) Manned spacecraft",
+          "D) Underwater drones"
+        ],
+        "answer": "B) Advanced rovers and orbiters"
+      },
+      {
+        "q": "What are future plans for Mars exploration mentioned in the article?",
+        "options": [
+          "A) Building permanent bases",
+          "B) Sending human crews",
+          "C) Sample return missions",
+          "D) Launching more communication satellites"
+        ],
+        "answer": "C) Sample return missions"
+      },
+      {
+        "q": "The term \"Red Planet\" refers to which celestial body?",
+        "options": [
+          "A) Earth",
+          "B) Jupiter",
+          "C) Mars",
+          "D) Venus"
+        ],
+        "answer": "C) Mars"
+      },
+      {
+        "q": "The article highlights a united effort in which scientific field?",
+        "options": [
+          "A) Astrophysics",
+          "B) Geology",
+          "C) Astrobiology",
+          "D) Meteorology"
+        ],
+        "answer": "C) Astrobiology"
+      },
+      {
+        "q": "What does \"accelerate\" mean in the context of the article?",
+        "options": [
+          "A) To slow down",
+          "B) To speed up",
+          "C) To stop completely",
+          "D) To change direction"
+        ],
+        "answer": "B) To speed up"
+      },
+      {
+        "q": "The news was reported on what date?",
+        "options": [
+          "A) April 22, 2024",
+          "B) April 22, 2025",
+          "C) April 22, 2026",
+          "D) April 22, 2027"
+        ],
+        "answer": "C) April 22, 2026"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "全球央行數位貨幣發展加速，跨境支付效率提升。",
+    "tabTitle": "金融市場",
+    "english": "Central bank digital currencies (CBDCs) are seeing rapid development worldwide. Many countries are now actively exploring or piloting their own digital currencies, aiming to modernize financial systems. This global acceleration is significantly improving the efficiency of cross-border payments, making international transactions faster and cheaper. Experts believe CBDCs could reshape the future of finance, offering new possibilities for financial inclusion and stability.",
+    "chinese": "全球各國央行數位貨幣（CBDC）的發展正迅速加速。許多國家現在正積極探索或試行自己的數位貨幣，旨在實現金融系統的現代化。這項全球性的加速發展顯著提升了跨境支付的效率，使國際交易更快速、成本更低。專家們認為，CBDC 有可能重塑金融的未來，為金融普惠和穩定提供新的可能性。",
+    "vocabulary": [
+      "Central Bank Digital Currency (n.): 央行數位貨幣",
+      "accelerate (v.): 加速",
+      "development (n.): 發展",
+      "cross-border (adj.): 跨境的",
+      "payment (n.): 支付",
+      "efficiency (n.): 效率",
+      "rise (v.): 提升；增加",
+      "explore (v.): 探索",
+      "pilot (v.): 試行；試驗",
+      "modernize (v.): 現代化",
+      "financial system (n.): 金融系統",
+      "transaction (n.): 交易",
+      "reshape (v.): 重塑",
+      "future (n.): 未來",
+      "financial inclusion (n.): 金融普惠",
+      "stability (n.): 穩定性",
+      "global (adj.): 全球的",
+      "actively (adv.): 積極地",
+      "significantly (adv.): 顯著地",
+      "possibility (n.): 可能性"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of this news report?",
+        "options": [
+          "Global stock market trends",
+          "The rise of private cryptocurrencies",
+          "The acceleration of central bank digital currency development",
+          "New regulations for traditional banking"
+        ],
+        "answer": "The acceleration of central bank digital currency development"
+      },
+      {
+        "q": "What does the acronym CBDC stand for?",
+        "options": [
+          "Central Bank Digital Coin",
+          "Corporate Blockchain Development Committee",
+          "Central Bank Digital Currency",
+          "Cross-Border Digital Clearing"
+        ],
+        "answer": "Central Bank Digital Currency"
+      },
+      {
+        "q": "According to the news, what is happening to CBDC development worldwide?",
+        "options": [
+          "It is slowing down due to economic concerns.",
+          "It is facing significant regulatory hurdles.",
+          "It is seeing rapid development.",
+          "It is primarily focused on domestic use."
+        ],
+        "answer": "It is seeing rapid development."
+      },
+      {
+        "q": "What specific improvement is mentioned regarding cross-border payments due to CBDC development?",
+        "options": [
+          "Increased security risks",
+          "Higher transaction fees",
+          "Reduced speed and efficiency",
+          "Faster and cheaper transactions"
+        ],
+        "answer": "Faster and cheaper transactions"
+      },
+      {
+        "q": "What are many countries actively doing with their own digital currencies?",
+        "options": [
+          "Banning them outright",
+          "Investing heavily in private cryptocurrencies",
+          "Exploring or piloting them",
+          "Only discussing them in theory"
+        ],
+        "answer": "Exploring or piloting them"
+      },
+      {
+        "q": "What is the primary aim of countries exploring or piloting their digital currencies?",
+        "options": [
+          "To replace all physical cash immediately",
+          "To modernize financial systems",
+          "To invest in speculative assets",
+          "To compete with commercial banks"
+        ],
+        "answer": "To modernize financial systems"
+      },
+      {
+        "q": "Experts believe CBDCs could reshape the future of finance by offering new possibilities for which two areas?",
+        "options": [
+          "Stock market speculation and inflation control",
+          "International trade agreements and tourism",
+          "Financial inclusion and stability",
+          "Commercial lending and private investment"
+        ],
+        "answer": "Financial inclusion and stability"
+      },
+      {
+        "q": "In the context of the news, what does 'accelerate' mean?",
+        "options": [
+          "To slow down",
+          "To speed up",
+          "To stop completely",
+          "To remain unchanged"
+        ],
+        "answer": "To speed up"
+      },
+      {
+        "q": "What does the term 'cross-border payment' refer to?",
+        "options": [
+          "Payments made within a single country",
+          "Payments between different countries",
+          "Payments using only cash",
+          "Payments for illegal activities"
+        ],
+        "answer": "Payments between different countries"
+      },
+      {
+        "q": "Which of the following best describes 'financial inclusion'?",
+        "options": [
+          "Limiting access to financial services",
+          "Ensuring everyone has access to useful and affordable financial products and services",
+          "Only allowing wealthy individuals to use banking services",
+          "Excluding certain groups from the financial system"
+        ],
+        "answer": "Ensuring everyone has access to useful and affordable financial products and services"
+      },
+      {
+        "q": "Which of the following is NOT explicitly mentioned as a potential benefit or impact of CBDCs in the news?",
+        "options": [
+          "Modernizing financial systems",
+          "Improving cross-border payment efficiency",
+          "Increasing financial stability",
+          "Eliminating all traditional banks"
+        ],
+        "answer": "Eliminating all traditional banks"
+      },
+      {
+        "q": "What does 'piloting' a digital currency imply?",
+        "options": [
+          "Fully launching it nationwide",
+          "Testing it on a small scale before wider implementation",
+          "Using it only for air travel payments",
+          "Developing it without any testing"
+        ],
+        "answer": "Testing it on a small scale before wider implementation"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "主要經濟體通膨壓力緩解，全球經濟復甦展望趨穩。",
+    "tabTitle": "金融市場",
+    "english": "Global economic prospects are improving as major economies experience a noticeable easing in inflation pressures. Recent data indicates that central banks' efforts to control rising prices appear to be succeeding across key regions. This positive development contributes to a more stable outlook for worldwide economic recovery, reducing concerns about potential recessions and fostering renewed confidence among investors and businesses. Experts now anticipate a gradual but steady expansion.",
+    "chinese": "隨著主要經濟體通膨壓力顯著緩解，全球經濟前景正在改善。最新數據顯示，各主要地區央行控制物價上漲的努力似乎正在奏效。這一積極發展有助於全球經濟復甦的前景趨於穩定，減少了對潛在衰退的擔憂，並在投資者和企業之間培養了新的信心。專家們現在預計將會出現逐步但穩定的擴張。",
+    "vocabulary": [
+      "global (adj.): 全球的",
+      "economic prospects (n. phr.): 經濟前景",
+      "major economies (n. phr.): 主要經濟體",
+      "experience (v.): 經歷",
+      "noticeable (adj.): 顯著的",
+      "easing (n.): 緩解",
+      "inflation pressures (n. phr.): 通貨膨脹壓力",
+      "recent data (n. phr.): 最新數據",
+      "indicates (v.): 顯示",
+      "central banks (n. phr.): 中央銀行",
+      "efforts (n.): 努力",
+      "succeeding (v.): 成功",
+      "positive development (n. phr.): 積極發展",
+      "contributes to (phr. v.): 有助於",
+      "stable outlook (n. phr.): 穩定前景",
+      "worldwide (adj.): 全球的",
+      "economic recovery (n. phr.): 經濟復甦",
+      "reducing concerns (phr.): 減少擔憂",
+      "fostering confidence (phr.): 培養信心",
+      "gradual but steady (adj. phr.): 逐步但穩定的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of this news report?",
+        "options": [
+          "A. The rise of new technologies",
+          "B. Global economic trends",
+          "C. Political instability in Europe",
+          "D. Environmental protection efforts"
+        ],
+        "answer": "B. Global economic trends"
+      },
+      {
+        "q": "According to the news, what is happening to inflation pressures in major economies?",
+        "options": [
+          "A. They are intensifying",
+          "B. They are remaining stagnant",
+          "C. They are noticeably easing",
+          "D. They are unpredictable"
+        ],
+        "answer": "C. They are noticeably easing"
+      },
+      {
+        "q": "What has contributed to the easing of inflation pressures?",
+        "options": [
+          "A. Increased consumer spending",
+          "B. Central banks' efforts",
+          "C. Government subsidies",
+          "D. A decrease in global trade"
+        ],
+        "answer": "B. Central banks' efforts"
+      },
+      {
+        "q": "What is the current outlook for worldwide economic recovery?",
+        "options": [
+          "A. Highly uncertain",
+          "B. More stable",
+          "C. Rapidly declining",
+          "D. Facing severe setbacks"
+        ],
+        "answer": "B. More stable"
+      },
+      {
+        "q": "The positive economic developments are reducing concerns about what?",
+        "options": [
+          "A. Climate change",
+          "B. Potential recessions",
+          "C. Social inequality",
+          "D. Technological unemployment"
+        ],
+        "answer": "B. Potential recessions"
+      },
+      {
+        "q": "What is being fostered among investors and businesses due to these developments?",
+        "options": [
+          "A. Skepticism",
+          "B. Renewed confidence",
+          "C. Indifference",
+          "D. Increased competition"
+        ],
+        "answer": "B. Renewed confidence"
+      },
+      {
+        "q": "What kind of economic expansion do experts now anticipate?",
+        "options": [
+          "A. Rapid and sudden",
+          "B. Unstable and unpredictable",
+          "C. Gradual but steady",
+          "D. Non-existent"
+        ],
+        "answer": "C. Gradual but steady"
+      },
+      {
+        "q": "In the sentence \"major economies experience a noticeable easing in inflation pressures,\" what does \"easing\" mean?",
+        "options": [
+          "A. Increasing",
+          "B. Accelerating",
+          "C. Decreasing or becoming less severe",
+          "D. Remaining the same"
+        ],
+        "answer": "C. Decreasing or becoming less severe"
+      },
+      {
+        "q": "What does \"economic prospects\" refer to?",
+        "options": [
+          "A. Past economic performance",
+          "B. Current economic problems",
+          "C. Future possibilities for the economy",
+          "D. Economic theories"
+        ],
+        "answer": "C. Future possibilities for the economy"
+      },
+      {
+        "q": "The phrase \"contributes to\" is best defined as:",
+        "options": [
+          "A. Takes away from",
+          "B. Has no effect on",
+          "C. Helps to cause or bring about",
+          "D. Prevents"
+        ],
+        "answer": "C. Helps to cause or bring about"
+      },
+      {
+        "q": "What does \"fostering renewed confidence\" imply?",
+        "options": [
+          "A. Destroying trust",
+          "B. Discouraging belief",
+          "C. Helping to develop new trust",
+          "D. Ignoring existing beliefs"
+        ],
+        "answer": "C. Helping to develop new trust"
+      },
+      {
+        "q": "Which of the following best describes \"gradual but steady\"?",
+        "options": [
+          "A. Slow and inconsistent",
+          "B. Fast and continuous",
+          "C. Slow and continuous",
+          "D. Fast and inconsistent"
+        ],
+        "answer": "C. Slow and continuous"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
