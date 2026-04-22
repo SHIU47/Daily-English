@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 23, 2026：台灣經濟、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣半導體產業韌性分析，探討潛在脆弱性\nTaipei, April 23, 2026 – A new analysis today deeply examined the resilience of Taiwan's crucial semiconductor industry, a global powerhouse vital for the world's technology supply chain. Despite its strong position, built on advanced manufacturing capabilities and a robust ecosystem, the report highlighted several potential vulnerabilities. These include escalating geopolitical tensions, a significant concentration of production facilities in specific areas, and increasing resource dependencies, particularly regarding water and electricity. Experts emphasize the critical need for ongoing strategic planning to mitigate these identified risks and ensure the industry's sustained global leadership and stability.\n\n[2] 俄烏戰推升無人機需求，台灣對歐出口飆升40倍\nTaiwan's drone exports to Europe have seen an extraordinary forty-fold increase, driven by the ongoing demand for unmanned aerial vehicles (UAVs) in the Ukraine war. This significant surge, recorded as of April 23, 2026, highlights Taiwan's growing role in the global defense supply chain. The conflict has accelerated the need for advanced drone technology, positioning Taiwan as a key supplier for European nations seeking robust solutions. This trend reflects the changing landscape of modern warfare and the increasing reliance on drone capabilities.\n\n[3] 竑騰受惠輝達新平台，2026年營收挑戰翻倍\nHotung, a key semiconductor component supplier, anticipates its revenue will double in 2026. This significant growth is primarily attributed to its strong engagement with NVIDIA's new platform. The company is expected to benefit substantially from the increased demand for high-performance computing components. Industry analysts project Hotung's strategic position will allow it to capture a larger market share, solidifying its future prospects in the competitive semiconductor industry.",
+    "chinese": "【1】台灣半導體產業韌性分析，探討潛在脆弱性\n台北，2026年4月23日 – 今日一份最新分析深入探討了台灣關鍵半導體產業的韌性，該產業是全球的強大支柱，對全球科技供應鏈至關重要。儘管台灣憑藉先進的製造能力和健全的生態系統建立了強勢地位，但該報告也指出了一些潛在的脆弱性。其中包括不斷升級的地緣政治緊張局勢、生產設施高度集中於特定區域，以及日益增加的資源依賴，特別是水電供應。專家強調，迫切需要持續的戰略規劃，以減輕這些已識別的風險，並確保該產業持續的全球領先地位和穩定性。\n\n【2】俄烏戰推升無人機需求，台灣對歐出口飆升40倍\n台灣對歐洲的無人機出口量激增了非凡的四十倍，這歸因於烏克蘭戰爭對無人機（UAVs）的持續需求。截至2026年4月23日的這項顯著增長，突顯了台灣在全球國防供應鏈中日益重要的角色。這場衝突加速了對先進無人機技術的需求，使台灣成為尋求強大解決方案的歐洲國家的主要供應商。這一趨勢反映了現代戰爭格局的變化以及對無人機能力的日益依賴。\n\n【3】竑騰受惠輝達新平台，2026年營收挑戰翻倍\n竑騰，一家重要的半導體零組件供應商，預計其2026年的營收將會翻倍。這項顯著的增長主要歸因於其與輝達（NVIDIA）新平台的深度合作。該公司預計將從對高效能運算零組件日益增長的需求中大幅受益。產業分析師預測，竑騰的策略性定位將使其能夠佔據更大的市場份額，鞏固其在競爭激烈的半導體產業中的未來前景。",
+    "vocabulary": [
+      "resilience (n.): 韌性，彈性",
+      "semiconductor (n.): 半導體",
+      "industry (n.): 產業",
+      "analyzed (v.): 分析",
+      "vulnerabilities (n.): 脆弱性，弱點",
+      "explored (v.): 探討，探索",
+      "crucial (adj.): 關鍵的，重要的",
+      "powerhouse (n.): 強大的國家/組織，發電廠",
+      "vital (adj.): 極其重要的，不可或缺的",
+      "supply chain (n.): 供應鏈",
+      "advanced manufacturing (n. phr.): 先進製造",
+      "robust (adj.): 健全的，強健的",
+      "ecosystem (n.): 生態系統",
+      "escalating (adj.): 不斷升級的",
+      "geopolitical (adj.): 地緣政治的",
+      "tensions (n.): 緊張局勢",
+      "concentration (n.): 集中，專注",
+      "resource dependencies (n. phr.): 資源依賴",
+      "mitigate (v.): 減輕，緩和",
+      "sustained (adj.): 持續的",
+      "soar (v.): 飆升",
+      "extraordinary (adj.): 非凡的",
+      "demand (n.): 需求",
+      "unmanned aerial vehicle (n. phr.): 無人機 (UAV)",
+      "ongoing (adj.): 持續的",
+      "significant (adj.): 顯著的",
+      "surge (n.): 激增",
+      "highlight (v.): 突顯",
+      "defense supply chain (n. phr.): 國防供應鏈",
+      "conflict (n.): 衝突",
+      "accelerate (v.): 加速",
+      "advanced (adj.): 先進的",
+      "technology (n.): 技術",
+      "position (v.): 定位",
+      "key supplier (n. phr.): 主要供應商",
+      "robust (adj.): 強大的；穩健的",
+      "solution (n.): 解決方案",
+      "trend (n.): 趨勢",
+      "modern warfare (n. phr.): 現代戰爭",
+      "reliance (n.): 依賴",
+      "semiconductor (n.): 半導體",
+      "component (n.): 零組件",
+      "supplier (n.): 供應商",
+      "anticipate (v.): 預期",
+      "revenue (n.): 營收",
+      "double (v.): 翻倍",
+      "significant (adj.): 顯著的",
+      "growth (n.): 增長",
+      "primarily (adv.): 主要地",
+      "attribute to (phr. v.): 歸因於",
+      "engagement (n.): 參與；合作",
+      "platform (n.): 平台",
+      "benefit (v.): 受益",
+      "substantially (adv.): 大幅地",
+      "demand (n.): 需求",
+      "high-performance computing (n.): 高效能運算",
+      "industry analyst (n.): 產業分析師",
+      "project (v.): 預測",
+      "market share (n.): 市場份額",
+      "solidify (v.): 鞏固"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main focus of the analysis mentioned in the news?",
+        "options": [
+          "Taiwan's tourism industry growth",
+          "Taiwan's semiconductor industry resilience and vulnerabilities",
+          "Taiwan's agricultural exports",
+          "Taiwan's political stability"
+        ],
+        "answer": "Taiwan's semiconductor industry resilience and vulnerabilities"
+      },
+      {
+        "q": "How is Taiwan's semiconductor industry described in relation to the global technology supply chain?",
+        "options": [
+          "Insignificant",
+          "A minor player",
+          "Crucial and vital",
+          "Largely independent"
+        ],
+        "answer": "Crucial and vital"
+      },
+      {
+        "q": "According to the report, what is one key factor contributing to Taiwan's strong position in the semiconductor industry?",
+        "options": [
+          "Low electricity costs",
+          "Advanced manufacturing capabilities",
+          "Abundant natural resources",
+          "Extensive international trade agreements"
+        ],
+        "answer": "Advanced manufacturing capabilities"
+      },
+      {
+        "q": "What kind of tensions are highlighted as a potential vulnerability for Taiwan's semiconductor industry?",
+        "options": [
+          "Economic recessions",
+          "Social unrest",
+          "Geopolitical tensions",
+          "Technological stagnation"
+        ],
+        "answer": "Geopolitical tensions"
+      },
+      {
+        "q": "Besides geopolitical tensions, what other vulnerability related to production facilities is mentioned?",
+        "options": [
+          "Outdated technology",
+          "Lack of skilled labor",
+          "Significant concentration in specific areas",
+          "Excessive competition"
+        ],
+        "answer": "Significant concentration in specific areas"
+      },
+      {
+        "q": "What specific resources are mentioned as dependencies for the industry?",
+        "options": [
+          "Oil and gas",
+          "Rare earth minerals",
+          "Water and electricity",
+          "Labor and capital"
+        ],
+        "answer": "Water and electricity"
+      },
+      {
+        "q": "What do experts emphasize is critically needed to address the identified risks?",
+        "options": [
+          "Increased foreign investment",
+          "New product development",
+          "Ongoing strategic planning",
+          "Relaxation of environmental regulations"
+        ],
+        "answer": "Ongoing strategic planning"
+      },
+      {
+        "q": "What is the primary goal of mitigating the identified risks?",
+        "options": [
+          "To reduce production output",
+          "To increase market share globally",
+          "To ensure sustained global leadership and stability",
+          "To outsource manufacturing processes"
+        ],
+        "answer": "To ensure sustained global leadership and stability"
+      },
+      {
+        "q": "The word \"resilience\" in the title most closely means:",
+        "options": [
+          "Fragility",
+          "The ability to recover quickly from difficulties",
+          "Sensitivity to change",
+          "Economic growth"
+        ],
+        "answer": "The ability to recover quickly from difficulties"
+      },
+      {
+        "q": "When the news describes Taiwan's semiconductor industry as a \"global powerhouse,\" it means the industry is:",
+        "options": [
+          "Small and developing",
+          "Highly influential and dominant worldwide",
+          "Struggling financially",
+          "Focused only on domestic markets"
+        ],
+        "answer": "Highly influential and dominant worldwide"
+      },
+      {
+        "q": "The news report was published on:",
+        "options": [
+          "April 23, 2024",
+          "April 23, 2025",
+          "April 23, 2026",
+          "March 23, 2026"
+        ],
+        "answer": "April 23, 2026"
+      },
+      {
+        "q": "What is the overall tone of the news report?",
+        "options": [
+          "Alarmist and pessimistic",
+          "Optimistic and celebratory",
+          "Factual and analytical",
+          "Speculative and informal"
+        ],
+        "answer": "Factual and analytical"
+      },
+      {
+        "q": "What is the primary reason for the significant increase in Taiwan's drone exports to Europe?",
+        "options": [
+          "A. New trade agreements",
+          "B. The Ukraine war's demand for drones",
+          "C. Improved manufacturing processes in Taiwan",
+          "D. Decreased drone production in Europe"
+        ],
+        "answer": "B. The Ukraine war's demand for drones"
+      },
+      {
+        "q": "By how much have Taiwan's drone exports to Europe increased?",
+        "options": [
+          "A. Ten-fold",
+          "B. Twenty-fold",
+          "C. Thirty-fold",
+          "D. Forty-fold"
+        ],
+        "answer": "D. Forty-fold"
+      },
+      {
+        "q": "What specific type of vehicle is referred to as UAVs in the news?",
+        "options": [
+          "A. Unmanned armored vehicles",
+          "B. Underwater autonomous vehicles",
+          "C. Unmanned aerial vehicles",
+          "D. Utility acquisition vehicles"
+        ],
+        "answer": "C. Unmanned aerial vehicles"
+      },
+      {
+        "q": "The news highlights Taiwan's growing role in which global market?",
+        "options": [
+          "A. Consumer electronics market",
+          "B. Global defense supply chain",
+          "C. Automotive parts industry",
+          "D. Renewable energy sector"
+        ],
+        "answer": "B. Global defense supply chain"
+      },
+      {
+        "q": "What does the term \"soar\" imply regarding Taiwan's exports?",
+        "options": [
+          "A. A slight decrease",
+          "B. A gradual stabilization",
+          "C. A dramatic increase",
+          "D. A temporary pause"
+        ],
+        "answer": "C. A dramatic increase"
+      },
+      {
+        "q": "What has the ongoing conflict accelerated the need for?",
+        "options": [
+          "A. Traditional weaponry",
+          "B. Advanced drone technology",
+          "C. Humanitarian aid",
+          "D. Diplomatic negotiations"
+        ],
+        "answer": "B. Advanced drone technology"
+      },
+      {
+        "q": "As of what date was this significant surge recorded?",
+        "options": [
+          "A. 2025.04.23",
+          "B. 2026.04.23",
+          "C. 2027.04.23",
+          "D. 2024.04.23"
+        ],
+        "answer": "B. 2026.04.23"
+      },
+      {
+        "q": "What kind of solutions are European nations seeking from Taiwan?",
+        "options": [
+          "A. Cost-effective",
+          "B. Basic",
+          "C. Robust",
+          "D. Experimental"
+        ],
+        "answer": "C. Robust"
+      },
+      {
+        "q": "What does \"modern warfare\" increasingly rely on, according to the news?",
+        "options": [
+          "A. Large infantry units",
+          "B. Naval blockades",
+          "C. Drone capabilities",
+          "D. Air superiority fighters"
+        ],
+        "answer": "C. Drone capabilities"
+      },
+      {
+        "q": "What does \"highlight\" mean in the context of the news?",
+        "options": [
+          "A. To obscure or hide",
+          "B. To emphasize or draw attention to",
+          "C. To color brightly",
+          "D. To minimize the importance of"
+        ],
+        "answer": "B. To emphasize or draw attention to"
+      },
+      {
+        "q": "What is Taiwan positioned as for European nations?",
+        "options": [
+          "A. A minor competitor",
+          "B. A research partner",
+          "C. A key supplier",
+          "D. A logistical hub"
+        ],
+        "answer": "C. A key supplier"
+      },
+      {
+        "q": "The trend mentioned in the news reflects changes in what?",
+        "options": [
+          "A. Global trade policies",
+          "B. Modern warfare landscape",
+          "C. International travel patterns",
+          "D. Energy consumption habits"
+        ],
+        "answer": "B. Modern warfare landscape"
+      },
+      {
+        "q": "What is Hotung's core business, according to the news?",
+        "options": [
+          "A. Software development",
+          "B. Financial services",
+          "C. Semiconductor component supply",
+          "D. Retail sales"
+        ],
+        "answer": "C. Semiconductor component supply"
+      },
+      {
+        "q": "What is the projected financial outcome for Hotung in 2026?",
+        "options": [
+          "A. Revenue decrease by half",
+          "B. Revenue to remain stable",
+          "C. Revenue to double",
+          "D. Revenue to slightly increase"
+        ],
+        "answer": "C. Revenue to double"
+      },
+      {
+        "q": "What is the main factor driving Hotung's anticipated revenue growth?",
+        "options": [
+          "A. New marketing campaigns",
+          "B. NVIDIA's new platform",
+          "C. Government subsidies",
+          "D. Reduced operational costs"
+        ],
+        "answer": "B. NVIDIA's new platform"
+      },
+      {
+        "q": "What type of components is expected to see increased demand, benefiting Hotung?",
+        "options": [
+          "A. Consumer electronics parts",
+          "B. Low-power sensors",
+          "C. High-performance computing components",
+          "D. Automotive parts"
+        ],
+        "answer": "C. High-performance computing components"
+      },
+      {
+        "q": "Who believes Hotung will gain a larger portion of the market?",
+        "options": [
+          "A. Hotung's CEO",
+          "B. Government regulators",
+          "C. Industry analysts",
+          "D. Competitors"
+        ],
+        "answer": "C. Industry analysts"
+      },
+      {
+        "q": "The word \"double\" in the context of revenue means to:",
+        "options": [
+          "A. Halve the amount",
+          "B. Triple the amount",
+          "C. Increase by 100%",
+          "D. Reduce significantly"
+        ],
+        "answer": "C. Increase by 100%"
+      },
+      {
+        "q": "What does \"primarily attributed to\" mean in the sentence \"This significant growth is primarily attributed to its strong engagement with NVIDIA's new platform\"?",
+        "options": [
+          "A. Partially caused by",
+          "B. Mainly caused by",
+          "C. Unrelated to",
+          "D. Opposed by"
+        ],
+        "answer": "B. Mainly caused by"
+      },
+      {
+        "q": "In which industry does Hotung operate?",
+        "options": [
+          "A. Automotive industry",
+          "B. Biotechnology industry",
+          "C. Semiconductor industry",
+          "D. Renewable energy industry"
+        ],
+        "answer": "C. Semiconductor industry"
+      },
+      {
+        "q": "What role does NVIDIA play in Hotung's growth, according to the article?",
+        "options": [
+          "A. A direct competitor",
+          "B. A platform provider driving demand",
+          "C. A minor investor",
+          "D. A regulatory body"
+        ],
+        "answer": "B. A platform provider driving demand"
+      },
+      {
+        "q": "What does \"solidifying its future prospects\" imply for Hotung?",
+        "options": [
+          "A. Making its future uncertain",
+          "B. Weakening its market position",
+          "C. Strengthening its future position and opportunities",
+          "D. Diversifying its product line"
+        ],
+        "answer": "C. Strengthening its future position and opportunities"
+      },
+      {
+        "q": "The expected growth for Hotung is described as:",
+        "options": [
+          "A. Minor",
+          "B. Stagnant",
+          "C. Insignificant",
+          "D. Significant"
+        ],
+        "answer": "D. Significant"
+      },
+      {
+        "q": "What is the meaning of \"engagement\" in \"strong engagement with NVIDIA's new platform\"?",
+        "options": [
+          "A. Disagreement",
+          "B. Competition",
+          "C. Collaboration or active involvement",
+          "D. Observation"
+        ],
+        "answer": "C. Collaboration or active involvement"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "SpaceX擬600億美元收購AI編碼公司Cursor",
+    "tabTitle": "科技",
+    "english": "SpaceX is reportedly planning a significant acquisition, eyeing AI coding firm Cursor for an estimated $60 billion. This strategic move, dated April 23, 2026, would mark a major expansion for Elon Musk's aerospace company into artificial intelligence development. Cursor is known for its advanced AI tools that assist software engineers in writing and debugging code more efficiently. The potential deal highlights SpaceX's ambition to integrate cutting-edge AI capabilities across its various operations, from rocket manufacturing to satellite internet services.",
+    "chinese": "SpaceX據報導正計劃進行一項重大收購，目標是估價達600億美元的人工智慧編碼公司Cursor。這項日期為2026年4月23日的戰略舉動，將標誌著埃隆·馬斯克的航太公司向人工智慧開發領域的重大擴張。Cursor以其先進的人工智慧工具而聞名，這些工具能協助軟體工程師更有效率地編寫和調試程式碼。這項潛在交易突顯了SpaceX將尖端人工智慧能力整合到其各項業務的雄心，從火箭製造到衛星網路服務。",
+    "vocabulary": [
+      "reportedly (adv.): 據報導",
+      "significant (adj.): 重大的",
+      "acquisition (n.): 收購",
+      "eyeing (v.): 著眼於；考慮",
+      "firm (n.): 公司",
+      "estimated (adj.): 估計的",
+      "strategic move (n. phrase): 戰略舉動",
+      "mark (v.): 標誌著",
+      "expansion (n.): 擴張",
+      "aerospace company (n. phrase): 航太公司",
+      "artificial intelligence (n. phrase): 人工智慧",
+      "development (n.): 開發",
+      "known for (phrase): 以...聞名",
+      "advanced (adj.): 先進的",
+      "assist (v.): 協助",
+      "software engineers (n. phrase): 軟體工程師",
+      "debugging (v.): 調試（程式碼）",
+      "efficiently (adv.): 有效率地",
+      "potential deal (n. phrase): 潛在交易",
+      "integrate (v.): 整合"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A. SpaceX's new rocket launch.",
+          "B. Elon Musk's latest invention.",
+          "C. SpaceX's potential acquisition of an AI coding company.",
+          "D. Cursor's new AI software release."
+        ],
+        "answer": "C. SpaceX's potential acquisition of an AI coding company."
+      },
+      {
+        "q": "What is the estimated value of the potential acquisition?",
+        "options": [
+          "A. $6 billion.",
+          "B. $60 billion.",
+          "C. $600 million.",
+          "D. $600 billion."
+        ],
+        "answer": "B. $60 billion."
+      },
+      {
+        "q": "What type of company is Cursor?",
+        "options": [
+          "A. A rocket manufacturing company.",
+          "B. A satellite internet service provider.",
+          "C. An AI coding firm.",
+          "D. An aerospace company."
+        ],
+        "answer": "C. An AI coding firm."
+      },
+      {
+        "q": "What is Cursor known for?",
+        "options": [
+          "A. Building rockets.",
+          "B. Providing satellite internet.",
+          "C. Developing advanced AI tools for coding.",
+          "D. Manufacturing spacecraft."
+        ],
+        "answer": "C. Developing advanced AI tools for coding."
+      },
+      {
+        "q": "Who is the CEO of SpaceX mentioned in the article?",
+        "options": [
+          "A. Jeff Bezos.",
+          "B. Mark Zuckerberg.",
+          "C. Elon Musk.",
+          "D. Bill Gates."
+        ],
+        "answer": "C. Elon Musk."
+      },
+      {
+        "q": "What does the article suggest is a reason for SpaceX's interest in Cursor?",
+        "options": [
+          "A. To compete with other aerospace companies.",
+          "B. To expand into artificial intelligence development.",
+          "C. To launch more satellites.",
+          "D. To reduce manufacturing costs for rockets."
+        ],
+        "answer": "B. To expand into artificial intelligence development."
+      },
+      {
+        "q": "What does \"acquisition\" mean in the context of the article?",
+        "options": [
+          "A. A new product launch.",
+          "B. A company buying another company.",
+          "C. A partnership between two companies.",
+          "D. A technology patent."
+        ],
+        "answer": "B. A company buying another company."
+      },
+      {
+        "q": "What is one area where SpaceX intends to integrate AI capabilities?",
+        "options": [
+          "A. Food production.",
+          "B. Rocket manufacturing.",
+          "C. Medical research.",
+          "D. Fashion design."
+        ],
+        "answer": "B. Rocket manufacturing."
+      },
+      {
+        "q": "The word \"strategic\" in \"strategic move\" implies that the action is:",
+        "options": [
+          "A. Random and unplanned.",
+          "B. Important and carefully planned.",
+          "C. Quick and impulsive.",
+          "D. Minor and insignificant."
+        ],
+        "answer": "B. Important and carefully planned."
+      },
+      {
+        "q": "What do Cursor's AI tools help software engineers do?",
+        "options": [
+          "A. Design rockets.",
+          "B. Write and debug code.",
+          "C. Market new products.",
+          "D. Manage finances."
+        ],
+        "answer": "B. Write and debug code."
+      },
+      {
+        "q": "According to the article, what is the approximate word count for the English news?",
+        "options": [
+          "A. Around 30 words.",
+          "B. Around 50 words.",
+          "C. Around 80 words.",
+          "D. Around 120 words."
+        ],
+        "answer": "C. Around 80 words."
+      },
+      {
+        "q": "The phrase \"cutting-edge AI capabilities\" refers to:",
+        "options": [
+          "A. Old and outdated AI technologies.",
+          "B. Basic and simple AI functions.",
+          "C. The most advanced and innovative AI technologies.",
+          "D. AI tools for cutting materials."
+        ],
+        "answer": "C. The most advanced and innovative AI technologies."
+      }
+    ]
+  },
+  "article-4": {
+    "title": "Cognizant攜手OpenAI，Codex重塑企業軟體工程",
+    "tabTitle": "科技",
+    "english": "Cognizant, a leading technology services company, announced a strategic partnership with OpenAI on April 23, 2026. This collaboration aims to integrate OpenAI's advanced AI models, particularly Codex, into enterprise software engineering practices. The initiative seeks to revolutionize how businesses develop, deploy, and maintain software by leveraging AI to enhance efficiency, automate coding tasks, and accelerate innovation. It is expected to significantly impact the future of enterprise software development.",
+    "chinese": "領先的科技服務公司Cognizant於2026年4月23日宣布與OpenAI建立戰略合作夥伴關係。此次合作旨在將OpenAI的先進AI模型，特別是Codex，整合到企業軟體工程實踐中。這項倡議旨在透過利用AI提高效率、自動化編碼任務和加速創新，徹底改變企業開發、部署和維護軟體的方式。預計這將對企業軟體開發的未來產生重大影響。",
+    "vocabulary": [
+      "Cognizant (n.): 科睿唯安 (公司名稱)",
+      "OpenAI (n.): 開放人工智慧 (公司名稱)",
+      "strategic (adj.): 戰略性的",
+      "partnership (n.): 夥伴關係",
+      "collaboration (n.): 合作",
+      "integrate (v.): 整合",
+      "advanced (adj.): 先進的",
+      "AI model (n. phr.): 人工智慧模型",
+      "Codex (n.): 編碼器 (OpenAI的程式碼生成模型)",
+      "enterprise software (n. phr.): 企業軟體",
+      "engineering practices (n. phr.): 工程實踐",
+      "initiative (n.): 倡議",
+      "revolutionize (v.): 徹底改變",
+      "develop (v.): 開發",
+      "deploy (v.): 部署",
+      "maintain (v.): 維護",
+      "leverage (v.): 利用",
+      "enhance efficiency (n. phr.): 提高效率",
+      "automate (v.): 自動化",
+      "innovation (n.): 創新"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of the partnership between Cognizant and OpenAI?",
+        "options": [
+          "A. To create new hardware products.",
+          "B. To reshape enterprise software engineering.",
+          "C. To develop a new social media platform.",
+          "D. To compete with Google's search engine."
+        ],
+        "answer": "B. To reshape enterprise software engineering."
+      },
+      {
+        "q": "Which specific OpenAI AI model is mentioned for integration into software engineering practices?",
+        "options": [
+          "A. DALL-E",
+          "B. ChatGPT",
+          "C. Codex",
+          "D. Whisper"
+        ],
+        "answer": "C. Codex"
+      },
+      {
+        "q": "What kind of company is Cognizant?",
+        "options": [
+          "A. A leading social media company.",
+          "B. A leading technology services company.",
+          "C. A leading car manufacturer.",
+          "D. A leading pharmaceutical company."
+        ],
+        "answer": "B. A leading technology services company."
+      },
+      {
+        "q": "When was this strategic partnership announced?",
+        "options": [
+          "A. March 15, 2025",
+          "B. April 23, 2026",
+          "C. January 1, 2027",
+          "D. December 24, 2024"
+        ],
+        "answer": "B. April 23, 2026"
+      },
+      {
+        "q": "What does the initiative aim to do by leveraging AI?",
+        "options": [
+          "A. Increase manual labor in coding.",
+          "B. Decrease software development speed.",
+          "C. Enhance efficiency and automate coding tasks.",
+          "D. Reduce the need for innovation."
+        ],
+        "answer": "C. Enhance efficiency and automate coding tasks."
+      },
+      {
+        "q": "The partnership is expected to have a significant impact on which area?",
+        "options": [
+          "A. Global climate change research.",
+          "B. Enterprise software development.",
+          "C. Space exploration technology.",
+          "D. Traditional manufacturing processes."
+        ],
+        "answer": "B. Enterprise software development."
+      },
+      {
+        "q": "What term describes the nature of the partnership between Cognizant and OpenAI?",
+        "options": [
+          "A. Casual",
+          "B. Temporary",
+          "C. Strategic",
+          "D. Minor"
+        ],
+        "answer": "C. Strategic"
+      },
+      {
+        "q": "Which of the following is NOT one of the ways AI is expected to revolutionize software development in this context?",
+        "options": [
+          "A. Enhancing efficiency.",
+          "B. Automating coding tasks.",
+          "C. Accelerating innovation.",
+          "D. Replacing all human programmers."
+        ],
+        "answer": "D. Replacing all human programmers."
+      },
+      {
+        "q": "What does \"integrate\" mean in the context of the news?",
+        "options": [
+          "A. To separate different systems.",
+          "B. To combine different elements into a whole.",
+          "C. To remove parts of a system.",
+          "D. To ignore new technologies."
+        ],
+        "answer": "B. To combine different elements into a whole."
+      },
+      {
+        "q": "The partnership aims to revolutionize how businesses perform which actions related to software?",
+        "options": [
+          "A. Only developing software.",
+          "B. Only deploying software.",
+          "C. Only maintaining software.",
+          "D. Develop, deploy, and maintain software."
+        ],
+        "answer": "D. Develop, deploy, and maintain software."
+      },
+      {
+        "q": "What is \"enterprise software\"?",
+        "options": [
+          "A. Software for personal entertainment.",
+          "B. Software designed for use by organizations and businesses.",
+          "C. Software for scientific research only.",
+          "D. Software for playing games."
+        ],
+        "answer": "B. Software designed for use by organizations and businesses."
+      },
+      {
+        "q": "What is the core idea behind leveraging AI in this partnership?",
+        "options": [
+          "A. To make software development more complicated.",
+          "B. To reduce the overall quality of software.",
+          "C. To use AI for advantage to improve processes.",
+          "D. To eliminate all human involvement in IT."
+        ],
+        "answer": "C. To use AI for advantage to improve processes."
+      }
+    ]
+  },
+  "article-5": {
+    "title": "中東局勢與財報季施壓，歐洲股市全線下跌",
+    "tabTitle": "金融市場",
+    "english": "European stock markets experienced a widespread decline on April 23, 2026, as investors reacted to escalating tensions in the Middle East. Major indices across the continent closed lower, with geopolitical uncertainty weighing heavily on market sentiment. Adding to the pressure, the ongoing corporate earnings season presented mixed results, leading to further cautious trading. Companies' financial reports revealed varying performances, contributing to a general retreat from riskier assets. This combination of global instability and specific company performance created a challenging environment for European equities.",
+    "chinese": "歐洲股市在2026年4月23日普遍下跌，投資者對中東地區局勢升級做出反應。歐洲大陸主要股指收盤走低，地緣政治不確定性嚴重影響市場情緒。此外，正在進行的企業財報季呈現出好壞參半的結果，導致交易更加謹慎。公司的財務報告顯示出不同的表現，促使市場普遍撤離風險較高的資產。全球不穩定性與具體公司業績的雙重影響，為歐洲股市創造了一個充滿挑戰的環境。",
+    "vocabulary": [
+      "Mideast (n.): 中東",
+      "Tensions (n.): 緊張局勢",
+      "Earnings Season (n.): 財報季",
+      "European Stocks (n.): 歐洲股市",
+      "Fall (v.): 下跌",
+      "Widespread (adj.): 普遍的；廣泛的",
+      "Decline (n.): 下跌；下降",
+      "React (v.): 反應",
+      "Escalating (adj.): 不斷升級的",
+      "Major indices (n.phr.): 主要股指",
+      "Closed lower (v.phr.): 收盤走低",
+      "Geopolitical (adj.): 地緣政治的",
+      "Uncertainty (n.): 不確定性",
+      "Weigh heavily on (phr.v.): 嚴重影響；施加重壓",
+      "Market sentiment (n.phr.): 市場情緒",
+      "Corporate (adj.): 企業的",
+      "Mixed results (n.phr.): 好壞參半的結果",
+      "Cautious trading (n.phr.): 謹慎交易",
+      "Financial reports (n.phr.): 財務報告",
+      "Riskier assets (n.phr.): 風險較高的資產"
+    ],
+    "quiz": [
+      {
+        "q": "What was the main reason for European stock markets falling on April 23, 2026?",
+        "options": [
+          "A. A major natural disaster in Europe.",
+          "B. Escalating tensions in the Middle East and mixed corporate earnings.",
+          "C. A sudden increase in interest rates by central banks.",
+          "D. A global pandemic outbreak."
+        ],
+        "answer": "B. Escalating tensions in the Middle East and mixed corporate earnings."
+      },
+      {
+        "q": "Which region's stock markets were primarily affected according to the news?",
+        "options": [
+          "A. Asian markets",
+          "B. American markets",
+          "C. European markets",
+          "D. African markets"
+        ],
+        "answer": "C. European markets"
+      },
+      {
+        "q": "What does \"Mideast Tensions\" refer to in the context of the news?",
+        "options": [
+          "A. Economic competition between Middle Eastern countries.",
+          "B. Political and military instability in the Middle East.",
+          "C. Cultural disagreements among Middle Eastern nations.",
+          "D. Environmental concerns in the Middle East."
+        ],
+        "answer": "B. Political and military instability in the Middle East."
+      },
+      {
+        "q": "What is \"Earnings Season\"?",
+        "options": [
+          "A. A period when companies announce new products.",
+          "B. A time when employees receive their annual bonuses.",
+          "C. A quarter when companies release their financial results.",
+          "D. A season for agricultural harvests."
+        ],
+        "answer": "C. A quarter when companies release their financial results."
+      },
+      {
+        "q": "How did \"geopolitical uncertainty\" affect market sentiment?",
+        "options": [
+          "A. It boosted investor confidence.",
+          "B. It had no significant impact.",
+          "C. It weighed heavily on market sentiment.",
+          "D. It led to increased trading volume."
+        ],
+        "answer": "C. It weighed heavily on market sentiment."
+      },
+      {
+        "q": "What kind of results did the corporate earnings season present?",
+        "options": [
+          "A. Universally positive results.",
+          "B. Consistently negative results.",
+          "C. Mixed results.",
+          "D. No results were released."
+        ],
+        "answer": "C. Mixed results."
+      },
+      {
+        "q": "What does \"closed lower\" mean for major indices?",
+        "options": [
+          "A. They ended the trading day with higher values than they started.",
+          "B. They finished the trading day with reduced values compared to the previous close.",
+          "C. They were temporarily suspended from trading.",
+          "D. They opened at a lower price but closed higher."
+        ],
+        "answer": "B. They finished the trading day with reduced values compared to the previous close."
+      },
+      {
+        "q": "The phrase \"retreat from riskier assets\" implies investors were doing what?",
+        "options": [
+          "A. Buying more high-risk investments.",
+          "B. Moving their money into safer investments.",
+          "C. Ignoring all investment opportunities.",
+          "D. Investing only in the Middle East."
+        ],
+        "answer": "B. Moving their money into safer investments."
+      },
+      {
+        "q": "What was the overall environment for European equities described as?",
+        "options": [
+          "A. Highly promising.",
+          "B. Stable and predictable.",
+          "C. Challenging.",
+          "D. Unchanged."
+        ],
+        "answer": "C. Challenging."
+      },
+      {
+        "q": "What does \"widespread decline\" suggest about the fall in European stock markets?",
+        "options": [
+          "A. Only a few specific stocks fell.",
+          "B. The decline was observed across many different stocks and sectors.",
+          "C. The decline was very minor.",
+          "D. The decline only affected non-European companies."
+        ],
+        "answer": "B. The decline was observed across many different stocks and sectors."
+      },
+      {
+        "q": "Which of the following best describes the style of the news report?",
+        "options": [
+          "A. Opinionated and speculative.",
+          "B. Humorous and light-hearted.",
+          "C. Factual and objective.",
+          "D. Persuasive and argumentative."
+        ],
+        "answer": "C. Factual and objective."
+      },
+      {
+        "q": "The word \"escalating\" in \"escalating tensions\" means the tensions are:",
+        "options": [
+          "A. Decreasing.",
+          "B. Remaining stable.",
+          "C. Intensifying or increasing.",
+          "D. Being resolved quickly."
+        ],
+        "answer": "C. Intensifying or increasing."
+      }
+    ]
+  },
+  "article-6": {
+    "title": "2026全球金融市場展望：地緣政治風險升溫",
+    "tabTitle": "金融市場",
+    "english": "The 2026 global financial market outlook suggests increasing uncertainty, largely driven by rising geopolitical risks. Experts anticipate continued inflation pressures, though central banks may maintain higher interest rates to manage them. This environment could lead to slower economic growth and increased market volatility across various sectors. Investors are advised to monitor international conflicts and their potential impact on supply chains and commodity prices closely. Prudent risk management will be crucial for navigating the year ahead.",
+    "chinese": "2026年全球金融市場展望顯示不確定性日益增加，這主要受到地緣政治風險上升的驅動。專家預計通膨壓力將持續存在，儘管各國央行可能會維持較高的利率來管理這些壓力。這種環境可能導致各行各業的經濟成長放緩，並增加市場波動性。建議投資者密切關注國際衝突及其對供應鏈和大宗商品價格的潛在影響。審慎的風險管理對於應對未來一年至關重要。",
+    "vocabulary": [
+      "outlook (n.): 展望",
+      "uncertainty (n.): 不確定性",
+      "geopolitical (adj.): 地緣政治的",
+      "inflation (n.): 通貨膨脹",
+      "central bank (n.): 中央銀行",
+      "interest rate (n.): 利率",
+      "economic growth (n.): 經濟成長",
+      "market volatility (n.): 市場波動性",
+      "sector (n.): 行業；部門",
+      "monitor (v.): 監測；監控",
+      "international conflict (n.): 國際衝突",
+      "supply chain (n.): 供應鏈",
+      "commodity price (n.): 大宗商品價格",
+      "prudent (adj.): 審慎的；謹慎的",
+      "risk management (n.): 風險管理",
+      "navigate (v.): 應對；導航",
+      "anticipate (v.): 預期",
+      "pressure (n.): 壓力",
+      "recession (n.): 經濟衰退",
+      "diversify (v.): 多元化"
+    ],
+    "quiz": [
+      {
+        "q": "What is identified as the main driver of increasing uncertainty in the 2026 global financial market?",
+        "options": [
+          "A. Technological advancements",
+          "B. Geopolitical risks",
+          "C. Environmental disasters",
+          "D. Population growth"
+        ],
+        "answer": "B. Geopolitical risks"
+      },
+      {
+        "q": "What do experts predict regarding inflation pressures in 2026?",
+        "options": [
+          "A. They will disappear entirely",
+          "B. They will decrease significantly",
+          "C. They will continue to exist",
+          "D. They are not a concern"
+        ],
+        "answer": "C. They will continue to exist"
+      },
+      {
+        "q": "What action might central banks take to manage inflation pressures?",
+        "options": [
+          "A. Lower interest rates",
+          "B. Maintain higher interest rates",
+          "C. Print more money",
+          "D. Encourage consumer spending"
+        ],
+        "answer": "B. Maintain higher interest rates"
+      },
+      {
+        "q": "What could be a consequence of the current economic environment on economic growth?",
+        "options": [
+          "A. Rapid acceleration",
+          "B. Significant boom",
+          "C. Slower growth",
+          "D. No noticeable impact"
+        ],
+        "answer": "C. Slower growth"
+      },
+      {
+        "q": "What is expected to increase across various sectors due to this environment?",
+        "options": [
+          "A. Market stability",
+          "B. Market volatility",
+          "C. Consumer confidence",
+          "D. Investment returns"
+        ],
+        "answer": "B. Market volatility"
+      },
+      {
+        "q": "What are investors advised to closely monitor?",
+        "options": [
+          "A. Local sports events",
+          "B. International conflicts",
+          "C. Fashion trends",
+          "D. Social media popularity"
+        ],
+        "answer": "B. International conflicts"
+      },
+      {
+        "q": "What specific economic elements could be impacted by international conflicts, according to the news?",
+        "options": [
+          "A. Tourism and entertainment",
+          "B. Education and healthcare",
+          "C. Supply chains and commodity prices",
+          "D. Real estate and construction"
+        ],
+        "answer": "C. Supply chains and commodity prices"
+      },
+      {
+        "q": "What is considered crucial for navigating the year ahead?",
+        "options": [
+          "A. Aggressive speculation",
+          "B. Ignoring economic data",
+          "C. Prudent risk management",
+          "D. Relying purely on luck"
+        ],
+        "answer": "C. Prudent risk management"
+      },
+      {
+        "q": "In the context of the news, what does 'outlook' primarily refer to?",
+        "options": [
+          "A. A view from a window",
+          "B. A future prospect or forecast",
+          "C. A personal opinion",
+          "D. A historical record"
+        ],
+        "answer": "B. A future prospect or forecast"
+      },
+      {
+        "q": "What does 'geopolitical' relate to?",
+        "options": [
+          "A. The study of geological formations",
+          "B. Politics and geography",
+          "C. Animal behavior and habitats",
+          "D. Space exploration and astronomy"
+        ],
+        "answer": "B. Politics and geography"
+      },
+      {
+        "q": "If a market shows 'volatility,' what does that mean?",
+        "options": [
+          "A. It is very stable and predictable",
+          "B. It experiences frequent and sharp changes",
+          "C. It is growing steadily and slowly",
+          "D. It is declining slowly over time"
+        ],
+        "answer": "B. It experiences frequent and sharp changes"
+      },
+      {
+        "q": "What is the primary role of a 'central bank' in an economy?",
+        "options": [
+          "A. To manage a country's main railway system",
+          "B. To oversee the monetary policy and currency of a country",
+          "C. To provide loans to small businesses and individuals directly",
+          "D. To organize national elections and public events"
+        ],
+        "answer": "B. To oversee the monetary policy and currency of a country"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
