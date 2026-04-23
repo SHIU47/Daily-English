@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 24, 2026：台灣經濟、國際大事 與 地緣政治</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 經濟部：台灣經濟擺脫中國依賴，2026年GDP成長率預估7.6%\nTaiwan's Ministry of Economic Affairs announced on April 24, 2026, that the nation's economy is successfully reducing its reliance on China. A robust 7.6% GDP growth rate is projected for 2026, signaling strong economic performance. This positive outlook is primarily attributed to successful market diversification efforts and booming tech exports, which are driving Taiwan's sustained economic expansion.\n\n[2] 台積電年度調薪定案，平均3-5%，資深工程師最高9%\nTaiwan Semiconductor Manufacturing Company (TSMC) has officially announced its annual salary adjustments for 2026, effective April 24. The companywide average increase is set between 3% and 5%. Notably, senior engineers, crucial to TSMC's technological leadership, will see a more significant raise, with some receiving up to a 9% increase. This move is intended to reward employees for their contributions and maintain TSMC's competitive edge in attracting and retaining top talent in the global semiconductor industry.\n\n[3] 台灣新創赴日參與SusHi Tech Tokyo 2026，深化臺日深科技合作\nTaipei, Taiwan – April 24, 2026 – A delegation of Taiwanese deep tech startups is set to participate in SusHi Tech Tokyo 2026, a major international exhibition, later this year. This initiative aims to strengthen technological exchange and foster deeper collaboration between Taiwan and Japan in cutting-edge fields such as AI, biotechnology, and advanced manufacturing. The event provides a crucial platform for these innovative companies to showcase their solutions, attract international investment, and explore strategic partnerships, thereby bolstering the region's deep tech ecosystem.",
+    "chinese": "【1】經濟部：台灣經濟擺脫中國依賴，2026年GDP成長率預估7.6%\n台灣經濟部於2026年4月24日宣布，台灣經濟已成功減少對中國的依賴。預估2026年國內生產毛額（GDP）成長率將達到強勁的7.6%，顯示出卓越的經濟表現。這一積極前景主要歸因於成功的市場多元化努力以及蓬勃發展的科技出口，這些是推動台灣經濟持續擴張的主要動力。\n\n【2】台積電年度調薪定案，平均3-5%，資深工程師最高9%\n台積電（TSMC）已於2026年4月24日正式宣布其年度薪資調整方案。全公司平均調薪幅度定在3%至5%之間。值得注意的是，對於台積電技術領先地位至關重要的資深工程師，將獲得更大幅度的加薪，部分人員最高可達9%。此舉旨在獎勵員工的貢獻，並維持台積電在全球半導體產業中吸引和留住頂尖人才的競爭優勢。\n\n【3】台灣新創赴日參與SusHi Tech Tokyo 2026，深化臺日深科技合作\n台北，台灣 – 2026年4月24日 – 一個由台灣深科技新創組成的代表團將於今年稍晚參與SusHi Tech Tokyo 2026這場重要的國際展覽。這項倡議旨在加強台灣與日本在人工智慧、生物科技和先進製造等尖端領域的技術交流並促進更深層次的合作。此次活動為這些創新公司提供了一個關鍵平台，讓他們能夠展示其解決方案、吸引國際投資並探索策略夥伴關係，藉此強化該區域的深科技生態系統。",
+    "vocabulary": [
+      "Ministry of Economic Affairs (n.): 經濟部",
+      "decoupling (v. gerund): 脫鉤",
+      "reliance (n.): 依賴",
+      "project (v.): 預估",
+      "GDP (abbr.): 國內生產毛額",
+      "growth rate (n.): 成長率",
+      "robust (adj.): 強勁的",
+      "economic performance (n.): 經濟表現",
+      "outlook (n.): 前景",
+      "attributed to (phr. v.): 歸因於",
+      "diversification (n.): 多元化",
+      "tech exports (n.): 科技出口",
+      "sustained (adj.): 持續的",
+      "expansion (n.): 擴張",
+      "booming (adj.): 蓬勃發展的",
+      "accelerate (v.): 加速",
+      "resilience (n.): 韌性",
+      "domestic demand (n.): 國內需求",
+      "global supply chain (n.): 全球供應鏈",
+      "strategic industries (n.): 戰略產業",
+      "Taiwan Semiconductor Manufacturing Company (n.): 台灣積體電路製造公司 (台積電)",
+      "officially (adv.): 正式地",
+      "announced (v.): 宣布",
+      "annual (adj.): 每年的，年度的",
+      "salary adjustments (n. phrase): 薪資調整",
+      "effective (adj.): 生效的，有效的",
+      "companywide (adj.): 全公司範圍的",
+      "average (n.): 平均數",
+      "increase (n.): 增加，增長",
+      "notably (adv.): 尤其，特別地",
+      "senior engineers (n. phrase): 資深工程師",
+      "crucial (adj.): 至關重要的",
+      "technological leadership (n. phrase): 技術領先地位",
+      "significant (adj.): 顯著的，重大的",
+      "raise (n.): 加薪",
+      "intended to (phrase): 旨在，意圖",
+      "reward (v.): 獎勵",
+      "contributions (n.): 貢獻",
+      "maintain (v.): 維持",
+      "competitive edge (n. phrase): 競爭優勢",
+      "startup (n.): 新創公司",
+      "delegation (n.): 代表團",
+      "participate (v.): 參與",
+      "exhibition (n.): 展覽",
+      "initiative (n.): 倡議；計畫",
+      "strengthen (v.): 加強；鞏固",
+      "technological exchange (n.): 技術交流",
+      "foster (v.): 促進；培養",
+      "collaboration (n.): 合作",
+      "cutting-edge (adj.): 尖端的；領先的",
+      "deep tech (n.): 深科技 (指基於科學或工程突破的技術)",
+      "biotechnology (n.): 生物科技",
+      "advanced manufacturing (n.): 先進製造",
+      "crucial (adj.): 關鍵的；重要的",
+      "platform (n.): 平台",
+      "showcase (v.): 展示",
+      "attract (v.): 吸引",
+      "strategic partnership (n.): 策略夥伴關係",
+      "bolster (v.): 強化；支持",
+      "ecosystem (n.): 生態系統"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main message of the news report?",
+        "options": [
+          "A) Taiwan's tech exports are declining.",
+          "B) Taiwan's economy is becoming more reliant on China.",
+          "C) Taiwan's economy is growing and reducing reliance on China.",
+          "D) The Ministry of Economic Affairs is concerned about the economy."
+        ],
+        "answer": "C) Taiwan's economy is growing and reducing reliance on China."
+      },
+      {
+        "q": "Which government body made the announcement?",
+        "options": [
+          "A) Ministry of Finance",
+          "B) Ministry of Foreign Affairs",
+          "C) Ministry of Economic Affairs",
+          "D) Central Bank"
+        ],
+        "answer": "C) Ministry of Economic Affairs"
+      },
+      {
+        "q": "What is the projected GDP growth rate for Taiwan in 2026?",
+        "options": [
+          "A) 2.6%",
+          "B) 7.6%",
+          "C) 6.7%",
+          "D) 4.2%"
+        ],
+        "answer": "B) 7.6%"
+      },
+      {
+        "q": "The term \"decoupling\" in the headline suggests Taiwan's economy is:",
+        "options": [
+          "A) Increasing its trade with China.",
+          "B) Becoming less dependent on China.",
+          "C) Forming new alliances with China.",
+          "D) Experiencing an economic downturn due to China."
+        ],
+        "answer": "B) Becoming less dependent on China."
+      },
+      {
+        "q": "What are two key factors contributing to Taiwan's positive economic outlook?",
+        "options": [
+          "A) Increased domestic consumption and reduced imports.",
+          "B) Successful market diversification and booming tech exports.",
+          "C) Government subsidies and international aid.",
+          "D) Agricultural growth and tourism recovery."
+        ],
+        "answer": "B) Successful market diversification and booming tech exports."
+      },
+      {
+        "q": "The word \"robust\" in the context of \"robust 7.6% GDP growth rate\" most likely means:",
+        "options": [
+          "A) Weak",
+          "B) Average",
+          "C) Strong and healthy",
+          "D) Unpredictable"
+        ],
+        "answer": "C) Strong and healthy"
+      },
+      {
+        "q": "What does \"GDP\" stand for?",
+        "options": [
+          "A) Gross Domestic Product",
+          "B) Global Development Plan",
+          "C) Government Debt Projection",
+          "D) General Domestic Policy"
+        ],
+        "answer": "A) Gross Domestic Product"
+      },
+      {
+        "q": "The news implies that Taiwan's economic strategy includes:",
+        "options": [
+          "A) Focusing solely on the domestic market.",
+          "B) Limiting all international trade.",
+          "C) Expanding trade partners beyond a single country.",
+          "D) Reducing technology development."
+        ],
+        "answer": "C) Expanding trade partners beyond a single country."
+      },
+      {
+        "q": "What is the general tone of the news report regarding Taiwan's economy?",
+        "options": [
+          "A) Pessimistic",
+          "B) Neutral",
+          "C) Optimistic",
+          "D) Cautious"
+        ],
+        "answer": "C) Optimistic"
+      },
+      {
+        "q": "The phrase \"attributed to\" means:",
+        "options": [
+          "A) Caused by",
+          "B) In contrast to",
+          "C) Separated from",
+          "D) Irrelevant to"
+        ],
+        "answer": "A) Caused by"
+      },
+      {
+        "q": "\"Market diversification\" is mentioned as a reason for the positive outlook. This means Taiwan is:",
+        "options": [
+          "A) Selling fewer products.",
+          "B) Focusing on a single large market.",
+          "C) Expanding its markets to include more countries.",
+          "D) Reducing the variety of goods it produces."
+        ],
+        "answer": "C) Expanding its markets to include more countries."
+      },
+      {
+        "q": "The news suggests that Taiwan's economy is experiencing \"sustained economic expansion.\" What does \"sustained\" mean here?",
+        "options": [
+          "A) Brief and temporary",
+          "B) Intermittent and irregular",
+          "C) Continuous and ongoing",
+          "D) Slow and difficult"
+        ],
+        "answer": "C) Continuous and ongoing"
+      },
+      {
+        "q": "What company is making the salary adjustments?",
+        "options": [
+          "A) Samsung",
+          "B) TSMC",
+          "C) Intel",
+          "D) NVIDIA"
+        ],
+        "answer": "B) TSMC"
+      },
+      {
+        "q": "When are the salary adjustments effective?",
+        "options": [
+          "A) March 24, 2026",
+          "B) April 24, 2026",
+          "C) May 24, 2026",
+          "D) January 1, 2026"
+        ],
+        "answer": "B) April 24, 2026"
+      },
+      {
+        "q": "What is the companywide average salary increase?",
+        "options": [
+          "A) 1-2%",
+          "B) 3-5%",
+          "C) 6-8%",
+          "D) Up to 9%"
+        ],
+        "answer": "B) 3-5%"
+      },
+      {
+        "q": "Which group of employees will receive a more significant raise?",
+        "options": [
+          "A) Entry-level staff",
+          "B) Marketing team",
+          "C) Senior engineers",
+          "D) Administrative personnel"
+        ],
+        "answer": "C) Senior engineers"
+      },
+      {
+        "q": "What is the maximum increase some senior engineers might receive?",
+        "options": [
+          "A) 5%",
+          "B) 7%",
+          "C) 9%",
+          "D) 10%"
+        ],
+        "answer": "C) 9%"
+      },
+      {
+        "q": "What is one reason for TSMC's decision to increase salaries?",
+        "options": [
+          "A) To reduce production costs",
+          "B) To reward employees for their contributions",
+          "C) To expand into new markets",
+          "D) To acquire other companies"
+        ],
+        "answer": "B) To reward employees for their contributions"
+      },
+      {
+        "q": "What does 'technological leadership' refer to in the context of TSMC?",
+        "options": [
+          "A) Its leading position in marketing",
+          "B) Its leading position in technology and innovation",
+          "C) Its leading position in employee benefits",
+          "D) Its leading position in sales"
+        ],
+        "answer": "B) Its leading position in technology and innovation"
+      },
+      {
+        "q": "The salary adjustment aims to maintain TSMC's 'competitive edge' in what area?",
+        "options": [
+          "A) Sports equipment manufacturing",
+          "B) Global real estate",
+          "C) Attracting and retaining top talent",
+          "D) Food and beverage industry"
+        ],
+        "answer": "C) Attracting and retaining top talent"
+      },
+      {
+        "q": "What industry is TSMC primarily in?",
+        "options": [
+          "A) Automotive",
+          "B) Biotechnology",
+          "C) Semiconductor",
+          "D) Telecommunications"
+        ],
+        "answer": "C) Semiconductor"
+      },
+      {
+        "q": "The word 'crucial' in the text is closest in meaning to:",
+        "options": [
+          "A) minor",
+          "B) unimportant",
+          "C) essential",
+          "D) optional"
+        ],
+        "answer": "C) essential"
+      },
+      {
+        "q": "What does 'companywide' mean in this context?",
+        "options": [
+          "A) Only for executives",
+          "B) Across the entire company",
+          "C) For a specific department",
+          "D) For new hires only"
+        ],
+        "answer": "B) Across the entire company"
+      },
+      {
+        "q": "What is the overall tone of the news report?",
+        "options": [
+          "A) Speculative",
+          "B) Opinionated",
+          "C) Factual",
+          "D) Critical"
+        ],
+        "answer": "C) Factual"
+      },
+      {
+        "q": "What is the main purpose of Taiwanese startups participating in SusHi Tech Tokyo 2026?",
+        "options": [
+          "A) To find new customers for their products",
+          "B) To strengthen deep tech collaboration with Japan",
+          "C) To compete with Japanese companies",
+          "D) To learn Japanese culture"
+        ],
+        "answer": "B) To strengthen deep tech collaboration with Japan"
+      },
+      {
+        "q": "What is the name of the event Taiwanese startups are joining in Japan?",
+        "options": [
+          "A) Tokyo Tech Expo",
+          "B) SusHi Tech Tokyo 2026",
+          "C) Japan Innovation Summit",
+          "D) Deep Tech Taiwan"
+        ],
+        "answer": "B) SusHi Tech Tokyo 2026"
+      },
+      {
+        "q": "Who is participating from Taiwan in the event?",
+        "options": [
+          "A) Government officials",
+          "B) Deep tech startups",
+          "C) University professors",
+          "D) Large corporations"
+        ],
+        "answer": "B) Deep tech startups"
+      },
+      {
+        "q": "When is the event mentioned in the news article taking place?",
+        "options": [
+          "A) April 24, 2026",
+          "B) Early next year",
+          "C) Later this year",
+          "D) In 2027"
+        ],
+        "answer": "C) Later this year"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a cutting-edge field for collaboration?",
+        "options": [
+          "A) AI",
+          "B) Biotechnology",
+          "C) Advanced manufacturing",
+          "D) Traditional agriculture"
+        ],
+        "answer": "D) Traditional agriculture"
+      },
+      {
+        "q": "What is one key opportunity the event provides for innovative companies?",
+        "options": [
+          "A) To reduce production costs",
+          "B) To showcase their solutions",
+          "C) To recruit new employees",
+          "D) To visit tourist attractions"
+        ],
+        "answer": "B) To showcase their solutions"
+      },
+      {
+        "q": "Besides showcasing solutions, what else do startups aim to attract?",
+        "options": [
+          "A) Local talent",
+          "B) International investment",
+          "C) Government grants",
+          "D) Media attention"
+        ],
+        "answer": "B) International investment"
+      },
+      {
+        "q": "In the sentence, 'This initiative aims to strengthen...', what does 'initiative' most closely mean?",
+        "options": [
+          "A) A new beginning",
+          "B) A formal proposal or plan",
+          "C) A personal decision",
+          "D) A technological invention"
+        ],
+        "answer": "B) A formal proposal or plan"
+      },
+      {
+        "q": "The word 'foster' in the text means to:",
+        "options": [
+          "A) Prevent",
+          "B) Discourage",
+          "C) Promote the development of",
+          "D) Compete with"
+        ],
+        "answer": "C) Promote the development of"
+      },
+      {
+        "q": "What does 'cutting-edge fields' imply about the technologies?",
+        "options": [
+          "A) They are old and established",
+          "B) They are simple and easy to use",
+          "C) They are the most advanced and innovative",
+          "D) They are difficult to understand"
+        ],
+        "answer": "C) They are the most advanced and innovative"
+      },
+      {
+        "q": "The participation aims at 'bolstering the region's deep tech ecosystem.' What is the meaning of 'bolstering'?",
+        "options": [
+          "A) Weakening",
+          "B) Undermining",
+          "C) Strengthening",
+          "D) Replacing"
+        ],
+        "answer": "C) Strengthening"
+      },
+      {
+        "q": "Where was this news reported from?",
+        "options": [
+          "A) Tokyo, Japan",
+          "B) Taipei, Taiwan",
+          "C) New York, USA",
+          "D) London, UK"
+        ],
+        "answer": "B) Taipei, Taiwan"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "全球核能復興：運行反應堆突破400座，應對AI用電與氣候變遷",
+    "tabTitle": "國際大事",
+    "english": "Global nuclear power is experiencing a significant revival. As of April 24, 2026, the number of operational nuclear reactors worldwide has surpassed 400, marking a key milestone in energy production. This resurgence is largely driven by the increasing demand for electricity from artificial intelligence technologies and the urgent need to combat climate change. Many nations are now reconsidering nuclear energy as a reliable and low-carbon solution to meet future power requirements.",
+    "chinese": "全球核能正在經歷顯著的復興。截至2026年4月24日，全球運行的核反應堆數量已突破400座，標誌著能源生產的一個重要里程碑。此次復甦主要受人工智慧技術日益增長的電力需求以及應對氣候變遷的迫切需要所驅動。許多國家現在正重新考慮將核能作為一種可靠且低碳的解決方案，以滿足未來的電力需求。",
+    "vocabulary": [
+      "revival (n.): 復興",
+      "operational (adj.): 運行的；操作中的",
+      "reactor (n.): 反應堆",
+      "address (v.): 處理；應對",
+      "energy needs (phr.): 能源需求",
+      "climate change (phr.): 氣候變遷",
+      "significant (adj.): 顯著的；重要的",
+      "surpass (v.): 超過；超越",
+      "milestone (n.): 里程碑",
+      "resurgence (n.): 復甦；再起",
+      "largely (adv.): 主要地；大部分地",
+      "driven by (phr.): 由...驅動",
+      "artificial intelligence (phr.): 人工智慧",
+      "urgent (adj.): 緊迫的；緊急的",
+      "combat (v.): 對抗；打擊",
+      "reconsider (v.): 重新考慮",
+      "reliable (adj.): 可靠的",
+      "low-carbon (adj.): 低碳的",
+      "solution (n.): 解決方案",
+      "power requirements (phr.): 電力需求"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "The decline of nuclear power.",
+          "The global revival of nuclear energy.",
+          "New AI technologies.",
+          "International climate agreements."
+        ],
+        "answer": "The global revival of nuclear energy."
+      },
+      {
+        "q": "When was this news reported?",
+        "options": [
+          "April 24, 2024",
+          "April 24, 2025",
+          "April 24, 2026",
+          "April 26, 2026"
+        ],
+        "answer": "April 24, 2026"
+      },
+      {
+        "q": "What significant milestone has nuclear power reached?",
+        "options": [
+          "Over 100 new reactors built.",
+          "Over 400 reactors are now operational.",
+          "Nuclear energy is now the primary energy source.",
+          "All countries are building new reactors."
+        ],
+        "answer": "Over 400 reactors are now operational."
+      },
+      {
+        "q": "One major reason for nuclear power's resurgence is:",
+        "options": [
+          "Decreased costs of fossil fuels.",
+          "The need for energy for artificial intelligence.",
+          "A global shortage of coal.",
+          "New discoveries of oil reserves."
+        ],
+        "answer": "The need for energy for artificial intelligence."
+      },
+      {
+        "q": "Another key factor driving the revival is:",
+        "options": [
+          "A decrease in global population.",
+          "The urgent need to address climate change.",
+          "The popularity of electric vehicles.",
+          "Cheaper maintenance for old reactors."
+        ],
+        "answer": "The urgent need to address climate change."
+      },
+      {
+        "q": "What does 'resurgence' most closely mean in this context?",
+        "options": [
+          "A sudden stop.",
+          "A decline.",
+          "A new increase in activity.",
+          "A stable period."
+        ],
+        "answer": "A new increase in activity."
+      },
+      {
+        "q": "If a reactor is 'operational,' it means it is:",
+        "options": [
+          "Under construction.",
+          "Being decommissioned.",
+          "Functioning and producing power.",
+          "Being designed."
+        ],
+        "answer": "Functioning and producing power."
+      },
+      {
+        "q": "How are many nations viewing nuclear energy now?",
+        "options": [
+          "As an outdated and dangerous option.",
+          "As a temporary solution.",
+          "As a reliable and low-carbon solution.",
+          "As a very expensive and impractical choice."
+        ],
+        "answer": "As a reliable and low-carbon solution."
+      },
+      {
+        "q": "What does 'combat climate change' imply?",
+        "options": [
+          "Ignoring climate change.",
+          "Fighting against the effects of climate change.",
+          "Contributing to climate change.",
+          "Studying climate change without action."
+        ],
+        "answer": "Fighting against the effects of climate change."
+      },
+      {
+        "q": "What kind of trend is global nuclear power experiencing?",
+        "options": [
+          "A gradual decline.",
+          "A significant revival.",
+          "A period of stagnation.",
+          "A shift to other renewable sources."
+        ],
+        "answer": "A significant revival."
+      },
+      {
+        "q": "Nuclear energy is being reconsidered to meet what kind of requirements?",
+        "options": [
+          "Historical energy requirements.",
+          "Future power requirements.",
+          "Only industrial energy requirements.",
+          "Short-term energy requirements."
+        ],
+        "answer": "Future power requirements."
+      },
+      {
+        "q": "What does 'largely driven by' mean in the sentence 'This resurgence is largely driven by...'?",
+        "options": [
+          "Completely stopped by.",
+          "Primarily caused by.",
+          "Slightly influenced by.",
+          "Ignored due to."
+        ],
+        "answer": "Primarily caused by."
+      }
+    ]
+  },
+  "article-4": {
+    "title": "日本解除武器出口禁令，戰後防衛政策重大轉向",
+    "tabTitle": "地緣政治",
+    "english": "On April 24, 2026, Japan officially lifted its decades-old ban on exporting lethal weapons. This landmark decision marks a significant departure from its pacifist post-World War II defense policy. The move aims to strengthen its defense industry and enhance security cooperation with allies amidst increasing regional geopolitical challenges. Critics, however, raise concerns about potential regional instability and Japan's evolving military role.",
+    "chinese": "2026年4月24日，日本正式解除其數十年來對致命武器出口的禁令。這項里程碑式的決定標誌著其在二戰後和平主義防衛政策的重大轉變。此舉旨在加強其國防工業，並在日益加劇的區域地緣政治挑戰中增強與盟友的安全合作。然而，批評者對潛在的區域不穩定和日本不斷演變的軍事角色表示擔憂。",
+    "vocabulary": [
+      "lift (v.): 解除，取消",
+      "ban (n.): 禁令",
+      "export (v.): 出口",
+      "lethal (adj.): 致命的",
+      "landmark (adj.): 具有里程碑意義的",
+      "decision (n.): 決定",
+      "significant (adj.): 重大的，顯著的",
+      "departure (n.): 偏離，背離",
+      "pacifist (adj.): 和平主義的",
+      "post-war (adj.): 戰後的",
+      "defense policy (n.): 防衛政策",
+      "strengthen (v.): 加強",
+      "defense industry (n.): 國防工業",
+      "enhance (v.): 提升，增強",
+      "security cooperation (n.): 安全合作",
+      "allies (n.): 盟友",
+      "amidst (prep.): 在…之中",
+      "geopolitical (adj.): 地緣政治的",
+      "raise concerns (phr.): 引起擔憂",
+      "instability (n.): 不穩定性"
+    ],
+    "quiz": [
+      {
+        "q": "What did Japan officially lift on April 24, 2026?",
+        "options": [
+          "Its trade tariffs",
+          "Its ban on exporting lethal weapons",
+          "Its travel restrictions",
+          "Its immigration policies"
+        ],
+        "answer": "Its ban on exporting lethal weapons"
+      },
+      {
+        "q": "The decision marks a significant departure from what policy?",
+        "options": [
+          "Its economic growth strategy",
+          "Its post-World War II pacifist defense policy",
+          "Its cultural exchange programs",
+          "Its environmental protection laws"
+        ],
+        "answer": "Its post-World War II pacifist defense policy"
+      },
+      {
+        "q": "What is one of the aims of this move?",
+        "options": [
+          "To reduce military spending",
+          "To weaken its defense industry",
+          "To strengthen its defense industry",
+          "To decrease security cooperation"
+        ],
+        "answer": "To strengthen its defense industry"
+      },
+      {
+        "q": "With whom does Japan aim to enhance security cooperation?",
+        "options": [
+          "Its rivals",
+          "Its allies",
+          "Neutral countries",
+          "International organizations"
+        ],
+        "answer": "Its allies"
+      },
+      {
+        "q": "The policy change occurs \"amidst increasing regional geopolitical challenges.\" What does \"geopolitical\" refer to?",
+        "options": [
+          "The study of Earth's physical features",
+          "Relating to politics, especially international relations, as influenced by geographical factors",
+          "The science of population distribution",
+          "The art of map-making"
+        ],
+        "answer": "Relating to politics, especially international relations, as influenced by geographical factors"
+      },
+      {
+        "q": "Who raises concerns about this new policy?",
+        "options": [
+          "Government officials",
+          "Military leaders",
+          "Critics",
+          "International trade organizations"
+        ],
+        "answer": "Critics"
+      },
+      {
+        "q": "What is one concern raised by critics?",
+        "options": [
+          "Economic recession",
+          "Increased tourism",
+          "Potential regional instability",
+          "Improved human rights"
+        ],
+        "answer": "Potential regional instability"
+      },
+      {
+        "q": "How long had the ban on exporting lethal weapons been in place before it was lifted?",
+        "options": [
+          "A few years",
+          "Several months",
+          "A decade",
+          "Decades"
+        ],
+        "answer": "Decades"
+      },
+      {
+        "q": "The word \"pacifist\" in the context of defense policy suggests a stance that is:",
+        "options": [
+          "Aggressive and confrontational",
+          "Neutral and isolationist",
+          "Opposed to war and violence",
+          "Supportive of military expansion"
+        ],
+        "answer": "Opposed to war and violence"
+      },
+      {
+        "q": "What kind of weapons are specifically mentioned in the ban?",
+        "options": [
+          "Non-lethal weapons",
+          "Lethal weapons",
+          "Defensive weapons only",
+          "Small arms"
+        ],
+        "answer": "Lethal weapons"
+      },
+      {
+        "q": "What is \"evolving\" according to the critics' concerns?",
+        "options": [
+          "Japan's economic system",
+          "Japan's military role",
+          "Japan's cultural traditions",
+          "Japan's educational system"
+        ],
+        "answer": "Japan's military role"
+      },
+      {
+        "q": "The decision is described as a \"landmark decision.\" This implies it is:",
+        "options": [
+          "A minor adjustment",
+          "A temporary measure",
+          "A significant and important event",
+          "A controversial but insignificant event"
+        ],
+        "answer": "A significant and important event"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "北韓駭客竊取2.9億美元加密貨幣，引發全球資安關注",
+    "tabTitle": "科技",
+    "english": "North Korean state-sponsored hackers have reportedly stolen approximately $290 million worth of cryptocurrency on April 24, 2026. This significant cyberattack targeted various platforms, highlighting the growing sophistication of threat actors. The incident immediately raised serious global cybersecurity concerns among governments and financial institutions worldwide. Experts warn that such illicit activities fund North Korea's weapons programs, posing a severe international security risk.",
+    "chinese": "據報導，北韓國家資助的駭客於2026年4月24日竊取了價值約2.9億美元的加密貨幣。這起重大的網路攻擊鎖定了多個平台，凸顯了威脅行為者日益複雜的技術。此事件立即在全球各國政府和金融機構之間引發了嚴重的網路資安擔憂。專家警告，此類非法活動資助了北韓的武器計畫，構成嚴重的國際安全風險。",
+    "vocabulary": [
+      "state-sponsored (adj.): 國家資助的",
+      "hackers (n.): 駭客",
+      "reportedly (adv.): 據報導",
+      "stolen (v.pp.): 竊取（steal的過去分詞）",
+      "approximately (adv.): 大約",
+      "cryptocurrency (n.): 加密貨幣",
+      "significant (adj.): 重大的",
+      "cyberattack (n.): 網路攻擊",
+      "targeted (v.): 鎖定；針對",
+      "platforms (n.): 平台",
+      "highlighting (v.gerund): 凸顯；強調",
+      "sophistication (n.): 複雜性；精密性",
+      "threat actors (n.phr.): 威脅行為者",
+      "immediately (adv.): 立即地",
+      "raised (v.): 引發；提高（raise的過去式）",
+      "global (adj.): 全球的",
+      "cybersecurity (n.): 網路資安",
+      "concerns (n.): 擔憂；關切",
+      "financial institutions (n.phr.): 金融機構",
+      "illicit activities (n.phr.): 非法活動"
+    ],
+    "quiz": [
+      {
+        "q": "According to the news, who is responsible for stealing the cryptocurrency?",
+        "options": [
+          "A. Independent hackers",
+          "B. State-sponsored hackers from North Korea",
+          "C. A global crime syndicate",
+          "D. An unknown group"
+        ],
+        "answer": "B. State-sponsored hackers from North Korea"
+      },
+      {
+        "q": "Approximately how much cryptocurrency was reportedly stolen?",
+        "options": [
+          "A. $29 million",
+          "B. $290 million",
+          "C. $2.9 billion",
+          "D. $290,000"
+        ],
+        "answer": "B. $290 million"
+      },
+      {
+        "q": "When did this cyberattack reportedly take place?",
+        "options": [
+          "A. March 24, 2026",
+          "B. April 24, 2026",
+          "C. May 24, 2026",
+          "D. April 24, 2025"
+        ],
+        "answer": "B. April 24, 2026"
+      },
+      {
+        "q": "What type of assets were stolen in this incident?",
+        "options": [
+          "A. Government bonds",
+          "B. Physical gold",
+          "C. Cryptocurrency",
+          "D. Company stocks"
+        ],
+        "answer": "C. Cryptocurrency"
+      },
+      {
+        "q": "The news highlights the growing sophistication of what?",
+        "options": [
+          "A. Cybersecurity defenses",
+          "B. Financial markets",
+          "C. Threat actors",
+          "D. International laws"
+        ],
+        "answer": "C. Threat actors"
+      },
+      {
+        "q": "What did the incident immediately raise among governments and financial institutions?",
+        "options": [
+          "A. Economic opportunities",
+          "B. Global cybersecurity concerns",
+          "C. New investment strategies",
+          "D. Interest in blockchain technology"
+        ],
+        "answer": "B. Global cybersecurity concerns"
+      },
+      {
+        "q": "What do experts warn that such illicit activities help fund?",
+        "options": [
+          "A. Humanitarian aid",
+          "B. North Korea's weapons programs",
+          "C. Global economic development",
+          "D. Renewable energy projects"
+        ],
+        "answer": "B. North Korea's weapons programs"
+      },
+      {
+        "q": "What kind of risk does this activity pose according to the experts?",
+        "options": [
+          "A. A minor economic setback",
+          "B. A regional trade dispute",
+          "C. A severe international security risk",
+          "D. A temporary market fluctuation"
+        ],
+        "answer": "C. A severe international security risk"
+      },
+      {
+        "q": "The term \"state-sponsored\" implies that the hackers are:",
+        "options": [
+          "A. Working independently",
+          "B. Supported or directed by a government",
+          "C. Funded by private corporations",
+          "D. Part of an international charity"
+        ],
+        "answer": "B. Supported or directed by a government"
+      },
+      {
+        "q": "Which of the following best describes the style of the news report?",
+        "options": [
+          "A. Opinionated and speculative",
+          "B. Emotional and dramatic",
+          "C. Factual and informative",
+          "D. Humorous and light-hearted"
+        ],
+        "answer": "C. Factual and informative"
+      },
+      {
+        "q": "The cyberattack targeted \"various platforms.\" What does \"platforms\" refer to in this context?",
+        "options": [
+          "A. Social media websites",
+          "B. Physical trading floors",
+          "C. Online systems or services where cryptocurrency is held or traded",
+          "D. Political organizations"
+        ],
+        "answer": "C. Online systems or services where cryptocurrency is held or traded"
+      },
+      {
+        "q": "What is the primary focus of this news article?",
+        "options": [
+          "A. The future of cryptocurrency",
+          "B. The economic impact of cybercrime",
+          "C. A significant cryptocurrency theft by North Korean hackers and its global security implications",
+          "D. New cybersecurity defense technologies"
+        ],
+        "answer": "C. A significant cryptocurrency theft by North Korean hackers and its global security implications"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "NASA阿提米絲二號任務返航，太空人稱重返月球「絕對可行」",
+    "tabTitle": "科技",
+    "english": "NASA's Artemis II mission successfully returned to Earth on April 24, 2026, after completing its critical test flight around the Moon. The four astronauts aboard the Orion spacecraft conducted essential checks of the spacecraft's systems and life support. Upon their return, the crew expressed strong confidence in future lunar missions, with one astronaut declaring that returning humans to the Moon is 'absolutely feasible.' This successful journey marks a significant step towards NASA's goal of establishing a long-term human presence on the Moon.",
+    "chinese": "美國太空總署（NASA）的阿提米絲二號任務於2026年4月24日成功返回地球，完成了其繞月關鍵測試飛行。獵戶座太空船上的四名太空人對太空船系統和生命維持系統進行了必要的檢查。他們返航後，機組人員對未來的月球任務表達了強烈信心，其中一位太空人宣稱將人類送回月球「絕對可行」。這次成功的旅程標誌著NASA實現月球長期人類駐留目標的關鍵一步。",
+    "vocabulary": [
+      "NASA (abbr.): 美國國家航空暨太空總署",
+      "Artemis II (n.): 阿提米絲二號 (任務名稱)",
+      "mission (n.): 任務",
+      "return (v.): 返回",
+      "astronaut (n.): 太空人",
+      "declare (v.): 宣稱；聲明",
+      "absolutely (adv.): 絕對地；完全地",
+      "feasible (adj.): 可行的；辦得到的",
+      "successfully (adv.): 成功地",
+      "critical (adj.): 關鍵的；重要的",
+      "test flight (n.): 試飛",
+      "Orion spacecraft (n.): 獵戶座太空船",
+      "aboard (prep.): 在（船、飛機、火車）上",
+      "conduct (v.): 執行；進行",
+      "essential (adj.): 必要的；不可或缺的",
+      "check (n.): 檢查",
+      "system (n.): 系統",
+      "life support (n.): 生命維持",
+      "confidence (n.): 信心",
+      "lunar (adj.): 月球的"
+    ],
+    "quiz": [
+      {
+        "q": "What was the name of the NASA mission mentioned in the news?",
+        "options": [
+          "A) Apollo 11",
+          "B) Artemis II",
+          "C) Voyager I",
+          "D) SpaceX Falcon"
+        ],
+        "answer": "B) Artemis II"
+      },
+      {
+        "q": "When did the Artemis II mission return to Earth?",
+        "options": [
+          "A) March 24, 2026",
+          "B) April 24, 2026",
+          "C) May 24, 2026",
+          "D) June 24, 2026"
+        ],
+        "answer": "B) April 24, 2026"
+      },
+      {
+        "q": "What was the primary purpose of the Artemis II mission's flight around the Moon?",
+        "options": [
+          "A) To land on the Moon",
+          "B) To collect Moon rocks",
+          "C) To conduct essential test flights",
+          "D) To explore deep space"
+        ],
+        "answer": "C) To conduct essential test flights"
+      },
+      {
+        "q": "How many astronauts were aboard the Orion spacecraft?",
+        "options": [
+          "A) Two",
+          "B) Three",
+          "C) Four",
+          "D) Five"
+        ],
+        "answer": "C) Four"
+      },
+      {
+        "q": "What did the astronauts check during their mission?",
+        "options": [
+          "A) Lunar surface conditions",
+          "B) Asteroid trajectories",
+          "C) Spacecraft systems and life support",
+          "D) Other planets' atmospheres"
+        ],
+        "answer": "C) Spacecraft systems and life support"
+      },
+      {
+        "q": "What did an astronaut declare about returning humans to the Moon?",
+        "options": [
+          "A) It's impossible",
+          "B) It's challenging but achievable",
+          "C) It's absolutely feasible",
+          "D) It's not a priority"
+        ],
+        "answer": "C) It's absolutely feasible"
+      },
+      {
+        "q": "What does the successful journey mark a significant step towards for NASA?",
+        "options": [
+          "A) Exploring Mars",
+          "B) Establishing a long-term human presence on the Moon",
+          "C) Building a space station around Venus",
+          "D) Sending probes to Jupiter"
+        ],
+        "answer": "B) Establishing a long-term human presence on the Moon"
+      },
+      {
+        "q": "What does the word \"feasible\" mean in the context of the news?",
+        "options": [
+          "A) Difficult",
+          "B) Impossible",
+          "C) Achievable",
+          "D) Unnecessary"
+        ],
+        "answer": "C) Achievable"
+      },
+      {
+        "q": "Which word best describes the style of the news report?",
+        "options": [
+          "A) Opinionated",
+          "B) Fictional",
+          "C) Factual",
+          "D) Humorous"
+        ],
+        "answer": "C) Factual"
+      },
+      {
+        "q": "The phrase \"critical test flight\" implies the flight was:",
+        "options": [
+          "A) Unimportant",
+          "B) Dangerous",
+          "C) Essential for future success",
+          "D) Optional"
+        ],
+        "answer": "C) Essential for future success"
+      },
+      {
+        "q": "What is the spacecraft used in the Artemis II mission called?",
+        "options": [
+          "A) Apollo",
+          "B) Enterprise",
+          "C) Orion",
+          "D) Discovery"
+        ],
+        "answer": "C) Orion"
+      },
+      {
+        "q": "What does \"life support\" refer to in the context of a spacecraft?",
+        "options": [
+          "A) Financial aid for astronauts' families",
+          "B) Systems that keep astronauts alive in space",
+          "C) Emotional support for the crew",
+          "D) Backup communication systems"
+        ],
+        "answer": "B) Systems that keep astronauts alive in space"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
