@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 27, 2026：科技、科技 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 政府加碼投資AI研發，打造國家隊\nThe government has announced a significant increase in funding for Artificial Intelligence (AI) research and development. This initiative aims to foster domestic innovation and establish a 'national team' of leading AI experts and institutions. The substantial investment is expected to accelerate the development of cutting-edge AI technologies and enhance the nation's competitive edge in the global tech landscape.\n\n[2] 綠能發展新政策，目標2050淨零\nTaiwan's government has unveiled a comprehensive suite of new green energy policies aimed at achieving carbon neutrality by 2050. The initiative focuses on accelerating the transition to renewable energy sources, including solar and wind power. Key measures involve significant investments in infrastructure development and research into advanced energy technologies. This strategic shift is expected to boost economic growth while drastically reducing the nation's carbon footprint.\n\n[3] 台積電獲獎肯定，技術領先地位穩固\nTSMC, a global leader in semiconductor manufacturing, has been honored with a prestigious industry award. This recognition highlights the company's continuous innovation and its significant contributions to advancing chip technology. The award further solidifies TSMC's dominant position in the competitive semiconductor market, underscoring its unwavering commitment to technological excellence and customer satisfaction.",
+    "chinese": "【1】政府加碼投資AI研發，打造國家隊\n政府宣布將大幅增加對人工智能（AI）研發的投資。這項舉措旨在促進國內創新，並建立一支由頂尖AI專家和機構組成的「國家隊」。這項巨額投資預計將加速尖端AI技術的發展，並增強國家在全球科技領域的競爭力。\n\n【2】綠能發展新政策，目標2050淨零\n台灣政府公布了一系列全面的綠能新政策，目標是在 2050 年實現碳中和。這項倡議著重於加速轉向再生能源，包括太陽能和風力發電。關鍵措施包含對基礎設施開發和先進能源技術研究的大量投資。這項策略性轉變預計將促進經濟成長，同時大幅減少國家的碳足跡。\n\n【3】台積電獲獎肯定，技術領先地位穩固\n全球半導體製造領導者台積電榮獲一項重要的產業獎項。這項肯定突顯了公司持續的創新及其對推動晶片技術進步的重大貢獻。該獎項進一步鞏固了台積電在競爭激烈的半導體市場中的主導地位，強調了其對技術卓越和客戶滿意度的堅定承諾。",
+    "vocabulary": [
+      "government (n.): 政府",
+      "announced (v.): 宣布",
+      "significant (adj.): 顯著的",
+      "increase (n.): 增加",
+      "funding (n.): 資金",
+      "Artificial Intelligence (n.): 人工智能",
+      "research and development (n.): 研究與開發",
+      "initiative (n.): 倡議，計畫",
+      "foster (v.): 培養，促進",
+      "domestic (adj.): 國內的",
+      "innovation (n.): 創新",
+      "establish (v.): 建立",
+      "national team (n.): 國家隊",
+      "experts (n.): 專家",
+      "institutions (n.): 機構",
+      "substantial (adj.): 相當大的，實質的",
+      "investment (n.): 投資",
+      "expected (v.): 預期",
+      "accelerate (v.): 加速",
+      "competitive edge (n.): 競爭優勢",
+      "unveiled (v.): 揭露，公布",
+      "comprehensive (adj.): 全面的",
+      "suite (n.): 一套（政策、措施等）",
+      "green energy (n.): 綠色能源",
+      "policies (n.): 政策",
+      "aimed at (phr.): 旨在",
+      "achieving (v.): 達成",
+      "carbon neutrality (n.): 碳中和",
+      "initiative (n.): 倡議，計畫",
+      "focuses on (phr.): 著重於",
+      "accelerating (v.): 加速",
+      "transition (n.): 轉型",
+      "renewable energy (n.): 再生能源",
+      "sources (n.): 來源",
+      "solar power (n.): 太陽能",
+      "wind power (n.): 風力發電",
+      "key measures (phr.): 關鍵措施",
+      "significant investments (phr.): 大量投資",
+      "infrastructure development (n.): 基礎設施開發",
+      "carbon footprint (n.): 碳足跡",
+      "semiconductor (n.): 半導體",
+      "manufacturing (n.): 製造業",
+      "prestigious (adj.): 享有盛譽的",
+      "industry award (n.): 產業獎項",
+      "recognition (n.): 認可，肯定",
+      "continuous (adj.): 持續的",
+      "innovation (n.): 創新",
+      "significant (adj.): 重大的",
+      "contributions (n.): 貢獻",
+      "advancing (v.): 推進，促進",
+      "chip technology (n.): 晶片技術",
+      "solidifies (v.): 鞏固，使牢固",
+      "dominant position (n.): 主導地位",
+      "competitive (adj.): 競爭激烈的",
+      "semiconductor market (n.): 半導體市場",
+      "underscoring (v.): 強調，標示",
+      "unwavering (adj.): 堅定的",
+      "commitment (n.): 承諾",
+      "technological excellence (n.): 技術卓越",
+      "customer satisfaction (n.): 客戶滿意度"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news?",
+        "options": [
+          "A new smartphone release",
+          "Increased government investment in AI R&D",
+          "A major international sporting event",
+          "Changes in educational policies"
+        ],
+        "answer": "Increased government investment in AI R&D"
+      },
+      {
+        "q": "What does the government aim to foster with this investment?",
+        "options": [
+          "International trade agreements",
+          "Cultural exchange programs",
+          "Domestic innovation",
+          "Environmental protection policies"
+        ],
+        "answer": "Domestic innovation"
+      },
+      {
+        "q": "What is being established as part of this initiative?",
+        "options": [
+          "A new university campus",
+          "A 'national team' of AI experts",
+          "A public transportation network",
+          "A space exploration agency"
+        ],
+        "answer": "A 'national team' of AI experts"
+      },
+      {
+        "q": "The investment is described as:",
+        "options": [
+          "Minor",
+          "Insignificant",
+          "Substantial",
+          "Temporary"
+        ],
+        "answer": "Substantial"
+      },
+      {
+        "q": "What is the expected outcome of this investment?",
+        "options": [
+          "A decrease in technological progress",
+          "An acceleration of AI technology development",
+          "Reduced funding for other sectors",
+          "A decline in global competitiveness"
+        ],
+        "answer": "An acceleration of AI technology development"
+      },
+      {
+        "q": "The news is about a boost in funding for:",
+        "options": [
+          "Medical research",
+          "Renewable energy",
+          "Artificial Intelligence",
+          "Agricultural technology"
+        ],
+        "answer": "Artificial Intelligence"
+      },
+      {
+        "q": "The term 'national team' in this context refers to:",
+        "options": [
+          "A sports team representing the country",
+          "A group of leading AI experts and institutions",
+          "Military personnel",
+          "A diplomatic delegation"
+        ],
+        "answer": "A group of leading AI experts and institutions"
+      },
+      {
+        "q": "The investment aims to enhance the nation's:",
+        "options": [
+          "Cultural heritage",
+          "Global competitive edge",
+          "Tourism industry",
+          "Historical preservation"
+        ],
+        "answer": "Global competitive edge"
+      },
+      {
+        "q": "Which word means 'to encourage the development of something'?",
+        "options": [
+          "Establish",
+          "Announce",
+          "Foster",
+          "Boost"
+        ],
+        "answer": "Foster"
+      },
+      {
+        "q": "What does 'R&D' stand for?",
+        "options": [
+          "Regulation and Development",
+          "Research and Discovery",
+          "Resources and Distribution",
+          "Research and Development"
+        ],
+        "answer": "Research and Development"
+      },
+      {
+        "q": "The investment is focused on:",
+        "options": [
+          "Past achievements",
+          "Future technologies",
+          "Historical records",
+          "Current infrastructure"
+        ],
+        "answer": "Future technologies"
+      },
+      {
+        "q": "The news suggests that the government is taking a proactive approach to:",
+        "options": [
+          "Reduce technological risks",
+          "Limit foreign influence",
+          "Advance in the field of AI",
+          "Cut public spending"
+        ],
+        "answer": "Advance in the field of AI"
+      },
+      {
+        "q": "What is the main goal of Taiwan's new green energy policies?",
+        "options": [
+          "To increase fossil fuel consumption",
+          "To achieve carbon neutrality by 2050",
+          "To reduce investment in renewable energy",
+          "To focus solely on nuclear power"
+        ],
+        "answer": "To achieve carbon neutrality by 2050"
+      },
+      {
+        "q": "Which types of renewable energy are mentioned in the article?",
+        "options": [
+          "Geothermal and Hydroelectric",
+          "Solar and Wind",
+          "Biomass and Tidal",
+          "All of the above"
+        ],
+        "answer": "Solar and Wind"
+      },
+      {
+        "q": "What do the new policies involve in terms of investment?",
+        "options": [
+          "Minimal funding",
+          "Investment in fossil fuel research",
+          "Significant investments in infrastructure and technology",
+          "Divestment from green energy projects"
+        ],
+        "answer": "Significant investments in infrastructure and technology"
+      },
+      {
+        "q": "What is the expected impact of this strategic shift on Taiwan's economy?",
+        "options": [
+          "Economic decline",
+          "No significant change",
+          "Boost economic growth",
+          "Increased reliance on imported energy"
+        ],
+        "answer": "Boost economic growth"
+      },
+      {
+        "q": "The policies aim to reduce Taiwan's ______.",
+        "options": [
+          "GDP",
+          "Population",
+          "Carbon footprint",
+          "Energy imports"
+        ],
+        "answer": "Carbon footprint"
+      },
+      {
+        "q": "What does 'unveiled' mean in the context of the article?",
+        "options": [
+          "Hidden",
+          "Announced or revealed",
+          "Cancelled",
+          "Delayed"
+        ],
+        "answer": "Announced or revealed"
+      },
+      {
+        "q": "The word 'comprehensive' means:",
+        "options": [
+          "Limited",
+          "Partial",
+          "Including all or nearly all elements",
+          "Confusing"
+        ],
+        "answer": "Including all or nearly all elements"
+      },
+      {
+        "q": "What does 'accelerating' mean?",
+        "options": [
+          "Slowing down",
+          "Stopping",
+          "Making something happen faster",
+          "Maintaining speed"
+        ],
+        "answer": "Making something happen faster"
+      },
+      {
+        "q": "Which of the following is a 'renewable energy source'?",
+        "options": [
+          "Coal",
+          "Natural Gas",
+          "Wind Power",
+          "Oil"
+        ],
+        "answer": "Wind Power"
+      },
+      {
+        "q": "What is the target year for achieving carbon neutrality?",
+        "options": [
+          "2030",
+          "2040",
+          "2050",
+          "2060"
+        ],
+        "answer": "2050"
+      },
+      {
+        "q": "The 'initiative' refers to:",
+        "options": [
+          "A problem",
+          "A plan or program",
+          "A past event",
+          "A personal opinion"
+        ],
+        "answer": "A plan or program"
+      },
+      {
+        "q": "What is the 'carbon footprint'?",
+        "options": [
+          "The number of trees in a country",
+          "The total amount of greenhouse gases produced by human activities",
+          "The amount of solar energy captured",
+          "The speed of economic development"
+        ],
+        "answer": "The total amount of greenhouse gases produced by human activities"
+      },
+      {
+        "q": "What is TSMC's primary industry?",
+        "options": [
+          "Automotive manufacturing",
+          "Semiconductor manufacturing",
+          "Software development",
+          "Aerospace engineering"
+        ],
+        "answer": "Semiconductor manufacturing"
+      },
+      {
+        "q": "What did TSMC recently receive?",
+        "options": [
+          "A new factory",
+          "A major investment",
+          "A prestigious industry award",
+          "A government subsidy"
+        ],
+        "answer": "A prestigious industry award"
+      },
+      {
+        "q": "What does the award highlight about TSMC?",
+        "options": [
+          "Its financial performance",
+          "Its employee training programs",
+          "Its continuous innovation and contributions to chip technology",
+          "Its marketing strategies"
+        ],
+        "answer": "Its continuous innovation and contributions to chip technology"
+      },
+      {
+        "q": "According to the text, what does the award help to do for TSMC?",
+        "options": [
+          "Reduce its production costs",
+          "Expand into new markets",
+          "Solidify its dominant position in the semiconductor market",
+          "Hire more engineers"
+        ],
+        "answer": "Solidify its dominant position in the semiconductor market"
+      },
+      {
+        "q": "The word 'prestigious' in the text means:",
+        "options": [
+          "New",
+          "Expensive",
+          "Highly respected",
+          "Obsolete"
+        ],
+        "answer": "Highly respected"
+      },
+      {
+        "q": "What aspect of TSMC's business is underscored by its commitment?",
+        "options": [
+          "Environmental sustainability",
+          "Technological excellence and customer satisfaction",
+          "Labor relations",
+          "Supply chain logistics"
+        ],
+        "answer": "Technological excellence and customer satisfaction"
+      },
+      {
+        "q": "The term 'semiconductor' refers to:",
+        "options": [
+          "A type of battery",
+          "A material used in electronics",
+          "A type of software",
+          "A manufacturing process"
+        ],
+        "answer": "A material used in electronics"
+      },
+      {
+        "q": "Which word describes TSMC's position in the market, as mentioned in the text?",
+        "options": [
+          "Minor",
+          "Emerging",
+          "Dominant",
+          "Challenged"
+        ],
+        "answer": "Dominant"
+      },
+      {
+        "q": "The news states that TSMC is a global leader in:",
+        "options": [
+          "Artificial intelligence",
+          "Cloud computing",
+          "Semiconductor manufacturing",
+          "Electric vehicles"
+        ],
+        "answer": "Semiconductor manufacturing"
+      },
+      {
+        "q": "What does 'advancing' mean in the context of chip technology?",
+        "options": [
+          "Slowing down",
+          "Improving or developing",
+          "Replacing",
+          "Testing"
+        ],
+        "answer": "Improving or developing"
+      },
+      {
+        "q": "The recognition TSMC received is for its:",
+        "options": [
+          "Marketing campaigns",
+          "Financial reports",
+          "Technological achievements",
+          "Human resources policies"
+        ],
+        "answer": "Technological achievements"
+      },
+      {
+        "q": "The word 'unwavering' suggests that TSMC's commitment is:",
+        "options": [
+          "Variable",
+          "Flexible",
+          "Constant and firm",
+          "New"
+        ],
+        "answer": "Constant and firm"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "AI晶片競賽白熱化，英特爾祭新策略",
+    "tabTitle": "科技",
+    "english": "The global race for advanced AI chips is heating up, with major players investing heavily in research and development. Intel, a long-standing semiconductor giant, has announced a new strategic initiative aimed at regaining market share. This move signals a fierce competition to dominate the future of artificial intelligence hardware. The company's updated plan focuses on next-generation manufacturing processes and partnerships to accelerate innovation in this critical technological sector.",
+    "chinese": "全球先進AI晶片競賽日趨激烈，各大廠商正大力投入研發。半導體巨頭英特爾宣布了一項旨在重奪市場份額的新策略。此舉標誌著在人工智能硬體未來領域的激烈競爭。該公司更新的計畫重點關注下一代製造流程和合作夥伴關係，以加速這一關鍵技術領域的創新。",
+    "vocabulary": [
+      "AI chip (n.): 人工智能晶片",
+      "race (n.): 競賽",
+      "intensifies (v.): 加劇",
+      "unveils (v.): 揭開，公布",
+      "strategy (n.): 策略",
+      "global (adj.): 全球的",
+      "advanced (adj.): 先進的",
+      "major players (n.): 主要參與者",
+      "investing heavily (v. phrase): 大力投資",
+      "research and development (n.): 研究與發展",
+      "semiconductor giant (n.): 半導體巨頭",
+      "announced (v.): 宣布",
+      "strategic initiative (n.): 策略性舉措",
+      "aimed at (v. phrase): 旨在",
+      "regaining market share (v. phrase): 重奪市場份額",
+      "signals (v.): 預示",
+      "fierce competition (n.): 激烈競爭",
+      "dominate (v.): 支配，主導",
+      "artificial intelligence hardware (n.): 人工智能硬體",
+      "next-generation (adj.): 下一代的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "Intel's new product launch",
+          "The increasing competition in the AI chip market",
+          "The development of new software for AI",
+          "Global economic trends"
+        ],
+        "answer": "The increasing competition in the AI chip market"
+      },
+      {
+        "q": "Which company is mentioned as unveiling a new strategy?",
+        "options": [
+          "Nvidia",
+          "AMD",
+          "Intel",
+          "Qualcomm"
+        ],
+        "answer": "Intel"
+      },
+      {
+        "q": "What is the primary goal of Intel's new strategy?",
+        "options": [
+          "To reduce manufacturing costs",
+          "To expand into new geographical markets",
+          "To improve its AI software",
+          "To regain market share"
+        ],
+        "answer": "To regain market share"
+      },
+      {
+        "q": "The news states that the AI chip race is becoming:",
+        "options": [
+          "Slower",
+          "Less competitive",
+          "More intense",
+          "Less important"
+        ],
+        "answer": "More intense"
+      },
+      {
+        "q": "What does Intel's updated plan focus on?",
+        "options": [
+          "Marketing and advertising",
+          "Customer service improvements",
+          "Next-generation manufacturing and partnerships",
+          "Acquiring smaller tech companies"
+        ],
+        "answer": "Next-generation manufacturing and partnerships"
+      },
+      {
+        "q": "According to the text, major players are investing heavily in:",
+        "options": [
+          "Marketing campaigns",
+          "Research and development",
+          "Company cafeterias",
+          "Employee training programs"
+        ],
+        "answer": "Research and development"
+      },
+      {
+        "q": "What does the word \"unveils\" mean in this context?",
+        "options": [
+          "Hides",
+          "Announces",
+          "Cancels",
+          "Postpones"
+        ],
+        "answer": "Announces"
+      },
+      {
+        "q": "The competition is fierce to dominate the future of:",
+        "options": [
+          "Computer games",
+          "Artificial intelligence hardware",
+          "Mobile phone technology",
+          "Cloud storage"
+        ],
+        "answer": "Artificial intelligence hardware"
+      },
+      {
+        "q": "Intel is described as a:",
+        "options": [
+          "New startup",
+          "Software company",
+          "Semiconductor giant",
+          "Chip distributor"
+        ],
+        "answer": "Semiconductor giant"
+      },
+      {
+        "q": "The strategy aims to accelerate innovation in which critical sector?",
+        "options": [
+          "Biotechnology",
+          "Renewable energy",
+          "Financial technology",
+          "Technological sector"
+        ],
+        "answer": "Technological sector"
+      },
+      {
+        "q": "What is the English word for \"策略\"?",
+        "options": [
+          "plan",
+          "method",
+          "strategy",
+          "approach"
+        ],
+        "answer": "strategy"
+      },
+      {
+        "q": "What does the phrase \"regaining market share\" imply?",
+        "options": [
+          "Losing customers",
+          "Increasing sales and influence",
+          "Developing new markets",
+          "Reducing production"
+        ],
+        "answer": "Increasing sales and influence"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "全球通膨壓力再起，央行利率決策受關注",
+    "tabTitle": "金融市場",
+    "english": "Global inflation pressures are showing renewed signs of acceleration, prompting increased scrutiny of central bank monetary policy. Several key economies have reported higher-than-expected price increases in recent months. This trend is forcing policymakers to carefully re-evaluate interest rate strategies to manage potential economic instability. Market participants are closely monitoring upcoming central bank announcements for guidance on future monetary tightening or easing.",
+    "chinese": "全球通膨壓力再次顯現加速跡象，引發對央行貨幣政策的嚴格審查。近期，幾個主要經濟體均報告了高於預期的物價上漲。這一趨勢正迫使決策者仔細重新評估利率策略，以應對潛在的經濟不穩定。市場參與者正密切關注即將到來的央行公告，以尋求未來貨幣緊縮或寬鬆的指引。",
+    "vocabulary": [
+      "inflation (n.): 通貨膨脹",
+      "pressures (n.): 壓力",
+      "renewed (adj.): 再度的",
+      "signs (n.): 跡象",
+      "acceleration (n.): 加速",
+      "prompting (v.): 促使",
+      "scrutiny (n.): 審查",
+      "central bank (n.): 中央銀行",
+      "monetary policy (n.): 貨幣政策",
+      "key (adj.): 關鍵的",
+      "economies (n.): 經濟體",
+      "reported (v.): 報告",
+      "higher-than-expected (adj.): 高於預期",
+      "price increases (n.): 物價上漲",
+      "trend (n.): 趨勢",
+      "forcing (v.): 迫使",
+      "policymakers (n.): 決策者",
+      "re-evaluate (v.): 重新評估",
+      "interest rate (n.): 利率",
+      "economic instability (n.): 經濟不穩定"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "A. Stock market performance",
+          "B. Global inflation pressures and central bank actions",
+          "C. Technological advancements",
+          "D. International trade agreements"
+        ],
+        "answer": "B. Global inflation pressures and central bank actions"
+      },
+      {
+        "q": "What are central banks being forced to do?",
+        "options": [
+          "A. Lower interest rates immediately",
+          "B. Increase government spending",
+          "C. Re-evaluate interest rate strategies",
+          "D. Focus on export promotion"
+        ],
+        "answer": "C. Re-evaluate interest rate strategies"
+      },
+      {
+        "q": "What has been reported in several key economies recently?",
+        "options": [
+          "A. Decreasing inflation",
+          "B. Stable price levels",
+          "C. Higher-than-expected price increases",
+          "D. Lower unemployment rates"
+        ],
+        "answer": "C. Higher-than-expected price increases"
+      },
+      {
+        "q": "What is showing renewed signs of acceleration?",
+        "options": [
+          "A. Economic growth",
+          "B. Technological innovation",
+          "C. Global inflation pressures",
+          "D. Consumer spending"
+        ],
+        "answer": "C. Global inflation pressures"
+      },
+      {
+        "q": "What are market participants closely monitoring?",
+        "options": [
+          "A. Political elections",
+          "B. Upcoming central bank announcements",
+          "C. Environmental regulations",
+          "D. Commodity prices"
+        ],
+        "answer": "B. Upcoming central bank announcements"
+      },
+      {
+        "q": "The word 'scrutiny' in the text means:",
+        "options": [
+          "A. Ignoring",
+          "B. Careful examination",
+          "C. Quick approval",
+          "D. Public celebration"
+        ],
+        "answer": "B. Careful examination"
+      },
+      {
+        "q": "What is the potential consequence of rising inflation mentioned in the text?",
+        "options": [
+          "A. Economic stability",
+          "B. Increased investment",
+          "C. Economic instability",
+          "D. Lower interest rates"
+        ],
+        "answer": "C. Economic instability"
+      },
+      {
+        "q": "The term 'monetary policy' refers to:",
+        "options": [
+          "A. Government fiscal spending",
+          "B. Central bank actions regarding money supply and interest rates",
+          "C. Trade tariffs and quotas",
+          "D. Regulations on businesses"
+        ],
+        "answer": "B. Central bank actions regarding money supply and interest rates"
+      },
+      {
+        "q": "What is the purpose of re-evaluating interest rate strategies?",
+        "options": [
+          "A. To encourage more borrowing",
+          "B. To manage potential economic instability",
+          "C. To increase government debt",
+          "D. To boost stock prices"
+        ],
+        "answer": "B. To manage potential economic instability"
+      },
+      {
+        "q": "Which word best describes the recent price increases?",
+        "options": [
+          "A. Expected",
+          "B. Lower-than-expected",
+          "C. Higher-than-expected",
+          "D. Stable"
+        ],
+        "answer": "C. Higher-than-expected"
+      },
+      {
+        "q": "The news suggests that central banks are paying close attention to:",
+        "options": [
+          "A. Social media trends",
+          "B. Inflationary developments",
+          "C. Sports events",
+          "D. Celebrity news"
+        ],
+        "answer": "B. Inflationary developments"
+      },
+      {
+        "q": "What are market participants looking for from central banks?",
+        "options": [
+          "A. Entertainment news",
+          "B. Guidance on future monetary actions",
+          "C. Weather forecasts",
+          "D. Historical data analysis"
+        ],
+        "answer": "B. Guidance on future monetary actions"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "朝鮮半島軍事緊張升高，引發區域擔憂",
+    "tabTitle": "地緣政治",
+    "english": "Military tensions on the Korean Peninsula have escalated significantly, prompting serious concerns across the region. Recent heightened activities and rhetoric from North Korea have led to increased military readiness among neighboring countries, including South Korea and Japan. International observers are closely monitoring the situation, urging diplomatic solutions to de-escalate the volatile standoff and prevent any potential conflict.",
+    "chinese": "朝鮮半島的軍事緊張局勢顯著升級，引起了整個區域的嚴重擔憂。朝鮮近期加劇的活動和言論，已導致包括韓國和日本在內的鄰國加強軍事戒備。國際觀察家正密切關注局勢，呼籲透過外交途徑來緩和這一不穩定的對峙，以防止任何潛在的衝突。",
+    "vocabulary": [
+      "escalated (v.): 升級",
+      "significantly (adv.): 顯著地",
+      "prompting (v.): 引起；促使",
+      "concerns (n.): 擔憂；關切",
+      "region (n.): 區域",
+      "heightened (adj.): 加劇的；提高的",
+      "activities (n.): 活動",
+      "rhetoric (n.): 言辭；修辭",
+      "increased (v.): 增加",
+      "readiness (n.): 戒備；準備",
+      "neighboring (adj.): 鄰近的",
+      "international (adj.): 國際的",
+      "observers (n.): 觀察家",
+      "closely (adv.): 密切地",
+      "monitoring (v.): 監控",
+      "situation (n.): 局勢",
+      "urging (v.): 敦促；力勸",
+      "diplomatic (adj.): 外交的",
+      "solutions (n.): 解決方案",
+      "de-escalate (v.): 緩和；降低（緊張局勢）",
+      "volatile (adj.): 不穩定的；易變的",
+      "standoff (n.): 對峙",
+      "prevent (v.): 預防",
+      "potential (adj.): 潛在的",
+      "conflict (n.): 衝突"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "Economic growth in East Asia",
+          "Military tensions on the Korean Peninsula",
+          "Environmental protection initiatives",
+          "Cultural exchange programs"
+        ],
+        "answer": "Military tensions on the Korean Peninsula"
+      },
+      {
+        "q": "According to the text, military tensions have:",
+        "options": [
+          "Decreased",
+          "Remained stable",
+          "Escalated significantly",
+          "Caused no concern"
+        ],
+        "answer": "Escalated significantly"
+      },
+      {
+        "q": "Who is prompted to be concerned by the situation?",
+        "options": [
+          "Only North Korea",
+          "Just South Korea",
+          "The entire region",
+          "No one"
+        ],
+        "answer": "The entire region"
+      },
+      {
+        "q": "What has led to increased military readiness among neighboring countries?",
+        "options": [
+          "Peaceful negotiations",
+          "Economic cooperation",
+          "Heightened activities and rhetoric from North Korea",
+          "Joint military exercises"
+        ],
+        "answer": "Heightened activities and rhetoric from North Korea"
+      },
+      {
+        "q": "Which countries are mentioned as having increased military readiness?",
+        "options": [
+          "China and Russia",
+          "South Korea and Japan",
+          "Vietnam and Thailand",
+          "North Korea and China"
+        ],
+        "answer": "South Korea and Japan"
+      },
+      {
+        "q": "Who is closely monitoring the situation?",
+        "options": [
+          "Local residents",
+          "Business leaders",
+          "International observers",
+          "Historians"
+        ],
+        "answer": "International observers"
+      },
+      {
+        "q": "What are international observers urging?",
+        "options": [
+          "Further military buildup",
+          "Economic sanctions",
+          "Diplomatic solutions",
+          "Increased rhetoric"
+        ],
+        "answer": "Diplomatic solutions"
+      },
+      {
+        "q": "What is the goal of urging diplomatic solutions?",
+        "options": [
+          "To escalate the conflict",
+          "To de-escalate the volatile standoff",
+          "To increase regional concerns",
+          "To ignore the situation"
+        ],
+        "answer": "To de-escalate the volatile standoff"
+      },
+      {
+        "q": "The word 'escalated' in the text means:",
+        "options": [
+          "Became less intense",
+          "Increased in intensity or seriousness",
+          "Remained the same",
+          "Stopped completely"
+        ],
+        "answer": "Increased in intensity or seriousness"
+      },
+      {
+        "q": "What does 'volatile' describe in the context of the standoff?",
+        "options": [
+          "Stable and predictable",
+          "Calm and peaceful",
+          "Likely to change rapidly and unpredictably",
+          "Slowly developing"
+        ],
+        "answer": "Likely to change rapidly and unpredictably"
+      },
+      {
+        "q": "The phrase 'sparking regional concerns' implies:",
+        "options": [
+          "The situation is causing worry throughout the area",
+          "The situation is leading to regional celebrations",
+          "The situation is having no impact on the region",
+          "The situation is improving regional relations"
+        ],
+        "answer": "The situation is causing worry throughout the area"
+      },
+      {
+        "q": "What is the ultimate aim mentioned to prevent any potential conflict?",
+        "options": [
+          "Increased military readiness",
+          "Heightened rhetoric",
+          "Diplomatic solutions to de-escalate the standoff",
+          "Close monitoring by observers"
+        ],
+        "answer": "Diplomatic solutions to de-escalate the standoff"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "日本解禁武器出口，防衛政策轉向",
+    "tabTitle": "地緣政治",
+    "english": "Japan has officially lifted its long-standing ban on arms exports, marking a significant shift in its post-war defense policy. This decision allows Japanese companies to sell military equipment and technology to other countries, a move aimed at strengthening alliances and contributing to international security. The change is expected to boost Japan's defense industry and its role in global security discussions.",
+    "chinese": "日本已正式解除長期的武器出口禁令，標誌著其戰後國防政策的重大轉變。這項決定允許日本公司向其他國家銷售軍事裝備和技術，此舉旨在加強聯盟並為國際安全做出貢獻。此改變預計將促進日本國防工業的發展及其在全球安全事務中的作用。",
+    "vocabulary": [
+      "lifted (v.): 解除",
+      "long-standing (adj.): 長期的",
+      "ban (n.): 禁令",
+      "arms export (n.): 武器出口",
+      "significant (adj.): 重大的",
+      "shift (n.): 轉變",
+      "post-war (adj.): 戰後的",
+      "defense policy (n.): 國防政策",
+      "officially (adv.): 正式地",
+      "allows (v.): 允許",
+      "military equipment (n.): 軍事裝備",
+      "technology (n.): 技術",
+      "aimed at (v.): 旨在",
+      "strengthening (v.): 加強",
+      "alliances (n.): 聯盟",
+      "contributing to (v.): 為...做出貢獻",
+      "international security (n.): 國際安全",
+      "expected (v.): 預計",
+      "boost (v.): 促進",
+      "defense industry (n.): 國防工業"
+    ],
+    "quiz": [
+      {
+        "q": "What major change has Japan implemented regarding arms exports?",
+        "options": [
+          "Increased restrictions on arms sales",
+          "Lifted the ban on arms exports",
+          "Banned all foreign military technology",
+          "Focused solely on domestic defense"
+        ],
+        "answer": "Lifted the ban on arms exports"
+      },
+      {
+        "q": "What does the decision signify for Japan's defense policy?",
+        "options": [
+          "A return to isolationism",
+          "A minor adjustment",
+          "A significant shift",
+          "A reduction in military spending"
+        ],
+        "answer": "A significant shift"
+      },
+      {
+        "q": "What is a stated aim of allowing Japanese companies to sell military equipment abroad?",
+        "options": [
+          "To reduce domestic production",
+          "To weaken international alliances",
+          "To strengthen alliances and contribute to international security",
+          "To focus only on technological development"
+        ],
+        "answer": "To strengthen alliances and contribute to international security"
+      },
+      {
+        "q": "Who is permitted to sell military equipment and technology under the new policy?",
+        "options": [
+          "Only government agencies",
+          "Foreign companies operating in Japan",
+          "Japanese companies",
+          "International organizations"
+        ],
+        "answer": "Japanese companies"
+      },
+      {
+        "q": "What aspect of Japan's defense is expected to be boosted by this change?",
+        "options": [
+          "Research and development funding",
+          "The defense industry",
+          "Naval capacity",
+          "Cybersecurity measures"
+        ],
+        "answer": "The defense industry"
+      },
+      {
+        "q": "The article describes the change as a \"long-standing\" ban. What does \"long-standing\" mean?",
+        "options": [
+          "Recent",
+          "Short-lived",
+          "Existing for a long time",
+          "Temporary"
+        ],
+        "answer": "Existing for a long time"
+      },
+      {
+        "q": "What is the primary focus of the new policy regarding international engagement?",
+        "options": [
+          "Economic sanctions",
+          "Cultural exchange",
+          "Military cooperation and security",
+          "Environmental protection"
+        ],
+        "answer": "Military cooperation and security"
+      },
+      {
+        "q": "The decision marks a shift in Japan's defense policy after which historical period?",
+        "options": [
+          "The Meiji Restoration",
+          "World War I",
+          "The Edo period",
+          "The post-war era"
+        ],
+        "answer": "The post-war era"
+      },
+      {
+        "q": "What kind of items can Japanese companies now sell internationally?",
+        "options": [
+          "Only raw materials",
+          "Military equipment and technology",
+          "Consumer electronics",
+          "Agricultural products"
+        ],
+        "answer": "Military equipment and technology"
+      },
+      {
+        "q": "What is the expected impact on Japan's role in global discussions?",
+        "options": [
+          "A diminished role",
+          "An increased role in global security discussions",
+          "No change in its role",
+          "A focus on regional trade only"
+        ],
+        "answer": "An increased role in global security discussions"
+      },
+      {
+        "q": "The word \"officially\" in the text means:",
+        "options": [
+          "Unofficially",
+          "Formally",
+          "Secretly",
+          "Casually"
+        ],
+        "answer": "Formally"
+      },
+      {
+        "q": "Which of the following best describes the style of the English text?",
+        "options": [
+          "Narrative",
+          "Opinionated",
+          "Factual",
+          "Humorous"
+        ],
+        "answer": "Factual"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
