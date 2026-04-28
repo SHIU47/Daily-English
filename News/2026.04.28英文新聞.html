@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 28, 2026：台灣社會、地緣政治 與 國際大事</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電2奈米洩密案判決，工程師遭重判十年\nA former engineer at Taiwan Semiconductor Manufacturing Company (TSMC) has been handed a severe sentence of ten years in prison. The verdict stems from a case involving the alleged leaking of sensitive information related to TSMC's advanced 2-nanometer chip technology. This incident highlights the critical importance of intellectual property protection in the highly competitive semiconductor industry.\n\n[2] AI引爆半導體大時代，台灣產值估達7.1兆\nThe artificial intelligence (AI) boom is dramatically reshaping the semiconductor industry, ushering in a new era of growth. Taiwan, a key player in global chip manufacturing, is expected to see its semiconductor output reach an estimated NT$7.1 trillion (approximately $220 billion USD) in the coming years. This surge is driven by the increasing demand for advanced chips essential for AI applications, from large language models to autonomous systems. The Taiwanese government and industry leaders are investing heavily to maintain their competitive edge in this rapidly evolving market.\n\n[3] 南亞科獲台積電技術支援，切入輝達AI伺服器供應鏈\nNanya Technology has secured a significant partnership by entering the supply chain for NVIDIA's AI servers. This advancement is made possible through crucial technical support from TSMC, the world's leading semiconductor manufacturer. The collaboration aims to enhance Nanya's capabilities in producing high-performance memory solutions essential for the rapidly growing AI market.",
+    "chinese": "【1】台積電2奈米洩密案判決，工程師遭重判十年\n台灣積體電路製造股份有限公司（台積電）的一名前工程師被判處十年有期徒刑。這項判決源於一起涉及洩露台積電先進二奈米製程技術敏感資訊的案件。此事件凸顯了在競爭激烈的半導體產業中，保護知識產權的關鍵重要性。\n\n【2】AI引爆半導體大時代，台灣產值估達7.1兆\n人工智能（AI）的蓬勃發展正在劇烈重塑半導體產業，開啟一個新的增長時代。作為全球晶片製造的關鍵參與者，台灣預計在未來幾年內，其半導體產值將達到估計的新台幣 7.1 兆元（約合 2200 億美元）。這一激增是由於從大型語言模型到自主系統的 AI 應用對先進晶片日益增長的需求所驅動。台灣政府和業界領導者正大力投資，以在這個快速變化的市場中保持其競爭優勢。\n\n【3】南亞科獲台積電技術支援，切入輝達AI伺服器供應鏈\n南亞科技透過與全球頂尖半導體製造商台積電的關鍵技術支援，成功進入輝達（NVIDIA）AI伺服器的供應鏈。此項進展旨在提升南亞在為快速增長的AI市場生產高效能記憶體解決方案方面的能力。",
+    "vocabulary": [
+      "former (adj.): 前任的",
+      "engineer (n.): 工程師",
+      "handed (v.): 判給，處以",
+      "severe (adj.): 嚴厲的",
+      "sentence (n.): 判決，刑期",
+      "prison (n.): 監獄",
+      "verdict (n.): （陪審團的）裁決，判決",
+      "stems from (phr.): 源於，來自",
+      "involving (v.): 涉及",
+      "alleged (adj.): 被指稱的，涉嫌的",
+      "leaking (v.): 洩漏",
+      "sensitive (adj.): 敏感的",
+      "information (n.): 資訊",
+      "related to (phr.): 與…有關",
+      "advanced (adj.): 先進的",
+      "chip (n.): 晶片",
+      "technology (n.): 技術",
+      "incident (n.): 事件",
+      "highlights (v.): 強調，使...顯著",
+      "intellectual property (n.): 知識產權",
+      "artificial intelligence (AI) (n.): 人工智能",
+      "boom (n.): 繁榮；飆升",
+      "dramatically (adv.): 顯著地；戲劇性地",
+      "reshaping (v.): 重塑",
+      "semiconductor industry (n.): 半導體產業",
+      "ushering in (v.): 開啟；引入",
+      "era (n.): 時代",
+      "growth (n.): 成長；增長",
+      "key player (n.): 關鍵參與者",
+      "global (adj.): 全球的",
+      "chip manufacturing (n.): 晶片製造",
+      "output (n.): 產值；產量",
+      "estimated (adj.): 估計的",
+      "trillion (num.): 兆",
+      "surge (n.): 激增；飆升",
+      "driven by (v.): 由...驅動",
+      "increasing demand (n.): 日益增長的需求",
+      "advanced chips (n.): 先進晶片",
+      "applications (n.): 應用",
+      "autonomous systems (n.): 自主系統",
+      "secured (v.): 獲得、確保",
+      "significant (adj.): 顯著的、重要的",
+      "partnership (n.): 合作夥伴關係",
+      "entering (v.): 進入",
+      "supply chain (n.): 供應鏈",
+      "AI servers (n.): AI伺服器",
+      "advancement (n.): 進步、發展",
+      "made possible (v. phrase): 使成為可能",
+      "crucial (adj.): 關鍵的、重要的",
+      "technical support (n.): 技術支援",
+      "TSMC (n.): 台積電",
+      "world's leading (adj. phrase): 世界領先的",
+      "semiconductor manufacturer (n.): 半導體製造商",
+      "collaboration (n.): 合作",
+      "aims to (v. phrase): 旨在",
+      "enhance (v.): 增強、提升",
+      "capabilities (n.): 能力",
+      "producing (v.): 生產",
+      "high-performance memory solutions (n. phrase): 高效能記憶體解決方案",
+      "rapidly growing (adj. phrase): 快速增長的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news?",
+        "options": [
+          "A new technological breakthrough by TSMC",
+          "A legal case involving a TSMC engineer and leaked technology",
+          "A global shortage of semiconductor chips",
+          "An international collaboration on chip manufacturing"
+        ],
+        "answer": "A legal case involving a TSMC engineer and leaked technology"
+      },
+      {
+        "q": "What was the engineer accused of?",
+        "options": [
+          "Sabotaging TSMC's production lines",
+          "Stealing company funds",
+          "Leaking confidential information about 2nm chip technology",
+          "Working for a competitor while employed by TSMC"
+        ],
+        "answer": "Leaking confidential information about 2nm chip technology"
+      },
+      {
+        "q": "What was the sentence given to the engineer?",
+        "options": [
+          "Five years in prison",
+          "Ten years in prison",
+          "A fine of one million dollars",
+          "Community service"
+        ],
+        "answer": "Ten years in prison"
+      },
+      {
+        "q": "What does the news emphasize regarding the semiconductor industry?",
+        "options": [
+          "The need for more government funding",
+          "The importance of protecting intellectual property",
+          "The challenges of international trade",
+          "The rapid pace of innovation"
+        ],
+        "answer": "The importance of protecting intellectual property"
+      },
+      {
+        "q": "What does the word \"former\" mean in the context of the news?",
+        "options": [
+          "Currently employed",
+          "Retired",
+          "No longer employed by the company",
+          "Newly hired"
+        ],
+        "answer": "No longer employed by the company"
+      },
+      {
+        "q": "What is TSMC known for?",
+        "options": [
+          "Consumer electronics",
+          "Advanced chip manufacturing",
+          "Software development",
+          "Computer hardware sales"
+        ],
+        "answer": "Advanced chip manufacturing"
+      },
+      {
+        "q": "The word \"sensitive\" in the context of information refers to:",
+        "options": [
+          "Information that is widely known",
+          "Information that is easily accessible",
+          "Information that is private and potentially valuable",
+          "Information that is outdated"
+        ],
+        "answer": "Information that is private and potentially valuable"
+      },
+      {
+        "q": "What does \"intellectual property protection\" mean?",
+        "options": [
+          "Protecting physical assets of a company",
+          "Safeguarding creations of the mind, like inventions and trade secrets",
+          "Ensuring fair wages for employees",
+          "Regulating the stock market"
+        ],
+        "answer": "Safeguarding creations of the mind, like inventions and trade secrets"
+      },
+      {
+        "q": "The verdict in this case suggests:",
+        "options": [
+          "Leaking company secrets is a minor offense",
+          "TSMC is lenient with employees",
+          "There are serious consequences for intellectual property theft",
+          "The legal system is slow to react"
+        ],
+        "answer": "There are serious consequences for intellectual property theft"
+      },
+      {
+        "q": "What does \"advanced\" describe in the phrase \"advanced 2-nanometer chip technology\"?",
+        "options": [
+          "Old-fashioned",
+          "Basic",
+          "Cutting-edge and highly developed",
+          "Simple"
+        ],
+        "answer": "Cutting-edge and highly developed"
+      },
+      {
+        "q": "The word \"alleged\" means:",
+        "options": [
+          "Proven true",
+          "Officially confirmed",
+          "Claimed but not yet proven",
+          "Denied by the accused"
+        ],
+        "answer": "Claimed but not yet proven"
+      },
+      {
+        "q": "Which industry is mentioned as being highly competitive?",
+        "options": [
+          "The fashion industry",
+          "The food service industry",
+          "The semiconductor industry",
+          "The automotive industry"
+        ],
+        "answer": "The semiconductor industry"
+      },
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "The impact of AI on the semiconductor industry.",
+          "Taiwan's economic growth in general.",
+          "The development of new AI software.",
+          "Global trade policies for technology."
+        ],
+        "answer": "The impact of AI on the semiconductor industry."
+      },
+      {
+        "q": "Which industry is experiencing a boom due to AI?",
+        "options": [
+          "Automotive industry",
+          "Semiconductor industry",
+          "Software development",
+          "Renewable energy"
+        ],
+        "answer": "Semiconductor industry"
+      },
+      {
+        "q": "What is Taiwan's expected semiconductor output in the coming years?",
+        "options": [
+          "NT$7.1 billion",
+          "NT$7.1 million",
+          "NT$7.1 trillion",
+          "NT$71 trillion"
+        ],
+        "answer": "NT$7.1 trillion"
+      },
+      {
+        "q": "Who is identified as a key player in global chip manufacturing?",
+        "options": [
+          "The United States",
+          "South Korea",
+          "Japan",
+          "Taiwan"
+        ],
+        "answer": "Taiwan"
+      },
+      {
+        "q": "What is driving the surge in semiconductor demand?",
+        "options": [
+          "Increased smartphone sales",
+          "Growing demand for AI applications",
+          "The popularity of video games",
+          "Advancements in medical technology"
+        ],
+        "answer": "Growing demand for AI applications"
+      },
+      {
+        "q": "What kind of chips are in high demand?",
+        "options": [
+          "Basic memory chips",
+          "Low-power processors",
+          "Advanced chips",
+          "Graphics processing units for gaming"
+        ],
+        "answer": "Advanced chips"
+      },
+      {
+        "q": "What are some examples of AI applications mentioned?",
+        "options": [
+          "Virtual reality and augmented reality",
+          "Large language models and autonomous systems",
+          "Cloud computing and big data analysis",
+          "Robotics and automation in factories"
+        ],
+        "answer": "Large language models and autonomous systems"
+      },
+      {
+        "q": "What is the role of the Taiwanese government and industry leaders?",
+        "options": [
+          "To reduce semiconductor production",
+          "To invest heavily and maintain a competitive edge",
+          "To focus on consumer electronics",
+          "To limit AI development"
+        ],
+        "answer": "To invest heavily and maintain a competitive edge"
+      },
+      {
+        "q": "What does the word 'boom' suggest in this context?",
+        "options": [
+          "A sudden decrease in activity",
+          "A period of rapid growth and increased activity",
+          "A stable and unchanging market",
+          "A decline in technological innovation"
+        ],
+        "answer": "A period of rapid growth and increased activity"
+      },
+      {
+        "q": "The news suggests that the semiconductor market is:",
+        "options": [
+          "Stagnant",
+          "Declining",
+          "Rapidly evolving",
+          "Unimportant"
+        ],
+        "answer": "Rapidly evolving"
+      },
+      {
+        "q": "What does 'NT$' stand for?",
+        "options": [
+          "New Technology",
+          "North Taiwan",
+          "New Taiwan Dollar",
+          "National Technology"
+        ],
+        "answer": "New Taiwan Dollar"
+      },
+      {
+        "q": "The phrase 'ushering in a new era' implies:",
+        "options": [
+          "Ending a previous period",
+          "Starting a new and significant phase",
+          "Returning to old methods",
+          "Maintaining the status quo"
+        ],
+        "answer": "Starting a new and significant phase"
+      },
+      {
+        "q": "What is the main news about Nanya Technology?",
+        "options": [
+          "It is launching a new AI chip.",
+          "It is entering the supply chain for NVIDIA's AI servers.",
+          "It is acquiring TSMC.",
+          "It is developing its own AI software."
+        ],
+        "answer": "It is entering the supply chain for NVIDIA's AI servers."
+      },
+      {
+        "q": "Who is providing technical support to Nanya Technology?",
+        "options": [
+          "NVIDIA",
+          "Intel",
+          "TSMC",
+          "Samsung"
+        ],
+        "answer": "TSMC"
+      },
+      {
+        "q": "What kind of products is Nanya Technology expected to produce for NVIDIA's AI servers?",
+        "options": [
+          "CPUs",
+          "Graphics cards",
+          "Power supplies",
+          "Memory solutions"
+        ],
+        "answer": "Memory solutions"
+      },
+      {
+        "q": "The news states that TSMC is the world's leading...",
+        "options": [
+          "AI software developer",
+          "Server manufacturer",
+          "Semiconductor manufacturer",
+          "Memory producer"
+        ],
+        "answer": "Semiconductor manufacturer"
+      },
+      {
+        "q": "The partnership aims to enhance Nanya's capabilities in producing what?",
+        "options": [
+          "Advanced cooling systems",
+          "High-performance memory solutions",
+          "Networking components",
+          "AI algorithms"
+        ],
+        "answer": "High-performance memory solutions"
+      },
+      {
+        "q": "The collaboration is important due to the growing market for...",
+        "options": [
+          "Smartphones",
+          "Gaming consoles",
+          "AI",
+          "Automotive electronics"
+        ],
+        "answer": "AI"
+      },
+      {
+        "q": "What does 'secured' mean in the context of the first sentence?",
+        "options": [
+          "Lost",
+          "Guaranteed",
+          "Negotiated",
+          "Announced"
+        ],
+        "answer": "Guaranteed"
+      },
+      {
+        "q": "Which company is mentioned as a major player in the AI server market?",
+        "options": [
+          "Nanya Technology",
+          "TSMC",
+          "NVIDIA",
+          "All of the above"
+        ],
+        "answer": "NVIDIA"
+      },
+      {
+        "q": "What is the role of TSMC in this situation?",
+        "options": [
+          "It is a customer of Nanya.",
+          "It is a competitor to NVIDIA.",
+          "It provides technical support to Nanya.",
+          "It manufactures AI servers directly."
+        ],
+        "answer": "It provides technical support to Nanya."
+      },
+      {
+        "q": "The term 'advancement' refers to:",
+        "options": [
+          "A setback",
+          "A new product",
+          "Progress or development",
+          "A financial loss"
+        ],
+        "answer": "Progress or development"
+      },
+      {
+        "q": "What is the primary goal of this collaboration for Nanya?",
+        "options": [
+          "To reduce production costs",
+          "To expand into a new market segment",
+          "To develop new AI software",
+          "To compete with TSMC"
+        ],
+        "answer": "To expand into a new market segment"
+      },
+      {
+        "q": "The phrase 'rapidly growing' describes the market for:",
+        "options": [
+          "Traditional servers",
+          "AI",
+          "Semiconductor manufacturing equipment",
+          "Memory chips for general use"
+        ],
+        "answer": "AI"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美軍三航母進入戰位，中東局勢一觸即發",
+    "tabTitle": "地緣政治",
+    "english": "The US Navy has strategically positioned three aircraft carriers in the Middle East, a significant show of force amidst escalating regional tensions. This deployment is seen by analysts as a proactive measure to deter potential conflicts and ensure stability in the volatile area. The presence of these powerful naval assets is expected to heighten diplomatic efforts and military readiness.",
+    "chinese": "美國海軍已將三艘航空母艦策略性地部署在中東地區，這是在區域緊張局勢不斷升級之際的一項重大武力展示。分析人士認為，此部署是為了預防潛在衝突並確保這個動盪地區穩定的積極措施。這些強大海軍資產的存在預計將加強外交努力和軍事戒備。",
+    "vocabulary": [
+      "strategically (adv.): 策略性地",
+      "positioned (v.): 部署；放置",
+      "aircraft carrier (n.): 航空母艦",
+      "significant (adj.): 顯著的；重要的",
+      "show of force (n.): 武力展示",
+      "escalating (v.): 逐步升級；加劇",
+      "regional (adj.): 區域的",
+      "tensions (n.): 緊張局勢",
+      "deployment (n.): 部署；調遣",
+      "analysts (n.): 分析人士",
+      "seen as (v.): 被視為",
+      "proactive (adj.): 積極主動的",
+      "measure (n.): 措施",
+      "deter (v.): 阻止；遏阻",
+      "potential (adj.): 潛在的",
+      "conflicts (n.): 衝突",
+      "ensure (v.): 確保",
+      "stability (n.): 穩定性",
+      "volatile (adj.): 動盪不安的",
+      "assets (n.): 資產；資優"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news report?",
+        "options": [
+          "A new peace treaty in the Middle East",
+          "The deployment of three US aircraft carriers in the Middle East",
+          "Economic sanctions against a Middle Eastern country",
+          "A cultural exchange program in the region"
+        ],
+        "answer": "The deployment of three US aircraft carriers in the Middle East"
+      },
+      {
+        "q": "Why has the US Navy deployed these carriers?",
+        "options": [
+          "For a naval parade",
+          "To conduct joint military exercises with regional allies",
+          "As a show of force amidst escalating regional tensions",
+          "To provide humanitarian aid to affected populations"
+        ],
+        "answer": "As a show of force amidst escalating regional tensions"
+      },
+      {
+        "q": "What is the intended purpose of this deployment, according to analysts?",
+        "options": [
+          "To increase tourism in the region",
+          "To prepare for a large-scale invasion",
+          "To deter potential conflicts and ensure stability",
+          "To facilitate trade negotiations"
+        ],
+        "answer": "To deter potential conflicts and ensure stability"
+      },
+      {
+        "q": "The report describes the Middle East as a 'volatile area'. What does 'volatile' mean in this context?",
+        "options": [
+          "Stable and peaceful",
+          "Economically prosperous",
+          "Subject to rapid and unpredictable change",
+          "Isolated and remote"
+        ],
+        "answer": "Subject to rapid and unpredictable change"
+      },
+      {
+        "q": "What does the presence of these naval assets aim to do?",
+        "options": [
+          "Reduce diplomatic efforts",
+          "Decrease military readiness",
+          "Heighten diplomatic efforts and military readiness",
+          "Ignore regional issues"
+        ],
+        "answer": "Heighten diplomatic efforts and military readiness"
+      },
+      {
+        "q": "The term 'show of force' implies:",
+        "options": [
+          "A peaceful demonstration",
+          "A display of military strength",
+          "A diplomatic negotiation",
+          "An economic investment"
+        ],
+        "answer": "A display of military strength"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a reason for the carrier deployment?",
+        "options": [
+          "Escalating regional tensions",
+          "Deterring potential conflicts",
+          "Ensuring stability",
+          "Preparing for a space mission"
+        ],
+        "answer": "Preparing for a space mission"
+      },
+      {
+        "q": "The word 'escalating' means:",
+        "options": [
+          "Decreasing",
+          "Becoming more intense or severe",
+          "Remaining the same",
+          "Starting"
+        ],
+        "answer": "Becoming more intense or severe"
+      },
+      {
+        "q": "What kind of 'assets' are being discussed?",
+        "options": [
+          "Financial investments",
+          "Cultural artifacts",
+          "Naval military equipment",
+          "Natural resources"
+        ],
+        "answer": "Naval military equipment"
+      },
+      {
+        "q": "The deployment is described as 'strategic'. This suggests it is:",
+        "options": [
+          "Accidental",
+          "Planned and purposeful",
+          "Unimportant",
+          "Temporary"
+        ],
+        "answer": "Planned and purposeful"
+      },
+      {
+        "q": "Who are 'analysts' likely referring to in this context?",
+        "options": [
+          "Tour guides",
+          "Military and political experts",
+          "Historians",
+          "Journalists covering entertainment"
+        ],
+        "answer": "Military and political experts"
+      },
+      {
+        "q": "The news focuses on the US Navy's actions in which region?",
+        "options": [
+          "East Asia",
+          "South America",
+          "The Middle East",
+          "Europe"
+        ],
+        "answer": "The Middle East"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "印尼火車相撞事故致14死84傷，搜救工作持續進行",
+    "tabTitle": "國際大事",
+    "english": "A devastating train collision in Indonesia on Sunday resulted in at least 14 fatalities and 84 injuries. The accident occurred when two passenger trains derailed and crashed into each other in West Java. Emergency services are actively engaged in rescue and recovery operations at the scene. The cause of the catastrophic incident is currently under investigation by authorities.",
+    "chinese": "週日，印尼發生了一場毀滅性的火車相撞事故，至少造成14人死亡，84人受傷。這起事故發生在西爪哇，當時有兩列客運火車脫軌並相撞。緊急服務部門正在事故現場積極進行搜救和復原行動。當局目前正在調查這起災難性事件的原因。",
+    "vocabulary": [
+      "devastating (adj.): 毀滅性的",
+      "collision (n.): 相撞；碰撞",
+      "fatality (n.): 死亡人數",
+      "injury (n.): 傷害；傷亡人數",
+      "occurred (v.): 發生",
+      "passenger train (n.): 客運火車",
+      "derailed (v.): (火車)脫軌",
+      "crashed (v.): 撞擊",
+      "emergency services (n.): 緊急服務部門",
+      "actively (adv.): 積極地",
+      "engaged in (v.): 從事；參與",
+      "rescue (n.): 救援",
+      "recovery operations (n.): 復原行動",
+      "scene (n.): 現場",
+      "cause (n.): 原因",
+      "catastrophic (adj.): 災難性的",
+      "incident (n.): 事件",
+      "investigation (n.): 調查",
+      "authorities (n.): 當局",
+      "under investigation (phr.): 正在調查中"
+    ],
+    "quiz": [
+      {
+        "q": "What was the primary event described in the news?",
+        "options": [
+          "A volcanic eruption",
+          "A train collision",
+          "A building collapse",
+          "A plane crash"
+        ],
+        "answer": "A train collision"
+      },
+      {
+        "q": "In which region of Indonesia did the accident take place?",
+        "options": [
+          "East Java",
+          "Bali",
+          "West Java",
+          "Sumatra"
+        ],
+        "answer": "West Java"
+      },
+      {
+        "q": "How many people were reported dead as a result of the collision?",
+        "options": [
+          "10",
+          "14",
+          "20",
+          "84"
+        ],
+        "answer": "14"
+      },
+      {
+        "q": "How many people were injured in the incident?",
+        "options": [
+          "14",
+          "24",
+          "48",
+          "84"
+        ],
+        "answer": "84"
+      },
+      {
+        "q": "What were the trains involved in the accident?",
+        "options": [
+          "Freight trains",
+          "High-speed trains",
+          "Passenger trains",
+          "Subway trains"
+        ],
+        "answer": "Passenger trains"
+      },
+      {
+        "q": "What happened to the trains before they collided?",
+        "options": [
+          "They caught fire",
+          "They derailed",
+          "They stopped suddenly",
+          "They switched tracks"
+        ],
+        "answer": "They derailed"
+      },
+      {
+        "q": "Who is currently investigating the cause of the accident?",
+        "options": [
+          "International rescue teams",
+          "The train drivers",
+          "Local police",
+          "Authorities"
+        ],
+        "answer": "Authorities"
+      },
+      {
+        "q": "What is being done at the scene of the accident?",
+        "options": [
+          "Building a memorial",
+          "Conducting a parade",
+          "Rescue and recovery operations",
+          "A press conference"
+        ],
+        "answer": "Rescue and recovery operations"
+      },
+      {
+        "q": "The word 'devastating' in the text means:",
+        "options": [
+          "Slightly inconvenient",
+          "Causing great damage or suffering",
+          "Minor",
+          "Funny"
+        ],
+        "answer": "Causing great damage or suffering"
+      },
+      {
+        "q": "What does the phrase 'under investigation' imply?",
+        "options": [
+          "The cause is already known",
+          "The cause is being officially examined",
+          "The accident was accidental",
+          "No one is looking into it"
+        ],
+        "answer": "The cause is being officially examined"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as part of the accident's outcome?",
+        "options": [
+          "Fatalities",
+          "Injuries",
+          "Environmental damage",
+          "Rescue efforts"
+        ],
+        "answer": "Environmental damage"
+      },
+      {
+        "q": "The English text is approximately how many words long?",
+        "options": [
+          "50 words",
+          "80 words",
+          "100 words",
+          "150 words"
+        ],
+        "answer": "80 words"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "Meta擬20億美元收購中國AI公司，官方禁止外資收購",
+    "tabTitle": "科技",
+    "english": "Meta is reportedly considering a significant investment, potentially around $2 billion, to acquire a prominent Chinese artificial intelligence company. However, Chinese authorities have recently implemented regulations that strictly prohibit foreign entities from acquiring domestic AI firms. This move aims to protect national interests and foster indigenous technological development in a highly strategic sector.",
+    "chinese": "據報導，Meta 正在考慮一項重大的投資，可能斥資約 20 億美元收購一家中國知名的人工智慧公司。然而，中國當局最近實施了嚴格禁止外國實體收購國內 AI 公司的規定。此舉旨在保護國家利益，並在一個高度戰略性的領域促進本土技術發展。",
+    "vocabulary": [
+      "reportedly (adv.): 據報導",
+      "considering (v.): 考慮",
+      "significant (adj.): 重大的",
+      "investment (n.): 投資",
+      "potentially (adv.): 可能地",
+      "around (prep.): 約",
+      "billion (n.): 十億",
+      "acquire (v.): 收購",
+      "prominent (adj.): 顯著的",
+      "artificial intelligence (n.): 人工智慧",
+      "company (n.): 公司",
+      "however (adv.): 然而",
+      "authorities (n.): 當局",
+      "recently (adv.): 最近",
+      "implemented (v.): 實施",
+      "regulations (n.): 規定",
+      "strictly (adv.): 嚴格地",
+      "prohibit (v.): 禁止",
+      "entities (n.): 實體",
+      "domestic (adj.): 國內的"
+    ],
+    "quiz": [
+      {
+        "q": "What is Meta reportedly considering?",
+        "options": [
+          "A $2 billion investment in a Chinese AI company",
+          "Acquiring a US-based AI firm",
+          "Developing its own AI technology in China",
+          "Partnering with a Chinese tech giant"
+        ],
+        "answer": "A $2 billion investment in a Chinese AI company"
+      },
+      {
+        "q": "Approximately how much is Meta reportedly willing to spend?",
+        "options": [
+          "1 billion dollars",
+          "500 million dollars",
+          "2 billion dollars",
+          "10 billion dollars"
+        ],
+        "answer": "2 billion dollars"
+      },
+      {
+        "q": "What type of company is Meta interested in acquiring?",
+        "options": [
+          "A social media platform",
+          "An artificial intelligence company",
+          "A gaming studio",
+          "A hardware manufacturer"
+        ],
+        "answer": "An artificial intelligence company"
+      },
+      {
+        "q": "Which country's AI company is Meta reportedly looking to acquire?",
+        "options": [
+          "United States",
+          "India",
+          "China",
+          "Germany"
+        ],
+        "answer": "China"
+      },
+      {
+        "q": "What action have Chinese authorities taken recently?",
+        "options": [
+          "Encouraging foreign takeovers of AI firms",
+          "Implementing regulations that prohibit foreign acquisition of domestic AI firms",
+          "Investing heavily in Meta's AI research",
+          "Opening up the market for foreign tech companies"
+        ],
+        "answer": "Implementing regulations that prohibit foreign acquisition of domestic AI firms"
+      },
+      {
+        "q": "What is the stated aim of China's new regulations?",
+        "options": [
+          "To encourage foreign investment",
+          "To protect national interests and foster indigenous technological development",
+          "To promote global AI collaboration",
+          "To reduce Meta's market influence"
+        ],
+        "answer": "To protect national interests and foster indigenous technological development"
+      },
+      {
+        "q": "The news discusses a potential 'takeover'. What does 'takeover' mean in this context?",
+        "options": [
+          "A partnership agreement",
+          "A hostile acquisition",
+          "Buying out a company",
+          "A joint venture"
+        ],
+        "answer": "Buying out a company"
+      },
+      {
+        "q": "The article mentions 'indigenous technological development'. What does 'indigenous' refer to?",
+        "options": [
+          "Foreign-developed",
+          "Globally sourced",
+          "Native or local",
+          "Cutting-edge"
+        ],
+        "answer": "Native or local"
+      },
+      {
+        "q": "Which sector is described as 'highly strategic'?",
+        "options": [
+          "Social media",
+          "E-commerce",
+          "Artificial intelligence",
+          "Virtual reality"
+        ],
+        "answer": "Artificial intelligence"
+      },
+      {
+        "q": "The word 'prominent' in the text means:",
+        "options": [
+          "Small and unknown",
+          "New and emerging",
+          "Famous and important",
+          "Technologically advanced"
+        ],
+        "answer": "Famous and important"
+      },
+      {
+        "q": "What is the main conflict or obstacle presented in the news?",
+        "options": [
+          "Meta's lack of funding",
+          "The target company's refusal to sell",
+          "Chinese regulations prohibiting foreign acquisitions",
+          "Competition from other tech giants"
+        ],
+        "answer": "Chinese regulations prohibiting foreign acquisitions"
+      },
+      {
+        "q": "The term 'entities' in the phrase 'foreign entities' refers to:",
+        "options": [
+          "Individuals",
+          "Companies or organizations",
+          "Government bodies",
+          "Products"
+        ],
+        "answer": "Companies or organizations"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "歐洲央行預計6月啟動兩次加息，應對通膨壓力",
+    "tabTitle": "金融市場",
+    "english": "The European Central Bank (ECB) is signaling a shift in monetary policy, with expectations of two interest rate hikes commencing in June. This move is intended to address persistent inflation pressures across the Eurozone. Officials aim to curb rising prices and stabilize the economy. Further adjustments may follow based on evolving economic data.",
+    "chinese": "歐洲中央銀行（ECB）正發出貨幣政策轉變的訊號，預計將於六月啟動兩次升息。此舉旨在應對整個歐元區持續的通膨壓力。決策者們的目標是遏制物價上漲並穩定經濟。後續的調整將視經濟數據的演變而定。",
+    "vocabulary": [
+      "European Central Bank (ECB) (n.): 歐洲中央銀行",
+      "signaling (v.): 發出訊號",
+      "shift (n.): 轉變",
+      "monetary policy (n.): 貨幣政策",
+      "expectations (n.): 預期",
+      "interest rate hikes (n.): 升息",
+      "commencing (v.): 開始",
+      "intended (v.): 意在",
+      "address (v.): 應對",
+      "persistent (adj.): 持續的",
+      "inflation pressures (n.): 通膨壓力",
+      "Eurozone (n.): 歐元區",
+      "move (n.): 舉措",
+      "curb (v.): 遏制",
+      "rising prices (n.): 物價上漲",
+      "stabilize (v.): 穩定",
+      "economy (n.): 經濟",
+      "adjustments (n.): 調整",
+      "follow (v.): 隨之而來",
+      "evolving economic data (n.): 演變中的經濟數據"
+    ],
+    "quiz": [
+      {
+        "q": "According to the news, when is the European Central Bank expected to start its interest rate hikes?",
+        "options": [
+          "April",
+          "May",
+          "June",
+          "July"
+        ],
+        "answer": "June"
+      },
+      {
+        "q": "What is the primary reason for the ECB's planned rate hikes?",
+        "options": [
+          "To stimulate economic growth",
+          "To combat inflation pressures",
+          "To strengthen the Euro against other currencies",
+          "To reduce unemployment rates"
+        ],
+        "answer": "To combat inflation pressures"
+      },
+      {
+        "q": "How many rate hikes are anticipated to begin in June?",
+        "options": [
+          "One",
+          "Two",
+          "Three",
+          "Four"
+        ],
+        "answer": "Two"
+      },
+      {
+        "q": "What region is mentioned as experiencing inflation pressures?",
+        "options": [
+          "North America",
+          "Asia",
+          "Africa",
+          "The Eurozone"
+        ],
+        "answer": "The Eurozone"
+      },
+      {
+        "q": "What is the ECB aiming to do by curbing rising prices?",
+        "options": [
+          "Increase consumer spending",
+          "Stabilize the economy",
+          "Encourage borrowing",
+          "Promote international trade"
+        ],
+        "answer": "Stabilize the economy"
+      },
+      {
+        "q": "The article suggests that future policy decisions will depend on what?",
+        "options": [
+          "Political elections",
+          "Global stock market performance",
+          "Evolving economic data",
+          "Public opinion polls"
+        ],
+        "answer": "Evolving economic data"
+      },
+      {
+        "q": "What does the phrase 'signaling a shift' imply about the ECB's policy?",
+        "options": [
+          "It will remain unchanged.",
+          "It is undergoing a change.",
+          "It is declining in importance.",
+          "It is being outsourced."
+        ],
+        "answer": "It is undergoing a change."
+      },
+      {
+        "q": "The term 'persistent' in relation to inflation means the inflation is:",
+        "options": [
+          "Temporary",
+          "Sudden",
+          "Continuing",
+          "Minor"
+        ],
+        "answer": "Continuing"
+      },
+      {
+        "q": "What is the main objective of the ECB's planned actions?",
+        "options": [
+          "To lower interest rates",
+          "To increase the money supply",
+          "To manage inflation",
+          "To boost exports"
+        ],
+        "answer": "To manage inflation"
+      },
+      {
+        "q": "Which of the following is NOT explicitly mentioned as a goal of the ECB's policy shift?",
+        "options": [
+          "Curbing rising prices",
+          "Stabilizing the economy",
+          "Increasing employment",
+          "Addressing inflation pressures"
+        ],
+        "answer": "Increasing employment"
+      },
+      {
+        "q": "The word 'commencing' means:",
+        "options": [
+          "Ending",
+          "Continuing",
+          "Starting",
+          "Pausing"
+        ],
+        "answer": "Starting"
+      },
+      {
+        "q": "What does the ECB stand for?",
+        "options": [
+          "European Commercial Bank",
+          "Economic Cooperation Bureau",
+          "European Central Bank",
+          "Eastern Commercial Board"
+        ],
+        "answer": "European Central Bank"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
