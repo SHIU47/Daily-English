@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 30, 2026：台灣經濟、科技 與 地緣政治</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] AI浪潮推升！台灣伺服器產業迎史上最大成長\nTaiwan's server industry is experiencing unprecedented growth, driven by the surging demand for Artificial Intelligence (AI) technology. This AI boom has propelled the sector to its largest expansion historically. Manufacturers are seeing significant increases in orders, anticipating continued strong performance as AI applications become more widespread. The robust demand highlights Taiwan's crucial role in the global technology supply chain.\n\n[2] 大學生AI素養調查：逾七成學生曾使用AI工具\nA recent survey reveals that over 70% of Taiwanese college students have utilized AI tools in their academic work. The investigation into AI literacy among university students highlights a significant adoption rate of these technologies. While this widespread use indicates growing familiarity, it also raises questions about the depth of understanding and ethical implications of AI in education. Further analysis is needed to assess how these tools are being integrated and their impact on learning outcomes.\n\n[3] 台灣大重啟境外海纜布局，強化AI跨境傳輸\nTaiwan Mobile has restarted its investment in submarine cable infrastructure, aiming to bolster cross-border data transmission capabilities crucial for AI development. This strategic move seeks to enhance the speed and reliability of data flow, supporting the growing demand for international AI services and research. The company's renewed focus on submarine cables underscores the vital role of robust network infrastructure in advancing the global AI landscape.",
+    "chinese": "【1】AI浪潮推升！台灣伺服器產業迎史上最大成長\n受人工智能（AI）技術需求激增的推動，台灣伺服器產業正經歷前所未有的成長。這波AI浪潮已將該產業推升至史上最大規模的擴張。製造商們預計隨著AI應用的普及，將看到訂單顯著增加，並預期持續強勁的業績表現。強勁的需求凸顯了台灣在全球科技供應鏈中的關鍵地位。\n\n【2】大學生AI素養調查：逾七成學生曾使用AI工具\n一項最新調查顯示，超過七成的台灣大學生在學術工作中曾使用過人工智慧工具。這項針對大學生AI素養的調查，突顯了這些技術顯著的採用率。儘管廣泛使用表明了日益熟悉，但也引發了對AI在教育中理解深度及其倫理影響的疑問。需要進一步分析來評估這些工具的整合方式及其對學習成果的影響。\n\n【3】台灣大重啟境外海纜布局，強化AI跨境傳輸\n台灣大哥大已重啟對海底電纜基礎設施的投資，旨在增強對人工智能發展至關重要之跨境數據傳輸能力。這項策略性舉措旨在提升數據流的速度與可靠性，以支持日益增長的國際人工智能服務與研究需求。該公司對海底電纜的重新關注，凸顯了穩健的網絡基礎設施在全球人工智能領域發展中的關鍵作用。",
+    "vocabulary": [
+      "unprecedented (adj.): 前所未有的",
+      "growth (n.): 成長",
+      "driven by (phr.): 受...推動",
+      "surging (adj.): 洶湧的，激增的",
+      "demand (n.): 需求",
+      "Artificial Intelligence (n.): 人工智能",
+      "server (n.): 伺服器",
+      "industry (n.): 產業",
+      "boom (n.): 繁榮，興盛",
+      "propelled (v.): 推動",
+      "sector (n.): 行業，領域",
+      "expansion (n.): 擴張",
+      "historically (adv.): 歷史上",
+      "manufacturers (n.): 製造商",
+      "significant (adj.): 顯著的",
+      "increases (n.): 增加",
+      "orders (n.): 訂單",
+      "anticipating (v.): 預期",
+      "continued (adj.): 持續的",
+      "widespread (adj.): 廣泛的",
+      "survey (n.): 調查",
+      "reveals (v.): 揭露；顯示",
+      "utilized (v.): 利用；使用",
+      "academic work (n.): 學術工作",
+      "investigation (n.): 調查；研究",
+      "AI literacy (n.): AI素養",
+      "university students (n.): 大學生",
+      "highlights (v.): 強調；使顯著",
+      "significant (adj.): 顯著的；重要的",
+      "adoption rate (n.): 採用率",
+      "technologies (n.): 技術",
+      "widespread use (n.): 廣泛使用",
+      "indicates (v.): 表明；顯示",
+      "growing familiarity (n.): 日益熟悉",
+      "raises questions (v. phrase): 引發疑問",
+      "depth of understanding (n.): 理解深度",
+      "ethical implications (n.): 倫理影響",
+      "integration (n.): 整合",
+      "impact (n.): 影響",
+      "learning outcomes (n.): 學習成果",
+      "resumed (v.): 恢復",
+      "investment (n.): 投資",
+      "submarine cable (n.): 海底電纜",
+      "infrastructure (n.): 基礎設施",
+      "bolster (v.): 加強，鞏固",
+      "cross-border (adj.): 跨境的",
+      "transmission (n.): 傳輸",
+      "crucial (adj.): 關鍵的",
+      "artificial intelligence (n.): 人工智能 (AI)",
+      "development (n.): 發展",
+      "strategic (adj.): 策略性的",
+      "move (n.): 舉措，行動",
+      "enhance (v.): 提升，增強",
+      "speed (n.): 速度",
+      "reliability (n.): 可靠性",
+      "data flow (n.): 數據流",
+      "growing demand (n.): 日益增長的需求",
+      "international (adj.): 國際的",
+      "services (n.): 服務",
+      "robust (adj.): 穩健的，強健的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main driver of the growth in Taiwan's server industry?",
+        "options": [
+          "A. Government subsidies",
+          "B. Increased demand for AI technology",
+          "C. A decline in global competition",
+          "D. Lower production costs"
+        ],
+        "answer": "B. Increased demand for AI technology"
+      },
+      {
+        "q": "According to the text, how significant is the current growth for the server industry?",
+        "options": [
+          "A. It is experiencing moderate growth.",
+          "B. It is the slowest growth period in years.",
+          "C. It is the biggest growth in its history.",
+          "D. Growth has stagnated recently."
+        ],
+        "answer": "C. It is the biggest growth in its history."
+      },
+      {
+        "q": "What are manufacturers seeing due to the AI boom?",
+        "options": [
+          "A. A decrease in orders",
+          "B. Significant increases in orders",
+          "C. A shift in production focus",
+          "D. Reduced demand for servers"
+        ],
+        "answer": "B. Significant increases in orders"
+      },
+      {
+        "q": "What is expected to happen as AI applications become more widespread?",
+        "options": [
+          "A. Demand for servers will likely decrease.",
+          "B. The industry will face a downturn.",
+          "C. Performance is anticipated to remain strong.",
+          "D. Manufacturers will reduce production."
+        ],
+        "answer": "C. Performance is anticipated to remain strong."
+      },
+      {
+        "q": "What does the robust demand highlight about Taiwan's role?",
+        "options": [
+          "A. Its limited role in manufacturing",
+          "B. Its crucial position in the global technology supply chain",
+          "C. Its reliance on domestic markets",
+          "D. Its focus on consumer electronics"
+        ],
+        "answer": "B. Its crucial position in the global technology supply chain"
+      },
+      {
+        "q": "The word 'unprecedented' means:",
+        "options": [
+          "A. Very common",
+          "B. Never done or known before",
+          "C. Gradually increasing",
+          "D. Slowly declining"
+        ],
+        "answer": "B. Never done or known before"
+      },
+      {
+        "q": "What does 'AI boom' refer to in the context of the news?",
+        "options": [
+          "A. A period of economic recession",
+          "B. A significant increase in the popularity and application of AI",
+          "C. A decrease in AI research funding",
+          "D. A slowdown in AI development"
+        ],
+        "answer": "B. A significant increase in the popularity and application of AI"
+      },
+      {
+        "q": "Which of these is NOT mentioned as a factor in the server industry's growth?",
+        "options": [
+          "A. AI technology",
+          "B. Server demand",
+          "C. Government policy",
+          "D. Industry expansion"
+        ],
+        "answer": "C. Government policy"
+      },
+      {
+        "q": "The term 'sector' in the sentence 'propelled the sector to its largest expansion' refers to:",
+        "options": [
+          "A. The entire economy",
+          "B. The server industry",
+          "C. AI research",
+          "D. Global trade"
+        ],
+        "answer": "B. The server industry"
+      },
+      {
+        "q": "What is the anticipated future trend for the server industry based on the text?",
+        "options": [
+          "A. A gradual decline",
+          "B. Continued strong performance",
+          "C. A complete halt in growth",
+          "D. A shift away from AI-related products"
+        ],
+        "answer": "B. Continued strong performance"
+      },
+      {
+        "q": "The word 'driven' in 'driven by the surging demand' implies:",
+        "options": [
+          "A. Resistance",
+          "B. Causation",
+          "C. Stagnation",
+          "D. Competition"
+        ],
+        "answer": "B. Causation"
+      },
+      {
+        "q": "What is the main subject of the news article?",
+        "options": [
+          "A. The development of AI algorithms",
+          "B. The economic impact of AI on Taiwan's server industry",
+          "C. The challenges faced by server manufacturers",
+          "D. The global demand for AI chips"
+        ],
+        "answer": "B. The economic impact of AI on Taiwan's server industry"
+      },
+      {
+        "q": "What percentage of Taiwanese college students have used AI tools, according to the survey?",
+        "options": [
+          "Less than 50%",
+          "Exactly 70%",
+          "Over 70%",
+          "Less than 70%"
+        ],
+        "answer": "Over 70%"
+      },
+      {
+        "q": "What is the main topic of the news report?",
+        "options": [
+          "The development of new AI technologies",
+          "The impact of AI on the job market",
+          "College students' use of AI tools and literacy",
+          "Ethical concerns in AI research"
+        ],
+        "answer": "College students' use of AI tools and literacy"
+      },
+      {
+        "q": "The survey investigated AI literacy among which group?",
+        "options": [
+          "High school students",
+          "University students",
+          "AI researchers",
+          "Teachers"
+        ],
+        "answer": "University students"
+      },
+      {
+        "q": "The widespread use of AI tools by students indicates:",
+        "options": [
+          "A lack of interest in traditional learning",
+          "A decrease in academic performance",
+          "Growing familiarity with these technologies",
+          "A decline in AI literacy"
+        ],
+        "answer": "Growing familiarity with these technologies"
+      },
+      {
+        "q": "Besides familiarity, what else does the widespread use of AI raise questions about?",
+        "options": [
+          "The cost of AI tools",
+          "The speed of AI development",
+          "The depth of understanding and ethical implications",
+          "The availability of AI resources"
+        ],
+        "answer": "The depth of understanding and ethical implications"
+      },
+      {
+        "q": "What does the report suggest is needed for further assessment?",
+        "options": [
+          "More AI tools",
+          "A ban on AI in education",
+          "Analysis of AI integration and impact",
+          "Student feedback on AI courses"
+        ],
+        "answer": "Analysis of AI integration and impact"
+      },
+      {
+        "q": "The word 'utilized' in the text means:",
+        "options": [
+          "Avoided",
+          "Created",
+          "Used",
+          "Disliked"
+        ],
+        "answer": "Used"
+      },
+      {
+        "q": "What does 'AI literacy' refer to?",
+        "options": [
+          "The ability to program AI",
+          "The understanding and use of AI",
+          "The ethical guidelines for AI",
+          "The history of artificial intelligence"
+        ],
+        "answer": "The understanding and use of AI"
+      },
+      {
+        "q": "The phrase 'raises questions' suggests that the situation is:",
+        "options": [
+          "Fully understood",
+          "Simple and clear",
+          "Complex and requires further thought",
+          "Completely resolved"
+        ],
+        "answer": "Complex and requires further thought"
+      },
+      {
+        "q": "What is the overall tone of the news report?",
+        "options": [
+          "Celebratory",
+          "Critical",
+          "Informative and slightly cautionary",
+          "Humorous"
+        ],
+        "answer": "Informative and slightly cautionary"
+      },
+      {
+        "q": "The word 'significant' means:",
+        "options": [
+          "Small",
+          "Important or noticeable",
+          "Unusual",
+          "Negative"
+        ],
+        "answer": "Important or noticeable"
+      },
+      {
+        "q": "The report implies that the integration of AI tools could affect:",
+        "options": [
+          "Student social lives",
+          "University funding",
+          "Learning outcomes",
+          "Campus infrastructure"
+        ],
+        "answer": "Learning outcomes"
+      },
+      {
+        "q": "What has Taiwan Mobile restarted?",
+        "options": [
+          "Developing new AI models",
+          "Investing in submarine cable infrastructure",
+          "Expanding its mobile network coverage",
+          "Launching a new cloud computing service"
+        ],
+        "answer": "Investing in submarine cable infrastructure"
+      },
+      {
+        "q": "What is the main goal of this investment?",
+        "options": [
+          "To reduce internet costs for consumers",
+          "To improve domestic network speeds",
+          "To bolster cross-border data transmission for AI",
+          "To create new international partnerships"
+        ],
+        "answer": "To bolster cross-border data transmission for AI"
+      },
+      {
+        "q": "Why is enhanced cross-border data transmission important?",
+        "options": [
+          "It is essential for AI development",
+          "It helps in reducing energy consumption",
+          "It supports the growth of social media platforms",
+          "It facilitates online gaming experiences"
+        ],
+        "answer": "It is essential for AI development"
+      },
+      {
+        "q": "What does the strategic move aim to improve?",
+        "options": [
+          "Customer service response times",
+          "The speed and reliability of data flow",
+          "The company's financial performance",
+          "The security of user data"
+        ],
+        "answer": "The speed and reliability of data flow"
+      },
+      {
+        "q": "What is supporting the growing demand for international AI services?",
+        "options": [
+          "New government regulations",
+          "Increased competition among tech companies",
+          "Robust network infrastructure",
+          "Advancements in battery technology"
+        ],
+        "answer": "Robust network infrastructure"
+      },
+      {
+        "q": "The renewed focus on submarine cables highlights their importance in what?",
+        "options": [
+          "E-commerce logistics",
+          "Global AI landscape advancement",
+          "Satellite communication systems",
+          "Undersea exploration"
+        ],
+        "answer": "Global AI landscape advancement"
+      },
+      {
+        "q": "The news is categorized under which section?",
+        "options": [
+          "Finance",
+          "Technology",
+          "Environment",
+          "Politics"
+        ],
+        "answer": "Technology"
+      },
+      {
+        "q": "What does 'bolster' mean in the context of the news?",
+        "options": [
+          "To weaken",
+          "To reduce",
+          "To strengthen",
+          "To ignore"
+        ],
+        "answer": "To strengthen"
+      },
+      {
+        "q": "Which term refers to data moving between countries?",
+        "options": [
+          "Domestic transmission",
+          "Internal communication",
+          "Cross-border transmission",
+          "Local network traffic"
+        ],
+        "answer": "Cross-border transmission"
+      },
+      {
+        "q": "What is 'infrastructure' in this context?",
+        "options": [
+          "Software programs",
+          "Underlying physical and organizational structures",
+          "Employee training materials",
+          "Marketing campaigns"
+        ],
+        "answer": "Underlying physical and organizational structures"
+      },
+      {
+        "q": "The news suggests that AI development is increasingly reliant on:",
+        "options": [
+          "Manual labor",
+          "Advanced algorithms only",
+          "Effective data transfer capabilities",
+          "Traditional computing methods"
+        ],
+        "answer": "Effective data transfer capabilities"
+      },
+      {
+        "q": "What does Taiwan Mobile's action indicate about their priorities?",
+        "options": [
+          "A shift away from technology",
+          "A focus on improving physical retail stores",
+          "A commitment to advancing AI through network upgrades",
+          "An intention to discontinue international operations"
+        ],
+        "answer": "A commitment to advancing AI through network upgrades"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "Google在印度動土建AI樞紐，打造美國外最大基地",
+    "tabTitle": "科技",
+    "english": "Google has officially broken ground on a new artificial intelligence (AI) hub in India. This facility is set to become the company's largest AI base outside of the United States. The project signifies Google's significant investment in India's growing tech landscape and its commitment to fostering AI innovation within the country. The hub aims to accelerate AI research and development, supporting local talent and global initiatives.",
+    "chinese": "Google 已在印度正式動土興建一個新的人工智慧（AI）樞紐。此設施將成為該公司在美國以外最大的 AI 基地。此計畫象徵著 Google 對印度日益成長的科技領域的重大投資，以及其致力於培養國內 AI 創新的承諾。該樞紐旨在加速 AI 的研究與開發，支持在地人才和全球性計畫。",
+    "vocabulary": [
+      "breaks ground (idiom): 開始動工",
+      "artificial intelligence (n.): 人工智慧",
+      "hub (n.): 中心；樞紐",
+      "facility (n.): 設施",
+      "company's (adj.): 公司的",
+      "largest (adj.): 最大（good）的",
+      "base (n.): 基地",
+      "outside of (prep.): 在...之外",
+      "United States (n.): 美國",
+      "signifies (v.): 象徵；表示",
+      "significant (adj.): 重大的；顯著的",
+      "investment (n.): 投資",
+      "growing (adj.): 成長中的",
+      "tech landscape (n.): 科技領域",
+      "commitment (n.): 承諾；投入",
+      "fostering (v.): 培養；促進",
+      "innovation (n.): 創新",
+      "aims to (phr.): 旨在",
+      "accelerate (v.): 加速",
+      "research and development (n.): 研究與開發"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "Google's new office in the US",
+          "Google's expansion into a new AI hub in India",
+          "A new AI research breakthrough",
+          "Google's financial report"
+        ],
+        "answer": "Google's expansion into a new AI hub in India"
+      },
+      {
+        "q": "Where is Google building its new AI hub?",
+        "options": [
+          "United States",
+          "China",
+          "India",
+          "Europe"
+        ],
+        "answer": "India"
+      },
+      {
+        "q": "What is the significance of this new hub for Google?",
+        "options": [
+          "It will be their smallest base",
+          "It will be their largest AI base outside the US",
+          "It will focus only on software development",
+          "It is a temporary research facility"
+        ],
+        "answer": "It will be their largest AI base outside the US"
+      },
+      {
+        "q": "What does the project signify for Google?",
+        "options": [
+          "A withdrawal from the Indian market",
+          "A small investment in technology",
+          "A significant investment in India's tech growth",
+          "A focus on hardware manufacturing"
+        ],
+        "answer": "A significant investment in India's tech growth"
+      },
+      {
+        "q": "What is a stated aim of the new AI hub?",
+        "options": [
+          "To reduce AI research",
+          "To slow down innovation",
+          "To accelerate AI research and development",
+          "To limit local talent involvement"
+        ],
+        "answer": "To accelerate AI research and development"
+      },
+      {
+        "q": "The news mentions Google is 'breaking ground'. What does this idiom mean?",
+        "options": [
+          "Finishing a project",
+          "Starting a project, especially construction",
+          "Discussing future plans",
+          "Buying land"
+        ],
+        "answer": "Starting a project, especially construction"
+      },
+      {
+        "q": "What kind of facility is Google building?",
+        "options": [
+          "A manufacturing plant",
+          "A retail store",
+          "An AI hub",
+          "A data center"
+        ],
+        "answer": "An AI hub"
+      },
+      {
+        "q": "The article uses the word 'facility'. What is a synonym for this word?",
+        "options": [
+          "Idea",
+          "Building",
+          "Plan",
+          "Problem"
+        ],
+        "answer": "Building"
+      },
+      {
+        "q": "What does 'fostering innovation' imply?",
+        "options": [
+          "Stopping new ideas",
+          "Encouraging and developing new ideas",
+          "Ignoring new technologies",
+          "Copying existing inventions"
+        ],
+        "answer": "Encouraging and developing new ideas"
+      },
+      {
+        "q": "The hub aims to support both local talent and what else?",
+        "options": [
+          "International competitors",
+          "Global initiatives",
+          "Historical research",
+          "Political campaigns"
+        ],
+        "answer": "Global initiatives"
+      },
+      {
+        "q": "What is the English term for '人工智慧'?",
+        "options": [
+          "Computer Science",
+          "Machine Learning",
+          "Artificial Intelligence",
+          "Data Science"
+        ],
+        "answer": "Artificial Intelligence"
+      },
+      {
+        "q": "According to the text, this hub will be Google's largest AI base outside which country?",
+        "options": [
+          "India",
+          "China",
+          "Canada",
+          "United States"
+        ],
+        "answer": "United States"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "阿聯退出OPEC引發市場波動，全球石油秩序面臨重組",
+    "tabTitle": "地緣政治",
+    "english": "The United Arab Emirates (UAE) has announced its withdrawal from the Organization of the Petroleum Exporting Countries (OPEC), a move that sent shockwaves through global energy markets. This decision is expected to trigger significant price fluctuations and could lead to a substantial reshaping of the international oil order. Analysts are closely monitoring the situation to assess the long-term implications for supply and demand dynamics.",
+    "chinese": "阿拉伯聯合大公國（UAE）已宣布退出石油輸出國家組織（OPEC），此舉在全球能源市場引發連鎖反應。這項決定預計將引發顯著的價格波動，並可能導致國際石油秩序面臨重大重組。分析師正密切關注局勢，以評估對供需動態的長期影響。",
+    "vocabulary": [
+      "withdrawal (n.): 退出；撤回",
+      "Organization of the Petroleum Exporting Countries (OPEC) (n.): 石油輸出國家組織",
+      "announced (v.): 宣布",
+      "move (n.): 行動；舉措",
+      "sent shockwaves through (phr.): 震撼了...",
+      "global energy markets (phr.): 全球能源市場",
+      "decision (n.): 決定",
+      "expected (v.): 預期",
+      "trigger (v.): 引發；觸發",
+      "significant (adj.): 顯著的；重大的",
+      "price fluctuations (phr.): 價格波動",
+      "lead to (phr.): 導致",
+      "substantial (adj.): 實質的；大量的",
+      "reshaping (n.): 重塑；重組",
+      "international oil order (phr.): 國際石油秩序",
+      "analysts (n.): 分析師",
+      "closely monitoring (phr.): 密切監控",
+      "assess (v.): 評估",
+      "long-term implications (phr.): 長期影響",
+      "supply and demand dynamics (phr.): 供需動態"
+    ],
+    "quiz": [
+      {
+        "q": "What major event did the news report on?",
+        "options": [
+          "The UAE joining OPEC",
+          "The UAE withdrawing from OPEC",
+          "A change in global oil prices",
+          "An analysis of oil market dynamics"
+        ],
+        "answer": "The UAE withdrawing from OPEC"
+      },
+      {
+        "q": "What was the immediate impact of the UAE's decision on energy markets?",
+        "options": [
+          "A period of stability",
+          "Increased cooperation among OPEC members",
+          "Shockwaves",
+          "A decrease in oil production"
+        ],
+        "answer": "Shockwaves"
+      },
+      {
+        "q": "What is one expected consequence of the UAE's withdrawal?",
+        "options": [
+          "Stable oil prices",
+          "A decrease in market volatility",
+          "Significant price fluctuations",
+          "Strengthened OPEC unity"
+        ],
+        "answer": "Significant price fluctuations"
+      },
+      {
+        "q": "According to the text, what might the UAE's exit lead to?",
+        "options": [
+          "A less organized oil market",
+          "A reshaping of the global oil order",
+          "Increased demand for oil",
+          "Reduced international trade"
+        ],
+        "answer": "A reshaping of the global oil order"
+      },
+      {
+        "q": "Who is closely monitoring the situation?",
+        "options": [
+          "OPEC members",
+          "Oil consumers",
+          "Government officials",
+          "Analysts"
+        ],
+        "answer": "Analysts"
+      },
+      {
+        "q": "What are analysts trying to assess?",
+        "options": [
+          "The UAE's future political strategy",
+          "The short-term impact on oil prices",
+          "The long-term implications for supply and demand",
+          "The reactions of other oil-producing nations"
+        ],
+        "answer": "The long-term implications for supply and demand"
+      },
+      {
+        "q": "The term 'shockwaves' in the context of the news implies:",
+        "options": [
+          "A gentle ripple effect",
+          "A strong and disruptive impact",
+          "A positive and stabilizing influence",
+          "A slow and gradual change"
+        ],
+        "answer": "A strong and disruptive impact"
+      },
+      {
+        "q": "What does 'reshaping' suggest in relation to the global oil order?",
+        "options": [
+          "Maintaining the current structure",
+          "Making minor adjustments",
+          "Causing a fundamental change in structure",
+          "Strengthening existing alliances"
+        ],
+        "answer": "Causing a fundamental change in structure"
+      },
+      {
+        "q": "The withdrawal of the UAE is from which organization?",
+        "options": [
+          "The International Energy Agency (IEA)",
+          "The Organization of the Petroleum Exporting Countries (OPEC)",
+          "The World Trade Organization (WTO)",
+          "The United Nations (UN)"
+        ],
+        "answer": "The Organization of the Petroleum Exporting Countries (OPEC)"
+      },
+      {
+        "q": "The news is primarily focused on:",
+        "options": [
+          "UAE's domestic economic policy",
+          "Geopolitical events affecting the oil industry",
+          "Technological advancements in oil extraction",
+          "Environmental concerns related to oil consumption"
+        ],
+        "answer": "Geopolitical events affecting the oil industry"
+      },
+      {
+        "q": "What does 'volatility' refer to in the context of markets?",
+        "options": [
+          "Stability and predictability",
+          "Rapid and unpredictable changes",
+          "A steady increase in prices",
+          "A consistent demand for products"
+        ],
+        "answer": "Rapid and unpredictable changes"
+      },
+      {
+        "q": "The phrase 'sent shockwaves through' suggests the news was:",
+        "options": [
+          "Unimportant and easily ignored",
+          "Mildly concerning",
+          "Highly significant and disruptive",
+          "Largely expected and anticipated"
+        ],
+        "answer": "Highly significant and disruptive"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "微軟投資新加坡55億美元，強化AI基礎設施與人才",
+    "tabTitle": "科技",
+    "english": "Microsoft has announced a significant investment of $5.5 billion in Singapore over the next five years. This substantial funding aims to bolster the nation's artificial intelligence (AI) infrastructure and cultivate local AI talent. The initiative underscores Singapore's strategic importance in the global tech landscape and Microsoft's commitment to advancing AI capabilities in the region.",
+    "chinese": "微軟宣布未來五年將在新加坡進行55億美元的重大投資。這筆巨額資金旨在加強該國的人工智能（AI）基礎設施並培養本地AI人才。此舉凸顯了新加坡在全球科技格局中的戰略重要性，以及微軟對促進該區域AI能力發展的承諾。",
+    "vocabulary": [
+      "investment (n.): 投資",
+      "significant (adj.): 重大的",
+      "billion (n.): 十億",
+      "bolster (v.): 加強",
+      "artificial intelligence (n.): 人工智能",
+      "infrastructure (n.): 基礎設施",
+      "cultivate (v.): 培養",
+      "talent (n.): 人才",
+      "initiative (n.): 倡議",
+      "underscores (v.): 凸顯",
+      "strategic (adj.): 戰略的",
+      "importance (n.): 重要性",
+      "global (adj.): 全球的",
+      "tech landscape (n.): 科技格局",
+      "commitment (n.): 承諾",
+      "advancing (v.): 推進",
+      "capabilities (n.): 能力",
+      "region (n.): 區域",
+      "announced (v.): 宣布",
+      "funding (n.): 資金"
+    ],
+    "quiz": [
+      {
+        "q": "What is the total amount Microsoft is investing in Singapore?",
+        "options": [
+          "1.5 billion dollars",
+          "3.5 billion dollars",
+          "5.5 billion dollars",
+          "7.5 billion dollars"
+        ],
+        "answer": "5.5 billion dollars"
+      },
+      {
+        "q": "Over what period will this investment be made?",
+        "options": [
+          "Two years",
+          "Five years",
+          "Ten years",
+          "Fifteen years"
+        ],
+        "answer": "Five years"
+      },
+      {
+        "q": "What are the two main areas Microsoft's investment will focus on?",
+        "options": [
+          "Manufacturing and energy",
+          "Retail and logistics",
+          "AI infrastructure and talent",
+          "Healthcare and education"
+        ],
+        "answer": "AI infrastructure and talent"
+      },
+      {
+        "q": "What does the initiative aim to 'bolster'?",
+        "options": [
+          "Financial markets",
+          "Tourism industry",
+          "AI infrastructure",
+          "Environmental protection"
+        ],
+        "answer": "AI infrastructure"
+      },
+      {
+        "q": "What does Microsoft aim to 'cultivate' in Singapore?",
+        "options": [
+          "New businesses",
+          "Local AI talent",
+          "Research institutions",
+          "Export markets"
+        ],
+        "answer": "Local AI talent"
+      },
+      {
+        "q": "The investment 'underscores' Singapore's strategic importance in what?",
+        "options": [
+          "Maritime trade",
+          "The global tech landscape",
+          "Aerospace manufacturing",
+          "Financial services"
+        ],
+        "answer": "The global tech landscape"
+      },
+      {
+        "q": "What does Microsoft demonstrate with this investment?",
+        "options": [
+          "A desire to relocate",
+          "A commitment to advancing AI",
+          "A plan to reduce staff",
+          "An interest in real estate"
+        ],
+        "answer": "A commitment to advancing AI"
+      },
+      {
+        "q": "What is the primary goal of the funding?",
+        "options": [
+          "To develop new software products",
+          "To support startups",
+          "To boost AI infrastructure and talent",
+          "To acquire local companies"
+        ],
+        "answer": "To boost AI infrastructure and talent"
+      },
+      {
+        "q": "The news is categorized under which sector?",
+        "options": [
+          "Finance",
+          "Technology",
+          "Environment",
+          "Health"
+        ],
+        "answer": "Technology"
+      },
+      {
+        "q": "The word 'substantial' in the text means:",
+        "options": [
+          "Small",
+          "Uncertain",
+          "Large",
+          "Temporary"
+        ],
+        "answer": "Large"
+      },
+      {
+        "q": "Which word means to encourage the development of something?",
+        "options": [
+          "Bolster",
+          "Cultivate",
+          "Underscore",
+          "Advance"
+        ],
+        "answer": "Cultivate"
+      },
+      {
+        "q": "The investment is described as 'significant', meaning it is:",
+        "options": [
+          "Minor",
+          "Important",
+          "Optional",
+          "Unnecessary"
+        ],
+        "answer": "Important"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "OpenAI完成1220億美元融資，估值達8520億美元",
+    "tabTitle": "科技",
+    "english": "Artificial intelligence leader OpenAI has successfully closed a monumental funding round, securing $122 billion. This significant investment propels the company's valuation to an impressive $852 billion. The substantial capital infusion is expected to accelerate OpenAI's research and development in advanced AI technologies, further solidifying its position in the global tech landscape.",
+    "chinese": "人工智能領導者 OpenAI 已成功完成一輪重大的融資，籌集了 1220 億美元。這項重大投資將該公司的估值推升至驚人的 8520 億美元。這筆龐大的資金注入預計將加速 OpenAI 在先進人工智能技術方面的研究與開發，進一步鞏固其在全球科技領域的地位。",
+    "vocabulary": [
+      "Artificial intelligence (n.): 人工智能",
+      "leader (n.): 領導者",
+      "successfully (adv.): 成功地",
+      "closed (v.): 完成（交易、融資等）",
+      "monumental (adj.): 巨大的，重大的",
+      "funding round (n.): 融資輪",
+      "securing (v.): 籌集到，獲得",
+      "billion (num.): 十億",
+      "significant (adj.): 重大的，顯著的",
+      "investment (n.): 投資",
+      "propels (v.): 推動",
+      "company's (possessive n.): 公司的",
+      "valuation (n.): 估值",
+      "impressive (adj.): 令人印象深刻的",
+      "substantial (adj.): 大量的，實質的",
+      "capital infusion (n.): 資金注入",
+      "expected (v.): 預計",
+      "accelerate (v.): 加速",
+      "research and development (n.): 研究與開發",
+      "advanced (adj.): 先進的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the primary subject of the news?",
+        "options": [
+          "A new AI product launch",
+          "OpenAI's recent funding achievement",
+          "A partnership between OpenAI and another company",
+          "Changes in AI regulations"
+        ],
+        "answer": "OpenAI's recent funding achievement"
+      },
+      {
+        "q": "How much money did OpenAI secure in this funding round?",
+        "options": [
+          "$122 million",
+          "$852 million",
+          "$122 billion",
+          "$852 billion"
+        ],
+        "answer": "$122 billion"
+      },
+      {
+        "q": "What is OpenAI's new valuation after this funding round?",
+        "options": [
+          "$122 billion",
+          "$852 billion",
+          "It was not mentioned",
+          "$122 trillion"
+        ],
+        "answer": "$852 billion"
+      },
+      {
+        "q": "The news describes OpenAI as a leader in which field?",
+        "options": [
+          "Biotechnology",
+          "Quantum Computing",
+          "Artificial Intelligence",
+          "Renewable Energy"
+        ],
+        "answer": "Artificial Intelligence"
+      },
+      {
+        "q": "What is the expected impact of this funding infusion?",
+        "options": [
+          "To reduce research staff",
+          "To slow down development",
+          "To accelerate research and development",
+          "To focus solely on marketing"
+        ],
+        "answer": "To accelerate research and development"
+      },
+      {
+        "q": "The funding round is described as:",
+        "options": [
+          "Minor",
+          "Modest",
+          "Monumental",
+          "Insignificant"
+        ],
+        "answer": "Monumental"
+      },
+      {
+        "q": "What does 'securing' mean in the context of the funding round?",
+        "options": [
+          "Losing money",
+          "Raising or obtaining money",
+          "Investing money",
+          "Spending money"
+        ],
+        "answer": "Raising or obtaining money"
+      },
+      {
+        "q": "The funding is expected to help OpenAI in its research concerning:",
+        "options": [
+          "Basic AI algorithms",
+          "Advanced AI technologies",
+          "AI hardware manufacturing",
+          "AI ethics committees"
+        ],
+        "answer": "Advanced AI technologies"
+      },
+      {
+        "q": "What does 'propels' suggest about the funding?",
+        "options": [
+          "It slows down progress",
+          "It pushes forward or drives progress",
+          "It stops innovation",
+          "It causes a setback"
+        ],
+        "answer": "It pushes forward or drives progress"
+      },
+      {
+        "q": "The term 'valuation' refers to:",
+        "options": [
+          "The company's debt",
+          "The company's market share",
+          "The estimated worth of the company",
+          "The number of employees"
+        ],
+        "answer": "The estimated worth of the company"
+      },
+      {
+        "q": "This funding round will likely strengthen OpenAI's position in the:",
+        "options": [
+          "Automotive industry",
+          "Global tech landscape",
+          "Pharmaceutical sector",
+          "Entertainment business"
+        ],
+        "answer": "Global tech landscape"
+      },
+      {
+        "q": "Which word best describes the amount of capital infused?",
+        "options": [
+          "Minimal",
+          "Negligible",
+          "Substantial",
+          "Scarce"
+        ],
+        "answer": "Substantial"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
