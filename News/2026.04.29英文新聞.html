@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">APR 29, 2026：台灣經濟、科技 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台經院上調GDP預測至7.56%，AI出口動能強勁\nTaiwan's economic outlook has significantly improved, with the Taiwan Institute of Economic Research (TIER) revising its GDP forecast upwards to 7.56% for the year. This optimistic revision is primarily driven by robust export momentum, particularly in the artificial intelligence (AI) sector. Strong demand for AI-related products is expected to fuel continued growth throughout the economy.\n\n[2] 台灣大AI三引擎成長，科技電信業迎黃金十年\nTaiwan Mobile is set to experience significant growth, driven by three key AI engines. This strategic focus is expected to propel the technology and telecommunications sectors into a decade of prosperity. The company's investment in artificial intelligence is anticipated to create new opportunities and solidify its market leadership in the coming years.\n\n[3] 美媒點名台積電為「最值得買入股票」\nTSMC, the world's largest contract chipmaker, has been highlighted by a prominent US media outlet as the 'most worthy stock to buy'. The report cited TSMC's crucial role in the global semiconductor supply chain and its strong technological leadership. Analysts believe this endorsement could further boost investor confidence in the Taiwanese tech giant, potentially impacting its stock performance positively in the coming period.",
+    "chinese": "【1】台經院上調GDP預測至7.56%，AI出口動能強勁\n台灣的經濟前景顯著改善，台灣經濟研究院（TIER）已將今年的國內生產總值（GDP）預測上調至7.56%。此樂觀的修正主要是由強勁的出口動能所帶動，特別是在人工智能（AI）領域。對AI相關產品的強勁需求預計將為整體經濟注入持續的成長動力。\n\n【2】台灣大AI三引擎成長，科技電信業迎黃金十年\n台灣大哥大正準備迎接顯著的成長，這將由三個關鍵的人工智慧引擎所驅動。此策略重點預期將帶領科技與電信產業進入一個繁榮的十年。該公司對人工智慧的投資，有望在未來幾年創造新的機會並鞏固其市場領導地位。\n\n【3】美媒點名台積電為「最值得買入股票」\n全球最大的合約晶片製造商台積電（TSMC）被一家知名的美國媒體點名為「最值得買入的股票」。該報導引用了台積電在全球半導體供應鏈中的關鍵角色及其強大的技術領導地位。分析師認為，這項肯定可能會進一步提振投資者對這家台灣科技巨頭的信心，並可能在未來一段時間內對其股價表現產生正面影響。",
+    "vocabulary": [
+      "economic outlook (n.): 經濟前景",
+      "significantly (adv.): 顯著地",
+      "improved (v.): 改善了",
+      "Taiwan Institute of Economic Research (TIER) (n.): 台灣經濟研究院",
+      "revising (v.): 修訂",
+      "forecast (n.): 預測",
+      "upwards (adv.): 向上",
+      "primarily (adv.): 主要地",
+      "driven by (v.): 由...所帶動",
+      "robust (adj.): 強勁的",
+      "export momentum (n.): 出口動能",
+      "particularly (adv.): 特別是",
+      "artificial intelligence (AI) (n.): 人工智能",
+      "sector (n.): 領域",
+      "strong demand (n.): 強勁的需求",
+      "related products (n.): 相關產品",
+      "expected to (v.): 預計將",
+      "fuel (v.): 助長，注入",
+      "continued growth (n.): 持續的成長",
+      "economy (n.): 經濟",
+      "significant (adj.): 顯著的",
+      "growth (n.): 成長",
+      "driven by (phr.): 由...所驅動",
+      "key (adj.): 關鍵的",
+      "AI engines (n.): 人工智慧引擎",
+      "strategic (adj.): 策略性的",
+      "focus (n.): 焦點",
+      "expected (v.): 預期",
+      "propel (v.): 推進",
+      "technology (n.): 科技",
+      "telecommunications (n.): 電信",
+      "sector (n.): 產業",
+      "enter (v.): 進入",
+      "decade (n.): 十年",
+      "prosperity (n.): 繁榮",
+      "investment (n.): 投資",
+      "artificial intelligence (n.): 人工智慧",
+      "anticipated (v.): 預期",
+      "create (v.): 創造",
+      "opportunities (n.): 機會",
+      "TSMC (n.): 台灣積體電路製造股份有限公司 (台積電)",
+      "contract chipmaker (n.): 合約晶片製造商",
+      "prominent (adj.): 著名的；顯赫的",
+      "US media outlet (n.): 美國媒體",
+      "highlighted (v.): 強調；使顯著",
+      "most worthy (adj.): 最值得的",
+      "stock to buy (n.): 值得購買的股票",
+      "cited (v.): 引用",
+      "crucial role (n.): 關鍵角色",
+      "global semiconductor supply chain (n.): 全球半導體供應鏈",
+      "strong technological leadership (n.): 強大的技術領導地位",
+      "analysts (n.): 分析師",
+      "endorsement (n.): 支持；認可",
+      "boost (v.): 提升；增加",
+      "investor confidence (n.): 投資者信心",
+      "Taiwanese tech giant (n.): 台灣科技巨頭",
+      "potentially (adv.): 可能地",
+      "impacting (v.): 影響",
+      "stock performance (n.): 股價表現",
+      "positively (adv.): 正面地"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of the news report?",
+        "options": [
+          "To discuss inflation rates in Taiwan",
+          "To announce an upward revision of Taiwan's GDP forecast",
+          "To detail challenges in the AI export market",
+          "To report on new government economic policies"
+        ],
+        "answer": "To announce an upward revision of Taiwan's GDP forecast"
+      },
+      {
+        "q": "Which organization is responsible for the GDP forecast revision?",
+        "options": [
+          "The Central Bank of Taiwan",
+          "The Ministry of Economic Affairs",
+          "The Taiwan Institute of Economic Research (TIER)",
+          "The International Monetary Fund (IMF)"
+        ],
+        "answer": "The Taiwan Institute of Economic Research (TIER)"
+      },
+      {
+        "q": "What is the new GDP forecast for Taiwan?",
+        "options": [
+          "5.76%",
+          "6.56%",
+          "7.56%",
+          "8.56%"
+        ],
+        "answer": "7.56%"
+      },
+      {
+        "q": "What is the primary driver behind the improved economic outlook?",
+        "options": [
+          "Increased domestic consumption",
+          "Strong export momentum",
+          "Government stimulus packages",
+          "Foreign direct investment"
+        ],
+        "answer": "Strong export momentum"
+      },
+      {
+        "q": "Which specific sector is mentioned as a key contributor to export growth?",
+        "options": [
+          "Automotive",
+          "Textiles",
+          "Artificial Intelligence (AI)",
+          "Agriculture"
+        ],
+        "answer": "Artificial Intelligence (AI)"
+      },
+      {
+        "q": "The news suggests that the demand for AI-related products is:",
+        "options": [
+          "Weakening",
+          "Stable",
+          "Declining",
+          "Strong"
+        ],
+        "answer": "Strong"
+      },
+      {
+        "q": "What does TIER stand for?",
+        "options": [
+          "Taiwan International Economic Relations",
+          "Taiwan Institute of Economic Research",
+          "Technology and Innovation Economic Report",
+          "Trade and Investment Efficiency Review"
+        ],
+        "answer": "Taiwan Institute of Economic Research"
+      },
+      {
+        "q": "The word 'robust' in the context of exports means:",
+        "options": [
+          "Weak",
+          "Steady",
+          "Strong and healthy",
+          "Fluctuating"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "What is expected to happen as a result of strong demand for AI products?",
+        "options": [
+          "A decrease in export revenue",
+          "Continued growth for the economy",
+          "A slowdown in technological development",
+          "Increased import costs"
+        ],
+        "answer": "Continued growth for the economy"
+      },
+      {
+        "q": "The economic outlook has been described as:",
+        "options": [
+          "Deteriorating",
+          "Unchanged",
+          "Significantly improved",
+          "Uncertain"
+        ],
+        "answer": "Significantly improved"
+      },
+      {
+        "q": "The revision of the GDP forecast is described as:",
+        "options": [
+          "A downward adjustment",
+          "An optimistic revision",
+          "A cautionary note",
+          "A negligible change"
+        ],
+        "answer": "An optimistic revision"
+      },
+      {
+        "q": "What does 'momentum' refer to in 'export momentum'?",
+        "options": [
+          "The speed and force of something",
+          "The cost of exporting goods",
+          "The regulations surrounding exports",
+          "The number of export destinations"
+        ],
+        "answer": "The speed and force of something"
+      },
+      {
+        "q": "What is driving Taiwan Mobile's expected growth?",
+        "options": [
+          "Government subsidies",
+          "Three key AI engines",
+          "International partnerships",
+          "Reduced operating costs"
+        ],
+        "answer": "Three key AI engines"
+      },
+      {
+        "q": "Which industries are expected to benefit from this growth?",
+        "options": [
+          "Retail and hospitality",
+          "Finance and insurance",
+          "Technology and telecommunications",
+          "Healthcare and pharmaceuticals"
+        ],
+        "answer": "Technology and telecommunications"
+      },
+      {
+        "q": "What is the anticipated duration of this prosperous period?",
+        "options": [
+          "Five years",
+          "A decade",
+          "Two years",
+          "Until the next election"
+        ],
+        "answer": "A decade"
+      },
+      {
+        "q": "What is Taiwan Mobile investing in?",
+        "options": [
+          "Renewable energy",
+          "Artificial intelligence",
+          "Space exploration",
+          "Traditional manufacturing"
+        ],
+        "answer": "Artificial intelligence"
+      },
+      {
+        "q": "What is the tone of the English text?",
+        "options": [
+          "Humorous",
+          "Critical",
+          "Factual",
+          "Opinionated"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "The text suggests the company's investment will...",
+        "options": [
+          "Reduce its workforce",
+          "Decrease market share",
+          "Create new opportunities",
+          "Focus on legacy systems"
+        ],
+        "answer": "Create new opportunities"
+      },
+      {
+        "q": "What does 'propel' mean in this context?",
+        "options": [
+          "To slow down",
+          "To push forward",
+          "To replace",
+          "To ignore"
+        ],
+        "answer": "To push forward"
+      },
+      {
+        "q": "What is the predicted outcome for the company's market position?",
+        "options": [
+          "Market decline",
+          "Market stagnation",
+          "Solidify market leadership",
+          "Exit the market"
+        ],
+        "answer": "Solidify market leadership"
+      },
+      {
+        "q": "The phrase 'golden decade' implies a period of...",
+        "options": [
+          "Difficulty and struggle",
+          "Economic hardship",
+          "Great success and prosperity",
+          "Technological regression"
+        ],
+        "answer": "Great success and prosperity"
+      },
+      {
+        "q": "Which word describes the nature of the growth expected?",
+        "options": [
+          "Minor",
+          "Insignificant",
+          "Significant",
+          "Temporary"
+        ],
+        "answer": "Significant"
+      },
+      {
+        "q": "The company's AI strategy is described as...",
+        "options": [
+          "Uncertain",
+          "Experimental",
+          "Strategic",
+          "Outdated"
+        ],
+        "answer": "Strategic"
+      },
+      {
+        "q": "What is the main subject of the news?",
+        "options": [
+          "A new smartphone launch",
+          "Taiwan Mobile's growth strategy",
+          "A global economic downturn",
+          "Changes in advertising regulations"
+        ],
+        "answer": "Taiwan Mobile's growth strategy"
+      },
+      {
+        "q": "What company is the main subject of the news?",
+        "options": [
+          "Intel",
+          "Samsung",
+          "TSMC",
+          "Nvidia"
+        ],
+        "answer": "TSMC"
+      },
+      {
+        "q": "According to the news, which country's media highlighted TSMC?",
+        "options": [
+          "Taiwan",
+          "Japan",
+          "China",
+          "US"
+        ],
+        "answer": "US"
+      },
+      {
+        "q": "What description was given to TSMC by the US media?",
+        "options": [
+          "Most promising company",
+          "Most worthy stock to buy",
+          "Top innovator in AI",
+          "Largest semiconductor manufacturer"
+        ],
+        "answer": "Most worthy stock to buy"
+      },
+      {
+        "q": "What is TSMC's primary business mentioned in the text?",
+        "options": [
+          "Designing chips",
+          "Selling electronics",
+          "Contract chipmaking",
+          "Developing software"
+        ],
+        "answer": "Contract chipmaking"
+      },
+      {
+        "q": "What role does TSMC play in the global semiconductor market?",
+        "options": [
+          "A minor player",
+          "A crucial part of the supply chain",
+          "A competitor to many",
+          "An emerging leader"
+        ],
+        "answer": "A crucial part of the supply chain"
+      },
+      {
+        "q": "Besides its supply chain role, what else was mentioned about TSMC's strengths?",
+        "options": [
+          "Low production costs",
+          "Strong marketing",
+          "Strong technological leadership",
+          "Government subsidies"
+        ],
+        "answer": "Strong technological leadership"
+      },
+      {
+        "q": "Who believes this endorsement could boost investor confidence?",
+        "options": [
+          "Media reporters",
+          "TSMC executives",
+          "Analysts",
+          "Government officials"
+        ],
+        "answer": "Analysts"
+      },
+      {
+        "q": "What could be a potential effect of this news on TSMC?",
+        "options": [
+          "A decrease in stock price",
+          "Increased competition",
+          "Positive impact on stock performance",
+          "Reduced production capacity"
+        ],
+        "answer": "Positive impact on stock performance"
+      },
+      {
+        "q": "The news suggests that TSMC is the world's largest...",
+        "options": [
+          "Chip designer",
+          "Electronics retailer",
+          "Contract chipmaker",
+          "Semiconductor research firm"
+        ],
+        "answer": "Contract chipmaker"
+      },
+      {
+        "q": "The term 'US media outlet' refers to a news source from which country?",
+        "options": [
+          "United States",
+          "United Kingdom",
+          "United Arab Emirates",
+          "Uruguay"
+        ],
+        "answer": "United States"
+      },
+      {
+        "q": "What does the word 'endorsement' mean in this context?",
+        "options": [
+          "Criticism",
+          "Rejection",
+          "Support or approval",
+          "Investigation"
+        ],
+        "answer": "Support or approval"
+      },
+      {
+        "q": "The news implies that TSMC has a significant position in the...",
+        "options": [
+          "Automotive industry",
+          "Global semiconductor supply chain",
+          "Social media market",
+          "Renewable energy sector"
+        ],
+        "answer": "Global semiconductor supply chain"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "全球AI企業數破6000家，中國AI產業規模破兆",
+    "tabTitle": "科技",
+    "english": "The global Artificial Intelligence (AI) sector is experiencing rapid expansion, with the number of AI companies worldwide surpassing 6,000. This growth signifies a substantial increase in innovation and investment within the field. Notably, China's AI industry has achieved a significant milestone, with its market value exceeding one trillion US dollars. This surge highlights the country's prominent role in AI development and application.",
+    "chinese": "全球人工智能（AI）領域正經歷快速擴張，全球AI企業數量已突破6000家。這一增長標誌著該領域創新和投資的大幅增加。值得注意的是，中國的AI產業已 достигла 重要的里程碑，其市場價值超過一兆美元。這一激增凸顯了中國在AI發展和應用方面的突出地位。",
+    "vocabulary": [
+      "Artificial Intelligence (AI) (n.): 人工智能",
+      "sector (n.): 行業，領域",
+      "rapid (adj.): 快速的",
+      "expansion (n.): 擴張，擴大",
+      "surpassing (v.): 超過",
+      "signifies (v.): 意味著",
+      "substantial (adj.): 實質的，大量的",
+      "increase (n.): 增加",
+      "innovation (n.): 創新",
+      "investment (n.): 投資",
+      "notably (adv.): 值得注意的是",
+      "industry (n.): 產業",
+      "achieved (v.): 達到，實現",
+      "milestone (n.): 里程碑",
+      "market value (n.): 市場價值",
+      "exceeding (v.): 超過",
+      "trillion (n.): 兆",
+      "surge (n.): 激增",
+      "highlights (v.): 強調，凸顯",
+      "prominent (adj.): 突出的，著名的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "The decline of the tech industry",
+          "The growth of the global AI sector",
+          "The impact of AI on traditional jobs",
+          "The regulation of AI technology"
+        ],
+        "answer": "The growth of the global AI sector"
+      },
+      {
+        "q": "How many AI companies are there globally, according to the news?",
+        "options": [
+          "Less than 5,000",
+          "Exactly 6,000",
+          "Over 6,000",
+          "Around 7,000"
+        ],
+        "answer": "Over 6,000"
+      },
+      {
+        "q": "What does the expansion of the AI sector signify?",
+        "options": [
+          "A decrease in research",
+          "Increased competition",
+          "More innovation and investment",
+          "Stagnation in development"
+        ],
+        "answer": "More innovation and investment"
+      },
+      {
+        "q": "Which country's AI industry has reached a value of over one trillion US dollars?",
+        "options": [
+          "United States",
+          "Japan",
+          "Germany",
+          "China"
+        ],
+        "answer": "China"
+      },
+      {
+        "q": "What does the term 'trillion' refer to in the context of China's AI industry?",
+        "options": [
+          "The number of AI researchers",
+          "The amount of data processed",
+          "The market value in US dollars",
+          "The number of AI patents"
+        ],
+        "answer": "The market value in US dollars"
+      },
+      {
+        "q": "The word 'surpassing' in the text means:",
+        "options": [
+          "Falling below",
+          "Equalling",
+          "Going beyond",
+          "Remaining static"
+        ],
+        "answer": "Going beyond"
+      },
+      {
+        "q": "The word 'signifies' is closest in meaning to:",
+        "options": [
+          "Denies",
+          "Indicates",
+          "Conceals",
+          "Weakens"
+        ],
+        "answer": "Indicates"
+      },
+      {
+        "q": "What does the word 'substantial' mean?",
+        "options": [
+          "Minor",
+          "Insignificant",
+          "Considerable",
+          "Fleeting"
+        ],
+        "answer": "Considerable"
+      },
+      {
+        "q": "The word 'notably' suggests that the following information is:",
+        "options": [
+          "Unimportant",
+          "Common knowledge",
+          "Particularly worthy of attention",
+          "Controversial"
+        ],
+        "answer": "Particularly worthy of attention"
+      },
+      {
+        "q": "Which word describes the growth in China's AI industry value?",
+        "options": [
+          "Decline",
+          "Stagnation",
+          "Surge",
+          "Reduction"
+        ],
+        "answer": "Surge"
+      },
+      {
+        "q": "The phrase 'market value' refers to:",
+        "options": [
+          "The cost of production",
+          "The price of individual products",
+          "The total worth of the industry in the market",
+          "The number of employees"
+        ],
+        "answer": "The total worth of the industry in the market"
+      },
+      {
+        "q": "The news states that China's AI industry has achieved a 'milestone'. What does this imply?",
+        "options": [
+          "A setback in progress",
+          "A significant achievement or stage",
+          "A return to previous levels",
+          "A minor development"
+        ],
+        "answer": "A significant achievement or stage"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "地緣衝突推升油價，六大石化巨頭2026年獲利預估增3兆",
+    "tabTitle": "金融市場",
+    "english": "Geopolitical tensions are significantly impacting global energy markets, leading to a substantial rise in oil prices. Consequently, the six largest petrochemical companies are projected to experience a remarkable profit increase in 2026. Analysts estimate this surge could reach as high as $3 trillion, driven by increased demand and supply chain disruptions. This financial boost is expected to reshape investment strategies within the energy sector.",
+    "chinese": "地緣政治緊張局勢正顯著影響全球能源市場，導致油價大幅上漲。因此，六大石化巨頭預計在 2026 年將經歷顯著的利潤增長。分析師估計，在需求增加和供應鏈中斷的推動下，這一激增可能高達 3 兆美元。預計這一財政提振將重塑能源行業內的投資策略。",
+    "vocabulary": [
+      "Geopolitical tensions (n.): 地緣政治緊張局勢",
+      "Significantly (adv.): 顯著地",
+      "Impacting (v.): 影響",
+      "Global energy markets (n.): 全球能源市場",
+      "Substantial (adj.): 實質的，大量的",
+      "Rise (n.): 上漲",
+      "Oil prices (n.): 油價",
+      "Consequently (adv.): 因此，結果",
+      "Petrochemical companies (n.): 石化公司",
+      "Projected (v.): 預計",
+      "Experience (v.): 經歷，體驗",
+      "Remarkable (adj.): 顯著的，非凡的",
+      "Profit increase (n.): 利潤增長",
+      "Analysts (n.): 分析師",
+      "Estimate (v.): 估計",
+      "Surge (n.): 激增",
+      "Reach (v.): 達到",
+      "Driven by (v.): 由...推動",
+      "Demand (n.): 需求",
+      "Supply chain disruptions (n.): 供應鏈中斷"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main reason for the rise in oil prices mentioned in the news?",
+        "options": [
+          "Increased production by OPEC",
+          "Geopolitical tensions",
+          "A decrease in global demand",
+          "Technological advancements in extraction"
+        ],
+        "answer": "Geopolitical tensions"
+      },
+      {
+        "q": "Which group of companies is expected to see a profit surge?",
+        "options": [
+          "Technology firms",
+          "Automobile manufacturers",
+          "Top 6 petrochemical giants",
+          "Renewable energy providers"
+        ],
+        "answer": "Top 6 petrochemical giants"
+      },
+      {
+        "q": "What is the estimated profit surge for these companies in 2026?",
+        "options": [
+          "$3 billion",
+          "$30 billion",
+          "$3 trillion",
+          "$300 billion"
+        ],
+        "answer": "$3 trillion"
+      },
+      {
+        "q": "What factors are driving this profit increase?",
+        "options": [
+          "Lower production costs and reduced competition",
+          "Increased demand and supply chain disruptions",
+          "Government subsidies and tax breaks",
+          "Innovation in product development"
+        ],
+        "answer": "Increased demand and supply chain disruptions"
+      },
+      {
+        "q": "The news suggests that this financial boost will likely affect:",
+        "options": [
+          "Consumer electronics markets",
+          "Agricultural output",
+          "Investment strategies in the energy sector",
+          "The tourism industry"
+        ],
+        "answer": "Investment strategies in the energy sector"
+      },
+      {
+        "q": "The English text is written in a factual style, suitable for:",
+        "options": [
+          "A fictional novel",
+          "A children's story",
+          "A news report",
+          "A personal diary"
+        ],
+        "answer": "A news report"
+      },
+      {
+        "q": "What is the approximate word count of the English text?",
+        "options": [
+          "Less than 50 words",
+          "Around 80 words",
+          "More than 150 words",
+          "Exactly 100 words"
+        ],
+        "answer": "Around 80 words"
+      },
+      {
+        "q": "The word 'consequently' means:",
+        "options": [
+          "In contrast",
+          "As a result",
+          "For example",
+          "However"
+        ],
+        "answer": "As a result"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a driver of the profit surge?",
+        "options": [
+          "Increased demand",
+          "Supply chain disruptions",
+          "Lower oil prices",
+          "Geopolitical tensions"
+        ],
+        "answer": "Lower oil prices"
+      },
+      {
+        "q": "The term 'petrochemical' relates to:",
+        "options": [
+          "Animal farming",
+          "Chemical products derived from petroleum",
+          "Digital technology",
+          "Construction materials"
+        ],
+        "answer": "Chemical products derived from petroleum"
+      },
+      {
+        "q": "What is the predicted impact of the profit increase on the energy sector?",
+        "options": [
+          "A decrease in investment",
+          "A shift away from oil",
+          "Reshaping investment strategies",
+          "Reduced production"
+        ],
+        "answer": "Reshaping investment strategies"
+      },
+      {
+        "q": "The English text uses the word 'substantial' to describe the:",
+        "options": [
+          "Decrease in oil prices",
+          "Profit increase",
+          "Number of companies affected",
+          "Level of geopolitical tension"
+        ],
+        "answer": "Profit increase"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "AI大模型競爭白熱化API價格戰持續",
+    "tabTitle": "科技",
+    "english": "The competition among AI large models is reaching a fever pitch, with major tech companies fiercely vying for market dominance. This intense rivalry has triggered an ongoing price war, particularly concerning API access. Companies are lowering prices to attract more developers and businesses, hoping to secure a larger share of the rapidly expanding AI market. The trend suggests a dynamic and evolving landscape where cost-effectiveness is becoming a key differentiator.",
+    "chinese": "人工智能大模型的競爭正趨於白熱化，主要科技公司正激烈爭奪市場主導地位。這種激烈的競爭引發了一場持續的價格戰，尤其是在 API 訪問方面。公司們正在降低價格以吸引更多開發者和企業，希望在快速擴張的人工智能市場中獲得更大的份額。這一趨勢表明，一個成本效益日益成為關鍵差異化因素的動態且不斷發展的格局。",
+    "vocabulary": [
+      "competition (n.): 競爭",
+      "large model (n.): 大型模型",
+      "intensifies (v.): 加劇",
+      "fiercely (adv.): 激烈地",
+      "vying (v.): 競爭",
+      "market dominance (n.): 市場主導地位",
+      "rivalry (n.): 對抗，競爭",
+      "triggered (v.): 引發",
+      "ongoing (adj.): 持續的",
+      "price war (n.): 價格戰",
+      "concerning (prep.): 關於",
+      "API access (n.): API 訪問",
+      "lowering prices (v. phrase): 降低價格",
+      "attract (v.): 吸引",
+      "developers (n.): 開發者",
+      "businesses (n.): 企業",
+      "secure (v.): 獲得，確保",
+      "market share (n.): 市場份額",
+      "rapidly expanding (adj. phrase): 快速擴張的",
+      "differentiator (n.): 差異化因素"
+    ],
+    "quiz": [
+      {
+        "q": "What is the current state of competition among AI large models?",
+        "options": [
+          "It is declining.",
+          "It is reaching a fever pitch.",
+          "It is stable.",
+          "It is a minor issue."
+        ],
+        "answer": "It is reaching a fever pitch."
+      },
+      {
+        "q": "What has the intense rivalry triggered?",
+        "options": [
+          "A decrease in innovation",
+          "A focus on hardware development",
+          "An ongoing price war",
+          "Reduced demand for AI services"
+        ],
+        "answer": "An ongoing price war"
+      },
+      {
+        "q": "What is a primary focus of the current price war?",
+        "options": [
+          "Hardware sales",
+          "Cloud computing infrastructure",
+          "API access",
+          "Employee salaries"
+        ],
+        "answer": "API access"
+      },
+      {
+        "q": "Why are companies lowering prices for API access?",
+        "options": [
+          "To increase their operational costs",
+          "To attract more developers and businesses",
+          "To reduce the number of AI users",
+          "To focus on niche markets"
+        ],
+        "answer": "To attract more developers and businesses"
+      },
+      {
+        "q": "What is the goal of attracting more developers and businesses?",
+        "options": [
+          "To decrease market share",
+          "To secure a larger share of the AI market",
+          "To simplify AI models",
+          "To eliminate competition"
+        ],
+        "answer": "To secure a larger share of the AI market"
+      },
+      {
+        "q": "How is the AI market described in the text?",
+        "options": [
+          "Slowly growing",
+          "Rapidly expanding",
+          "Stagnant",
+          "Declining"
+        ],
+        "answer": "Rapidly expanding"
+      },
+      {
+        "q": "What is becoming a key differentiator in the AI market?",
+        "options": [
+          "Brand recognition",
+          "Marketing budget",
+          "Cost-effectiveness",
+          "Geographical location"
+        ],
+        "answer": "Cost-effectiveness"
+      },
+      {
+        "q": "Which phrase describes the intensity of the competition?",
+        "options": [
+          "Calm and steady",
+          "Reaching a fever pitch",
+          "Slowly building",
+          "Minimal"
+        ],
+        "answer": "Reaching a fever pitch"
+      },
+      {
+        "q": "Who are the main players involved in the competition?",
+        "options": [
+          "Small startups",
+          "Individual researchers",
+          "Major tech companies",
+          "Government agencies"
+        ],
+        "answer": "Major tech companies"
+      },
+      {
+        "q": "What does the price war primarily affect?",
+        "options": [
+          "AI model training costs",
+          "AI hardware production",
+          "API access pricing",
+          "AI research funding"
+        ],
+        "answer": "API access pricing"
+      },
+      {
+        "q": "The text suggests the AI landscape is:",
+        "options": [
+          "Static and unchanging",
+          "Dynamic and evolving",
+          "Predictable and stable",
+          "Limited in scope"
+        ],
+        "answer": "Dynamic and evolving"
+      },
+      {
+        "q": "What is the ultimate goal for companies in this competitive environment?",
+        "options": [
+          "To maintain high prices",
+          "To reduce API availability",
+          "To gain a larger market share",
+          "To focus solely on research"
+        ],
+        "answer": "To gain a larger market share"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "全球核能復興應對AI用電與氣候變遷",
+    "tabTitle": "國際大事",
+    "english": "The global energy landscape is witnessing a significant resurgence in nuclear power. This revival is driven by the escalating electricity demands of artificial intelligence (AI) technologies and the urgent need to combat climate change. Nations are increasingly turning to nuclear energy as a reliable, low-carbon power source to meet these dual challenges, signaling a potential shift in global energy strategies.",
+    "chinese": "全球能源格局正見證一場顯著的核能復興。這場復興是由人工智慧（AI）技術日益增長的電力需求以及應對氣候變遷的迫切需求所驅動。各國越來越將核能視為一種可靠、低碳的能源，以應對這雙重挑戰，這預示著全球能源策略可能發生轉變。",
+    "vocabulary": [
+      "resurgence (n.): 復興；復活",
+      "nuclear power (n.): 核能；核子動力",
+      "escalating (adj.): 逐步升級的；不斷加劇的",
+      "electricity demands (n.): 電力需求",
+      "artificial intelligence (n.): 人工智慧",
+      "technologies (n.): 技術",
+      "urgent (adj.): 緊急的；迫切的",
+      "combat (v.): 戰鬥；對抗",
+      "climate change (n.): 氣候變遷",
+      "nations (n.): 國家；民族",
+      "increasingly (adv.): 越來越多地；漸漸地",
+      "turning to (phr.): 轉向；求助於",
+      "reliable (adj.): 可靠的；信賴的",
+      "low-carbon (adj.): 低碳的",
+      "power source (n.): 能源；電源",
+      "meet (v.): 滿足；應付",
+      "dual challenges (n.): 雙重挑戰",
+      "signaling (v.): 標示著；預示著",
+      "potential shift (n.): 潛在的轉變",
+      "energy strategies (n.): 能源策略"
+    ],
+    "quiz": [
+      {
+        "q": "What is driving the resurgence in nuclear power?",
+        "options": [
+          "Decreasing AI electricity demands",
+          "Advancements in renewable energy storage",
+          "Escalating AI power needs and climate change concerns",
+          "Global economic recession"
+        ],
+        "answer": "Escalating AI power needs and climate change concerns"
+      },
+      {
+        "q": "According to the text, nuclear energy is considered a ______ power source.",
+        "options": [
+          "high-carbon",
+          "unreliable",
+          "expensive",
+          "low-carbon"
+        ],
+        "answer": "low-carbon"
+      },
+      {
+        "q": "The text suggests that nations are viewing nuclear power as a way to address:",
+        "options": [
+          "Only climate change",
+          "Only AI electricity demands",
+          "Both AI power demand and climate change",
+          "International trade disputes"
+        ],
+        "answer": "Both AI power demand and climate change"
+      },
+      {
+        "q": "The word 'resurgence' in the text means:",
+        "options": [
+          "A decline",
+          "A comeback or revival",
+          "A complete stop",
+          "A new invention"
+        ],
+        "answer": "A comeback or revival"
+      },
+      {
+        "q": "What kind of demand is mentioned as escalating?",
+        "options": [
+          "Demand for fossil fuels",
+          "Demand for renewable energy",
+          "Electricity demand from AI",
+          "Demand for nuclear fuel"
+        ],
+        "answer": "Electricity demand from AI"
+      },
+      {
+        "q": "The text describes the need to combat:",
+        "options": [
+          "Technological unemployment",
+          "Climate change",
+          "Energy scarcity",
+          "Global pandemics"
+        ],
+        "answer": "Climate change"
+      },
+      {
+        "q": "What is implied about global energy strategies?",
+        "options": [
+          "They are not changing.",
+          "They are likely to shift.",
+          "They are solely focused on renewables.",
+          "They are being abandoned."
+        ],
+        "answer": "They are likely to shift."
+      },
+      {
+        "q": "The term 'low-carbon' refers to energy that produces:",
+        "options": [
+          "High levels of carbon emissions",
+          "Minimal carbon emissions",
+          "No energy at all",
+          "Only heat"
+        ],
+        "answer": "Minimal carbon emissions"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a driver for nuclear power's return?",
+        "options": [
+          "AI's power needs",
+          "Climate change",
+          "Cost reduction in solar panels",
+          "Need for reliable energy"
+        ],
+        "answer": "Cost reduction in solar panels"
+      },
+      {
+        "q": "The word 'escalating' is a synonym for:",
+        "options": [
+          "Decreasing",
+          "Stabilizing",
+          "Increasing",
+          "Halting"
+        ],
+        "answer": "Increasing"
+      },
+      {
+        "q": "What is the nature of the challenges mentioned?",
+        "options": [
+          "Single",
+          "Triple",
+          "Dual",
+          "Multiple"
+        ],
+        "answer": "Dual"
+      },
+      {
+        "q": "The text uses a factual style, reporting on:",
+        "options": [
+          "Opinions about nuclear power",
+          "Personal experiences with nuclear energy",
+          "Current trends and motivations regarding nuclear power",
+          "Historical accounts of nuclear accidents"
+        ],
+        "answer": "Current trends and motivations regarding nuclear power"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
