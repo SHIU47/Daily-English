@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 04, 2026：台灣經濟、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣新創獲國際大廠青睞，募資逾億美元\nA prominent Taiwanese startup has successfully attracted significant international investment, securing over $100 million in its latest funding round. The company, known for its innovative technology in the AI sector, impressed major global players with its promising growth potential. This substantial financial backing is expected to accelerate the startup's expansion plans and further solidify its position in the competitive tech landscape.\n\n[2] 台灣企業ESG評級提升，綠色金融受矚目\nTaiwanese companies are experiencing a notable increase in their Environmental, Social, and Governance (ESG) ratings. This positive trend highlights a growing commitment to sustainable business practices across various sectors. Consequently, green finance initiatives are attracting significant attention and investment, signaling a shift towards a more environmentally conscious economy. The improved ratings suggest that companies are actively integrating ESG principles into their core strategies.\n\n[3] 台灣勞動市場新趨勢：彈性工時與遠距辦公\nTaiwan's labor market is undergoing significant shifts, with flexible work arrangements becoming increasingly prevalent. Employers are adopting more adaptable schedules to attract and retain talent, recognizing the growing demand for work-life balance. Furthermore, remote work options are expanding, offering employees greater autonomy and reducing commuting stress. These trends are reshaping the traditional employment landscape and fostering a more employee-centric work environment.",
+    "chinese": "【1】台灣新創獲國際大廠青睞，募資逾億美元\n一家知名的台灣新創公司在其最新一輪融資中成功吸引了重大的國際投資，募集超過 1 億美元。這家以其在人工智能領域的創新技術聞名的公司，以其充滿潛力的成長前景贏得了主要國際大廠的青睞。這筆可觀的資金支持預計將加速該新創公司的擴張計畫，並進一步鞏固其在競爭激烈的科技領域的地位。\n\n【2】台灣企業ESG評級提升，綠色金融受矚目\n台灣企業的環境、社會和公司治理（ESG）評級正經歷顯著提升。這一積極趨勢凸顯了各行業對可持續商業實踐日益增長的承諾。因此，綠色金融倡議正吸引重要的關注和投資，預示著經濟正朝向更具環保意識的方向轉變。評級的提升表明企業正積極將ESG原則融入其核心戰略。\n\n【3】台灣勞動市場新趨勢：彈性工時與遠距辦公\n台灣勞動市場正經歷顯著轉變，彈性工作安排日益普及。雇主們正採取更靈活的工作時間表來吸引和留住人才，認識到對工作與生活平衡日益增長的需求。此外，遠距工作的選項也在擴大，為員工提供更大的自主權並減輕通勤壓力。這些趨勢正在重塑傳統的就業格局，並培養一個更以員工為中心的工作環境。",
+    "vocabulary": [
+      "prominent (adj.): 傑出的，顯著的",
+      "startup (n.): 新創公司",
+      "attracted (v.): 吸引",
+      "significant (adj.): 重大的，顯著的",
+      "international (adj.): 國際的",
+      "investment (n.): 投資",
+      "securing (v.): 獲得，確保",
+      "latest (adj.): 最新的",
+      "funding round (n.): 融資輪",
+      "innovative (adj.): 創新的",
+      "technology (n.): 技術",
+      "AI sector (n.): 人工智能領域",
+      "impressed (v.): 留下深刻印象",
+      "major (adj.): 主要的，重大的",
+      "global players (n.): 國際大廠，全球性參與者",
+      "promising (adj.): 有希望的，有前途的",
+      "growth potential (n.): 成長潛力",
+      "substantial (adj.): 可觀的，大量的",
+      "financial backing (n.): 資金支持",
+      "accelerate (v.): 加速",
+      "expansion plans (n.): 擴張計畫",
+      "solidify (v.): 鞏固",
+      "competitive (adj.): 競爭激烈的",
+      "tech landscape (n.): 科技領域，科技格局",
+      "Environmental (adj.): 環境的",
+      "Social (adj.): 社會的",
+      "Governance (n.): 公司治理",
+      "Ratings (n.): 評級",
+      "Notable (adj.): 顯著的",
+      "Increase (n.): 增加",
+      "Experiencing (v.): 經歷",
+      "Commitment (n.): 承諾",
+      "Sustainable (adj.): 可持續的",
+      "Business practices (n.): 商業實踐",
+      "Sectors (n.): 行業",
+      "Trend (n.): 趨勢",
+      "Consequently (adv.): 因此",
+      "Green finance (n.): 綠色金融",
+      "Initiatives (n.): 倡議",
+      "Attracting (v.): 吸引",
+      "Significant (adj.): 重要的",
+      "Attention (n.): 關注",
+      "Investment (n.): 投資",
+      "Conscious (adj.): 意識到的",
+      "labor market (n.): 勞動市場",
+      "undergoing (v.): 經歷，承受",
+      "significant (adj.): 顯著的，重要的",
+      "shifts (n.): 轉變，變動",
+      "flexible (adj.): 彈性的",
+      "work arrangements (n.): 工作安排",
+      "increasingly (adv.): 越來越",
+      "prevalent (adj.): 普遍的，盛行的",
+      "employers (n.): 雇主",
+      "adopting (v.): 採納，採用",
+      "adaptable (adj.): 靈活的，適應性強的",
+      "schedules (n.): 工作時間表",
+      "attract (v.): 吸引",
+      "retain (v.): 留住",
+      "talent (n.): 人才",
+      "recognizing (v.): 認識到",
+      "growing demand (n.): 日益增長的需求",
+      "work-life balance (n.): 工作與生活平衡",
+      "remote work (n.): 遠距工作",
+      "autonomy (n.): 自主權"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "A new technological breakthrough in AI",
+          "A Taiwanese startup securing significant international funding",
+          "The challenges faced by startups in the tech industry",
+          "The impact of global economic trends on investments"
+        ],
+        "answer": "A Taiwanese startup securing significant international funding"
+      },
+      {
+        "q": "How much money did the Taiwanese startup raise?",
+        "options": [
+          "Less than $10 million",
+          "Over $100 million",
+          "Exactly $100 million",
+          "An undisclosed amount"
+        ],
+        "answer": "Over $100 million"
+      },
+      {
+        "q": "What sector is the startup known for its innovative technology in?",
+        "options": [
+          "Biotechnology",
+          "Renewable Energy",
+          "Artificial Intelligence (AI)",
+          "Fintech"
+        ],
+        "answer": "Artificial Intelligence (AI)"
+      },
+      {
+        "q": "Who were impressed by the startup's growth potential?",
+        "options": [
+          "Local venture capitalists",
+          "Government agencies",
+          "Major global players",
+          "Consumer review boards"
+        ],
+        "answer": "Major global players"
+      },
+      {
+        "q": "What is the expected impact of the funding?",
+        "options": [
+          "To decrease its workforce",
+          "To halt its expansion plans",
+          "To accelerate expansion and solidify its market position",
+          "To focus solely on research and development"
+        ],
+        "answer": "To accelerate expansion and solidify its market position"
+      },
+      {
+        "q": "The word 'prominent' in the text means:",
+        "options": [
+          "New and unknown",
+          "Small and insignificant",
+          "Well-known and important",
+          "Struggling and unsuccessful"
+        ],
+        "answer": "Well-known and important"
+      },
+      {
+        "q": "What does 'securing' imply in the context of funding?",
+        "options": [
+          "Losing",
+          "Gaining or obtaining",
+          "Negotiating",
+          "Delaying"
+        ],
+        "answer": "Gaining or obtaining"
+      },
+      {
+        "q": "The phrase 'funding round' refers to:",
+        "options": [
+          "A sports competition",
+          "A period of financial support",
+          "A company's annual report",
+          "A marketing campaign"
+        ],
+        "answer": "A period of financial support"
+      },
+      {
+        "q": "What does 'innovative' mean?",
+        "options": [
+          "Old-fashioned",
+          "Creative and new",
+          "Expensive",
+          "Difficult to understand"
+        ],
+        "answer": "Creative and new"
+      },
+      {
+        "q": "The term 'global players' most likely refers to:",
+        "options": [
+          "International athletes",
+          "Companies with worldwide operations",
+          "Diplomats",
+          "Cultural organizations"
+        ],
+        "answer": "Companies with worldwide operations"
+      },
+      {
+        "q": "What does 'substantial' suggest about the financial backing?",
+        "options": [
+          "It is small",
+          "It is uncertain",
+          "It is large in amount",
+          "It is temporary"
+        ],
+        "answer": "It is large in amount"
+      },
+      {
+        "q": "To 'solidify' its position means to:",
+        "options": [
+          "Weaken",
+          "Make stronger and more stable",
+          "Change completely",
+          "Abandon"
+        ],
+        "answer": "Make stronger and more stable"
+      },
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "A decline in Taiwanese company ratings",
+          "The rise of ESG ratings for Taiwanese firms and attention to green finance",
+          "New regulations on corporate governance",
+          "A decrease in investment in sustainable practices"
+        ],
+        "answer": "The rise of ESG ratings for Taiwanese firms and attention to green finance"
+      },
+      {
+        "q": "What does ESG stand for?",
+        "options": [
+          "Economic, Social, and Growth",
+          "Environmental, Social, and Governance",
+          "Ethical, Sustainable, and Global",
+          "Enterprise, Strategy, and Growth"
+        ],
+        "answer": "Environmental, Social, and Governance"
+      },
+      {
+        "q": "According to the text, what is happening to the ESG ratings of Taiwanese companies?",
+        "options": [
+          "They are declining",
+          "They are remaining stable",
+          "They are increasing",
+          "They are no longer being tracked"
+        ],
+        "answer": "They are increasing"
+      },
+      {
+        "q": "What type of finance is gaining attention?",
+        "options": [
+          "Red finance",
+          "Blue finance",
+          "Green finance",
+          "Yellow finance"
+        ],
+        "answer": "Green finance"
+      },
+      {
+        "q": "What does the increase in ESG ratings suggest about companies?",
+        "options": [
+          "They are reducing their environmental impact",
+          "They are integrating ESG principles into their strategies",
+          "They are focusing only on social issues",
+          "They are ignoring governance concerns"
+        ],
+        "answer": "They are integrating ESG principles into their strategies"
+      },
+      {
+        "q": "The term 'sustainable business practices' implies:",
+        "options": [
+          "Practices that are only profitable in the short term",
+          "Practices that can continue over a long period without harming the environment or society",
+          "Practices that prioritize immediate economic gains above all else",
+          "Practices that are not subject to any regulations"
+        ],
+        "answer": "Practices that can continue over a long period without harming the environment or society"
+      },
+      {
+        "q": "What is a consequence of the positive trend in ESG ratings?",
+        "options": [
+          "Less attention to green finance",
+          "Increased investment in traditional industries",
+          "Green finance initiatives attracting significant attention",
+          "A shift away from environmentally conscious economies"
+        ],
+        "answer": "Green finance initiatives attracting significant attention"
+      },
+      {
+        "q": "The word 'notable' in the context of the news means:",
+        "options": [
+          "Unimportant",
+          "Slight",
+          "Remarkable or significant",
+          "Negative"
+        ],
+        "answer": "Remarkable or significant"
+      },
+      {
+        "q": "Which word describes the direction the economy is shifting towards?",
+        "options": [
+          "Less environmentally conscious",
+          "More traditional",
+          "More environmentally conscious",
+          "Less regulated"
+        ],
+        "answer": "More environmentally conscious"
+      },
+      {
+        "q": "The text mentions that green finance is gaining 'attention'. What does this imply?",
+        "options": [
+          "It is being ignored",
+          "It is becoming more popular and discussed",
+          "It is facing criticism",
+          "It is losing relevance"
+        ],
+        "answer": "It is becoming more popular and discussed"
+      },
+      {
+        "q": "What does 'governance' in ESG refer to?",
+        "options": [
+          "Environmental protection policies",
+          "Company management and leadership structures",
+          "Social welfare programs",
+          "Financial reporting standards"
+        ],
+        "answer": "Company management and leadership structures"
+      },
+      {
+        "q": "The news suggests that companies are actively doing what with ESG principles?",
+        "options": [
+          "Ignoring them",
+          "Debating them",
+          "Integrating them",
+          "Outsourcing them"
+        ],
+        "answer": "Integrating them"
+      },
+      {
+        "q": "What is a major trend in Taiwan's labor market mentioned in the text?",
+        "options": [
+          "A decrease in job opportunities",
+          "Increased demand for overtime",
+          "Flexible work arrangements",
+          "A return to traditional office-only policies"
+        ],
+        "answer": "Flexible work arrangements"
+      },
+      {
+        "q": "Why are employers adopting more adaptable schedules?",
+        "options": [
+          "To increase office space",
+          "To attract and retain talent",
+          "To reduce employee benefits",
+          "To discourage remote work"
+        ],
+        "answer": "To attract and retain talent"
+      },
+      {
+        "q": "What does the text say about remote work options?",
+        "options": [
+          "They are decreasing",
+          "They are expanding",
+          "They are only available in major cities",
+          "They are being replaced by in-person meetings"
+        ],
+        "answer": "They are expanding"
+      },
+      {
+        "q": "What is one benefit of remote work mentioned?",
+        "options": [
+          "Increased commuting time",
+          "Less employee autonomy",
+          "Reduced commuting stress",
+          "More supervision from managers"
+        ],
+        "answer": "Reduced commuting stress"
+      },
+      {
+        "q": "The text suggests that flexible hours and remote work are leading to a more...",
+        "options": [
+          "employer-dominated work environment",
+          "traditional employment landscape",
+          "stressful work environment",
+          "employee-centric work environment"
+        ],
+        "answer": "employee-centric work environment"
+      },
+      {
+        "q": "What does 'prevalent' mean in the context of the sentence 'flexible work arrangements becoming increasingly prevalent'?",
+        "options": [
+          "Rare",
+          "Uncommon",
+          "Widespread",
+          "New"
+        ],
+        "answer": "Widespread"
+      },
+      {
+        "q": "The phrase 'work-life balance' refers to:",
+        "options": [
+          "The amount of time spent at work versus leisure",
+          "The difficulty of managing professional and personal responsibilities",
+          "The integration of work tasks into personal life",
+          "The satisfaction derived from one's job"
+        ],
+        "answer": "The amount of time spent at work versus leisure"
+      },
+      {
+        "q": "What does 'autonomy' mean in the context of remote work?",
+        "options": [
+          "Dependence on others",
+          "Need for constant supervision",
+          "Freedom to make one's own decisions",
+          "Strict adherence to company rules"
+        ],
+        "answer": "Freedom to make one's own decisions"
+      },
+      {
+        "q": "The text implies that flexible work is a response to:",
+        "options": [
+          "A decrease in the workforce",
+          "A desire for more traditional work",
+          "Employee preferences and demands",
+          "Government regulations"
+        ],
+        "answer": "Employee preferences and demands"
+      },
+      {
+        "q": "What is a synonym for 'adaptable' in the context of schedules?",
+        "options": [
+          "Rigid",
+          "Inflexible",
+          "Flexible",
+          "Fixed"
+        ],
+        "answer": "Flexible"
+      },
+      {
+        "q": "Which word describes the changes happening in the labor market?",
+        "options": [
+          "Minor",
+          "Insignificant",
+          "Significant",
+          "Temporary"
+        ],
+        "answer": "Significant"
+      },
+      {
+        "q": "What is the opposite of 'attract' in the context of retaining talent?",
+        "options": [
+          "Repel",
+          "Hire",
+          "Employ",
+          "Dismiss"
+        ],
+        "answer": "Repel"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "OpenAI 推出革命性AI模型，引爆全球科技界",
+    "tabTitle": "科技",
+    "english": "OpenAI has unveiled a groundbreaking new AI model that is set to redefine artificial intelligence capabilities. This advanced system demonstrates unprecedented performance in complex tasks, promising to accelerate innovation across various industries. The announcement has sent ripples through the global technology sector, sparking widespread excitement and anticipation for future applications.",
+    "chinese": "OpenAI 發布了一款革命性新AI模型，勢將重新定義人工智能的能力。這個先進系統在複雜任務中展現了前所未有的效能，有望加速各行各業的創新。此消息已在全球科技界引起漣漪，激發了對未來應用的廣泛興奮和期待。",
+    "vocabulary": [
+      "unveiled (v.): 揭露；公布",
+      "groundbreaking (adj.): 開創性的",
+      "redefine (v.): 重新定義",
+      "artificial intelligence (n.): 人工智能",
+      "capabilities (n.): 能力；才能",
+      "advanced (adj.): 先進的",
+      "system (n.): 系統",
+      "demonstrates (v.): 證明；展示",
+      "unprecedented (adj.): 前所未有的",
+      "performance (n.): 表現；效能",
+      "complex (adj.): 複雜的",
+      "tasks (n.): 任務",
+      "promising (v.): 有望；承諾",
+      "accelerate (v.): 加速",
+      "innovation (n.): 創新",
+      "industries (n.): 行業；產業",
+      "announcement (n.): 宣布；公告",
+      "ripples (n.): 漣漪",
+      "sector (n.): 行業；領域",
+      "anticipation (n.): 期待；預期"
+    ],
+    "quiz": [
+      {
+        "q": "What has OpenAI unveiled?",
+        "options": [
+          "A new computer chip",
+          "A groundbreaking AI model",
+          "A virtual reality headset",
+          "A cybersecurity platform"
+        ],
+        "answer": "A groundbreaking AI model"
+      },
+      {
+        "q": "What is the new AI model expected to do?",
+        "options": [
+          "Reduce energy consumption",
+          "Improve graphic design tools",
+          "Redefine artificial intelligence capabilities",
+          "Enhance social media algorithms"
+        ],
+        "answer": "Redefine artificial intelligence capabilities"
+      },
+      {
+        "q": "The new system demonstrates unprecedented performance in what kind of tasks?",
+        "options": [
+          "Simple calculations",
+          "Complex tasks",
+          "Data storage",
+          "Network security"
+        ],
+        "answer": "Complex tasks"
+      },
+      {
+        "q": "What is the new AI model expected to accelerate?",
+        "options": [
+          "Manufacturing processes",
+          "Scientific research",
+          "Innovation across various industries",
+          "Global communication"
+        ],
+        "answer": "Innovation across various industries"
+      },
+      {
+        "q": "The announcement has caused excitement in which sector?",
+        "options": [
+          "The automotive industry",
+          "The global technology sector",
+          "The entertainment industry",
+          "The healthcare sector"
+        ],
+        "answer": "The global technology sector"
+      },
+      {
+        "q": "What word describes the performance of the new AI model in complex tasks?",
+        "options": [
+          "Limited",
+          "Average",
+          "Unprecedented",
+          "Standard"
+        ],
+        "answer": "Unprecedented"
+      },
+      {
+        "q": "What does 'redefine' mean in the context of the news?",
+        "options": [
+          "To repeat something",
+          "To change the definition or understanding of something",
+          "To simplify a concept",
+          "To analyze data"
+        ],
+        "answer": "To change the definition or understanding of something"
+      },
+      {
+        "q": "What is 'artificial intelligence'?",
+        "options": [
+          "A type of software",
+          "The simulation of human intelligence by machines",
+          "A new programming language",
+          "A hardware component"
+        ],
+        "answer": "The simulation of human intelligence by machines"
+      },
+      {
+        "q": "The word 'capabilities' refers to:",
+        "options": [
+          "Limitations",
+          "Skills and abilities",
+          "Costs",
+          "Historical data"
+        ],
+        "answer": "Skills and abilities"
+      },
+      {
+        "q": "What does 'accelerate' mean?",
+        "options": [
+          "To slow down",
+          "To speed up",
+          "To stop",
+          "To maintain"
+        ],
+        "answer": "To speed up"
+      },
+      {
+        "q": "The term 'groundbreaking' suggests that the AI model is:",
+        "options": [
+          "A minor improvement",
+          "Completely new and innovative",
+          "A copy of existing technology",
+          "Unreliable"
+        ],
+        "answer": "Completely new and innovative"
+      },
+      {
+        "q": "The announcement has sparked widespread excitement and what else?",
+        "options": [
+          "Disappointment",
+          "Fear",
+          "Anticipation",
+          "Indifference"
+        ],
+        "answer": "Anticipation"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "全球AI晶片大戰升溫，多國祭出產業政策",
+    "tabTitle": "科技",
+    "english": "The global competition for advanced AI chips is escalating rapidly. Governments worldwide are actively implementing industrial policies to bolster their domestic semiconductor industries. This strategic focus aims to secure technological leadership and reduce reliance on foreign suppliers in this critical sector. The intensifying \"chip war\" underscores the geopolitical significance of AI hardware.",
+    "chinese": "全球先進AI晶片的競爭正在迅速升溫。世界各國政府正積極實施產業政策，以支持其國內半導體產業。這種戰略重點旨在確保該關鍵領域的技術領先地位，並減少對外國供應商的依賴。這場日益激烈的「晶片戰爭」凸顯了AI硬體的地緣政治重要性。",
+    "vocabulary": [
+      "escalating (v.): 升級；加劇",
+      "competition (n.): 競爭",
+      "advanced (adj.): 先進的",
+      "semiconductor (n.): 半導體",
+      "implement (v.): 實施；執行",
+      "industrial policies (n.): 產業政策",
+      "bolster (v.): 支持；加強",
+      "domestic (adj.): 國內的",
+      "strategic (adj.): 戰略的",
+      "focus (n.): 焦點；重點",
+      "secure (v.): 確保；獲得",
+      "technological leadership (n.): 技術領先地位",
+      "reduce reliance (v. phrase): 減少依賴",
+      "foreign suppliers (n.): 外國供應商",
+      "critical sector (n.): 關鍵領域",
+      "intensifying (adj.): 加劇的；增強的",
+      "chip war (n.): 晶片戰爭",
+      "underscores (v.): 強調；凸顯",
+      "geopolitical significance (n.): 地緣政治重要性",
+      "hardware (n.): 硬體"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "The rise of new AI software.",
+          "The global competition in AI chips and government policies.",
+          "The decline of the semiconductor industry.",
+          "International efforts to ban AI development."
+        ],
+        "answer": "The global competition in AI chips and government policies."
+      },
+      {
+        "q": "According to the text, what is happening to the global AI chip competition?",
+        "options": [
+          "It is decreasing.",
+          "It is remaining stable.",
+          "It is escalating.",
+          "It is being replaced by software competition."
+        ],
+        "answer": "It is escalating."
+      },
+      {
+        "q": "What are nations implementing to address the AI chip competition?",
+        "options": [
+          "Trade embargoes.",
+          "Cultural exchange programs.",
+          "Industrial policies.",
+          "Space exploration initiatives."
+        ],
+        "answer": "Industrial policies."
+      },
+      {
+        "q": "What is a primary goal of these national policies?",
+        "options": [
+          "To increase reliance on foreign chip manufacturers.",
+          "To reduce the cost of consumer electronics.",
+          "To secure technological leadership and reduce foreign dependency.",
+          "To promote international collaboration in software development."
+        ],
+        "answer": "To secure technological leadership and reduce foreign dependency."
+      },
+      {
+        "q": "The term \"chip war\" refers to:",
+        "options": [
+          "A conflict between different chip design companies.",
+          "A metaphorical term for the intense competition in the AI chip sector.",
+          "A historical event involving physical battles over chip factories.",
+          "A war fought entirely through computer chips."
+        ],
+        "answer": "A metaphorical term for the intense competition in the AI chip sector."
+      },
+      {
+        "q": "Which sector is described as \"critical\" in the context of the news?",
+        "options": [
+          "The software development sector.",
+          "The AI hardware sector.",
+          "The consumer electronics sector.",
+          "The space exploration sector."
+        ],
+        "answer": "The AI hardware sector."
+      },
+      {
+        "q": "The word \"escalating\" suggests that the competition is:",
+        "options": [
+          "Becoming less intense.",
+          "Remaining the same.",
+          "Becoming more intense or severe.",
+          "Becoming peaceful."
+        ],
+        "answer": "Becoming more intense or severe."
+      },
+      {
+        "q": "What does it mean for a country to \"bolster\" its domestic semiconductor industry?",
+        "options": [
+          "To weaken it.",
+          "To support and strengthen it.",
+          "To sell it to foreign companies.",
+          "To ignore it."
+        ],
+        "answer": "To support and strengthen it."
+      },
+      {
+        "q": "The news implies that AI chips have significant importance in which area?",
+        "options": [
+          "Cultural diplomacy.",
+          "Environmental protection.",
+          "Geopolitics.",
+          "Artistic expression."
+        ],
+        "answer": "Geopolitics."
+      },
+      {
+        "q": "What is the opposite of \"domestic\" in this context?",
+        "options": [
+          "National",
+          "Local",
+          "Foreign",
+          "Internal"
+        ],
+        "answer": "Foreign"
+      },
+      {
+        "q": "The phrase \"reduce reliance\" means to:",
+        "options": [
+          "Increase dependence.",
+          "Become less dependent.",
+          "Eliminate all needs.",
+          "Share resources equally."
+        ],
+        "answer": "Become less dependent."
+      },
+      {
+        "q": "The article is written in a factual style, meaning it is primarily:",
+        "options": [
+          "Based on opinions and feelings.",
+          "Entertaining and humorous.",
+          "Objective and based on facts.",
+          "Highly imaginative and fictional."
+        ],
+        "answer": "Objective and based on facts."
+      }
+    ]
+  },
+  "article-5": {
+    "title": "日本央行維持超寬鬆貨幣政策，關注日圓走勢",
+    "tabTitle": "金融市場",
+    "english": "The Bank of Japan (BOJ) announced on May 4, 2026, that it will continue its ultra-loose monetary policy. This decision comes as the central bank aims to stimulate economic growth and achieve its inflation target. Officials are closely monitoring the yen's exchange rate, as significant fluctuations could impact trade and inflation. The BOJ's commitment to maintaining accommodative conditions is expected to persist for the foreseeable future, though market participants are keen for any signals regarding future policy adjustments.",
+    "chinese": "日本銀行（BOJ）於2026年5月4日宣布，將繼續維持其超寬鬆貨幣政策。此決定是在央行旨在刺激經濟增長並實現其通膨目標之際做出的。官員們正密切關注日圓的匯率走勢，因為顯著的波動可能會影響貿易和通膨。儘管市場參與者熱切期待有關未來政策調整的任何信號，但日本央行對維持寬鬆環境的承諾預計將在可預見的未來持續下去。",
+    "vocabulary": [
+      "Bank of Japan (BOJ) (n.): 日本銀行",
+      "ultra-loose monetary policy (n.): 超寬鬆貨幣政策",
+      "announced (v.): 宣布",
+      "continue (v.): 繼續",
+      "stimulate (v.): 刺激",
+      "economic growth (n.): 經濟增長",
+      "achieve (v.): 實現",
+      "inflation target (n.): 通膨目標",
+      "officials (n.): 官員",
+      "closely monitoring (v.): 密切關注",
+      "yen's exchange rate (n.): 日圓匯率",
+      "significant fluctuations (n.): 顯著波動",
+      "impact (v.): 影響",
+      "trade (n.): 貿易",
+      "commitment (n.): 承諾",
+      "maintaining (v.): 維持",
+      "accommodative conditions (n.): 寬鬆的環境",
+      "persist (v.): 持續",
+      "foreseeable future (n.): 可預見的未來",
+      "policy adjustments (n.): 政策調整"
+    ],
+    "quiz": [
+      {
+        "q": "What date was the BOJ's announcement made?",
+        "options": [
+          "April 5, 2026",
+          "May 4, 2026",
+          "May 5, 2026",
+          "April 4, 2026"
+        ],
+        "answer": "May 4, 2026"
+      },
+      {
+        "q": "What type of monetary policy did the Bank of Japan decide to maintain?",
+        "options": [
+          "Tight monetary policy",
+          "Moderate monetary policy",
+          "Ultra-loose monetary policy",
+          "Flexible monetary policy"
+        ],
+        "answer": "Ultra-loose monetary policy"
+      },
+      {
+        "q": "What are the two main goals mentioned for maintaining this policy?",
+        "options": [
+          "Increase government spending and reduce debt",
+          "Stimulate economic growth and achieve inflation target",
+          "Control currency exchange rates and boost exports",
+          "Encourage foreign investment and lower interest rates"
+        ],
+        "answer": "Stimulate economic growth and achieve inflation target"
+      },
+      {
+        "q": "What specific aspect of the economy are officials closely monitoring?",
+        "options": [
+          "Unemployment rates",
+          "Stock market performance",
+          "The yen's exchange rate",
+          "Consumer confidence"
+        ],
+        "answer": "The yen's exchange rate"
+      },
+      {
+        "q": "Why are officials concerned about fluctuations in the yen's exchange rate?",
+        "options": [
+          "They could lead to lower import costs",
+          "They might negatively impact trade and inflation",
+          "They would encourage more foreign investment",
+          "They are a sign of a strong economy"
+        ],
+        "answer": "They might negatively impact trade and inflation"
+      },
+      {
+        "q": "What is the BOJ's commitment expected to do regarding accommodative conditions?",
+        "options": [
+          "Be reviewed quarterly",
+          "Be gradually tightened",
+          "Persist for the foreseeable future",
+          "Be adjusted based on market sentiment"
+        ],
+        "answer": "Persist for the foreseeable future"
+      },
+      {
+        "q": "Who is closely monitoring the yen's path?",
+        "options": [
+          "International Monetary Fund",
+          "Commercial banks",
+          "Government officials",
+          "BOJ officials"
+        ],
+        "answer": "BOJ officials"
+      },
+      {
+        "q": "What does 'ultra-loose' monetary policy generally imply?",
+        "options": [
+          "High interest rates and tight credit",
+          "Low interest rates and easy credit availability",
+          "Government intervention in markets",
+          "Strict regulations on banks"
+        ],
+        "answer": "Low interest rates and easy credit availability"
+      },
+      {
+        "q": "The news mentions that significant fluctuations in the yen could affect...",
+        "options": [
+          "Domestic tourism and cultural exchange",
+          "Technological innovation and research",
+          "Trade and inflation",
+          "Real estate prices and construction"
+        ],
+        "answer": "Trade and inflation"
+      },
+      {
+        "q": "What are market participants keen for?",
+        "options": [
+          "A change in government leadership",
+          "Signals regarding future policy adjustments",
+          "Increased international trade agreements",
+          "Reduced government debt"
+        ],
+        "answer": "Signals regarding future policy adjustments"
+      },
+      {
+        "q": "What is the primary purpose of maintaining accommodative monetary conditions?",
+        "options": [
+          "To reduce the national debt",
+          "To prepare for a potential recession",
+          "To stimulate economic growth and meet inflation targets",
+          "To strengthen the domestic currency"
+        ],
+        "answer": "To stimulate economic growth and meet inflation targets"
+      },
+      {
+        "q": "The term 'foreseeable future' suggests that the policy is expected to continue for:",
+        "options": [
+          "A very short, uncertain period",
+          "An indefinite period with no end in sight",
+          "A predictable and definable length of time ahead",
+          "Only until the next market fluctuation"
+        ],
+        "answer": "A predictable and definable length of time ahead"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "全球AI支出預計達2.5兆美元，超越前十年總和",
+    "tabTitle": "科技",
+    "english": "Global spending on Artificial Intelligence (AI) is projected to reach an astonishing $2.5 trillion by 2026. This massive investment signifies a dramatic acceleration in AI adoption and development, surpassing the total expenditure of the previous decade. Key drivers include advancements in machine learning, increased data availability, and the growing integration of AI solutions across various industries. Analysts anticipate this trend will continue to reshape the technological landscape and global economy.",
+    "chinese": "到 2026 年，全球在人工智慧（AI）上的支出預計將達到驚人的 2.5 兆美元。這項龐大的投資標誌著 AI 的採用和發展呈現急劇加速，超越了前十年的總支出。主要驅動因素包括機器學習的進步、數據可用性的增加，以及 AI 解決方案在各行業中的日益整合。分析師預計，這一趨勢將持續重塑技術格局和全球經濟。",
+    "vocabulary": [
+      "projected (v.): 預計",
+      "astonishing (adj.): 令人驚訝的",
+      "trillion (n.): 兆",
+      "massive (adj.): 龐大的",
+      "investment (n.): 投資",
+      "signifies (v.): 意味著",
+      "dramatic (adj.): 戲劇性的",
+      "acceleration (n.): 加速",
+      "adoption (n.): 採用",
+      "development (n.): 發展",
+      "surpassing (v.): 超越",
+      "total (adj.): 總計的",
+      "expenditure (n.): 支出",
+      "key drivers (n.): 主要驅動因素",
+      "advancements (n.): 進步",
+      "machine learning (n.): 機器學習",
+      "availability (n.): 可用性",
+      "integration (n.): 整合",
+      "solutions (n.): 解決方案",
+      "anticipate (v.): 預計"
+    ],
+    "quiz": [
+      {
+        "q": "What is the projected global spending on AI by 2026?",
+        "options": [
+          "$1.5 trillion",
+          "$2 trillion",
+          "$2.5 trillion",
+          "$3 trillion"
+        ],
+        "answer": "$2.5 trillion"
+      },
+      {
+        "q": "The projected AI spending surpasses the total from which period?",
+        "options": [
+          "Last five years",
+          "Last decade",
+          "Last twenty years",
+          "Last fifty years"
+        ],
+        "answer": "Last decade"
+      },
+      {
+        "q": "What does the massive investment in AI signify?",
+        "options": [
+          "A decrease in AI development",
+          "A slower adoption of AI",
+          "A dramatic acceleration in AI adoption and development",
+          "A reduction in AI-related jobs"
+        ],
+        "answer": "A dramatic acceleration in AI adoption and development"
+      },
+      {
+        "q": "Which of the following is mentioned as a key driver for AI spending?",
+        "options": [
+          "Decreased data availability",
+          "Stagnation in machine learning",
+          "Advancements in machine learning",
+          "Limited integration of AI"
+        ],
+        "answer": "Advancements in machine learning"
+      },
+      {
+        "q": "What is another key driver for increased AI spending?",
+        "options": [
+          "Reduced computational power",
+          "Less data available for training",
+          "Increased data availability",
+          "Slower internet speeds"
+        ],
+        "answer": "Increased data availability"
+      },
+      {
+        "q": "The growing integration of AI solutions across industries is a driver of spending. What does 'integration' mean here?",
+        "options": [
+          "Separation",
+          "Exclusion",
+          "Inclusion and combination",
+          "Reduction"
+        ],
+        "answer": "Inclusion and combination"
+      },
+      {
+        "q": "What do analysts anticipate the continued trend of AI spending will do?",
+        "options": [
+          "Slow down technological progress",
+          "Minimize the impact on the global economy",
+          "Reshape the technological landscape and global economy",
+          "Reduce the importance of data"
+        ],
+        "answer": "Reshape the technological landscape and global economy"
+      },
+      {
+        "q": "The news uses the word 'astonishing'. What does it mean?",
+        "options": [
+          "Ordinary",
+          "Unimpressive",
+          "Very surprising",
+          "Expected"
+        ],
+        "answer": "Very surprising"
+      },
+      {
+        "q": "What does 'projected' mean in the context of the news title?",
+        "options": [
+          "Already happened",
+          "Guaranteed to happen",
+          "Estimated or forecasted",
+          "Uncertain"
+        ],
+        "answer": "Estimated or forecasted"
+      },
+      {
+        "q": "The term 'trillion' refers to a number with how many zeros?",
+        "options": [
+          "9",
+          "12",
+          "15",
+          "18"
+        ],
+        "answer": "12"
+      },
+      {
+        "q": "What is a 'key driver'?",
+        "options": [
+          "A main reason or cause",
+          "A type of vehicle",
+          "A minor factor",
+          "An obstacle"
+        ],
+        "answer": "A main reason or cause"
+      },
+      {
+        "q": "Which industry is NOT explicitly mentioned but implied to be affected by AI integration?",
+        "options": [
+          "Technology",
+          "Finance",
+          "Healthcare",
+          "All of the above"
+        ],
+        "answer": "All of the above"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
