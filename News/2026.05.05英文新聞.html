@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 05, 2026：台灣經濟、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電重啟龍潭擴廠計畫，先進製程再推進\nTaiwan Semiconductor Manufacturing Company (TSMC) has officially restarted its expansion project at its Longtan facility. This move signifies a renewed commitment to advancing its cutting-edge manufacturing processes. The revival of the plan is expected to bolster TSMC's capacity for producing next-generation chips, further solidifying its leadership in the global semiconductor industry.\n\n[2] 台灣Q1 GDP飆升13.69% 創近39年新高\nTaiwan's economy experienced a remarkable surge in the first quarter of 2026, with its Gross Domestic Product (GDP) expanding by an impressive 13.69%. This significant growth marks the highest quarterly increase recorded in nearly 39 years, underscoring a robust economic performance. The strong results reflect a combination of factors, including strong export demand and resilient domestic consumption.\n\n[3] Google在台建AI樞紐 強化跨境傳輸與連結\nGoogle has announced plans to establish a significant Artificial Intelligence (AI) hub in Taiwan. This strategic investment aims to bolster cross-border data transmission and enhance global connectivity. The new facility is expected to foster innovation and collaboration in AI research and development, positioning Taiwan as a key player in the international AI landscape. This move underscores Google's commitment to expanding its technological infrastructure in the region.",
+    "chinese": "【1】台積電重啟龍潭擴廠計畫，先進製程再推進\n台灣積體電路製造股份有限公司（台積電）已正式重啟其龍潭廠的擴廠計畫。此舉意味著公司對推進其尖端製程的承諾再次啟動。此計畫的復甦預計將增強台積電生產下一代晶片的能力，進一步鞏固其在全球半導體產業的領導地位。\n\n【2】台灣Q1 GDP飆升13.69% 創近39年新高\n台灣經濟在 2026 年第一季經歷了顯著的飆升，國內生產總值（GDP）擴張了驚人的 13.69%。這一顯著增長創下了近 39 年來最高的季度增幅，凸顯了強勁的經濟表現。強勁的業績歸因於多種因素，包括強勁的出口需求和穩健的國內消費。\n\n【3】Google在台建AI樞紐 強化跨境傳輸與連結\nGoogle 已宣布計劃在台灣建立一個重要的人工智慧（AI）樞紐。這項策略性投資旨在加強跨境數據傳輸並提升全球連結性。新設施預計將促進 AI 研發的創新與合作，使台灣在國際 AI 領域扮演關鍵角色。此舉凸顯了 Google 在該區域擴展其科技基礎設施的承諾。",
+    "vocabulary": [
+      "Taiwan Semiconductor Manufacturing Company (TSMC) (n.): 台灣積體電路製造股份有限公司（台積電）",
+      "officially (adv.): 正式地",
+      "restarted (v.): 重新啟動",
+      "expansion project (n.): 擴廠計畫",
+      "facility (n.): 廠房；設施",
+      "signifies (v.): 意味著；標誌著",
+      "renewed commitment (n.): 再次的承諾",
+      "advancing (v.): 推進；進步",
+      "cutting-edge (adj.): 尖端的；最先進的",
+      "manufacturing processes (n.): 製造製程",
+      "revival (n.): 復甦；復活",
+      "plan (n.): 計畫",
+      "expected (v.): 預期",
+      "bolster (v.): 加強；支撐",
+      "capacity (n.): 容量；能力",
+      "producing (v.): 生產",
+      "next-generation (adj.): 下一代的",
+      "chips (n.): 晶片",
+      "solidifying (v.): 鞏固",
+      "leadership (n.): 領導地位",
+      "global semiconductor industry (n.): 全球半導體產業",
+      "economy (n.): 經濟",
+      "remarkable (adj.): 卓越的；引人注目的",
+      "surge (v.): 飆升；激增",
+      "Gross Domestic Product (GDP) (n.): 國內生產總值",
+      "expand (v.): 擴張；擴大",
+      "impressive (adj.): 令人印象深刻的",
+      "significant (adj.): 顯著的；重大的",
+      "growth (n.): 增長；成長",
+      "quarterly (adj.): 每季的；季度性的",
+      "increase (n.): 增加；增長",
+      "recorded (v.): 記錄；記載",
+      "underscoring (v.): 凸顯；強調",
+      "robust (adj.): 強健的；穩健的",
+      "performance (n.): 表現；業績",
+      "reflect (v.): 反映；顯示",
+      "combination (n.): 結合；組合",
+      "factors (n.): 因素",
+      "export demand (n.): 出口需求",
+      "resilient (adj.): 堅韌的；有彈性的",
+      "consumption (n.): 消費",
+      "establish (v.): 建立",
+      "significant (adj.): 顯著的",
+      "Artificial Intelligence (n.): 人工智慧",
+      "hub (n.): 中心",
+      "strategic (adj.): 策略性的",
+      "investment (n.): 投資",
+      "bolster (v.): 加強",
+      "cross-border (adj.): 跨境的",
+      "transmission (n.): 傳輸",
+      "enhance (v.): 提升",
+      "connectivity (n.): 連結性",
+      "facility (n.): 設施",
+      "foster (v.): 促進",
+      "innovation (n.): 創新",
+      "collaboration (n.): 合作",
+      "research and development (n.): 研發",
+      "positioning (v.): 定位",
+      "key player (n.): 關鍵參與者",
+      "international (adj.): 國際的",
+      "underscores (v.): 強調"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news?",
+        "options": [
+          "TSMC's new product launch",
+          "TSMC's decision to close a facility",
+          "TSMC restarting its expansion project in Longtan",
+          "TSMC's financial report for 2025"
+        ],
+        "answer": "TSMC restarting its expansion project in Longtan"
+      },
+      {
+        "q": "Where is the expansion project located?",
+        "options": [
+          "Hsinchu",
+          "Tainan",
+          "Kaohsiung",
+          "Longtan"
+        ],
+        "answer": "Longtan"
+      },
+      {
+        "q": "What does the restart of the expansion plan signify?",
+        "options": [
+          "A reduction in chip production",
+          "A renewed commitment to advancing manufacturing processes",
+          "A move to a different technology",
+          "A focus on older chip technologies"
+        ],
+        "answer": "A renewed commitment to advancing manufacturing processes"
+      },
+      {
+        "q": "What is the expected outcome of reviving the plan?",
+        "options": [
+          "Decreased production capacity",
+          "Increased focus on research and development only",
+          "Bolstering capacity for producing next-generation chips",
+          "A partnership with a new company"
+        ],
+        "answer": "Bolstering capacity for producing next-generation chips"
+      },
+      {
+        "q": "Which industry does TSMC lead in?",
+        "options": [
+          "Automotive manufacturing",
+          "Aerospace technology",
+          "Global semiconductor industry",
+          "Consumer electronics"
+        ],
+        "answer": "Global semiconductor industry"
+      },
+      {
+        "q": "What does 'advancing' mean in the context of manufacturing processes?",
+        "options": [
+          "Stopping",
+          "Improving or moving forward",
+          "Simplifying",
+          "Reversing"
+        ],
+        "answer": "Improving or moving forward"
+      },
+      {
+        "q": "What does 'facility' refer to in the text?",
+        "options": [
+          "A type of chip",
+          "A financial investment",
+          "A place where a company operates, like a factory",
+          "A government regulation"
+        ],
+        "answer": "A place where a company operates, like a factory"
+      },
+      {
+        "q": "The word 'revived' suggests the plan was previously:",
+        "options": [
+          "Completed",
+          "Cancelled or paused",
+          "Never started",
+          "Under constant development"
+        ],
+        "answer": "Cancelled or paused"
+      },
+      {
+        "q": "What are 'next-generation chips' likely to be?",
+        "options": [
+          "Older models",
+          "Chips with advanced capabilities",
+          "Chips for simple tasks",
+          "Chips made with basic technology"
+        ],
+        "answer": "Chips with advanced capabilities"
+      },
+      {
+        "q": "The phrase 'solidifying its leadership' implies TSMC is:",
+        "options": [
+          "Becoming weaker",
+          "Maintaining or strengthening its top position",
+          "Leaving the market",
+          "Facing significant competition"
+        ],
+        "answer": "Maintaining or strengthening its top position"
+      },
+      {
+        "q": "What is TSMC's role in the global semiconductor industry according to the text?",
+        "options": [
+          "A minor player",
+          "A leader",
+          "A newcomer",
+          "A regulator"
+        ],
+        "answer": "A leader"
+      },
+      {
+        "q": "The news mentions 'advanced processes'. What does 'advanced' suggest?",
+        "options": [
+          "Basic",
+          "Outdated",
+          "Sophisticated and modern",
+          "Simple"
+        ],
+        "answer": "Sophisticated and modern"
+      },
+      {
+        "q": "What was the GDP growth rate for Taiwan in Q1 2026?",
+        "options": [
+          "13.69%",
+          "39%",
+          "80%",
+          "1.37%"
+        ],
+        "answer": "13.69%"
+      },
+      {
+        "q": "What does the article describe the Q1 GDP increase as?",
+        "options": [
+          "A minor setback",
+          "A 39-year high",
+          "Average growth",
+          "A slight decrease"
+        ],
+        "answer": "A 39-year high"
+      },
+      {
+        "q": "The English text is approximately how many words long?",
+        "options": [
+          "39 words",
+          "80 words",
+          "13 words",
+          "69 words"
+        ],
+        "answer": "80 words"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a factor for the strong results?",
+        "options": [
+          "Strong export demand",
+          "Resilient domestic consumption",
+          "Government subsidies",
+          "A combination of factors"
+        ],
+        "answer": "Government subsidies"
+      },
+      {
+        "q": "What does 'surge' mean in the context of the article?",
+        "options": [
+          "To decrease rapidly",
+          "To remain stable",
+          "To increase suddenly and dramatically",
+          "To fluctuate slightly"
+        ],
+        "answer": "To increase suddenly and dramatically"
+      },
+      {
+        "q": "The Chinese translation uses the term '國內生產總值' which translates to:",
+        "options": [
+          "National Income",
+          "Gross National Product",
+          "Gross Domestic Product",
+          "Economic Output"
+        ],
+        "answer": "Gross Domestic Product"
+      },
+      {
+        "q": "What is the meaning of 'robust' in the phrase 'robust economic performance'?",
+        "options": [
+          "Weak",
+          "Unstable",
+          "Strong and healthy",
+          "Slow"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "The article is written in a factual style. What does 'factual' imply?",
+        "options": [
+          "It is highly opinionated",
+          "It focuses on objective information",
+          "It is primarily narrative",
+          "It is largely fictional"
+        ],
+        "answer": "It focuses on objective information"
+      },
+      {
+        "q": "What does 'resilient' mean when describing domestic consumption?",
+        "options": [
+          "Easily damaged",
+          "Able to withstand or recover quickly from difficult conditions",
+          "Declining",
+          "Negligible"
+        ],
+        "answer": "Able to withstand or recover quickly from difficult conditions"
+      },
+      {
+        "q": "The Chinese translation mentions '顯著的飆升'. '顯著' translates to:",
+        "options": [
+          "Minor",
+          "Insignificant",
+          "Significant",
+          "Temporary"
+        ],
+        "answer": "Significant"
+      },
+      {
+        "q": "What does the word 'underscoring' mean in the English text?",
+        "options": [
+          "To hide",
+          "To downplay",
+          "To emphasize or highlight",
+          "To ignore"
+        ],
+        "answer": "To emphasize or highlight"
+      },
+      {
+        "q": "The article states the growth is the highest in nearly how many years?",
+        "options": [
+          "10 years",
+          "20 years",
+          "39 years",
+          "13 years"
+        ],
+        "answer": "39 years"
+      },
+      {
+        "q": "What is Google planning to establish in Taiwan?",
+        "options": [
+          "A new data center",
+          "A significant AI hub",
+          "A research laboratory",
+          "A regional headquarters"
+        ],
+        "answer": "A significant AI hub"
+      },
+      {
+        "q": "What are the main goals of this AI hub?",
+        "options": [
+          "To improve local internet speeds",
+          "To develop new hardware",
+          "To bolster cross-border transmission and enhance connectivity",
+          "To train local employees"
+        ],
+        "answer": "To bolster cross-border transmission and enhance connectivity"
+      },
+      {
+        "q": "What does the new facility aim to foster?",
+        "options": [
+          "Competition among tech companies",
+          "Government regulations",
+          "Innovation and collaboration in AI",
+          "Increased manufacturing"
+        ],
+        "answer": "Innovation and collaboration in AI"
+      },
+      {
+        "q": "According to the text, what will this investment do for Taiwan's role in AI?",
+        "options": [
+          "Make it a minor participant",
+          "Position it as a key player",
+          "Focus it on software development only",
+          "Limit its international involvement"
+        ],
+        "answer": "Position it as a key player"
+      },
+      {
+        "q": "The word 'bolster' in the text means:",
+        "options": [
+          "To weaken",
+          "To reduce",
+          "To support or strengthen",
+          "To ignore"
+        ],
+        "answer": "To support or strengthen"
+      },
+      {
+        "q": "What does 'cross-border transmission' refer to in this context?",
+        "options": [
+          "Data traveling between different countries",
+          "Physical construction across borders",
+          "International trade agreements",
+          "Communication within a single country"
+        ],
+        "answer": "Data traveling between different countries"
+      },
+      {
+        "q": "The term 'connectivity' relates to:",
+        "options": [
+          "The cost of technology",
+          "The ability to connect or be connected",
+          "The speed of data processing",
+          "The security of networks"
+        ],
+        "answer": "The ability to connect or be connected"
+      },
+      {
+        "q": "What does 'strategic' imply about Google's investment?",
+        "options": [
+          "It is a random decision",
+          "It is carefully planned for future benefit",
+          "It is a short-term project",
+          "It is purely for public relations"
+        ],
+        "answer": "It is carefully planned for future benefit"
+      },
+      {
+        "q": "The word 'foster' is used to describe the action of encouraging:",
+        "options": [
+          "Stagnation",
+          "Development and growth",
+          "Isolation",
+          "Bureaucracy"
+        ],
+        "answer": "Development and growth"
+      },
+      {
+        "q": "What does the text suggest about Google's commitment?",
+        "options": [
+          "It is temporary",
+          "It is focused only on hardware",
+          "It is expanding its technological infrastructure in the region",
+          "It is withdrawing from the region"
+        ],
+        "answer": "It is expanding its technological infrastructure in the region"
+      },
+      {
+        "q": "Which of the following best describes the style of the English text?",
+        "options": [
+          "Narrative",
+          "Persuasive",
+          "Factual",
+          "Humorous"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "The English text is approximately how many words long?",
+        "options": [
+          "Around 50 words",
+          "Around 80 words",
+          "Around 100 words",
+          "Around 150 words"
+        ],
+        "answer": "Around 80 words"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "Google在印度動土建AI中心 投資額達150億美元",
+    "tabTitle": "科技",
+    "english": "Google has officially broken ground on a massive new Artificial Intelligence (AI) center in India, marking a significant expansion of its technological footprint in the region. The ambitious project represents a substantial investment of $15 billion. This state-of-the-art facility is expected to accelerate AI research and development, fostering innovation and creating numerous job opportunities within the country. The move underscores Google's commitment to advancing AI capabilities globally.",
+    "chinese": "Google 在印度正式動土興建一座大型新的人工智慧（AI）中心，標誌著其在該地區科技版圖的重大擴張。這項雄心勃勃的計畫代表了高達 150 億美元的巨額投資。這座最先進的設施預計將加速 AI 的研究與開發，促進創新並在印度創造眾多就業機會。此舉凸顯了 Google 在全球推動 AI 能力發展的承諾。",
+    "vocabulary": [
+      "break ground (phr.): 動土興建",
+      "massive (adj.): 龐大的",
+      "Artificial Intelligence (n.): 人工智慧",
+      "center (n.): 中心",
+      "significant (adj.): 顯著的",
+      "expansion (n.): 擴張",
+      "technological (adj.): 科技的",
+      "footprint (n.): 足跡，版圖",
+      "region (n.): 地區",
+      "ambitious (adj.): 雄心勃勃的",
+      "project (n.): 計畫",
+      "represents (v.): 代表",
+      "substantial (adj.): 實質的，大量的",
+      "investment (n.): 投資",
+      "state-of-the-art (adj.): 最先進的",
+      "facility (n.): 設施",
+      "expected (v.): 預計",
+      "accelerate (v.): 加速",
+      "research and development (n.): 研究與開發",
+      "fostering (v.): 培養，促進",
+      "innovation (n.): 創新",
+      "underscores (v.): 強調"
+    ],
+    "quiz": [
+      {
+        "q": "What is Google building in India?",
+        "options": [
+          "A new data center",
+          "A massive AI center",
+          "A research lab for hardware",
+          "An employee training facility"
+        ],
+        "answer": "A massive AI center"
+      },
+      {
+        "q": "What is the total investment for this project?",
+        "options": [
+          "$1.5 billion",
+          "$15 million",
+          "$15 billion",
+          "$50 billion"
+        ],
+        "answer": "$15 billion"
+      },
+      {
+        "q": "What is the primary purpose of the new AI center?",
+        "options": [
+          "To manufacture AI chips",
+          "To provide customer support",
+          "To accelerate AI research and development",
+          "To host Google's annual conference"
+        ],
+        "answer": "To accelerate AI research and development"
+      },
+      {
+        "q": "The word 'massive' in the text means:",
+        "options": [
+          "Small",
+          "Expensive",
+          "Very large",
+          "Temporary"
+        ],
+        "answer": "Very large"
+      },
+      {
+        "q": "What does the new facility aim to foster?",
+        "options": [
+          "Competition",
+          "Innovation",
+          "Regulation",
+          "Downturn"
+        ],
+        "answer": "Innovation"
+      },
+      {
+        "q": "The phrase 'break ground' means:",
+        "options": [
+          "To stop a project",
+          "To start construction",
+          "To review plans",
+          "To sell land"
+        ],
+        "answer": "To start construction"
+      },
+      {
+        "q": "This investment signifies Google's commitment to:",
+        "options": [
+          "Reducing its global presence",
+          "Focusing solely on software",
+          "Advancing AI capabilities worldwide",
+          "Investing only in Europe"
+        ],
+        "answer": "Advancing AI capabilities worldwide"
+      },
+      {
+        "q": "Which word describes the project's scale?",
+        "options": [
+          "Modest",
+          "Ambitious",
+          "Minor",
+          "Limited"
+        ],
+        "answer": "Ambitious"
+      },
+      {
+        "q": "What is a potential outcome mentioned for the local economy?",
+        "options": [
+          "Job losses",
+          "Increased competition",
+          "Creation of job opportunities",
+          "Reduced investment"
+        ],
+        "answer": "Creation of job opportunities"
+      },
+      {
+        "q": "The term 'state-of-the-art' refers to something:",
+        "options": [
+          "Old-fashioned",
+          "Basic",
+          "Highly advanced",
+          "Experimental"
+        ],
+        "answer": "Highly advanced"
+      },
+      {
+        "q": "Where is Google constructing this new AI center?",
+        "options": [
+          "United States",
+          "Europe",
+          "India",
+          "Africa"
+        ],
+        "answer": "India"
+      },
+      {
+        "q": "The word 'underscores' means:",
+        "options": [
+          "Weakens",
+          "Ignores",
+          "Highlights",
+          "Reduces"
+        ],
+        "answer": "Highlights"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "AI推論需求升溫 伺服器產業迎爆發期",
+    "tabTitle": "科技",
+    "english": "The global demand for AI inference is experiencing a significant surge, propelling the server industry into a new boom period. This increased need for processing AI-generated outputs, from complex algorithms to real-time applications, is driving substantial investment in specialized server hardware. Industry experts anticipate continued growth as AI integration becomes more widespread across various sectors.",
+    "chinese": "全球對人工智能推理的需求正經歷顯著的飆升，推動伺服器產業進入新的爆發期。從複雜的演算法到即時應用，對處理 AI 生成輸出的這種日益增長的需求，正引導著對專業伺服器硬體的大量投資。隨著 AI 整合在各個領域日益普及，業內專家預計將持續增長。",
+    "vocabulary": [
+      "AI inference (n.): 人工智能推理",
+      "demand (n.): 需求",
+      "surge (v.): 飆升",
+      "server industry (n.): 伺服器產業",
+      "boom period (n.): 爆發期",
+      "processing (v.): 處理",
+      "AI-generated outputs (n.): AI 生成的輸出",
+      "complex algorithms (n.): 複雜的演算法",
+      "real-time applications (n.): 即時應用",
+      "driving (v.): 驅動",
+      "substantial investment (n.): 大量投資",
+      "specialized hardware (n.): 專業硬體",
+      "industry experts (n.): 業內專家",
+      "anticipate (v.): 預計",
+      "continued growth (n.): 持續增長",
+      "integration (n.): 整合",
+      "widespread (adj.): 普及的",
+      "various sectors (n.): 各個領域",
+      "propelling (v.): 推動",
+      "specialized server hardware (n.): 專業伺服器硬體"
+    ],
+    "quiz": [
+      {
+        "q": "What is experiencing a significant surge according to the news?",
+        "options": [
+          "Demand for AI training",
+          "Demand for AI inference",
+          "Server hardware production",
+          "Software development"
+        ],
+        "answer": "Demand for AI inference"
+      },
+      {
+        "q": "What industry is entering a boom period?",
+        "options": [
+          "Cloud computing",
+          "Semiconductor manufacturing",
+          "The server industry",
+          "Data analytics"
+        ],
+        "answer": "The server industry"
+      },
+      {
+        "q": "What is driving substantial investment in specialized server hardware?",
+        "options": [
+          "Decreased AI model complexity",
+          "Reduced demand for real-time applications",
+          "The increased need for processing AI-generated outputs",
+          "A decline in AI integration"
+        ],
+        "answer": "The increased need for processing AI-generated outputs"
+      },
+      {
+        "q": "What kind of applications are mentioned in relation to AI inference demand?",
+        "options": [
+          "Offline simulations",
+          "Historical data analysis",
+          "Real-time applications",
+          "Batch processing tasks"
+        ],
+        "answer": "Real-time applications"
+      },
+      {
+        "q": "What do industry experts anticipate for the future?",
+        "options": [
+          "A slowdown in AI adoption",
+          "Continued growth in AI integration",
+          "A decrease in server demand",
+          "Less investment in hardware"
+        ],
+        "answer": "Continued growth in AI integration"
+      },
+      {
+        "q": "The term 'surge' in the context of demand means:",
+        "options": [
+          "A slow decline",
+          "A sudden, large increase",
+          "A steady decrease",
+          "A stable condition"
+        ],
+        "answer": "A sudden, large increase"
+      },
+      {
+        "q": "What does 'inference' in AI refer to?",
+        "options": [
+          "The process of training an AI model",
+          "Using a trained AI model to make predictions or decisions",
+          "Developing new AI algorithms",
+          "Storing AI data"
+        ],
+        "answer": "Using a trained AI model to make predictions or decisions"
+      },
+      {
+        "q": "The news suggests that AI integration is becoming more:",
+        "options": [
+          "Limited",
+          "Specialized",
+          "Widespread",
+          "Obsolete"
+        ],
+        "answer": "Widespread"
+      },
+      {
+        "q": "What type of hardware is seeing increased investment?",
+        "options": [
+          "General-purpose computers",
+          "Specialized server hardware",
+          "Consumer electronics",
+          "Mobile devices"
+        ],
+        "answer": "Specialized server hardware"
+      },
+      {
+        "q": "Which phrase describes the current state of the server industry?",
+        "options": [
+          "A period of decline",
+          "A stable market",
+          "A boom period",
+          "A stagnant phase"
+        ],
+        "answer": "A boom period"
+      },
+      {
+        "q": "The news focuses on the demand for AI:",
+        "options": [
+          "Development",
+          "Training",
+          "Inference",
+          "Maintenance"
+        ],
+        "answer": "Inference"
+      },
+      {
+        "q": "AI integration is expected to grow across:",
+        "options": [
+          "Only the tech sector",
+          "A limited number of industries",
+          "Various sectors",
+          "Primarily academic institutions"
+        ],
+        "answer": "Various sectors"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "美伊緊張局勢升溫，川普態度模糊",
+    "tabTitle": "地緣政治",
+    "english": "Recent developments have escalated tensions between the United States and Iran. President Trump's public statements regarding the situation have been notably ambiguous, leaving analysts uncertain about the administration's next moves. This increased friction raises concerns about regional stability and potential diplomatic pathways forward.",
+    "chinese": "近期事態發展加劇了美國與伊朗之間的緊張關係。川普總統公開發表的有關此局勢的言論顯得尤為模糊，令分析人士對政府的下一步行動感到不確定。這種日益加劇的摩擦引發了對地區穩定和未來潛在外交途徑的擔憂。",
+    "vocabulary": [
+      "escalated (v.): 升級",
+      "tensions (n.): 緊張局勢",
+      "ambiguous (adj.): 模糊不清的",
+      "analysts (n.): 分析人士",
+      "uncertain (adj.): 不確定的",
+      "administration (n.): 行政當局",
+      "friction (n.): 摩擦",
+      "concerns (n.): 擔憂",
+      "regional (adj.): 地區性的",
+      "stability (n.): 穩定",
+      "diplomatic (adj.): 外交的",
+      "pathways (n.): 途徑",
+      "forward (adv.): 向前",
+      "developments (n.): 事態發展",
+      "situation (n.): 局勢",
+      "notably (adv.): 顯著地",
+      "regarding (prep.): 關於",
+      "increased (adj.): 增加的",
+      "potential (adj.): 潛在的",
+      "raise (v.): 引起"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "US-China trade talks",
+          "US-Iran tensions",
+          "European Union elections",
+          "Climate change agreement"
+        ],
+        "answer": "US-Iran tensions"
+      },
+      {
+        "q": "How are President Trump's statements described?",
+        "options": [
+          "Clear and decisive",
+          "Very detailed",
+          "Ambiguous",
+          "Aggressive"
+        ],
+        "answer": "Ambiguous"
+      },
+      {
+        "q": "What does the news suggest about analysts?",
+        "options": [
+          "They are fully confident in the administration's plans.",
+          "They are uncertain about the administration's next moves.",
+          "They believe the tensions have decreased.",
+          "They are not following the situation."
+        ],
+        "answer": "They are uncertain about the administration's next moves."
+      },
+      {
+        "q": "What has happened to the relationship between the US and Iran?",
+        "options": [
+          "It has improved significantly.",
+          "It has remained stable.",
+          "It has become more tense.",
+          "It has been resolved."
+        ],
+        "answer": "It has become more tense."
+      },
+      {
+        "q": "What are the concerns raised by the increased friction?",
+        "options": [
+          "Economic growth",
+          "Regional stability",
+          "Technological advancements",
+          "Cultural exchange"
+        ],
+        "answer": "Regional stability"
+      },
+      {
+        "q": "The word 'escalated' means:",
+        "options": [
+          "decreased",
+          "stabilized",
+          "increased",
+          "avoided"
+        ],
+        "answer": "increased"
+      },
+      {
+        "q": "Which word describes the US President's stance?",
+        "options": [
+          "Certain",
+          "Clear",
+          "Ambiguous",
+          "Resolved"
+        ],
+        "answer": "Ambiguous"
+      },
+      {
+        "q": "What does the news suggest about future diplomatic actions?",
+        "options": [
+          "They are clearly defined.",
+          "They are uncertain.",
+          "They are no longer possible.",
+          "They are unnecessary."
+        ],
+        "answer": "They are uncertain."
+      },
+      {
+        "q": "The term 'administration' refers to:",
+        "options": [
+          "The military forces",
+          "The legislative body",
+          "The executive branch of government",
+          "The judicial system"
+        ],
+        "answer": "The executive branch of government"
+      },
+      {
+        "q": "What does 'regional stability' refer to?",
+        "options": [
+          "Peace and security within a specific geographical area",
+          "Economic prosperity of a single nation",
+          "International trade agreements",
+          "Global political consensus"
+        ],
+        "answer": "Peace and security within a specific geographical area"
+      },
+      {
+        "q": "The news mentions 'potential diplomatic pathways'. What does 'potential' mean here?",
+        "options": [
+          "Guaranteed",
+          "Impossible",
+          "Existing but not yet realized",
+          "Failed"
+        ],
+        "answer": "Existing but not yet realized"
+      },
+      {
+        "q": "Which word is a synonym for 'concerns' in this context?",
+        "options": [
+          "Certainties",
+          "Worries",
+          "Solutions",
+          "Facts"
+        ],
+        "answer": "Worries"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "俄羅斯與烏克蘭宣布停火",
+    "tabTitle": "地緣政治",
+    "english": "In a significant development, Russia and Ukraine have officially announced a ceasefire agreement. This truce is set to take effect immediately, aiming to de-escalate the ongoing conflict. International observers hope this ceasefire will pave the way for sustained peace talks and a lasting resolution. Both nations have expressed cautious optimism regarding the cessation of hostilities.",
+    "chinese": "在一項重大發展中，俄羅斯與烏克蘭已正式宣布停火協議。這項休戰將立即生效，旨在緩和持續的衝突。國際觀察家希望這次停火能為持續的和平談判和持久的解決方案鋪平道路。兩國均對停止敵對行動表達了謹慎的樂觀態度。",
+    "vocabulary": [
+      "development (n.): 發展",
+      "significant (adj.): 顯著的",
+      "officially (adv.): 正式地",
+      "announce (v.): 宣布",
+      "ceasefire (n.): 停火",
+      "agreement (n.): 協議",
+      "truce (n.): 休戰",
+      "take effect (phr.): 生效",
+      "immediately (adv.): 立即",
+      "aiming to (phr.): 旨在",
+      "de-escalate (v.): 緩和",
+      "ongoing (adj.): 持續的",
+      "conflict (n.): 衝突",
+      "international (adj.): 國際的",
+      "observer (n.): 觀察家",
+      "hope (v.): 希望",
+      "pave the way for (phr.): 為...鋪平道路",
+      "sustained (adj.): 持續的",
+      "peace talks (n.): 和平談判",
+      "resolution (n.): 解決方案"
+    ],
+    "quiz": [
+      {
+        "q": "What have Russia and Ukraine officially announced?",
+        "options": [
+          "A new alliance",
+          "A ceasefire agreement",
+          "Economic sanctions",
+          "Military exercises"
+        ],
+        "answer": "A ceasefire agreement"
+      },
+      {
+        "q": "When is the ceasefire set to take effect?",
+        "options": [
+          "Next week",
+          "After negotiations",
+          "Immediately",
+          "In one month"
+        ],
+        "answer": "Immediately"
+      },
+      {
+        "q": "What is the primary aim of the ceasefire?",
+        "options": [
+          "To launch new offensives",
+          "To increase military spending",
+          "To de-escalate the ongoing conflict",
+          "To sign a trade deal"
+        ],
+        "answer": "To de-escalate the ongoing conflict"
+      },
+      {
+        "q": "Who hopes this ceasefire will lead to peace talks?",
+        "options": [
+          "The involved nations",
+          "Local citizens",
+          "International observers",
+          "Financial institutions"
+        ],
+        "answer": "International observers"
+      },
+      {
+        "q": "What does the ceasefire aim to achieve in the long term?",
+        "options": [
+          "A temporary pause",
+          "A lasting resolution",
+          "Further escalation",
+          "Economic recovery"
+        ],
+        "answer": "A lasting resolution"
+      },
+      {
+        "q": "How do both nations feel about the cessation of hostilities?",
+        "options": [
+          "Angry and defiant",
+          "Indifferent and passive",
+          "Cautious optimism",
+          "Complete disbelief"
+        ],
+        "answer": "Cautious optimism"
+      },
+      {
+        "q": "The news reports a 'significant development'. What does 'significant' mean?",
+        "options": [
+          "Unimportant",
+          "Minor",
+          "Noticeable and important",
+          "Temporary"
+        ],
+        "answer": "Noticeable and important"
+      },
+      {
+        "q": "What does 'truce' mean in this context?",
+        "options": [
+          "A declaration of war",
+          "A temporary stop to fighting",
+          "A peace treaty",
+          "A military parade"
+        ],
+        "answer": "A temporary stop to fighting"
+      },
+      {
+        "q": "The word 'pave the way for' suggests:",
+        "options": [
+          "Creating obstacles",
+          "Making something possible or easier",
+          "Stopping all progress",
+          "Reversing a decision"
+        ],
+        "answer": "Making something possible or easier"
+      },
+      {
+        "q": "What does 'cessation of hostilities' refer to?",
+        "options": [
+          "The start of fighting",
+          "The end of fighting",
+          "Military training",
+          "Diplomatic negotiations"
+        ],
+        "answer": "The end of fighting"
+      },
+      {
+        "q": "The English text uses a 'factual' style. This means it is:",
+        "options": [
+          "Emotional and subjective",
+          "Based on facts and objective",
+          "Full of opinions",
+          "Highly speculative"
+        ],
+        "answer": "Based on facts and objective"
+      },
+      {
+        "q": "What is the approximate word count of the English text?",
+        "options": [
+          "Around 50 words",
+          "Around 80 words",
+          "Around 120 words",
+          "Around 150 words"
+        ],
+        "answer": "Around 80 words"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
