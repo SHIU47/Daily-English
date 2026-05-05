@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 06, 2026：科技、科技 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣大啟動AI三引擎，科技電信業迎黃金十年\nTaiwan Mobile is set to revolutionize the tech and telecom sectors with the launch of its AI Triple Engines. This strategic initiative aims to drive innovation and enhance customer experiences through advanced artificial intelligence. The company anticipates this move will usher in a golden decade for the industry, marked by significant growth and technological breakthroughs. This ambitious plan underscores Taiwan Mobile's commitment to leading the digital transformation.\n\n[2] 台灣Q1 GDP飆升13.69%，創近39年新高\nTaiwan's Gross Domestic Product (GDP) experienced a remarkable surge of 13.69% in the first quarter of 2026. This significant growth marks the highest quarterly expansion in nearly 39 years, reflecting robust economic performance. The strong figures indicate a healthy recovery and continued dynamism in Taiwan's economy, surpassing many market expectations.\n\n[3] 川習會將登場，台灣議題成美中會談焦點\nThe highly anticipated Trump-Xi meeting is set to take place soon, with the complex issue of Taiwan expected to dominate discussions between the two leaders. Both the United States and China have acknowledged the sensitivity surrounding Taiwan's political status. International observers are closely watching to see if any breakthroughs or significant agreements can be reached regarding cross-Strait relations.",
+    "chinese": "【1】台灣大啟動AI三引擎，科技電信業迎黃金十年\n台灣大哥大透過啟動其AI三引擎，準備徹底改變科技和電信業。這項策略性計畫旨在透過先進的人工智慧推動創新並提升客戶體驗。該公司預計此舉將為產業迎來一個黃金十年，其特點是顯著的成長和技術突破。這項雄心勃勃的計畫突顯了台灣大哥大在引領數位轉型方面的承諾。\n\n【2】台灣Q1 GDP飆升13.69%，創近39年新高\n2026年第一季度，台灣的國內生產總值（GDP）經歷了驚人的13.69%的飆升。這一顯著增長創下了近39年來的最高季度擴張紀錄，反映出強勁的經濟表現。強勁的數據表明台灣經濟正在健康復甦並持續充滿活力，超出了許多市場預期。\n\n【3】川習會將登場，台灣議題成美中會談焦點\n備受期待的川習會即將舉行，台灣的複雜議題預計將成為兩國領導人討論的焦點。美國和中國都已承認台灣政治地位的敏感性。國際觀察家正密切關注，看是否能就兩岸關係達成任何突破或重要協議。",
+    "vocabulary": [
+      "revolutionize (v.): 徹底改變",
+      "tech (n.): 科技",
+      "telecom (n.): 電信",
+      "sectors (n.): 行業/領域",
+      "strategic (adj.): 策略性的",
+      "initiative (n.): 計畫/倡議",
+      "drive (v.): 推動",
+      "innovation (n.): 創新",
+      "enhance (v.): 提升",
+      "customer experiences (n.): 客戶體驗",
+      "advanced (adj.): 先進的",
+      "artificial intelligence (n.): 人工智慧",
+      "anticipates (v.): 預計",
+      "usher in (v.): 迎來",
+      "golden decade (n.): 黃金十年",
+      "marked by (v.): 以...為特點",
+      "significant (adj.): 顯著的",
+      "growth (n.): 成長",
+      "technological breakthroughs (n.): 技術突破",
+      "ambitious (adj.): 雄心勃勃的",
+      "underscores (v.): 突顯",
+      "commitment (n.): 承諾",
+      "leading (v.): 引領",
+      "digital transformation (n.): 數位轉型",
+      "Gross Domestic Product (GDP) (n.): 國內生產總值",
+      "remarkable (adj.): 顯著的，非凡的",
+      "surge (n.): 飆升，猛漲",
+      "quarter (n.): 季度",
+      "significant (adj.): 顯著的，重要的",
+      "growth (n.): 增長",
+      "marks (v.): 標誌著",
+      "highest (adj.): 最高的",
+      "quarterly (adj.): 每季度的",
+      "expansion (n.): 擴張，增長",
+      "nearly (adv.): 將近",
+      "reflecting (v.): 反映",
+      "robust (adj.): 強健的，穩健的",
+      "economic (adj.): 經濟的",
+      "performance (n.): 表現",
+      "strong (adj.): 強勁的",
+      "figures (n.): 數據",
+      "indicate (v.): 表明，顯示",
+      "healthy (adj.): 健康的",
+      "dynamism (n.): 活力，動力",
+      "highly anticipated (adj.): 備受期待的",
+      "set to take place (phr.): 即將舉行",
+      "complex (adj.): 複雜的",
+      "issue (n.): 議題",
+      "dominate (v.): 主導，支配",
+      "discussions (n.): 討論",
+      "leaders (n.): 領導人",
+      "acknowledged (v.): 承認",
+      "sensitivity (n.): 敏感性",
+      "surrounding (prep.): 關於，環繞",
+      "political status (n.): 政治地位",
+      "international (adj.): 國際的",
+      "observers (n.): 觀察家",
+      "closely watching (phr.): 密切關注",
+      "breakthroughs (n.): 突破",
+      "significant (adj.): 顯著的",
+      "agreements (n.): 協議",
+      "reached (v.): 達成",
+      "regarding (prep.): 關於",
+      "cross-Strait relations (n.): 兩岸關係"
+    ],
+    "quiz": [
+      {
+        "q": "What is Taiwan Mobile launching to impact the tech and telecom sectors?",
+        "options": [
+          "A new mobile network",
+          "AI Triple Engines",
+          "A customer service chatbot",
+          "A cloud computing platform"
+        ],
+        "answer": "AI Triple Engines"
+      },
+      {
+        "q": "What is the main goal of Taiwan Mobile's AI Triple Engines initiative?",
+        "options": [
+          "To reduce operational costs",
+          "To expand into new international markets",
+          "To drive innovation and enhance customer experiences",
+          "To develop new hardware devices"
+        ],
+        "answer": "To drive innovation and enhance customer experiences"
+      },
+      {
+        "q": "What does Taiwan Mobile expect this initiative to lead to for the industry?",
+        "options": [
+          "A period of stagnation",
+          "Increased competition",
+          "A golden decade",
+          "Technological decline"
+        ],
+        "answer": "A golden decade"
+      },
+      {
+        "q": "The AI Triple Engines are described as a 'strategic' initiative. What does 'strategic' imply?",
+        "options": [
+          "It is a short-term project.",
+          "It is carefully planned and designed to achieve specific goals.",
+          "It is a spontaneous decision.",
+          "It is focused on immediate results only."
+        ],
+        "answer": "It is carefully planned and designed to achieve specific goals."
+      },
+      {
+        "q": "Which field is Taiwan Mobile aiming to revolutionize?",
+        "options": [
+          "Finance and banking",
+          "Healthcare and medicine",
+          "Technology and telecommunications",
+          "Education and research"
+        ],
+        "answer": "Technology and telecommunications"
+      },
+      {
+        "q": "What is 'artificial intelligence' primarily used for in this context?",
+        "options": [
+          "Marketing campaigns",
+          "Driving innovation and improving customer experiences",
+          "Employee training",
+          "Logistics management"
+        ],
+        "answer": "Driving innovation and improving customer experiences"
+      },
+      {
+        "q": "The company 'anticipates' a golden decade. What does 'anticipates' mean?",
+        "options": [
+          "It fears",
+          "It hopes",
+          "It expects",
+          "It denies"
+        ],
+        "answer": "It expects"
+      },
+      {
+        "q": "What kind of decade is expected for the tech and telecom industry?",
+        "options": [
+          "A challenging decade",
+          "A stable decade",
+          "A golden decade",
+          "A transitional decade"
+        ],
+        "answer": "A golden decade"
+      },
+      {
+        "q": "The golden decade will be characterized by significant growth and what else?",
+        "options": [
+          "Reduced investment",
+          "Technological breakthroughs",
+          "Increased regulation",
+          "Market saturation"
+        ],
+        "answer": "Technological breakthroughs"
+      },
+      {
+        "q": "The phrase 'usher in' suggests:",
+        "options": [
+          "To end something",
+          "To begin or introduce something new",
+          "To delay something",
+          "To review something"
+        ],
+        "answer": "To begin or introduce something new"
+      },
+      {
+        "q": "What does Taiwan Mobile's plan 'underscore'?",
+        "options": [
+          "Its financial difficulties",
+          "Its lack of ambition",
+          "Its commitment to leading the digital transformation",
+          "Its focus on traditional services"
+        ],
+        "answer": "Its commitment to leading the digital transformation"
+      },
+      {
+        "q": "What is the overall tone of the news regarding Taiwan Mobile's initiative?",
+        "options": [
+          "Negative and critical",
+          "Neutral and objective",
+          "Positive and forward-looking",
+          "Skeptical and uncertain"
+        ],
+        "answer": "Positive and forward-looking"
+      },
+      {
+        "q": "What was Taiwan's GDP growth rate in Q1 2026?",
+        "options": [
+          "13.69%",
+          "39%",
+          "80%",
+          "10%"
+        ],
+        "answer": "13.69%"
+      },
+      {
+        "q": "What does GDP stand for?",
+        "options": [
+          "Global Development Plan",
+          "Gross Domestic Product",
+          "General Data Processing",
+          "Governmental Domestic Policy"
+        ],
+        "answer": "Gross Domestic Product"
+      },
+      {
+        "q": "How does the Q1 2026 growth compare to previous periods?",
+        "options": [
+          "It's the lowest in 39 years",
+          "It's the highest in nearly 39 years",
+          "It's an average growth",
+          "It's a slight decrease"
+        ],
+        "answer": "It's the highest in nearly 39 years"
+      },
+      {
+        "q": "The word 'surge' in the text means:",
+        "options": [
+          "a small increase",
+          "a sudden and large increase",
+          "a steady decline",
+          "no change"
+        ],
+        "answer": "a sudden and large increase"
+      },
+      {
+        "q": "What does the strong growth indicate about Taiwan's economy?",
+        "options": [
+          "It is weakening",
+          "It is recovering and dynamic",
+          "It is stagnant",
+          "It is facing challenges"
+        ],
+        "answer": "It is recovering and dynamic"
+      },
+      {
+        "q": "The economic performance in Q1 2026 was described as:",
+        "options": [
+          "disappointing",
+          "average",
+          "robust",
+          "slow"
+        ],
+        "answer": "robust"
+      },
+      {
+        "q": "The news states that the Q1 GDP growth surpassed:",
+        "options": [
+          "historical records",
+          "market expectations",
+          "competitor performance",
+          "government targets"
+        ],
+        "answer": "market expectations"
+      },
+      {
+        "q": "The word 'remarkable' is used to describe the:",
+        "options": [
+          "GDP decline",
+          "economic stagnation",
+          "GDP surge",
+          "market uncertainty"
+        ],
+        "answer": "GDP surge"
+      },
+      {
+        "q": "What time period does the GDP growth refer to?",
+        "options": [
+          "The entire year of 2026",
+          "The second quarter of 2026",
+          "The first quarter of 2026",
+          "The last quarter of 2025"
+        ],
+        "answer": "The first quarter of 2026"
+      },
+      {
+        "q": "The word 'dynamism' refers to the economy's:",
+        "options": [
+          "stability",
+          "predictability",
+          "lack of activity",
+          "energy and progress"
+        ],
+        "answer": "energy and progress"
+      },
+      {
+        "q": "Which word describes the economic growth as strong and healthy?",
+        "options": [
+          "stagnant",
+          "robust",
+          "declining",
+          "weak"
+        ],
+        "answer": "robust"
+      },
+      {
+        "q": "The news is about Taiwan's economic performance in:",
+        "options": [
+          "March 2026",
+          "April 2026",
+          "The first quarter of 2026",
+          "The year 2025"
+        ],
+        "answer": "The first quarter of 2026"
+      },
+      {
+        "q": "What is the main topic expected to be discussed at the Trump-Xi meeting?",
+        "options": [
+          "Economic trade policies",
+          "Climate change initiatives",
+          "The issue of Taiwan",
+          "Military alliances"
+        ],
+        "answer": "The issue of Taiwan"
+      },
+      {
+        "q": "According to the text, when is the Trump-Xi meeting expected to happen?",
+        "options": [
+          "Last week",
+          "Next month",
+          "In the past year",
+          "Soon"
+        ],
+        "answer": "Soon"
+      },
+      {
+        "q": "Who are the two main leaders involved in the meeting?",
+        "options": [
+          "Obama and Xi",
+          "Trump and Putin",
+          "Trump and Xi",
+          "Biden and Xi"
+        ],
+        "answer": "Trump and Xi"
+      },
+      {
+        "q": "What aspect of Taiwan is mentioned as being sensitive?",
+        "options": [
+          "Its economy",
+          "Its cultural heritage",
+          "Its political status",
+          "Its geographical location"
+        ],
+        "answer": "Its political status"
+      },
+      {
+        "q": "Which countries have acknowledged the sensitivity surrounding Taiwan?",
+        "options": [
+          "China and Japan",
+          "The United States and China",
+          "Taiwan and South Korea",
+          "The United States and Japan"
+        ],
+        "answer": "The United States and China"
+      },
+      {
+        "q": "What are international observers doing?",
+        "options": [
+          "Organizing protests",
+          "Closely watching the developments",
+          "Negotiating new treaties",
+          "Issuing official statements"
+        ],
+        "answer": "Closely watching the developments"
+      },
+      {
+        "q": "What is the meeting described as?",
+        "options": [
+          "Routine",
+          "Unimportant",
+          "Highly anticipated",
+          "Uncertain"
+        ],
+        "answer": "Highly anticipated"
+      },
+      {
+        "q": "The word 'dominate' in the text means:",
+        "options": [
+          "To be of secondary importance",
+          "To be the most important topic",
+          "To be ignored",
+          "To be a minor point"
+        ],
+        "answer": "To be the most important topic"
+      },
+      {
+        "q": "What are they hoping to achieve regarding cross-Strait relations?",
+        "options": [
+          "Increased tension",
+          "No change",
+          "Breakthroughs or significant agreements",
+          "Further isolation"
+        ],
+        "answer": "Breakthroughs or significant agreements"
+      },
+      {
+        "q": "The word 'issue' in the context of the news refers to:",
+        "options": [
+          "A problem or a topic for discussion",
+          "A formal announcement",
+          "A personal opinion",
+          "A minor detail"
+        ],
+        "answer": "A problem or a topic for discussion"
+      },
+      {
+        "q": "Which word describes the nature of Taiwan's issue?",
+        "options": [
+          "Simple",
+          "Straightforward",
+          "Complex",
+          "Unimportant"
+        ],
+        "answer": "Complex"
+      },
+      {
+        "q": "What kind of style is the English text written in?",
+        "options": [
+          "Narrative",
+          "Opinionated",
+          "Factual",
+          "Humorous"
+        ],
+        "answer": "Factual"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "OpenAI加速布局AI手機，聯發科有望獨家供應處理器",
+    "tabTitle": "科技",
+    "english": "OpenAI is reportedly accelerating its strategy to enter the AI-powered smartphone market. Recent industry insights suggest that MediaTek is poised to become the exclusive supplier of processors for these upcoming devices. This collaboration signals a significant move by OpenAI to integrate its advanced AI capabilities directly into mobile hardware, potentially transforming user interaction with smartphones.",
+    "chinese": "據報導，OpenAI 正在加速其進軍 AI 驅動智慧型手機市場的策略。近期產業消息顯示，聯發科有望成為這些即將推出的裝置的獨家處理器供應商。這次合作標誌著 OpenAI 將其先進的 AI 功能直接整合到行動硬體中的重大舉措，可能徹底改變使用者與智慧型手機的互動方式。",
+    "vocabulary": [
+      "accelerate (v.): 加速",
+      "strategy (n.): 策略",
+      "AI-powered (adj.): 由 AI 驅動的",
+      "smartphone (n.): 智慧型手機",
+      "industry insights (n.): 產業洞見",
+      "reportedly (adv.): 據報導",
+      "suggest (v.): 表明；暗示",
+      "poised to (v. phrase): 即將；準備好要",
+      "exclusive (adj.): 獨家的",
+      "supplier (n.): 供應商",
+      "processor (n.): 處理器",
+      "upcoming (adj.): 即將到來的",
+      "collaboration (n.): 合作",
+      "signals (v.): 標誌著；預示著",
+      "significant (adj.): 重大的",
+      "move (n.): 舉措；行動",
+      "integrate (v.): 整合",
+      "advanced (adj.): 先進的",
+      "capabilities (n.): 功能；能力",
+      "transform (v.): 徹底改變；轉變"
+    ],
+    "quiz": [
+      {
+        "q": "What is OpenAI reportedly doing with its AI smartphone strategy?",
+        "options": [
+          "Slowing down its development",
+          "Accelerating its development",
+          "Focusing on software only",
+          "Partnering with Apple"
+        ],
+        "answer": "Accelerating its development"
+      },
+      {
+        "q": "Which company is expected to be the exclusive processor supplier for OpenAI's AI phones?",
+        "options": [
+          "Qualcomm",
+          "Intel",
+          "MediaTek",
+          "Samsung"
+        ],
+        "answer": "MediaTek"
+      },
+      {
+        "q": "What does the collaboration between OpenAI and MediaTek aim to achieve?",
+        "options": [
+          "Develop new AI software",
+          "Integrate AI capabilities into mobile hardware",
+          "Create a new operating system",
+          "Reduce smartphone prices"
+        ],
+        "answer": "Integrate AI capabilities into mobile hardware"
+      },
+      {
+        "q": "The term 'AI-powered' in the context of smartphones means:",
+        "options": [
+          "Smartphones with a camera",
+          "Smartphones that use artificial intelligence",
+          "Smartphones with long battery life",
+          "Smartphones made by AI"
+        ],
+        "answer": "Smartphones that use artificial intelligence"
+      },
+      {
+        "q": "What does 'poised to' suggest about MediaTek's role?",
+        "options": [
+          "It is unlikely to be the supplier",
+          "It is ready or prepared to be the supplier",
+          "It is negotiating the price",
+          "It has already supplied processors"
+        ],
+        "answer": "It is ready or prepared to be the supplier"
+      },
+      {
+        "q": "What is the main focus of OpenAI's strategy mentioned in the text?",
+        "options": [
+          "Cloud computing services",
+          "AI-powered smartphones",
+          "Robotics development",
+          "Language translation tools"
+        ],
+        "answer": "AI-powered smartphones"
+      },
+      {
+        "q": "The word 'exclusive' implies that:",
+        "options": [
+          "MediaTek will supply processors to many companies",
+          "Only MediaTek will supply processors for these specific phones",
+          "MediaTek will share the supply contract",
+          "MediaTek will be one of several suppliers"
+        ],
+        "answer": "Only MediaTek will supply processors for these specific phones"
+      },
+      {
+        "q": "What kind of information is referred to by 'industry insights'?",
+        "options": [
+          "Publicly available news articles",
+          "Information gathered from within the industry",
+          "Historical sales data",
+          "Government regulations"
+        ],
+        "answer": "Information gathered from within the industry"
+      },
+      {
+        "q": "The text suggests this collaboration could lead to:",
+        "options": [
+          "A decrease in smartphone usage",
+          "A change in how users interact with smartphones",
+          "More complex app development",
+          "Lower demand for mobile chips"
+        ],
+        "answer": "A change in how users interact with smartphones"
+      },
+      {
+        "q": "What is the role of a 'processor' in a smartphone?",
+        "options": [
+          "To display the screen",
+          "To provide power to the battery",
+          "To perform calculations and run the device",
+          "To connect to the internet"
+        ],
+        "answer": "To perform calculations and run the device"
+      },
+      {
+        "q": "The word 'transform' means:",
+        "options": [
+          "To maintain the same state",
+          "To make minor adjustments",
+          "To change something significantly",
+          "To divide into parts"
+        ],
+        "answer": "To change something significantly"
+      },
+      {
+        "q": "According to the text, what is OpenAI trying to achieve by integrating AI into phones?",
+        "options": [
+          "Make phones more expensive",
+          "Reduce the need for human interaction",
+          "Enhance user experience through AI",
+          "Simplify phone manufacturing"
+        ],
+        "answer": "Enhance user experience through AI"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "美股4大指數上漲，台積電ADR卻逆勢下跌",
+    "tabTitle": "金融市場",
+    "english": "Major US stock indices experienced gains on May 6, 2026, reflecting positive sentiment in the broader market. The Dow Jones Industrial Average, S&P 500, Nasdaq Composite, and Russell 2000 all closed higher. However, Taiwan Semiconductor Manufacturing Company's American Depositary Receipts (ADRs) moved against the trend, registering a decline. This divergence suggests specific factors may be affecting the semiconductor giant's performance despite the overall market upswing.",
+    "chinese": "2026年5月6日，主要美國股市指數普遍上漲，反映出整體市場的樂觀情緒。道瓊工業平均指數、標準普爾500指數、那斯達克綜合指數和羅素2000指數均收盤走高。然而，台積電的美國存託憑證（ADR）卻逆勢下跌。這種分歧表明，儘管整體市場上揚，但可能存在特定因素影響著這家半導體巨頭的表現。",
+    "vocabulary": [
+      "Major (adj.): 主要的",
+      "Indices (n.): 指數",
+      "Rise (v.): 上漲",
+      "Market (n.): 市場",
+      "Sentiment (n.): 情绪，看法",
+      "Broader (adj.): 更廣泛的",
+      "Reflecting (v.): 反映",
+      "Experienced (v.): 經歷",
+      "Gains (n.): 收益，漲幅",
+      "However (adv.): 然而",
+      "Against the trend (idiom): 逆勢",
+      "Moved against the trend (idiom): 逆勢而行",
+      "Register (v.): 記錄，顯示",
+      "Decline (n.): 下跌，減少",
+      "Divergence (n.): 分歧，差異",
+      "Suggests (v.): 表明，暗示",
+      "Specific (adj.): 特定的",
+      "Factors (n.): 因素",
+      "Affecting (v.): 影響",
+      "Upswing (n.): 上升，漲勢"
+    ],
+    "quiz": [
+      {
+        "q": "What happened to the major US stock indices on May 6, 2026?",
+        "options": [
+          "They all declined.",
+          "They experienced gains.",
+          "They remained unchanged.",
+          "Some rose and some fell."
+        ],
+        "answer": "They experienced gains."
+      },
+      {
+        "q": "Which of the following indices was NOT mentioned as rising?",
+        "options": [
+          "Dow Jones Industrial Average",
+          "S&P 500",
+          "Nikkei 225",
+          "Nasdaq Composite"
+        ],
+        "answer": "Nikkei 225"
+      },
+      {
+        "q": "What does the term 'ADR' stand for in the context of TSMC?",
+        "options": [
+          "Advanced Research Development",
+          "American Depositary Receipts",
+          "Automated Data Retrieval",
+          "Asset Revaluation Division"
+        ],
+        "answer": "American Depositary Receipts"
+      },
+      {
+        "q": "How did TSMC's ADRs perform compared to the overall market trend?",
+        "options": [
+          "They moved with the trend.",
+          "They fell against the trend.",
+          "They showed no significant change.",
+          "They rose significantly."
+        ],
+        "answer": "They fell against the trend."
+      },
+      {
+        "q": "The word 'gains' in the context of stock markets means:",
+        "options": [
+          "Losses",
+          "Increases in value",
+          "Stagnation",
+          "Dividends"
+        ],
+        "answer": "Increases in value"
+      },
+      {
+        "q": "What does 'divergence' suggest in this news report?",
+        "options": [
+          "A lack of market interest",
+          "A unified market movement",
+          "A difference in performance between different assets",
+          "A sign of market stability"
+        ],
+        "answer": "A difference in performance between different assets"
+      },
+      {
+        "q": "Which sector does TSMC belong to?",
+        "options": [
+          "Banking",
+          "Energy",
+          "Technology (Semiconductor)",
+          "Retail"
+        ],
+        "answer": "Technology (Semiconductor)"
+      },
+      {
+        "q": "The phrase 'moved against the trend' implies:",
+        "options": [
+          "Following the general direction",
+          "Acting contrary to the general direction",
+          "Being unaffected by market movements",
+          "Leading the market direction"
+        ],
+        "answer": "Acting contrary to the general direction"
+      },
+      {
+        "q": "What is the date of the news event?",
+        "options": [
+          "May 6, 2025",
+          "May 5, 2026",
+          "May 6, 2026",
+          "April 6, 2026"
+        ],
+        "answer": "May 6, 2026"
+      },
+      {
+        "q": "The word 'reflecting' means:",
+        "options": [
+          "Ignoring",
+          "Causing",
+          "Showing or indicating",
+          "Concealing"
+        ],
+        "answer": "Showing or indicating"
+      },
+      {
+        "q": "What might be the reason for TSMC ADRs falling despite the market upswing?",
+        "options": [
+          "General market decline",
+          "Positive news for TSMC",
+          "Specific factors affecting TSMC",
+          "Increased investor confidence"
+        ],
+        "answer": "Specific factors affecting TSMC"
+      },
+      {
+        "q": "The word 'upswing' refers to:",
+        "options": [
+          "A downturn",
+          "A period of stability",
+          "A period of increase or improvement",
+          "A market crash"
+        ],
+        "answer": "A period of increase or improvement"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "Palantir企業級AI軟體領跑 分析師看好前景",
+    "tabTitle": "科技",
+    "english": "Technology firm Palantir is reportedly leading the market with its enterprise-grade Artificial Intelligence software. Analysts are expressing strong optimism about the company's future prospects in this rapidly growing sector. The advanced AI solutions offered by Palantir are designed to help businesses improve decision-making and operational efficiency. This strategic focus positions the company for significant growth in the coming years.",
+    "chinese": "據報導，科技公司 Palantir 正以其企業級人工智能軟體領跑市場。分析師對該公司在這個快速增長領域的未來前景表示高度樂觀。Palantir 提供的先進人工智能解決方案旨在幫助企業改善決策和營運效率。這一策略重點將使公司在未來幾年獲得顯著增長。",
+    "vocabulary": [
+      "firm (n.): 公司",
+      "reportedly (adv.): 據報導",
+      "leading (v.): 領先",
+      "market (n.): 市場",
+      "enterprise-grade (adj.): 企業級",
+      "Artificial Intelligence (n.): 人工智能",
+      "software (n.): 軟體",
+      "Analysts (n.): 分析師",
+      "expressing (v.): 表達",
+      "strong (adj.): 強烈的",
+      "optimism (n.): 樂觀",
+      "future (n.): 未來",
+      "prospects (n.): 前景",
+      "rapidly (adv.): 快速地",
+      "growing (v.): 增長的",
+      "sector (n.): 領域",
+      "advanced (adj.): 先進的",
+      "solutions (n.): 解決方案",
+      "decision-making (n.): 決策",
+      "operational efficiency (n.): 營運效率"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news?",
+        "options": [
+          "Palantir's new hardware products",
+          "Palantir's leadership in enterprise AI software",
+          "A decline in the AI market",
+          "New regulations for technology firms"
+        ],
+        "answer": "Palantir's leadership in enterprise AI software"
+      },
+      {
+        "q": "How do analysts describe the future prospects of Palantir in this sector?",
+        "options": [
+          "Pessimistic",
+          "Uncertain",
+          "Strongly optimistic",
+          "Neutral"
+        ],
+        "answer": "Strongly optimistic"
+      },
+      {
+        "q": "What type of software is Palantir reportedly leading with?",
+        "options": [
+          "Consumer-grade",
+          "Government-grade",
+          "Enterprise-grade",
+          "Educational-grade"
+        ],
+        "answer": "Enterprise-grade"
+      },
+      {
+        "q": "What is the purpose of Palantir's AI solutions mentioned in the text?",
+        "options": [
+          "To replace human workers",
+          "To improve decision-making and operational efficiency",
+          "To develop new video games",
+          "To create social media platforms"
+        ],
+        "answer": "To improve decision-making and operational efficiency"
+      },
+      {
+        "q": "Which word describes the growth of the sector Palantir is in?",
+        "options": [
+          "Stagnant",
+          "Slow",
+          "Rapidly growing",
+          "Declining"
+        ],
+        "answer": "Rapidly growing"
+      },
+      {
+        "q": "According to the text, Palantir is a...",
+        "options": [
+          "Software developer",
+          "Hardware manufacturer",
+          "Consulting firm",
+          "Research institution"
+        ],
+        "answer": "Software developer"
+      },
+      {
+        "q": "The word 'optimism' suggests a feeling of...",
+        "options": [
+          "Doubt",
+          "Hopefulness",
+          "Fear",
+          "Indifference"
+        ],
+        "answer": "Hopefulness"
+      },
+      {
+        "q": "What does 'enterprise-grade' imply about the software?",
+        "options": [
+          "It's for small businesses only.",
+          "It's designed for complex business needs.",
+          "It's a simple, basic version.",
+          "It's only for personal use."
+        ],
+        "answer": "It's designed for complex business needs."
+      },
+      {
+        "q": "The news suggests that Palantir's focus on AI positions it for...",
+        "options": [
+          "Financial loss",
+          "Limited growth",
+          "Significant growth",
+          "Market decline"
+        ],
+        "answer": "Significant growth"
+      },
+      {
+        "q": "Which word means 'according to what has been said or reported'?",
+        "options": [
+          "Optimistic",
+          "Advanced",
+          "Reportedly",
+          "Enterprise"
+        ],
+        "answer": "Reportedly"
+      },
+      {
+        "q": "What is the primary benefit of Palantir's AI solutions for businesses?",
+        "options": [
+          "Reducing employee numbers",
+          "Increasing marketing reach",
+          "Enhancing data security",
+          "Improving decision-making"
+        ],
+        "answer": "Improving decision-making"
+      },
+      {
+        "q": "The term 'sector' in the context of the news refers to a...",
+        "options": [
+          "Geographical region",
+          "Specific industry or area of activity",
+          "Company department",
+          "Type of computer hardware"
+        ],
+        "answer": "Specific industry or area of activity"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "美伊停火協議仍有效，但緊張局勢持續",
+    "tabTitle": "地緣政治",
+    "english": "The ceasefire agreement between the United States and Iran remains in effect, bringing a temporary respite to the region. However, underlying tensions persist, with both sides closely monitoring each other's actions. Diplomatic channels are reportedly open, but the situation remains delicate, underscoring the need for continued de-escalation efforts.",
+    "chinese": "美伊之間的停火協議仍然有效，為該地區帶來了暫時的喘息機會。然而，潛在的緊張局勢依然存在，雙方都在密切關注對方的行動。據報導，外交管道保持暢通，但局勢依然微妙，這凸顯了持續緩和局勢的必要性。",
+    "vocabulary": [
+      "ceasefire (n.): 停火",
+      "agreement (n.): 協議",
+      "remain (v.): 保持",
+      "effect (n.): 效力",
+      "temporary (adj.): 暫時的",
+      "respite (n.): 喘息",
+      "region (n.): 地區",
+      "however (adv.): 然而",
+      "underlying (adj.): 潛在的",
+      "tensions (n.): 緊張局勢",
+      "persist (v.): 持續",
+      "monitoring (v.): 監控",
+      "actions (n.): 行動",
+      "diplomatic (adj.): 外交的",
+      "channels (n.): 管道",
+      "reportedly (adv.): 據報導",
+      "open (adj.): 暢通的",
+      "situation (n.): 局勢",
+      "delicate (adj.): 微妙的",
+      "de-escalation (n.): 緩和"
+    ],
+    "quiz": [
+      {
+        "q": "What is the current status of the ceasefire agreement between the US and Iran?",
+        "options": [
+          "It has been broken.",
+          "It remains in effect.",
+          "It is still under negotiation.",
+          "It has been officially terminated."
+        ],
+        "answer": "It remains in effect."
+      },
+      {
+        "q": "What is the general atmosphere between the US and Iran despite the ceasefire?",
+        "options": [
+          "Complete harmony",
+          "Reduced hostility",
+          "Persistent tensions",
+          "Open conflict"
+        ],
+        "answer": "Persistent tensions"
+      },
+      {
+        "q": "What are both sides reportedly doing regarding each other's actions?",
+        "options": [
+          "Ignoring them",
+          "Encouraging them",
+          "Closely monitoring them",
+          "Reacting aggressively to them"
+        ],
+        "answer": "Closely monitoring them"
+      },
+      {
+        "q": "According to the text, are diplomatic channels open?",
+        "options": [
+          "No, they are closed.",
+          "Yes, they are reportedly open.",
+          "It is unknown if they are open.",
+          "Only unofficial channels are open."
+        ],
+        "answer": "Yes, they are reportedly open."
+      },
+      {
+        "q": "How is the current situation described?",
+        "options": [
+          "Stable and resolved",
+          "Volatile and dangerous",
+          "Delicate and requiring caution",
+          "Completely peaceful"
+        ],
+        "answer": "Delicate and requiring caution"
+      },
+      {
+        "q": "What does the text suggest is needed?",
+        "options": [
+          "Increased military presence",
+          "Further diplomatic sanctions",
+          "Continued de-escalation efforts",
+          "A complete breakdown of communication"
+        ],
+        "answer": "Continued de-escalation efforts"
+      },
+      {
+        "q": "What does the ceasefire provide?",
+        "options": [
+          "A permanent solution",
+          "A temporary respite",
+          "Increased conflict",
+          "Economic sanctions"
+        ],
+        "answer": "A temporary respite"
+      },
+      {
+        "q": "The word 'persist' means:",
+        "options": [
+          "To stop happening",
+          "To continue to exist or happen",
+          "To suddenly disappear",
+          "To be forgotten"
+        ],
+        "answer": "To continue to exist or happen"
+      },
+      {
+        "q": "What does 'diplomatic channels' refer to?",
+        "options": [
+          "Military communication lines",
+          "Methods of communication and negotiation between countries",
+          "Trade routes",
+          "Intelligence gathering operations"
+        ],
+        "answer": "Methods of communication and negotiation between countries"
+      },
+      {
+        "q": "The word 'delicate' in this context implies:",
+        "options": [
+          "Strong and robust",
+          "Fragile and easily disrupted",
+          "Unimportant",
+          "Simple and straightforward"
+        ],
+        "answer": "Fragile and easily disrupted"
+      },
+      {
+        "q": "What is the main theme of the news report?",
+        "options": [
+          "A complete resolution of US-Iran conflict",
+          "The ongoing fragility of the US-Iran ceasefire",
+          "The start of a new trade agreement",
+          "A major military engagement"
+        ],
+        "answer": "The ongoing fragility of the US-Iran ceasefire"
+      },
+      {
+        "q": "Which word describes the nature of the tensions between the US and Iran?",
+        "options": [
+          "Surface-level",
+          "Underlying",
+          "Temporary",
+          "Resolved"
+        ],
+        "answer": "Underlying"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
