@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 08, 2026：科技、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 聯發科資料中心啟用，布局AI晶片設計\nMediaTek has officially launched its new data center, a significant step in its strategy to bolster AI chip development. This advanced facility is designed to accelerate research and development, enabling faster innovation in high-performance computing and artificial intelligence. The company aims to leverage this new infrastructure to strengthen its competitive edge in the rapidly evolving semiconductor market, particularly in AI-driven solutions.\n\n[2] 通寶半導體獲安謀投資，五年內將推動先進製程\nTopsemiconductor announced today it has secured a significant investment from Arm Holdings. This strategic partnership aims to accelerate the development and implementation of advanced semiconductor manufacturing processes. Over the next five years, the collaboration will focus on pushing the boundaries of chip technology, enhancing production capabilities, and solidifying Taiwan's leading position in the global electronics industry.\n\n[3] 台積電先進封裝布局，VIS新加坡廠擴建\nTSMC, the world's largest contract chip manufacturer, is significantly expanding its advanced packaging capacity. The company is investing heavily in its VIS Singapore facility to meet growing demand for its cutting-edge packaging technologies. This strategic move aims to solidify TSMC's leadership in the semiconductor industry by enabling more complex chip designs and improving performance for its clients.",
+    "chinese": "【1】聯發科資料中心啟用，布局AI晶片設計\n聯發科已正式啟用其新的資料中心，這是其加強人工智慧晶片開發策略的重要一步。這個先進的設施旨在加速研發，推動高效能運算和人工智慧領域的快速創新。該公司旨在利用這一新基礎設施，以增強其在快速變化的半導體市場中的競爭優勢，特別是在人工智慧驅動的解決方案方面。\n\n【2】通寶半導體獲安謀投資，五年內將推動先進製程\n通寶半導體今日宣布，已獲得安謀（Arm Holdings）的大筆投資。這項策略性合作旨在加速先進半導體製造製程的開發與實施。在未來五年內，雙方將聚焦於突破晶片技術的極限，提升生產能力，並鞏固台灣在全球電子產業的領先地位。\n\n【3】台積電先進封裝布局，VIS新加坡廠擴建\n全球最大的合同芯片製造商台積電正大幅擴充其先進封裝產能。該公司正大力投資其新加坡VIS廠，以滿足對其尖端封裝技術日益增長的需求。此策略性舉措旨在透過實現更複雜的芯片設計並提升客戶的性能，鞏固台積電在半導體行業的領導地位。",
+    "vocabulary": [
+      "launched (v.): 啟用；啟動",
+      "data center (n.): 資料中心",
+      "significant (adj.): 顯著的；重要的",
+      "strategy (n.): 策略",
+      "bolster (v.): 加強；支持",
+      "development (n.): 開發；發展",
+      "advanced (adj.): 先進的",
+      "facility (n.): 設施；設備",
+      "accelerate (v.): 加速",
+      "research and development (n.): 研究與開發",
+      "innovation (n.): 創新",
+      "high-performance computing (n.): 高效能運算",
+      "artificial intelligence (n.): 人工智慧",
+      "leverage (v.): 利用；善用",
+      "infrastructure (n.): 基礎設施",
+      "strengthen (v.): 加強；鞏固",
+      "competitive edge (n.): 競爭優勢",
+      "rapidly evolving (adj.): 快速演變的",
+      "semiconductor market (n.): 半導體市場",
+      "AI-driven solutions (n.): 人工智慧驅動的解決方案",
+      "Topsemiconductor (n.): 通寶半導體",
+      "Arm Holdings (n.): 安謀控股公司",
+      "investment (n.): 投資",
+      "strategic partnership (n.): 策略性合作",
+      "accelerate (v.): 加速",
+      "development (n.): 開發",
+      "implementation (n.): 實施",
+      "advanced (adj.): 先進的",
+      "semiconductor manufacturing processes (n.): 半導體製造製程",
+      "collaboration (n.): 合作",
+      "focus on (v.): 專注於",
+      "push the boundaries (v.): 突破極限",
+      "chip technology (n.): 晶片技術",
+      "enhancing (v.): 提升",
+      "production capabilities (n.): 生產能力",
+      "solidifying (v.): 鞏固",
+      "Taiwan (n.): 台灣",
+      "leading position (n.): 領先地位",
+      "global electronics industry (n.): 全球電子產業",
+      "announced (v.): 宣布",
+      "contract chip manufacturer (n.): 合約芯片製造商",
+      "significantly (adv.): 顯著地",
+      "expanding (v.): 擴張",
+      "advanced packaging (n.): 先進封裝",
+      "capacity (n.): 產能",
+      "investing heavily (phr.): 大力投資",
+      "facility (n.): 工廠；設施",
+      "meet demand (phr.): 滿足需求",
+      "cutting-edge (adj.): 尖端的",
+      "technologies (n.): 技術",
+      "strategic move (n.): 策略性舉措",
+      "aims to (phr.): 旨在",
+      "solidify (v.): 鞏固",
+      "leadership (n.): 領導地位",
+      "semiconductor industry (n.): 半導體行業",
+      "enabling (v.): 使能夠",
+      "complex (adj.): 複雜的",
+      "chip designs (n.): 芯片設計",
+      "improving performance (phr.): 提升性能",
+      "clients (n.): 客戶"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of MediaTek's newly launched data center?",
+        "options": [
+          "To store customer data",
+          "To support AI chip development",
+          "To manage financial records",
+          "To host marketing events"
+        ],
+        "answer": "To support AI chip development"
+      },
+      {
+        "q": "The new data center is described as a 'significant step' in what area for MediaTek?",
+        "options": [
+          "Sales expansion",
+          "Manufacturing capacity",
+          "AI chip development",
+          "Global logistics"
+        ],
+        "answer": "AI chip development"
+      },
+      {
+        "q": "What is the data center designed to accelerate?",
+        "options": [
+          "Product shipping times",
+          "Customer service responses",
+          "Research and development",
+          "Employee training programs"
+        ],
+        "answer": "Research and development"
+      },
+      {
+        "q": "Which two fields will benefit from faster innovation due to this facility?",
+        "options": [
+          "Automotive and healthcare",
+          "High-performance computing and artificial intelligence",
+          "Consumer electronics and telecommunications",
+          "Renewable energy and aerospace"
+        ],
+        "answer": "High-performance computing and artificial intelligence"
+      },
+      {
+        "q": "What does MediaTek aim to do by leveraging this new infrastructure?",
+        "options": [
+          "Reduce operational costs",
+          "Increase market share in unrelated sectors",
+          "Strengthen its competitive edge",
+          "Develop new consumer products"
+        ],
+        "answer": "Strengthen its competitive edge"
+      },
+      {
+        "q": "In which market is MediaTek looking to enhance its position, especially regarding AI solutions?",
+        "options": [
+          "The software development market",
+          "The semiconductor market",
+          "The data storage market",
+          "The artificial intelligence software market"
+        ],
+        "answer": "The semiconductor market"
+      },
+      {
+        "q": "The term 'bolster' in the text means:",
+        "options": [
+          "To weaken",
+          "To support or strengthen",
+          "To replace",
+          "To ignore"
+        ],
+        "answer": "To support or strengthen"
+      },
+      {
+        "q": "What kind of solutions is MediaTek particularly interested in within the AI domain?",
+        "options": [
+          "AI-powered games",
+          "AI-driven solutions",
+          "AI-based educational tools",
+          "AI-generated art"
+        ],
+        "answer": "AI-driven solutions"
+      },
+      {
+        "q": "The word 'advanced' describes the:",
+        "options": [
+          "Company's marketing team",
+          "Data center facility",
+          "Competitors' products",
+          "Old infrastructure"
+        ],
+        "answer": "Data center facility"
+      },
+      {
+        "q": "What is the general tone of the news excerpt?",
+        "options": [
+          "Critical",
+          "Sarcastic",
+          "Informative and factual",
+          "Promotional and exaggerated"
+        ],
+        "answer": "Informative and factual"
+      },
+      {
+        "q": "The launch of the data center is a strategic move for MediaTek to:",
+        "options": [
+          "Reduce its workforce",
+          "Focus on traditional chip designs",
+          "Innovate in AI chip design",
+          "Expand into the food industry"
+        ],
+        "answer": "Innovate in AI chip design"
+      },
+      {
+        "q": "The text implies that the semiconductor market is:",
+        "options": [
+          "Stagnant",
+          "Slowly growing",
+          "Rapidly evolving",
+          "Declining"
+        ],
+        "answer": "Rapidly evolving"
+      },
+      {
+        "q": "Who is investing in Topsemiconductor?",
+        "options": [
+          "Intel",
+          "TSMC",
+          "Arm Holdings",
+          "Nvidia"
+        ],
+        "answer": "Arm Holdings"
+      },
+      {
+        "q": "What is the main goal of the partnership?",
+        "options": [
+          "To reduce manufacturing costs",
+          "To develop new smartphone apps",
+          "To accelerate advanced semiconductor process development",
+          "To expand into the automotive sector"
+        ],
+        "answer": "To accelerate advanced semiconductor process development"
+      },
+      {
+        "q": "What is the timeframe for this collaboration's focus?",
+        "options": [
+          "Two years",
+          "Three years",
+          "Five years",
+          "Ten years"
+        ],
+        "answer": "Five years"
+      },
+      {
+        "q": "What does the collaboration aim to enhance?",
+        "options": [
+          "Marketing strategies",
+          "Customer service",
+          "Production capabilities",
+          "Financial reporting"
+        ],
+        "answer": "Production capabilities"
+      },
+      {
+        "q": "The news highlights Taiwan's position in which industry?",
+        "options": [
+          "Automotive",
+          "Aerospace",
+          "Global electronics",
+          "Biotechnology"
+        ],
+        "answer": "Global electronics"
+      },
+      {
+        "q": "What kind of investment did Topsemiconductor secure?",
+        "options": [
+          "Minor",
+          "Significant",
+          "Temporary",
+          "Operational"
+        ],
+        "answer": "Significant"
+      },
+      {
+        "q": "The partnership is described as:",
+        "options": [
+          "Competitive",
+          "Informal",
+          "Strategic",
+          "Mandatory"
+        ],
+        "answer": "Strategic"
+      },
+      {
+        "q": "What specific area will be pushed in terms of technology?",
+        "options": [
+          "Software development",
+          "Chip technology",
+          "Battery technology",
+          "Display technology"
+        ],
+        "answer": "Chip technology"
+      },
+      {
+        "q": "The investment is expected to drive:",
+        "options": [
+          "Reduced R&D spending",
+          "Advanced processes",
+          "Layoffs",
+          "Market withdrawal"
+        ],
+        "answer": "Advanced processes"
+      },
+      {
+        "q": "What is Arm Holdings primarily known for?",
+        "options": [
+          "Manufacturing chips",
+          "Designing chip architectures",
+          "Selling consumer electronics",
+          "Providing cloud services"
+        ],
+        "answer": "Designing chip architectures"
+      },
+      {
+        "q": "The news was announced on:",
+        "options": [
+          "2026.05.07",
+          "2026.05.08",
+          "2026.05.09",
+          "2025.05.08"
+        ],
+        "answer": "2026.05.08"
+      },
+      {
+        "q": "The article mentions 'pushing the boundaries' in relation to:",
+        "options": [
+          "Employee training",
+          "Supply chain logistics",
+          "Technological innovation",
+          "Corporate social responsibility"
+        ],
+        "answer": "Technological innovation"
+      },
+      {
+        "q": "What is TSMC's primary business?",
+        "options": [
+          "Designing advanced chips",
+          "Manufacturing chips for other companies",
+          "Developing new semiconductor materials",
+          "Selling consumer electronics"
+        ],
+        "answer": "Manufacturing chips for other companies"
+      },
+      {
+        "q": "What specific area is TSMC expanding?",
+        "options": [
+          "Research and development",
+          "Advanced packaging",
+          "Chip design software",
+          "Raw material sourcing"
+        ],
+        "answer": "Advanced packaging"
+      },
+      {
+        "q": "Where is TSMC's VIS plant located?",
+        "options": [
+          "Taiwan",
+          "United States",
+          "Singapore",
+          "China"
+        ],
+        "answer": "Singapore"
+      },
+      {
+        "q": "Why is TSMC expanding its capacity?",
+        "options": [
+          "To reduce production costs",
+          "To meet growing demand for its technologies",
+          "To enter a new market segment",
+          "To comply with government regulations"
+        ],
+        "answer": "To meet growing demand for its technologies"
+      },
+      {
+        "q": "What is the purpose of advanced packaging?",
+        "options": [
+          "To make chips smaller",
+          "To enable more complex chip designs and improve performance",
+          "To reduce the energy consumption of chips",
+          "To protect chips from physical damage"
+        ],
+        "answer": "To enable more complex chip designs and improve performance"
+      },
+      {
+        "q": "The news states TSMC is 'investing heavily'. What does this imply?",
+        "options": [
+          "A small, cautious investment",
+          "A significant financial commitment",
+          "An investment in research only",
+          "A partnership with a competitor"
+        ],
+        "answer": "A significant financial commitment"
+      },
+      {
+        "q": "What does 'cutting-edge' mean in this context?",
+        "options": [
+          "Outdated",
+          "Standard",
+          "Innovative and advanced",
+          "Experimental"
+        ],
+        "answer": "Innovative and advanced"
+      },
+      {
+        "q": "What is the goal of TSMC's strategic move?",
+        "options": [
+          "To decrease its market share",
+          "To maintain its leadership in the semiconductor industry",
+          "To focus solely on domestic production",
+          "To reduce its workforce"
+        ],
+        "answer": "To maintain its leadership in the semiconductor industry"
+      },
+      {
+        "q": "The expansion aims to improve performance for whom?",
+        "options": [
+          "TSMC's employees",
+          "The Singaporean government",
+          "TSMC's clients",
+          "The general public"
+        ],
+        "answer": "TSMC's clients"
+      },
+      {
+        "q": "What is the relationship between TSMC and its clients?",
+        "options": [
+          "TSMC is a client of its customers",
+          "TSMC provides manufacturing services to its clients",
+          "TSMC competes directly with its clients",
+          "TSMC buys chips from its clients"
+        ],
+        "answer": "TSMC provides manufacturing services to its clients"
+      },
+      {
+        "q": "Which word describes the nature of TSMC's investment in the VIS Singapore plant?",
+        "options": [
+          "Passive",
+          "Strategic",
+          "Temporary",
+          "Uncertain"
+        ],
+        "answer": "Strategic"
+      },
+      {
+        "q": "The phrase 'enabling more complex chip designs' suggests that advanced packaging allows for:",
+        "options": [
+          "Simpler manufacturing processes",
+          "Chips with more integrated functions",
+          "Lower power consumption only",
+          "Reduced data processing speed"
+        ],
+        "answer": "Chips with more integrated functions"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "Anthropic砸2000億美元採購Google雲端資源",
+    "tabTitle": "科技",
+    "english": "Artificial intelligence company Anthropic has announced a significant commitment to utilize Google Cloud resources. The deal, reportedly valued at $200 billion, will see Anthropic leverage Google's extensive cloud infrastructure for its AI model development and operations. This strategic partnership aims to accelerate the advancement of cutting-edge AI technologies by providing Anthropic with the necessary computing power and scalability. The agreement highlights the growing demand for robust cloud solutions in the rapidly evolving AI landscape.",
+    "chinese": "人工智能公司 Anthropic 宣布將大量採用 Google Cloud 資源。這項交易據報價值 2000 億美元，將使 Anthropic 能夠利用 Google 廣泛的雲端基礎設施來開發和營運其人工智能模型。這項策略性合作夥伴關係旨在透過為 Anthropic 提供所需的運算能力和可擴展性，來加速尖端人工智能技術的進展。該協議凸顯了在快速發展的人工智能領域對強大雲端解決方案日益增長的需求。",
+    "vocabulary": [
+      "Artificial intelligence (n.): 人工智能",
+      "company (n.): 公司",
+      "announced (v.): 宣布",
+      "significant (adj.): 重大的",
+      "commitment (n.): 承諾",
+      "utilize (v.): 利用",
+      "resources (n.): 資源",
+      "reportedly (adv.): 據報",
+      "valued (v.): 價值",
+      "leverage (v.): 利用",
+      "extensive (adj.): 廣泛的",
+      "infrastructure (n.): 基礎設施",
+      "development (n.): 開發",
+      "operations (n.): 營運",
+      "strategic (adj.): 策略性的",
+      "partnership (n.): 夥伴關係",
+      "aims to (v.): 旨在",
+      "accelerate (v.): 加速",
+      "advancement (n.): 進展",
+      "cutting-edge (adj.): 尖端的"
+    ],
+    "quiz": [
+      {
+        "q": "Who announced the commitment to utilize Google Cloud resources?",
+        "options": [
+          "Google",
+          "Microsoft",
+          "Anthropic",
+          "Amazon"
+        ],
+        "answer": "Anthropic"
+      },
+      {
+        "q": "What is the reported value of the deal?",
+        "options": [
+          "$20 billion",
+          "$200 million",
+          "$2 billion",
+          "$200 billion"
+        ],
+        "answer": "$200 billion"
+      },
+      {
+        "q": "What will Anthropic leverage Google's resources for?",
+        "options": [
+          "Financial investments",
+          "AI model development and operations",
+          "Marketing campaigns",
+          "Employee training"
+        ],
+        "answer": "AI model development and operations"
+      },
+      {
+        "q": "What is the primary goal of this strategic partnership?",
+        "options": [
+          "To reduce operational costs",
+          "To expand into new markets",
+          "To accelerate the advancement of AI technologies",
+          "To develop new hardware"
+        ],
+        "answer": "To accelerate the advancement of AI technologies"
+      },
+      {
+        "q": "What does the agreement highlight?",
+        "options": [
+          "Decreasing demand for cloud solutions",
+          "The stability of the AI market",
+          "Growing demand for robust cloud solutions in AI",
+          "Limited scalability of AI models"
+        ],
+        "answer": "Growing demand for robust cloud solutions in AI"
+      },
+      {
+        "q": "What kind of company is Anthropic?",
+        "options": [
+          "A cloud service provider",
+          "An artificial intelligence company",
+          "A hardware manufacturer",
+          "A financial institution"
+        ],
+        "answer": "An artificial intelligence company"
+      },
+      {
+        "q": "What will the partnership provide Anthropic with?",
+        "options": [
+          "Financial aid",
+          "Marketing support",
+          "Computing power and scalability",
+          "Physical office space"
+        ],
+        "answer": "Computing power and scalability"
+      },
+      {
+        "q": "The news is categorized under which section?",
+        "options": [
+          "Business",
+          "Technology",
+          "Finance",
+          "Politics"
+        ],
+        "answer": "Technology"
+      },
+      {
+        "q": "What does 'leverage' mean in this context?",
+        "options": [
+          "To ignore",
+          "To use effectively",
+          "To oppose",
+          "To limit"
+        ],
+        "answer": "To use effectively"
+      },
+      {
+        "q": "What does 'extensive' describe in the text?",
+        "options": [
+          "Anthropic's commitment",
+          "The AI models",
+          "Google's cloud infrastructure",
+          "The value of the deal"
+        ],
+        "answer": "Google's cloud infrastructure"
+      },
+      {
+        "q": "What is the 'AI landscape' referring to?",
+        "options": [
+          "The physical environment where AI is developed",
+          "The overall situation and development of artificial intelligence",
+          "The visual appearance of AI interfaces",
+          "The competitive market for AI hardware"
+        ],
+        "answer": "The overall situation and development of artificial intelligence"
+      },
+      {
+        "q": "What does the phrase 'cutting-edge AI technologies' imply?",
+        "options": [
+          "Outdated AI methods",
+          "Basic AI applications",
+          "The most advanced and innovative AI technologies",
+          "AI technologies that are no longer in use"
+        ],
+        "answer": "The most advanced and innovative AI technologies"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "烏克蘭無人機供應鏈尋求脫中，台灣科技成選項",
+    "tabTitle": "科技",
+    "english": "Ukraine's defense industry is actively exploring alternatives to its current drone supply chain, aiming to reduce reliance on Chinese components. This strategic shift is driven by geopolitical concerns and a desire for greater supply chain security. As a result, Taiwanese technology firms are emerging as a potential key partner, offering advanced solutions that could bolster Ukraine's drone manufacturing capabilities.",
+    "chinese": "烏克蘭國防工業正積極尋求替代現有的無人機供應鏈，目標是減少對中國製零件的依賴。這一戰略轉變源於地緣政治考量以及對提升供應鏈安全性的渴望。因此，台灣科技公司正成為一個潛在的關鍵合作夥伴，提供能夠增強烏克蘭無人機製造能力的先進解決方案。",
+    "vocabulary": [
+      "defense industry (n.):國防工業",
+      "actively (adv.):積極地",
+      "exploring (v.):探索",
+      "alternatives (n.):替代方案",
+      "current (adj.):目前的",
+      "drone (n.):無人機",
+      "supply chain (n.):供應鏈",
+      "aiming (v.):旨在",
+      "reduce (v.):減少",
+      "reliance (n.):依賴",
+      "components (n.):零件",
+      "strategic (adj.):戰略性的",
+      "shift (n.):轉變",
+      "driven by (phr.):源於",
+      "geopolitical (adj.):地緣政治的",
+      "concerns (n.):考量",
+      "desire (n.):渴望",
+      "greater (adj.):更大的",
+      "security (n.):安全性",
+      "emerging (v.):出現",
+      "potential (adj.):潛在的",
+      "key partner (n.):關鍵合作夥伴",
+      "offering (v.):提供",
+      "advanced (adj.):先進的",
+      "solutions (n.):解決方案",
+      "bolster (v.):增強",
+      "manufacturing capabilities (n.):製造能力"
+    ],
+    "quiz": [
+      {
+        "q": "What is Ukraine's defense industry exploring?",
+        "options": [
+          "New weapon systems",
+          "Alternatives to its drone supply chain",
+          "Training programs for pilots",
+          "International military alliances"
+        ],
+        "answer": "Alternatives to its drone supply chain"
+      },
+      {
+        "q": "What is a primary goal of Ukraine's strategic shift?",
+        "options": [
+          "To increase reliance on Chinese components",
+          "To reduce reliance on Chinese components",
+          "To develop entirely new drone technology",
+          "To focus solely on drone maintenance"
+        ],
+        "answer": "To reduce reliance on Chinese components"
+      },
+      {
+        "q": "What are the main drivers behind this strategic shift?",
+        "options": [
+          "Economic benefits and cost reduction",
+          "Technological advancements and innovation",
+          "Geopolitical concerns and supply chain security",
+          "Environmental regulations and sustainability"
+        ],
+        "answer": "Geopolitical concerns and supply chain security"
+      },
+      {
+        "q": "Which country's technology firms are emerging as a potential key partner?",
+        "options": [
+          "South Korea",
+          "Japan",
+          "Taiwan",
+          "Germany"
+        ],
+        "answer": "Taiwan"
+      },
+      {
+        "q": "What are Taiwanese technology firms offering?",
+        "options": [
+          "Raw materials for drone production",
+          "Financial investment only",
+          "Advanced solutions for drone manufacturing",
+          "Logistical support for distribution"
+        ],
+        "answer": "Advanced solutions for drone manufacturing"
+      },
+      {
+        "q": "The news article suggests that the shift is aimed at enhancing Ukraine's what?",
+        "options": [
+          "Cybersecurity measures",
+          "Drone manufacturing capabilities",
+          "Diplomatic relations",
+          "Energy infrastructure"
+        ],
+        "answer": "Drone manufacturing capabilities"
+      },
+      {
+        "q": "The term 'reliance' in the text means:",
+        "options": [
+          "Independence",
+          "Dependence",
+          "Competition",
+          "Collaboration"
+        ],
+        "answer": "Dependence"
+      },
+      {
+        "q": "What does 'bolster' mean in the context of the sentence?",
+        "options": [
+          "To weaken",
+          "To support or strengthen",
+          "To replace",
+          "To ignore"
+        ],
+        "answer": "To support or strengthen"
+      },
+      {
+        "q": "The phrase 'emerging as a potential key partner' implies that Taiwan is:",
+        "options": [
+          "Already a primary partner",
+          "A possible important collaborator in the future",
+          "A competitor in the drone market",
+          "A historical supplier of drones"
+        ],
+        "answer": "A possible important collaborator in the future"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a reason for the shift?",
+        "options": [
+          "Geopolitical concerns",
+          "Desire for supply chain security",
+          "Cost-effectiveness",
+          "Reducing reliance on China"
+        ],
+        "answer": "Cost-effectiveness"
+      },
+      {
+        "q": "The news focuses on the supply chain for which type of military equipment?",
+        "options": [
+          "Tanks",
+          "Fighter jets",
+          "Drones",
+          "Submarines"
+        ],
+        "answer": "Drones"
+      },
+      {
+        "q": "What kind of style is the English text written in?",
+        "options": [
+          "Persuasive",
+          "Narrative",
+          "Factual",
+          "Humorous"
+        ],
+        "answer": "Factual"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "軟銀攜手輝達、鴻海，計畫打造「日本製」AI伺服器",
+    "tabTitle": "科技",
+    "english": "SoftBank Group announced a significant collaboration with technology giants Nvidia and Foxconn. The partnership aims to establish a domestic production base for AI servers in Japan. This strategic move is expected to boost Japan's capabilities in the rapidly growing artificial intelligence sector by leveraging advanced technologies and manufacturing expertise. The joint venture signifies a major step towards creating 'Made in Japan' AI infrastructure.",
+    "chinese": "軟銀集團宣布與科技巨頭輝達（Nvidia）和鴻海（Foxconn）達成重要合作。該夥伴關係旨在日本建立本土的 AI 伺服器生產基地。這項策略性舉措預計將透過結合先進技術和製造專業知識，來提升日本在快速成長的人工智慧領域的能力。這項合資事業象徵著朝向打造「日本製」AI 基礎設施邁出了重要一步。",
+    "vocabulary": [
+      "collaboration (n.): 合作",
+      "technology giants (n.): 科技巨頭",
+      "partnership (n.): 夥伴關係",
+      "establish (v.): 建立",
+      "domestic production base (n.): 本土生產基地",
+      "strategic move (n.): 策略性舉措",
+      "boost (v.): 提升",
+      "capabilities (n.): 能力",
+      "rapidly growing (adj.): 快速成長的",
+      "artificial intelligence (n.): 人工智慧",
+      "sector (n.): 領域",
+      "leveraging (v.): 利用",
+      "advanced technologies (n.): 先進技術",
+      "manufacturing expertise (n.): 製造專業知識",
+      "joint venture (n.): 合資企業",
+      "signifies (v.): 象徵",
+      "infrastructure (n.): 基礎設施",
+      "AI servers (n.): AI 伺服器",
+      "domestic (adj.): 本土的",
+      "production base (n.): 生產基地"
+    ],
+    "quiz": [
+      {
+        "q": "Who are the main partners in this collaboration?",
+        "options": [
+          "SoftBank, Apple, and Intel",
+          "SoftBank, Nvidia, and Foxconn",
+          "Google, Microsoft, and Sony",
+          "Nvidia, Foxconn, and Samsung"
+        ],
+        "answer": "SoftBank, Nvidia, and Foxconn"
+      },
+      {
+        "q": "What is the primary goal of this partnership?",
+        "options": [
+          "To develop new AI software",
+          "To create a domestic production base for AI servers in Japan",
+          "To invest in renewable energy projects",
+          "To expand smartphone manufacturing"
+        ],
+        "answer": "To create a domestic production base for AI servers in Japan"
+      },
+      {
+        "q": "Which country is the production base planned for?",
+        "options": [
+          "South Korea",
+          "Taiwan",
+          "United States",
+          "Japan"
+        ],
+        "answer": "Japan"
+      },
+      {
+        "q": "What is expected to be boosted by this initiative?",
+        "options": [
+          "The automotive industry",
+          "Japan's capabilities in the AI sector",
+          "Global semiconductor supply chains",
+          "The financial services market"
+        ],
+        "answer": "Japan's capabilities in the AI sector"
+      },
+      {
+        "q": "What kind of technology is central to this announcement?",
+        "options": [
+          "Blockchain",
+          "Virtual Reality",
+          "Artificial Intelligence",
+          "Quantum Computing"
+        ],
+        "answer": "Artificial Intelligence"
+      },
+      {
+        "q": "The term 'Made in Japan' in the title refers to the origin of what?",
+        "options": [
+          "Software",
+          "Components",
+          "AI Servers",
+          "Research Labs"
+        ],
+        "answer": "AI Servers"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a partner?",
+        "options": [
+          "SoftBank",
+          "Nvidia",
+          "Foxconn",
+          "Intel"
+        ],
+        "answer": "Intel"
+      },
+      {
+        "q": "What does SoftBank Group aim to leverage through this collaboration?",
+        "options": [
+          "Marketing strategies and brand recognition",
+          "Advanced technologies and manufacturing expertise",
+          "Financial investment and venture capital",
+          "Logistics and distribution networks"
+        ],
+        "answer": "Advanced technologies and manufacturing expertise"
+      },
+      {
+        "q": "The news headline suggests a focus on domestic production. What does 'domestic' mean in this context?",
+        "options": [
+          "International",
+          "Foreign",
+          "Local or within the country",
+          "Global"
+        ],
+        "answer": "Local or within the country"
+      },
+      {
+        "q": "The partnership is described as a 'strategic move'. What does 'strategic' imply?",
+        "options": [
+          "Impulsive and unplanned",
+          "Carefully planned and designed to achieve long-term goals",
+          "Focusing only on immediate profits",
+          "Based on luck or chance"
+        ],
+        "answer": "Carefully planned and designed to achieve long-term goals"
+      },
+      {
+        "q": "What is the expected outcome of establishing a 'domestic production base'?",
+        "options": [
+          "Increased reliance on foreign suppliers",
+          "Reduced technological innovation",
+          "Strengthening Japan's self-sufficiency in AI hardware",
+          "Decreased quality of AI servers"
+        ],
+        "answer": "Strengthening Japan's self-sufficiency in AI hardware"
+      },
+      {
+        "q": "The phrase 'AI servers' refers to:",
+        "options": [
+          "Software used for artificial intelligence",
+          "Hardware designed to run artificial intelligence workloads",
+          "Servers used for general internet browsing",
+          "Servers exclusively for video games"
+        ],
+        "answer": "Hardware designed to run artificial intelligence workloads"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "阿波羅CEO警告：巨大地緣政治重組來襲，世界未做好準備",
+    "tabTitle": "國際大事",
+    "english": "Leon Black, the former CEO of Apollo Global Management, has issued a stark warning regarding significant geopolitical shifts on the horizon. He believes the world is ill-equipped to handle the profound changes that are coming. Black emphasized that these impending realignments could drastically alter the global landscape and require immediate attention from international leaders and institutions.",
+    "chinese": "阿波羅全球管理公司（Apollo Global Management）前執行長Leon Black發出嚴厲警告，預示著重大的地緣政治變革即將來臨。他認為，世界尚未準備好應對即將到來的深刻變化。Black強調，這些迫在眉睫的重組可能會徹底改變全球格局，並需要國際領導人和機構立即關注。",
+    "vocabulary": [
+      "former (adj.): 前任的",
+      "CEO (n.): 執行長",
+      "Apollo Global Management (n.): 阿波羅全球管理公司",
+      "issued (v.): 發布，發出",
+      "stark (adj.): 嚴厲的，嚴峻的",
+      "warning (n.): 警告",
+      "regarding (prep.): 關於",
+      "significant (adj.): 重大的，顯著的",
+      "geopolitical (adj.): 地緣政治的",
+      "shifts (n.): 變動，轉變",
+      "horizon (n.): 地平線；（事物發生的）範圍，視野",
+      "believes (v.): 相信",
+      "world (n.): 世界",
+      "ill-equipped (adj.): 裝備不良的；準備不足的",
+      "handle (v.): 應對，處理",
+      "profound (adj.): 深刻的，深遠的",
+      "changes (n.): 變化",
+      "emphasized (v.): 強調",
+      "impending (adj.): 即將發生的",
+      "realignments (n.): 重組，調整"
+    ],
+    "quiz": [
+      {
+        "q": "Who issued the warning about geopolitical shifts?",
+        "options": [
+          "The current CEO of Apollo",
+          "Leon Black, former CEO of Apollo",
+          "A geopolitical analyst",
+          "The United Nations Secretary-General"
+        ],
+        "answer": "Leon Black, former CEO of Apollo"
+      },
+      {
+        "q": "What is the main subject of the warning?",
+        "options": [
+          "Economic recession",
+          "Climate change",
+          "Major geopolitical restructuring",
+          "Technological advancements"
+        ],
+        "answer": "Major geopolitical restructuring"
+      },
+      {
+        "q": "According to the text, how is the world prepared for these changes?",
+        "options": [
+          "Very well prepared",
+          "Somewhat prepared",
+          "Not prepared at all",
+          "The text does not mention preparation"
+        ],
+        "answer": "Not prepared at all"
+      },
+      {
+        "q": "What does Leon Black believe these changes could do?",
+        "options": [
+          "Strengthen international cooperation",
+          "Drastically alter the global landscape",
+          "Lead to economic stability",
+          "Have minimal impact"
+        ],
+        "answer": "Drastically alter the global landscape"
+      },
+      {
+        "q": "What does 'geopolitical' relate to?",
+        "options": [
+          "Only economics",
+          "Only politics",
+          "The interplay of geography and politics",
+          "International trade agreements"
+        ],
+        "answer": "The interplay of geography and politics"
+      },
+      {
+        "q": "What does 'restructuring' mean in this context?",
+        "options": [
+          "Building new structures",
+          "Reorganizing or changing the structure of something",
+          "Demolishing old structures",
+          "Improving existing structures"
+        ],
+        "answer": "Reorganizing or changing the structure of something"
+      },
+      {
+        "q": "The word 'stark' is used to describe the warning. What does 'stark' imply here?",
+        "options": [
+          "Subtle",
+          "Gentle",
+          "Severe and clear",
+          "Confusing"
+        ],
+        "answer": "Severe and clear"
+      },
+      {
+        "q": "What does 'ill-equipped' mean?",
+        "options": [
+          "Having the right tools",
+          "Lacking necessary preparation or resources",
+          "Being well-trained",
+          "Having advanced technology"
+        ],
+        "answer": "Lacking necessary preparation or resources"
+      },
+      {
+        "q": "Who is 'Leon Black' mentioned as in the article?",
+        "options": [
+          "Current CEO of Apollo Global Management",
+          "Former CEO of Apollo Global Management",
+          "An investor",
+          "A politician"
+        ],
+        "answer": "Former CEO of Apollo Global Management"
+      },
+      {
+        "q": "What does the text suggest needs to happen regarding these changes?",
+        "options": [
+          "They should be ignored",
+          "They require immediate attention from leaders",
+          "They will resolve themselves",
+          "They are only a minor concern"
+        ],
+        "answer": "They require immediate attention from leaders"
+      },
+      {
+        "q": "The word 'impending' suggests that the changes are:",
+        "options": [
+          "Already happened",
+          "Far in the future",
+          "About to happen",
+          "Uncertain"
+        ],
+        "answer": "About to happen"
+      },
+      {
+        "q": "What kind of 'landscape' could be altered by these geopolitical shifts?",
+        "options": [
+          "A physical landscape",
+          "An artistic landscape",
+          "The global political and economic environment",
+          "A natural landscape"
+        ],
+        "answer": "The global political and economic environment"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
