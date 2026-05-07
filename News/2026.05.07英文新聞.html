@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 07, 2026：台灣社會、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 高房價引關注，政府祭出新一波打炒房措施\nTaiwan's government is addressing the persistent issue of high housing prices, which have become a significant concern for many citizens. In response, authorities have announced a new series of measures aimed at curbing property speculation. These initiatives are designed to stabilize the market and make homeownership more accessible to the general public, reflecting a commitment to easing financial burdens on residents.\n\n[2] 半導體人才缺口擴大，產學合作培育新血\nThe global semiconductor industry is facing an escalating talent shortage, posing a significant challenge to future growth. To address this critical issue, a growing emphasis is being placed on industry-academia collaborations. These partnerships aim to bridge the gap between academic learning and practical industry needs, ensuring a pipeline of skilled professionals. By combining theoretical knowledge with hands-on experience, these initiatives are crucial for cultivating the next generation of semiconductor experts.\n\n[3] 勞動部推動彈性工時，提升職場多元性\nThe Ministry of Labor has introduced new initiatives to promote flexible work hours across Taiwan. This policy aims to enhance workplace diversity by offering employees more control over their schedules. It is expected that these changes will improve work-life balance and boost overall productivity. The ministry is encouraging businesses to adopt these flexible arrangements to better meet the needs of a modern workforce.",
+    "chinese": "【1】高房價引關注，政府祭出新一波打炒房措施\n台灣政府正著手處理持續存在的高房價問題，這已成為許多民眾高度關注的議題。為此，當局宣布了一系列旨在遏制房地產投機的新措施。這些措施旨在穩定市場，並使一般民眾更容易購房，體現了減輕居民經濟負擔的承諾。\n\n【2】半導體人才缺口擴大，產學合作培育新血\n全球半導體產業正 facing 嚴峻的人才短缺問題，對未來成長構成重大挑戰。為了解決這個關鍵問題，越來越多的重心被放在產學合作上。這些合作旨在縮小學術學習與業界實際需求之間的差距，確保有技能的專業人才供應無虞。透過結合理論知識與實務經驗，這些措施對於培育下一代半導體專家至關重要。\n\n【3】勞動部推動彈性工時，提升職場多元性\n勞動部已在台灣推動新的彈性工時措施。這項政策旨在透過賦予員工更多對其排程的掌控權，來提升職場的多元性。預計這些改變將能改善工作與生活的平衡，並提升整體生產力。勞動部鼓勵企業採納這些彈性安排，以更好地滿足現代勞動力的需求。",
+    "vocabulary": [
+      "persistent (adj.): 持續的",
+      "issue (n.): 問題",
+      "housing prices (n.): 房價",
+      "significant (adj.): 顯著的",
+      "concern (n.): 關注；擔憂",
+      "citizens (n.): 公民；市民",
+      "in response (adv.): 作為回應",
+      "authorities (n.): 當局；權力機構",
+      "announced (v.): 宣布",
+      "series (n.): 系列",
+      "measures (n.): 措施",
+      "aimed at (v.): 旨在",
+      "curbing (v.): 遏制；抑制",
+      "property speculation (n.): 房地產投機",
+      "initiatives (n.): 倡議；計畫",
+      "designed to (v.): 旨在",
+      "stabilize (v.): 穩定",
+      "market (n.): 市場",
+      "homeownership (n.): 房屋所有權",
+      "accessible (adj.): 可及的；易於獲得的",
+      "escalating (adj.): 逐步升級的，加劇的",
+      "talent shortage (n.): 人才短缺",
+      "posing a challenge (v. phrase): 構成挑戰",
+      "significant (adj.): 顯著的，重要的",
+      "future growth (n.): 未來成長",
+      "address (v.): 處理，解決",
+      "critical issue (n.): 關鍵問題",
+      "growing emphasis (n. phrase): 日益增加的重視",
+      "industry-academia collaboration (n.): 產學合作",
+      "partnerships (n.): 合作夥伴關係",
+      "aim to (v. phrase): 旨在",
+      "bridge the gap (v. phrase): 縮小差距",
+      "academic learning (n.): 學術學習",
+      "practical industry needs (n. phrase): 業界實際需求",
+      "ensuring (v.): 確保",
+      "pipeline of skilled professionals (n. phrase): 技術專業人才供應鏈",
+      "combining (v.): 結合",
+      "theoretical knowledge (n.): 理論知識",
+      "hands-on experience (n. phrase): 實務經驗",
+      "cultivating (v.): 培育",
+      "Ministry of Labor (n.): 勞動部",
+      "initiatives (n.): 倡議；新措施",
+      "promote (v.): 推動；促進",
+      "flexible work hours (n.): 彈性工時",
+      "enhance (v.): 提升；增強",
+      "workplace diversity (n.): 職場多元性",
+      "policy (n.): 政策",
+      "aims to (v.): 旨在",
+      "offering (v.): 提供",
+      "employees (n.): 員工",
+      "control (n.): 掌控權",
+      "schedules (n.): 工作時間表；排程",
+      "expected (v.): 預期",
+      "changes (n.): 改變",
+      "improve (v.): 改善",
+      "work-life balance (n.): 工作與生活平衡",
+      "boost (v.): 提升；促進",
+      "overall productivity (n.): 整體生產力",
+      "encouraging (v.): 鼓勵",
+      "adopt (v.): 採納；採用"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main issue discussed in the news?",
+        "options": [
+          "Rising unemployment rates",
+          "High housing prices",
+          "Environmental pollution",
+          "Changes in education policy"
+        ],
+        "answer": "High housing prices"
+      },
+      {
+        "q": "Who is taking action to address the housing price issue?",
+        "options": [
+          "Local community leaders",
+          "International organizations",
+          "Taiwan's government",
+          "Real estate developers"
+        ],
+        "answer": "Taiwan's government"
+      },
+      {
+        "q": "What kind of measures are being introduced?",
+        "options": [
+          "Tax reductions for developers",
+          "New anti-speculation measures",
+          "Subsidies for luxury housing",
+          "Relaxation of building regulations"
+        ],
+        "answer": "New anti-speculation measures"
+      },
+      {
+        "q": "What is the goal of these new measures?",
+        "options": [
+          "To increase property speculation",
+          "To make homeownership less accessible",
+          "To stabilize the market",
+          "To encourage foreign investment only"
+        ],
+        "answer": "To stabilize the market"
+      },
+      {
+        "q": "The phrase \"persistent issue\" suggests the problem is:",
+        "options": [
+          "New and temporary",
+          "Unimportant",
+          "Ongoing and long-standing",
+          "Easily solved"
+        ],
+        "answer": "Ongoing and long-standing"
+      },
+      {
+        "q": "What does \"draw concern\" mean in this context?",
+        "options": [
+          "To attract positive attention",
+          "To cause worry or anxiety",
+          "To invite discussion",
+          "To lead to immediate solutions"
+        ],
+        "answer": "To cause worry or anxiety"
+      },
+      {
+        "q": "The government's actions are a \"response\" to:",
+        "options": [
+          "A decrease in housing prices",
+          "Public complaints about housing prices",
+          "A new housing market trend",
+          "Economic growth"
+        ],
+        "answer": "Public complaints about housing prices"
+      },
+      {
+        "q": "What does \"curbing\" property speculation mean?",
+        "options": [
+          "Encouraging it",
+          "Limiting or controlling it",
+          "Ignoring it",
+          "Investigating it deeply"
+        ],
+        "answer": "Limiting or controlling it"
+      },
+      {
+        "q": "The measures are intended to make homeownership more ______.",
+        "options": [
+          "Difficult",
+          "Expensive",
+          "Accessible",
+          "Exclusive"
+        ],
+        "answer": "Accessible"
+      },
+      {
+        "q": "What does \"speculation\" refer to in real estate?",
+        "options": [
+          "Living in a property long-term",
+          "Buying property for personal use",
+          "Buying property with the hope of reselling it for profit",
+          "Renovating a property for rental income"
+        ],
+        "answer": "Buying property with the hope of reselling it for profit"
+      },
+      {
+        "q": "The news suggests the government wants to ease the financial burdens on:",
+        "options": [
+          "Real estate agents",
+          "Investors",
+          "Residents",
+          "Construction companies"
+        ],
+        "answer": "Residents"
+      },
+      {
+        "q": "Which word best describes the style of the English text?",
+        "options": [
+          "Persuasive",
+          "Emotional",
+          "Informative/Factual",
+          "Humorous"
+        ],
+        "answer": "Informative/Factual"
+      },
+      {
+        "q": "What is the main issue discussed in the news?",
+        "options": [
+          "A decline in semiconductor sales",
+          "An increasing shortage of semiconductor talent",
+          "A new breakthrough in semiconductor technology",
+          "Government regulations on the semiconductor industry"
+        ],
+        "answer": "An increasing shortage of semiconductor talent"
+      },
+      {
+        "q": "What is considered a significant challenge to the industry's future growth?",
+        "options": [
+          "Lack of funding",
+          "Environmental concerns",
+          "The talent shortage",
+          "Competition from other industries"
+        ],
+        "answer": "The talent shortage"
+      },
+      {
+        "q": "What is being emphasized to address the talent shortage?",
+        "options": [
+          "Increasing university tuition fees",
+          "Reducing the number of engineering programs",
+          "Encouraging early retirement for experts",
+          "Strengthening industry-academia collaborations"
+        ],
+        "answer": "Strengthening industry-academia collaborations"
+      },
+      {
+        "q": "What is the primary goal of industry-academia collaborations in this context?",
+        "options": [
+          "To lower the cost of education",
+          "To make academic learning more theoretical",
+          "To connect academic learning with practical industry needs",
+          "To reduce the number of graduates"
+        ],
+        "answer": "To connect academic learning with practical industry needs"
+      },
+      {
+        "q": "These collaborations aim to ensure a pipeline of what?",
+        "options": [
+          "Financial investors",
+          "Raw material suppliers",
+          "Skilled professionals",
+          "Marketing experts"
+        ],
+        "answer": "Skilled professionals"
+      },
+      {
+        "q": "What two types of learning are being combined in these initiatives?",
+        "options": [
+          "Online and offline learning",
+          "Theoretical knowledge and hands-on experience",
+          "Basic and advanced studies",
+          "General education and specialized training"
+        ],
+        "answer": "Theoretical knowledge and hands-on experience"
+      },
+      {
+        "q": "The word 'escalating' in the text means:",
+        "options": [
+          "decreasing",
+          "stabilizing",
+          "gradually increasing",
+          "suddenly stopping"
+        ],
+        "answer": "gradually increasing"
+      },
+      {
+        "q": "What is the noun form of 'collaborate'?",
+        "options": [
+          "collaboration",
+          "collaborative",
+          "collaborating",
+          "collaborator"
+        ],
+        "answer": "collaboration"
+      },
+      {
+        "q": "The phrase 'pose a challenge' means:",
+        "options": [
+          "to solve a problem",
+          "to present a difficulty",
+          "to create an opportunity",
+          "to ignore an issue"
+        ],
+        "answer": "to present a difficulty"
+      },
+      {
+        "q": "What is the main purpose of 'cultivating new blood' in the context of the article?",
+        "options": [
+          "To increase the age of the workforce",
+          "To train new people for the industry",
+          "To reduce the number of experienced workers",
+          "To focus on management roles"
+        ],
+        "answer": "To train new people for the industry"
+      },
+      {
+        "q": "Which phrase means 'to deal with or try to solve a problem'?",
+        "options": [
+          "bridge the gap",
+          "ensure a pipeline",
+          "address the issue",
+          "pose a challenge"
+        ],
+        "answer": "address the issue"
+      },
+      {
+        "q": "What is the ultimate goal of these initiatives for the semiconductor field?",
+        "options": [
+          "To reduce innovation",
+          "To prepare the next generation of experts",
+          "To decrease the need for skilled workers",
+          "To focus solely on research"
+        ],
+        "answer": "To prepare the next generation of experts"
+      },
+      {
+        "q": "What is the main goal of the Ministry of Labor's new initiatives?",
+        "options": [
+          "To reduce working hours",
+          "To promote flexible work hours and enhance workplace diversity",
+          "To increase overtime pay",
+          "To mandate a four-day work week"
+        ],
+        "answer": "To promote flexible work hours and enhance workplace diversity"
+      },
+      {
+        "q": "How do flexible work hours aim to benefit employees?",
+        "options": [
+          "By giving them more control over their schedules",
+          "By requiring them to work longer hours",
+          "By reducing their salaries",
+          "By limiting their career advancement opportunities"
+        ],
+        "answer": "By giving them more control over their schedules"
+      },
+      {
+        "q": "What positive outcomes are expected from these changes?",
+        "options": [
+          "Decreased productivity and employee satisfaction",
+          "Improved work-life balance and overall productivity",
+          "Increased absenteeism and stress",
+          "Stricter management oversight"
+        ],
+        "answer": "Improved work-life balance and overall productivity"
+      },
+      {
+        "q": "Who is encouraging businesses to adopt these new arrangements?",
+        "options": [
+          "The Ministry of Education",
+          "The Ministry of Economic Affairs",
+          "The Ministry of Labor",
+          "The Ministry of Health and Welfare"
+        ],
+        "answer": "The Ministry of Labor"
+      },
+      {
+        "q": "The news is about initiatives being promoted in which country?",
+        "options": [
+          "Japan",
+          "South Korea",
+          "China",
+          "Taiwan"
+        ],
+        "answer": "Taiwan"
+      },
+      {
+        "q": "The term 'workplace diversity' in the text refers to:",
+        "options": [
+          "Having a variety of office supplies",
+          "Including employees with different skills and backgrounds",
+          "Implementing flexible work schedules",
+          "Ensuring equal pay for all employees"
+        ],
+        "answer": "Including employees with different skills and backgrounds"
+      },
+      {
+        "q": "What does the word 'enhance' mean in the context of the sentence 'enhancing workplace diversity'?",
+        "options": [
+          "To decrease",
+          "To improve",
+          "To ignore",
+          "To complicate"
+        ],
+        "answer": "To improve"
+      },
+      {
+        "q": "The Ministry of Labor is encouraging businesses to adopt flexible arrangements to:",
+        "options": [
+          "Reduce their operating costs",
+          "Meet the needs of a modern workforce",
+          "Comply with international labor laws",
+          "Increase employee surveillance"
+        ],
+        "answer": "Meet the needs of a modern workforce"
+      },
+      {
+        "q": "What is one of the expected benefits for employees mentioned?",
+        "options": [
+          "More vacation days",
+          "Higher starting salaries",
+          "Better work-life balance",
+          "Company-provided transportation"
+        ],
+        "answer": "Better work-life balance"
+      },
+      {
+        "q": "Which word describes the style of the English text?",
+        "options": [
+          "Narrative",
+          "Persuasive",
+          "Factual",
+          "Humorous"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "The initiatives aim to give employees more ______ over their schedules.",
+        "options": [
+          "responsibility",
+          "pressure",
+          "control",
+          "information"
+        ],
+        "answer": "control"
+      },
+      {
+        "q": "What does the Ministry of Labor hope to achieve by promoting flexible work hours?",
+        "options": [
+          "A less diverse workforce",
+          "A more productive and balanced workforce",
+          "A workforce with fixed schedules",
+          "A workforce that works fewer hours overall"
+        ],
+        "answer": "A more productive and balanced workforce"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "AI晶片大戰升級，英特爾新架構挑戰NVIDIA",
+    "tabTitle": "科技",
+    "english": "The fierce competition in the AI chip market is intensifying. Intel has unveiled a new processor architecture designed to directly challenge NVIDIA's dominance in this rapidly growing sector. This strategic move by Intel aims to capture a larger share of the lucrative AI hardware market, signaling a significant escalation in the ongoing technological battle for supremacy.",
+    "chinese": "人工智能晶片市場的激烈競爭正在加劇。英特爾推出了一種新的處理器架構，旨在直接挑戰輝達（NVIDIA）在這個快速增長領域的主導地位。英特爾的這項戰略舉措旨在攫取利潤豐厚的人工智能硬體市場的更大份額，這標誌著爭奪霸權的持續技術戰鬥顯著升級。",
+    "vocabulary": [
+      "competition (n.): 競爭",
+      "intensifying (v.): 加劇",
+      "unveiled (v.): 揭開；推出",
+      "processor (n.): 處理器",
+      "architecture (n.): 架構",
+      "designed (v.): 設計",
+      "directly (adv.): 直接地",
+      "challenge (v.): 挑戰",
+      "dominance (n.): 主導地位",
+      "sector (n.): 行業；領域",
+      "strategic (adj.): 戰略的",
+      "move (n.): 舉措",
+      "aims (v.): 旨在",
+      "capture (v.): 攫取；捕獲",
+      "larger share (n.): 更大份額",
+      "lucrative (adj.): 賺錢的；有利可圖的",
+      "hardware (n.): 硬體",
+      "market (n.): 市場",
+      "signaling (v.): 標誌著；預示",
+      "escalation (n.): 升級；加劇"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "The launch of new smartphones",
+          "The increasing competition in the AI chip market",
+          "Advancements in cloud computing",
+          "The development of new software applications"
+        ],
+        "answer": "The increasing competition in the AI chip market"
+      },
+      {
+        "q": "Which company has introduced a new processor architecture?",
+        "options": [
+          "NVIDIA",
+          "AMD",
+          "Intel",
+          "Qualcomm"
+        ],
+        "answer": "Intel"
+      },
+      {
+        "q": "What is Intel's new architecture designed to do?",
+        "options": [
+          "Improve graphic rendering",
+          "Challenge NVIDIA's dominance in AI chips",
+          "Reduce energy consumption",
+          "Increase data storage capacity"
+        ],
+        "answer": "Challenge NVIDIA's dominance in AI chips"
+      },
+      {
+        "q": "The news suggests that the AI chip market is experiencing:",
+        "options": [
+          "A slowdown",
+          "Stagnation",
+          "Intensification of competition",
+          "Reduced demand"
+        ],
+        "answer": "Intensification of competition"
+      },
+      {
+        "q": "What sector is mentioned as rapidly growing?",
+        "options": [
+          "Gaming",
+          "Automotive",
+          "Artificial Intelligence (AI)",
+          "Cybersecurity"
+        ],
+        "answer": "Artificial Intelligence (AI)"
+      },
+      {
+        "q": "Intel's move is described as:",
+        "options": [
+          "A defensive strategy",
+          "A minor adjustment",
+          "A significant escalation",
+          "An experimental phase"
+        ],
+        "answer": "A significant escalation"
+      },
+      {
+        "q": "What is the primary goal of Intel's new architecture?",
+        "options": [
+          "To lower production costs",
+          "To compete directly with NVIDIA",
+          "To expand into the mobile market",
+          "To develop new software"
+        ],
+        "answer": "To compete directly with NVIDIA"
+      },
+      {
+        "q": "The AI hardware market is described as:",
+        "options": [
+          "Unstable",
+          "Declining",
+          "Lucrative",
+          "Niche"
+        ],
+        "answer": "Lucrative"
+      },
+      {
+        "q": "Which company is currently considered dominant in the AI chip sector?",
+        "options": [
+          "Intel",
+          "AMD",
+          "NVIDIA",
+          "IBM"
+        ],
+        "answer": "NVIDIA"
+      },
+      {
+        "q": "The word 'escalates' in the context of the news means:",
+        "options": [
+          "Decreases",
+          "Becomes more intense",
+          "Stays the same",
+          "Becomes less important"
+        ],
+        "answer": "Becomes more intense"
+      },
+      {
+        "q": "What does 'unveiled' mean in the sentence 'Intel has unveiled a new processor architecture'?",
+        "options": [
+          "Hid",
+          "Announced or revealed",
+          "Destroyed",
+          "Patented"
+        ],
+        "answer": "Announced or revealed"
+      },
+      {
+        "q": "Intel aims to capture a larger share of the __________ market.",
+        "options": [
+          "Software",
+          "AI hardware",
+          "Cloud storage",
+          "Gaming console"
+        ],
+        "answer": "AI hardware"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "全球最大AI數據中心落腳新加坡",
+    "tabTitle": "科技",
+    "english": "Singapore has been selected as the location for the world's largest AI data center, marking a significant milestone in the nation's technological advancement. This state-of-the-art facility is expected to boost the development and deployment of artificial intelligence technologies across the region. The project underscores Singapore's commitment to becoming a leading hub for innovation and digital infrastructure, attracting substantial investment and creating numerous job opportunities.",
+    "chinese": "新加坡已被選為全球最大人工智能數據中心的所在地，這標誌著該國技術進步的一個重要里程碑。這個最先進的設施預計將促進該區域人工智能技術的發展和部署。該項目突顯了新加坡致力於成為創新和數字基礎設施的領先樞紐的承諾，吸引了大量投資並創造了眾多就業機會。",
+    "vocabulary": [
+      "selected (v.): 被選中的",
+      "location (n.): 地點",
+      "artificial intelligence (n.): 人工智能",
+      "data center (n.): 數據中心",
+      "milestone (n.): 里程碑",
+      "technological advancement (n.): 技術進步",
+      "state-of-the-art (adj.): 最先進的",
+      "facility (n.): 設施",
+      "expected (v.): 預計",
+      "boost (v.): 促進，提升",
+      "development (n.): 發展",
+      "deployment (n.): 部署",
+      "technologies (n.): 技術",
+      "region (n.): 地區",
+      "underscores (v.): 強調，標示",
+      "commitment (n.): 承諾",
+      "leading hub (n.): 領先的樞紐",
+      "innovation (n.): 創新",
+      "digital infrastructure (n.): 數字基礎設施",
+      "substantial investment (n.): 大量投資"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "The opening of a new park in Singapore",
+          "The construction of the world's largest AI data center in Singapore",
+          "A new technology company launching in Singapore",
+          "Singapore's advancements in space exploration"
+        ],
+        "answer": "The construction of the world's largest AI data center in Singapore"
+      },
+      {
+        "q": "Where will the world's largest AI data center be located?",
+        "options": [
+          "Tokyo, Japan",
+          "Seoul, South Korea",
+          "Singapore",
+          "Bangkok, Thailand"
+        ],
+        "answer": "Singapore"
+      },
+      {
+        "q": "What is the primary purpose of this new facility?",
+        "options": [
+          "To store historical archives",
+          "To develop new gaming technologies",
+          "To boost the development and deployment of AI technologies",
+          "To serve as a tourist attraction"
+        ],
+        "answer": "To boost the development and deployment of AI technologies"
+      },
+      {
+        "q": "The news mentions this facility is 'state-of-the-art'. What does this mean?",
+        "options": [
+          "It is very old and traditional.",
+          "It uses the latest technology and is highly advanced.",
+          "It is designed for basic storage only.",
+          "It is a small, experimental setup."
+        ],
+        "answer": "It uses the latest technology and is highly advanced."
+      },
+      {
+        "q": "What does the project underscore about Singapore?",
+        "options": [
+          "Its focus on traditional industries",
+          "Its commitment to becoming a leading hub for innovation and digital infrastructure",
+          "Its intention to reduce foreign investment",
+          "Its withdrawal from global technology markets"
+        ],
+        "answer": "Its commitment to becoming a leading hub for innovation and digital infrastructure"
+      },
+      {
+        "q": "What kind of impact is the data center expected to have?",
+        "options": [
+          "Decrease in job opportunities",
+          "Attract substantial investment and create job opportunities",
+          "Reduce technological development",
+          "Shift focus away from digital infrastructure"
+        ],
+        "answer": "Attract substantial investment and create job opportunities"
+      },
+      {
+        "q": "The news describes the facility as the 'world's largest'. What is it the largest of?",
+        "options": [
+          "Library",
+          "Shopping mall",
+          "AI data center",
+          "University campus"
+        ],
+        "answer": "AI data center"
+      },
+      {
+        "q": "The word 'milestone' in the text refers to:",
+        "options": [
+          "A small obstacle",
+          "A significant event or stage in development",
+          "A type of measurement",
+          "A historical landmark"
+        ],
+        "answer": "A significant event or stage in development"
+      },
+      {
+        "q": "Which of the following is a synonym for 'boost' as used in the text?",
+        "options": [
+          "Hinder",
+          "Reduce",
+          "Enhance",
+          "Neglect"
+        ],
+        "answer": "Enhance"
+      },
+      {
+        "q": "The news highlights Singapore's role as a 'leading hub'. What does 'hub' imply in this context?",
+        "options": [
+          "A peripheral area",
+          "A central point of activity or connection",
+          "An isolated location",
+          "A place with limited resources"
+        ],
+        "answer": "A central point of activity or connection"
+      },
+      {
+        "q": "What area is expected to benefit from the AI data center's deployment?",
+        "options": [
+          "Agriculture",
+          "Manufacturing",
+          "The region",
+          "Tourism"
+        ],
+        "answer": "The region"
+      },
+      {
+        "q": "The establishment of this data center is considered a 'significant milestone' for Singapore's:",
+        "options": [
+          "Cultural heritage",
+          "Environmental protection efforts",
+          "Technological advancement",
+          "Public transportation system"
+        ],
+        "answer": "Technological advancement"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "日本央行維持寬鬆政策，日圓貶值壓力不減",
+    "tabTitle": "金融市場",
+    "english": "The Bank of Japan (BOJ) has decided to maintain its ultra-loose monetary policy, signaling continued economic support. This decision comes amid persistent concerns about the yen's depreciation. Analysts suggest that the BOJ's stance, while aimed at stimulating growth, is likely to keep downward pressure on the Japanese currency. Further economic indicators will be closely watched.",
+    "chinese": "日本銀行（BOJ）已決定維持其極度寬鬆的貨幣政策，顯示將持續提供經濟支持。這項決定是在日圓持續貶值的擔憂下做出的。分析師認為，日本銀行的立場雖然旨在刺激經濟增長，但很可能會對日圓保持下行壓力。後續的經濟指標將受到密切關注。",
+    "vocabulary": [
+      "Bank of Japan (n.): 日本銀行",
+      "ultra-loose monetary policy (n.): 極度寬鬆的貨幣政策",
+      "maintain (v.): 維持",
+      "economic support (n.): 經濟支持",
+      "decision (n.): 決定",
+      "amid (prep.): 在...之中",
+      "persistent (adj.): 持續的",
+      "concerns (n.): 擔憂",
+      "yen's depreciation (n.): 日圓貶值",
+      "analysts (n.): 分析師",
+      "suggest (v.): 建議；認為",
+      "stance (n.): 立場",
+      "aimed at (v.): 旨在",
+      "stimulating growth (v.): 刺激增長",
+      "likely to (adv.): 很可能",
+      "keep (v.): 保持",
+      "downward pressure (n.): 下行壓力",
+      "Japanese currency (n.): 日圓（日本貨幣）",
+      "further (adj.): 更多的；進一步的",
+      "economic indicators (n.): 經濟指標",
+      "closely watched (v.): 密切關注"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "The Japanese stock market performance",
+          "The Bank of Japan's monetary policy decision",
+          "International trade agreements",
+          "Inflation rates in East Asia"
+        ],
+        "answer": "The Bank of Japan's monetary policy decision"
+      },
+      {
+        "q": "What policy did the Bank of Japan decide to maintain?",
+        "options": [
+          "A tight monetary policy",
+          "An ultra-loose monetary policy",
+          "A neutral monetary policy",
+          "A policy focused on interest rate hikes"
+        ],
+        "answer": "An ultra-loose monetary policy"
+      },
+      {
+        "q": "What is a persistent concern mentioned in the news?",
+        "options": [
+          "Rising inflation",
+          "The yen's appreciation",
+          "The yen's depreciation",
+          "Low export demand"
+        ],
+        "answer": "The yen's depreciation"
+      },
+      {
+        "q": "According to analysts, what is the likely effect of the BOJ's stance on the Japanese currency?",
+        "options": [
+          "It will strengthen the yen.",
+          "It will cause the yen to appreciate.",
+          "It will keep downward pressure on the yen.",
+          "It will have no effect on the yen."
+        ],
+        "answer": "It will keep downward pressure on the yen."
+      },
+      {
+        "q": "What is the stated aim of the BOJ's policy?",
+        "options": [
+          "To increase the value of the yen",
+          "To reduce export prices",
+          "To stimulate economic growth",
+          "To curb inflation"
+        ],
+        "answer": "To stimulate economic growth"
+      },
+      {
+        "q": "The news suggests that the BOJ's decision is aimed at providing what?",
+        "options": [
+          "Reduced investment",
+          "Economic support",
+          "Higher interest rates",
+          "Currency appreciation"
+        ],
+        "answer": "Economic support"
+      },
+      {
+        "q": "What does the news imply about future monitoring?",
+        "options": [
+          "Future economic indicators will be ignored.",
+          "Only currency markets will be watched.",
+          "Further economic indicators will be closely watched.",
+          "The BOJ will stop releasing data."
+        ],
+        "answer": "Further economic indicators will be closely watched."
+      },
+      {
+        "q": "Which word means 'to continue to have or use something'?",
+        "options": [
+          "Maintain",
+          "Suggest",
+          "Depreciate",
+          "Stimulate"
+        ],
+        "answer": "Maintain"
+      },
+      {
+        "q": "What is the meaning of 'persistent'?",
+        "options": [
+          "Temporary",
+          "Fleeting",
+          "Continuing to exist or occur",
+          "Sudden"
+        ],
+        "answer": "Continuing to exist or occur"
+      },
+      {
+        "q": "If a currency is depreciating, it is:",
+        "options": [
+          "Increasing in value",
+          "Decreasing in value",
+          "Staying the same",
+          "Becoming more stable"
+        ],
+        "answer": "Decreasing in value"
+      },
+      {
+        "q": "What does 'stance' refer to in this context?",
+        "options": [
+          "A physical position",
+          "A person's opinion or attitude",
+          "A financial investment",
+          "A type of economic model"
+        ],
+        "answer": "A person's opinion or attitude"
+      },
+      {
+        "q": "The phrase 'aimed at' means:",
+        "options": [
+          "Was accidentally achieved",
+          "Had the intention of",
+          "Was unaware of",
+          "Was opposed to"
+        ],
+        "answer": "Had the intention of"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "美聯儲暗示升息循環終結，市場靜待通膨數據",
+    "tabTitle": "金融市場",
+    "english": "The U.S. Federal Reserve has signaled a potential pause in its aggressive interest rate hike campaign. Officials' recent statements suggest that the central bank may be concluding its cycle of monetary tightening. Investors are now keenly observing upcoming inflation data, which will be crucial in determining future policy decisions. The market's reaction indicates a shift towards anticipation of stable or even declining interest rates.",
+    "chinese": "美國聯準會已暗示其激進的升息行動可能會暫停。官員們近期的聲明表明，央行可能正結束其貨幣緊縮週期。投資者目前正密切關注即將公布的通膨數據，這將是決定未來政策的關鍵。市場的反應顯示出轉向預期利率穩定甚至下降的趨勢。",
+    "vocabulary": [
+      "Federal Reserve (n.): 美國聯邦準備理事會",
+      "signal (v.): 發出信號",
+      "potential (adj.): 潛在的",
+      "pause (n.): 暫停",
+      "aggressive (adj.): 激進的",
+      "interest rate hike (n.): 升息",
+      "campaign (n.): 行動；運動",
+      "officials (n.): 官員",
+      "recent (adj.): 近期的",
+      "statements (n.): 聲明",
+      "suggest (v.): 表明；暗示",
+      "central bank (n.): 中央銀行",
+      "concluding (v.): 結束",
+      "cycle (n.): 週期",
+      "monetary tightening (n.): 貨幣緊縮",
+      "investors (n.): 投資者",
+      "keenly (adv.): 敏銳地；熱切地",
+      "observing (v.): 觀察",
+      "upcoming (adj.): 即將來臨的",
+      "inflation data (n.): 通膨數據"
+    ],
+    "quiz": [
+      {
+        "q": "What has the U.S. Federal Reserve signaled?",
+        "options": [
+          "An increase in interest rates",
+          "A potential pause in rate hikes",
+          "A decrease in inflation",
+          "The start of a new tightening cycle"
+        ],
+        "answer": "A potential pause in rate hikes"
+      },
+      {
+        "q": "What do recent statements from Fed officials suggest?",
+        "options": [
+          "More aggressive rate hikes are coming",
+          "The central bank is ending its tightening cycle",
+          "Inflation is expected to rise significantly",
+          "The Fed will focus on fiscal policy"
+        ],
+        "answer": "The central bank is ending its tightening cycle"
+      },
+      {
+        "q": "What are investors keenly observing?",
+        "options": [
+          "Stock market performance",
+          "Geopolitical events",
+          "Upcoming inflation data",
+          "Consumer spending reports"
+        ],
+        "answer": "Upcoming inflation data"
+      },
+      {
+        "q": "Why is the inflation data considered crucial?",
+        "options": [
+          "It will determine future policy decisions",
+          "It affects consumer confidence",
+          "It influences global trade",
+          "It predicts economic growth"
+        ],
+        "answer": "It will determine future policy decisions"
+      },
+      {
+        "q": "What does the market's reaction indicate?",
+        "options": [
+          "A move towards higher interest rates",
+          "An expectation of stable or declining interest rates",
+          "Disregard for inflation data",
+          "A focus on immediate economic recovery"
+        ],
+        "answer": "An expectation of stable or declining interest rates"
+      },
+      {
+        "q": "The term 'Federal Reserve' refers to:",
+        "options": [
+          "The U.S. Treasury Department",
+          "The central bank of the United States",
+          "A private investment firm",
+          "An international monetary fund"
+        ],
+        "answer": "The central bank of the United States"
+      },
+      {
+        "q": "What does 'monetary tightening' generally involve?",
+        "options": [
+          "Lowering interest rates",
+          "Increasing the money supply",
+          "Raising interest rates to control inflation",
+          "Reducing government spending"
+        ],
+        "answer": "Raising interest rates to control inflation"
+      },
+      {
+        "q": "The word 'aggressive' in the context of rate hikes implies:",
+        "options": [
+          "Cautious and gradual increases",
+          "Rapid and significant increases",
+          "No changes to rates",
+          "A focus on economic stimulus"
+        ],
+        "answer": "Rapid and significant increases"
+      },
+      {
+        "q": "What is the antonym of 'potential'?",
+        "options": [
+          "Actual",
+          "Possible",
+          "Likely",
+          "Probable"
+        ],
+        "answer": "Actual"
+      },
+      {
+        "q": "Which word means 'to give a sign or indication of'?",
+        "options": [
+          "Suggest",
+          "Observe",
+          "Conclude",
+          "Signal"
+        ],
+        "answer": "Signal"
+      },
+      {
+        "q": "What is the primary focus of the market's current anticipation?",
+        "options": [
+          "New economic policies",
+          "Future interest rate movements",
+          "Global market trends",
+          "Technological advancements"
+        ],
+        "answer": "Future interest rate movements"
+      },
+      {
+        "q": "The word 'crucial' means:",
+        "options": [
+          "Unimportant",
+          "Minor",
+          "Extremely important",
+          "Optional"
+        ],
+        "answer": "Extremely important"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
