@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 11, 2026：科技、地緣政治 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] AI PC元年起飛 台灣供應鏈迎轉單潮\nThe year 2026 marks the dawn of the AI PC era, with Taiwan's technology supply chain poised to experience a significant surge in orders. This trend is driven by the increasing demand for advanced computing capabilities integrated into personal computers. As global manufacturers pivot towards AI-powered devices, Taiwanese firms specializing in semiconductors and related components are expected to benefit greatly from this industry-wide transition. The momentum suggests a robust future for Taiwan's role in the global tech landscape.\n\n[2] 台灣青年就業困境加劇，起薪凍漲引憂\nTaiwanese youth are facing increasingly difficult employment challenges. A significant concern is the stagnation of starting salaries, which have remained low for an extended period, failing to keep pace with inflation and living costs. This situation is leading to widespread worry among young job seekers about their future financial stability and career prospects.\n\n[3] 台灣智慧醫療新突破，AI輔助診斷提升效率\nTaiwan's healthcare sector is witnessing significant advancements with the integration of Artificial Intelligence. A recent breakthrough involves AI-assisted diagnostic tools that are demonstrably enhancing medical professionals' efficiency. This development promises to expedite patient care and improve diagnostic accuracy, marking a new era for smart healthcare in Taiwan.",
+    "chinese": "【1】AI PC元年起飛 台灣供應鏈迎轉單潮\n2026年標誌著AI PC時代的黎明，台灣的科技供應鏈有望經歷顯著的訂單激增。此趨勢是由個人電腦日益增長對整合式先進運算能力的需求所驅動。隨著全球製造商轉向AI驅動的設備，專精於半導體及相關零組件的台灣企業預計將從這場全行業的轉型中獲益匪淺。這股勢頭預示著台灣在全球科技格局中扮演著穩健的未來角色。\n\n【2】台灣青年就業困境加劇，起薪凍漲引憂\n台灣青年正日益面臨嚴峻的就業挑戰。一個顯著的擔憂是起薪的停滯不前，長時期以來保持低位，未能跟上通貨膨脹和生活成本的步伐。這種情況正導致年輕求職者對他們未來的財務穩定性和職業前景感到普遍擔憂。\n\n【3】台灣智慧醫療新突破，AI輔助診斷提升效率\n台灣醫療保健領域正經歷人工智能整合帶來的重大進步。近期的一項突破涉及人工智能輔助診斷工具，這些工具顯著提高了醫療專業人員的效率。這項發展有望加快患者護理速度並提高診斷準確性，標誌著台灣智慧醫療新時代的到來。",
+    "vocabulary": [
+      "AI PC (n.): 人工智慧個人電腦",
+      "era (n.): 時代",
+      "dawn (n.): 黎明，開端",
+      "supply chain (n.): 供應鏈",
+      "poised to (v.): 準備好，處於...的狀態",
+      "experience (v.): 經歷，體驗",
+      "significant (adj.): 顯著的，重大的",
+      "surge (n.): 激增，湧現",
+      "orders (n.): 訂單",
+      "trend (n.): 趨勢",
+      "driven by (v.): 由...驅動",
+      "increasing demand (n.): 日益增長的需求",
+      "advanced computing capabilities (n.): 先進運算能力",
+      "integrated (adj.): 整合的",
+      "personal computers (n.): 個人電腦",
+      "global manufacturers (n.): 全球製造商",
+      "pivot towards (v.): 轉向",
+      "AI-powered devices (n.): AI驅動的設備",
+      "semiconductors (n.): 半導體",
+      "components (n.): 零組件",
+      "employment challenges (n.): 就業挑戰",
+      "worsen (v.): 使惡化",
+      "stagnant (adj.): 停滯的",
+      "starting salaries (n.): 起薪",
+      "concern (n.): 擔憂",
+      "cause (v.): 引起",
+      "difficult (adj.): 困難的",
+      "increasingly (adv.): 越來越",
+      "significant (adj.): 顯著的",
+      "stagnation (n.): 停滯",
+      "remain (v.): 保持",
+      "extended period (n.): 長時期",
+      "failing to keep pace with (phr.): 未能跟上...",
+      "inflation (n.): 通貨膨脹",
+      "living costs (n.): 生活成本",
+      "situation (n.): 情況",
+      "leading to (phr.): 導致",
+      "widespread (adj.): 普遍的",
+      "worry (n.): 擔憂",
+      "job seekers (n.): 求職者",
+      "financial stability (n.): 財務穩定",
+      "career prospects (n.): 職業前景",
+      "healthcare sector (n.): 醫療保健領域",
+      "witnessing (v.): 正在見證",
+      "significant advancements (n.): 重大進步",
+      "integration (n.): 整合",
+      "Artificial Intelligence (n.): 人工智能",
+      "recent breakthrough (n.): 近期突破",
+      "involves (v.): 涉及",
+      "AI-assisted diagnostic tools (n.): 人工智能輔助診斷工具",
+      "demonstrably (adv.): 顯著地，明顯地",
+      "enhancing (v.): 提高，增強",
+      "medical professionals (n.): 醫療專業人員",
+      "efficiency (n.): 效率",
+      "development (n.): 發展",
+      "promises (v.): 承諾，預示",
+      "expedite (v.): 加快",
+      "patient care (n.): 患者護理",
+      "improve (v.): 改善，提高",
+      "diagnostic accuracy (n.): 診斷準確性",
+      "marking (v.): 標誌著",
+      "smart healthcare (n.): 智慧醫療"
+    ],
+    "quiz": [
+      {
+        "q": "What year is mentioned as the beginning of the AI PC era?",
+        "options": [
+          "2025",
+          "2026",
+          "2027",
+          "2024"
+        ],
+        "answer": "2026"
+      },
+      {
+        "q": "Which country's supply chain is expected to benefit from the AI PC trend?",
+        "options": [
+          "South Korea",
+          "Japan",
+          "Taiwan",
+          "China"
+        ],
+        "answer": "Taiwan"
+      },
+      {
+        "q": "What is driving the demand for AI PCs?",
+        "options": [
+          "Lower prices",
+          "Increased marketing",
+          "Demand for advanced computing capabilities",
+          "Government subsidies"
+        ],
+        "answer": "Demand for advanced computing capabilities"
+      },
+      {
+        "q": "What type of companies are expected to benefit from this transition?",
+        "options": [
+          "Software developers",
+          "AI hardware and component manufacturers",
+          "Retailers",
+          "Logistics providers"
+        ],
+        "answer": "AI hardware and component manufacturers"
+      },
+      {
+        "q": "The news suggests a 'significant surge' in what for Taiwan's supply chain?",
+        "options": [
+          "Competition",
+          "Research funding",
+          "Orders",
+          "Export tariffs"
+        ],
+        "answer": "Orders"
+      },
+      {
+        "q": "What does 'poised to' mean in the context of the sentence?",
+        "options": [
+          "Unlikely to",
+          "Ready or prepared to",
+          "Forced to",
+          "Avoiding"
+        ],
+        "answer": "Ready or prepared to"
+      },
+      {
+        "q": "The article describes the year 2026 as the 'dawn' of the AI PC era. What does 'dawn' imply here?",
+        "options": [
+          "The end of the era",
+          "A new beginning",
+          "A period of decline",
+          "A time of uncertainty"
+        ],
+        "answer": "A new beginning"
+      },
+      {
+        "q": "Which industry is specifically mentioned as benefiting?",
+        "options": [
+          "Automotive",
+          "Healthcare",
+          "Technology",
+          "Entertainment"
+        ],
+        "answer": "Technology"
+      },
+      {
+        "q": "What are 'AI-powered devices'?",
+        "options": [
+          "Devices that use artificial intelligence",
+          "Devices that are powered by electricity",
+          "Devices that are very old",
+          "Devices that are difficult to use"
+        ],
+        "answer": "Devices that use artificial intelligence"
+      },
+      {
+        "q": "The news mentions 'Taiwan's technology supply chain'. What is a supply chain?",
+        "options": [
+          "A single company",
+          "A group of companies involved in producing and distributing a product",
+          "A government agency",
+          "A marketing campaign"
+        ],
+        "answer": "A group of companies involved in producing and distributing a product"
+      },
+      {
+        "q": "What kind of capabilities are being integrated into personal computers?",
+        "options": [
+          "Basic processing",
+          "Advanced computing",
+          "Entertainment features",
+          "Communication tools"
+        ],
+        "answer": "Advanced computing"
+      },
+      {
+        "q": "The article states that Taiwanese firms specializing in semiconductors are expected to benefit. What are semiconductors?",
+        "options": [
+          "Large electronic components",
+          "Materials used to make computer chips",
+          "Software programs",
+          "Internet service providers"
+        ],
+        "answer": "Materials used to make computer chips"
+      },
+      {
+        "q": "What is the main issue discussed in the news?",
+        "options": [
+          "High employment rates for young people",
+          "Increasing difficulties in youth employment",
+          "Rapidly rising starting salaries",
+          "Government subsidies for businesses"
+        ],
+        "answer": "Increasing difficulties in youth employment"
+      },
+      {
+        "q": "What specific problem is causing concern regarding youth employment?",
+        "options": [
+          "A shortage of job opportunities",
+          "Excessive competition for entry-level jobs",
+          "Stagnant starting salaries",
+          "Lack of advanced technological skills"
+        ],
+        "answer": "Stagnant starting salaries"
+      },
+      {
+        "q": "The news mentions that starting salaries have failed to keep pace with what?",
+        "options": [
+          "Technological advancements",
+          "International job markets",
+          "Inflation and living costs",
+          "Government regulations"
+        ],
+        "answer": "Inflation and living costs"
+      },
+      {
+        "q": "What is the consequence of the current employment situation for young job seekers?",
+        "options": [
+          "Increased confidence in their future",
+          "Worry about financial stability and career prospects",
+          "Opportunities for rapid career advancement",
+          "A decrease in the desire for higher education"
+        ],
+        "answer": "Worry about financial stability and career prospects"
+      },
+      {
+        "q": "The term 'stagnant' in the context of salaries means they are:",
+        "options": [
+          "Increasing rapidly",
+          "Decreasing significantly",
+          "Staying the same or not growing",
+          "Fluctuating unpredictably"
+        ],
+        "answer": "Staying the same or not growing"
+      },
+      {
+        "q": "The English text uses the word 'worsen' to describe the employment challenges. What does 'worsen' mean?",
+        "options": [
+          "To improve",
+          "To become better",
+          "To become more severe or worse",
+          "To stabilize"
+        ],
+        "answer": "To become more severe or worse"
+      },
+      {
+        "q": "According to the text, the employment challenges for Taiwanese youth are:",
+        "options": [
+          "Decreasing",
+          "Remaining stable",
+          "Worsening",
+          "Unchanged"
+        ],
+        "answer": "Worsening"
+      },
+      {
+        "q": "What is the primary reason for the concern among young job seekers?",
+        "options": [
+          "The high cost of education",
+          "The lack of available jobs",
+          "The low starting salaries",
+          "The long working hours"
+        ],
+        "answer": "The low starting salaries"
+      },
+      {
+        "q": "The phrase 'failing to keep pace with' suggests that starting salaries are:",
+        "options": [
+          "Outpacing inflation",
+          "Matching the rise in living costs",
+          "Falling behind inflation and living costs",
+          "Keeping up with economic growth"
+        ],
+        "answer": "Falling behind inflation and living costs"
+      },
+      {
+        "q": "The news focuses on the difficulties faced by which demographic group?",
+        "options": [
+          "Elderly workers",
+          "Middle-aged professionals",
+          "Youth",
+          "Recent immigrants"
+        ],
+        "answer": "Youth"
+      },
+      {
+        "q": "What does 'financial stability' refer to in the context of the news?",
+        "options": [
+          "Having a large amount of debt",
+          "The ability to manage money effectively",
+          "Being secure and steady in terms of finances",
+          "Investing in high-risk ventures"
+        ],
+        "answer": "Being secure and steady in terms of finances"
+      },
+      {
+        "q": "The word 'prospects' in 'career prospects' relates to:",
+        "options": [
+          "Past achievements",
+          "Current job duties",
+          "Future possibilities and potential",
+          "Retirement plans"
+        ],
+        "answer": "Future possibilities and potential"
+      },
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "The economic growth of Taiwan",
+          "Advancements in Taiwan's smart healthcare",
+          "New AI technologies in manufacturing",
+          "Improvements in public transportation"
+        ],
+        "answer": "Advancements in Taiwan's smart healthcare"
+      },
+      {
+        "q": "What technology is being integrated into Taiwan's healthcare sector?",
+        "options": [
+          "Robotics",
+          "Virtual Reality",
+          "Artificial Intelligence",
+          "Blockchain"
+        ],
+        "answer": "Artificial Intelligence"
+      },
+      {
+        "q": "What is a key benefit of AI-assisted diagnostic tools mentioned in the text?",
+        "options": [
+          "Reducing hospital costs",
+          "Increasing administrative tasks",
+          "Enhancing medical professionals' efficiency",
+          "Developing new surgical procedures"
+        ],
+        "answer": "Enhancing medical professionals' efficiency"
+      },
+      {
+        "q": "The news suggests that this development will lead to...",
+        "options": [
+          "Slower patient treatment",
+          "More complex diagnoses",
+          "Faster patient care and better accuracy",
+          "Increased reliance on human doctors only"
+        ],
+        "answer": "Faster patient care and better accuracy"
+      },
+      {
+        "q": "What does the word 'integration' mean in this context?",
+        "options": [
+          "Separation",
+          "Combination",
+          "Replacement",
+          "Opposition"
+        ],
+        "answer": "Combination"
+      },
+      {
+        "q": "The term 'AI-assisted diagnostic tools' refers to...",
+        "options": [
+          "Tools used for administrative work",
+          "Tools that help doctors diagnose illnesses",
+          "Tools for patient entertainment",
+          "Tools for hospital maintenance"
+        ],
+        "answer": "Tools that help doctors diagnose illnesses"
+      },
+      {
+        "q": "According to the text, what is 'diagnostic accuracy'?",
+        "options": [
+          "The speed of diagnosis",
+          "The correctness of a diagnosis",
+          "The cost of diagnostic tests",
+          "The availability of diagnostic equipment"
+        ],
+        "answer": "The correctness of a diagnosis"
+      },
+      {
+        "q": "The news describes the development as a 'new era' for...",
+        "options": [
+          "Traditional medicine",
+          "Taiwan's economy",
+          "Taiwan's smart healthcare",
+          "Medical research in general"
+        ],
+        "answer": "Taiwan's smart healthcare"
+      },
+      {
+        "q": "The word 'expedite' means to...",
+        "options": [
+          "Slow down",
+          "Delay",
+          "Speed up",
+          "Complicate"
+        ],
+        "answer": "Speed up"
+      },
+      {
+        "q": "Who is expected to benefit from enhanced efficiency?",
+        "options": [
+          "AI developers",
+          "Hospital administrators",
+          "Medical professionals",
+          "Insurance companies"
+        ],
+        "answer": "Medical professionals"
+      },
+      {
+        "q": "What does the text imply about the future of healthcare in Taiwan?",
+        "options": [
+          "It will become less technologically advanced.",
+          "It will see more AI implementation.",
+          "It will focus solely on traditional methods.",
+          "It will face significant setbacks."
+        ],
+        "answer": "It will see more AI implementation."
+      },
+      {
+        "q": "The word 'demonstrably' suggests that the improvement in efficiency is...",
+        "options": [
+          "Uncertain",
+          "Minor",
+          "Clearly evident",
+          "Theoretical"
+        ],
+        "answer": "Clearly evident"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "川普拒伊朗停戰提議：完全無法接受",
+    "tabTitle": "地緣政治",
+    "english": "Former U.S. President Donald Trump has publicly rejected a ceasefire proposal from Iran. Sources indicate Trump stated the offer was \"completely unacceptable,\" signaling no immediate de-escalation of regional tensions. This stance could impact ongoing diplomatic efforts and further complicate the geopolitical landscape in the Middle East. The specifics of Iran's proposal remain undisclosed.",
+    "chinese": "美國前總統唐納·川普已公開拒絕了伊朗提出的停火提議。消息人士指出，川普表示該提議「完全無法接受」，這預示著地區緊張局勢不會立即緩和。這一立場可能會影響當前的外交努力，並進一步使中東的地緣政治格局複雜化。伊朗提議的具體內容仍未披露。",
+    "vocabulary": [
+      "former (adj.): 前任的",
+      "publicly (adv.): 公開地",
+      "rejected (v.): 拒絕",
+      "ceasefire (n.): 停火",
+      "proposal (n.): 提議",
+      "indicate (v.): 指出",
+      "stated (v.): 聲明",
+      "completely (adv.): 完全地",
+      "unacceptable (adj.): 無法接受的",
+      "signaling (v.): 預示",
+      "immediate (adj.): 立即的",
+      "de-escalation (n.): 降級",
+      "regional (adj.): 地區的",
+      "tensions (n.): 緊張局勢",
+      "stance (n.): 立場",
+      "impact (v.): 影響",
+      "ongoing (adj.): 持續中的",
+      "diplomatic (adj.): 外交的",
+      "efforts (n.): 努力",
+      "complicate (v.): 使複雜化",
+      "geopolitical (adj.): 地緣政治的",
+      "landscape (n.): 局勢",
+      "Middle East (n.): 中東",
+      "specifics (n.): 細節",
+      "undisclosed (adj.): 未披露的"
+    ],
+    "quiz": [
+      {
+        "q": "Who rejected Iran's ceasefire proposal?",
+        "options": [
+          "Current U.S. President",
+          "Former U.S. President Donald Trump",
+          "The United Nations",
+          "Iranian officials"
+        ],
+        "answer": "Former U.S. President Donald Trump"
+      },
+      {
+        "q": "What was the former U.S. President's reaction to the proposal?",
+        "options": [
+          "He accepted it cautiously.",
+          "He found it 'completely unacceptable'.",
+          "He requested more details.",
+          "He remained silent on the matter."
+        ],
+        "answer": "He found it 'completely unacceptable'."
+      },
+      {
+        "q": "What does the article suggest about regional tensions?",
+        "options": [
+          "They are expected to de-escalate immediately.",
+          "The rejection signals no immediate de-escalation.",
+          "The proposal would have led to de-escalation.",
+          "The tensions are unrelated to the proposal."
+        ],
+        "answer": "The rejection signals no immediate de-escalation."
+      },
+      {
+        "q": "What might be impacted by Trump's stance?",
+        "options": [
+          "Global stock markets",
+          "Ongoing diplomatic efforts",
+          "Environmental regulations",
+          "International trade agreements"
+        ],
+        "answer": "Ongoing diplomatic efforts"
+      },
+      {
+        "q": "How does the article describe the geopolitical situation?",
+        "options": [
+          "Stable and predictable",
+          "Becoming less complicated",
+          "Further complicated",
+          "Unchanged by the event"
+        ],
+        "answer": "Further complicated"
+      },
+      {
+        "q": "Where is the geopolitical landscape mentioned?",
+        "options": [
+          "North Africa",
+          "East Asia",
+          "The Middle East",
+          "Eastern Europe"
+        ],
+        "answer": "The Middle East"
+      },
+      {
+        "q": "What are the specifics of Iran's proposal?",
+        "options": [
+          "They are widely known.",
+          "They were detailed in the article.",
+          "They remain undisclosed.",
+          "They were accepted by Trump."
+        ],
+        "answer": "They remain undisclosed."
+      },
+      {
+        "q": "The word 'rejected' in the article means:",
+        "options": [
+          "accepted",
+          "considered",
+          "refused",
+          "modified"
+        ],
+        "answer": "refused"
+      },
+      {
+        "q": "What is a 'ceasefire'?",
+        "options": [
+          "A declaration of war",
+          "A temporary stop to fighting",
+          "A peace treaty",
+          "An economic sanction"
+        ],
+        "answer": "A temporary stop to fighting"
+      },
+      {
+        "q": "The word 'unacceptable' means:",
+        "options": [
+          "good enough",
+          "tolerable",
+          "not able to be accepted",
+          "worth considering"
+        ],
+        "answer": "not able to be accepted"
+      },
+      {
+        "q": "What does 'diplomatic efforts' refer to?",
+        "options": [
+          "Military actions",
+          "Negotiations between countries",
+          "Economic aid",
+          "Cultural exchanges"
+        ],
+        "answer": "Negotiations between countries"
+      },
+      {
+        "q": "The term 'geopolitical landscape' refers to:",
+        "options": [
+          "The physical geography of a region",
+          "The political and economic relationships between countries",
+          "The history of international conflicts",
+          "The natural resources of a country"
+        ],
+        "answer": "The political and economic relationships between countries"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "AI熱潮推動CPU大反攻 英特爾超微股價飆漲",
+    "tabTitle": "科技",
+    "english": "The burgeoning AI sector is significantly boosting demand for powerful central processing units (CPUs). This surge in interest has led to a notable resurgence for CPU manufacturers like Intel and AMD. Consequently, their stock prices have experienced a substantial increase, reflecting investor confidence in the continued growth driven by AI advancements and the essential role of high-performance CPUs in supporting these technologies.",
+    "chinese": "蓬勃發展的人工智慧（AI）領域正顯著推動對強大中央處理器（CPU）的需求。這種興趣的激增已導致英特爾（Intel）和超微（AMD）等 CPU 製造商的業務顯著復甦。因此，他們的股價大幅上漲，反映了投資者對由 AI 進步所帶動的持續增長以及高效能 CPU 在支持這些技術中的關鍵作用的信心。",
+    "vocabulary": [
+      "burgeoning (adj.): 蓬勃發展的",
+      "significantly (adv.): 顯著地",
+      "boosting (v.): 提振；促進",
+      "demand (n.): 需求",
+      "powerful (adj.): 強大的",
+      "central processing unit (n.): 中央處理器",
+      "notable (adj.): 顯著的；值得注意的",
+      "resurgence (n.): 復甦；再興",
+      "manufacturers (n.): 製造商",
+      "consequently (adv.): 因此；結果",
+      "stock prices (n.): 股價",
+      "experienced (v.): 經歷；體驗",
+      "substantial (adj.): 大量的；實質的",
+      "increase (n.): 增加",
+      "reflecting (v.): 反映",
+      "investor confidence (n.): 投資者信心",
+      "continued growth (n.): 持續增長",
+      "driven by (v.): 由…驅動",
+      "advancements (n.): 進步；進展",
+      "essential role (n.): 關鍵角色"
+    ],
+    "quiz": [
+      {
+        "q": "What is driving the increased demand for CPUs?",
+        "options": [
+          "A decrease in the cost of memory.",
+          "The burgeoning AI sector.",
+          "A decline in the semiconductor industry.",
+          "Government regulations on technology."
+        ],
+        "answer": "The burgeoning AI sector."
+      },
+      {
+        "q": "Which companies are mentioned as experiencing a resurgence?",
+        "options": [
+          "Nvidia and Apple.",
+          "Microsoft and Google.",
+          "Intel and AMD.",
+          "Qualcomm and ARM."
+        ],
+        "answer": "Intel and AMD."
+      },
+      {
+        "q": "What has happened to the stock prices of Intel and AMD?",
+        "options": [
+          "They have decreased significantly.",
+          "They have remained stable.",
+          "They have experienced a substantial increase.",
+          "They have been temporarily suspended."
+        ],
+        "answer": "They have experienced a substantial increase."
+      },
+      {
+        "q": "What does the increase in stock prices reflect?",
+        "options": [
+          "Investor skepticism about AI.",
+          "Concerns about CPU performance.",
+          "Investor confidence in continued growth driven by AI.",
+          "A shift away from CPU technology."
+        ],
+        "answer": "Investor confidence in continued growth driven by AI."
+      },
+      {
+        "q": "The news suggests that CPUs play an essential role in supporting what?",
+        "options": [
+          "Mobile gaming.",
+          "Advanced AI technologies.",
+          "Cloud storage solutions.",
+          "Virtual reality headsets."
+        ],
+        "answer": "Advanced AI technologies."
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "The decline of the smartphone market.",
+          "The impact of AI on the CPU industry.",
+          "New developments in battery technology.",
+          "The rise of quantum computing."
+        ],
+        "answer": "The impact of AI on the CPU industry."
+      },
+      {
+        "q": "Which word describes the current state of the AI sector?",
+        "options": [
+          "Declining",
+          "Stagnant",
+          "Burgeoning",
+          "Obsolete"
+        ],
+        "answer": "Burgeoning"
+      },
+      {
+        "q": "What does 'resurgence' mean in the context of the article?",
+        "options": [
+          "A failure or collapse.",
+          "A return to popularity or importance.",
+          "A complete replacement.",
+          "A temporary dip."
+        ],
+        "answer": "A return to popularity or importance."
+      },
+      {
+        "q": "The article implies that high-performance CPUs are necessary for what?",
+        "options": [
+          "Basic internet browsing.",
+          "Running simple office applications.",
+          "Supporting complex AI computations.",
+          "Playing older video games."
+        ],
+        "answer": "Supporting complex AI computations."
+      },
+      {
+        "q": "Which adverb indicates that the boost in demand is significant?",
+        "options": [
+          "Temporarily",
+          "Slightly",
+          "Significantly",
+          "Gradually"
+        ],
+        "answer": "Significantly"
+      },
+      {
+        "q": "What is the primary function of a CPU?",
+        "options": [
+          "Storing data long-term.",
+          "Displaying images on a screen.",
+          "Executing instructions and processing data.",
+          "Connecting to the internet."
+        ],
+        "answer": "Executing instructions and processing data."
+      },
+      {
+        "q": "The term 'AI Boom' suggests that AI is currently experiencing:",
+        "options": [
+          "A period of slow development.",
+          "A rapid increase in activity and popularity.",
+          "A decline in research funding.",
+          "A phase of widespread public disinterest."
+        ],
+        "answer": "A rapid increase in activity and popularity."
+      }
+    ]
+  },
+  "article-5": {
+    "title": "NAND Flash缺貨至2028年 價格持續上揚",
+    "tabTitle": "科技",
+    "english": "The global NAND Flash market is facing a significant shortage that industry analysts predict will extend until 2028. This prolonged scarcity is driven by robust demand from sectors like AI and automotive, coupled with production constraints. Consequently, the price of NAND Flash memory is expected to continue its upward trend throughout this period, impacting costs for various electronic devices and data storage solutions.",
+    "chinese": "全球NAND Flash市場正經歷嚴重的短缺，產業分析師預測此情況將持續至2028年。這種長期的供應不足是由人工智慧和汽車等領域的強勁需求，加上生產限制所導致。因此，NAND Flash記憶體的價格預計在此期間將持續上漲，影響各種電子設備和數據儲存解決方案的成本。",
+    "vocabulary": [
+      "NAND Flash (n.): 儲存技術的一種",
+      "shortage (n.): 短缺；匱乏",
+      "expected (v.): 預期；預計",
+      "until (prep.): 直到",
+      "prices (n.): 價格",
+      "to rise (v.): 上漲；上升",
+      "global (adj.): 全球的",
+      "market (n.): 市場",
+      "facing (v.): 面臨",
+      "significant (adj.): 顯著的；重要的",
+      "industry analysts (n.): 業界分析師",
+      "predict (v.): 預測",
+      "prolonged (adj.): 持續很久的；長期的",
+      "scarcity (n.): 稀少；匱乏",
+      "driven by (v.): 由...驅動；由...引起",
+      "robust demand (n.): 強勁的需求",
+      "sectors (n.): 行業；領域",
+      "AI (n.): 人工智慧",
+      "automotive (adj.): 汽車的",
+      "coupled with (prep.): 連同；加上",
+      "production constraints (n.): 生產限制",
+      "consequently (adv.): 因此；結果",
+      "memory (n.): 記憶體",
+      "upward trend (n.): 上升趨勢",
+      "throughout (prep.): 在...期間；遍及",
+      "impacting (v.): 影響"
+    ],
+    "quiz": [
+      {
+        "q": "According to the news, when is the NAND Flash shortage expected to end?",
+        "options": [
+          "By the end of 2026",
+          "Until 2028",
+          "It will not end",
+          "By the middle of 2027"
+        ],
+        "answer": "Until 2028"
+      },
+      {
+        "q": "What is a primary reason for the NAND Flash shortage?",
+        "options": [
+          "Decreased demand from AI and automotive sectors",
+          "Overproduction of NAND Flash chips",
+          "Robust demand and production constraints",
+          "A global economic recession"
+        ],
+        "answer": "Robust demand and production constraints"
+      },
+      {
+        "q": "What is predicted to happen to the price of NAND Flash?",
+        "options": [
+          "It will decrease significantly",
+          "It will remain stable",
+          "It will continue to rise",
+          "It will fluctuate unpredictably"
+        ],
+        "answer": "It will continue to rise"
+      },
+      {
+        "q": "Which sectors are mentioned as contributing to the demand for NAND Flash?",
+        "options": [
+          "Healthcare and education",
+          "AI and automotive",
+          "Retail and entertainment",
+          "Agriculture and construction"
+        ],
+        "answer": "AI and automotive"
+      },
+      {
+        "q": "The news describes the shortage as:",
+        "options": [
+          "Minor",
+          "Temporary",
+          "Significant",
+          "Non-existent"
+        ],
+        "answer": "Significant"
+      },
+      {
+        "q": "What is the expected consequence of the NAND Flash shortage on prices?",
+        "options": [
+          "Prices will fall",
+          "Prices will stabilize",
+          "Prices will increase",
+          "Prices will be volatile"
+        ],
+        "answer": "Prices will increase"
+      },
+      {
+        "q": "Who is making predictions about the NAND Flash shortage duration?",
+        "options": [
+          "Government officials",
+          "Consumers",
+          "Industry analysts",
+          "Chip manufacturers"
+        ],
+        "answer": "Industry analysts"
+      },
+      {
+        "q": "The term 'scarcity' in the text means:",
+        "options": [
+          "Abundance",
+          "Shortage",
+          "High quality",
+          "Low cost"
+        ],
+        "answer": "Shortage"
+      },
+      {
+        "q": "What does 'robust demand' imply?",
+        "options": [
+          "Weak demand",
+          "Slightly increasing demand",
+          "Strong and healthy demand",
+          "Fluctuating demand"
+        ],
+        "answer": "Strong and healthy demand"
+      },
+      {
+        "q": "The upward trend in prices is expected to occur:",
+        "options": [
+          "Before 2028",
+          "Only in 2028",
+          "Throughout the shortage period",
+          "Only for a short time"
+        ],
+        "answer": "Throughout the shortage period"
+      },
+      {
+        "q": "The shortage is driven by demand and:",
+        "options": [
+          "Increased supply",
+          "Technological advancements",
+          "Production constraints",
+          "Lower manufacturing costs"
+        ],
+        "answer": "Production constraints"
+      },
+      {
+        "q": "The shortage will impact the costs of:",
+        "options": [
+          "Only high-end smartphones",
+          "Various electronic devices and data storage solutions",
+          "Only servers",
+          "No specific products"
+        ],
+        "answer": "Various electronic devices and data storage solutions"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "美國戰爭部與科技巨頭簽署AI協議 軍工複合體2.0成形",
+    "tabTitle": "科技",
+    "english": "The U.S. Department of Defense has entered into a significant agreement with leading technology corporations concerning artificial intelligence. This landmark accord aims to foster collaboration on AI development and deployment for national security purposes. Experts suggest this partnership signals the emergence of a 'Military-Industrial Complex 2.0,' reflecting a new era of defense innovation driven by private sector AI expertise.",
+    "chinese": "美國國防部已與領先的科技公司就人工智能達成一項重要協議。這項里程碑式的協議旨在促進在國家安全領域上人工智能的開發與部署。專家們認為，這次合作標誌著“軍工複合體2.0”的誕生，反映出一個由私營企業人工智能專業知識驅動的國防創新新時代。",
+    "vocabulary": [
+      "Department of Defense (n.):國防部",
+      "entered into (v.): 達成（協議）",
+      "significant (adj.): 顯著的",
+      "agreement (n.):協議",
+      "leading (adj.): 領先的",
+      "corporations (n.): 公司",
+      "concerning (prep.): 關於",
+      "artificial intelligence (n.): 人工智能",
+      "landmark (adj.): 里程碑式的",
+      "accord (n.): 協議",
+      "foster (v.): 促進",
+      "collaboration (n.): 合作",
+      "development (n.): 開發",
+      "deployment (n.): 部署",
+      "national security (n.): 國家安全",
+      "purposes (n.): 目的",
+      "experts (n.): 專家",
+      "suggest (v.): 建議",
+      "emergence (n.): 興起",
+      "Military-Industrial Complex 2.0 (n.): 軍工複合體2.0",
+      "reflecting (v.): 反映",
+      "era (n.): 時代",
+      "defense innovation (n.): 國防創新",
+      "driven by (v.): 由...驅動",
+      "private sector (n.): 私營企業",
+      "expertise (n.): 專業知識"
+    ],
+    "quiz": [
+      {
+        "q": "What U.S. government department signed the AI accord?",
+        "options": [
+          "Department of State",
+          "Department of Homeland Security",
+          "Department of Defense",
+          "Department of Justice"
+        ],
+        "answer": "Department of Defense"
+      },
+      {
+        "q": "Who did the Department of Defense sign the agreement with?",
+        "options": [
+          "Academic institutions",
+          "Foreign governments",
+          "Non-profit organizations",
+          "Leading technology corporations"
+        ],
+        "answer": "Leading technology corporations"
+      },
+      {
+        "q": "What is the main focus of the agreement?",
+        "options": [
+          "Space exploration",
+          "Artificial Intelligence development",
+          "Climate change research",
+          "Economic policy"
+        ],
+        "answer": "Artificial Intelligence development"
+      },
+      {
+        "q": "What is a stated aim of the accord?",
+        "options": [
+          "To reduce military spending",
+          "To improve public education",
+          "To foster collaboration on AI",
+          "To regulate social media"
+        ],
+        "answer": "To foster collaboration on AI"
+      },
+      {
+        "q": "For what purposes is the AI development intended?",
+        "options": [
+          "Commercial use",
+          "National security",
+          "Medical research",
+          "Environmental monitoring"
+        ],
+        "answer": "National security"
+      },
+      {
+        "q": "What new concept is suggested by this partnership?",
+        "options": [
+          "Techno-Utopia",
+          "Digital Democracy",
+          "Military-Industrial Complex 2.0",
+          "Global AI Governance"
+        ],
+        "answer": "Military-Industrial Complex 2.0"
+      },
+      {
+        "q": "What does the term 'Military-Industrial Complex 2.0' suggest?",
+        "options": [
+          "A return to traditional warfare",
+          "A new phase of defense innovation",
+          "A decrease in technological advancement",
+          "A shift towards purely diplomatic solutions"
+        ],
+        "answer": "A new phase of defense innovation"
+      },
+      {
+        "q": "Who is driving this new era of defense innovation, according to the text?",
+        "options": [
+          "Government scientists",
+          "International organizations",
+          "Private sector AI expertise",
+          "University researchers"
+        ],
+        "answer": "Private sector AI expertise"
+      },
+      {
+        "q": "The word 'accord' in the text means:",
+        "options": [
+          "Disagreement",
+          "Conflict",
+          "Treaty or agreement",
+          "Protest"
+        ],
+        "answer": "Treaty or agreement"
+      },
+      {
+        "q": "The word 'foster' means to:",
+        "options": [
+          "Hinder",
+          "Encourage or promote",
+          "Oppose",
+          "Ignore"
+        ],
+        "answer": "Encourage or promote"
+      },
+      {
+        "q": "What kind of style is the English text written in?",
+        "options": [
+          "Opinionated",
+          "Factual",
+          "Humorous",
+          "Narrative"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "Approximately how long is the English text?",
+        "options": [
+          "Around 50 words",
+          "Around 80 words",
+          "Around 120 words",
+          "Around 200 words"
+        ],
+        "answer": "Around 80 words"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
