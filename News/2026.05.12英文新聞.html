@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 12, 2026：台灣經濟、科技 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台股指數再創新高，AI概念股領漲\nThe Taiwan Stock Exchange Capitalization Weighted Stock Index (TAIEX) reached an unprecedented high today, signaling robust investor confidence. Leading the surge, stocks associated with Artificial Intelligence (AI) technologies saw significant gains. This upward trend reflects optimism surrounding the potential of AI in driving future economic growth and corporate innovation.\n\n[2] 淡江大橋5/12正式通車 卓揆：新地標展現國力\nThe Tamsui-Bali Bridge officially opened to traffic on May 12, 2026. Premier Zhuo Rong-tai attended the inauguration ceremony, hailing the bridge as a new landmark that demonstrates Taiwan's national strength and engineering capabilities. This significant infrastructure project aims to improve transportation in the region and boost local development.\n\n[3] 2026年半導體封裝市場規模估破6000億美元\nThe global semiconductor packaging market is projected to surpass $600 billion by 2026. This significant growth is driven by increasing demand for advanced electronic devices and the expansion of the automotive and AI sectors. Innovations in packaging technologies, such as advanced chiplet integration and heterogeneous integration, are crucial for this market expansion. Industry experts anticipate continued strong performance in the coming years.",
+    "chinese": "【1】台股指數再創新高，AI概念股領漲\n台灣股票交易所市值加權指數（TAIEX）今日觸及前所未有的新高，顯示投資者信心強勁。與人工智能（AI）技術相關的股票領漲，實現了顯著的漲幅。這一上升趨勢反映了市場對AI在推動未來經濟增長和企業創新方面的潛力感到樂觀。\n\n【2】淡江大橋5/12正式通車 卓揆：新地標展現國力\n淡江大橋於2026年5月12日正式通車。卓榮泰院長出席了啟用典禮，稱讚該橋為一座展現台灣國力與工程能力的嶄新地標。這項重要的基礎建設工程旨在改善該地區的交通並促進地方發展。\n\n【3】2026年半導體封裝市場規模估破6000億美元\n到 2026 年，全球半導體封裝市場預計將超過 6000 億美元。這項顯著增長是由對先進電子設備日益增長的需求以及汽車和人工智慧領域的擴張所推動的。封裝技術的創新，例如先進的小晶片整合和異質整合，對這個市場的擴張至關重要。行業專家預計未來幾年將持續強勁表現。",
+    "vocabulary": [
+      "Stock Index (n.): 股票指數",
+      "unprecedented (adj.): 前所未有的",
+      "robust (adj.): 強勁的",
+      "investor confidence (n.): 投資者信心",
+      "signaling (v.): 顯示，標誌著",
+      "robust (adj.): 強勁的",
+      "investor confidence (n.): 投資者信心",
+      "leading (v.): 帶領，領先",
+      "surge (n.): 猛漲，激增",
+      "associated with (adj.): 與...相關的",
+      "Artificial Intelligence (n.): 人工智能",
+      "technologies (n.): 技術",
+      "significant (adj.): 顯著的",
+      "gains (n.): 漲幅，收益",
+      "upward trend (n.): 上升趨勢",
+      "reflects (v.): 反映",
+      "optimism (n.): 樂觀",
+      "surrounding (prep.): 關於，圍繞著",
+      "potential (n.): 潛力",
+      "driving (v.): 推動",
+      "economic growth (n.): 經濟增長",
+      "corporate innovation (n.): 企業創新",
+      "officially (adv.): 正式地",
+      "opened to traffic (phr.): 通車",
+      "Premier (n.): 院長；總理",
+      "attended (v.): 出席了",
+      "inauguration ceremony (n.): 啟用典禮",
+      "hailed (v.): 稱讚；頌揚",
+      "landmark (n.): 地標",
+      "demonstrates (v.): 展現；證明",
+      "national strength (n.): 國力",
+      "engineering capabilities (n.): 工程能力",
+      "significant (adj.): 重要的；意義深遠的",
+      "infrastructure project (n.): 基礎建設工程",
+      "aims to (phr.): 旨在",
+      "improve (v.): 改善",
+      "transportation (n.): 交通",
+      "region (n.): 地區",
+      "boost (v.): 促進；提升",
+      "local development (n.): 地方發展",
+      "traffic (n.): 交通",
+      "ceremony (n.): 典禮",
+      "semiconductor (n.): 半導體",
+      "packaging (n.): 封裝",
+      "market (n.): 市場",
+      "projected (v.): 預計",
+      "surpass (v.): 超過",
+      "billion (n.): 十億",
+      "significant (adj.): 顯著的",
+      "growth (n.): 增長",
+      "driven by (v. phrase): 由...推動",
+      "increasing demand (n. phrase): 日益增長的需求",
+      "advanced (adj.): 先進的",
+      "electronic devices (n. phrase): 電子設備",
+      "expansion (n.): 擴張",
+      "automotive (adj.): 汽車的",
+      "artificial intelligence (AI) (n. phrase): 人工智慧",
+      "innovations (n.): 創新",
+      "technologies (n.): 技術",
+      "chiplet integration (n. phrase): 小晶片整合",
+      "heterogeneous integration (n. phrase): 異質整合",
+      "crucial (adj.): 至關重要的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "A. A decrease in AI stock prices",
+          "B. A new record high for the Taiwan Stock Index",
+          "C. A decline in investor confidence",
+          "D. New regulations for technology companies"
+        ],
+        "answer": "B. A new record high for the Taiwan Stock Index"
+      },
+      {
+        "q": "Which sector is mentioned as leading the stock market gains?",
+        "options": [
+          "A. Renewable energy",
+          "B. Biotechnology",
+          "C. Artificial Intelligence (AI)",
+          "D. Real estate"
+        ],
+        "answer": "C. Artificial Intelligence (AI)"
+      },
+      {
+        "q": "The phrase \"unprecedented high\" means:",
+        "options": [
+          "A. A low point",
+          "B. A usual level",
+          "C. A record high",
+          "D. A temporary dip"
+        ],
+        "answer": "C. A record high"
+      },
+      {
+        "q": "What does the news suggest about investor confidence?",
+        "options": [
+          "A. It is decreasing.",
+          "B. It is weakening.",
+          "C. It is robust and strong.",
+          "D. It is neutral."
+        ],
+        "answer": "C. It is robust and strong."
+      },
+      {
+        "q": "The TAIEX is an abbreviation for:",
+        "options": [
+          "A. Technology Advancement Index",
+          "B. Taiwan Stock Exchange Capitalization Weighted Stock Index",
+          "C. Trade and Investment Council",
+          "D. Top Asian Retailers Association"
+        ],
+        "answer": "B. Taiwan Stock Exchange Capitalization Weighted Stock Index"
+      },
+      {
+        "q": "The upward trend in the stock market is linked to optimism about:",
+        "options": [
+          "A. Decreasing production costs",
+          "B. The potential of AI",
+          "C. Government subsidies",
+          "D. International trade agreements"
+        ],
+        "answer": "B. The potential of AI"
+      },
+      {
+        "q": "What kind of gains did AI concept stocks see?",
+        "options": [
+          "A. Minor losses",
+          "B. Stable performance",
+          "C. Significant gains",
+          "D. Moderate increases"
+        ],
+        "answer": "C. Significant gains"
+      },
+      {
+        "q": "The news is written in a factual style, meaning it:",
+        "options": [
+          "A. Expresses strong personal opinions",
+          "B. Uses emotional language",
+          "C. Presents information objectively",
+          "D. Includes fictional elements"
+        ],
+        "answer": "C. Presents information objectively"
+      },
+      {
+        "q": "The term \"surge\" in the context of stock prices means:",
+        "options": [
+          "A. A sudden and significant increase",
+          "B. A gradual decline",
+          "C. A period of stagnation",
+          "D. A slight fluctuation"
+        ],
+        "answer": "A. A sudden and significant increase"
+      },
+      {
+        "q": "What role is AI expected to play according to the news?",
+        "options": [
+          "A. Reducing technological innovation",
+          "B. Hindering economic growth",
+          "C. Driving future economic growth and corporate innovation",
+          "D. Limiting market access"
+        ],
+        "answer": "C. Driving future economic growth and corporate innovation"
+      },
+      {
+        "q": "The English text is approximately how many words long?",
+        "options": [
+          "A. Around 50 words",
+          "B. Around 80 words",
+          "C. Around 120 words",
+          "D. Around 150 words"
+        ],
+        "answer": "B. Around 80 words"
+      },
+      {
+        "q": "The English text is described as being at which proficiency level?",
+        "options": [
+          "A. A1 (Beginner)",
+          "B. B1 (Intermediate)",
+          "C. B2 (Upper Intermediate)",
+          "D. C1 (Advanced)"
+        ],
+        "answer": "C. B2 (Upper Intermediate)"
+      },
+      {
+        "q": "On what date did the Tamsui-Bali Bridge officially open?",
+        "options": [
+          "May 11, 2026",
+          "May 12, 2026",
+          "April 12, 2026",
+          "May 12, 2025"
+        ],
+        "answer": "May 12, 2026"
+      },
+      {
+        "q": "Who attended the inauguration ceremony?",
+        "options": [
+          "President Tsai Ing-wen",
+          "Minister of Transportation",
+          "Premier Zhuo Rong-tai",
+          "Local residents"
+        ],
+        "answer": "Premier Zhuo Rong-tai"
+      },
+      {
+        "q": "What did Premier Zhuo hail the bridge as?",
+        "options": [
+          "A historical monument",
+          "A new landmark",
+          "A transportation hub",
+          "A tourist attraction"
+        ],
+        "answer": "A new landmark"
+      },
+      {
+        "q": "According to Premier Zhuo, what does the bridge showcase?",
+        "options": [
+          "International cooperation",
+          "Taiwan's national strength",
+          "Environmental protection efforts",
+          "Cultural heritage"
+        ],
+        "answer": "Taiwan's national strength"
+      },
+      {
+        "q": "The bridge is described as a significant project for what?",
+        "options": [
+          "Military defense",
+          "Cultural exchange",
+          "Infrastructure",
+          "Scientific research"
+        ],
+        "answer": "Infrastructure"
+      },
+      {
+        "q": "What is one of the aims of this bridge project?",
+        "options": [
+          "To reduce tourism",
+          "To improve transportation",
+          "To decrease economic activity",
+          "To limit regional access"
+        ],
+        "answer": "To improve transportation"
+      },
+      {
+        "q": "Besides improving transportation, what else does the project aim to do?",
+        "options": [
+          "Preserve historical sites",
+          "Boost local development",
+          "Promote international trade",
+          "Relocate the capital city"
+        ],
+        "answer": "Boost local development"
+      },
+      {
+        "q": "What does the word 'officially' mean in the context of the bridge opening?",
+        "options": [
+          "Unofficially",
+          "Formally",
+          "Secretly",
+          "Temporarily"
+        ],
+        "answer": "Formally"
+      },
+      {
+        "q": "What is the role of a 'Premier'?",
+        "options": [
+          "Head of state",
+          "Chief justice",
+          "Head of government",
+          "Leader of the opposition"
+        ],
+        "answer": "Head of government"
+      },
+      {
+        "q": "The word 'demonstrates' means:",
+        "options": [
+          "Hides",
+          "Conceals",
+          "Shows",
+          "Ignores"
+        ],
+        "answer": "Shows"
+      },
+      {
+        "q": "What does 'infrastructure' refer to in this news?",
+        "options": [
+          "Cultural traditions",
+          "Basic public services and facilities",
+          "Artistic creations",
+          "Political systems"
+        ],
+        "answer": "Basic public services and facilities"
+      },
+      {
+        "q": "The phrase 'opened to traffic' indicates that:",
+        "options": [
+          "The bridge is closed for maintenance",
+          "Vehicles can now use the bridge",
+          "Only pedestrians are allowed",
+          "Construction is still ongoing"
+        ],
+        "answer": "Vehicles can now use the bridge"
+      },
+      {
+        "q": "What is the projected market size for semiconductor packaging in 2026?",
+        "options": [
+          "Below $500 billion",
+          "Exactly $600 billion",
+          "Exceed $600 billion",
+          "Around $550 billion"
+        ],
+        "answer": "Exceed $600 billion"
+      },
+      {
+        "q": "What is driving the growth of the semiconductor packaging market?",
+        "options": [
+          "Decreasing demand for electronics",
+          "New regulations",
+          "Increased demand for advanced electronics and sector expansion",
+          "Decline in AI development"
+        ],
+        "answer": "Increased demand for advanced electronics and sector expansion"
+      },
+      {
+        "q": "Which sectors are mentioned as expanding and contributing to market growth?",
+        "options": [
+          "Healthcare and education",
+          "Automotive and AI",
+          "Retail and entertainment",
+          "Agriculture and construction"
+        ],
+        "answer": "Automotive and AI"
+      },
+      {
+        "q": "What are some examples of innovations in packaging technologies mentioned?",
+        "options": [
+          "Basic chip assembly",
+          "Legacy packaging methods",
+          "Advanced chiplet integration and heterogeneous integration",
+          "Simple wire bonding"
+        ],
+        "answer": "Advanced chiplet integration and heterogeneous integration"
+      },
+      {
+        "q": "According to the text, what is the outlook for the market in the coming years?",
+        "options": [
+          "Expected decline",
+          "Stable but slow growth",
+          "Continued strong performance",
+          "Uncertain future"
+        ],
+        "answer": "Continued strong performance"
+      },
+      {
+        "q": "The word 'surpass' in the text means:",
+        "options": [
+          "To fall short of",
+          "To equal",
+          "To go beyond",
+          "To remain below"
+        ],
+        "answer": "To go beyond"
+      },
+      {
+        "q": "What does 'driven by' mean in the context of market growth?",
+        "options": [
+          "Hindered by",
+          "Caused or motivated by",
+          "Independent of",
+          "Slowed down by"
+        ],
+        "answer": "Caused or motivated by"
+      },
+      {
+        "q": "Which term refers to the technology of combining smaller processing units?",
+        "options": [
+          "Heterogeneous integration",
+          "Semiconductor packaging",
+          "Chiplet integration",
+          "Advanced electronics"
+        ],
+        "answer": "Chiplet integration"
+      },
+      {
+        "q": "The term 'crucial' suggests something is:",
+        "options": [
+          "Unimportant",
+          "Optional",
+          "Very important",
+          "Disputable"
+        ],
+        "answer": "Very important"
+      },
+      {
+        "q": "What is the primary focus of the news article?",
+        "options": [
+          "The history of semiconductors",
+          "The future market size and drivers of semiconductor packaging",
+          "The manufacturing process of chips",
+          "The impact of AI on society"
+        ],
+        "answer": "The future market size and drivers of semiconductor packaging"
+      },
+      {
+        "q": "The word 'projected' indicates that the market size is:",
+        "options": [
+          "A past measurement",
+          "A current estimate",
+          "A future forecast",
+          "A historical trend"
+        ],
+        "answer": "A future forecast"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a driver for market growth?",
+        "options": [
+          "Increasing demand for electronic devices",
+          "Expansion of the automotive sector",
+          "Development of new software applications",
+          "Expansion of the AI sector"
+        ],
+        "answer": "Development of new software applications"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "輝達首季財報亮眼 AI熱潮延燒",
+    "tabTitle": "科技",
+    "english": "Nvidia reported impressive first-quarter financial results, driven by the ongoing AI boom. The technology giant's revenue significantly surpassed expectations, fueled by strong demand for its advanced AI chips. This performance underscores Nvidia's dominant position in the artificial intelligence hardware market and suggests continued growth as AI applications become more widespread. Investors are closely watching the company's trajectory amidst this technological surge.",
+    "chinese": "輝達公布了亮眼的第 الأولى季財務業績，這得益於持續不斷的人工智慧熱潮。這家科技巨頭的營收遠超預期，主要受其先進 AI 晶片強勁需求的推動。這一表現突顯了輝達在人工智能硬體市場的領導地位，並預示著隨著 AI 應用日益普及，公司將持續成長。在這波科技浪潮中，投資者正密切關注該公司的發展軌跡。",
+    "vocabulary": [
+      "impressive (adj.): 令人印象深刻的",
+      "financial results (n.): 財務業績",
+      "driven by (phr.): 由...驅動",
+      "ongoing (adj.): 持續的",
+      "boom (n.): 繁榮；熱潮",
+      "technology giant (n.): 科技巨頭",
+      "revenue (n.): 營收",
+      "significantly (adv.): 顯著地",
+      "surpassed (v.): 超越",
+      "expectations (n.): 預期",
+      "fueled by (phr.): 由...助長；由...推動",
+      "strong demand (n.): 強勁需求",
+      "advanced (adj.): 先進的",
+      "AI chips (n.): AI 晶片",
+      "performance (n.): 表現",
+      "underscores (v.): 強調；標示",
+      "dominant position (n.): 領導地位；主導地位",
+      "artificial intelligence (n.): 人工智慧",
+      "hardware market (n.): 硬體市場",
+      "widespread (adj.): 廣泛的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main reason for Nvidia's impressive first-quarter financial results?",
+        "options": [
+          "A decrease in production costs",
+          "The ongoing AI boom",
+          "A new product launch in a different sector",
+          "Reduced marketing expenses"
+        ],
+        "answer": "The ongoing AI boom"
+      },
+      {
+        "q": "According to the text, Nvidia's revenue significantly surpassed what?",
+        "options": [
+          "Its previous year's performance",
+          "Competitors' revenues",
+          "Expectations",
+          "Government subsidies"
+        ],
+        "answer": "Expectations"
+      },
+      {
+        "q": "What specific product is mentioned as being in high demand?",
+        "options": [
+          "Gaming consoles",
+          "Smartphones",
+          "Advanced AI chips",
+          "Cloud computing services"
+        ],
+        "answer": "Advanced AI chips"
+      },
+      {
+        "q": "The text suggests Nvidia holds a dominant position in which market?",
+        "options": [
+          "Software development",
+          "Artificial intelligence hardware",
+          "Consumer electronics",
+          "Semiconductor manufacturing equipment"
+        ],
+        "answer": "Artificial intelligence hardware"
+      },
+      {
+        "q": "What does the text predict for Nvidia's future growth?",
+        "options": [
+          "Stagnation",
+          "A significant decline",
+          "Continued growth",
+          "Diversification into unrelated fields"
+        ],
+        "answer": "Continued growth"
+      },
+      {
+        "q": "Why is continued growth expected?",
+        "options": [
+          "Due to a decrease in the cost of raw materials",
+          "Because AI applications are becoming more widespread",
+          "As a result of government regulations favoring tech companies",
+          "Owing to a shift in consumer preferences away from technology"
+        ],
+        "answer": "Because AI applications are becoming more widespread"
+      },
+      {
+        "q": "Who is closely watching Nvidia's trajectory?",
+        "options": [
+          "Competitors",
+          "Regulators",
+          "Investors",
+          "Customers"
+        ],
+        "answer": "Investors"
+      },
+      {
+        "q": "The word 'impressive' in the first sentence means:",
+        "options": [
+          "Ordinary",
+          "Disappointing",
+          "Remarkable",
+          "Average"
+        ],
+        "answer": "Remarkable"
+      },
+      {
+        "q": "What does 'surpassed expectations' mean?",
+        "options": [
+          "Met expectations",
+          "Fell short of expectations",
+          "Went beyond what was expected",
+          "Changed the expectations"
+        ],
+        "answer": "Went beyond what was expected"
+      },
+      {
+        "q": "The phrase 'AI boom' refers to:",
+        "options": [
+          "A period of decline in AI development",
+          "A rapid increase in the popularity and use of AI",
+          "A specific AI technology failure",
+          "A government ban on AI research"
+        ],
+        "answer": "A rapid increase in the popularity and use of AI"
+      },
+      {
+        "q": "The word 'underscores' means:",
+        "options": [
+          "Minimizes",
+          "Hides",
+          "Emphasizes",
+          "Ignores"
+        ],
+        "answer": "Emphasizes"
+      },
+      {
+        "q": "What is Nvidia's main area of expertise mentioned in the text?",
+        "options": [
+          "Software development",
+          "Cloud computing",
+          "Artificial intelligence hardware",
+          "Data analytics"
+        ],
+        "answer": "Artificial intelligence hardware"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "美聯儲暗示降息時程延後",
+    "tabTitle": "金融市場",
+    "english": "The Federal Reserve has signaled a potential delay in its planned interest rate cuts. Recent statements from Fed officials suggest that inflation remains a persistent concern, prompting a more cautious approach. While a rate cut was anticipated for mid-year, current economic data indicates a need for sustained higher rates to achieve the desired price stability. This shift in outlook could impact global financial markets.",
+    "chinese": "美國聯邦儲備委員會暗示了其計劃中的降息可能會延後。聯儲官員近期的聲明表明，通脹仍然是一個持續存在的擔憂，這促使他們採取更謹慎的態度。雖然年中曾預期會降息，但目前的經濟數據顯示，需要維持較高的利率水平才能實現預期的物價穩定。這一前景的轉變可能會影響全球金融市場。",
+    "vocabulary": [
+      "Federal Reserve (n.): 美國聯邦儲備委員會",
+      "signal (v.): 示意；暗示",
+      "potential (adj.): 潛在的",
+      "delay (n.): 延遲",
+      "interest rate cut (n.): 降息",
+      "official (n.): 官員",
+      "suggest (v.): 表明；暗示",
+      "inflation (n.): 通貨膨脹",
+      "persistent (adj.): 持續存在的；頑固的",
+      "concern (n.): 擔憂；顧慮",
+      "prompt (v.): 促使；引起",
+      "cautious (adj.): 謹慎的",
+      "approach (n.): 方法；途徑",
+      "anticipate (v.): 預期；預料",
+      "mid-year (n.): 年中",
+      "economic data (n.): 經濟數據",
+      "indicate (v.): 表明；顯示",
+      "sustained (adj.): 持續的；持久的",
+      "price stability (n.): 物價穩定",
+      "outlook (n.): 前景；展望"
+    ],
+    "quiz": [
+      {
+        "q": "What has the Federal Reserve signaled regarding interest rates?",
+        "options": [
+          "An acceleration of rate cuts",
+          "A potential delay in rate cuts",
+          "No change in interest rate policy",
+          "An immediate increase in rates"
+        ],
+        "answer": "A potential delay in rate cuts"
+      },
+      {
+        "q": "What is a primary concern mentioned in the article?",
+        "options": [
+          "Unemployment rates",
+          "Economic growth slowdown",
+          "Persistent inflation",
+          "Stock market volatility"
+        ],
+        "answer": "Persistent inflation"
+      },
+      {
+        "q": "What does the Fed's approach suggest?",
+        "options": [
+          "An aggressive rate cut strategy",
+          "A cautious approach",
+          "A focus on immediate economic stimulus",
+          "Ignoring current economic data"
+        ],
+        "answer": "A cautious approach"
+      },
+      {
+        "q": "When was a rate cut previously anticipated?",
+        "options": [
+          "Early in the year",
+          "At the end of the year",
+          "Mid-year",
+          "Next year"
+        ],
+        "answer": "Mid-year"
+      },
+      {
+        "q": "What do current economic data indicate the need for?",
+        "options": [
+          "Lower interest rates",
+          "More government spending",
+          "Sustained higher rates",
+          "Reduced inflation targets"
+        ],
+        "answer": "Sustained higher rates"
+      },
+      {
+        "q": "What is the goal of sustained higher rates according to the text?",
+        "options": [
+          "To boost economic growth",
+          "To achieve desired price stability",
+          "To encourage borrowing",
+          "To increase stock prices"
+        ],
+        "answer": "To achieve desired price stability"
+      },
+      {
+        "q": "What could the Fed's shift in outlook impact?",
+        "options": [
+          "Only the US economy",
+          "Global financial markets",
+          "Local real estate prices",
+          "Small businesses exclusively"
+        ],
+        "answer": "Global financial markets"
+      },
+      {
+        "q": "Which word means 'lasting for a long time or happening repeatedly'?",
+        "options": [
+          "Potential",
+          "Cautious",
+          "Persistent",
+          "Sustained"
+        ],
+        "answer": "Persistent"
+      },
+      {
+        "q": "What is the role of the Federal Reserve in the US?",
+        "options": [
+          "Regulating foreign trade",
+          "Setting fiscal policy",
+          "Managing monetary policy",
+          "Overseeing the stock exchange"
+        ],
+        "answer": "Managing monetary policy"
+      },
+      {
+        "q": "The word 'prompt' in the sentence 'prompting a more cautious approach' means:",
+        "options": [
+          "To delay",
+          "To encourage or cause",
+          "To ignore",
+          "To announce"
+        ],
+        "answer": "To encourage or cause"
+      },
+      {
+        "q": "What does 'price stability' refer to?",
+        "options": [
+          "Rapidly falling prices",
+          "Stable or slowly rising prices",
+          "High and unpredictable price changes",
+          "Government control over all prices"
+        ],
+        "answer": "Stable or slowly rising prices"
+      },
+      {
+        "q": "The news suggests that the Fed's decision-making is influenced by:",
+        "options": [
+          "Political pressure",
+          "Public opinion polls",
+          "Current economic data and inflation concerns",
+          "International trade agreements"
+        ],
+        "answer": "Current economic data and inflation concerns"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "蘋果推出AI功能 科技巨頭競逐AI市場",
+    "tabTitle": "科技",
+    "english": "Apple has officially launched its highly anticipated artificial intelligence features, marking a significant step in its strategy to integrate AI across its product ecosystem. This move intensifies the competition among major technology companies, all vying to capture a dominant position in the rapidly evolving AI market. Industry analysts expect this development to spur further innovation and reshape the landscape of consumer technology.",
+    "chinese": "蘋果公司正式推出了其備受期待的人工智能功能，這標誌著其將AI整合到整個產品生態系統的策略上邁出了重要一步。此舉加劇了主要科技公司之間的競爭，它們都在爭奪在快速發展的AI市場中佔據主導地位。行業分析師預計，這一發展將刺激進一步的創新，並重塑消費技術的格局。",
+    "vocabulary": [
+      "officially launched (v.): 正式推出",
+      "highly anticipated (adj.): 備受期待的",
+      "artificial intelligence (n.): 人工智能",
+      "features (n.): 功能",
+      "marking (v.): 標誌著",
+      "significant step (n.): 重要一步",
+      "strategy (n.): 策略",
+      "integrate (v.): 整合",
+      "product ecosystem (n.): 產品生態系統",
+      "intensifies (v.): 加劇",
+      "competition (n.): 競爭",
+      "major technology companies (n.): 主要科技公司",
+      "vying (v.): 爭奪",
+      "capture (v.): 佔據",
+      "dominant position (n.): 主導地位",
+      "rapidly evolving (adj.): 快速發展的",
+      "AI market (n.): AI市場",
+      "industry analysts (n.): 行業分析師",
+      "expect (v.): 預計",
+      "reshape (v.): 重塑"
+    ],
+    "quiz": [
+      {
+        "q": "What did Apple officially launch?",
+        "options": [
+          "New hardware devices",
+          "A new operating system",
+          "Artificial intelligence features",
+          "A streaming service"
+        ],
+        "answer": "Artificial intelligence features"
+      },
+      {
+        "q": "What does Apple's move signify in its product strategy?",
+        "options": [
+          "A focus on hardware sales",
+          "Integration of AI across its ecosystem",
+          "A reduction in software development",
+          "An expansion into unrelated industries"
+        ],
+        "answer": "Integration of AI across its ecosystem"
+      },
+      {
+        "q": "What is the impact of Apple's launch on the tech industry?",
+        "options": [
+          "It reduces competition",
+          "It intensifies competition among tech giants",
+          "It has no significant impact",
+          "It leads to a decline in AI development"
+        ],
+        "answer": "It intensifies competition among tech giants"
+      },
+      {
+        "q": "What are the tech giants vying for?",
+        "options": [
+          "Market share in gaming",
+          "A dominant position in the AI market",
+          "Control over social media platforms",
+          "Leadership in renewable energy"
+        ],
+        "answer": "A dominant position in the AI market"
+      },
+      {
+        "q": "What do industry analysts expect this development to do?",
+        "options": [
+          "Slow down technological progress",
+          "Reduce innovation in the tech sector",
+          "Spur further innovation and reshape consumer technology",
+          "Lead to a decrease in AI adoption"
+        ],
+        "answer": "Spur further innovation and reshape consumer technology"
+      },
+      {
+        "q": "The AI market is described as:",
+        "options": [
+          "Stagnant",
+          "Slowly growing",
+          "Rapidly evolving",
+          "Uncertain"
+        ],
+        "answer": "Rapidly evolving"
+      },
+      {
+        "q": "The word 'vying' in the text means:",
+        "options": [
+          "Avoiding",
+          "Ignoring",
+          "Competing",
+          "Collaborating"
+        ],
+        "answer": "Competing"
+      },
+      {
+        "q": "What is a 'product ecosystem'?",
+        "options": [
+          "A single product",
+          "A group of related products",
+          "A marketing campaign",
+          "A research laboratory"
+        ],
+        "answer": "A group of related products"
+      },
+      {
+        "q": "The term 'highly anticipated' suggests that the features were:",
+        "options": [
+          "Unexpected",
+          "Disappointing",
+          "Long-awaited",
+          "Secretive"
+        ],
+        "answer": "Long-awaited"
+      },
+      {
+        "q": "Who are 'industry analysts'?",
+        "options": [
+          "Company executives",
+          "Government regulators",
+          "Experts who study a particular industry",
+          "Consumers of technology"
+        ],
+        "answer": "Experts who study a particular industry"
+      },
+      {
+        "q": "What does 'integrate' mean in this context?",
+        "options": [
+          "To separate",
+          "To combine or include",
+          "To remove",
+          "To simplify"
+        ],
+        "answer": "To combine or include"
+      },
+      {
+        "q": "The news suggests that Apple's AI features are:",
+        "options": [
+          "Experimental",
+          "Limited to one product",
+          "A major part of their business",
+          "A response to competitor actions"
+        ],
+        "answer": "A major part of their business"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "亞馬遜拓展AI服務 雲端市場競爭白熱化",
+    "tabTitle": "科技",
+    "english": "Amazon is significantly expanding its artificial intelligence (AI) services, a move expected to intensify competition in the lucrative cloud computing market. The tech giant is reportedly investing heavily in new AI tools and features for its Amazon Web Services (AWS) platform. This strategic expansion aims to capture a larger share of the rapidly growing AI-powered cloud solutions sector, putting increased pressure on rivals like Microsoft Azure and Google Cloud.",
+    "chinese": "亞馬遜正大幅拓展其人工智能（AI）服務，此舉預計將加劇利潤豐厚的雲端運算市場的競爭。據報導，這家科技巨頭正大力投資於其亞馬遜網路服務（AWS）平台的新AI工具和功能。這項策略性擴張旨在爭取快速增長的人工智能雲端解決方案領域的更大市場份額，從而對微軟Azure和Google Cloud等競爭對手構成更大壓力。",
+    "vocabulary": [
+      "expand (v.): 擴大",
+      "artificial intelligence (AI) (n.): 人工智能",
+      "service (n.): 服務",
+      "intensify (v.): 加劇",
+      "competition (n.): 競爭",
+      "lucrative (adj.): 賺錢的，有利可圖的",
+      "cloud computing (n.): 雲端運算",
+      "market (n.): 市場",
+      "tech giant (n.): 科技巨頭",
+      "reportedly (adv.): 據報導",
+      "investing (v.): 投資",
+      "significantly (adv.): 顯著地",
+      "strategic (adj.): 策略性的",
+      "expansion (n.): 擴張",
+      "capture (v.): 捕捉，贏得",
+      "share (n.): 份額",
+      "rapidly (adv.): 快速地",
+      "growing (adj.): 增長的",
+      "solutions (n.): 解決方案",
+      "pressure (n.): 壓力"
+    ],
+    "quiz": [
+      {
+        "q": "What is Amazon reportedly doing?",
+        "options": [
+          "Reducing its AI services",
+          "Investing in new AI tools for AWS",
+          "Focusing only on hardware",
+          "Leaving the cloud market"
+        ],
+        "answer": "Investing in new AI tools for AWS"
+      },
+      {
+        "q": "What market is expected to see intensified competition?",
+        "options": [
+          "E-commerce",
+          "Cloud computing",
+          "Online advertising",
+          "Streaming services"
+        ],
+        "answer": "Cloud computing"
+      },
+      {
+        "q": "The expansion of Amazon's AI services is described as:",
+        "options": [
+          "Minor",
+          "Marginal",
+          "Significant",
+          "Temporary"
+        ],
+        "answer": "Significant"
+      },
+      {
+        "q": "Amazon Web Services (AWS) is mentioned as:",
+        "options": [
+          "A competitor",
+          "A hardware division",
+          "A platform for AI services",
+          "A research lab"
+        ],
+        "answer": "A platform for AI services"
+      },
+      {
+        "q": "The word 'lucrative' in the text means:",
+        "options": [
+          "Risky",
+          "Profitable",
+          "Small",
+          "Competitive"
+        ],
+        "answer": "Profitable"
+      },
+      {
+        "q": "What is the aim of Amazon's strategic expansion?",
+        "options": [
+          "To reduce costs",
+          "To decrease market share",
+          "To gain more of the AI cloud solutions market",
+          "To exit the AI sector"
+        ],
+        "answer": "To gain more of the AI cloud solutions market"
+      },
+      {
+        "q": "Which companies are mentioned as rivals?",
+        "options": [
+          "Apple and Samsung",
+          "Microsoft Azure and Google Cloud",
+          "IBM and Oracle",
+          "Facebook and Twitter"
+        ],
+        "answer": "Microsoft Azure and Google Cloud"
+      },
+      {
+        "q": "The cloud computing market is described as:",
+        "options": [
+          "Shrinking",
+          "Stable",
+          "Rapidly growing",
+          "Declining"
+        ],
+        "answer": "Rapidly growing"
+      },
+      {
+        "q": "The word 'intensify' means:",
+        "options": [
+          "To decrease",
+          "To strengthen or increase",
+          "To stabilize",
+          "To ignore"
+        ],
+        "answer": "To strengthen or increase"
+      },
+      {
+        "q": "What is the overall tone of the news excerpt?",
+        "options": [
+          "Sarcastic",
+          "Factual and informative",
+          "Opinionated",
+          "Humorous"
+        ],
+        "answer": "Factual and informative"
+      },
+      {
+        "q": "Amazon's move is expected to put pressure on:",
+        "options": [
+          "Its own internal teams",
+          "Smaller cloud providers only",
+          "Major competitors in the cloud market",
+          "Customers using its services"
+        ],
+        "answer": "Major competitors in the cloud market"
+      },
+      {
+        "q": "The news focuses on Amazon's expansion in which area?",
+        "options": [
+          "Physical retail",
+          "Entertainment streaming",
+          "Artificial Intelligence services",
+          "Logistics and delivery"
+        ],
+        "answer": "Artificial Intelligence services"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
