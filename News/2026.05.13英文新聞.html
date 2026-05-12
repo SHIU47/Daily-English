@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 13, 2026：台灣經濟、國際大事 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣首季GDP成長13.69%，創近39年新高\nTaiwan's economy experienced remarkable growth in the first quarter of 2026, with its Gross Domestic Product (GDP) surging by an impressive 13.69%. This significant expansion marks the highest quarterly growth rate recorded in nearly 39 years, signaling robust economic performance. The strong figures reflect a dynamic recovery and continued resilience in the Taiwanese market.\n\n[2] 台積電首季股息調升至7元，創歷史新高\nTaiwan Semiconductor Manufacturing Company (TSMC) announced a significant increase in its first-quarter dividend, raising it to NT$7 per share. This marks a historic high for the company's dividend payouts. The decision reflects TSMC's strong financial performance and confidence in its continued growth and profitability. This move is expected to be well-received by investors, signaling a positive outlook for the semiconductor giant.\n\n[3] 台灣電動車產業鏈成形，積極拓展國際市場\nTaiwan's electric vehicle (EV) industry chain is rapidly solidifying, with key players establishing robust manufacturing capabilities and fostering innovation. The sector is now proactively seeking to broaden its international reach. Companies are investing in advanced technologies and forming strategic partnerships to compete on the global stage. This expansion is expected to boost Taiwan's export performance and further cement its position in the burgeoning EV market.",
+    "chinese": "【1】台灣首季GDP成長13.69%，創近39年新高\n台灣經濟在2026年第一季經歷了顯著的成長，其國內生產總值（GDP）激增了13.69%。這一顯著擴張標誌著近39年來最高的季度成長率，顯示出強勁的經濟表現。強勁的數據反映了台灣市場充滿活力的復甦和持續的韌性。\n\n【2】台積電首季股息調升至7元，創歷史新高\n台灣積體電路製造股份有限公司（台積電）宣布將第一季股息大幅調升至每股新台幣7元。這創下了公司股息發放的歷史新高。此決定反映了台積電強勁的財務表現及其對持續增長和盈利能力的信心。此舉預計將受到投資者好評，預示著這家半導體巨頭的前景看好。\n\n【3】台灣電動車產業鏈成形，積極拓展國際市場\n台灣的電動車（EV）產業鏈正迅速成形，主要參與者建立了穩健的製造能力並促進創新。該產業目前正積極尋求拓展其國際市場。各公司正投資先進技術並建立策略性合作夥伴關係，以在全球舞台上競爭。預計這項擴張將能提振台灣的出口表現，並進一步鞏固其在新興電動車市場的地位。",
+    "vocabulary": [
+      "economy (n.): 經濟",
+      "experienced (v.): 經歷了",
+      "remarkable (adj.): 卓越的",
+      "growth (n.): 成長",
+      "Gross Domestic Product (n.): 國內生產總值",
+      "surging (v.): 激增",
+      "impressive (adj.): 令人印象深刻的",
+      "significant (adj.): 顯著的",
+      "expansion (n.): 擴張",
+      "marks (v.): 標誌著",
+      "highest (adj.): 最高的",
+      "quarterly (adj.): 每季的",
+      "growth rate (n.): 成長率",
+      "recorded (v.): 記錄",
+      "nearly (adv.): 將近",
+      "signaling (v.): 標誌著",
+      "robust (adj.): 強勁的",
+      "performance (n.): 表現",
+      "dynamic (adj.): 充滿活力的",
+      "resilience (n.): 韌性",
+      "Taiwan Semiconductor Manufacturing Company (TSMC) (n.): 台灣積體電路製造股份有限公司（台積電）",
+      "announced (v.): 宣布",
+      "significant (adj.): 顯著的",
+      "increase (n.): 增加",
+      "first-quarter (n.): 第一季",
+      "dividend (n.): 股息",
+      "raising (v.): 提高",
+      "per share (adv.): 每股",
+      "historic high (n.): 歷史新高",
+      "company's (n.): 公司的",
+      "dividend payouts (n.): 股息發放",
+      "decision (n.): 決定",
+      "reflects (v.): 反映",
+      "strong (adj.): 強勁的",
+      "financial performance (n.): 財務表現",
+      "confidence (n.): 信心",
+      "continued growth (n.): 持續增長",
+      "profitability (n.): 盈利能力",
+      "expected (v.): 預計",
+      "investors (n.): 投資者",
+      "electric vehicle (EV) (n.): 電動車",
+      "industry chain (n.): 產業鏈",
+      "solidify (v.): 使鞏固；使凝固",
+      "key player (n.): 主要參與者",
+      "robust (adj.): 強健的；健全的",
+      "manufacturing capability (n.): 製造能力",
+      "foster (v.): 培養；促進",
+      "innovation (n.): 創新",
+      "proactively (adv.): 積極地",
+      "broaden (v.): 擴大；放寬",
+      "international reach (n.): 國際市場；國際影響力",
+      "invest (v.): 投資",
+      "advanced technology (n.): 先進技術",
+      "strategic partnership (n.): 策略性合作夥伴關係",
+      "compete (v.): 競爭",
+      "global stage (n.): 全球舞台",
+      "expansion (n.): 擴張；擴大",
+      "boost (v.): 提升；增加",
+      "export performance (n.): 出口表現",
+      "cement (v.): 鞏固；加強"
+    ],
+    "quiz": [
+      {
+        "q": "What was Taiwan's GDP growth rate in the first quarter of 2026?",
+        "options": [
+          "13.69%",
+          "3.69%",
+          "1.36%",
+          "23.69%"
+        ],
+        "answer": "13.69%"
+      },
+      {
+        "q": "How does the reported growth rate compare to historical data?",
+        "options": [
+          "It's the lowest in 39 years.",
+          "It's the highest in nearly 39 years.",
+          "It's average for the last decade.",
+          "It's a slight decrease from the previous quarter."
+        ],
+        "answer": "It's the highest in nearly 39 years."
+      },
+      {
+        "q": "What does the strong GDP figure indicate about Taiwan's economy?",
+        "options": [
+          "Economic stagnation",
+          "A weak recovery",
+          "Robust economic performance",
+          "Declining market confidence"
+        ],
+        "answer": "Robust economic performance"
+      },
+      {
+        "q": "The English text is written at approximately what proficiency level?",
+        "options": [
+          "A1",
+          "B2",
+          "C1",
+          "Beginner"
+        ],
+        "answer": "B2"
+      },
+      {
+        "q": "The news focuses on which aspect of Taiwan's economy?",
+        "options": [
+          "Unemployment rates",
+          "Inflation",
+          "GDP growth",
+          "Trade balance"
+        ],
+        "answer": "GDP growth"
+      },
+      {
+        "q": "What is the meaning of 'surges' in the context of the news?",
+        "options": [
+          "Decreases rapidly",
+          "Stays the same",
+          "Increases suddenly and significantly",
+          "Fluctuates slightly"
+        ],
+        "answer": "Increases suddenly and significantly"
+      },
+      {
+        "q": "What does 'resilience' refer to in the text?",
+        "options": [
+          "Weakness",
+          "Fragility",
+          "Ability to withstand or recover from difficult conditions",
+          "Stagnation"
+        ],
+        "answer": "Ability to withstand or recover from difficult conditions"
+      },
+      {
+        "q": "The article uses a factual style, meaning it is likely to:",
+        "options": [
+          "Express personal opinions",
+          "Tell a fictional story",
+          "Present objective information",
+          "Use emotional language"
+        ],
+        "answer": "Present objective information"
+      },
+      {
+        "q": "What does 'quarterly' mean?",
+        "options": [
+          "Happening once a year",
+          "Happening twice a year",
+          "Happening every three months",
+          "Happening every month"
+        ],
+        "answer": "Happening every three months"
+      },
+      {
+        "q": "The term 'GDP' stands for:",
+        "options": [
+          "Global Development Plan",
+          "Gross Domestic Product",
+          "General Distribution Policy",
+          "Governmental Data Processing"
+        ],
+        "answer": "Gross Domestic Product"
+      },
+      {
+        "q": "The word 'remarkable' suggests the growth was:",
+        "options": [
+          "Ordinary",
+          "Disappointing",
+          "Noticeable and impressive",
+          "Insignificant"
+        ],
+        "answer": "Noticeable and impressive"
+      },
+      {
+        "q": "What does the strong growth signal for the Taiwanese market?",
+        "options": [
+          "A potential downturn",
+          "A dynamic recovery and resilience",
+          "Economic uncertainty",
+          "A decline in consumer spending"
+        ],
+        "answer": "A dynamic recovery and resilience"
+      },
+      {
+        "q": "What is the name of the company mentioned in the news?",
+        "options": [
+          "Intel",
+          "Samsung",
+          "TSMC",
+          "Micron"
+        ],
+        "answer": "TSMC"
+      },
+      {
+        "q": "What did TSMC announce regarding its first-quarter dividend?",
+        "options": [
+          "It was decreased.",
+          "It remained the same.",
+          "It was increased.",
+          "It was suspended."
+        ],
+        "answer": "It was increased."
+      },
+      {
+        "q": "To how much was the first-quarter dividend raised per share?",
+        "options": [
+          "NT$5",
+          "NT$6",
+          "NT$7",
+          "NT$8"
+        ],
+        "answer": "NT$7"
+      },
+      {
+        "q": "What does the dividend increase represent for TSMC?",
+        "options": [
+          "A slight improvement",
+          "A historic high",
+          "A slight decrease",
+          "A temporary adjustment"
+        ],
+        "answer": "A historic high"
+      },
+      {
+        "q": "What does the decision to raise the dividend reflect?",
+        "options": [
+          "Financial difficulties",
+          "Strong financial performance",
+          "A need for capital",
+          "Market uncertainty"
+        ],
+        "answer": "Strong financial performance"
+      },
+      {
+        "q": "What does TSMC's confidence in continued growth and profitability suggest?",
+        "options": [
+          "Future challenges",
+          "Stable but slow progress",
+          "Positive future prospects",
+          "Potential decline"
+        ],
+        "answer": "Positive future prospects"
+      },
+      {
+        "q": "How is the dividend increase expected to be received by investors?",
+        "options": [
+          "With concern",
+          "With indifference",
+          "With approval",
+          "With criticism"
+        ],
+        "answer": "With approval"
+      },
+      {
+        "q": "What does the term 'dividend' refer to?",
+        "options": [
+          "Company debt",
+          "A share of profits paid to shareholders",
+          "The company's revenue",
+          "Employee bonuses"
+        ],
+        "answer": "A share of profits paid to shareholders"
+      },
+      {
+        "q": "What does 'historic high' mean in this context?",
+        "options": [
+          "A recent low point",
+          "The lowest level ever",
+          "The highest level ever reached",
+          "An average performance"
+        ],
+        "answer": "The highest level ever reached"
+      },
+      {
+        "q": "The news article uses a factual style. What does this mean?",
+        "options": [
+          "It includes personal opinions.",
+          "It focuses on objective information.",
+          "It is written for entertainment.",
+          "It uses emotional language."
+        ],
+        "answer": "It focuses on objective information."
+      },
+      {
+        "q": "What does 'payouts' refer to in 'dividend payouts'?",
+        "options": [
+          "The process of earning money",
+          "The act of distributing money",
+          "The cost of production",
+          "The company's expenses"
+        ],
+        "answer": "The act of distributing money"
+      },
+      {
+        "q": "Which of the following is a synonym for 'significant'?",
+        "options": [
+          "Minor",
+          "Small",
+          "Important",
+          "Insignificant"
+        ],
+        "answer": "Important"
+      },
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "Taiwan's advancements in AI technology",
+          "The development and global expansion of Taiwan's EV industry chain",
+          "New trade agreements between Taiwan and European countries",
+          "The impact of climate change on Taiwan's agriculture"
+        ],
+        "answer": "The development and global expansion of Taiwan's EV industry chain"
+      },
+      {
+        "q": "According to the text, what is Taiwan's EV industry chain doing?",
+        "options": [
+          "Focusing solely on domestic sales",
+          "Shrinking its production capacity",
+          "Solidifying and actively expanding internationally",
+          "Reducing investment in new technologies"
+        ],
+        "answer": "Solidifying and actively expanding internationally"
+      },
+      {
+        "q": "What are companies in this sector doing to compete globally?",
+        "options": [
+          "Reducing product quality",
+          "Investing in advanced technologies and forming strategic partnerships",
+          "Limiting production to reduce costs",
+          "Avoiding international markets"
+        ],
+        "answer": "Investing in advanced technologies and forming strategic partnerships"
+      },
+      {
+        "q": "The phrase \"takes shape\" implies that the industry chain is:",
+        "options": [
+          "Disappearing",
+          "Becoming well-defined and established",
+          "Struggling to start",
+          "Already complete"
+        ],
+        "answer": "Becoming well-defined and established"
+      },
+      {
+        "q": "What is expected as a result of this expansion?",
+        "options": [
+          "A decrease in exports",
+          "A strengthened position in the EV market and boosted exports",
+          "A focus on traditional automotive industries",
+          "Reduced technological development"
+        ],
+        "answer": "A strengthened position in the EV market and boosted exports"
+      },
+      {
+        "q": "The word \"fostering\" in the context of innovation means:",
+        "options": [
+          "Hindering",
+          "Encouraging and promoting",
+          "Ignoring",
+          "Stopping"
+        ],
+        "answer": "Encouraging and promoting"
+      },
+      {
+        "q": "Which of the following best describes the style of the English text?",
+        "options": [
+          "Narrative",
+          "Persuasive",
+          "Factual",
+          "Humorous"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "The term \"burgeoning EV market\" refers to a market that is:",
+        "options": [
+          "Declining",
+          "Stable",
+          "New and rapidly growing",
+          "Highly saturated"
+        ],
+        "answer": "New and rapidly growing"
+      },
+      {
+        "q": "What does \"robust manufacturing capabilities\" suggest?",
+        "options": [
+          "Weak and unreliable production",
+          "Strong and dependable production facilities",
+          "Limited production output",
+          "Outdated manufacturing methods"
+        ],
+        "answer": "Strong and dependable production facilities"
+      },
+      {
+        "q": "The news suggests that companies are actively seeking to:",
+        "options": [
+          "Reduce their market share",
+          "Enter new international markets",
+          "Focus only on research and development",
+          "Increase prices significantly"
+        ],
+        "answer": "Enter new international markets"
+      },
+      {
+        "q": "What is a \"key player\" in an industry?",
+        "options": [
+          "A minor competitor",
+          "A new entrant with little influence",
+          "An important company or participant",
+          "A government regulator"
+        ],
+        "answer": "An important company or participant"
+      },
+      {
+        "q": "The word \"cement\" in the last sentence means:",
+        "options": [
+          "To break down",
+          "To weaken",
+          "To strengthen or make firm",
+          "To invent"
+        ],
+        "answer": "To strengthen or make firm"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "印度總理連任成功，經濟發展備受關注",
+    "tabTitle": "國際大事",
+    "english": "India's incumbent Prime Minister has secured a decisive victory in the recent general election, paving the way for another term in office. This outcome is largely seen as a mandate for his economic development agenda. Analysts are closely watching the country's economic trajectory, anticipating policies aimed at sustained growth and job creation.",
+    "chinese": "印度現任總理在最近的國會大選中贏得了決定性的勝利，為其連任鋪平了道路。這一結果在很大程度上被視為对其經濟發展議程的認可。分析人士正密切關注該國的經濟軌跡，預計將出台旨在實現持續增長和創造就業的政策。",
+    "vocabulary": [
+      "incumbent (adj.): 在任的",
+      "Prime Minister (n.): 總理",
+      "secured (v.): 獲得；確保",
+      "decisive (adj.): 決定性的",
+      "victory (n.): 勝利",
+      "recent (adj.): 最近的",
+      "general election (n.): 國會大選；普選",
+      "paving the way (phr.): 鋪平道路；為...創造條件",
+      "term in office (n.): 任期",
+      "outcome (n.): 結果",
+      "mandate (n.): 命令；授權；民意授權",
+      "economic development (n.): 經濟發展",
+      "agenda (n.): 議程",
+      "analysts (n.): 分析人士",
+      "closely watching (phr.): 密切關注",
+      "trajectory (n.): 軌跡；發展方向",
+      "anticipating (v.): 預期；預料",
+      "policies (n.): 政策",
+      "aimed at (phr.): 旨在",
+      "sustained growth (n.): 持續增長"
+    ],
+    "quiz": [
+      {
+        "q": "Who won the recent general election in India?",
+        "options": [
+          "The opposition leader",
+          "The incumbent Prime Minister",
+          "A new political party",
+          "No candidate secured a majority"
+        ],
+        "answer": "The incumbent Prime Minister"
+      },
+      {
+        "q": "What does the election outcome suggest about the Prime Minister's priorities?",
+        "options": [
+          "A focus on foreign policy",
+          "A shift towards social welfare",
+          "A mandate for his economic development agenda",
+          "A reduction in military spending"
+        ],
+        "answer": "A mandate for his economic development agenda"
+      },
+      {
+        "q": "What are analysts closely observing after the election?",
+        "options": [
+          "The Prime Minister's personal life",
+          "The country's economic trajectory",
+          "International trade agreements",
+          "Cultural exchange programs"
+        ],
+        "answer": "The country's economic trajectory"
+      },
+      {
+        "q": "What kind of policies are anticipated by analysts?",
+        "options": [
+          "Policies focused on environmental protection",
+          "Policies aimed at sustained growth and job creation",
+          "Policies reducing government spending",
+          "Policies increasing import tariffs"
+        ],
+        "answer": "Policies aimed at sustained growth and job creation"
+      },
+      {
+        "q": "What does 'incumbent' mean in this context?",
+        "options": [
+          "Newly elected",
+          "Opposing the current government",
+          "Holding the current office",
+          "Retired from politics"
+        ],
+        "answer": "Holding the current office"
+      },
+      {
+        "q": "What is 'paving the way' an idiom for?",
+        "options": [
+          "Creating obstacles",
+          "Making something easier or possible",
+          "Stopping progress",
+          "Demolishing existing structures"
+        ],
+        "answer": "Making something easier or possible"
+      },
+      {
+        "q": "What is a 'mandate' in politics?",
+        "options": [
+          "A formal resignation",
+          "An order to resign",
+          "Authority given by voters to implement policies",
+          "A temporary truce"
+        ],
+        "answer": "Authority given by voters to implement policies"
+      },
+      {
+        "q": "What does 'trajectory' refer to in the sentence about the economy?",
+        "options": [
+          "The speed of light",
+          "The path or direction of development",
+          "The cost of goods",
+          "The population growth rate"
+        ],
+        "answer": "The path or direction of development"
+      },
+      {
+        "q": "Which word means 'expected' or 'foreseen'?",
+        "options": [
+          "Secured",
+          "Watching",
+          "Anticipating",
+          "Paving"
+        ],
+        "answer": "Anticipating"
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A natural disaster in India",
+          "India's election results and economic outlook",
+          "A new cultural festival in India",
+          "India's space exploration program"
+        ],
+        "answer": "India's election results and economic outlook"
+      },
+      {
+        "q": "The election result is described as 'decisive'. What does this imply?",
+        "options": [
+          "The result was very close",
+          "The winner had a clear and significant advantage",
+          "The election was canceled",
+          "There was a tie"
+        ],
+        "answer": "The winner had a clear and significant advantage"
+      },
+      {
+        "q": "What are the two key areas of focus mentioned in relation to the Prime Minister's agenda and future policies?",
+        "options": [
+          "Infrastructure and education",
+          "Healthcare and environment",
+          "Economic development and job creation",
+          "Technology and defense"
+        ],
+        "answer": "Economic development and job creation"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "通膨升溫引爆賣壓，高通重挫半導體股全面跳水",
+    "tabTitle": "金融市場",
+    "english": "Financial markets experienced significant turbulence on May 13, 2026, as rising inflation concerns triggered a widespread sell-off. Qualcomm's stock took a major hit, plummeting sharply in early trading. This downturn extended across the semiconductor sector, with most related stocks diving considerably. Investors are closely monitoring economic indicators for signs of stabilization, but current sentiment remains cautious.",
+    "chinese": "2026年5月13日，金融市場經歷了顯著的動盪，因不斷升溫的通膨擔憂引發了廣泛的賣壓。高通股價遭受重創，在早期交易中急劇下跌。這一下跌蔓延至整個半導體行業，大多數相關股票大幅跳水。投資者正密切關注經濟指標以尋求穩定跡象，但目前市場情緒依然謹慎。",
+    "vocabulary": [
+      "turbulence (n.): 動盪",
+      "rising (adj.): 不斷升溫的",
+      "inflation (n.): 通膨",
+      "concerns (n.): 擔憂",
+      "trigger (v.): 引發",
+      "widespread (adj.): 廣泛的",
+      "sell-off (n.): 賣壓",
+      "Qualcomm (n.): 高通 (公司名)",
+      "stock (n.): 股票",
+      "major hit (n.): 重創",
+      "plummet (v.): 暴跌",
+      "sharply (adv.): 急劇地",
+      "early trading (n.): 早期交易",
+      "downturn (n.): 下跌",
+      "extend (v.): 蔓延",
+      "across (prep.): 遍及",
+      "semiconductor sector (n.): 半導體行業",
+      "considerably (adv.): 大大地",
+      "monitoring (v.): 監控",
+      "cautious (adj.): 謹慎的"
+    ],
+    "quiz": [
+      {
+        "q": "What was the main reason for the financial market turbulence?",
+        "options": [
+          "A sudden increase in oil prices",
+          "Rising inflation concerns",
+          "A major geopolitical event",
+          "Unexpected company earnings reports"
+        ],
+        "answer": "Rising inflation concerns"
+      },
+      {
+        "q": "Which company's stock experienced a significant drop?",
+        "options": [
+          "Apple",
+          "Microsoft",
+          "Qualcomm",
+          "Intel"
+        ],
+        "answer": "Qualcomm"
+      },
+      {
+        "q": "What happened to semiconductor stocks in general?",
+        "options": [
+          "They experienced a significant rise.",
+          "They remained stable.",
+          "They showed moderate gains.",
+          "They dove considerably."
+        ],
+        "answer": "They dove considerably."
+      },
+      {
+        "q": "When did this event take place?",
+        "options": [
+          "May 13, 2025",
+          "May 13, 2026",
+          "April 13, 2026",
+          "June 13, 2026"
+        ],
+        "answer": "May 13, 2026"
+      },
+      {
+        "q": "The word 'plummeted' means:",
+        "options": [
+          "To rise slowly",
+          "To fall sharply",
+          "To stay the same",
+          "To fluctuate slightly"
+        ],
+        "answer": "To fall sharply"
+      },
+      {
+        "q": "What sector was affected by the downturn?",
+        "options": [
+          "The technology sector",
+          "The automotive sector",
+          "The semiconductor sector",
+          "The energy sector"
+        ],
+        "answer": "The semiconductor sector"
+      },
+      {
+        "q": "What are investors currently doing?",
+        "options": [
+          "Buying stocks aggressively",
+          "Selling all their assets",
+          "Closely monitoring economic indicators",
+          "Investing in bonds only"
+        ],
+        "answer": "Closely monitoring economic indicators"
+      },
+      {
+        "q": "What is the current investor sentiment described as?",
+        "options": [
+          "Optimistic",
+          "Confident",
+          "Cautious",
+          "Aggressive"
+        ],
+        "answer": "Cautious"
+      },
+      {
+        "q": "The term 'sell-off' refers to:",
+        "options": [
+          "A period of buying spree",
+          "A rapid decline in prices due to selling pressure",
+          "The introduction of new financial products",
+          "Government intervention in the market"
+        ],
+        "answer": "A rapid decline in prices due to selling pressure"
+      },
+      {
+        "q": "Which of the following is a synonym for 'widespread'?",
+        "options": [
+          "Limited",
+          "Localized",
+          "Extensive",
+          "Specific"
+        ],
+        "answer": "Extensive"
+      },
+      {
+        "q": "The news describes 'turbulence' in the financial markets. What does 'turbulence' imply?",
+        "options": [
+          "Calm and steady conditions",
+          "Sudden and chaotic changes",
+          "Slow and predictable movements",
+          "Consistent growth"
+        ],
+        "answer": "Sudden and chaotic changes"
+      },
+      {
+        "q": "What did investors hope to find by monitoring economic indicators?",
+        "options": [
+          "Reasons to sell more stocks",
+          "Signs of stabilization",
+          "Information about new companies",
+          "Details about upcoming holidays"
+        ],
+        "answer": "Signs of stabilization"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "經濟學家警告美股接近歷史最大金融泡沫",
+    "tabTitle": "金融市場",
+    "english": "A prominent economist has issued a stark warning regarding the U.S. stock market, suggesting it is approaching a financial bubble of unprecedented historical scale. The expert cited several concerning indicators, pointing to a potential for significant correction. Investors are advised to exercise caution amid these heightened market conditions and consider the long-term implications of current valuations.",
+    "chinese": "一位知名的經濟學家發出了關於美國股市的嚴厲警告，暗示其正接近歷史上規模空前的金融泡沫。這位專家引用了幾個令人擔憂的指標，指出可能出現重大修正。建議投資者在這些加劇的市場狀況下保持謹慎，並考慮當前估值的長期影響。",
+    "vocabulary": [
+      "prominent (adj.): 著名的，顯眼的",
+      "economist (n.): 經濟學家",
+      "issued (v.): 發出，發表",
+      "stark (adj.): 嚴峻的，觸目驚心的",
+      "warning (n.): 警告",
+      "regarding (prep.): 關於",
+      "U.S. stock market (n.): 美國股市",
+      "suggesting (v.): 暗示，建議",
+      "approaching (v.): 接近",
+      "financial bubble (n.): 金融泡沫",
+      "unprecedented (adj.): 前所未有的",
+      "historical (adj.): 歷史的",
+      "scale (n.): 規模",
+      "expert (n.): 專家",
+      "cited (v.): 引用",
+      "concerning (adj.): 令人擔憂的",
+      "indicators (n.): 指標",
+      "potential (n.): 潛力，可能性",
+      "significant (adj.): 顯著的，重大的",
+      "correction (n.): 修正",
+      "investors (n.): 投資者",
+      "advised (v.): 被建議",
+      "exercise caution (v. phr.): 謹慎行事",
+      "heightened (adj.): 加劇的，提高的",
+      "market conditions (n.): 市場狀況",
+      "consider (v.): 考慮",
+      "long-term implications (n. phr.): 長期影響",
+      "current valuations (n. phr.): 當前估值"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "A new investment strategy",
+          "A warning about a potential U.S. stock market bubble",
+          "Analysis of historical stock market trends",
+          "Government regulations on financial markets"
+        ],
+        "answer": "A warning about a potential U.S. stock market bubble"
+      },
+      {
+        "q": "Who issued the warning?",
+        "options": [
+          "A government official",
+          "A group of investors",
+          "A prominent economist",
+          "A financial analyst"
+        ],
+        "answer": "A prominent economist"
+      },
+      {
+        "q": "According to the economist, what is the U.S. stock market approaching?",
+        "options": [
+          "A period of steady growth",
+          "Its lowest point in history",
+          "A major technological advancement",
+          "The largest financial bubble in history"
+        ],
+        "answer": "The largest financial bubble in history"
+      },
+      {
+        "q": "The economist cited several concerning what?",
+        "options": [
+          "Economic policies",
+          "Market indicators",
+          "Consumer demands",
+          "Geopolitical events"
+        ],
+        "answer": "Market indicators"
+      },
+      {
+        "q": "What does the warning suggest about the market?",
+        "options": [
+          "It is stable and secure",
+          "It is likely to experience a significant correction",
+          "It is undervalued",
+          "It is unaffected by external factors"
+        ],
+        "answer": "It is likely to experience a significant correction"
+      },
+      {
+        "q": "What advice is given to investors?",
+        "options": [
+          "To invest aggressively",
+          "To sell all their stocks immediately",
+          "To exercise caution",
+          "To ignore market warnings"
+        ],
+        "answer": "To exercise caution"
+      },
+      {
+        "q": "The term 'stark warning' implies the warning is:",
+        "options": [
+          "Mild and reassuring",
+          "Vague and uncertain",
+          "Serious and alarming",
+          "Technical and complex"
+        ],
+        "answer": "Serious and alarming"
+      },
+      {
+        "q": "What does 'unprecedented' mean in this context?",
+        "options": [
+          "Happening for the first time",
+          "Very common",
+          "Historically significant but not new",
+          "Difficult to understand"
+        ],
+        "answer": "Happening for the first time"
+      },
+      {
+        "q": "The news focuses on which country's stock market?",
+        "options": [
+          "China",
+          "Japan",
+          "The United States",
+          "Germany"
+        ],
+        "answer": "The United States"
+      },
+      {
+        "q": "What should investors consider regarding current market conditions?",
+        "options": [
+          "Short-term gains",
+          "The long-term implications of valuations",
+          "The opinions of other investors",
+          "The latest economic forecasts"
+        ],
+        "answer": "The long-term implications of valuations"
+      },
+      {
+        "q": "The word 'prominent' suggests the economist is:",
+        "options": [
+          "New to the field",
+          "Unknown",
+          "Well-known and respected",
+          "An academic researcher"
+        ],
+        "answer": "Well-known and respected"
+      },
+      {
+        "q": "What does 'financial bubble' refer to?",
+        "options": [
+          "A period of low stock prices",
+          "Overvaluation of assets leading to a potential crash",
+          "Government financial aid",
+          "International trade agreements"
+        ],
+        "answer": "Overvaluation of assets leading to a potential crash"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "菲律賓眾議院通過彈劾副總統杜特爾特條款",
+    "tabTitle": "國際大事",
+    "english": "The Philippine House of Representatives has approved articles of impeachment against Vice President Sara Duterte. This move follows accusations of betrayal of public trust and culpable violation of the Constitution. The resolution now proceeds to the Senate for trial. Duterte has denied all allegations, asserting her innocence and vowing to defend her position.",
+    "chinese": "菲律賓眾議院已批准針對副總統莎拉·杜特爾特的彈劾條款。此舉源於對她瀆職和嚴重違反憲法的指控。該決議現將提交參議院審理。杜特爾特否認所有指控，堅稱自己無辜並誓言捍衛其職位。",
+    "vocabulary": [
+      "House of Representatives (n.): 眾議院",
+      "impeachment (n.): 彈劾",
+      "articles of impeachment (n.): 彈劾條款",
+      "Vice President (n.): 副總統",
+      "approved (v.): 批准",
+      "accusations (n.): 指控",
+      "betrayal of public trust (n.): 瀆職 (背叛公眾信任)",
+      "culpable violation (n.): 應受譴責的違法行為",
+      "Constitution (n.): 憲法",
+      "resolution (n.): 決議",
+      "proceeds (v.): 進行",
+      "Senate (n.): 參議院",
+      "trial (n.): 審判",
+      "denied (v.): 否認",
+      "allegations (n.): 指控",
+      "asserting (v.): 堅稱",
+      "innocence (n.): 無罪",
+      "vowing (v.): 發誓",
+      "defend (v.): 捍衛",
+      "position (n.): 職位"
+    ],
+    "quiz": [
+      {
+        "q": "Who has the Philippine House of Representatives approved impeachment articles against?",
+        "options": [
+          "President Ferdinand Marcos Jr.",
+          "Vice President Sara Duterte",
+          "Former President Rodrigo Duterte",
+          "Senate President Juan Miguel Zubiri"
+        ],
+        "answer": "Vice President Sara Duterte"
+      },
+      {
+        "q": "What are some of the accusations mentioned in the news?",
+        "options": [
+          "Graft and corruption",
+          "Sedition and rebellion",
+          "Betrayal of public trust and violation of the Constitution",
+          "Abuse of power and obstruction of justice"
+        ],
+        "answer": "Betrayal of public trust and violation of the Constitution"
+      },
+      {
+        "q": "After the House of Representatives, where will the impeachment resolution proceed?",
+        "options": [
+          "The Supreme Court",
+          "The Office of the Ombudsman",
+          "The Senate",
+          "The Presidential Palace"
+        ],
+        "answer": "The Senate"
+      },
+      {
+        "q": "What has Vice President Sara Duterte done regarding the allegations?",
+        "options": [
+          "Resigned from her position",
+          "Admitted to some wrongdoing",
+          "Denied all allegations and asserted her innocence",
+          "Requested a public apology"
+        ],
+        "answer": "Denied all allegations and asserted her innocence"
+      },
+      {
+        "q": "The term 'impeachment' refers to:",
+        "options": [
+          "A legal trial for criminal offenses",
+          "A formal accusation by a legislature of wrongdoing against a public official",
+          "A vote of no confidence in a government leader",
+          "The process of electing a new Vice President"
+        ],
+        "answer": "A formal accusation by a legislature of wrongdoing against a public official"
+      },
+      {
+        "q": "What is the role of the House of Representatives in this context?",
+        "options": [
+          "To conduct the impeachment trial",
+          "To approve the articles of impeachment",
+          "To appoint the Vice President",
+          "To issue a presidential pardon"
+        ],
+        "answer": "To approve the articles of impeachment"
+      },
+      {
+        "q": "What does 'culpable violation of the Constitution' imply?",
+        "options": [
+          "Minor technical errors in interpreting the Constitution",
+          "A serious and blameworthy breach of constitutional law",
+          "A disagreement over constitutional amendments",
+          "The creation of new constitutional rights"
+        ],
+        "answer": "A serious and blameworthy breach of constitutional law"
+      },
+      {
+        "q": "What is the next step for the impeachment process after it leaves the House?",
+        "options": [
+          "Immediate removal from office",
+          "A public referendum",
+          "A trial in the Senate",
+          "A review by the Supreme Court"
+        ],
+        "answer": "A trial in the Senate"
+      },
+      {
+        "q": "The phrase 'betrayal of public trust' suggests:",
+        "options": [
+          "A failure to meet public expectations",
+          "An act that undermines the integrity of public office",
+          "A disagreement with public opinion",
+          "A lack of transparency in government dealings"
+        ],
+        "answer": "An act that undermines the integrity of public office"
+      },
+      {
+        "q": "What does it mean to 'assert innocence'?",
+        "options": [
+          "To admit guilt but ask for leniency",
+          "To strongly claim that one is not guilty",
+          "To remain silent about the accusations",
+          "To challenge the accusers' credibility"
+        ],
+        "answer": "To strongly claim that one is not guilty"
+      },
+      {
+        "q": "The word 'proceeds' in the sentence 'The resolution now proceeds to the Senate' means:",
+        "options": [
+          "Is delayed",
+          "Is sent or moved forward",
+          "Is rejected",
+          "Is debated"
+        ],
+        "answer": "Is sent or moved forward"
+      },
+      {
+        "q": "What is the Vice President vowing to do?",
+        "options": [
+          "To resign",
+          "To cooperate fully with the investigation",
+          "To defend her position",
+          "To file a counter-impeachment"
+        ],
+        "answer": "To defend her position"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
