@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 14, 2026：科技、地緣政治 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電CoWoS良率達98% N2製程超前量產\nTSMC has announced a significant achievement in its advanced packaging technology, with the CoWoS process reaching a remarkable 98% yield rate. This breakthrough boosts the company's production capabilities for cutting-edge semiconductors. Furthermore, TSMC's next-generation N2 manufacturing process is now ahead of its original schedule, indicating accelerated development and readiness for high-volume production.\n\n[2] 聯發科啟用研發資料中心，布局AI晶片設計\nTaiwanese semiconductor giant MediaTek has officially inaugurated its new research and development data center. This significant investment is strategically aimed at bolstering the company's capabilities in artificial intelligence (AI) chip design. The facility is expected to accelerate innovation and enhance the development of next-generation AI-powered semiconductor solutions, solidifying MediaTek's position in the competitive global market.\n\n[3] 通寶半導體獲安謀投資，推動先進製程\nTopco Scientific announced today that it has secured a significant investment from Arm. This strategic partnership aims to accelerate the development and manufacturing of advanced semiconductor processes. The collaboration will leverage Arm's expertise in chip design and Topco's advanced manufacturing capabilities to push the boundaries of semiconductor technology.",
+    "chinese": "【1】台積電CoWoS良率達98% N2製程超前量產\n台積電宣布其先進封裝技術取得重大成就，CoWoS 製程良率達到驚人的 98%。這項突破增強了公司生產尖端半導體的能力。此外，台積電的下一代 N2 製造製程現已超前原定時程，顯示其開發加速及已準備好進行大批量生產。\n\n【2】聯發科啟用研發資料中心，布局AI晶片設計\n台灣半導體巨頭聯發科已正式啟用其新的研發資料中心。這項重大投資策略性地旨在增強公司在人工智慧（AI）晶片設計方面的能力。該設施預計將加速創新，並提升下一代人工智慧驅動的半導體解決方案的開發，從而鞏固聯發科在全球競爭市場中的地位。\n\n【3】通寶半導體獲安謀投資，推動先進製程\n通寶半導體今日宣布，已獲得安謀（Arm）的大筆投資。這項策略性合作旨在加速先進半導體製程的開發與製造。此次合作將結合安謀在晶片設計領域的專業知識以及通寶的先進製造能力，以推動半導體技術的界限。",
+    "vocabulary": [
+      "announced (v.): 宣布",
+      "significant (adj.): 顯著的",
+      "achievement (n.): 成就",
+      "advanced (adj.): 先進的",
+      "packaging technology (n.): 封裝技術",
+      "process (n.): 製程",
+      "CoWoS (n.): CoWoS (一種先進封裝技術)",
+      "reaching (v.): 達到",
+      "remarkable (adj.): 卓越的",
+      "yield rate (n.): 良率",
+      "breakthrough (n.): 突破",
+      "boosts (v.): 增強",
+      "production capabilities (n.): 生產能力",
+      "cutting-edge (adj.): 尖端的",
+      "semiconductors (n.): 半導體",
+      "Furthermore (adv.): 此外",
+      "next-generation (adj.): 下一代的",
+      "manufacturing process (n.): 製造製程",
+      "ahead of schedule (adv.): 超前時程",
+      "accelerated development (n.): 開發加速",
+      "semiconductor (n.): 半導體",
+      "giant (n.): 巨頭",
+      "inaugurate (v.): 正式啟用；開創",
+      "research and development (n.): 研究與開發",
+      "data center (n.): 資料中心",
+      "significant (adj.): 重大的；顯著的",
+      "investment (n.): 投資",
+      "strategically (adv.): 策略性地",
+      "aimed at (phr.): 旨在",
+      "bolster (v.): 加強；支持",
+      "capabilities (n.): 能力；才能",
+      "artificial intelligence (n.): 人工智慧",
+      "chip design (n.): 晶片設計",
+      "facility (n.): 設施；機構",
+      "accelerate (v.): 加速",
+      "innovation (n.): 創新",
+      "enhance (v.): 增強；提高",
+      "development (n.): 開發；發展",
+      "next-generation (adj.): 下一代的",
+      "solidify (v.): 鞏固；使牢固",
+      "Secures (v.): 獲得",
+      "Investment (n.): 投資",
+      "Strategic (adj.): 策略性的",
+      "Partnership (n.): 合作夥伴關係",
+      "Accelerate (v.): 加速",
+      "Development (n.): 開發",
+      "Manufacturing (n.): 製造",
+      "Advanced (adj.): 先進的",
+      "Semiconductor (n.): 半導體",
+      "Process (n.): 製程",
+      "Collaboration (n.): 合作",
+      "Leverage (v.): 利用",
+      "Expertise (n.): 專業知識",
+      "Chip (n.): 晶片",
+      "Design (n.): 設計",
+      "Capabilities (n.): 能力",
+      "Push the boundaries (phr.): 推動...的界限",
+      "Technology (n.): 技術",
+      "Announced (v.): 宣布",
+      "Significant (adj.): 顯著的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the reported yield rate for TSMC's CoWoS process?",
+        "options": [
+          "95%",
+          "96%",
+          "98%",
+          "99%"
+        ],
+        "answer": "98%"
+      },
+      {
+        "q": "What does the CoWoS process relate to in the context of semiconductors?",
+        "options": [
+          "Chip design",
+          "Manufacturing yield",
+          "Advanced packaging",
+          "Process testing"
+        ],
+        "answer": "Advanced packaging"
+      },
+      {
+        "q": "TSMC's N2 manufacturing process is described as being:",
+        "options": [
+          "Behind schedule",
+          "On schedule",
+          "Ahead of schedule",
+          "Delayed indefinitely"
+        ],
+        "answer": "Ahead of schedule"
+      },
+      {
+        "q": "What is the primary benefit mentioned for the CoWoS yield improvement?",
+        "options": [
+          "Reduced chip size",
+          "Increased production capabilities",
+          "Lower energy consumption",
+          "Faster data transfer"
+        ],
+        "answer": "Increased production capabilities"
+      },
+      {
+        "q": "The term 'cutting-edge' in the text refers to:",
+        "options": [
+          "Old technology",
+          "Standard technology",
+          "Most advanced technology",
+          "Experimental technology"
+        ],
+        "answer": "Most advanced technology"
+      },
+      {
+        "q": "What does the 'N2' likely refer to in TSMC's manufacturing process?",
+        "options": [
+          "A specific type of chip",
+          "A manufacturing node or generation",
+          "A testing phase",
+          "A packaging technique"
+        ],
+        "answer": "A manufacturing node or generation"
+      },
+      {
+        "q": "The phrase 'ahead of schedule' indicates:",
+        "options": [
+          "A delay in the project",
+          "The project is progressing faster than planned",
+          "The project is on track",
+          "The project has been cancelled"
+        ],
+        "answer": "The project is progressing faster than planned"
+      },
+      {
+        "q": "Which word means 'remarkable'?",
+        "options": [
+          "Ordinary",
+          "Common",
+          "Extraordinary",
+          "Standard"
+        ],
+        "answer": "Extraordinary"
+      },
+      {
+        "q": "What is the main subject of the news?",
+        "options": [
+          "TSMC's financial results",
+          "TSMC's advancements in manufacturing and packaging",
+          "TSMC's new chip designs",
+          "TSMC's global expansion"
+        ],
+        "answer": "TSMC's advancements in manufacturing and packaging"
+      },
+      {
+        "q": "The word 'boosts' implies:",
+        "options": [
+          "Decreases",
+          "Weakens",
+          "Increases",
+          "Maintains"
+        ],
+        "answer": "Increases"
+      },
+      {
+        "q": "What does 'yield rate' measure in semiconductor manufacturing?",
+        "options": [
+          "The speed of production",
+          "The percentage of successful, defect-free products",
+          "The cost of materials",
+          "The energy efficiency of the process"
+        ],
+        "answer": "The percentage of successful, defect-free products"
+      },
+      {
+        "q": "The news suggests that TSMC is developing:",
+        "options": [
+          "Older semiconductor technologies",
+          "Less efficient packaging methods",
+          "Next-generation semiconductor processes",
+          "Only basic chip components"
+        ],
+        "answer": "Next-generation semiconductor processes"
+      },
+      {
+        "q": "What company has launched a new R&D data center?",
+        "options": [
+          "TSMC",
+          "Intel",
+          "MediaTek",
+          "Nvidia"
+        ],
+        "answer": "MediaTek"
+      },
+      {
+        "q": "What is the primary purpose of the new data center?",
+        "options": [
+          "To improve cloud storage",
+          "To enhance AI chip design",
+          "To manage financial data",
+          "To develop gaming hardware"
+        ],
+        "answer": "To enhance AI chip design"
+      },
+      {
+        "q": "The new data center is expected to accelerate what?",
+        "options": [
+          "Marketing efforts",
+          "Manufacturing processes",
+          "Innovation",
+          "Customer support"
+        ],
+        "answer": "Innovation"
+      },
+      {
+        "q": "What kind of solutions will the data center help develop?",
+        "options": [
+          "Quantum computing",
+          "Next-generation AI-powered semiconductors",
+          "Renewable energy technology",
+          "Biotechnology"
+        ],
+        "answer": "Next-generation AI-powered semiconductors"
+      },
+      {
+        "q": "The investment in the data center is described as significant. What does 'significant' mean in this context?",
+        "options": [
+          "Small",
+          "Unimportant",
+          "Noticeable and important",
+          "Temporary"
+        ],
+        "answer": "Noticeable and important"
+      },
+      {
+        "q": "What is the main goal of bolstering capabilities in AI chip design?",
+        "options": [
+          "To reduce research costs",
+          "To improve the company's position in the market",
+          "To comply with government regulations",
+          "To expand into unrelated industries"
+        ],
+        "answer": "To improve the company's position in the market"
+      },
+      {
+        "q": "The news mentions 'semiconductor giant'. What is a semiconductor?",
+        "options": [
+          "A type of software",
+          "A material that conducts electricity",
+          "A type of battery",
+          "A communication network"
+        ],
+        "answer": "A material that conducts electricity"
+      },
+      {
+        "q": "What does 'inaugurate' mean?",
+        "options": [
+          "To close down",
+          "To officially start or open",
+          "To postpone",
+          "To criticize"
+        ],
+        "answer": "To officially start or open"
+      },
+      {
+        "q": "The data center aims to 'bolster' MediaTek's capabilities. What does 'bolster' mean?",
+        "options": [
+          "To weaken",
+          "To increase or strengthen",
+          "To replace",
+          "To ignore"
+        ],
+        "answer": "To increase or strengthen"
+      },
+      {
+        "q": "What does 'strategically' imply about the investment?",
+        "options": [
+          "It was unplanned",
+          "It was made with careful consideration of long-term goals",
+          "It was a random decision",
+          "It was forced upon the company"
+        ],
+        "answer": "It was made with careful consideration of long-term goals"
+      },
+      {
+        "q": "The phrase 'next-generation' refers to:",
+        "options": [
+          "Older technology",
+          "The most recent stage of development",
+          "Future technology",
+          "Obsolete technology"
+        ],
+        "answer": "Future technology"
+      },
+      {
+        "q": "What does the new facility aim to do for MediaTek's market position?",
+        "options": [
+          "Weaken it",
+          "Maintain it as is",
+          "Solidify or strengthen it",
+          "Abandon it"
+        ],
+        "answer": "Solidify or strengthen it"
+      },
+      {
+        "q": "Who announced the investment?",
+        "options": [
+          "Arm",
+          "Topco Scientific",
+          "Both Topco Scientific and Arm",
+          "A third unnamed company"
+        ],
+        "answer": "Topco Scientific"
+      },
+      {
+        "q": "What type of company is Topco Scientific?",
+        "options": [
+          "Software development",
+          "Semiconductor manufacturing",
+          "Chip design",
+          "Investment firm"
+        ],
+        "answer": "Semiconductor manufacturing"
+      },
+      {
+        "q": "Who provided the investment to Topco Scientific?",
+        "options": [
+          "A venture capital firm",
+          "The government",
+          "Arm",
+          "A group of individual investors"
+        ],
+        "answer": "Arm"
+      },
+      {
+        "q": "What is the main goal of the partnership?",
+        "options": [
+          "To develop new software",
+          "To reduce manufacturing costs",
+          "To accelerate advanced semiconductor process development",
+          "To acquire new customers"
+        ],
+        "answer": "To accelerate advanced semiconductor process development"
+      },
+      {
+        "q": "What will the collaboration leverage?",
+        "options": [
+          "Marketing strategies",
+          "Financial resources only",
+          "Arm's chip design expertise and Topco's manufacturing capabilities",
+          "Government grants"
+        ],
+        "answer": "Arm's chip design expertise and Topco's manufacturing capabilities"
+      },
+      {
+        "q": "What kind of processes will be developed?",
+        "options": [
+          "Basic",
+          "Obsolete",
+          "Advanced",
+          "Consumer electronics"
+        ],
+        "answer": "Advanced"
+      },
+      {
+        "q": "What is the nature of the partnership described as?",
+        "options": [
+          "Competitive",
+          "Hostile",
+          "Strategic",
+          "Uncertain"
+        ],
+        "answer": "Strategic"
+      },
+      {
+        "q": "What does Arm specialize in, according to the text?",
+        "options": [
+          "Advanced manufacturing",
+          "Chip design",
+          "Investment banking",
+          "Software programming"
+        ],
+        "answer": "Chip design"
+      },
+      {
+        "q": "What is Topco Scientific's contribution to the collaboration?",
+        "options": [
+          "Investment capital",
+          "Chip design expertise",
+          "Advanced manufacturing capabilities",
+          "Marketing and sales"
+        ],
+        "answer": "Advanced manufacturing capabilities"
+      },
+      {
+        "q": "The phrase 'push the boundaries' suggests the partnership aims to:",
+        "options": [
+          "Maintain the status quo",
+          "Improve existing technology moderately",
+          "Innovate and reach new limits",
+          "Reduce technological advancement"
+        ],
+        "answer": "Innovate and reach new limits"
+      },
+      {
+        "q": "What is the primary industry sector involved?",
+        "options": [
+          "Automotive",
+          "Aerospace",
+          "Semiconductor",
+          "Telecommunications"
+        ],
+        "answer": "Semiconductor"
+      },
+      {
+        "q": "What does the investment aim to drive?",
+        "options": [
+          "Cost reduction",
+          "Market expansion",
+          "Development of advanced processes",
+          "Employee training"
+        ],
+        "answer": "Development of advanced processes"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "川普抵北京晤習近平，聚焦AI、貿易與地緣政治",
+    "tabTitle": "地緣政治",
+    "english": "Former U.S. President Donald Trump arrived in Beijing on May 14, 2026, for a high-stakes meeting with Chinese President Xi Jinping. The discussions are expected to center on critical issues including artificial intelligence development, bilateral trade relations, and pressing geopolitical matters. This visit marks a significant moment for international diplomacy, with both leaders aiming to address complex global challenges and potentially reshape future dialogues between the two superpowers.",
+    "chinese": "美国前总统唐纳德·特朗普于2026年5月14日抵达北京，与中国国家主席习近平举行备受瞩目的会晤。预计此次会谈将聚焦于人工智能发展、双边贸易关系以及紧迫的地缘政治议题等关键领域。此次访问标志着国际外交上的一个重要时刻，两位领导人旨在解决复杂的全球性挑战，并可能重塑未来两大超级大国之间的对话。",
+    "vocabulary": [
+      "arrived (v.): 抵达",
+      "high-stakes (adj.): 风险很高的",
+      "meeting (n.): 会晤，会议",
+      "expected (v.): 预计",
+      "center on (v.): 集中于，围绕...",
+      "critical issues (n.): 关键议题",
+      "artificial intelligence (n.): 人工智能",
+      "development (n.): 发展",
+      "bilateral (adj.): 双边的",
+      "trade relations (n.): 贸易关系",
+      "pressing (adj.): 紧迫的",
+      "geopolitical matters (n.): 地缘政治议题",
+      "visit (n.): 访问",
+      "marks (v.): 标志着",
+      "significant moment (n.): 重要时刻",
+      "international diplomacy (n.): 国际外交",
+      "leaders (n.): 领导人",
+      "aiming to (v.): 旨在",
+      "address (v.): 解决，处理",
+      "reshape (v.): 重塑"
+    ],
+    "quiz": [
+      {
+        "q": "When did Donald Trump arrive in Beijing?",
+        "options": [
+          "May 13, 2026",
+          "May 14, 2026",
+          "May 15, 2026",
+          "April 14, 2026"
+        ],
+        "answer": "May 14, 2026"
+      },
+      {
+        "q": "Who did Donald Trump meet with in Beijing?",
+        "options": [
+          "Premier Li Qiang",
+          "President Xi Jinping",
+          "Former President Hu Jintao",
+          "Vice President Han Zheng"
+        ],
+        "answer": "President Xi Jinping"
+      },
+      {
+        "q": "What is NOT mentioned as a focus of the meeting?",
+        "options": [
+          "Artificial intelligence",
+          "Climate change",
+          "Trade relations",
+          "Geopolitical matters"
+        ],
+        "answer": "Climate change"
+      },
+      {
+        "q": "The meeting is described as 'high-stakes'. What does this imply?",
+        "options": [
+          "It is a routine meeting.",
+          "There are significant potential consequences.",
+          "It is a very informal gathering.",
+          "The topics are of low importance."
+        ],
+        "answer": "There are significant potential consequences."
+      },
+      {
+        "q": "What is the primary purpose of the visit, according to the text?",
+        "options": [
+          "To discuss cultural exchange programs",
+          "To address complex global challenges",
+          "To negotiate a new tourism agreement",
+          "To host a public rally"
+        ],
+        "answer": "To address complex global challenges"
+      },
+      {
+        "q": "The text mentions 'bilateral trade relations'. What does 'bilateral' mean?",
+        "options": [
+          "Involving three countries",
+          "Concerning only one country",
+          "Involving two countries",
+          "Relating to international trade organizations"
+        ],
+        "answer": "Involving two countries"
+      },
+      {
+        "q": "What does the visit potentially aim to do?",
+        "options": [
+          "Reduce international cooperation",
+          "Isolate one of the countries",
+          "Reshape future dialogues",
+          "Cancel all existing agreements"
+        ],
+        "answer": "Reshape future dialogues"
+      },
+      {
+        "q": "Which of the following is a 'pressing' matter?",
+        "options": [
+          "A matter that can wait",
+          "A matter that requires immediate attention",
+          "A matter of minor concern",
+          "A historical issue with no current relevance"
+        ],
+        "answer": "A matter that requires immediate attention"
+      },
+      {
+        "q": "What is the level of the English text difficulty?",
+        "options": [
+          "Beginner (A1)",
+          "Intermediate (B1)",
+          "Upper-Intermediate (B2)",
+          "Advanced (C1)"
+        ],
+        "answer": "Upper-Intermediate (B2)"
+      },
+      {
+        "q": "The style of the English text is described as:",
+        "options": [
+          "Narrative",
+          "Persuasive",
+          "Factual",
+          "Humorous"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "The news is about a meeting between leaders of which two countries?",
+        "options": [
+          "China and Japan",
+          "United States and Russia",
+          "China and United States",
+          "United States and Germany"
+        ],
+        "answer": "China and United States"
+      },
+      {
+        "q": "What is the main topic related to technology discussed?",
+        "options": [
+          "Space exploration",
+          "Artificial intelligence",
+          "Cybersecurity",
+          "Renewable energy technology"
+        ],
+        "answer": "Artificial intelligence"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "華許接任Fed主席，市場憂慮通膨與降息壓力",
+    "tabTitle": "金融市場",
+    "english": "Jerome Powell is set to continue his tenure as Chair of the Federal Reserve, a decision that has sparked market concern. Investors are closely watching the central bank's response to persistent inflation and the potential pressure for interest rate cuts. Powell's reappointment signals a degree of continuity in monetary policy, though market participants are seeking clarity on future economic strategies.",
+    "chinese": "鮑威爾將繼續擔任聯準會主席，此決定引發市場擔憂。投資人正密切關注央行對抗持續通膨以及潛在降息壓力的應對措施。鮑威爾的連任預示著貨幣政策將保持一定程度的連續性，儘管市場參與者正尋求未來經濟策略的明確性。",
+    "vocabulary": [
+      "tenure (n.): 任期",
+      "Federal Reserve (n.): 聯邦準備理事會 (美國央行)",
+      "Chair (n.): 主席",
+      "decision (n.): 決定",
+      "sparked (v.): 激發，引發",
+      "market concern (n.): 市場擔憂",
+      "investors (n.): 投資人",
+      "closely watching (v.): 密切關注",
+      "central bank (n.): 中央銀行",
+      "response (n.): 回應，對策",
+      "persistent (adj.): 持續的，頑固的",
+      "inflation (n.): 通貨膨脹",
+      "potential (adj.): 潛在的",
+      "pressure (n.): 壓力",
+      "interest rate cuts (n.): 降息",
+      "reappointment (n.): 連任，再次任命",
+      "signals (v.): 預示，發出信號",
+      "continuity (n.): 連續性",
+      "monetary policy (n.): 貨幣政策",
+      "clarity (n.): 清晰度，明確性"
+    ],
+    "quiz": [
+      {
+        "q": "Who is expected to continue as the Chair of the Federal Reserve?",
+        "options": [
+          "Jerome Powell",
+          "A new nominee",
+          "The Treasury Secretary",
+          "An international banker"
+        ],
+        "answer": "Jerome Powell"
+      },
+      {
+        "q": "What has the decision about the Fed Chair sparked?",
+        "options": [
+          "Investor confidence",
+          "Market concern",
+          "Economic growth",
+          "Reduced inflation"
+        ],
+        "answer": "Market concern"
+      },
+      {
+        "q": "What are investors closely watching the central bank's response to?",
+        "options": [
+          "Stock market volatility",
+          "Global trade agreements",
+          "Persistent inflation and rate cut pressure",
+          "Unemployment rates"
+        ],
+        "answer": "Persistent inflation and rate cut pressure"
+      },
+      {
+        "q": "What does Powell's reappointment signal regarding monetary policy?",
+        "options": [
+          "A major shift",
+          "Increased volatility",
+          "A degree of continuity",
+          "Immediate deregulation"
+        ],
+        "answer": "A degree of continuity"
+      },
+      {
+        "q": "What are market participants seeking regarding future economic strategies?",
+        "options": [
+          "More uncertainty",
+          "Increased taxes",
+          "Clarity",
+          "Further rate hikes"
+        ],
+        "answer": "Clarity"
+      },
+      {
+        "q": "The news mentions \"persistent inflation.\" What does 'persistent' mean?",
+        "options": [
+          "Short-lived",
+          "Temporary",
+          "Continuing for a long time",
+          "Sudden"
+        ],
+        "answer": "Continuing for a long time"
+      },
+      {
+        "q": "What is the Federal Reserve?",
+        "options": [
+          "A commercial bank",
+          "The central bank of the United States",
+          "A stock exchange",
+          "A government regulatory agency"
+        ],
+        "answer": "The central bank of the United States"
+      },
+      {
+        "q": "What does the term \"rate cut pressure\" imply?",
+        "options": [
+          "Pressure to increase interest rates",
+          "Pressure to maintain current rates",
+          "Pressure to lower interest rates",
+          "Pressure to stop trading"
+        ],
+        "answer": "Pressure to lower interest rates"
+      },
+      {
+        "q": "The text uses the word \"tenure.\" What does it refer to?",
+        "options": [
+          "A short-term contract",
+          "The period of holding a position",
+          "A type of investment",
+          "A financial report"
+        ],
+        "answer": "The period of holding a position"
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A new trade deal",
+          "The reappointment of the Fed Chair and its market implications",
+          "A technological breakthrough",
+          "A political election"
+        ],
+        "answer": "The reappointment of the Fed Chair and its market implications"
+      },
+      {
+        "q": "Which word describes the investors' action towards the central bank's response?",
+        "options": [
+          "Ignoring",
+          "Actively promoting",
+          "Closely watching",
+          "Criticizing"
+        ],
+        "answer": "Closely watching"
+      },
+      {
+        "q": "The phrase \"monetary policy\" relates to:",
+        "options": [
+          "Government spending",
+          "Taxation policies",
+          "Control of money supply and interest rates",
+          "Trade tariffs"
+        ],
+        "answer": "Control of money supply and interest rates"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "美國批准10家中企採購輝達H200晶片，交易仍待落實",
+    "tabTitle": "科技",
+    "english": "The U.S. has reportedly granted approval for ten Chinese companies to purchase Nvidia's advanced H200 artificial intelligence chips. This decision marks a significant development amidst ongoing trade restrictions. However, the actual completion of these transactions remains uncertain, as final approvals and logistical arrangements are still pending. The move could potentially impact the global AI hardware market.",
+    "chinese": "據報導，美國已批准十家中國公司購買輝達先進的H200人工智能晶片。這項決定是在持續的貿易限制中一個重要的發展。然而，由於最終批准和後勤安排仍有待處理，這些交易的實際完成仍不確定。此舉可能會影響全球人工智能硬體市場。",
+    "vocabulary": [
+      "reportedly (adv.): 據報導",
+      "granted (v.): 授予",
+      "approval (n.): 批准",
+      "purchase (v.): 購買",
+      "advanced (adj.): 先進的",
+      "artificial intelligence (n.): 人工智能",
+      "chips (n.): 晶片",
+      "decision (n.): 決定",
+      "significant (adj.): 重要的",
+      "development (n.): 發展",
+      "amidst (prep.): 在...之中",
+      "ongoing (adj.): 持續的",
+      "trade restrictions (n.): 貿易限制",
+      "however (adv.): 然而",
+      "actual (adj.): 實際的",
+      "completion (n.): 完成",
+      "transactions (n.): 交易",
+      "remains uncertain (phrase): 仍不確定",
+      "final (adj.): 最終的",
+      "pending (adj.): 待處理的"
+    ],
+    "quiz": [
+      {
+        "q": "What type of chips are the Chinese companies approved to purchase?",
+        "options": [
+          "Nvidia A100 Chips",
+          "Nvidia H100 Chips",
+          "Nvidia H200 Chips",
+          "Intel AI Chips"
+        ],
+        "answer": "Nvidia H200 Chips"
+      },
+      {
+        "q": "Approximately how many Chinese companies received approval?",
+        "options": [
+          "Five",
+          "Ten",
+          "Fifteen",
+          "Twenty"
+        ],
+        "answer": "Ten"
+      },
+      {
+        "q": "What is the current status of the actual transactions?",
+        "options": [
+          "Fully completed",
+          "Immediately finalized",
+          "Stalled or pending",
+          "Rejected by the US"
+        ],
+        "answer": "Stalled or pending"
+      },
+      {
+        "q": "What does the English word 'reportedly' suggest about the information?",
+        "options": [
+          "It is confirmed as fact",
+          "It is based on official statements",
+          "It is based on unofficial accounts or news",
+          "It is a direct quote from the companies"
+        ],
+        "answer": "It is based on unofficial accounts or news"
+      },
+      {
+        "q": "The news mentions 'ongoing trade restrictions'. What does 'ongoing' mean?",
+        "options": [
+          "Finished",
+          "Starting",
+          "Continuing",
+          "Cancelled"
+        ],
+        "answer": "Continuing"
+      },
+      {
+        "q": "What does the word 'significant' imply about the development?",
+        "options": [
+          "Unimportant",
+          "Minor",
+          "Important",
+          "Negative"
+        ],
+        "answer": "Important"
+      },
+      {
+        "q": "According to the text, what remains uncertain about the deals?",
+        "options": [
+          "The type of chips",
+          "The number of companies",
+          "The final completion of the transactions",
+          "The manufacturer of the chips"
+        ],
+        "answer": "The final completion of the transactions"
+      },
+      {
+        "q": "What is 'artificial intelligence'?",
+        "options": [
+          "A type of computer hardware",
+          "A field of computer science",
+          "A type of software",
+          "A specific company"
+        ],
+        "answer": "A field of computer science"
+      },
+      {
+        "q": "The text states the decision marks a 'significant development'. What might this impact?",
+        "options": [
+          "The agricultural market",
+          "The global AI hardware market",
+          "The automotive industry",
+          "The healthcare sector"
+        ],
+        "answer": "The global AI hardware market"
+      },
+      {
+        "q": "What does the word 'pending' mean in the context of the deals?",
+        "options": [
+          "Completed",
+          "Approved",
+          "Waiting for final action",
+          "Cancelled"
+        ],
+        "answer": "Waiting for final action"
+      },
+      {
+        "q": "Which entity granted the approval for the chip purchases?",
+        "options": [
+          "China",
+          "Nvidia",
+          "The US",
+          "The World Trade Organization"
+        ],
+        "answer": "The US"
+      },
+      {
+        "q": "What is the main subject of the news article?",
+        "options": [
+          "New AI chip technology",
+          "International trade agreements",
+          "US approval for Chinese firms to buy Nvidia chips",
+          "The impact of trade restrictions on technology"
+        ],
+        "answer": "US approval for Chinese firms to buy Nvidia chips"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "Anthropic估值破9000億美元，超越OpenAI",
+    "tabTitle": "科技",
+    "english": "Artificial intelligence company Anthropic has reportedly achieved a valuation exceeding $900 billion. This significant milestone places Anthropic ahead of its rival, OpenAI, in terms of market valuation. The surge in valuation reflects the immense investor confidence and rapid advancements in the competitive AI sector. This development is a key indicator of the ongoing growth and potential within the artificial intelligence industry.",
+    "chinese": "據報導，人工智能公司 Anthropic 的估值已超過 9000 億美元。這一重要的里程碑標誌著 Anthropic 在市場估值方面超越了其競爭對手 OpenAI。估值的飆升反映了投資者的高度信心以及在競爭激烈的 AI 領域的快速進展。這一發展是人工智能產業持續增長和潛力的關鍵指標。",
+    "vocabulary": [
+      "Artificial intelligence (n.): 人工智能",
+      "company (n.): 公司",
+      "reportedly (adv.): 據報導",
+      "achieved (v.): 達成",
+      "valuation (n.): 估值",
+      "exceeding (v.): 超過",
+      "significant (adj.): 顯著的",
+      "milestone (n.): 里程碑",
+      "places (v.): 使處於",
+      "ahead of (prep.): 在...之前",
+      "rival (n.): 競爭對手",
+      "market valuation (n.): 市場估值",
+      "surge (n.): 飆升",
+      "reflects (v.): 反映了",
+      "immense (adj.): 巨大的",
+      "investor confidence (n.): 投資者信心",
+      "rapid advancements (n.): 快速進展",
+      "competitive (adj.): 競爭激烈的",
+      "sector (n.): 行業",
+      "development (n.): 發展"
+    ],
+    "quiz": [
+      {
+        "q": "What is the reported valuation of Anthropic?",
+        "options": [
+          "Exactly $900 billion",
+          "Over $900 billion",
+          "Under $900 billion",
+          "Less than OpenAI's valuation"
+        ],
+        "answer": "Over $900 billion"
+      },
+      {
+        "q": "Which company has Anthropic reportedly surpassed in valuation?",
+        "options": [
+          "Google",
+          "Microsoft",
+          "OpenAI",
+          "Meta"
+        ],
+        "answer": "OpenAI"
+      },
+      {
+        "q": "What does the surge in valuation reflect?",
+        "options": [
+          "Investor skepticism",
+          "Declining AI market",
+          "Immense investor confidence",
+          "Stagnation in AI technology"
+        ],
+        "answer": "Immense investor confidence"
+      },
+      {
+        "q": "What does the article suggest about the AI sector?",
+        "options": [
+          "It is highly competitive.",
+          "It is experiencing rapid advancements.",
+          "Both A and B",
+          "It is facing significant challenges."
+        ],
+        "answer": "Both A and B"
+      },
+      {
+        "q": "What does the term 'milestone' refer to in the text?",
+        "options": [
+          "A setback",
+          "A significant achievement",
+          "A new product launch",
+          "A financial loss"
+        ],
+        "answer": "A significant achievement"
+      },
+      {
+        "q": "The word 'exceeding' means:",
+        "options": [
+          "Being equal to",
+          "Being less than",
+          "Going beyond",
+          "Falling short of"
+        ],
+        "answer": "Going beyond"
+      },
+      {
+        "q": "What is Anthropic's primary field?",
+        "options": [
+          "Biotechnology",
+          "Artificial intelligence",
+          "Space exploration",
+          "Renewable energy"
+        ],
+        "answer": "Artificial intelligence"
+      },
+      {
+        "q": "The phrase 'ahead of' indicates:",
+        "options": [
+          "Being behind",
+          "Being in front of",
+          "Being equal to",
+          "Being unrelated to"
+        ],
+        "answer": "Being in front of"
+      },
+      {
+        "q": "What does the article use to describe the AI industry's current state?",
+        "options": [
+          "Slow growth",
+          "Declining investment",
+          "Ongoing growth and potential",
+          "Limited future"
+        ],
+        "answer": "Ongoing growth and potential"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a reason for Anthropic's valuation surge?",
+        "options": [
+          "Investor confidence",
+          "Technological advancements",
+          "Increased government funding",
+          "Competition in the AI sector"
+        ],
+        "answer": "Increased government funding"
+      },
+      {
+        "q": "The word 'rival' is used to describe:",
+        "options": [
+          "A close friend",
+          "A collaborator",
+          "An opponent or competitor",
+          "A subordinate"
+        ],
+        "answer": "An opponent or competitor"
+      },
+      {
+        "q": "What does the word 'development' refer to in the last sentence?",
+        "options": [
+          "A new invention",
+          "A change or progress",
+          "A physical structure",
+          "A legal document"
+        ],
+        "answer": "A change or progress"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
