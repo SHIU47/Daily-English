@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 15, 2026：台灣經濟、地緣政治 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣無人機出口飆升 惟國防預算遭刪減\nTaiwan's drone industry is experiencing a significant boom, with export figures reaching new heights. This surge in demand for unmanned aerial vehicles (UAVs) highlights the growing global market for advanced drone technology. However, this positive economic trend occurs concurrently with a controversial reduction in the nation's defense budget, raising questions about the allocation of resources for national security.\n\n[2] 學者：川習會尋求戰略穩定 台灣非會談焦點\nAcademics suggest the upcoming summit between President Trump and President Xi is primarily aimed at achieving strategic stability between the two global powers. Experts believe that while discussions will cover broad geopolitical issues, Taiwan is unlikely to be a central point of negotiation. The focus is expected to be on managing existing tensions and preventing further escalation in areas of mutual concern, rather than resolving specific territorial disputes.\n\n[3] 台積電矽光子技術今年量產 COUPE成新關鍵字\nTSMC is set to begin mass production of its silicon photonics technology this year, marking a significant advancement in optical interconnects. This development is expected to boost data transfer speeds and energy efficiency in computing. The term COUPE (Co-packaged Optics) is gaining prominence as a key component in future high-performance systems, enabling closer integration of optical and electrical functions. This innovation positions TSMC at the forefront of next-generation semiconductor solutions.",
+    "chinese": "【1】台灣無人機出口飆升 惟國防預算遭刪減\n台灣的無人機產業正經歷顯著的蓬勃發展，出口數字創下新高。這股對無人載具（UAVs）的需求激增，凸顯了全球先進無人機技術市場的日益擴張。然而，這一積極的經濟趨勢卻與國家國防預算備受爭議的削減同時發生，引發了關於國家安全資源分配的質疑。\n\n【2】學者：川習會尋求戰略穩定 台灣非會談焦點\n學者們認為，即將舉行的川普總統與習近平主席峰會主要目標是尋求兩個全球大國之間的戰略穩定。專家預計，雖然會議將涵蓋廣泛的地緣政治議題，但台灣不太可能成為談判的中心點。預計重點將放在管控現有緊張局勢和防止共同關切領域的進一步升級，而非解決具體的領土爭端。\n\n【3】台積電矽光子技術今年量產 COUPE成新關鍵字\n台積電今年將開始其矽光子技術的量產，這標誌著光互連技術的一項重大進展。此發展預計將提升運算中的數據傳輸速度和能源效率。COUPE（共封裝光學元件）一詞正日益成為未來高性能系統的關鍵組件，實現光學與電子功能的更緊密整合。這項創新使台積電處於下一代半導體解決方案的前沿。",
+    "vocabulary": [
+      "drone (n.): 無人機",
+      "industry (n.): 產業",
+      "significant (adj.): 顯著的",
+      "boom (n.): 蓬勃發展；繁榮",
+      "export (n.): 出口",
+      "figure (n.): 數字",
+      "reach (v.): 達到",
+      "new heights (idiom): 新高點",
+      "surge (n.): 激增",
+      "demand (n.): 需求",
+      "unmanned aerial vehicle (UAV) (n.): 無人載具",
+      "highlight (v.): 凸顯；強調",
+      "growing (adj.): 日益擴張的；成長中的",
+      "global market (n.): 全球市場",
+      "advanced (adj.): 先進的",
+      "technology (n.): 技術",
+      "however (adv.): 然而",
+      "positive (adj.): 積極的",
+      "trend (n.): 趨勢",
+      "concurrently (adv.): 同時地",
+      "reduction (n.): 削減",
+      "defense budget (n.): 國防預算",
+      "controversial (adj.): 備受爭議的",
+      "raise questions (idiom): 引發質疑",
+      "allocation (n.): 分配",
+      "resource (n.): 資源",
+      "national security (n.): 國家安全",
+      "summit (n.): 峰會",
+      "primarily (adv.): 主要地",
+      "aimed at (phr.): 旨在",
+      "achieving (v.): 達成",
+      "strategic stability (n.): 戰略穩定",
+      "global powers (n.): 全球大國",
+      "experts (n.): 專家",
+      "suggest (v.): 建議，認為",
+      "upcoming (adj.): 即將到來的",
+      "geopolitical (adj.): 地緣政治的",
+      "issues (n.): 問題，議題",
+      "unlikely (adj.): 不太可能的",
+      "central point (n.): 中心點",
+      "negotiation (n.): 談判",
+      "focus (n.): 焦點",
+      "expected to be (phr.): 預計將是",
+      "managing (v.): 管理，管控",
+      "tensions (n.): 緊張局勢",
+      "preventing (v.): 阻止，預防",
+      "escalation (n.): 升級",
+      "mutual concern (n.): 共同關切",
+      "territorial disputes (n.): 領土爭端",
+      "silicon photonics (n.): 矽光子學",
+      "mass production (n.): 量產",
+      "advancement (n.): 進步",
+      "optical interconnects (n.): 光互連",
+      "boost (v.): 提升",
+      "data transfer speeds (n.): 數據傳輸速度",
+      "energy efficiency (n.): 能源效率",
+      "computing (n.): 計算",
+      "prominence (n.): 重要性",
+      "key component (n.): 關鍵組件",
+      "high-performance (adj.): 高性能的",
+      "systems (n.): 系統",
+      "enabling (v.): 使能夠",
+      "closer integration (n.): 更緊密的整合",
+      "optical functions (n.): 光學功能",
+      "electrical functions (n.): 電子功能",
+      "innovation (n.): 創新",
+      "positions (v.): 使處於",
+      "forefront (n.): 前沿",
+      "next-generation (adj.): 下一代的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main positive trend mentioned in the news?",
+        "options": [
+          "A decrease in defense spending",
+          "A significant boom in Taiwan's drone industry and exports",
+          "Increased government investment in research",
+          "A reduction in global demand for technology"
+        ],
+        "answer": "A significant boom in Taiwan's drone industry and exports"
+      },
+      {
+        "q": "What does the term 'UAVs' stand for?",
+        "options": [
+          "United Aviation Ventures",
+          "Universal Aerial Vehicles",
+          "Unmanned Aerial Vehicles",
+          "Urban Vehicle Projects"
+        ],
+        "answer": "Unmanned Aerial Vehicles"
+      },
+      {
+        "q": "The news mentions a 'surge' in drone exports. What does 'surge' mean in this context?",
+        "options": [
+          "A slow decrease",
+          "A rapid increase",
+          "A steady decline",
+          "A temporary halt"
+        ],
+        "answer": "A rapid increase"
+      },
+      {
+        "q": "What negative development is happening concurrently with the drone industry's success?",
+        "options": [
+          "A rise in unemployment",
+          "A cut in the defense budget",
+          "A decrease in export figures",
+          "A decline in technological innovation"
+        ],
+        "answer": "A cut in the defense budget"
+      },
+      {
+        "q": "The phrase 'new heights' suggests that export figures have reached:",
+        "options": [
+          "A previous low point",
+          "A normal level",
+          "An unprecedented level",
+          "A stable plateau"
+        ],
+        "answer": "An unprecedented level"
+      },
+      {
+        "q": "What does the news suggest the drone export surge highlights?",
+        "options": [
+          "A decline in global security",
+          "The growing global market for advanced drone technology",
+          "A shift towards less advanced technology",
+          "Taiwan's isolation from the international market"
+        ],
+        "answer": "The growing global market for advanced drone technology"
+      },
+      {
+        "q": "The reduction in the defense budget is described as:",
+        "options": [
+          "Necessary",
+          "Popular",
+          "Controversial",
+          "Unimportant"
+        ],
+        "answer": "Controversial"
+      },
+      {
+        "q": "What issue is raised by the concurrent events?",
+        "options": [
+          "The effectiveness of drone technology",
+          "The future of the global market",
+          "The allocation of resources for national security",
+          "The reasons for the drone export surge"
+        ],
+        "answer": "The allocation of resources for national security"
+      },
+      {
+        "q": "Which word best describes the current state of Taiwan's drone industry?",
+        "options": [
+          "Stagnant",
+          "Declining",
+          "Booming",
+          "Uncertain"
+        ],
+        "answer": "Booming"
+      },
+      {
+        "q": "The news is written in a factual style, meaning it:",
+        "options": [
+          "Expresses strong opinions",
+          "Relies on personal anecdotes",
+          "Presents objective information",
+          "Uses highly emotional language"
+        ],
+        "answer": "Presents objective information"
+      },
+      {
+        "q": "What does 'allocation' refer to in the context of the news?",
+        "options": [
+          "The creation of new resources",
+          "The distribution or assignment of resources",
+          "The reduction of resources",
+          "The importance of resources"
+        ],
+        "answer": "The distribution or assignment of resources"
+      },
+      {
+        "q": "The overall tone of the news suggests a situation with both positive economic developments and:",
+        "options": [
+          "Political stability",
+          "Social harmony",
+          "National security concerns",
+          "Technological setbacks"
+        ],
+        "answer": "National security concerns"
+      },
+      {
+        "q": "What is the primary goal of the Trump-Xi summit, according to academics?",
+        "options": [
+          "To resolve territorial disputes",
+          "To achieve strategic stability",
+          "To discuss Taiwan's future",
+          "To prevent economic competition"
+        ],
+        "answer": "To achieve strategic stability"
+      },
+      {
+        "q": "According to the text, is Taiwan expected to be a central point of negotiation?",
+        "options": [
+          "Yes, it is the main focus",
+          "No, it is unlikely to be a central point",
+          "Only if economic issues are discussed",
+          "The text does not mention Taiwan"
+        ],
+        "answer": "No, it is unlikely to be a central point"
+      },
+      {
+        "q": "What kind of issues are expected to be covered in the summit?",
+        "options": [
+          "Only economic issues",
+          "Specific territorial disputes",
+          "Broad geopolitical issues",
+          "Cultural exchange programs"
+        ],
+        "answer": "Broad geopolitical issues"
+      },
+      {
+        "q": "The text suggests the focus will be on managing existing tensions and...",
+        "options": [
+          "Starting new trade wars",
+          "Increasing military presence",
+          "Preventing further escalation",
+          "Imposing new sanctions"
+        ],
+        "answer": "Preventing further escalation"
+      },
+      {
+        "q": "What is the main purpose of the summit, as interpreted by the academics?",
+        "options": [
+          "To establish a new alliance",
+          "To de-escalate potential conflicts",
+          "To divide global influence",
+          "To sign a peace treaty"
+        ],
+        "answer": "To de-escalate potential conflicts"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a likely focus of the summit?",
+        "options": [
+          "Strategic stability",
+          "Geopolitical issues",
+          "Taiwan",
+          "Managing tensions"
+        ],
+        "answer": "Taiwan"
+      },
+      {
+        "q": "The word 'primarily' in the first sentence means:",
+        "options": [
+          "Secondarily",
+          "Mainly",
+          "Briefly",
+          "Officially"
+        ],
+        "answer": "Mainly"
+      },
+      {
+        "q": "What does 'escalation' refer to in the context of the news?",
+        "options": [
+          "A decrease in tensions",
+          "An increase in the severity of a conflict",
+          "A diplomatic breakthrough",
+          "An economic recession"
+        ],
+        "answer": "An increase in the severity of a conflict"
+      },
+      {
+        "q": "Who are the two leaders mentioned in the context of the summit?",
+        "options": [
+          "Biden and Xi",
+          "Trump and Putin",
+          "Trump and Xi",
+          "Xi and Kim Jong Un"
+        ],
+        "answer": "Trump and Xi"
+      },
+      {
+        "q": "The academics believe the summit aims to prevent escalation in areas of:",
+        "options": [
+          "Limited disagreement",
+          "Mutual concern",
+          "Unilateral action",
+          "Economic competition only"
+        ],
+        "answer": "Mutual concern"
+      },
+      {
+        "q": "What is the expected outcome regarding specific territorial disputes?",
+        "options": [
+          "They are expected to be resolved",
+          "They are not the primary focus",
+          "They will be the main topic of discussion",
+          "They will be ignored completely"
+        ],
+        "answer": "They are not the primary focus"
+      },
+      {
+        "q": "The term 'global powers' refers to:",
+        "options": [
+          "Countries with small economies",
+          "Nations with significant international influence",
+          "Island nations",
+          "Developing countries"
+        ],
+        "answer": "Nations with significant international influence"
+      },
+      {
+        "q": "What technology is TSMC set to mass produce this year?",
+        "options": [
+          "Advanced AI chips",
+          "Silicon photonics technology",
+          "Quantum computing processors",
+          "Next-generation memory modules"
+        ],
+        "answer": "Silicon photonics technology"
+      },
+      {
+        "q": "What is a major expected benefit of TSMC's silicon photonics technology?",
+        "options": [
+          "Reduced manufacturing costs",
+          "Increased chip size",
+          "Boosted data transfer speeds and energy efficiency",
+          "Enhanced graphic rendering capabilities"
+        ],
+        "answer": "Boosted data transfer speeds and energy efficiency"
+      },
+      {
+        "q": "What term is emerging as a key aspect of future high-performance systems related to this technology?",
+        "options": [
+          "AIaaS",
+          "5GNR",
+          "COUPE",
+          "IoT Hub"
+        ],
+        "answer": "COUPE"
+      },
+      {
+        "q": "What does COUPE stand for?",
+        "options": [
+          "Centralized Optical Processing Unit",
+          "Co-packaged Optics",
+          "Computer Optimized Power Efficiency",
+          "Cloud-based Optical Platform"
+        ],
+        "answer": "Co-packaged Optics"
+      },
+      {
+        "q": "What does COUPE enable in future systems?",
+        "options": [
+          "Wireless charging integration",
+          "Closer integration of optical and electrical functions",
+          "Expanded storage capacity",
+          "Improved cooling systems"
+        ],
+        "answer": "Closer integration of optical and electrical functions"
+      },
+      {
+        "q": "The news suggests TSMC's innovation positions them at the forefront of what?",
+        "options": [
+          "Traditional semiconductor manufacturing",
+          "Next-generation semiconductor solutions",
+          "Consumer electronics design",
+          "Software development platforms"
+        ],
+        "answer": "Next-generation semiconductor solutions"
+      },
+      {
+        "q": "What field does silicon photonics technology relate to?",
+        "options": [
+          "Biotechnology",
+          "Aerospace engineering",
+          "Optical interconnects",
+          "Renewable energy"
+        ],
+        "answer": "Optical interconnects"
+      },
+      {
+        "q": "The development is described as a significant ____ in optical interconnects.",
+        "options": [
+          "setback",
+          "stagnation",
+          "advancement",
+          "disruption"
+        ],
+        "answer": "advancement"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a benefit of this technology?",
+        "options": [
+          "Boosted data transfer speeds",
+          "Enhanced energy efficiency",
+          "Reduced latency",
+          "Improved computing power"
+        ],
+        "answer": "Reduced latency"
+      },
+      {
+        "q": "The term COUPE is gaining ____ as a key component.",
+        "options": [
+          "obscurity",
+          "disregard",
+          "prominence",
+          "redundancy"
+        ],
+        "answer": "prominence"
+      },
+      {
+        "q": "What kind of systems will COUPE be a key component in?",
+        "options": [
+          "Low-power IoT devices",
+          "Future high-performance systems",
+          "Basic office computers",
+          "Legacy hardware"
+        ],
+        "answer": "Future high-performance systems"
+      },
+      {
+        "q": "The English text is written in a factual style suitable for which language proficiency level?",
+        "options": [
+          "A1",
+          "B1",
+          "B2",
+          "C1"
+        ],
+        "answer": "B2"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "川習會談 達成波音200架飛機採購協議",
+    "tabTitle": "地緣政治",
+    "english": "The highly anticipated summit between Chinese President Xi Jinping and U.S. President Donald Trump concluded today with a significant trade agreement. A key outcome is the confirmed purchase of 200 Boeing aircraft by China, valued at billions of dollars. This deal is expected to boost economic ties and potentially ease ongoing trade tensions between the two global powers.",
+    "chinese": "备受瞩目的中国国家主席习近平与美国总统唐纳德·特朗普之间的峰会今天结束，并达成了一项重要的贸易协议。一项关键成果是中国确认采购200架波音飞机，价值数十亿美元。该协议预计将促进经济联系，并可能缓解两国之间持续的贸易紧张局势。",
+    "vocabulary": [
+      "summit (n.): 峰会",
+      "anticipated (adj.): 期待的",
+      "concluded (v.): 结束",
+      "significant (adj.): 重大的",
+      "trade agreement (n.): 贸易协议",
+      "key outcome (n.): 关键成果",
+      "confirmed purchase (n.): 确认采购",
+      "aircraft (n.): 飞机",
+      "valued at (prep.): 价值",
+      "billions of dollars (n.): 数十亿美元",
+      "expected to (v.): 预计将",
+      "boost (v.): 促进",
+      "economic ties (n.): 经济联系",
+      "potentially (adv.): 可能地",
+      "ease (v.): 缓解",
+      "ongoing (adj.): 持续的",
+      "trade tensions (n.): 贸易紧张局势",
+      "global powers (n.): 全球大国",
+      "geopolitical (adj.): 地缘政治的",
+      "yields (v.): 产生"
+    ],
+    "quiz": [
+      {
+        "q": "What was the main purpose of the meeting mentioned in the article?",
+        "options": [
+          "To discuss military strategies",
+          "To negotiate a trade agreement",
+          "To address environmental concerns",
+          "To plan a cultural exchange"
+        ],
+        "answer": "To negotiate a trade agreement"
+      },
+      {
+        "q": "Which U.S. company is mentioned as benefiting from the agreement?",
+        "options": [
+          "Apple",
+          "Boeing",
+          "Ford",
+          "Microsoft"
+        ],
+        "answer": "Boeing"
+      },
+      {
+        "q": "How many aircraft did China agree to purchase?",
+        "options": [
+          "100",
+          "150",
+          "200",
+          "250"
+        ],
+        "answer": "200"
+      },
+      {
+        "q": "What is the estimated value of the aircraft deal?",
+        "options": [
+          "Millions of dollars",
+          "Billions of dollars",
+          "Trillions of dollars",
+          "Thousands of dollars"
+        ],
+        "answer": "Billions of dollars"
+      },
+      {
+        "q": "The article suggests the deal could help to...",
+        "options": [
+          "Increase global warming",
+          "Reduce international travel",
+          "Ease trade tensions",
+          "Limit technological development"
+        ],
+        "answer": "Ease trade tensions"
+      },
+      {
+        "q": "Who were the leaders involved in the summit?",
+        "options": [
+          "Xi Jinping and Donald Trump",
+          "Xi Jinping and Joe Biden",
+          "Donald Trump and Vladimir Putin",
+          "Emmanuel Macron and Xi Jinping"
+        ],
+        "answer": "Xi Jinping and Donald Trump"
+      },
+      {
+        "q": "The word 'anticipated' in the first sentence means:",
+        "options": [
+          "Unexpected",
+          "Postponed",
+          "Expected",
+          "Cancelled"
+        ],
+        "answer": "Expected"
+      },
+      {
+        "q": "What does the article predict about the deal's impact on economic ties?",
+        "options": [
+          "It will weaken them",
+          "It will strengthen them",
+          "It will have no impact",
+          "It will have a negative impact"
+        ],
+        "answer": "It will strengthen them"
+      },
+      {
+        "q": "The phrase 'key outcome' refers to:",
+        "options": [
+          "A minor detail",
+          "An unimportant result",
+          "A primary result",
+          "An unexpected consequence"
+        ],
+        "answer": "A primary result"
+      },
+      {
+        "q": "What is the general tone of the article?",
+        "options": [
+          "Sarcastic",
+          "Humorous",
+          "Factual",
+          "Opinionated"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "The deal is described as 'significant', meaning it is:",
+        "options": [
+          "Small",
+          "Unimportant",
+          "Large or important",
+          "Temporary"
+        ],
+        "answer": "Large or important"
+      },
+      {
+        "q": "The article belongs to which section of a newspaper?",
+        "options": [
+          "Sports",
+          "Entertainment",
+          "Geopolitics",
+          "Lifestyle"
+        ],
+        "answer": "Geopolitics"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "美股續創新高 科技股領漲",
+    "tabTitle": "金融市場",
+    "english": "US stock markets continued their upward trajectory this week, with major indices reaching unprecedented highs. The technology sector was a significant driver of this growth, experiencing robust gains. Investors remain optimistic about the economic outlook, contributing to the sustained rally. This positive sentiment is expected to persist as corporate earnings reports continue to impress.",
+    "chinese": "本週美國股市延續上漲趨勢，主要指數創下歷史新高。科技類股是此波成長的重要推手，經歷了強勁的上漲。投資者對經濟前景保持樂觀，這有助於持續的漲勢。隨著企業財報持續亮眼，這種積極情緒預計將會持續。",
+    "vocabulary": [
+      "trajectory (n.): 軌跡；軌道",
+      "unprecedented (adj.): 前所未有的",
+      "indices (n.): 指數",
+      "sector (n.): 板塊；行業",
+      "significant (adj.): 顯著的；重要的",
+      "driver (n.): 驅動因素；推動者",
+      "robust (adj.): 強健的；穩健的",
+      "gains (n.): 收益；漲幅",
+      "optimistic (adj.): 樂觀的",
+      "economic outlook (n.): 經濟前景",
+      "contributing (v.): 促成；貢獻",
+      "sustained (adj.): 持續的；持久的",
+      "rally (n.): (股價等的)反彈；上漲",
+      "sentiment (n.): 情感；情緒；態度",
+      "persist (v.): 持續；堅持",
+      "corporate (adj.): 公司的；企業的",
+      "earnings reports (n.): 盈利報告；財報",
+      "impress (v.): 使感動；給...留下深刻印象",
+      "upward (adj.): 向上的",
+      "reach (v.): 達到；到達"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "The decline of the technology sector",
+          "US stock markets reaching new highs",
+          "A decrease in investor optimism",
+          "Negative corporate earnings reports"
+        ],
+        "answer": "US stock markets reaching new highs"
+      },
+      {
+        "q": "Which sector is mentioned as a significant driver of growth?",
+        "options": [
+          "Energy",
+          "Healthcare",
+          "Technology",
+          "Real Estate"
+        ],
+        "answer": "Technology"
+      },
+      {
+        "q": "How are the US stock markets described in terms of their movement?",
+        "options": [
+          "Declining",
+          "Stabilizing",
+          "Fluctuating",
+          "Continuing their upward trajectory"
+        ],
+        "answer": "Continuing their upward trajectory"
+      },
+      {
+        "q": "What is the general sentiment of investors regarding the economic outlook?",
+        "options": [
+          "Pessimistic",
+          "Cautious",
+          "Optimistic",
+          "Indifferent"
+        ],
+        "answer": "Optimistic"
+      },
+      {
+        "q": "What is contributing to the sustained rally in the stock market?",
+        "options": [
+          "Decreasing corporate profits",
+          "Investor optimism about the economic outlook",
+          "A decline in technological innovation",
+          "Geopolitical instability"
+        ],
+        "answer": "Investor optimism about the economic outlook"
+      },
+      {
+        "q": "What is expected to persist due to recent developments?",
+        "options": [
+          "Market volatility",
+          "A bearish trend",
+          "Positive investor sentiment",
+          "Increased trading volumes"
+        ],
+        "answer": "Positive investor sentiment"
+      },
+      {
+        "q": "The news states that major indices have reached...",
+        "options": [
+          "yearly lows",
+          "record lows",
+          "unprecedented highs",
+          "stable averages"
+        ],
+        "answer": "unprecedented highs"
+      },
+      {
+        "q": "The word 'robust' in the context of gains means:",
+        "options": [
+          "Weak",
+          "Modest",
+          "Strong",
+          "Temporary"
+        ],
+        "answer": "Strong"
+      },
+      {
+        "q": "What is expected to continue impressing investors?",
+        "options": [
+          "Government regulations",
+          "Consumer spending habits",
+          "Corporate earnings reports",
+          "International trade agreements"
+        ],
+        "answer": "Corporate earnings reports"
+      },
+      {
+        "q": "The technology sector is described as a ______ driver of growth.",
+        "options": [
+          "minor",
+          "weak",
+          "negligible",
+          "significant"
+        ],
+        "answer": "significant"
+      },
+      {
+        "q": "What is happening to the trajectory of US stock markets?",
+        "options": [
+          "It is becoming unpredictable.",
+          "It is heading downwards.",
+          "It is continuing upward.",
+          "It has flattened out."
+        ],
+        "answer": "It is continuing upward."
+      },
+      {
+        "q": "The word 'persist' means to:",
+        "options": [
+          "Stop suddenly",
+          "Continue or last",
+          "Decrease gradually",
+          "Become uncertain"
+        ],
+        "answer": "Continue or last"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "三星電子工會發起罷工警告",
+    "tabTitle": "國際大事",
+    "english": "Samsung Electronics' main labor union has issued a formal strike warning, escalating tensions with management. The union is demanding improved working conditions and higher wages. If negotiations fail, the union has indicated that industrial action could begin as early as next month. This potential strike could significantly disrupt the global supply chain for semiconductors and consumer electronics.",
+    "chinese": "三星電子主要工會已發出正式罷工警告，加劇了與管理層的緊張關係。工會要求改善工作條件和提高工資。如果談判失敗，工會已表明可能最早於下個月開始採取工業行動。這次潛在的罷工可能會嚴重擾亂半導體和消費電子產品的全球供應鏈。",
+    "vocabulary": [
+      "labor union (n.): 工會",
+      "issued (v.): 發出",
+      "formal (adj.): 正式的",
+      "strike warning (n.): 罷工警告",
+      "escalating (v.): 加劇",
+      "tensions (n.): 緊張關係",
+      "management (n.): 管理層",
+      "demanding (v.): 要求",
+      "improved (adj.): 改善的",
+      "working conditions (n.): 工作條件",
+      "higher wages (n.): 較高的工資",
+      "negotiations (n.): 談判",
+      "fail (v.): 失敗",
+      "indicated (v.): 表明",
+      "industrial action (n.): 工業行動",
+      "begin (v.): 開始",
+      "potential (adj.): 潛在的",
+      "disrupt (v.): 擾亂",
+      "global supply chain (n.): 全球供應鏈",
+      "semiconductors (n.): 半導體"
+    ],
+    "quiz": [
+      {
+        "q": "What has Samsung Electronics' main labor union issued?",
+        "options": [
+          "A new product launch",
+          "A formal strike warning",
+          "A financial report",
+          "A partnership agreement"
+        ],
+        "answer": "A formal strike warning"
+      },
+      {
+        "q": "What are the union's main demands?",
+        "options": [
+          "Reduced working hours and lower wages",
+          "Improved working conditions and higher wages",
+          "More flexible work locations and bonuses",
+          "Increased employee training and development"
+        ],
+        "answer": "Improved working conditions and higher wages"
+      },
+      {
+        "q": "What could happen if negotiations fail?",
+        "options": [
+          "The union might agree to a pay cut.",
+          "Management might offer early retirement packages.",
+          "Industrial action could begin.",
+          "The company might relocate its headquarters."
+        ],
+        "answer": "Industrial action could begin."
+      },
+      {
+        "q": "When might the industrial action start, according to the union?",
+        "options": [
+          "This month",
+          "Next week",
+          "Next month",
+          "At the end of the year"
+        ],
+        "answer": "Next month"
+      },
+      {
+        "q": "What could be significantly disrupted by this potential strike?",
+        "options": [
+          "Samsung's internal IT systems",
+          "The global stock market",
+          "The global supply chain for semiconductors and consumer electronics",
+          "The company's research and development department"
+        ],
+        "answer": "The global supply chain for semiconductors and consumer electronics"
+      },
+      {
+        "q": "The news states that tensions are escalating between the union and whom?",
+        "options": [
+          "Government regulators",
+          "Competitors",
+          "Customers",
+          "Management"
+        ],
+        "answer": "Management"
+      },
+      {
+        "q": "What is the primary focus of the union's demands?",
+        "options": [
+          "Company expansion",
+          "Worker welfare and compensation",
+          "Technological innovation",
+          "Marketing strategies"
+        ],
+        "answer": "Worker welfare and compensation"
+      },
+      {
+        "q": "The term 'formal' in 'formal strike warning' suggests the warning is:",
+        "options": [
+          "Informal",
+          "Unofficial",
+          "Official and deliberate",
+          "Surprising"
+        ],
+        "answer": "Official and deliberate"
+      },
+      {
+        "q": "If the union takes 'industrial action', what does it imply?",
+        "options": [
+          "A peaceful protest",
+          "A collective action by workers to disrupt operations",
+          "A legal challenge",
+          "A public relations campaign"
+        ],
+        "answer": "A collective action by workers to disrupt operations"
+      },
+      {
+        "q": "The word 'escalating' means:",
+        "options": [
+          "Decreasing",
+          "Increasing",
+          "Remaining the same",
+          "Resolving"
+        ],
+        "answer": "Increasing"
+      },
+      {
+        "q": "Which products are mentioned as potentially being affected by the strike?",
+        "options": [
+          "Automobiles and medical devices",
+          "Aerospace components and software",
+          "Semiconductors and consumer electronics",
+          "Pharmaceuticals and agricultural products"
+        ],
+        "answer": "Semiconductors and consumer electronics"
+      },
+      {
+        "q": "What is the consequence of 'negotiations fail'?",
+        "options": [
+          "The union will accept the current terms.",
+          "Management will concede to all demands.",
+          "Further action from the union is possible.",
+          "The strike will be postponed indefinitely."
+        ],
+        "answer": "Further action from the union is possible."
+      }
+    ]
+  },
+  "article-6": {
+    "title": "烏克蘭稱遭俄最大規模空襲 衝突持續",
+    "tabTitle": "國際大事",
+    "english": "Ukraine's air force reported on Friday that the country endured its largest-ever Russian airstrike. The widespread attacks targeted multiple cities across Ukraine, causing significant damage. This escalation marks a critical point in the ongoing conflict, with both sides experiencing intense fighting. Authorities are assessing the full extent of the destruction and providing aid to affected areas.",
+    "chinese": "烏克蘭空軍週五（15日）報告稱，該國遭受了俄羅斯有史以來規模最大的空襲。這次大規模襲擊目標遍及烏克蘭多個城市，造成了嚴重破壞。這次襲擊升級標誌著持續衝突的一個關鍵時刻，雙方都經歷了激烈的戰鬥。當局正在評估破壞的全部範圍，並向受災地區提供援助。",
+    "vocabulary": [
+      "air force (n.): 空軍",
+      "reported (v.): 報導",
+      "endured (v.): 忍受，經歷",
+      "largest-ever (adj.): 史上最大的",
+      "airstrike (n.): 空襲",
+      "widespread (adj.): 廣泛的",
+      "targeted (v.): 瞄準，針對",
+      "multiple (adj.): 多個的",
+      "cities (n.): 城市",
+      "across (prep.): 遍及",
+      "causing (v.): 造成",
+      "significant (adj.): 顯著的",
+      "damage (n.): 損壞",
+      "escalation (n.): 升級",
+      "marks (v.): 標誌著",
+      "critical (adj.): 關鍵的",
+      "ongoing (adj.): 持續的",
+      "conflict (n.): 衝突",
+      "intense (adj.): 激烈的",
+      "fighting (n.): 戰鬥"
+    ],
+    "quiz": [
+      {
+        "q": "What did Ukraine's air force report on Friday?",
+        "options": [
+          "A minor Russian drone attack",
+          "The largest-ever Russian airstrike",
+          "A diplomatic breakthrough",
+          "A ceasefire agreement"
+        ],
+        "answer": "The largest-ever Russian airstrike"
+      },
+      {
+        "q": "Where did the widespread attacks target?",
+        "options": [
+          "Only the capital city",
+          "Military bases in Russia",
+          "Multiple cities across Ukraine",
+          "Border regions"
+        ],
+        "answer": "Multiple cities across Ukraine"
+      },
+      {
+        "q": "What was the result of the attacks?",
+        "options": [
+          "No damage was reported",
+          "Minor inconveniences",
+          "Significant damage",
+          "A complete withdrawal of forces"
+        ],
+        "answer": "Significant damage"
+      },
+      {
+        "q": "What does the escalation mark in the ongoing conflict?",
+        "options": [
+          "A period of calm",
+          "A critical point",
+          "The end of hostilities",
+          "A minor incident"
+        ],
+        "answer": "A critical point"
+      },
+      {
+        "q": "What is happening on both sides of the conflict?",
+        "options": [
+          "Peaceful negotiations",
+          "Intense fighting",
+          "Economic cooperation",
+          "Humanitarian aid distribution"
+        ],
+        "answer": "Intense fighting"
+      },
+      {
+        "q": "Who is assessing the extent of the destruction?",
+        "options": [
+          "International observers",
+          "Independent journalists",
+          "Ukrainian authorities",
+          "Russian officials"
+        ],
+        "answer": "Ukrainian authorities"
+      },
+      {
+        "q": "What are authorities also doing?",
+        "options": [
+          "Planning further attacks",
+          "Providing aid to affected areas",
+          "Demanding reparations",
+          "Seeking international mediation"
+        ],
+        "answer": "Providing aid to affected areas"
+      },
+      {
+        "q": "According to the report, when did Ukraine's air force make this statement?",
+        "options": [
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "answer": "Friday"
+      },
+      {
+        "q": "What is the nature of the attacks described?",
+        "options": [
+          "Limited and localized",
+          "Widespread and significant",
+          "Primarily defensive",
+          "Cybernetic in nature"
+        ],
+        "answer": "Widespread and significant"
+      },
+      {
+        "q": "The vocabulary word 'endured' means:",
+        "options": [
+          "To avoid",
+          "To experience or suffer through",
+          "To initiate",
+          "To negotiate"
+        ],
+        "answer": "To experience or suffer through"
+      },
+      {
+        "q": "What does the term 'escalation' refer to in this context?",
+        "options": [
+          "A decrease in the intensity of fighting",
+          "An increase in the severity or scale of the conflict",
+          "A diplomatic resolution",
+          "A humanitarian crisis"
+        ],
+        "answer": "An increase in the severity or scale of the conflict"
+      },
+      {
+        "q": "The word 'significant' in the context of 'significant damage' means:",
+        "options": [
+          "Minor",
+          "Insignificant",
+          "Important or noticeable",
+          "Temporary"
+        ],
+        "answer": "Important or noticeable"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
