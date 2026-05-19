@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 20, 2026：台灣社會、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 缺蛋危機解？政府祭穩定供應措施\nTaiwan is experiencing an egg shortage, prompting the government to implement measures aimed at stabilizing supply. These initiatives include increasing imports and supporting local poultry farmers. Officials hope these actions will alleviate consumer concerns and ensure a consistent availability of eggs in the market. The situation has highlighted the importance of robust agricultural policies.\n\n[2] AI伺服器需求旺 台廠出貨動能強勁\nThe demand for AI servers is experiencing a significant surge globally. This strong market trend is driving robust shipment performance from Taiwanese manufacturers. Companies in Taiwan are well-positioned to capitalize on this growth, with many reporting increased production and export volumes to meet the escalating needs of AI development and deployment. The outlook for these suppliers remains highly positive.\n\n[3] 台灣電動車充電樁佈建加速\nTaiwan is significantly accelerating the deployment of electric vehicle (EV) charging stations across the island. This initiative aims to support the growing number of EV owners and encourage wider adoption of sustainable transportation. The government has set ambitious targets for installing new charging infrastructure in urban centers and along major highways. This expansion is crucial for addressing range anxiety and ensuring convenient charging for all EV users.",
+    "chinese": "【1】缺蛋危機解？政府祭穩定供應措施\n台灣正經歷雞蛋短缺，促使政府實施旨在穩定供應的措施。這些措施包括增加進口和支持本地家禽養殖戶。官員們希望這些行動能緩解消費者的擔憂，並確保市場上雞蛋的持續供應。此情況凸顯了健全農業政策的重要性。\n\n【2】AI伺服器需求旺 台廠出貨動能強勁\n全球對AI伺服器的需求正經歷顯著的激增。這種強勁的市場趨勢正推動台灣製造商實現強勁的出貨表現。台灣的企業處於有利地位，能夠從中獲利，許多公司報告稱產量和出口量增加，以滿足AI開發和部署日益增長的需求。這些供應商的前景依然非常樂觀。\n\n【3】台灣電動車充電樁佈建加速\n台灣正在全島加速佈建電動車（EV）充電樁。這項措施旨在支持日益增長的電動車車主數量，並鼓勵更廣泛地採用永續交通。政府已設定了在城市中心和主要高速公路上安裝新充電基礎設施的宏大目標。這次擴張對於緩解里程焦慮並確保所有電動車使用者都能方便充電至關重要。",
+    "vocabulary": [
+      "shortage (n.): 短缺",
+      "prompt (v.): 促使",
+      "implement (v.): 實施",
+      "measures (n.): 措施",
+      "aimed at (prep.): 旨在",
+      "stabilizing (v.): 穩定",
+      "supply (n.): 供應",
+      "initiatives (n.): 措施/計畫",
+      "increasing (v.): 增加",
+      "imports (n.): 進口",
+      "supporting (v.): 支持",
+      "local (adj.): 當地的",
+      "poultry (n.): 家禽",
+      "farmers (n.): 農民",
+      "officials (n.): 官員",
+      "alleviate (v.): 緩解",
+      "consumer (n.): 消費者",
+      "concerns (n.): 擔憂",
+      "consistent (adj.): 持續的/一致的",
+      "availability (n.): 可獲得性",
+      "highlighted (v.): 凸顯",
+      "robust (adj.): 健全的",
+      "agricultural (adj.): 農業的",
+      "policies (n.): 政策",
+      "AI server (n.): 人工智慧伺服器",
+      "demand (n.): 需求",
+      "surge (v.): 激增",
+      "globally (adv.): 全球地",
+      "market trend (n.): 市場趨勢",
+      "driving (v.): 推動",
+      "robust (adj.): 強健的",
+      "shipment performance (n.): 出貨表現",
+      "Taiwanese manufacturers (n.): 台灣製造商",
+      "well-positioned (adj.): 處於有利地位",
+      "capitalize on (v.): 獲利於",
+      "growth (n.): 成長",
+      "reporting (v.): 報告",
+      "increased production (n.): 產量增加",
+      "export volumes (n.): 出口量",
+      "meet (v.): 滿足",
+      "escalating needs (n.): 日益增長的需求",
+      "development (n.): 開發",
+      "deployment (n.): 部署",
+      "outlook (n.): 前景",
+      "accelerating (v.): 加速",
+      "deployment (n.): 佈署",
+      "electric vehicle (EV) (n.): 電動車",
+      "charging station (n.): 充電樁",
+      "initiative (n.): 措施",
+      "support (v.): 支持",
+      "growing number (n.): 增長數量",
+      "encourage (v.): 鼓勵",
+      "wider adoption (n.): 更廣泛的採用",
+      "sustainable transportation (n.): 永續交通",
+      "government (n.): 政府",
+      "ambitious targets (n.): 宏大目標",
+      "installing (v.): 安裝",
+      "infrastructure (n.): 基礎設施",
+      "urban centers (n.): 城市中心",
+      "major highways (n.): 主要高速公路",
+      "expansion (n.): 擴張",
+      "crucial (adj.): 至關重要的",
+      "addressing (v.): 處理",
+      "range anxiety (n.): 里程焦慮",
+      "convenient charging (n.): 方便充電"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main issue discussed in the news?",
+        "options": [
+          "A. A decrease in egg prices",
+          "B. An egg shortage in Taiwan",
+          "C. New regulations for chicken farms",
+          "D. A rise in poultry exports"
+        ],
+        "answer": "An egg shortage in Taiwan"
+      },
+      {
+        "q": "What is the government doing to address the shortage?",
+        "options": [
+          "A. Reducing egg imports",
+          "B. Banning poultry farming",
+          "C. Implementing measures to stabilize supply",
+          "D. Encouraging citizens to eat less eggs"
+        ],
+        "answer": "Implementing measures to stabilize supply"
+      },
+      {
+        "q": "Which of the following is mentioned as a government initiative?",
+        "options": [
+          "A. Increasing domestic egg production only",
+          "B. Increasing imports and supporting local farmers",
+          "C. Providing subsidies for egg consumers",
+          "D. Establishing a national egg reserve"
+        ],
+        "answer": "Increasing imports and supporting local farmers"
+      },
+      {
+        "q": "What is the intended outcome of the government's actions?",
+        "options": [
+          "A. To decrease the price of eggs",
+          "B. To reduce the number of poultry farms",
+          "C. To alleviate consumer concerns and ensure availability",
+          "D. To encourage more people to buy eggs"
+        ],
+        "answer": "To alleviate consumer concerns and ensure availability"
+      },
+      {
+        "q": "The situation has highlighted the importance of what?",
+        "options": [
+          "A. International trade agreements",
+          "B. Consumer protection laws",
+          "C. Robust agricultural policies",
+          "D. Efficient transportation networks"
+        ],
+        "answer": "Robust agricultural policies"
+      },
+      {
+        "q": "What does the word 'prompt' mean in the context of the sentence 'prompting the government to implement measures'?",
+        "options": [
+          "A. To delay",
+          "B. To encourage or cause",
+          "C. To ignore",
+          "D. To cancel"
+        ],
+        "answer": "To encourage or cause"
+      },
+      {
+        "q": "What is the meaning of 'alleviate'?",
+        "options": [
+          "A. To worsen",
+          "B. To create",
+          "C. To reduce or relieve",
+          "D. To prohibit"
+        ],
+        "answer": "To reduce or relieve"
+      },
+      {
+        "q": "Which word means 'not enough of something'?",
+        "options": [
+          "A. Supply",
+          "B. Initiative",
+          "C. Shortage",
+          "D. Measure"
+        ],
+        "answer": "Shortage"
+      },
+      {
+        "q": "What type of farmers are being supported by the government?",
+        "options": [
+          "A. Dairy farmers",
+          "B. Grain farmers",
+          "C. Livestock farmers",
+          "D. Poultry farmers"
+        ],
+        "answer": "Poultry farmers"
+      },
+      {
+        "q": "The government is taking steps to make sure eggs are...",
+        "options": [
+          "A. Expensive",
+          "B. Limited",
+          "C. Consistently available",
+          "D. Imported only"
+        ],
+        "answer": "Consistently available"
+      },
+      {
+        "q": "What does 'robust' mean when describing policies?",
+        "options": [
+          "A. Weak",
+          "B. Inflexible",
+          "C. Strong and healthy",
+          "D. Temporary"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "The news article is written in a style that is:",
+        "options": [
+          "A. Opinionated",
+          "B. Humorous",
+          "C. Factual",
+          "D. Persuasive"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "A. The decline in global technology stocks",
+          "B. The increasing demand for AI servers and strong shipments from Taiwan",
+          "C. New advancements in AI software development",
+          "D. Challenges faced by Taiwanese electronics manufacturers"
+        ],
+        "answer": "B. The increasing demand for AI servers and strong shipments from Taiwan"
+      },
+      {
+        "q": "According to the text, what is happening to the demand for AI servers?",
+        "options": [
+          "A. It is decreasing rapidly.",
+          "B. It remains stable.",
+          "C. It is experiencing a significant surge.",
+          "D. It is only increasing in specific regions."
+        ],
+        "answer": "C. It is experiencing a significant surge."
+      },
+      {
+        "q": "Which group of suppliers is mentioned as having strong shipment performance?",
+        "options": [
+          "A. South Korean chip makers",
+          "B. American software companies",
+          "C. European server assemblers",
+          "D. Taiwanese manufacturers"
+        ],
+        "answer": "D. Taiwanese manufacturers"
+      },
+      {
+        "q": "What is the effect of the strong market trend on Taiwanese manufacturers?",
+        "options": [
+          "A. It leads to lower production.",
+          "B. It drives robust shipment performance.",
+          "C. It causes a decrease in export volumes.",
+          "D. It forces them to reduce prices."
+        ],
+        "answer": "B. It drives robust shipment performance."
+      },
+      {
+        "q": "What are Taiwanese companies well-positioned to do?",
+        "options": [
+          "A. To reduce their global presence.",
+          "B. To face increased competition.",
+          "C. To capitalize on market growth.",
+          "D. To develop new AI software."
+        ],
+        "answer": "C. To capitalize on market growth."
+      },
+      {
+        "q": "What are many Taiwanese companies reporting?",
+        "options": [
+          "A. Decreased export volumes.",
+          "B. Reduced production capacity.",
+          "C. Increased production and export volumes.",
+          "D. A decline in AI server demand."
+        ],
+        "answer": "C. Increased production and export volumes."
+      },
+      {
+        "q": "Why are Taiwanese companies increasing their production and export volumes?",
+        "options": [
+          "A. To prepare for a market downturn.",
+          "B. To meet the escalating needs of AI development and deployment.",
+          "C. To fulfill orders for traditional computer servers.",
+          "D. To comply with new government regulations."
+        ],
+        "answer": "B. To meet the escalating needs of AI development and deployment."
+      },
+      {
+        "q": "What is the general outlook for these suppliers?",
+        "options": [
+          "A. Uncertain and volatile.",
+          "B. Negative and declining.",
+          "C. Highly positive.",
+          "D. Stable but unpromising."
+        ],
+        "answer": "C. Highly positive."
+      },
+      {
+        "q": "The word 'surge' in the text means:",
+        "options": [
+          "A. a slow increase",
+          "B. a sudden and large increase",
+          "C. a steady decline",
+          "D. a fluctuation"
+        ],
+        "answer": "B. a sudden and large increase"
+      },
+      {
+        "q": "The term 'robust shipment performance' implies:",
+        "options": [
+          "A. poor and inconsistent shipments",
+          "B. weak and declining shipments",
+          "C. strong and reliable shipments",
+          "D. very few shipments"
+        ],
+        "answer": "C. strong and reliable shipments"
+      },
+      {
+        "q": "What does 'escalating needs' refer to in the context of AI?",
+        "options": [
+          "A. Decreasing requirements for AI resources.",
+          "B. Stable and unchanging requirements for AI resources.",
+          "C. Growing and increasing requirements for AI resources.",
+          "D. Requirements for outdated AI technology."
+        ],
+        "answer": "C. Growing and increasing requirements for AI resources."
+      },
+      {
+        "q": "The news suggests that Taiwanese manufacturers are benefiting from:",
+        "options": [
+          "A. a decrease in global AI adoption",
+          "B. a rise in demand for older technology",
+          "C. the growing global demand for AI servers",
+          "D. a shift away from AI development"
+        ],
+        "answer": "C. the growing global demand for AI servers"
+      },
+      {
+        "q": "What is Taiwan doing to support electric vehicles?",
+        "options": [
+          "Reducing EV taxes",
+          "Accelerating the deployment of charging stations",
+          "Banning gasoline cars",
+          "Building more gas stations"
+        ],
+        "answer": "Accelerating the deployment of charging stations"
+      },
+      {
+        "q": "What is the main goal of this initiative?",
+        "options": [
+          "To increase car sales",
+          "To support EV owners and encourage sustainable transport",
+          "To reduce electricity prices",
+          "To create more parking spaces"
+        ],
+        "answer": "To support EV owners and encourage sustainable transport"
+      },
+      {
+        "q": "Where are new charging stations being installed?",
+        "options": [
+          "Only in rural areas",
+          "In urban centers and along major highways",
+          "Only at airports",
+          "Exclusively in shopping malls"
+        ],
+        "answer": "In urban centers and along major highways"
+      },
+      {
+        "q": "What problem does this expansion aim to solve for EV users?",
+        "options": [
+          "High electricity costs",
+          "Lack of car models",
+          "Range anxiety and inconvenient charging",
+          "Traffic congestion"
+        ],
+        "answer": "Range anxiety and inconvenient charging"
+      },
+      {
+        "q": "The word 'accelerating' means:",
+        "options": [
+          "Slowing down",
+          "Stopping",
+          "Speeding up",
+          "Maintaining speed"
+        ],
+        "answer": "Speeding up"
+      },
+      {
+        "q": "What does 'deployment' refer to in this context?",
+        "options": [
+          "Removal of equipment",
+          "Planning and setting up",
+          "Dismantling infrastructure",
+          "Reducing the number of items"
+        ],
+        "answer": "Planning and setting up"
+      },
+      {
+        "q": "What is an 'initiative'?",
+        "options": [
+          "A problem",
+          "A plan or action to achieve something",
+          "A type of vehicle",
+          "A place to charge"
+        ],
+        "answer": "A plan or action to achieve something"
+      },
+      {
+        "q": "The term 'sustainable transportation' refers to:",
+        "options": [
+          "Transportation that pollutes heavily",
+          "Transportation that is environmentally friendly",
+          "Transportation that is very fast",
+          "Transportation that is very expensive"
+        ],
+        "answer": "Transportation that is environmentally friendly"
+      },
+      {
+        "q": "What are 'ambitious targets'?",
+        "options": [
+          "Easy goals",
+          "Unrealistic goals",
+          "Challenging and significant goals",
+          "Goals that have already been met"
+        ],
+        "answer": "Challenging and significant goals"
+      },
+      {
+        "q": "Which word means 'very important'?",
+        "options": [
+          "Ambitious",
+          "Convenient",
+          "Crucial",
+          "Growing"
+        ],
+        "answer": "Crucial"
+      },
+      {
+        "q": "What is 'range anxiety' for EV owners?",
+        "options": [
+          "Worry about the car's color",
+          "Worry about running out of battery charge",
+          "Worry about parking",
+          "Worry about the car's speed"
+        ],
+        "answer": "Worry about running out of battery charge"
+      },
+      {
+        "q": "The news mentions 'urban centers'. What are these?",
+        "options": [
+          "Rural villages",
+          "Small towns",
+          "The main, busiest parts of cities",
+          "Industrial parks"
+        ],
+        "answer": "The main, busiest parts of cities"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "OpenAI新模型亮相 科技巨頭AI競賽升級",
+    "tabTitle": "科技",
+    "english": "OpenAI has announced its latest artificial intelligence model, showcasing significant advancements in natural language processing and generation. This release intensifies the ongoing competition among major technology companies vying for leadership in the AI sector. Industry analysts predict this development will accelerate innovation and lead to the widespread integration of AI into various applications, further shaping the future of technology.",
+    "chinese": "OpenAI 宣布了其最新的が人工知能モデル、展示了在自然語言處理和生成方面的顯著進步。此舉加劇了主要科技公司在人工智能領域領導地位的持續競爭。行業分析師預計，這一發展將加速創新，並導致人工智能廣泛應用於各種領域，進一步塑造科技的未來。",
+    "vocabulary": [
+      "Unveils (v.): 揭露；展現",
+      "Model (n.): 模型",
+      "Tech Giants (n.): 科技巨頭",
+      "AI Race (n.): 人工智能競賽",
+      "Escalates (v.): 加劇；升級",
+      "Artificial Intelligence (n.): 人工智能",
+      "Announced (v.): 宣布",
+      "Latest (adj.): 最新的",
+      "Significant (adj.): 顯著的；重要的",
+      "Advancements (n.): 進步；進展",
+      "Natural Language Processing (n.): 自然語言處理",
+      "Generation (n.): 生成",
+      "Release (n.): 發布；發表",
+      "Intensifies (v.): 加劇；增強",
+      "Competition (n.): 競爭",
+      "Vying (v.): 競爭；爭奪",
+      "Leadership (n.): 領導地位",
+      "Sector (n.): 行業；領域",
+      "Analysts (n.): 分析師",
+      "Integration (n.): 整合；結合"
+    ],
+    "quiz": [
+      {
+        "q": "What did OpenAI announce?",
+        "options": [
+          "A new hardware device",
+          "A new artificial intelligence model",
+          "A change in company leadership",
+          "A partnership with a social media company"
+        ],
+        "answer": "A new artificial intelligence model"
+      },
+      {
+        "q": "What does the new OpenAI model showcase advancements in?",
+        "options": [
+          "Robotics and automation",
+          "Quantum computing",
+          "Natural language processing and generation",
+          "Cybersecurity"
+        ],
+        "answer": "Natural language processing and generation"
+      },
+      {
+        "q": "How does OpenAI's announcement affect the tech industry?",
+        "options": [
+          "It has no significant impact",
+          "It reduces competition",
+          "It intensifies the AI race among tech giants",
+          "It signals a slowdown in AI development"
+        ],
+        "answer": "It intensifies the AI race among tech giants"
+      },
+      {
+        "q": "What do industry analysts predict?",
+        "options": [
+          "A decrease in AI investment",
+          "A slower pace of innovation",
+          "Accelerated innovation and AI integration",
+          "A decline in AI-powered applications"
+        ],
+        "answer": "Accelerated innovation and AI integration"
+      },
+      {
+        "q": "The term 'Tech Giants' refers to:",
+        "options": [
+          "Small startups",
+          "Major technology companies",
+          "Research institutions",
+          "Government agencies"
+        ],
+        "answer": "Major technology companies"
+      },
+      {
+        "q": "Which word means 'to make more intense'?",
+        "options": [
+          "Unveils",
+          "Escalates",
+          "Showcasing",
+          "Vying"
+        ],
+        "answer": "Escalates"
+      },
+      {
+        "q": "The 'AI Race' is about companies competing for:",
+        "options": [
+          "Market share in traditional industries",
+          "Leadership in the AI sector",
+          "Physical space for offices",
+          "Talent in non-tech fields"
+        ],
+        "answer": "Leadership in the AI sector"
+      },
+      {
+        "q": "What is a synonym for 'advancements'?",
+        "options": [
+          "Setbacks",
+          "Progress",
+          "Declines",
+          "Failures"
+        ],
+        "answer": "Progress"
+      },
+      {
+        "q": "The news suggests AI will be increasingly used in:",
+        "options": [
+          "Only scientific research",
+          "Various applications",
+          "A limited number of industries",
+          "Personal hobbies"
+        ],
+        "answer": "Various applications"
+      },
+      {
+        "q": "What is the primary focus of the new OpenAI model mentioned?",
+        "options": [
+          "Robotic control",
+          "Data encryption",
+          "Language understanding and creation",
+          "Image recognition"
+        ],
+        "answer": "Language understanding and creation"
+      },
+      {
+        "q": "The word 'vying' implies:",
+        "options": [
+          "Cooperation",
+          "Passive observation",
+          "Active competition",
+          "Strategic withdrawal"
+        ],
+        "answer": "Active competition"
+      },
+      {
+        "q": "What does 'integration' mean in this context?",
+        "options": [
+          "Separation",
+          "Exclusion",
+          "Combining or merging",
+          "Disruption"
+        ],
+        "answer": "Combining or merging"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "Google I/O大會登場 AI整合應用受矚目",
+    "tabTitle": "科技",
+    "english": "Google I/O, the company's annual developer conference, kicked off today, drawing significant attention to its advancements in artificial intelligence. A major focus of the event is the deep integration of AI across Google's product suite. Developers and tech enthusiasts are keenly observing how these AI-powered features will enhance user experiences and reshape various applications. The conference is expected to unveil new tools and strategies for leveraging AI in innovative ways.",
+    "chinese": "Google I/O，該公司的年度開發者大會，於今日登場，吸引了對其在人工智慧領域進展的極大關注。本次活動的一大重點是將 AI 深度整合到 Google 的產品系列中。開發者和科技愛好者正密切關注這些由 AI 驅動的功能將如何增強用戶體驗並重塑各種應用。本次大會預計將揭示利用 AI 的創新新工具和策略。",
+    "vocabulary": [
+      "conference (n.): 大會",
+      "kicked off (v.): 開始",
+      "annual (adj.): 年度",
+      "developer (n.): 開發者",
+      "significant (adj.): 顯著的",
+      "attention (n.): 關注",
+      "advancements (n.): 進展",
+      "artificial intelligence (n.): 人工智慧",
+      "major (adj.): 主要的",
+      "focus (n.): 焦點",
+      "integration (n.): 整合",
+      "across (prep.): 遍及",
+      "product suite (n.): 產品系列",
+      "enthusiasts (n.): 愛好者",
+      "keenly (adv.): 密切地",
+      "observing (v.): 觀察",
+      "AI-powered (adj.): 由 AI 驅動的",
+      "enhance (v.): 增強",
+      "user experiences (n.): 用戶體驗",
+      "reshape (v.): 重塑"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main event mentioned in the news?",
+        "options": [
+          "A new smartphone launch",
+          "Google I/O conference",
+          "A major software update",
+          "A cybersecurity seminar"
+        ],
+        "answer": "Google I/O conference"
+      },
+      {
+        "q": "What technology is receiving significant attention at the event?",
+        "options": [
+          "Virtual Reality",
+          "Blockchain",
+          "Artificial Intelligence",
+          "Quantum Computing"
+        ],
+        "answer": "Artificial Intelligence"
+      },
+      {
+        "q": "What is a major focus of the conference regarding AI?",
+        "options": [
+          "AI for gaming",
+          "Deep integration of AI across Google's products",
+          "AI in hardware manufacturing",
+          "AI for social media trends"
+        ],
+        "answer": "Deep integration of AI across Google's products"
+      },
+      {
+        "q": "Who is keenly observing the AI-powered features?",
+        "options": [
+          "Politicians and policymakers",
+          "Investors and shareholders",
+          "Developers and tech enthusiasts",
+          "Environmental activists"
+        ],
+        "answer": "Developers and tech enthusiasts"
+      },
+      {
+        "q": "What is expected to be unveiled at the conference?",
+        "options": [
+          "New operating systems",
+          "New tools and strategies for leveraging AI",
+          "Partnership announcements",
+          "Financial reports"
+        ],
+        "answer": "New tools and strategies for leveraging AI"
+      },
+      {
+        "q": "The word 'annual' in the text means:",
+        "options": [
+          "Happening once a month",
+          "Happening every two years",
+          "Happening once a year",
+          "Happening frequently"
+        ],
+        "answer": "Happening once a year"
+      },
+      {
+        "q": "What is the primary purpose of the AI integration mentioned?",
+        "options": [
+          "To reduce production costs",
+          "To enhance user experiences",
+          "To compete with other tech companies",
+          "To collect more user data"
+        ],
+        "answer": "To enhance user experiences"
+      },
+      {
+        "q": "The word 'advancements' refers to:",
+        "options": [
+          "Setbacks or failures",
+          "Improvements or progress",
+          "New regulations",
+          "Historical data"
+        ],
+        "answer": "Improvements or progress"
+      },
+      {
+        "q": "What does 'AI-powered' suggest about the features?",
+        "options": [
+          "They are manually operated",
+          "They are controlled by users directly",
+          "They are driven or enabled by artificial intelligence",
+          "They are outdated technology"
+        ],
+        "answer": "They are driven or enabled by artificial intelligence"
+      },
+      {
+        "q": "The phrase 'product suite' refers to:",
+        "options": [
+          "A single flagship product",
+          "A collection of related products",
+          "A marketing campaign",
+          "A research paper"
+        ],
+        "answer": "A collection of related products"
+      },
+      {
+        "q": "What is the overall tone of the English text?",
+        "options": [
+          "Sarcastic",
+          "Humorous",
+          "Factual and informative",
+          "Opinionated"
+        ],
+        "answer": "Factual and informative"
+      },
+      {
+        "q": "The news is about an event that:",
+        "options": [
+          "Already concluded last year",
+          "Will happen in the distant future",
+          "Is currently taking place",
+          "Was canceled due to unforeseen circumstances"
+        ],
+        "answer": "Is currently taking place"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "AMD蘇姿丰：CPU與GPU比例走向1比1",
+    "tabTitle": "科技",
+    "english": "AMD CEO Lisa Su announced a significant shift in the company's product strategy. She indicated that the ratio of Central Processing Units (CPUs) to Graphics Processing Units (GPUs) in their future designs is moving towards a 1:1 balance. This strategic adjustment aims to enhance performance and efficiency across a wider range of computing applications, from gaming to artificial intelligence.",
+    "chinese": "AMD 執行長蘇姿丰宣布了公司產品策略的重大轉變。她指出，在其未來設計中，中央處理器（CPU）與圖形處理器（GPU）的比例正朝向 1:1 的平衡發展。這項策略調整旨在提升從遊戲到人工智能等更廣泛計算應用中的效能與效率。",
+    "vocabulary": [
+      "CEO (n.): 執行長",
+      "announced (v.): 宣布",
+      "significant (adj.): 重大的",
+      "shift (n.): 轉變",
+      "product strategy (n.): 產品策略",
+      "indicated (v.): 指出",
+      "ratio (n.): 比例",
+      "Central Processing Unit (CPU) (n.): 中央處理器",
+      "Graphics Processing Unit (GPU) (n.): 圖形處理器",
+      "future designs (n.): 未來設計",
+      "moving towards (v.): 朝向...發展",
+      "balance (n.): 平衡",
+      "strategic adjustment (n.): 策略調整",
+      "aims to (v.): 旨在",
+      "enhance (v.): 提升",
+      "performance (n.): 效能",
+      "efficiency (n.): 效率",
+      "across (prep.): 遍及",
+      "wider range (n.): 更廣泛的範圍",
+      "computing applications (n.): 計算應用"
+    ],
+    "quiz": [
+      {
+        "q": "Who made the announcement regarding AMD's product strategy?",
+        "options": [
+          "Nvidia CEO",
+          "Intel CTO",
+          "AMD CEO Lisa Su",
+          "Apple Head of Engineering"
+        ],
+        "answer": "AMD CEO Lisa Su"
+      },
+      {
+        "q": "What is the main topic of the announcement?",
+        "options": [
+          "A new line of laptops",
+          "A shift in CPU and GPU ratio",
+          "Expansion into the automotive market",
+          "A partnership with a software company"
+        ],
+        "answer": "A shift in CPU and GPU ratio"
+      },
+      {
+        "q": "What is the target ratio mentioned for CPUs and GPUs?",
+        "options": [
+          "2:1",
+          "1:2",
+          "1:1",
+          "3:2"
+        ],
+        "answer": "1:1"
+      },
+      {
+        "q": "What does the strategic adjustment aim to improve?",
+        "options": [
+          "Marketing campaigns",
+          "Manufacturing speed",
+          "Performance and efficiency",
+          "Customer service"
+        ],
+        "answer": "Performance and efficiency"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a beneficiary of the improved performance and efficiency?",
+        "options": [
+          "Gaming",
+          "Artificial intelligence",
+          "Cloud computing",
+          "Data analytics"
+        ],
+        "answer": "Cloud computing"
+      },
+      {
+        "q": "The term 'CPU' stands for:",
+        "options": [
+          "Computer Processing Unit",
+          "Central Performance Unit",
+          "Core Processing Unit",
+          "Central Processing Unit"
+        ],
+        "answer": "Central Processing Unit"
+      },
+      {
+        "q": "The term 'GPU' stands for:",
+        "options": [
+          "Graphics Performance Unit",
+          "General Processing Unit",
+          "Graphics Processing Unit",
+          "Global Processing Unit"
+        ],
+        "answer": "Graphics Processing Unit"
+      },
+      {
+        "q": "The news article suggests that the company is moving towards a ____ balance between CPUs and GPUs.",
+        "options": [
+          "varying",
+          "1:1",
+          "decreasing",
+          "increasing"
+        ],
+        "answer": "1:1"
+      },
+      {
+        "q": "What does 'strategic adjustment' imply in this context?",
+        "options": [
+          "A minor change",
+          "A planned change in direction",
+          "An accidental change",
+          "A temporary change"
+        ],
+        "answer": "A planned change in direction"
+      },
+      {
+        "q": "The phrase 'moving towards' suggests:",
+        "options": [
+          "A sudden arrival",
+          "A gradual progression",
+          "A complete stop",
+          "A reversal"
+        ],
+        "answer": "A gradual progression"
+      },
+      {
+        "q": "The article states that the adjustment aims to enhance performance and efficiency across a ____ range of computing applications.",
+        "options": [
+          "limited",
+          "narrow",
+          "wider",
+          "specific"
+        ],
+        "answer": "wider"
+      },
+      {
+        "q": "What is the overall tone of the English text?",
+        "options": [
+          "Informal and conversational",
+          "Promotional and persuasive",
+          "Factual and informative",
+          "Opinionated and critical"
+        ],
+        "answer": "Factual and informative"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "美30年債息飆5.18%，創19年新高",
+    "tabTitle": "金融市場",
+    "english": "US Treasury yields surged on Tuesday, with the 30-year bond rate climbing to 5.18%. This marks a significant increase, reaching its highest level in 19 years. The sharp rise reflects growing investor concerns about inflation and future interest rate hikes. Market participants are closely monitoring economic data for further indications of the Federal Reserve's policy direction.",
+    "chinese": "週二，美國國債殖利率飆升，其中30年期國債利率攀升至5.18%。這標誌著顯著的增長，達到了19年來的最高點。此急劇上升反映了投資者對通膨和未來升息的擔憂日益加劇。市場參與者正密切關注經濟數據，以進一步了解聯準會的政策方向。",
+    "vocabulary": [
+      "Treasury yields (n.): 國債殖利率",
+      "surged (v.): 飆升",
+      "bond rate (n.): 債券利率",
+      "climbing (v.): 攀升",
+      "significant increase (n.): 顯著的增長",
+      "highest level (n.): 最高點",
+      "sharp rise (n.): 急劇上升",
+      "reflects (v.): 反映",
+      "investor concerns (n.): 投資者擔憂",
+      "inflation (n.): 通貨膨脹",
+      "future interest rate hikes (n.): 未來升息",
+      "market participants (n.): 市場參與者",
+      "closely monitoring (v.): 密切關注",
+      "economic data (n.): 經濟數據",
+      "indications (n.): 指示；跡象",
+      "Federal Reserve (n.): 聯準會",
+      "policy direction (n.): 政策方向",
+      "yield (n.): 收益率",
+      "Treasury (n.): 國庫券；財政部",
+      "rate (n.): 比率；利率"
+    ],
+    "quiz": [
+      {
+        "q": "What was the approximate yield of the US 30-year Treasury bond on Tuesday?",
+        "options": [
+          "5.00%",
+          "5.18%",
+          "4.95%",
+          "5.30%"
+        ],
+        "answer": "5.18%"
+      },
+      {
+        "q": "What does the news report say about the 5.18% yield?",
+        "options": [
+          "It's a 10-year high.",
+          "It's a 5-year low.",
+          "It's a 19-year high.",
+          "It's a new record."
+        ],
+        "answer": "It's a 19-year high."
+      },
+      {
+        "q": "What market saw a surge in yields?",
+        "options": [
+          "Stock market",
+          "Bond market",
+          "Commodities market",
+          "Forex market"
+        ],
+        "answer": "Bond market"
+      },
+      {
+        "q": "According to the text, what does the sharp rise in yields reflect?",
+        "options": [
+          "Decreasing investor confidence",
+          "Strong economic growth",
+          "Investor concerns about inflation and rate hikes",
+          "Low government spending"
+        ],
+        "answer": "Investor concerns about inflation and rate hikes"
+      },
+      {
+        "q": "Who are 'market participants' likely referring to in this context?",
+        "options": [
+          "Consumers",
+          "Retail shoppers",
+          "Investors and financial institutions",
+          "Small business owners"
+        ],
+        "answer": "Investors and financial institutions"
+      },
+      {
+        "q": "What are market participants closely monitoring?",
+        "options": [
+          "Company earnings reports",
+          "Sports scores",
+          "Economic data",
+          "Weather forecasts"
+        ],
+        "answer": "Economic data"
+      },
+      {
+        "q": "What is the primary focus of the monitoring mentioned in the text?",
+        "options": [
+          "To predict stock prices",
+          "To understand the Federal Reserve's policy direction",
+          "To analyze consumer spending habits",
+          "To track international trade balances"
+        ],
+        "answer": "To understand the Federal Reserve's policy direction"
+      },
+      {
+        "q": "What does the word 'surged' mean in the context of the news?",
+        "options": [
+          "Decreased rapidly",
+          "Increased suddenly and dramatically",
+          "Remained stable",
+          "Fluctuated slightly"
+        ],
+        "answer": "Increased suddenly and dramatically"
+      },
+      {
+        "q": "The term 'Treasury yields' refers to the returns on which type of financial instrument?",
+        "options": [
+          "Stocks",
+          "Corporate bonds",
+          "Government bonds",
+          "Real estate"
+        ],
+        "answer": "Government bonds"
+      },
+      {
+        "q": "What does 'inflation' generally refer to?",
+        "options": [
+          "A decrease in the general price level of goods and services.",
+          "An increase in the general price level of goods and services.",
+          "A decrease in interest rates.",
+          "An increase in unemployment."
+        ],
+        "answer": "An increase in the general price level of goods and services."
+      },
+      {
+        "q": "What does the article suggest is a potential future action by the Federal Reserve?",
+        "options": [
+          "Lowering interest rates",
+          "Increasing government spending",
+          "Raising interest rates",
+          "Reducing taxes"
+        ],
+        "answer": "Raising interest rates"
+      },
+      {
+        "q": "What is the timeframe for the '19-year high' mentioned in the headline?",
+        "options": [
+          "The last 19 months",
+          "The last 19 quarters",
+          "The last 19 years",
+          "The last 19 days"
+        ],
+        "answer": "The last 19 years"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
