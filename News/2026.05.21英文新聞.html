@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 21, 2026：台灣經濟、科技 與 地緣政治</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電擬增資200億美元，擴張亞利桑那廠\nTaiwan Semiconductor Manufacturing Company (TSMC) is reportedly planning a significant capital injection of approximately $20 billion to bolster its expansion efforts at its Arizona facility. This move is expected to accelerate the construction and upgrading of advanced chip manufacturing capabilities in the United States. The increased investment underscores TSMC's commitment to diversifying its global production footprint and meeting rising demand for semiconductors.\n\n[2] 台灣GDP創40年新高，AI產業獨領風騷\nTaiwan's Gross Domestic Product (GDP) has reached a remarkable 40-year high, signaling robust economic growth. The artificial intelligence (AI) sector has emerged as the primary driver of this surge, showcasing significant advancements and contributions. This strong performance indicates a positive economic outlook for Taiwan, largely propelled by innovation in cutting-edge technologies like AI.\n\n[3] 學者：AI真正瓶頸在電力，帶動供應鏈升級\nA recent study suggests that the primary limitation for advanced Artificial Intelligence development is not algorithms or data, but rather the immense power consumption required. Experts highlight that the escalating demand for electricity to train and operate AI systems is creating significant challenges. This power constraint is expected to spur innovation and upgrades across the entire AI supply chain, from hardware manufacturing to energy infrastructure.",
+    "chinese": "【1】台積電擬增資200億美元，擴張亞利桑那廠\n台灣積體電路製造股份有限公司（台積電）據報計劃注資約 200 億美元，以支持其亞利桑那廠的擴張計畫。此舉預期將加速先進晶片製造能力的建置與升級。這項增加的投資凸顯了台積電致力於使其全球生產布局多元化，並滿足日益增長的半導體需求的承諾。\n\n【2】台灣GDP創40年新高，AI產業獨領風騷\n台灣的國內生產總值（GDP）已創下驚人的40年新高，顯示出強勁的經濟增長。人工智能（AI）產業已成為這波浪潮的主要驅動力，展現了顯著的進步和貢獻。這項強勁表現預示著台灣樂觀的經濟前景，這在很大程度上是由AI等尖端技術的創新所推動的。\n\n【3】學者：AI真正瓶頸在電力，帶動供應鏈升級\n一項最新研究指出，先進人工智慧發展的主要限制並非演算法或數據，而是其所需的龐大電力消耗。專家強調，訓練和運行 AI 系統對電力的需求不斷增加，正帶來嚴峻的挑戰。這種電力瓶頸預計將激發整個 AI 供應鏈的創新和升級，涵蓋從硬體製造到能源基礎設施的各個環節。",
+    "vocabulary": [
+      "Taiwan Semiconductor Manufacturing Company (TSMC) (n.): 台灣積體電路製造股份有限公司（台積電）",
+      "reportedly (adv.): 據報",
+      "planning (v.): 計劃",
+      "significant (adj.): 顯著的，重大的",
+      "capital injection (n.): 資金注入",
+      "approximately (adv.): 約",
+      "bolster (v.): 加強，支持",
+      "expansion efforts (n.): 擴張計畫",
+      "facility (n.): 工廠，設施",
+      "expected (v.): 預期",
+      "accelerate (v.): 加速",
+      "construction (n.): 建置，建造",
+      "upgrading (n.): 升級",
+      "advanced (adj.): 先進的",
+      "chip manufacturing (n.): 晶片製造",
+      "capabilities (n.): 能力",
+      "United States (n.): 美國",
+      "increased investment (n.): 增加的投資",
+      "underscores (v.): 強調",
+      "diversifying (v.): 使多元化",
+      "global production footprint (n.): 全球生產布局",
+      "rising demand (n.): 日益增長的（需求）",
+      "semiconductors (n.): 半導體",
+      "Gross Domestic Product (GDP) (n.): 國內生產總值 (GDP)",
+      "remarkable (adj.): 卓越的，非凡的",
+      "40-year high (n.): 40年來最高點",
+      "signaling (v.): 顯示，標誌著",
+      "robust (adj.): 強健的，健全的",
+      "economic growth (n.): 經濟增長",
+      "artificial intelligence (AI) (n.): 人工智能 (AI)",
+      "sector (n.): 行業，領域",
+      "emerged as (v.): 成為，嶄露頭角",
+      "primary driver (n.): 主要驅動力",
+      "surge (n.): 激增，飆升",
+      "showcasing (v.): 展示，展現",
+      "significant (adj.): 顯著的，重要的",
+      "advancements (n.): 進步，發展",
+      "contributions (n.): 貢獻",
+      "strong performance (n.): 強勁表現",
+      "indicates (v.): 表明，指示",
+      "positive economic outlook (n.): 樂觀的經濟前景",
+      "largely propelled by (v.): 在很大程度上由...推動",
+      "cutting-edge technologies (n.): 尖端技術",
+      "limitation (n.): 限制",
+      "immense (adj.): 巨大的",
+      "consumption (n.): 消耗",
+      "escalating (adj.): 不斷升級的",
+      "constraint (n.): 約束",
+      "spur (v.): 刺激",
+      "innovation (n.): 創新",
+      "upgrades (n.): 升級",
+      "supply chain (n.): 供應鏈",
+      "infrastructure (n.): 基礎設施",
+      "primary (adj.): 主要的",
+      "advanced (adj.): 先進的",
+      "development (n.): 發展",
+      "algorithms (n.): 演算法",
+      "operate (v.): 運行",
+      "significant (adj.): 顯著的",
+      "challenges (n.): 挑戰",
+      "expected (v.): 預計",
+      "manufacture (v.): 製造",
+      "energy (n.): 能源"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news?",
+        "options": [
+          "TSMC's new headquarters in Taiwan",
+          "TSMC's proposed capital increase for its Arizona facility",
+          "A new semiconductor research center in Europe",
+          "A partnership between TSMC and a US tech company"
+        ],
+        "answer": "TSMC's proposed capital increase for its Arizona facility"
+      },
+      {
+        "q": "How much capital is TSMC reportedly planning to increase?",
+        "options": [
+          "$2 billion",
+          "$10 billion",
+          "$20 billion",
+          "$50 billion"
+        ],
+        "answer": "$20 billion"
+      },
+      {
+        "q": "Where is the facility that TSMC plans to expand?",
+        "options": [
+          "Taiwan",
+          "Japan",
+          "South Korea",
+          "Arizona"
+        ],
+        "answer": "Arizona"
+      },
+      {
+        "q": "What is the expected outcome of this capital injection?",
+        "options": [
+          "To reduce chip prices globally",
+          "To accelerate construction and upgrading of chip manufacturing capabilities",
+          "To focus solely on research and development",
+          "To move all production back to Taiwan"
+        ],
+        "answer": "To accelerate construction and upgrading of chip manufacturing capabilities"
+      },
+      {
+        "q": "The word 'bolster' in the text means:",
+        "options": [
+          "To weaken",
+          "To support or strengthen",
+          "To reduce",
+          "To delay"
+        ],
+        "answer": "To support or strengthen"
+      },
+      {
+        "q": "What does the increased investment underscore?",
+        "options": [
+          "TSMC's withdrawal from the US market",
+          "TSMC's commitment to diversifying its global production",
+          "A decrease in global semiconductor demand",
+          "A focus on older chip technology"
+        ],
+        "answer": "TSMC's commitment to diversifying its global production"
+      },
+      {
+        "q": "Which country is mentioned as the location for the expanded facility?",
+        "options": [
+          "China",
+          "Germany",
+          "United States",
+          "India"
+        ],
+        "answer": "United States"
+      },
+      {
+        "q": "The phrase 'rising demand' refers to:",
+        "options": [
+          "Decreasing demand for semiconductors",
+          "Stable demand for semiconductors",
+          "Increasing demand for semiconductors",
+          "No demand for semiconductors"
+        ],
+        "answer": "Increasing demand for semiconductors"
+      },
+      {
+        "q": "What type of manufacturing is being expanded at the Arizona facility?",
+        "options": [
+          "Automobile manufacturing",
+          "Chip manufacturing",
+          "Textile manufacturing",
+          "Aerospace manufacturing"
+        ],
+        "answer": "Chip manufacturing"
+      },
+      {
+        "q": "TSMC is a company from which country?",
+        "options": [
+          "South Korea",
+          "Japan",
+          "United States",
+          "Taiwan"
+        ],
+        "answer": "Taiwan"
+      },
+      {
+        "q": "The news is about a proposed action by TSMC. What is the action?",
+        "options": [
+          "Selling the Arizona facility",
+          "Reducing production in Arizona",
+          "Increasing capital for the Arizona facility",
+          "Closing the Arizona facility"
+        ],
+        "answer": "Increasing capital for the Arizona facility"
+      },
+      {
+        "q": "The word 'reportedly' suggests that the information is:",
+        "options": [
+          "Confirmed by TSMC directly",
+          "Based on official statements",
+          "According to what is being said or rumored",
+          "A personal opinion of the writer"
+        ],
+        "answer": "According to what is being said or rumored"
+      },
+      {
+        "q": "What is the main achievement mentioned in the news?",
+        "options": [
+          "A 10-year high GDP",
+          "A 40-year high GDP",
+          "A record low GDP",
+          "A stable GDP growth"
+        ],
+        "answer": "A 40-year high GDP"
+      },
+      {
+        "q": "Which industry is identified as the main driver of Taiwan's economic surge?",
+        "options": [
+          "Manufacturing",
+          "Technology",
+          "Artificial Intelligence (AI)",
+          "Tourism"
+        ],
+        "answer": "Artificial Intelligence (AI)"
+      },
+      {
+        "q": "What does the strong performance indicate for Taiwan's economy?",
+        "options": [
+          "A negative outlook",
+          "A stable but slow growth",
+          "A positive outlook",
+          "A decline in innovation"
+        ],
+        "answer": "A positive outlook"
+      },
+      {
+        "q": "The term 'robust' in the context of economic growth means:",
+        "options": [
+          "Weak and unstable",
+          "Strong and healthy",
+          "Slow and steady",
+          "Declining rapidly"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "What is the meaning of 'GDP'?",
+        "options": [
+          "Global Development Plan",
+          "Gross Domestic Product",
+          "General Data Processing",
+          "Governmental Development Program"
+        ],
+        "answer": "Gross Domestic Product"
+      },
+      {
+        "q": "The AI sector is described as a 'primary driver' of the economic surge. What does 'primary' mean here?",
+        "options": [
+          "Secondary",
+          "Minor",
+          "Main",
+          "Occasional"
+        ],
+        "answer": "Main"
+      },
+      {
+        "q": "What kind of technologies are mentioned as driving Taiwan's economy?",
+        "options": [
+          "Outdated technologies",
+          "Traditional technologies",
+          "Cutting-edge technologies",
+          "Obsolete technologies"
+        ],
+        "answer": "Cutting-edge technologies"
+      },
+      {
+        "q": "The news suggests that AI is contributing to Taiwan's economic success. What does 'contributions' refer to?",
+        "options": [
+          "Withdrawals",
+          "Deductions",
+          "Gifts",
+          "Parts played in achieving something"
+        ],
+        "answer": "Parts played in achieving something"
+      },
+      {
+        "q": "What does the word 'remarkable' describe in the sentence 'Taiwan's GDP has reached a remarkable 40-year high'?",
+        "options": [
+          "Ordinary",
+          "Unimpressive",
+          "Extraordinary and noteworthy",
+          "Commonplace"
+        ],
+        "answer": "Extraordinary and noteworthy"
+      },
+      {
+        "q": "The word 'surge' implies:",
+        "options": [
+          "A gradual decrease",
+          "A sudden and large increase",
+          "A period of stagnation",
+          "A consistent decline"
+        ],
+        "answer": "A sudden and large increase"
+      },
+      {
+        "q": "What does the English text imply about Taiwan's economic future?",
+        "options": [
+          "It is uncertain.",
+          "It is expected to be positive.",
+          "It is likely to decline.",
+          "It will remain unchanged."
+        ],
+        "answer": "It is expected to be positive."
+      },
+      {
+        "q": "The AI industry is 'showcasing' advancements. What does 'showcasing' mean in this context?",
+        "options": [
+          "Hiding",
+          "Demonstrating or displaying",
+          "Ignoring",
+          "Minimizing"
+        ],
+        "answer": "Demonstrating or displaying"
+      },
+      {
+        "q": "According to the study, what is the true bottleneck for AI development?",
+        "options": [
+          "Data availability",
+          "Algorithm complexity",
+          "Power consumption",
+          "Processing speed"
+        ],
+        "answer": "Power consumption"
+      },
+      {
+        "q": "What is the primary challenge mentioned regarding AI systems?",
+        "options": [
+          "Lack of skilled engineers",
+          "Insufficient data storage",
+          "High electricity demand",
+          "Complex programming languages"
+        ],
+        "answer": "High electricity demand"
+      },
+      {
+        "q": "What is expected to be driven by the power constraint in AI?",
+        "options": [
+          "Reduced data collection",
+          "Stagnation in hardware manufacturing",
+          "Innovation and upgrades in the supply chain",
+          "Decreased investment in AI research"
+        ],
+        "answer": "Innovation and upgrades in the supply chain"
+      },
+      {
+        "q": "The news suggests that the bottleneck is NOT related to:",
+        "options": [
+          "Algorithms",
+          "Power",
+          "Data",
+          "Supply chain"
+        ],
+        "answer": "Supply chain"
+      },
+      {
+        "q": "What aspect of AI development requires immense power?",
+        "options": [
+          "Data analysis",
+          "Algorithm design",
+          "Training and operation",
+          "User interface development"
+        ],
+        "answer": "Training and operation"
+      },
+      {
+        "q": "The term 'escalating demand' implies:",
+        "options": [
+          "Decreasing demand",
+          "Stable demand",
+          "Increasing demand",
+          "Fluctuating demand"
+        ],
+        "answer": "Increasing demand"
+      },
+      {
+        "q": "What does the 'power constraint' refer to?",
+        "options": [
+          "The limitation of electrical outlets",
+          "The limited availability of renewable energy",
+          "The difficulty in meeting the high energy needs",
+          "The cost of electricity"
+        ],
+        "answer": "The difficulty in meeting the high energy needs"
+      },
+      {
+        "q": "The study focuses on the 'primary limitation' of AI, meaning the:",
+        "options": [
+          "Secondary limitation",
+          "Most important limitation",
+          "Minor limitation",
+          "Technical limitation"
+        ],
+        "answer": "Most important limitation"
+      },
+      {
+        "q": "Which part of the supply chain is mentioned as benefiting from upgrades?",
+        "options": [
+          "Software development",
+          "Marketing and sales",
+          "Hardware manufacturing and energy infrastructure",
+          "Customer support"
+        ],
+        "answer": "Hardware manufacturing and energy infrastructure"
+      },
+      {
+        "q": "The word 'spur' in the context of the news means to:",
+        "options": [
+          "Hinder",
+          "Encourage",
+          "Ignore",
+          "Reduce"
+        ],
+        "answer": "Encourage"
+      },
+      {
+        "q": "The news discusses the impact of AI on:",
+        "options": [
+          "Environmental policies",
+          "Global trade agreements",
+          "Energy consumption and infrastructure",
+          "Educational systems"
+        ],
+        "answer": "Energy consumption and infrastructure"
+      },
+      {
+        "q": "The overall tone of the news is:",
+        "options": [
+          "Optimistic about AI's future",
+          "Concerned about AI's limitations",
+          "Factual and informative",
+          "Critical of AI technology"
+        ],
+        "answer": "Factual and informative"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "輝達Q1財報亮眼，營收飆破800億美元創新高",
+    "tabTitle": "科技",
+    "english": "Nvidia announced impressive first-quarter financial results, with revenue surging past $80 billion, setting a new record. The company's performance significantly exceeded market expectations, driven by strong demand for its AI chips. This growth underscores Nvidia's dominant position in the rapidly expanding artificial intelligence sector.",
+    "chinese": "輝達公布了亮眼的今年第一季財務業績，營收飆升超過800億美元，創下新紀錄。由於對其AI晶片的需求強勁，公司的業績大幅超出市場預期。這項增長凸顯了輝達在快速擴張的人工智慧領域的主導地位。",
+    "vocabulary": [
+      "impressive (adj.): 令人印象深刻的",
+      "financial results (n.): 財務業績",
+      "revenue (n.): 營收",
+      "surging (v.): 飆升",
+      "past (prep.): 越過",
+      "setting a new record (phr.): 創下新紀錄",
+      "performance (n.): 業績",
+      "significantly (adv.): 顯著地",
+      "exceeded (v.): 超出",
+      "market expectations (n.): 市場預期",
+      "driven by (phr.): 由...所驅動",
+      "strong demand (n.): 強勁的需求",
+      "AI chips (n.): AI晶片",
+      "growth (n.): 增長",
+      "underscores (v.): 凸顯",
+      "dominant position (n.): 主導地位",
+      "rapidly expanding (adj.): 快速擴張的",
+      "artificial intelligence (n.): 人工智慧",
+      "sector (n.): 領域",
+      "company (n.): 公司"
+    ],
+    "quiz": [
+      {
+        "q": "What did Nvidia announce regarding its first-quarter financial results?",
+        "options": [
+          "Revenue declined significantly.",
+          "Revenue surged past $80 billion.",
+          "Revenue remained stagnant.",
+          "Revenue fell below expectations."
+        ],
+        "answer": "Revenue surged past $80 billion."
+      },
+      {
+        "q": "What record did Nvidia set with its Q1 earnings?",
+        "options": [
+          "A record low revenue",
+          "A record profit margin",
+          "A new record for revenue",
+          "A record number of employees"
+        ],
+        "answer": "A new record for revenue"
+      },
+      {
+        "q": "How did Nvidia's Q1 performance compare to market expectations?",
+        "options": [
+          "It met expectations exactly.",
+          "It fell slightly short of expectations.",
+          "It significantly exceeded expectations.",
+          "It was not comparable to expectations."
+        ],
+        "answer": "It significantly exceeded expectations."
+      },
+      {
+        "q": "What is the primary driver mentioned for Nvidia's strong performance?",
+        "options": [
+          "Increased marketing spending",
+          "Strong demand for its AI chips",
+          "A reduction in operating costs",
+          "Government subsidies"
+        ],
+        "answer": "Strong demand for its AI chips"
+      },
+      {
+        "q": "What does the growth in revenue highlight about Nvidia's market position?",
+        "options": [
+          "Its declining influence",
+          "Its competitive struggles",
+          "Its dominant position",
+          "Its experimental phase"
+        ],
+        "answer": "Its dominant position"
+      },
+      {
+        "q": "Which sector is rapidly expanding and benefits from Nvidia's products?",
+        "options": [
+          "Renewable energy",
+          "Biotechnology",
+          "Artificial intelligence",
+          "Automotive manufacturing"
+        ],
+        "answer": "Artificial intelligence"
+      },
+      {
+        "q": "The term 'surging' in the text implies:",
+        "options": [
+          "A slow increase",
+          "A rapid and significant rise",
+          "A steady decline",
+          "A stable condition"
+        ],
+        "answer": "A rapid and significant rise"
+      },
+      {
+        "q": "What does 'exceeded market expectations' mean?",
+        "options": [
+          "The results were worse than anticipated.",
+          "The results were as predicted.",
+          "The results were better than anticipated.",
+          "The market had no expectations."
+        ],
+        "answer": "The results were better than anticipated."
+      },
+      {
+        "q": "The word 'impressive' suggests the results were:",
+        "options": [
+          "Disappointing",
+          "Ordinary",
+          "Remarkable",
+          "Unimportant"
+        ],
+        "answer": "Remarkable"
+      },
+      {
+        "q": "What kind of products are driving Nvidia's success?",
+        "options": [
+          "Gaming consoles",
+          "AI chips",
+          "Computer monitors",
+          "Graphics cards for general use"
+        ],
+        "answer": "AI chips"
+      },
+      {
+        "q": "The text refers to Nvidia's 'Q1' results. What does 'Q1' typically stand for in financial reporting?",
+        "options": [
+          "Quarter 1",
+          "Quality 1",
+          "Quantity 1",
+          "Question 1"
+        ],
+        "answer": "Quarter 1"
+      },
+      {
+        "q": "What is the main topic of this news item?",
+        "options": [
+          "A new product launch by Nvidia",
+          "Nvidia's strong financial performance",
+          "The impact of AI on the stock market",
+          "Competition in the chip manufacturing industry"
+        ],
+        "answer": "Nvidia's strong financial performance"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "川普稱將與賴清德談話，白宮：軍售很快做決定",
+    "tabTitle": "地緣政治",
+    "english": "Former U.S. President Donald Trump announced his intention to speak with Taiwan's President Lai Ching-te. This potential conversation comes amid heightened cross-strait tensions. The White House responded by stating that decisions regarding arms sales to Taiwan are being expedited. This indicates a swift approach to bolstering Taiwan's defense capabilities in the region.",
+    "chinese": "美國前總統唐納·川普宣布他有意與台灣總統賴清德進行對話。這次潛在的談話發生在海峽兩岸緊張局勢加劇之際。白宮對此回應表示，關於對台軍售的決定正在加速進行。這顯示了在該地區迅速採取行動以增強台灣防禦能力的態度。",
+    "vocabulary": [
+      "intention (n.): 意圖",
+      "speak with (v.): 與...談話",
+      "president (n.): 總統",
+      "amid (prep.): 在...的過程中；在...的背景下",
+      "heightened (adj.): 加劇的；加強的",
+      "cross-strait (adj.): 橫跨海峽的",
+      "tensions (n.): 緊張局勢",
+      "white house (n.): 白宮",
+      "responded (v.): 回應了",
+      "stating (v.): 聲稱；表明",
+      "regarding (prep.): 關於",
+      "arms sale (n.): 軍售",
+      "expedited (adj.): 被加速的",
+      "indicates (v.): 表明；顯示",
+      "swift (adj.): 迅速的",
+      "approach (n.): 方法；途徑",
+      "bolstering (v.): 加強；支持",
+      "defense capabilities (n.): 防禦能力",
+      "region (n.): 地區",
+      "announced (v.): 宣布了"
+    ],
+    "quiz": [
+      {
+        "q": "Who did Donald Trump announce he would speak with?",
+        "options": [
+          "The current U.S. President",
+          "Taiwan's President Lai Ching-te",
+          "The White House spokesperson",
+          "The leader of China"
+        ],
+        "answer": "Taiwan's President Lai Ching-te"
+      },
+      {
+        "q": "What is the general context of this announcement?",
+        "options": [
+          "A period of calm in the region",
+          "Economic cooperation talks",
+          "Heightened cross-strait tensions",
+          "Cultural exchange programs"
+        ],
+        "answer": "Heightened cross-strait tensions"
+      },
+      {
+        "q": "What was the White House's response regarding arms sales?",
+        "options": [
+          "They denied any arms sales",
+          "Decisions are being expedited",
+          "Sales have been indefinitely postponed",
+          "They are awaiting Trump's approval"
+        ],
+        "answer": "Decisions are being expedited"
+      },
+      {
+        "q": "What does the White House's stance suggest about their approach to Taiwan's defense?",
+        "options": [
+          "A slow and cautious strategy",
+          "A focus on diplomatic solutions only",
+          "A swift approach to strengthening defense",
+          "A reduction in military support"
+        ],
+        "answer": "A swift approach to strengthening defense"
+      },
+      {
+        "q": "What does the word 'intention' mean in the context of the news?",
+        "options": [
+          "A past action",
+          "A plan or aim",
+          "A strong disagreement",
+          "A formal apology"
+        ],
+        "answer": "A plan or aim"
+      },
+      {
+        "q": "What does 'amid' mean in the sentence 'This potential conversation comes amid heightened cross-strait tensions'?",
+        "options": [
+          "After",
+          "Before",
+          "During or in the context of",
+          "Despite"
+        ],
+        "answer": "During or in the context of"
+      },
+      {
+        "q": "The term 'cross-strait' refers to relations between which two entities?",
+        "options": [
+          "The U.S. and China",
+          "Taiwan and the U.S.",
+          "China and Taiwan",
+          "North and South Korea"
+        ],
+        "answer": "China and Taiwan"
+      },
+      {
+        "q": "What does 'expedited' mean in relation to the arms sale decision?",
+        "options": [
+          "Made slower",
+          "Made faster",
+          "Cancelled",
+          "Reviewed carefully"
+        ],
+        "answer": "Made faster"
+      },
+      {
+        "q": "The news mentions 'bolstering Taiwan's defense capabilities'. What does 'bolstering' mean?",
+        "options": [
+          "Weakening",
+          "Strengthening",
+          "Ignoring",
+          "Questioning"
+        ],
+        "answer": "Strengthening"
+      },
+      {
+        "q": "Which entity is responsible for making decisions regarding arms sales to Taiwan?",
+        "options": [
+          "Donald Trump",
+          "President Lai Ching-te",
+          "The White House",
+          "The Pentagon"
+        ],
+        "answer": "The White House"
+      },
+      {
+        "q": "What kind of style is the English news content written in?",
+        "options": [
+          "Opinionated",
+          "Factual",
+          "Humorous",
+          "Personal narrative"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "The article is about a potential conversation between Trump and Lai, and a decision on what?",
+        "options": [
+          "Trade agreements",
+          "Cultural exchanges",
+          "Arms sales",
+          "Diplomatic recognition"
+        ],
+        "answer": "Arms sales"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "印度大選結果牽動全球經濟",
+    "tabTitle": "國際大事",
+    "english": "India's general election results have concluded, with significant implications for the global economic landscape. The outcome is expected to influence international trade policies and investment flows, particularly concerning emerging markets. Analysts are closely monitoring the new government's economic agenda and its potential effects on global supply chains and commodity prices. This election's results will likely shape economic strategies worldwide in the coming years.",
+    "chinese": "印度大選結果已經出爐，對全球經濟格局產生重大影響。此次選舉結果預計將影響國際貿易政策和投資流動，特別是針對新興市場。分析師們正密切關注新政府的經濟議程及其對全球供應鏈和商品價格的潛在影響。這次大選的結果很可能在未來幾年塑造全球的經濟策略。",
+    "vocabulary": [
+      "concluded (v.): 結束了",
+      "significant (adj.): 重大的",
+      "implications (n.): 影響",
+      "global (adj.): 全球的",
+      "economic (adj.): 經濟的",
+      "landscape (n.): 局面；格局",
+      "outcome (n.): 結果",
+      "influence (v.): 影響",
+      "international (adj.): 國際的",
+      "trade (n.): 貿易",
+      "policies (n.): 政策",
+      "investment (n.): 投資",
+      "flows (n.): 流動",
+      "particularly (adv.): 特別是",
+      "concerning (prep.): 關於",
+      "emerging markets (n.): 新興市場",
+      "analysts (n.): 分析師",
+      "monitoring (v.): 監控；密切關注",
+      "agenda (n.): 議程",
+      "commodity prices (n.): 商品價格"
+    ],
+    "quiz": [
+      {
+        "q": "What event has recently concluded in India?",
+        "options": [
+          "A trade summit",
+          "A general election",
+          "An economic forum",
+          "A scientific conference"
+        ],
+        "answer": "A general election"
+      },
+      {
+        "q": "What area is expected to be influenced by the election results?",
+        "options": [
+          "Local agricultural practices",
+          "Cultural exchange programs",
+          "The global economic landscape",
+          "Space exploration initiatives"
+        ],
+        "answer": "The global economic landscape"
+      },
+      {
+        "q": "What specific economic aspects are mentioned as being influenced?",
+        "options": [
+          "Environmental regulations and tourism",
+          "International trade policies and investment flows",
+          "Education reform and healthcare access",
+          "Technological innovation and scientific research"
+        ],
+        "answer": "International trade policies and investment flows"
+      },
+      {
+        "q": "Which type of markets are particularly mentioned in relation to investment?",
+        "options": [
+          "Developed markets",
+          "Frontier markets",
+          "Emerging markets",
+          "Closed markets"
+        ],
+        "answer": "Emerging markets"
+      },
+      {
+        "q": "Who is closely monitoring the new government's economic agenda?",
+        "options": [
+          "Journalists",
+          "Educators",
+          "Analysts",
+          "Environmentalists"
+        ],
+        "answer": "Analysts"
+      },
+      {
+        "q": "What are analysts watching for regarding the new government?",
+        "options": [
+          "Their foreign policy decisions",
+          "Their cultural initiatives",
+          "Their economic agenda",
+          "Their infrastructure projects"
+        ],
+        "answer": "Their economic agenda"
+      },
+      {
+        "q": "What potential effects of the economic agenda are being considered?",
+        "options": [
+          "Impact on local festivals",
+          "Effects on global supply chains and commodity prices",
+          "Changes in artistic expression",
+          "Developments in traditional crafts"
+        ],
+        "answer": "Effects on global supply chains and commodity prices"
+      },
+      {
+        "q": "The news states that the election results will likely shape economic strategies worldwide in the coming:",
+        "options": [
+          "days",
+          "weeks",
+          "months",
+          "years"
+        ],
+        "answer": "years"
+      },
+      {
+        "q": "The word 'significant' in the first sentence means:",
+        "options": [
+          "small",
+          "unimportant",
+          "important",
+          "temporary"
+        ],
+        "answer": "important"
+      },
+      {
+        "q": "What does the word 'implications' refer to in this context?",
+        "options": [
+          "Causes",
+          "Results",
+          "Effects",
+          "Opinions"
+        ],
+        "answer": "Effects"
+      },
+      {
+        "q": "The term 'emerging markets' refers to economies that are:",
+        "options": [
+          "fully developed and stable",
+          "rapidly growing and developing",
+          "experiencing economic decline",
+          "closed off from international trade"
+        ],
+        "answer": "rapidly growing and developing"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as being influenced by the election results?",
+        "options": [
+          "International trade policies",
+          "Investment flows",
+          "Global supply chains",
+          "Domestic tourism"
+        ],
+        "answer": "Domestic tourism"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "亞馬遜AWS推出新一代AI晶片",
+    "tabTitle": "科技",
+    "english": "Amazon Web Services (AWS) has announced the launch of its latest generation of artificial intelligence chips, codenamed 'Trainium2'. These advanced chips are designed to significantly accelerate AI training processes, offering enhanced performance and efficiency for developers building sophisticated machine learning models. The move underscores AWS's commitment to providing powerful, customized hardware solutions to meet the growing demand for AI computing power.",
+    "chinese": "亞馬遜網路服務（AWS）已宣布推出其最新一代人工智能晶片，代號為「Trainium2」。這些先進晶片旨在顯著加速 AI 訓練流程，為開發人員建構複雜的機器學習模型提供增強的效能和效率。此舉凸顯了 AWS 致力於提供強大、客製化的硬體解決方案，以滿足日益增長的人工智能運算能力需求。",
+    "vocabulary": [
+      "Amazon Web Services (AWS) (n.): 亞馬遜網路服務（AWS）",
+      "announced (v.): 宣布",
+      "launch (v.): 推出",
+      "latest generation (n.): 最新一代",
+      "artificial intelligence (AI) (n.): 人工智慧（AI）",
+      "chips (n.): 晶片",
+      "codenamed (adj.): 代號為",
+      "advanced (adj.): 先進的",
+      "designed (v.): 設計",
+      "significantly (adv.): 顯著地",
+      "accelerate (v.): 加速",
+      "training processes (n.): 訓練流程",
+      "enhanced (adj.): 增強的",
+      "performance (n.): 效能",
+      "efficiency (n.): 效率",
+      "developers (n.): 開發人員",
+      "building (v.): 建構",
+      "sophisticated (adj.): 複雜的",
+      "machine learning models (n.): 機器學習模型",
+      "underscores (v.): 凸顯",
+      "commitment (n.): 承諾",
+      "customized (adj.): 客製化的",
+      "hardware solutions (n.): 硬體解決方案",
+      "meet (v.): 滿足",
+      "growing demand (n.): 日益增長的需求",
+      "computing power (n.): 運算能力"
+    ],
+    "quiz": [
+      {
+        "q": "What is the codename for Amazon AWS's new AI chips?",
+        "options": [
+          "AlphaChip",
+          "Trainium2",
+          "AI Max",
+          "AWS Core"
+        ],
+        "answer": "Trainium2"
+      },
+      {
+        "q": "What is the primary purpose of these new AI chips?",
+        "options": [
+          "To improve cloud storage",
+          "To accelerate AI training processes",
+          "To enhance video streaming quality",
+          "To develop new operating systems"
+        ],
+        "answer": "To accelerate AI training processes"
+      },
+      {
+        "q": "Who will benefit from these enhanced chips?",
+        "options": [
+          "Gamers",
+          "Financial analysts",
+          "Developers building machine learning models",
+          "Medical researchers only"
+        ],
+        "answer": "Developers building machine learning models"
+      },
+      {
+        "q": "The new chips are designed to offer improved ____ and ____.",
+        "options": [
+          "security; speed",
+          "reliability; cost",
+          "performance; efficiency",
+          "storage; connectivity"
+        ],
+        "answer": "performance; efficiency"
+      },
+      {
+        "q": "What does the launch of these chips demonstrate about AWS?",
+        "options": [
+          "A focus on traditional computing",
+          "A commitment to AI hardware solutions",
+          "A reduction in cloud services",
+          "A move away from machine learning"
+        ],
+        "answer": "A commitment to AI hardware solutions"
+      },
+      {
+        "q": "The article mentions the chips are designed to 'significantly accelerate' what?",
+        "options": [
+          "Data transfer speeds",
+          "Customer service response times",
+          "AI training processes",
+          "Software compilation"
+        ],
+        "answer": "AI training processes"
+      },
+      {
+        "q": "What does AWS stand for?",
+        "options": [
+          "Advanced Web Services",
+          "Amazon Web Services",
+          "Automated Workflow Systems",
+          "Artificial Intelligence Solutions"
+        ],
+        "answer": "Amazon Web Services"
+      },
+      {
+        "q": "The chips are described as 'next-generation', implying they are:",
+        "options": [
+          "Outdated",
+          "The first of their kind",
+          "An improvement over previous models",
+          "Experimental"
+        ],
+        "answer": "An improvement over previous models"
+      },
+      {
+        "q": "The move by AWS addresses the increasing need for:",
+        "options": [
+          "Physical security",
+          "AI computing power",
+          "Office space",
+          "Print media"
+        ],
+        "answer": "AI computing power"
+      },
+      {
+        "q": "The chips are described as 'advanced'. What is another word for this?",
+        "options": [
+          "Basic",
+          "Simple",
+          "Sophisticated",
+          "Limited"
+        ],
+        "answer": "Sophisticated"
+      },
+      {
+        "q": "What kind of models are developers building with these chips?",
+        "options": [
+          "Simple calculators",
+          "Basic spreadsheets",
+          "Sophisticated machine learning models",
+          "Word processing documents"
+        ],
+        "answer": "Sophisticated machine learning models"
+      },
+      {
+        "q": "AWS is providing 'customized' hardware. What does 'customized' mean?",
+        "options": [
+          "Standardized",
+          "Mass-produced",
+          "Made to specific requirements",
+          "Generic"
+        ],
+        "answer": "Made to specific requirements"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
