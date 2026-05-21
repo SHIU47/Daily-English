@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 22, 2026：台灣政治、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 副總統：台美關係穩固 續強國防不對稱戰力\nVice President Lai Ching-te stated that the partnership between Taiwan and the United States remains robust. He emphasized Taiwan's commitment to continuously strengthening its asymmetric defense capabilities to ensure regional security. This ongoing effort reflects a strategic approach to maintaining peace and stability in the Indo-Pacific.\n\n[2] 野村喊買四檔台廠 半導體迎超級循環\nNomura Securities has issued a 'buy' recommendation for four Taiwanese companies, signaling optimism for the semiconductor industry. Analysts believe the sector is entering a significant \"super cycle,\" driven by robust demand for advanced chips. This positive outlook suggests strong growth potential for these Taiwanese manufacturers in the coming years, attracting investor interest.\n\n[3] 台糖獲利王逆勢翻身 國營事業表現兩極\nFormosa T Sugar has emerged as the top performer among state-owned enterprises, achieving significant profits against prevailing economic trends. This remarkable turnaround contrasts sharply with the mixed results seen across other government-backed companies. The company's success highlights a divergence in operational effectiveness within the public sector, with some entities thriving while others struggle.",
+    "chinese": "【1】副總統：台美關係穩固 續強國防不對稱戰力\n副總統賴清德表示，台灣與美國之間的夥伴關係依然穩固。他強調台灣致力於持續增強不對稱防禦能力，以確保區域安全。這項持續的努力反映了一種維持印太地區和平與穩定的戰略方針。\n\n【2】野村喊買四檔台廠 半導體迎超級循環\n野村證券發布了對四家台灣公司的「買進」建議，顯示出對半導體產業的樂觀態度。分析師認為，在先進晶片強勁需求的推動下，該產業正進入一個重要的「超級循環」。這種積極的前景預示著這些台灣製造商在未來幾年具有強勁的增長潛力，吸引了投資者的關注。\n\n【3】台糖獲利王逆勢翻身 國營事業表現兩極\n台糖公司在國營事業中脫穎而出，成為表現最佳者，在逆勢中取得了可觀的利潤。這次顯著的轉變與其他政府支持的企業表現參差不齊的情況形成了鮮明對比。該公司的成功凸顯了公共部門在營運效益上的分歧，有些機構蓬勃發展，而有些則面臨困境。",
+    "vocabulary": [
+      "Vice President (n.): 副總統",
+      "robust (adj.): 穩固的；強健的",
+      "partnership (n.): 夥伴關係",
+      "United States (n.): 美國",
+      "remains (v.): 保持；仍然是",
+      "emphasized (v.): 強調",
+      "commitment (n.): 承諾；致力",
+      "continuously (adv.): 持續地；不斷地",
+      "strengthening (v.): 加強；鞏固",
+      "asymmetric (adj.): 不對稱的",
+      "defense (n.): 防禦；國防",
+      "capabilities (n.): 能力；戰力",
+      "ensure (v.): 確保；保證",
+      "regional (adj.): 區域的",
+      "security (n.): 安全",
+      "ongoing (adj.): 進行中的；持續的",
+      "effort (n.): 努力； પ્રયત્ન",
+      "reflects (v.): 反映；顯示",
+      "strategic (adj.): 戰略的",
+      "stability (n.): 穩定",
+      "recommendation (n.): 建議",
+      "firm (n.): 公司",
+      "semiconductor (n.): 半導體",
+      "sector (n.): 產業",
+      "super cycle (n.): 超級循環",
+      "optimism (n.): 樂觀",
+      "analyst (n.): 分析師",
+      "significant (adj.): 顯著的，重要的",
+      "driven by (phr.): 由...驅動",
+      "robust (adj.): 強勁的，穩健的",
+      "demand (n.): 需求",
+      "advanced (adj.): 先進的",
+      "chip (n.): 晶片",
+      "positive outlook (phr.): 積極前景",
+      "suggests (v.): 顯示，暗示",
+      "strong growth potential (phr.): 強勁的增長潛力",
+      "manufacturer (n.): 製造商",
+      "attracting (v.): 吸引",
+      "investor interest (phr.): 投資者興趣",
+      "securities (n.): 證券",
+      "Formosa T Sugar (n.): 台糖公司",
+      "performer (n.): 表現者",
+      "state-owned enterprise (n.): 國營事業",
+      "significant (adj.): 顯著的",
+      "profit (n.): 利潤",
+      "prevailing (adj.): 盛行的",
+      "economic trend (n.): 經濟趨勢",
+      "remarkable (adj.): 卓越的",
+      "turnaround (n.): 轉機",
+      "contrasts sharply (v.): 鮮明對比",
+      "mixed result (n.): 參差不齊的結果",
+      "government-backed (adj.): 政府支持的",
+      "divergence (n.): 分歧",
+      "operational effectiveness (n.): 營運效益",
+      "public sector (n.): 公共部門",
+      "entity (n.): 實體",
+      "thriving (v.): 蓬勃發展",
+      "struggle (v.): 掙扎",
+      "emerge (v.): 浮現",
+      "achieve (v.): 達成"
+    ],
+    "quiz": [
+      {
+        "q": "Who made the statement about Taiwan-US relations?",
+        "options": [
+          "President Tsai Ing-wen",
+          "Vice President Lai Ching-te",
+          "Minister of Defense Chiu Kuo-cheng",
+          "US Ambassador to Taiwan"
+        ],
+        "answer": "Vice President Lai Ching-te"
+      },
+      {
+        "q": "According to the article, how is the Taiwan-US partnership described?",
+        "options": [
+          "Strained",
+          "Weakening",
+          "Solid",
+          "Non-existent"
+        ],
+        "answer": "Solid"
+      },
+      {
+        "q": "What is Taiwan continuing to strengthen?",
+        "options": [
+          "Economic ties",
+          "Cultural exchange",
+          "Asymmetric defense capabilities",
+          "Diplomatic relations"
+        ],
+        "answer": "Asymmetric defense capabilities"
+      },
+      {
+        "q": "What is the main goal of strengthening defense capabilities mentioned in the article?",
+        "options": [
+          "To project power",
+          "To ensure regional security",
+          "To prepare for offense",
+          "To attract foreign investment"
+        ],
+        "answer": "To ensure regional security"
+      },
+      {
+        "q": "The word 'robust' in the context of partnership means:",
+        "options": [
+          "Fragile",
+          "Uncertain",
+          "Strong and healthy",
+          "Temporary"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "What does 'asymmetric defense' primarily refer to?",
+        "options": [
+          "Military forces of equal size",
+          "Defense strategies that exploit an adversary's weaknesses",
+          "A focus on conventional warfare",
+          "A purely defensive posture"
+        ],
+        "answer": "Defense strategies that exploit an adversary's weaknesses"
+      },
+      {
+        "q": "The article suggests Taiwan's defense efforts are:",
+        "options": [
+          "Static",
+          "Retrogressive",
+          "Ongoing and strategic",
+          "Solely reliant on allies"
+        ],
+        "answer": "Ongoing and strategic"
+      },
+      {
+        "q": "What region is mentioned in relation to peace and stability?",
+        "options": [
+          "Europe",
+          "South America",
+          "Indo-Pacific",
+          "Africa"
+        ],
+        "answer": "Indo-Pacific"
+      },
+      {
+        "q": "The word 'commitment' implies:",
+        "options": [
+          "Hesitation",
+          "A promise or dedication",
+          "Doubt",
+          "Resignation"
+        ],
+        "answer": "A promise or dedication"
+      },
+      {
+        "q": "Which of the following best describes the tone of the English text?",
+        "options": [
+          "Opinionated",
+          "Factual",
+          "Humorous",
+          "Promotional"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "The Chinese translation uses the term '不對稱防禦能力', which directly corresponds to:",
+        "options": [
+          "Equal defense power",
+          "Asymmetric defense capabilities",
+          "Advanced technology defense",
+          "Joint defense strategies"
+        ],
+        "answer": "Asymmetric defense capabilities"
+      },
+      {
+        "q": "What is the main theme of the Vice President's statement?",
+        "options": [
+          "Taiwan's economic growth",
+          "Strengthening Taiwan-US ties and defense",
+          "Cultural diplomacy",
+          "Environmental protection initiatives"
+        ],
+        "answer": "Strengthening Taiwan-US ties and defense"
+      },
+      {
+        "q": "What is Nomura Securities' general stance on the four Taiwanese companies mentioned?",
+        "options": [
+          "Sell recommendation",
+          "Hold recommendation",
+          "Buy recommendation",
+          "Neutral stance"
+        ],
+        "answer": "Buy recommendation"
+      },
+      {
+        "q": "Which industry is expected to enter a \"super cycle\"?",
+        "options": [
+          "Automotive",
+          "Semiconductor",
+          "Biotechnology",
+          "Renewable Energy"
+        ],
+        "answer": "Semiconductor"
+      },
+      {
+        "q": "According to the text, what is driving the \"super cycle\" in the semiconductor sector?",
+        "options": [
+          "Decreased production costs",
+          "Government subsidies",
+          "Weakened global economy",
+          "Robust demand for advanced chips"
+        ],
+        "answer": "Robust demand for advanced chips"
+      },
+      {
+        "q": "The news suggests a positive outlook for the mentioned Taiwanese companies. What does this imply?",
+        "options": [
+          "Potential for strong growth",
+          "Likelihood of market decline",
+          "Increased competition",
+          "Reduced investor confidence"
+        ],
+        "answer": "Potential for strong growth"
+      },
+      {
+        "q": "Which country are the recommended companies from?",
+        "options": [
+          "South Korea",
+          "Japan",
+          "Taiwan",
+          "China"
+        ],
+        "answer": "Taiwan"
+      },
+      {
+        "q": "What is the term used to describe a prolonged period of significant growth in an industry?",
+        "options": [
+          "Mini-boom",
+          "Super cycle",
+          "Economic slump",
+          "Market correction"
+        ],
+        "answer": "Super cycle"
+      },
+      {
+        "q": "Who are the analysts mentioned in the text associated with?",
+        "options": [
+          "A Taiwanese bank",
+          "A global investment firm",
+          "A semiconductor manufacturer",
+          "A government agency"
+        ],
+        "answer": "A global investment firm"
+      },
+      {
+        "q": "The word \"robust\" in the context of demand means:",
+        "options": [
+          "Weak and declining",
+          "Stable but low",
+          "Strong and healthy",
+          "Fluctuating unpredictably"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "What kind of chips are mentioned as driving the demand?",
+        "options": [
+          "Basic",
+          "Obsolete",
+          "Advanced",
+          "Low-power"
+        ],
+        "answer": "Advanced"
+      },
+      {
+        "q": "The positive outlook is expected to attract what?",
+        "options": [
+          "More competition",
+          "Investor interest",
+          "Regulatory scrutiny",
+          "Technological stagnation"
+        ],
+        "answer": "Investor interest"
+      },
+      {
+        "q": "The English text is approximately how many words long?",
+        "options": [
+          "50 words",
+          "80 words",
+          "120 words",
+          "200 words"
+        ],
+        "answer": "80 words"
+      },
+      {
+        "q": "What is the primary subject of the news article?",
+        "options": [
+          "Taiwan's real estate market",
+          "Nomura's investment strategy",
+          "The semiconductor industry's growth prospects",
+          "Global economic trends"
+        ],
+        "answer": "The semiconductor industry's growth prospects"
+      },
+      {
+        "q": "What is the main subject of the news?",
+        "options": [
+          "The overall decline of Taiwan's economy",
+          "The performance of state-owned enterprises",
+          "New policies for government-backed companies",
+          "International trade agreements"
+        ],
+        "answer": "The performance of state-owned enterprises"
+      },
+      {
+        "q": "Which company is highlighted as the top performer?",
+        "options": [
+          "Taiwan Power Company",
+          "China Steel Corporation",
+          "Formosa T Sugar",
+          "Chunghwa Post"
+        ],
+        "answer": "Formosa T Sugar"
+      },
+      {
+        "q": "How did Formosa T Sugar perform relative to economic trends?",
+        "options": [
+          "It struggled against the trends.",
+          "It performed poorly.",
+          "It achieved profits against prevailing trends.",
+          "It had mixed results."
+        ],
+        "answer": "It achieved profits against prevailing trends."
+      },
+      {
+        "q": "What is the general performance of other state-owned enterprises mentioned in the text?",
+        "options": [
+          "All are performing exceptionally well.",
+          "They show divergent or mixed results.",
+          "Most are struggling significantly.",
+          "Their performance is uniform."
+        ],
+        "answer": "They show divergent or mixed results."
+      },
+      {
+        "q": "The text describes Formosa T Sugar's success as a:",
+        "options": [
+          "Minor improvement",
+          "Significant setback",
+          "Remarkable turnaround",
+          "Planned failure"
+        ],
+        "answer": "Remarkable turnaround"
+      },
+      {
+        "q": "The success of Formosa T Sugar highlights what within the public sector?",
+        "options": [
+          "Uniformity in management",
+          "A divergence in operational effectiveness",
+          "A lack of government support",
+          "Consistent financial losses"
+        ],
+        "answer": "A divergence in operational effectiveness"
+      },
+      {
+        "q": "Which word describes the results of other state-owned enterprises?",
+        "options": [
+          "Consistent",
+          "Uniform",
+          "Divergent",
+          "Negative"
+        ],
+        "answer": "Divergent"
+      },
+      {
+        "q": "What does the word 'prevailing' mean in the context of economic trends?",
+        "options": [
+          "Unusual",
+          "Future",
+          "Dominant or widespread",
+          "Declining"
+        ],
+        "answer": "Dominant or widespread"
+      },
+      {
+        "q": "The news contrasts Formosa T Sugar's performance with:",
+        "options": [
+          "Private sector companies",
+          "International corporations",
+          "Other state-owned enterprises",
+          "Small businesses"
+        ],
+        "answer": "Other state-owned enterprises"
+      },
+      {
+        "q": "What does it mean for an enterprise to be 'state-owned'?",
+        "options": [
+          "It is privately funded.",
+          "It is owned and operated by the government.",
+          "It operates internationally.",
+          "It focuses solely on exports."
+        ],
+        "answer": "It is owned and operated by the government."
+      },
+      {
+        "q": "The phrase 'mixed results' implies:",
+        "options": [
+          "Completely positive outcomes",
+          "Completely negative outcomes",
+          "A combination of good and bad outcomes",
+          "No results at all"
+        ],
+        "answer": "A combination of good and bad outcomes"
+      },
+      {
+        "q": "Which of the following best describes the style of the English text?",
+        "options": [
+          "Narrative",
+          "Persuasive",
+          "Factual",
+          "Humorous"
+        ],
+        "answer": "Factual"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "川普延後簽署AI行政命令 顧慮削弱美競爭力",
+    "tabTitle": "科技",
+    "english": "Former President Donald Trump has postponed signing a planned executive order on artificial intelligence (AI). The decision stems from concerns that the order might inadvertently weaken the United States' competitive edge in the rapidly evolving AI landscape. This delay allows for further review of the potential economic and technological impacts before any definitive action is taken.",
+    "chinese": "前總統唐納·川普已推遲簽署一項關於人工智能（AI）的行政命令。此決定源於擔憂該命令可能無意中削弱美國在快速發展的人工智能領域的競爭優勢。此舉推遲了在採取任何最終行動之前，對潛在經濟和技術影響進行進一步審查。",
+    "vocabulary": [
+      "postponed (v.): 推遲",
+      "signing (v.): 簽署",
+      "planned (adj.): 計劃中的",
+      "executive order (n.): 行政命令",
+      "artificial intelligence (n.): 人工智能",
+      "decision (n.): 決定",
+      "stems from (v.): 源於",
+      "concerns (n.): 擔憂",
+      "order (n.): 命令",
+      "inadvertently (adv.): 無意中地",
+      "weaken (v.): 削弱",
+      "United States (n.): 美國",
+      "competitive edge (n.): 競爭優勢",
+      "rapidly (adv.): 快速地",
+      "evolving (adj.): 發展中的",
+      "landscape (n.): 領域；格局",
+      "delay (n.): 推遲；延誤",
+      "allows for (v.): 允許；容許",
+      "further review (n.): 進一步審查",
+      "potential (adj.): 潛在的"
+    ],
+    "quiz": [
+      {
+        "q": "What action has Donald Trump postponed?",
+        "options": [
+          "Signing a trade agreement",
+          "Issuing a statement on foreign policy",
+          "Signing an executive order on AI",
+          "Announcing a new economic plan"
+        ],
+        "answer": "Signing an executive order on AI"
+      },
+      {
+        "q": "What is the main reason cited for the postponement?",
+        "options": [
+          "Lack of public support",
+          "Concerns about weakening US competitiveness",
+          "Technical difficulties in drafting the order",
+          "Disagreement with advisors"
+        ],
+        "answer": "Concerns about weakening US competitiveness"
+      },
+      {
+        "q": "What does the executive order relate to?",
+        "options": [
+          "Environmental regulations",
+          "Artificial Intelligence (AI)",
+          "National security",
+          "Healthcare policy"
+        ],
+        "answer": "Artificial Intelligence (AI)"
+      },
+      {
+        "q": "The news states that the order might inadvertently do what?",
+        "options": [
+          "Boost the economy",
+          "Strengthen international relations",
+          "Weaken the US's competitive edge",
+          "Increase technological innovation"
+        ],
+        "answer": "Weaken the US's competitive edge"
+      },
+      {
+        "q": "What does the delay allow for?",
+        "options": [
+          "Immediate implementation of the order",
+          "Further review of potential impacts",
+          "A public debate on the order",
+          "Negotiations with other countries"
+        ],
+        "answer": "Further review of potential impacts"
+      },
+      {
+        "q": "What kind of landscape is mentioned in the text?",
+        "options": [
+          "Economic landscape",
+          "Political landscape",
+          "Technological landscape",
+          "AI landscape"
+        ],
+        "answer": "AI landscape"
+      },
+      {
+        "q": "The word 'inadvertently' means:",
+        "options": [
+          "Intentionally",
+          "Accidentally",
+          "Carefully",
+          "Publicly"
+        ],
+        "answer": "Accidentally"
+      },
+      {
+        "q": "What is the status of the executive order?",
+        "options": [
+          "It has been signed",
+          "It has been rejected",
+          "It is planned but has been delayed",
+          "It is still under development"
+        ],
+        "answer": "It is planned but has been delayed"
+      },
+      {
+        "q": "The text mentions 'rapidly evolving'. What does 'evolving' suggest?",
+        "options": [
+          "Becoming static",
+          "Changing and developing",
+          "Being replaced",
+          "Operating slowly"
+        ],
+        "answer": "Changing and developing"
+      },
+      {
+        "q": "What is the 'competitive edge'?",
+        "options": [
+          "A disadvantage",
+          "A superior position in competition",
+          "A lack of resources",
+          "A historical advantage"
+        ],
+        "answer": "A superior position in competition"
+      },
+      {
+        "q": "Who is the former president mentioned?",
+        "options": [
+          "Joe Biden",
+          "Barack Obama",
+          "Donald Trump",
+          "George W. Bush"
+        ],
+        "answer": "Donald Trump"
+      },
+      {
+        "q": "The delay is intended to allow for assessment of:",
+        "options": [
+          "Public opinion",
+          "International reactions",
+          "Economic and technological impacts",
+          "Legal challenges"
+        ],
+        "answer": "Economic and technological impacts"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "ASML：全球晶片長期供應受限 AI需求旺",
+    "tabTitle": "科技",
+    "english": "ASML, a key supplier in the semiconductor industry, has warned that the global chip supply could face long-term limitations. This situation is exacerbated by the immense and continuously growing demand for chips driven by the artificial intelligence (AI) sector. The company highlighted that meeting this surge in AI-related chip requirements presents a significant challenge for the entire industry's production capacity.",
+    "chinese": "半導體產業的關鍵供應商艾司摩爾（ASML）警告，全球晶片供應可能面臨長期限制。此情況因人工智慧（AI）領域驅動的龐大且持續增長的需求而加劇。該公司強調，滿足這波與AI相關的晶片需求激增，對整個產業的生產能力構成了重大挑戰。",
+    "vocabulary": [
+      "semiconductor (n.): 半導體",
+      "industry (n.): 產業",
+      "supplier (n.): 供應商",
+      "warned (v.): 警告",
+      "global (adj.): 全球的",
+      "chip (n.): 晶片",
+      "supply (n.): 供應",
+      "face (v.): 面臨",
+      "long-term (adj.): 長期的",
+      "limitation (n.): 限制",
+      "exacerbated (v.): 加劇",
+      "immense (adj.): 巨大的",
+      "continuously (adv.): 持續地",
+      "growing (adj.): 增長的",
+      "demand (n.): 需求",
+      "driven by (phr.): 由...驅動",
+      "artificial intelligence (AI) (n.): 人工智慧",
+      "sector (n.): 領域",
+      "highlighted (v.): 強調",
+      "surge (n.): 激增"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "The decline in AI technology",
+          "ASML's new chip manufacturing process",
+          "Long-term chip supply constraints due to AI demand",
+          "The reduction in semiconductor industry jobs"
+        ],
+        "answer": "Long-term chip supply constraints due to AI demand"
+      },
+      {
+        "q": "Which company issued the warning about chip supply?",
+        "options": [
+          "Nvidia",
+          "Intel",
+          "TSMC",
+          "ASML"
+        ],
+        "answer": "ASML"
+      },
+      {
+        "q": "What is driving the increased demand for chips?",
+        "options": [
+          "The gaming industry",
+          "The automotive industry",
+          "Artificial intelligence (AI)",
+          "Consumer electronics"
+        ],
+        "answer": "Artificial intelligence (AI)"
+      },
+      {
+        "q": "According to the news, the chip supply limitations are expected to be:",
+        "options": [
+          "Short-term",
+          "Temporary",
+          "Long-term",
+          "Non-existent"
+        ],
+        "answer": "Long-term"
+      },
+      {
+        "q": "What does ASML do in the semiconductor industry?",
+        "options": [
+          "Designs AI algorithms",
+          "Manufactures chip-making machines",
+          "Develops new software",
+          "Sells finished chips"
+        ],
+        "answer": "Manufactures chip-making machines"
+      },
+      {
+        "q": "The word 'exacerbated' means:",
+        "options": [
+          "Improved",
+          "Made worse",
+          "Caused by",
+          "Reduced"
+        ],
+        "answer": "Made worse"
+      },
+      {
+        "q": "The demand for chips is described as:",
+        "options": [
+          "Declining rapidly",
+          "Stable",
+          "Immense and continuously growing",
+          "Slightly increasing"
+        ],
+        "answer": "Immense and continuously growing"
+      },
+      {
+        "q": "What is a potential challenge mentioned by ASML?",
+        "options": [
+          "Reducing AI development costs",
+          "Meeting the surge in AI-related chip requirements",
+          "Finding new markets for chips",
+          "Training the workforce"
+        ],
+        "answer": "Meeting the surge in AI-related chip requirements"
+      },
+      {
+        "q": "The news is primarily about a warning regarding the:",
+        "options": [
+          "Cost of AI",
+          "Future of ASML",
+          "Availability of computer memory",
+          "Global chip supply"
+        ],
+        "answer": "Global chip supply"
+      },
+      {
+        "q": "Which sector is significantly contributing to the chip demand?",
+        "options": [
+          "Healthcare",
+          "Education",
+          "Artificial Intelligence",
+          "Agriculture"
+        ],
+        "answer": "Artificial Intelligence"
+      },
+      {
+        "q": "The term 'semiconductor industry' refers to companies that make:",
+        "options": [
+          "Smartphones",
+          "Computer components like chips",
+          "Internet services",
+          "Batteries"
+        ],
+        "answer": "Computer components like chips"
+      },
+      {
+        "q": "The news suggests that the chip supply issue is:",
+        "options": [
+          "A minor inconvenience",
+          "A temporary setback",
+          "A significant and ongoing problem",
+          "Easily solvable"
+        ],
+        "answer": "A significant and ongoing problem"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "OpenAI擬提交IPO申請 估值破9000億美元",
+    "tabTitle": "科技",
+    "english": "Artificial intelligence leader OpenAI is reportedly preparing to file for an Initial Public Offering (IPO). The company is in discussions with advisors regarding a potential stock market debut. This move could see OpenAI's valuation surge beyond $900 billion. Such a significant valuation would position OpenAI among the most valuable tech companies globally. The IPO aims to raise substantial capital for future research and development.",
+    "chinese": "人工智能領導者 OpenAI 據報正準備提交首次公開募股（IPO）申請。該公司正與顧問商討潛在的上市事宜。此舉可能使 OpenAI 的估值飆升至 9000 億美元以上。如此龐大的估值將使 OpenAI 躋身全球最具價值的科技公司之列。此次 IPO 旨在為未來的研發籌集大量資金。",
+    "vocabulary": [
+      "Artificial intelligence (n.): 人工智能",
+      "leader (n.): 領導者",
+      "reportedly (adv.): 據報",
+      "preparing (v.): 準備",
+      "file for (v.): 提交（申請）",
+      "Initial Public Offering (IPO) (n.): 首次公開募股",
+      "company (n.): 公司",
+      "discussions (n.): 討論",
+      "advisors (n.): 顧問",
+      "regarding (prep.): 關於",
+      "potential (adj.): 潛在的",
+      "stock market (n.): 股票市場",
+      "debut (n.): 首次亮相",
+      "move (n.): 行動、舉措",
+      "valuation (n.): 估值",
+      "surge (v.): 飆升",
+      "beyond (prep.): 超過",
+      "significant (adj.): 顯著的",
+      "position (v.): 使處於...地位",
+      "valuable (adj.): 有價值的",
+      "globally (adv.): 全球地",
+      "aims to (v.): 旨在",
+      "raise (v.): 籌集",
+      "substantial (adj.): 大量的",
+      "capital (n.): 資金",
+      "future (n.): 未來",
+      "research and development (n.): 研究與開發"
+    ],
+    "quiz": [
+      {
+        "q": "What is OpenAI reportedly preparing to file for?",
+        "options": [
+          "A patent application",
+          "A merger with another company",
+          "An Initial Public Offering (IPO)",
+          "A new product launch"
+        ],
+        "answer": "An Initial Public Offering (IPO)"
+      },
+      {
+        "q": "Who is OpenAI described as in the news?",
+        "options": [
+          "A financial institution",
+          "An artificial intelligence leader",
+          "A research laboratory",
+          "A software development firm"
+        ],
+        "answer": "An artificial intelligence leader"
+      },
+      {
+        "q": "What is the reported threshold for OpenAI's valuation if the IPO proceeds?",
+        "options": [
+          "$100 billion",
+          "$500 billion",
+          "$900 billion",
+          "$1 trillion"
+        ],
+        "answer": "$900 billion"
+      },
+      {
+        "q": "What is OpenAI discussing with advisors?",
+        "options": [
+          "Future research projects",
+          "Potential collaborations",
+          "A potential stock market debut",
+          "Regulatory compliance"
+        ],
+        "answer": "A potential stock market debut"
+      },
+      {
+        "q": "What does the term 'IPO' stand for?",
+        "options": [
+          "International Project Organization",
+          "Initial Public Offering",
+          "Innovative Product Outline",
+          "Internal Process Optimization"
+        ],
+        "answer": "Initial Public Offering"
+      },
+      {
+        "q": "What does a 'significant valuation' imply for OpenAI?",
+        "options": [
+          "It will face more competition.",
+          "It will become one of the world's most valuable tech companies.",
+          "It needs to reduce its workforce.",
+          "It will focus on domestic markets only."
+        ],
+        "answer": "It will become one of the world's most valuable tech companies."
+      },
+      {
+        "q": "What is the primary stated goal of the IPO?",
+        "options": [
+          "To acquire smaller companies",
+          "To reduce company debt",
+          "To raise substantial capital for future R&D",
+          "To increase executive salaries"
+        ],
+        "answer": "To raise substantial capital for future R&D"
+      },
+      {
+        "q": "Which word describes the increase in valuation?",
+        "options": [
+          "decrease",
+          "stabilize",
+          "surge",
+          "fluctuate"
+        ],
+        "answer": "surge"
+      },
+      {
+        "q": "What does 'regarding' mean in the context of the sentence 'discussions with advisors regarding a potential stock market debut'?",
+        "options": [
+          "Despite",
+          "Because of",
+          "About",
+          "Without"
+        ],
+        "answer": "About"
+      },
+      {
+        "q": "The news suggests OpenAI is a company focused on what field?",
+        "options": [
+          "Biotechnology",
+          "Financial technology",
+          "Artificial intelligence",
+          "Renewable energy"
+        ],
+        "answer": "Artificial intelligence"
+      },
+      {
+        "q": "What does 'potential' mean in the context of 'potential stock market debut'?",
+        "options": [
+          "Certain",
+          "Impossible",
+          "Possible",
+          "Past"
+        ],
+        "answer": "Possible"
+      },
+      {
+        "q": "What does 'substantial' mean when referring to capital?",
+        "options": [
+          "Minimal",
+          "Negligible",
+          "Large",
+          "Temporary"
+        ],
+        "answer": "Large"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "伊朗最高領袖禁濃縮鈾運出國 川普回應",
+    "tabTitle": "地緣政治",
+    "english": "Iran's Supreme Leader has issued a decree prohibiting the export of enriched uranium. This significant policy shift aims to strengthen domestic control over nuclear materials. The move comes amid heightened international scrutiny of Iran's nuclear program. In response, U.S. President Trump stated that the U.S. is closely monitoring the situation and will consider appropriate measures.",
+    "chinese": "伊朗最高領袖發布了一項法令，禁止濃縮鈾的出口。這項重大的政策轉變旨在加強國內對核材料的控制。此舉是在伊朗核計畫受到國際社會高度審查之際發生的。美國總統川普對此回應表示，美國正密切關注事態發展，並將考慮採取適當措施。",
+    "vocabulary": [
+      "Supreme Leader (n.): 最高領袖",
+      "decree (n.): 法令",
+      "prohibiting (v.): 禁止",
+      "export (n.): 出口",
+      "enriched uranium (n.): 濃縮鈾",
+      "significant (adj.): 重大的",
+      "policy shift (n.): 政策轉變",
+      "aims to (v.): 旨在",
+      "strengthen (v.): 加強",
+      "domestic control (n.): 國內控制",
+      "nuclear materials (n.): 核材料",
+      "amid (prep.): 在...之際",
+      "heightened (adj.): 增強的",
+      "international scrutiny (n.): 國際審查",
+      "nuclear program (n.): 核計畫",
+      "in response (adv.): 作為回應",
+      "closely monitoring (v.): 密切關注",
+      "situation (n.): 事態",
+      "consider (v.): 考慮",
+      "appropriate measures (n.): 適當措施"
+    ],
+    "quiz": [
+      {
+        "q": "What did Iran's Supreme Leader prohibit?",
+        "options": [
+          "Importing enriched uranium",
+          "Exporting enriched uranium",
+          "Developing nuclear weapons",
+          "Sharing nuclear technology"
+        ],
+        "answer": "Exporting enriched uranium"
+      },
+      {
+        "q": "What is the aim of this policy shift?",
+        "options": [
+          "To increase uranium production",
+          "To export more nuclear materials",
+          "To strengthen domestic control over nuclear materials",
+          "To reduce international scrutiny"
+        ],
+        "answer": "To strengthen domestic control over nuclear materials"
+      },
+      {
+        "q": "When did this move occur?",
+        "options": [
+          "Before international scrutiny",
+          "During a period of reduced international scrutiny",
+          "Amid heightened international scrutiny",
+          "After the nuclear program was completed"
+        ],
+        "answer": "Amid heightened international scrutiny"
+      },
+      {
+        "q": "Who responded to Iran's decision?",
+        "options": [
+          "The UN Secretary-General",
+          "The President of France",
+          "U.S. President Trump",
+          "The IAEA Director"
+        ],
+        "answer": "U.S. President Trump"
+      },
+      {
+        "q": "What did President Trump state?",
+        "options": [
+          "The U.S. supports the ban",
+          "The U.S. is closely monitoring the situation",
+          "The U.S. will offer assistance",
+          "The U.S. is lifting sanctions"
+        ],
+        "answer": "The U.S. is closely monitoring the situation"
+      },
+      {
+        "q": "What does 'decree' mean in this context?",
+        "options": [
+          "A suggestion",
+          "A request",
+          "A formal order",
+          "A public announcement"
+        ],
+        "answer": "A formal order"
+      },
+      {
+        "q": "The word 'scrutiny' means:",
+        "options": [
+          "Encouragement",
+          "Support",
+          "Close examination or inspection",
+          "Agreement"
+        ],
+        "answer": "Close examination or inspection"
+      },
+      {
+        "q": "What is 'enriched uranium'?",
+        "options": [
+          "A type of conventional fuel",
+          "A material used in nuclear reactors",
+          "A chemical compound for fertilizers",
+          "A rare earth metal"
+        ],
+        "answer": "A material used in nuclear reactors"
+      },
+      {
+        "q": "The phrase 'policy shift' implies:",
+        "options": [
+          "Continuing the same policy",
+          "A change in approach or strategy",
+          "A temporary pause in action",
+          "An increase in funding"
+        ],
+        "answer": "A change in approach or strategy"
+      },
+      {
+        "q": "What does 'domestic control' refer to?",
+        "options": [
+          "International oversight",
+          "Control by foreign governments",
+          "Control within a country",
+          "Control by non-governmental organizations"
+        ],
+        "answer": "Control within a country"
+      },
+      {
+        "q": "The word 'amid' means:",
+        "options": [
+          "Before",
+          "After",
+          "During or in the middle of",
+          "Because of"
+        ],
+        "answer": "During or in the middle of"
+      },
+      {
+        "q": "What might the U.S. consider doing in response?",
+        "options": [
+          "Ignoring the situation",
+          "Providing aid to Iran",
+          "Taking appropriate measures",
+          "Withdrawing from international agreements"
+        ],
+        "answer": "Taking appropriate measures"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
