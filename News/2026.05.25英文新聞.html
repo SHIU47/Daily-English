@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 25, 2026：台灣經濟、地緣政治 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣無人機國家隊挺進美國市場，爭取國際商機\nTaiwan's burgeoning drone industry is making a significant push into the lucrative US market. A consortium, often referred to as the 'drone national team,' has begun engaging with American counterparts to explore collaborative opportunities. This strategic move aims to secure international contracts and bolster Taiwan's position in the global unmanned aerial vehicle sector.\n\n[2] AI浪潮推升台股破四萬點，半導體供應鏈成關鍵\nTaiwan's stock market has surpassed the 40,000-point milestone, largely driven by the global AI boom. The surge is significantly attributed to the robust performance of the semiconductor supply chain, which plays a critical role in AI development. This achievement highlights Taiwan's integral position in the international technology landscape, with continued investor confidence in the sector's future growth potential.\n\n[3] 好市多台南東區新店啟動，將設南台灣首座加油站\nCostco Wholesale Corporation is set to open a new store in the East District of Tainan City. This significant development will mark the debut of Southern Taiwan's first-ever Costco gas station, offering a new convenience for members in the region. The expansion is expected to boost local economic activity and provide enhanced shopping options.",
+    "chinese": "【1】台灣無人機國家隊挺進美國市場，爭取國際商機\n台灣蓬勃發展的無人機產業正大力進軍利潤豐厚的美國市場。一個常被稱為「無人機國家隊」的聯盟，已開始與美國同行接觸，以探索合作機會。這項策略性舉措旨在爭取國際合約，並鞏固台灣在全球無人載具領域的地位。\n\n【2】AI浪潮推升台股破四萬點，半導體供應鏈成關鍵\n受惠於全球人工智能（AI）熱潮的推動，台灣股市已突破四萬點的里程碑。此次上漲主要歸功於半導體供應鏈的強勁表現，該鏈條在AI發展中扮演著關鍵角色。這一成就凸顯了台灣在全球科技領域中的重要地位，投資者對該產業的未來增長潛力持續充滿信心。\n\n【3】好市多台南東區新店啟動，將設南台灣首座加油站\n好市多批發公司即將在台南市東區開設一家新店。這項重要發展將是南台灣首座好市多加油站的亮相，為該地區的會員提供新的便利。此次擴張預計將促進當地經濟活動，並提供更優質的購物選擇。",
+    "vocabulary": [
+      "burgeoning (adj.): 蓬勃發展的",
+      "drone (n.): 無人機",
+      "industry (n.): 產業",
+      "significant (adj.): 顯著的",
+      "push (n.): 推動",
+      "lucrative (adj.): 賺錢的，有利可圖的",
+      "market (n.): 市場",
+      "consortium (n.): 聯盟，聯合企業",
+      "referred to as (phr.): 被稱為",
+      "national team (n.): 國家隊",
+      "begun (v.): 開始 (begin 的過去式)",
+      "engaging with (v. phrase): 與...接觸，與...交往",
+      "counterparts (n.): 對等人員，相對應者",
+      "explore (v.): 探索",
+      "collaborative (adj.): 合作的",
+      "opportunities (n.): 機會",
+      "strategic (adj.): 策略性的",
+      "move (n.): 舉動，行動",
+      "aims to (v. phrase): 旨在",
+      "secure (v.): 爭取，確保",
+      "contracts (n.): 合約",
+      "bolster (v.): 增強，支持",
+      "position (n.): 地位",
+      "global (adj.): 全球的",
+      "unmanned aerial vehicle (n.): 無人載具 (UAV)",
+      "milestone (n.): 里程碑",
+      "surpassed (v.): 超越",
+      "largely (adv.): 在很大程度上",
+      "driven by (phr.): 受...驅動",
+      "global (adj.): 全球的",
+      "boom (n.): 繁榮；興旺",
+      "surge (n.): 激增；飆升",
+      "significantly (adv.): 顯著地",
+      "attributed to (phr.): 歸因於",
+      "robust (adj.): 強健的；穩健的",
+      "performance (n.): 表現",
+      "semiconductor (n.): 半導體",
+      "supply chain (n.): 供應鏈",
+      "plays a critical role (phr.): 扮演關鍵角色",
+      "development (n.): 發展",
+      "achievement (n.): 成就",
+      "highlights (v.): 強調；凸顯",
+      "integral (adj.): 必需的；不可或缺的",
+      "position (n.): 地位；位置",
+      "investor confidence (phr.): 投資者信心",
+      "Costco Wholesale Corporation (n.): 好市多股份有限公司",
+      "set to (phrasing): 預定要",
+      "open (v.): 開設",
+      "new store (n.): 新店",
+      "East District (n.): 東區",
+      "Tainan City (n.): 台南市",
+      "significant development (n.): 重要發展",
+      "mark (v.): 標誌著",
+      "debut (n.): 首次亮相",
+      "Southern Taiwan (n.): 南台灣",
+      "first-ever (adj.): 史上第一個",
+      "gas station (n.): 加油站",
+      "offering (v.): 提供",
+      "convenience (n.): 便利",
+      "members (n.): 會員",
+      "region (n.): 地區",
+      "expansion (n.): 擴張",
+      "expected (adj.): 預期的",
+      "boost (v.): 提升",
+      "local economic activity (n.): 當地經濟活動",
+      "provide (v.): 提供",
+      "enhanced shopping options (n.): 更優質的購物選擇"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "Taiwan's new technology in cars",
+          "Taiwan's drone industry entering the US market",
+          "A new trade agreement between Taiwan and the US",
+          "The development of AI in Taiwan"
+        ],
+        "answer": "Taiwan's drone industry entering the US market"
+      },
+      {
+        "q": "What is described as 'burgeoning' in the article?",
+        "options": [
+          "The US market",
+          "International contracts",
+          "Taiwan's drone industry",
+          "Collaborative opportunities"
+        ],
+        "answer": "Taiwan's drone industry"
+      },
+      {
+        "q": "Who is the 'drone national team' engaging with in the US?",
+        "options": [
+          "Government officials",
+          "Financial institutions",
+          "American counterparts",
+          "Consumer groups"
+        ],
+        "answer": "American counterparts"
+      },
+      {
+        "q": "What is the primary goal of this strategic move?",
+        "options": [
+          "To reduce drone production costs",
+          "To explore new drone designs",
+          "To secure international contracts",
+          "To recruit American engineers"
+        ],
+        "answer": "To secure international contracts"
+      },
+      {
+        "q": "What does the article suggest about the US market?",
+        "options": [
+          "It is small and developing",
+          "It is lucrative and important",
+          "It is not interested in drones",
+          "It is already dominated by Taiwanese companies"
+        ],
+        "answer": "It is lucrative and important"
+      },
+      {
+        "q": "The term 'drone national team' refers to:",
+        "options": [
+          "A single company",
+          "A government agency",
+          "A consortium of drone companies",
+          "A research institute"
+        ],
+        "answer": "A consortium of drone companies"
+      },
+      {
+        "q": "What does 'bolster' mean in the context of the article?",
+        "options": [
+          "To weaken",
+          "To increase or strengthen",
+          "To ignore",
+          "To criticize"
+        ],
+        "answer": "To increase or strengthen"
+      },
+      {
+        "q": "What is the article's overall tone?",
+        "options": [
+          "Critical",
+          "Sarcastic",
+          "Informative and factual",
+          "Opinionated"
+        ],
+        "answer": "Informative and factual"
+      },
+      {
+        "q": "What kind of business opportunities are being sought?",
+        "options": [
+          "Domestic sales",
+          "International contracts",
+          "Component manufacturing",
+          "Software development only"
+        ],
+        "answer": "International contracts"
+      },
+      {
+        "q": "The article mentions 'unmanned aerial vehicle' as another term for:",
+        "options": [
+          "Satellite",
+          "Helicopter",
+          "Drone",
+          "Robot"
+        ],
+        "answer": "Drone"
+      },
+      {
+        "q": "What is the purpose of engaging with 'American counterparts'?",
+        "options": [
+          "To sell existing products",
+          "To explore collaborative opportunities",
+          "To establish a headquarters",
+          "To recruit local talent"
+        ],
+        "answer": "To explore collaborative opportunities"
+      },
+      {
+        "q": "The article suggests that this move will help Taiwan in which sector?",
+        "options": [
+          "Automotive",
+          "Aerospace",
+          "Global unmanned aerial vehicle sector",
+          "Information technology"
+        ],
+        "answer": "Global unmanned aerial vehicle sector"
+      },
+      {
+        "q": "What major event has driven Taiwan's stock market to surpass 40,000 points?",
+        "options": [
+          "A decrease in global interest rates",
+          "A surge in the AI industry",
+          "A decline in oil prices",
+          "New government regulations"
+        ],
+        "answer": "A surge in the AI industry"
+      },
+      {
+        "q": "Which sector is identified as a key contributor to the stock market's rise?",
+        "options": [
+          "The renewable energy sector",
+          "The tourism industry",
+          "The semiconductor supply chain",
+          "The real estate market"
+        ],
+        "answer": "The semiconductor supply chain"
+      },
+      {
+        "q": "What does the news suggest about Taiwan's role in technology?",
+        "options": [
+          "It is becoming less important",
+          "It holds an integral position",
+          "It is focusing on traditional industries",
+          "It is reducing its tech exports"
+        ],
+        "answer": "It holds an integral position"
+      },
+      {
+        "q": "What is the current sentiment of investors regarding the technology sector?",
+        "options": [
+          "Uncertainty",
+          "Doubt",
+          "Confidence",
+          "Disappointment"
+        ],
+        "answer": "Confidence"
+      },
+      {
+        "q": "The term 'AI wave' in the headline refers to:",
+        "options": [
+          "A historical trend in artificial intelligence",
+          "A recent and significant increase in AI adoption and development",
+          "A natural phenomenon related to AI research",
+          "A metaphorical representation of AI's impact on weather patterns"
+        ],
+        "answer": "A recent and significant increase in AI adoption and development"
+      },
+      {
+        "q": "The phrase 'surpassed the 40,000-point milestone' means:",
+        "options": [
+          "The stock market fell below 40,000 points",
+          "The stock market reached and went beyond 40,000 points",
+          "The stock market is expected to reach 40,000 points soon",
+          "The stock market has been trading around 40,000 points for a long time"
+        ],
+        "answer": "The stock market reached and went beyond 40,000 points"
+      },
+      {
+        "q": "What is the primary function of the semiconductor supply chain in the context of AI?",
+        "options": [
+          "Marketing AI products",
+          "Providing the essential components for AI development",
+          "Regulating AI usage",
+          "Developing AI software interfaces"
+        ],
+        "answer": "Providing the essential components for AI development"
+      },
+      {
+        "q": "The word 'robust' in relation to performance means:",
+        "options": [
+          "Weak and unstable",
+          "Strong and healthy",
+          "Average and consistent",
+          "Fluctuating and unpredictable"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "Why is investor confidence important for the stock market?",
+        "options": [
+          "It leads to lower stock prices",
+          "It encourages investment and supports market growth",
+          "It reduces the need for technological innovation",
+          "It causes market volatility"
+        ],
+        "answer": "It encourages investment and supports market growth"
+      },
+      {
+        "q": "The news highlights Taiwan's 'integral position' in the technology landscape. What does 'integral' imply?",
+        "options": [
+          "Marginal",
+          "Essential",
+          "Optional",
+          "Peripheral"
+        ],
+        "answer": "Essential"
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "Taiwan's agricultural output",
+          "The impact of AI on Taiwan's stock market and its key industries",
+          "International trade agreements unrelated to technology",
+          "Taiwan's tourism statistics"
+        ],
+        "answer": "The impact of AI on Taiwan's stock market and its key industries"
+      },
+      {
+        "q": "The phrase 'future growth potential' refers to:",
+        "options": [
+          "Past achievements of the sector",
+          "Current market stability",
+          "The possibility of future expansion and success",
+          "Risks associated with the sector"
+        ],
+        "answer": "The possibility of future expansion and success"
+      },
+      {
+        "q": "Where will Costco's new store be located?",
+        "options": [
+          "Kaohsiung City",
+          "Tainan City",
+          "Taichung City",
+          "Taipei City"
+        ],
+        "answer": "Tainan City"
+      },
+      {
+        "q": "What is a significant new feature of this Tainan store?",
+        "options": [
+          "A larger electronics section",
+          "Southern Taiwan's first Costco gas station",
+          "A dedicated organic food aisle",
+          "An indoor playground"
+        ],
+        "answer": "Southern Taiwan's first Costco gas station"
+      },
+      {
+        "q": "Which part of Tainan City will the new store be in?",
+        "options": [
+          "West District",
+          "North District",
+          "South District",
+          "East District"
+        ],
+        "answer": "East District"
+      },
+      {
+        "q": "What is the name of the company opening the new store?",
+        "options": [
+          "Walmart",
+          "Target",
+          "Costco Wholesale Corporation",
+          "Sam's Club"
+        ],
+        "answer": "Costco Wholesale Corporation"
+      },
+      {
+        "q": "What is the expected impact of this expansion on the local area?",
+        "options": [
+          "A decrease in traffic",
+          "A boost to local economic activity",
+          "Reduced competition for other businesses",
+          "Less job creation"
+        ],
+        "answer": "A boost to local economic activity"
+      },
+      {
+        "q": "The new gas station will be the first of its kind in which region?",
+        "options": [
+          "Northern Taiwan",
+          "Central Taiwan",
+          "Southern Taiwan",
+          "Eastern Taiwan"
+        ],
+        "answer": "Southern Taiwan"
+      },
+      {
+        "q": "The article mentions the store will offer 'enhanced shopping options' for whom?",
+        "options": [
+          "All residents of Taiwan",
+          "Tourists",
+          "Members",
+          "Employees"
+        ],
+        "answer": "Members"
+      },
+      {
+        "q": "What does 'debut' mean in the context of the article?",
+        "options": [
+          "A final closing",
+          "A repeated event",
+          "A first appearance or introduction",
+          "A temporary closure"
+        ],
+        "answer": "A first appearance or introduction"
+      },
+      {
+        "q": "The word 'convenience' refers to something that makes life easier. What will the gas station offer?",
+        "options": [
+          "Discomfort",
+          "Difficulty",
+          "Ease and usefulness",
+          "A delay"
+        ],
+        "answer": "Ease and usefulness"
+      },
+      {
+        "q": "What kind of company is Costco?",
+        "options": [
+          "A fast-food chain",
+          "A discount clothing retailer",
+          "A wholesale corporation",
+          "An electronics manufacturer"
+        ],
+        "answer": "A wholesale corporation"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a benefit of the new store?",
+        "options": [
+          "New convenience for members",
+          "Boost to local economic activity",
+          "A wider selection of imported books",
+          "Enhanced shopping options"
+        ],
+        "answer": "A wider selection of imported books"
+      },
+      {
+        "q": "The word 'expansion' refers to:",
+        "options": [
+          "A reduction in size",
+          "The act of becoming larger or more extensive",
+          "A temporary closure",
+          "A change in management"
+        ],
+        "answer": "The act of becoming larger or more extensive"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美伊終戰協議談判露曙光，但核問題仍存歧見",
+    "tabTitle": "地緣政治",
+    "english": "Diplomatic efforts between the United States and Iran have shown encouraging signs regarding a potential peace agreement. Recent negotiations indicate a willingness from both sides to de-escalate tensions and find common ground. However, significant disagreements persist concerning Iran's nuclear program, posing a substantial challenge to a comprehensive resolution. The international community is closely monitoring these developments.",
+    "chinese": "美國與伊朗之間的地緣政治外交努力，在潛在的和平協議方面展現了令人鼓舞的跡象。近期的談判顯示雙方都有意願緩和緊張局勢並尋求共識。然而，關於伊朗核計畫的分歧依然顯著，這對達成全面解決方案構成重大挑戰。國際社會正密切關注這些發展。",
+    "vocabulary": [
+      "Diplomatic efforts (n.): 外交努力",
+      "United States (n.): 美國",
+      "Iran (n.): 伊朗",
+      "encouraging signs (n.): 令人鼓舞的跡象",
+      "potential (adj.): 潛在的",
+      "peace agreement (n.): 和平協議",
+      "Recent negotiations (n.): 近期談判",
+      "willingness (n.): 意願",
+      "de-escalate tensions (v.): 緩和緊張局勢",
+      "common ground (n.): 共識，共同點",
+      "significant disagreements (n.): 顯著的分歧",
+      "persist (v.): 持續存在",
+      "concerning (prep.): 關於",
+      "nuclear program (n.): 核計畫",
+      "posing a challenge (v.): 構成挑戰",
+      "substantial (adj.): 重大的",
+      "comprehensive resolution (n.): 全面解決方案",
+      "international community (n.): 國際社會",
+      "closely monitoring (v.): 密切關注",
+      "developments (n.): 發展"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news report?",
+        "options": [
+          "Economic sanctions on Iran",
+          "US-Iran peace talks and nuclear disagreements",
+          "Cultural exchange programs between the US and Iran",
+          "Military cooperation between the US and Iran"
+        ],
+        "answer": "US-Iran peace talks and nuclear disagreements"
+      },
+      {
+        "q": "What positive development is mentioned in the report?",
+        "options": [
+          "A complete resolution has been reached.",
+          "Iran has agreed to halt its nuclear program.",
+          "Diplomatic efforts show encouraging signs for peace.",
+          "Economic sanctions have been lifted."
+        ],
+        "answer": "Diplomatic efforts show encouraging signs for peace."
+      },
+      {
+        "q": "What is the primary obstacle to a comprehensive resolution?",
+        "options": [
+          "Lack of willingness from both sides",
+          "Disagreements over Iran's nuclear program",
+          "Interference from other countries",
+          "Historical conflicts between the nations"
+        ],
+        "answer": "Disagreements over Iran's nuclear program"
+      },
+      {
+        "q": "The word 'persist' means:",
+        "options": [
+          "to disappear",
+          "to continue to exist",
+          "to agree",
+          "to negotiate"
+        ],
+        "answer": "to continue to exist"
+      },
+      {
+        "q": "Which phrase describes the current state of the negotiations regarding nuclear issues?",
+        "options": [
+          "Complete agreement",
+          "Minor differences",
+          "Significant disagreements",
+          "Full transparency"
+        ],
+        "answer": "Significant disagreements"
+      },
+      {
+        "q": "What is the attitude of the international community towards these developments?",
+        "options": [
+          "Indifferent",
+          "Actively interfering",
+          "Closely monitoring",
+          "Skeptical"
+        ],
+        "answer": "Closely monitoring"
+      },
+      {
+        "q": "The negotiations aim to:",
+        "options": [
+          "Increase military presence",
+          "De-escalate tensions and find common ground",
+          "Impose new sanctions",
+          "Break off diplomatic ties"
+        ],
+        "answer": "De-escalate tensions and find common ground"
+      },
+      {
+        "q": "What is the level of the English text?",
+        "options": [
+          "Beginner (A1)",
+          "Intermediate (B1)",
+          "Upper-Intermediate (B2)",
+          "Advanced (C1)"
+        ],
+        "answer": "Upper-Intermediate (B2)"
+      },
+      {
+        "q": "The report suggests that both the US and Iran are showing what?",
+        "options": [
+          "Hostility",
+          "A desire to de-escalate",
+          "Refusal to negotiate",
+          "Aggression"
+        ],
+        "answer": "A desire to de-escalate"
+      },
+      {
+        "q": "The term 'comprehensive resolution' implies:",
+        "options": [
+          "A partial solution",
+          "A solution that covers all aspects",
+          "A temporary fix",
+          "A resolution imposed by one side"
+        ],
+        "answer": "A solution that covers all aspects"
+      },
+      {
+        "q": "What is the overall tone of the English text?",
+        "options": [
+          "Optimistic",
+          "Pessimistic",
+          "Factual",
+          "Biased"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "Which word means 'potentially existing but not yet developed or manifest; likely to emerge or become apparent'? ",
+        "options": [
+          "Encouraging",
+          "Significant",
+          "Potential",
+          "Substantial"
+        ],
+        "answer": "Potential"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "川普暫緩AI監管命令，科技巨頭擔憂落後中國",
+    "tabTitle": "科技",
+    "english": "President Trump has temporarily suspended his executive order on AI regulation. This move comes amid concerns from major tech companies that the U.S. might lag behind China in artificial intelligence development. The decision aims to allow for further review and discussion on the best approach to govern AI. Industry leaders are closely watching the next steps, as the pace of innovation in AI is rapid.",
+    "chinese": "川普總統已暫停其關於AI監管的行政命令。此舉是在主要科技公司擔心美國可能在人工智能發展方面落後於中國的背景下發生的。此決定旨在允許對監管AI的最佳方法進行進一步審查和討論。由於AI的創新步伐迅速，行業領導者正密切關注下一步行動。",
+    "vocabulary": [
+      "temporarily (adv.): 暫時地",
+      "suspended (v.): 暫停",
+      "executive order (n.): 行政命令",
+      "regulation (n.): 監管",
+      "amid (prep.): 在...之中",
+      "concerns (n.): 擔憂",
+      "major (adj.): 主要的",
+      "tech companies (n.): 科技公司",
+      "lag behind (v.): 落後",
+      "artificial intelligence (n.): 人工智能",
+      "development (n.): 發展",
+      "decision (n.): 決定",
+      "aims to (v.): 旨在",
+      "allow for (v.): 允許",
+      "further (adj.): 進一步的",
+      "review (n.): 審查",
+      "discussion (n.): 討論",
+      "approach (n.): 方法",
+      "govern (v.): 監管",
+      "industry leaders (n.): 行業領導者"
+    ],
+    "quiz": [
+      {
+        "q": "What did President Trump do regarding the AI regulation order?",
+        "options": [
+          "Issued a new regulation",
+          "Permanently canceled the order",
+          "Temporarily suspended the order",
+          "Increased AI funding"
+        ],
+        "answer": "Temporarily suspended the order"
+      },
+      {
+        "q": "Why are tech companies concerned?",
+        "options": [
+          "They fear increased competition",
+          "They worry the U.S. might fall behind China in AI",
+          "They are unhappy with the current regulations",
+          "They believe AI development is too slow"
+        ],
+        "answer": "They worry the U.S. might fall behind China in AI"
+      },
+      {
+        "q": "What is the stated aim of suspending the order?",
+        "options": [
+          "To speed up AI development",
+          "To allow for more review and discussion",
+          "To impose stricter rules",
+          "To shift focus to other technologies"
+        ],
+        "answer": "To allow for more review and discussion"
+      },
+      {
+        "q": "Which country is mentioned as a potential leader in AI development that the U.S. might be lagging behind?",
+        "options": [
+          "Germany",
+          "Japan",
+          "China",
+          "South Korea"
+        ],
+        "answer": "China"
+      },
+      {
+        "q": "What is the pace of innovation in AI described as?",
+        "options": [
+          "Slow and steady",
+          "Rapid",
+          "Stagnant",
+          "Unpredictable"
+        ],
+        "answer": "Rapid"
+      },
+      {
+        "q": "What kind of order was the one related to AI regulation?",
+        "options": [
+          "A legislative bill",
+          "A judicial ruling",
+          "An executive order",
+          "A public referendum"
+        ],
+        "answer": "An executive order"
+      },
+      {
+        "q": "Who is closely watching the next steps regarding AI regulation?",
+        "options": [
+          "Foreign governments",
+          "Environmental activists",
+          "Industry leaders",
+          "Consumer groups"
+        ],
+        "answer": "Industry leaders"
+      },
+      {
+        "q": "The word 'suspended' in the text means:",
+        "options": [
+          "Started",
+          "Continued",
+          "Stopped temporarily",
+          "Approved"
+        ],
+        "answer": "Stopped temporarily"
+      },
+      {
+        "q": "The word 'concerns' in the text refers to:",
+        "options": [
+          "Excitement",
+          "Praise",
+          "Worries or anxieties",
+          "Disagreements"
+        ],
+        "answer": "Worries or anxieties"
+      },
+      {
+        "q": "What does 'AI' stand for?",
+        "options": [
+          "American Innovation",
+          "Advanced Internet",
+          "Artificial Intelligence",
+          "Automated Industry"
+        ],
+        "answer": "Artificial Intelligence"
+      },
+      {
+        "q": "What is the general topic of the news article?",
+        "options": [
+          "International trade disputes",
+          "Climate change policies",
+          "Government regulation of technology",
+          "Economic growth forecasts"
+        ],
+        "answer": "Government regulation of technology"
+      },
+      {
+        "q": "The word 'amid' in the sentence 'This move comes amid concerns...' suggests the action is happening:",
+        "options": [
+          "After concerns",
+          "Because of concerns",
+          "During or surrounded by concerns",
+          "Despite concerns"
+        ],
+        "answer": "During or surrounded by concerns"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "世界衛生組織拉高剛果埃博拉疫情風險至最高級",
+    "tabTitle": "國際大事",
+    "english": "The World Health Organization (WHO) has elevated the risk assessment for the Ebola outbreak in the Democratic Republic of Congo (DRC) to 'very high' at the national level and 'high' internationally. This decision follows an increase in confirmed cases and concerns about the virus's potential spread beyond affected areas. The WHO is coordinating international efforts to contain the epidemic and prevent further transmission.",
+    "chinese": "世界衛生組織（WHO）已將剛果民主共和國（DRC）的伊波拉疫情風險評估，提升至國家層級的「非常高」以及國際層級的「高」。此決定是在確診病例增加以及對病毒可能擴散至疫區以外地區的擔憂之後做出的。世衛組織正協調國際努力，以遏制疫情並防止進一步傳播。",
+    "vocabulary": [
+      "World Health Organization (n.): 世界衛生組織",
+      "elevated (v.): 提升",
+      "risk assessment (n.): 風險評估",
+      "Ebola outbreak (n.): 伊波拉疫情爆發",
+      "Democratic Republic of Congo (n.): 剛果民主共和國",
+      "very high (adj.): 非常高",
+      "national level (n.): 國家層級",
+      "high (adj.): 高",
+      "internationally (adv.): 國際上",
+      "decision (n.): 決定",
+      "increase (n.): 增加",
+      "confirmed cases (n.): 確診病例",
+      "concerns (n.): 擔憂",
+      "potential spread (n.): 潛在擴散",
+      "affected areas (n.): 疫區",
+      "coordinating (v.): 協調",
+      "international efforts (n.): 國際努力",
+      "contain (v.): 遏制",
+      "epidemic (n.): 流行病",
+      "transmission (n.): 傳播"
+    ],
+    "quiz": [
+      {
+        "q": "What organization has raised the risk assessment for the Ebola outbreak?",
+        "options": [
+          "United Nations",
+          "World Health Organization",
+          "International Red Cross",
+          "Centers for Disease Control and Prevention"
+        ],
+        "answer": "World Health Organization"
+      },
+      {
+        "q": "In which country is the Ebola outbreak occurring?",
+        "options": [
+          "Nigeria",
+          "Uganda",
+          "Democratic Republic of Congo",
+          "South Africa"
+        ],
+        "answer": "Democratic Republic of Congo"
+      },
+      {
+        "q": "What is the national risk level for the Ebola outbreak in the DRC?",
+        "options": [
+          "Low",
+          "Moderate",
+          "High",
+          "Very high"
+        ],
+        "answer": "Very high"
+      },
+      {
+        "q": "What is the international risk level for the Ebola outbreak?",
+        "options": [
+          "Very low",
+          "Low",
+          "Moderate",
+          "High"
+        ],
+        "answer": "High"
+      },
+      {
+        "q": "What has led to the increased risk assessment?",
+        "options": [
+          "Decrease in cases and improved containment",
+          "Increase in confirmed cases and concerns about spread",
+          "New vaccine development",
+          "International travel restrictions"
+        ],
+        "answer": "Increase in confirmed cases and concerns about spread"
+      },
+      {
+        "q": "What is the WHO coordinating to address the outbreak?",
+        "options": [
+          "Vaccine research",
+          "Economic aid",
+          "International efforts to contain the epidemic",
+          "Travel advisories"
+        ],
+        "answer": "International efforts to contain the epidemic"
+      },
+      {
+        "q": "The term 'elevated' in the text means:",
+        "options": [
+          "Decreased",
+          "Increased",
+          "Maintained",
+          "Ignored"
+        ],
+        "answer": "Increased"
+      },
+      {
+        "q": "What does 'DRC' stand for?",
+        "options": [
+          "Dominican Republic",
+          "Democratic Republic of Congo",
+          "Dutch Royal Company",
+          "Development and Reconstruction Committee"
+        ],
+        "answer": "Democratic Republic of Congo"
+      },
+      {
+        "q": "The news mentions concerns about the virus's potential spread beyond:",
+        "options": [
+          "The capital city",
+          "International borders",
+          "Affected areas",
+          "Research facilities"
+        ],
+        "answer": "Affected areas"
+      },
+      {
+        "q": "The WHO's goal is to prevent further:",
+        "options": [
+          "Research",
+          "Aid",
+          "Transmission",
+          "Discussions"
+        ],
+        "answer": "Transmission"
+      },
+      {
+        "q": "The style of the English text is described as:",
+        "options": [
+          "Persuasive",
+          "Factual",
+          "Narrative",
+          "Opinionated"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "The English text is approximately how many words long?",
+        "options": [
+          "50 words",
+          "80 words",
+          "120 words",
+          "150 words"
+        ],
+        "answer": "80 words"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "三星工會罷工危機暫緩，但勞資談判仍持續",
+    "tabTitle": "國際大事",
+    "english": "The immediate threat of a strike at Samsung has been averted as the company and its main union reached a tentative agreement. This development eases significant concerns about potential disruptions to production and global supply chains. However, both parties have acknowledged that substantial disagreements remain, and intensive negotiations are expected to continue in the coming weeks to address these outstanding issues.",
+    "chinese": "三星與其主要工會達成初步協議，暫時避免了迫在眉睫的罷工危機。此舉緩解了對生產和全球供應鏈可能中斷的嚴重擔憂。然而，雙方均承認仍存在重大分歧，預計未來幾週將持續進行密集談判，以解決這些懸而未決的問題。",
+    "vocabulary": [
+      "averted (v.): 避免了",
+      "tentative (adj.): 暫定的",
+      "agreement (n.): 協議",
+      "development (n.): 事態發展",
+      "eases (v.): 緩解",
+      "significant (adj.): 顯著的",
+      "concerns (n.): 擔憂",
+      "potential (adj.): 潛在的",
+      "disruptions (n.): 中斷",
+      "production (n.): 生產",
+      "global (adj.): 全球的",
+      "supply chains (n.): 供應鏈",
+      "acknowledged (v.): 承認",
+      "substantial (adj.): 實質的",
+      "disagreements (n.): 分歧",
+      "remain (v.): 仍然存在",
+      "intensive (adj.): 密集的",
+      "negotiations (n.): 談判",
+      "expected (v.): 預計",
+      "outstanding (adj.): 懸而未決的"
+    ],
+    "quiz": [
+      {
+        "q": "What has been averted at Samsung according to the news?",
+        "options": [
+          "A major product launch",
+          "The immediate threat of a strike",
+          "A change in leadership",
+          "A financial crisis"
+        ],
+        "answer": "The immediate threat of a strike"
+      },
+      {
+        "q": "Who reached a tentative agreement?",
+        "options": [
+          "Samsung and its customers",
+          "Samsung and the government",
+          "Samsung and its main union",
+          "Samsung and its shareholders"
+        ],
+        "answer": "Samsung and its main union"
+      },
+      {
+        "q": "What concerns does the development ease?",
+        "options": [
+          "Concerns about increased competition",
+          "Concerns about environmental regulations",
+          "Concerns about potential disruptions to production and supply chains",
+          "Concerns about a new marketing campaign"
+        ],
+        "answer": "Concerns about potential disruptions to production and supply chains"
+      },
+      {
+        "q": "What is expected to continue in the coming weeks?",
+        "options": [
+          "Company-wide celebrations",
+          "Extensive factory upgrades",
+          "Intensive negotiations",
+          "Public demonstrations"
+        ],
+        "answer": "Intensive negotiations"
+      },
+      {
+        "q": "What do both parties acknowledge about the current situation?",
+        "options": [
+          "That all issues have been resolved",
+          "That substantial disagreements remain",
+          "That negotiations are no longer necessary",
+          "That the agreement is final"
+        ],
+        "answer": "That substantial disagreements remain"
+      },
+      {
+        "q": "What is the meaning of 'averted' in the context of the news?",
+        "options": [
+          "Caused",
+          "Prevented",
+          "Increased",
+          "Announced"
+        ],
+        "answer": "Prevented"
+      },
+      {
+        "q": "The word 'tentative' suggests that the agreement is:",
+        "options": [
+          "Permanent",
+          "Final",
+          "Temporary or provisional",
+          "Unimportant"
+        ],
+        "answer": "Temporary or provisional"
+      },
+      {
+        "q": "What does 'disruptions' refer to in the sentence 'potential disruptions to production and global supply chains'?",
+        "options": [
+          "Improvements",
+          "Interruptions or problems",
+          "Increases in efficiency",
+          "New opportunities"
+        ],
+        "answer": "Interruptions or problems"
+      },
+      {
+        "q": "The word 'substantial' means:",
+        "options": [
+          "Small",
+          "Minor",
+          "Significant or large",
+          "Unimportant"
+        ],
+        "answer": "Significant or large"
+      },
+      {
+        "q": "What is the purpose of the continued negotiations?",
+        "options": [
+          "To celebrate the initial agreement",
+          "To address outstanding issues",
+          "To replace the union leadership",
+          "To announce new product lines"
+        ],
+        "answer": "To address outstanding issues"
+      },
+      {
+        "q": "The news implies that the strike crisis has been:",
+        "options": [
+          "Resolved completely",
+          "Escalated",
+          "Temporarily eased",
+          "Ignored"
+        ],
+        "answer": "Temporarily eased"
+      },
+      {
+        "q": "What is the implication for Samsung's production?",
+        "options": [
+          "It will definitely stop",
+          "It might have been disrupted",
+          "It will be significantly improved",
+          "It is unaffected"
+        ],
+        "answer": "It might have been disrupted"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
