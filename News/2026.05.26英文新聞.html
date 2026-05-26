@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 26, 2026：科技、金融市場 與 國際大事</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 華為提出「韜定律」，中國半導體概念股應聲大漲\nHuawei has introduced a groundbreaking \"Tau Law\" initiative aimed at accelerating advancements in China's semiconductor industry. This proposal, detailed in a recent announcement, seeks to foster innovation and enhance domestic production capabilities. Following the news, shares of Chinese semiconductor concept stocks experienced a significant surge, reflecting investor optimism about the potential impact of Huawei's new strategy on the sector.\n\n[2] 台股市值衝破4.95兆美元，超越印度成全球第五\nTaiwan's stock market has achieved a significant milestone, with its total market capitalization soaring past $4.95 trillion USD. This impressive surge has propelled Taiwan's market ahead of India's, securing its position as the world's fifth-largest stock exchange. This economic achievement reflects growing investor confidence and the robust performance of listed Taiwanese companies in the global arena.\n\n[3] 黃仁勳：AI狂潮需更多電力，台灣能源政策引關注\nNvidia CEO Jensen Huang stated that the current AI boom will significantly increase electricity demand. He emphasized the critical need for robust energy infrastructure to support this growth. Huang's remarks have brought Taiwan's energy policies under closer scrutiny, as the island's technological sector is a major player in the global AI supply chain and requires substantial power resources.",
+    "chinese": "【1】華為提出「韜定律」，中國半導體概念股應聲大漲\n華為推出了一項開創性的「韜定律」倡議，旨在加速中國半導體產業的發展。這項在近期公告中詳細闡述的提案，旨在促進創新並增強國內生產能力。在此消息傳出後，中國半導體概念股的股價經歷了顯著上漲，反映出投資者對華為新戰略可能對該行業產生的影響感到樂觀。\n\n【2】台股市值衝破4.95兆美元，超越印度成全球第五\n台灣股市達成了一項重要里程碑，總市值飆升至 4.95 兆美元以上。這一令人印象深刻的飆升使台灣股市超越了印度，穩居全球第五大證券交易所的地位。這項經濟成就反映了投資者信心的增長以及台灣上市公司在全球舞台上的強勁表現。\n\n【3】黃仁勳：AI狂潮需更多電力，台灣能源政策引關注\n輝達執行長黃仁勳表示，當前的人工智慧（AI）熱潮將大幅增加電力需求。他強調，必須具備穩健的能源基礎設施來支持這項成長。黃仁勳的言論已使台灣的能源政策受到更嚴密的檢視，因為該島的科技產業在全球 AI 供應鏈中扮演重要角色，並需要大量的電力資源。",
+    "vocabulary": [
+      "groundbreaking (adj.): 劃時代的",
+      "initiative (n.): 主動權；倡議",
+      "aimed at (phr.): 旨在",
+      "accelerating (v.): 加速",
+      "advancements (n.): 進步；發展",
+      "semiconductor (n.): 半導體",
+      "industry (n.): 工業；產業",
+      "proposal (n.): 提案；建議",
+      "detailed (v.): 詳細說明",
+      "foster (v.): 培養；促進",
+      "innovation (n.): 創新",
+      "enhance (v.): 增強；提高",
+      "domestic (adj.): 國內的",
+      "production (n.): 生產",
+      "capabilities (n.): 能力",
+      "following (prep.): 在...之後",
+      "shares (n.): 股份",
+      "concept stocks (n.): 概念股",
+      "experienced (v.): 經歷了",
+      "surge (n.): 飆升；猛漲",
+      "significant (adj.): 顯著的",
+      "milestone (n.): 里程碑",
+      "stock market (n.): 股市",
+      "achieved (v.): 達成",
+      "significant (adj.): 顯著的",
+      "milestone (n.): 里程碑",
+      "stock market (n.): 股市",
+      "achieved (v.): 達成",
+      "market capitalization (n.): 市值",
+      "soaring (v.): 飆升",
+      "past (prep.): 越過",
+      "trillion (n.): 兆",
+      "USD (n.): 美元",
+      "impressive (adj.): 令人印象深刻的",
+      "surge (n.): 飆升",
+      "propelled (v.): 推動",
+      "surpassing (v.): 超越",
+      "securing (v.): 確保",
+      "position (n.): 地位",
+      "globally (adv.): 全球地",
+      "economic (adj.): 經濟的",
+      "achievement (n.): 成就",
+      "reflects (v.): 反映",
+      "investor confidence (n.): 投資者信心",
+      "robust (adj.): 強健的",
+      "performance (n.): 表現",
+      "listed companies (n.): 上市公司",
+      "global arena (n.): 全球舞台",
+      "boom (n.): 繁榮；興盛",
+      "require (v.): 需要",
+      "power (n.): 電力",
+      "policy (n.): 政策",
+      "attention (n.): 注意",
+      "CEO (n.): 執行長",
+      "stated (v.): 聲明；陳述",
+      "significantly (adv.): 顯著地",
+      "increase (v.): 增加",
+      "demand (n.): 需求",
+      "emphasized (v.): 強調",
+      "critical (adj.): 關鍵的；重要的",
+      "need (n.): 需求；需要",
+      "robust (adj.): 強健的；健全的",
+      "infrastructure (n.): 基礎設施",
+      "support (v.): 支持",
+      "growth (n.): 成長",
+      "remarks (n.): 言論；談話",
+      "scrutiny (n.): 審查；詳細檢查",
+      "substantial (adj.): 大量的；實質的"
+    ],
+    "quiz": [
+      {
+        "q": "What has Huawei introduced?",
+        "options": [
+          "A new smartphone model",
+          "A groundbreaking \"Tau Law\" initiative",
+          "A partnership with a foreign company",
+          "A change in its corporate structure"
+        ],
+        "answer": "A groundbreaking \"Tau Law\" initiative"
+      },
+      {
+        "q": "What is the primary goal of the \"Tau Law\" initiative?",
+        "options": [
+          "To reduce manufacturing costs",
+          "To expand into new markets",
+          "To accelerate advancements in the semiconductor industry",
+          "To improve customer service"
+        ],
+        "answer": "To accelerate advancements in the semiconductor industry"
+      },
+      {
+        "q": "What does the \"Tau Law\" proposal seek to foster?",
+        "options": [
+          "International collaboration",
+          "Innovation and domestic production capabilities",
+          "Marketing and sales strategies",
+          "Research into artificial intelligence"
+        ],
+        "answer": "Innovation and domestic production capabilities"
+      },
+      {
+        "q": "What happened to Chinese semiconductor concept stocks after the news?",
+        "options": [
+          "They declined sharply",
+          "They remained unchanged",
+          "They experienced a significant surge",
+          "They were delisted"
+        ],
+        "answer": "They experienced a significant surge"
+      },
+      {
+        "q": "What does the word \"groundbreaking\" mean in this context?",
+        "options": [
+          "Conventional",
+          "Traditional",
+          "Innovative and new",
+          "Expensive"
+        ],
+        "answer": "Innovative and new"
+      },
+      {
+        "q": "The initiative is aimed at advancing which industry?",
+        "options": [
+          "Telecommunications",
+          "Artificial Intelligence",
+          "Semiconductor",
+          "Consumer Electronics"
+        ],
+        "answer": "Semiconductor"
+      },
+      {
+        "q": "What does \"domestic production capabilities\" refer to?",
+        "options": [
+          "Manufacturing done in other countries",
+          "Manufacturing done within China",
+          "The ability to import goods",
+          "The quality of imported products"
+        ],
+        "answer": "Manufacturing done within China"
+      },
+      {
+        "q": "The news about Huawei's proposal led to investor optimism about the sector's potential impact.",
+        "options": [
+          "True",
+          "False",
+          "Cannot be determined",
+          "Partially true"
+        ],
+        "answer": "True"
+      },
+      {
+        "q": "What is the noun form of the verb \"enhance\"?",
+        "options": [
+          "Enhancement",
+          "Enhancing",
+          "Enhanced",
+          "Enhancer"
+        ],
+        "answer": "Enhancement"
+      },
+      {
+        "q": "Which word describes a sudden and significant increase?",
+        "options": [
+          "Decline",
+          "Stagnation",
+          "Surge",
+          "Struggle"
+        ],
+        "answer": "Surge"
+      },
+      {
+        "q": "The proposal was detailed in a recent announcement.",
+        "options": [
+          "The announcement was vague",
+          "The proposal was made public earlier",
+          "The details of the proposal were made known recently",
+          "The announcement was about a different topic"
+        ],
+        "answer": "The details of the proposal were made known recently"
+      },
+      {
+        "q": "What does \"concept stocks\" typically refer to?",
+        "options": [
+          "Companies with established, stable businesses",
+          "Stocks of companies expected to benefit from a specific trend or idea",
+          "Companies with low trading volume",
+          "Stocks that have consistently paid dividends"
+        ],
+        "answer": "Stocks of companies expected to benefit from a specific trend or idea"
+      },
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "Taiwan's GDP growth",
+          "Taiwan's stock market value surpassing India's",
+          "New trade agreements for Taiwan",
+          "Taiwan's technological advancements"
+        ],
+        "answer": "Taiwan's stock market value surpassing India's"
+      },
+      {
+        "q": "What is the approximate market capitalization mentioned in the article?",
+        "options": [
+          "$4.59 trillion USD",
+          "$4.95 billion USD",
+          "$4.95 trillion USD",
+          "$5.00 trillion USD"
+        ],
+        "answer": "$4.95 trillion USD"
+      },
+      {
+        "q": "Which country's stock market did Taiwan surpass?",
+        "options": [
+          "Japan",
+          "South Korea",
+          "China",
+          "India"
+        ],
+        "answer": "India"
+      },
+      {
+        "q": "What position did Taiwan's stock market secure globally?",
+        "options": [
+          "Third",
+          "Fourth",
+          "Fifth",
+          "Sixth"
+        ],
+        "answer": "Fifth"
+      },
+      {
+        "q": "The word 'soaring' in the text means:",
+        "options": [
+          "decreasing rapidly",
+          "increasing quickly",
+          "staying the same",
+          "fluctuating slightly"
+        ],
+        "answer": "increasing quickly"
+      },
+      {
+        "q": "What does the article suggest about investor confidence?",
+        "options": [
+          "It has decreased significantly.",
+          "It is not mentioned in the article.",
+          "It has increased, contributing to the market's performance.",
+          "It is only relevant to domestic investors."
+        ],
+        "answer": "It has increased, contributing to the market's performance."
+      },
+      {
+        "q": "The term 'market capitalization' refers to:",
+        "options": [
+          "The total debt of companies listed on the exchange.",
+          "The total value of all outstanding shares of a company.",
+          "The total number of companies listed on the exchange.",
+          "The profit margin of the largest companies."
+        ],
+        "answer": "The total value of all outstanding shares of a company."
+      },
+      {
+        "q": "Which word describes the performance of listed Taiwanese companies?",
+        "options": [
+          "Weak",
+          "Robust",
+          "Declining",
+          "Uncertain"
+        ],
+        "answer": "Robust"
+      },
+      {
+        "q": "The news highlights an 'impressive surge'. What does 'surge' imply?",
+        "options": [
+          "A slow and steady growth",
+          "A sudden and significant increase",
+          "A period of stagnation",
+          "A gradual decline"
+        ],
+        "answer": "A sudden and significant increase"
+      },
+      {
+        "q": "What is the overall tone of the English text?",
+        "options": [
+          "Critical",
+          "Informative and factual",
+          "Sarcastic",
+          "Opinionated"
+        ],
+        "answer": "Informative and factual"
+      },
+      {
+        "q": "The phrase 'global arena' suggests:",
+        "options": [
+          "A specific geographical location",
+          "The international stage or environment",
+          "A sports competition",
+          "A political debate"
+        ],
+        "answer": "The international stage or environment"
+      },
+      {
+        "q": "Which of the following is NOT directly mentioned as a reason for the market's achievement?",
+        "options": [
+          "Investor confidence",
+          "Performance of listed companies",
+          "Government subsidies",
+          "Market capitalization exceeding a certain value"
+        ],
+        "answer": "Government subsidies"
+      },
+      {
+        "q": "Who is Jensen Huang?",
+        "options": [
+          "The CEO of AMD",
+          "The CEO of Intel",
+          "The CEO of Nvidia",
+          "A Taiwanese politician"
+        ],
+        "answer": "The CEO of Nvidia"
+      },
+      {
+        "q": "What is the main topic of Jensen Huang's statement?",
+        "options": [
+          "The global stock market",
+          "The need for more electricity due to the AI boom",
+          "New advancements in semiconductor manufacturing",
+          "Taiwan's international trade agreements"
+        ],
+        "answer": "The need for more electricity due to the AI boom"
+      },
+      {
+        "q": "According to Huang, what will the AI boom lead to?",
+        "options": [
+          "A decrease in electricity consumption",
+          "Increased demand for fossil fuels",
+          "A significant increase in electricity demand",
+          "A reduction in the need for energy infrastructure"
+        ],
+        "answer": "A significant increase in electricity demand"
+      },
+      {
+        "q": "What kind of infrastructure does Huang emphasize the need for?",
+        "options": [
+          "Transportation infrastructure",
+          "Communication infrastructure",
+          "Energy infrastructure",
+          "Educational infrastructure"
+        ],
+        "answer": "Energy infrastructure"
+      },
+      {
+        "q": "What has Huang's statement brought under scrutiny?",
+        "options": [
+          "Nvidia's stock price",
+          "Taiwan's economic growth rate",
+          "Taiwan's energy policies",
+          "The future of AI research"
+        ],
+        "answer": "Taiwan's energy policies"
+      },
+      {
+        "q": "Why is Taiwan's energy policy relevant to the AI boom?",
+        "options": [
+          "Taiwan exports most of its electricity",
+          "Taiwan's technological sector is a major player in the AI supply chain",
+          "Taiwan is developing new renewable energy sources",
+          "Taiwanese consumers are demanding more AI services"
+        ],
+        "answer": "Taiwan's technological sector is a major player in the AI supply chain"
+      },
+      {
+        "q": "What does the word 'boom' refer to in this context?",
+        "options": [
+          "An explosion",
+          "A period of rapid growth and popularity",
+          "A loud noise",
+          "A political movement"
+        ],
+        "answer": "A period of rapid growth and popularity"
+      },
+      {
+        "q": "The word 'robust' in relation to infrastructure means:",
+        "options": [
+          "Weak and unstable",
+          "Small and limited",
+          "Strong and healthy",
+          "Newly built"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "What does 'scrutiny' imply about Taiwan's energy policies?",
+        "options": [
+          "They are being ignored",
+          "They are being examined closely",
+          "They are being celebrated",
+          "They are being changed rapidly"
+        ],
+        "answer": "They are being examined closely"
+      },
+      {
+        "q": "The phrase 'supply chain' refers to:",
+        "options": [
+          "A series of companies involved in producing and distributing a product",
+          "A list of available products",
+          "A government regulation",
+          "A customer service department"
+        ],
+        "answer": "A series of companies involved in producing and distributing a product"
+      },
+      {
+        "q": "What is the primary reason for the increased electricity demand mentioned?",
+        "options": [
+          "Increased use of smartphones",
+          "The rapid growth of Artificial Intelligence",
+          "More electric vehicles on the road",
+          "Wider adoption of smart home devices"
+        ],
+        "answer": "The rapid growth of Artificial Intelligence"
+      },
+      {
+        "q": "What is the overall tone of the news report?",
+        "options": [
+          "Optimistic and celebratory",
+          "Critical and accusatory",
+          "Informative and factual",
+          "Humorous and lighthearted"
+        ],
+        "answer": "Informative and factual"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "外資連12日拋售韓股，半導體科技巨頭成重災區",
+    "tabTitle": "金融市場",
+    "english": "Foreign investors continued their selling spree in South Korea's stock market, marking the 12th consecutive day of net outflows. This sustained sell-off has disproportionately affected major technology firms, particularly those in the semiconductor sector, which have seen significant divestment. Analysts attribute this trend to global economic uncertainties and a shift in investment strategies towards safer assets.",
+    "chinese": "外國投資者在韓國股市持續拋售，已連續第12天出現淨流出。這波持續的賣壓不成比例地影響了大型科技公司，特別是半導體行業，這些公司已經歷了大規模的撤資。分析師將此趨勢歸因於全球經濟的不確定性以及投資策略轉向更安全的資產。",
+    "vocabulary": [
+      "Foreign investors (n.): 外國投資者",
+      "continued (v.): 繼續",
+      "selling spree (n.): 拋售潮",
+      "South Korea (n.): 韓國",
+      "stock market (n.): 股市",
+      "marking (v.): 標誌著",
+      "12th consecutive day (n.): 連續第12天",
+      "net outflows (n.): 淨流出",
+      "sustained (adj.): 持續的",
+      "sell-off (n.): 賣壓",
+      "disproportionately (adv.): 不成比例地",
+      "affected (v.): 影響",
+      "major (adj.): 主要的",
+      "technology firms (n.): 科技公司",
+      "particularly (adv.): 特別是",
+      "semiconductor sector (n.): 半導體行業",
+      "significant (adj.): 顯著的",
+      "divestment (n.): 撤資",
+      "analysts (n.): 分析師",
+      "global economic uncertainties (n.): 全球經濟的不確定性"
+    ],
+    "quiz": [
+      {
+        "q": "How long have foreign investors been selling Korean stocks?",
+        "options": [
+          "For 12 days",
+          "For 12 weeks",
+          "For 12 months",
+          "For the first time"
+        ],
+        "answer": "For 12 days"
+      },
+      {
+        "q": "What does the article describe foreign investors' activity as?",
+        "options": [
+          "A buying spree",
+          "A selling spree",
+          "A holding pattern",
+          "An investment surge"
+        ],
+        "answer": "A selling spree"
+      },
+      {
+        "q": "Which sector has been hit hardest by the selling?",
+        "options": [
+          "Automotive",
+          "Entertainment",
+          "Semiconductor",
+          "Retail"
+        ],
+        "answer": "Semiconductor"
+      },
+      {
+        "q": "What kind of companies are mentioned as being significantly affected?",
+        "options": [
+          "Small startups",
+          "Real estate developers",
+          "Major technology firms",
+          "Biopharmaceutical companies"
+        ],
+        "answer": "Major technology firms"
+      },
+      {
+        "q": "What is a reason given for the trend?",
+        "options": [
+          "Increased domestic demand",
+          "Government subsidies",
+          "Global economic uncertainties",
+          "Technological breakthroughs"
+        ],
+        "answer": "Global economic uncertainties"
+      },
+      {
+        "q": "What has happened to foreign investors' net position in Korean stocks?",
+        "options": [
+          "Net inflows",
+          "Net outflows",
+          "Net zero",
+          "Net increase in holdings"
+        ],
+        "answer": "Net outflows"
+      },
+      {
+        "q": "The term 'selling spree' implies:",
+        "options": [
+          "A period of consistent buying",
+          "A period of consistent selling",
+          "A period of stable prices",
+          "A period of active trading without clear direction"
+        ],
+        "answer": "A period of consistent selling"
+      },
+      {
+        "q": "What has been observed regarding divestment in the semiconductor sector?",
+        "options": [
+          "It has been minimal",
+          "It has been significant",
+          "It has been stable",
+          "It has been increasing"
+        ],
+        "answer": "It has been significant"
+      },
+      {
+        "q": "Who is mentioned as attributing the trend to economic factors?",
+        "options": [
+          "Government officials",
+          "Company CEOs",
+          "Analysts",
+          "Retail investors"
+        ],
+        "answer": "Analysts"
+      },
+      {
+        "q": "What does 'hit hardest' mean in this context?",
+        "options": [
+          "Received the most investment",
+          "Experienced the greatest negative impact",
+          "Became the most popular",
+          "Saw the fastest growth"
+        ],
+        "answer": "Experienced the greatest negative impact"
+      },
+      {
+        "q": "What is a likely consequence of 'net outflows' from a stock market?",
+        "options": [
+          "Stock prices are likely to rise",
+          "Stock prices are likely to fall",
+          "Market volatility will decrease",
+          "Trading volume will remain unchanged"
+        ],
+        "answer": "Stock prices are likely to fall"
+      },
+      {
+        "q": "Why might investors shift towards 'safer assets'?",
+        "options": [
+          "To seek higher returns",
+          "To avoid potential losses",
+          "To increase market risk",
+          "To invest in emerging technologies"
+        ],
+        "answer": "To avoid potential losses"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "俄烏衝突持續，全球能源市場波動加劇",
+    "tabTitle": "國際大事",
+    "english": "The ongoing Russia-Ukraine conflict continues to exert significant pressure on global energy markets. This prolonged geopolitical tension has led to increased volatility, affecting supply chains and driving up prices for oil and natural gas. International efforts to stabilize the situation and mitigate economic impacts are ongoing, but a resolution remains uncertain, keeping markets on edge.",
+    "chinese": "持續不斷的俄烏衝突持續對全球能源市場施加巨大壓力。這種長期的地緣政治緊張局勢導致波動性加劇，影響了供應鏈並推高了石油和天然氣的價格。國際社會為穩定局勢和減輕經濟影響的努力仍在進行中，但解決方案仍不確定，市場情緒持續緊張。",
+    "vocabulary": [
+      "ongoing (adj.): 持續的",
+      "conflict (n.): 衝突",
+      "exert (v.): 施加",
+      "significant (adj.): 顯著的",
+      "pressure (n.): 壓力",
+      "global (adj.): 全球的",
+      "energy market (n.): 能源市場",
+      "prolonged (adj.): 長期的",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張",
+      "volatility (n.): 波動性",
+      "affect (v.): 影響",
+      "supply chain (n.): 供應鏈",
+      "drive up (v.): 推高",
+      "price (n.): 價格",
+      "natural gas (n.): 天然氣",
+      "international (adj.): 國際的",
+      "stabilize (v.): 穩定",
+      "mitigate (v.): 減輕",
+      "uncertain (adj.): 不確定的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "Economic recovery after the pandemic",
+          "The ongoing Russia-Ukraine conflict and its impact on energy markets",
+          "Technological advancements in renewable energy",
+          "International trade agreements"
+        ],
+        "answer": "The ongoing Russia-Ukraine conflict and its impact on energy markets"
+      },
+      {
+        "q": "According to the text, what has the Russia-Ukraine conflict led to?",
+        "options": [
+          "Decreased energy prices",
+          "Improved global supply chains",
+          "Increased volatility in global energy markets",
+          "A stable international political climate"
+        ],
+        "answer": "Increased volatility in global energy markets"
+      },
+      {
+        "q": "What specific energy resources are mentioned as having their prices driven up?",
+        "options": [
+          "Coal and nuclear power",
+          "Solar and wind energy",
+          "Oil and natural gas",
+          "Geothermal and hydroelectric power"
+        ],
+        "answer": "Oil and natural gas"
+      },
+      {
+        "q": "The text states that international efforts are focused on:",
+        "options": [
+          "Increasing energy production",
+          "Stabilizing the situation and mitigating economic impacts",
+          "Imposing sanctions on Russia",
+          "Developing new energy technologies"
+        ],
+        "answer": "Stabilizing the situation and mitigating economic impacts"
+      },
+      {
+        "q": "What is the current status of a resolution to the conflict?",
+        "options": [
+          "It is imminent",
+          "It is uncertain",
+          "It has been achieved",
+          "It is not mentioned"
+        ],
+        "answer": "It is uncertain"
+      },
+      {
+        "q": "The word 'exert' in the sentence 'exert significant pressure' means:",
+        "options": [
+          "to reduce",
+          "to create or cause",
+          "to ignore",
+          "to support"
+        ],
+        "answer": "to create or cause"
+      },
+      {
+        "q": "What does 'volatility' refer to in the context of energy markets?",
+        "options": [
+          "Stability and predictability",
+          "Rapid and unpredictable changes",
+          "Low prices",
+          "Increased demand"
+        ],
+        "answer": "Rapid and unpredictable changes"
+      },
+      {
+        "q": "The phrase 'on edge' suggests that the markets are:",
+        "options": [
+          "relaxed",
+          "calm",
+          "anxious and tense",
+          "fully recovered"
+        ],
+        "answer": "anxious and tense"
+      },
+      {
+        "q": "What does 'mitigate' mean?",
+        "options": [
+          "To increase",
+          "To worsen",
+          "To make less severe",
+          "To ignore"
+        ],
+        "answer": "To make less severe"
+      },
+      {
+        "q": "Which of the following best describes the style of the English text?",
+        "options": [
+          "Opinionated and personal",
+          "Humorous and lighthearted",
+          "Factual and informative",
+          "Narrative and story-telling"
+        ],
+        "answer": "Factual and informative"
+      },
+      {
+        "q": "The text implies that the conflict is:",
+        "options": [
+          "a short-term issue",
+          "a long-term problem",
+          "fully resolved",
+          "only affecting local markets"
+        ],
+        "answer": "a long-term problem"
+      },
+      {
+        "q": "What is the relationship between the conflict and supply chains?",
+        "options": [
+          "The conflict has improved supply chains.",
+          "The conflict has disrupted supply chains.",
+          "Supply chains have no relation to the conflict.",
+          "Supply chains are causing the conflict."
+        ],
+        "answer": "The conflict has disrupted supply chains."
+      }
+    ]
+  },
+  "article-5": {
+    "title": "Google推出新AI工具，助企業數位轉型",
+    "tabTitle": "科技",
+    "english": "Google has unveiled a suite of new artificial intelligence tools designed to accelerate digital transformation for businesses. These advanced AI solutions aim to enhance operational efficiency, streamline workflows, and unlock new avenues for innovation. By integrating these tools, companies can expect to gain a competitive edge and adapt more effectively to the evolving digital landscape.",
+    "chinese": "Google 發布了一系列新的人工智慧工具，旨在加速企業的數位轉型。這些先進的人工智慧解決方案旨在提高營運效率、簡化工作流程，並開拓創新的新途徑。透過整合這些工具，企業可以預期獲得競爭優勢，並更有效地適應不斷變化的數位格局。",
+    "vocabulary": [
+      "unveiled (v.): 揭幕；公布",
+      "suite (n.): 套；組",
+      "artificial intelligence (n.): 人工智慧",
+      "tools (n.): 工具",
+      "designed (v.): 設計",
+      "accelerate (v.): 加速",
+      "digital transformation (n.): 數位轉型",
+      "businesses (n.): 企業；公司",
+      "advanced (adj.): 先進的",
+      "solutions (n.): 解決方案",
+      "aim (v.): 旨在；目標是",
+      "enhance (v.): 增強；提高",
+      "operational efficiency (n.): 營運效率",
+      "streamline (v.): 使...效率化；簡化",
+      "workflows (n.): 工作流程",
+      "unlock (v.): 解鎖；開拓",
+      "avenues (n.): 途徑；管道",
+      "innovation (n.): 創新",
+      "integrating (v.): 整合",
+      "competitive edge (n.): 競爭優勢"
+    ],
+    "quiz": [
+      {
+        "q": "What did Google recently unveil?",
+        "options": [
+          "New hardware products",
+          "A suite of new artificial intelligence tools",
+          "A new social media platform",
+          "Updates to its search engine algorithm"
+        ],
+        "answer": "A suite of new artificial intelligence tools"
+      },
+      {
+        "q": "What is the primary goal of these new AI tools?",
+        "options": [
+          "To reduce manufacturing costs",
+          "To improve customer service chatbots",
+          "To accelerate digital transformation for businesses",
+          "To develop new gaming technologies"
+        ],
+        "answer": "To accelerate digital transformation for businesses"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as an aim of the AI solutions?",
+        "options": [
+          "Enhance operational efficiency",
+          "Streamline workflows",
+          "Reduce employee workload",
+          "Unlock new avenues for innovation"
+        ],
+        "answer": "Reduce employee workload"
+      },
+      {
+        "q": "What can companies expect by integrating these tools?",
+        "options": [
+          "A decrease in market share",
+          "To gain a competitive edge",
+          "Increased reliance on manual labor",
+          "Slower adaptation to market changes"
+        ],
+        "answer": "To gain a competitive edge"
+      },
+      {
+        "q": "The AI tools are designed to help businesses with what process?",
+        "options": [
+          "Financial auditing",
+          "Talent acquisition",
+          "Digital transformation",
+          "Supply chain management"
+        ],
+        "answer": "Digital transformation"
+      },
+      {
+        "q": "The word 'unveiled' in the text means:",
+        "options": [
+          "Hidden",
+          "Announced",
+          "Demolished",
+          "Invented"
+        ],
+        "answer": "Announced"
+      },
+      {
+        "q": "What does 'streamline workflows' imply?",
+        "options": [
+          "Making processes more complicated",
+          "Making processes more efficient",
+          "Adding more steps to tasks",
+          "Reducing the number of available tools"
+        ],
+        "answer": "Making processes more efficient"
+      },
+      {
+        "q": "The AI tools aim to 'unlock new avenues for innovation'. This suggests:",
+        "options": [
+          "Creating more obstacles",
+          "Finding new ways to be creative",
+          "Limiting new ideas",
+          "Focusing only on existing methods"
+        ],
+        "answer": "Finding new ways to be creative"
+      },
+      {
+        "q": "What is the general tone of the news article?",
+        "options": [
+          "Critical",
+          "Skeptical",
+          "Informative",
+          "Humorous"
+        ],
+        "answer": "Informative"
+      },
+      {
+        "q": "The phrase 'digital landscape' refers to:",
+        "options": [
+          "Physical environments",
+          "The world of digital technology and its changes",
+          "Geographical terrain",
+          "Artistic representations of technology"
+        ],
+        "answer": "The world of digital technology and its changes"
+      },
+      {
+        "q": "Which word best describes the 'solutions' offered by Google?",
+        "options": [
+          "Simple",
+          "Basic",
+          "Sophisticated",
+          "Temporary"
+        ],
+        "answer": "Sophisticated"
+      },
+      {
+        "q": "By adapting more effectively, companies can:",
+        "options": [
+          "Become less competitive",
+          "Struggle with new technologies",
+          "Stay relevant in a changing environment",
+          "Reduce their digital presence"
+        ],
+        "answer": "Stay relevant in a changing environment"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "Anthropic首季盈利，AI公司告別燒錢換增長",
+    "tabTitle": "科技",
+    "english": "Artificial intelligence company Anthropic has reported its first profitable quarter, marking a significant shift in the industry. This milestone suggests a move away from the previous 'growth-at-all-costs' strategy towards sustainable profitability. Major AI firms are now focusing on financial stability alongside technological advancement. This trend indicates a maturing AI market where operational efficiency is becoming as crucial as innovation.",
+    "chinese": "人工智能公司 Anthropic 報告了其首個盈利季度，這標誌著該行業的一個重大轉變。這一里程碑表明，行業正從以往的「不計一切代價追求增長」策略轉向可持續盈利。主要人工智能公司現在正將財務穩定與技術進步並重。這一趨勢預示著人工智能市場日趨成熟，營運效率正變得與創新同等重要。",
+    "vocabulary": [
+      "profitable (adj.): 盈利的",
+      "quarter (n.): 季度",
+      "milestone (n.): 里程碑",
+      "significant (adj.): 重大的",
+      "shift (n.): 轉變",
+      "industry (n.): 行業",
+      "suggests (v.): 表明",
+      "move away from (phr.): 遠離；停止",
+      "growth-at-all-costs (phr.): 不計一切代價追求增長",
+      "strategy (n.): 策略",
+      "sustainable (adj.): 可持續的",
+      "profitability (n.): 盈利能力",
+      "major (adj.): 主要的",
+      "firms (n.): 公司",
+      "focusing on (phr.): 專注於",
+      "financial stability (phr.): 財務穩定",
+      "alongside (prep.): 與...並肩；與...同時",
+      "technological advancement (phr.): 技術進步",
+      "trend (n.): 趨勢",
+      "maturing (adj.): 日趨成熟的",
+      "operational efficiency (phr.): 營運效率",
+      "crucial (adj.): 至關重要的",
+      "innovation (n.): 創新"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main news about Anthropic?",
+        "options": [
+          "It launched a new AI product.",
+          "It achieved its first profitable quarter.",
+          "It received a large investment.",
+          "It partnered with another tech company."
+        ],
+        "answer": "It achieved its first profitable quarter."
+      },
+      {
+        "q": "What does Anthropic's achievement suggest about the AI industry?",
+        "options": [
+          "A return to rapid expansion.",
+          "A focus on user acquisition.",
+          "A shift away from 'growth-at-all-costs'.",
+          "Increased competition from startups."
+        ],
+        "answer": "A shift away from 'growth-at-all-costs'."
+      },
+      {
+        "q": "What are major AI firms now focusing on besides technological advancement?",
+        "options": [
+          "Marketing campaigns",
+          "Employee training",
+          "Financial stability",
+          "International expansion"
+        ],
+        "answer": "Financial stability"
+      },
+      {
+        "q": "The news indicates that the AI market is becoming more...",
+        "options": [
+          "volatile",
+          "experimental",
+          "unregulated",
+          "mature"
+        ],
+        "answer": "mature"
+      },
+      {
+        "q": "What is becoming as crucial as innovation in the AI market?",
+        "options": [
+          "Marketing",
+          "Operational efficiency",
+          "Customer service",
+          "Hardware development"
+        ],
+        "answer": "Operational efficiency"
+      },
+      {
+        "q": "Which word describes the AI industry's previous strategy?",
+        "options": [
+          "Profit-driven",
+          "Sustainable growth",
+          "Growth-at-all-costs",
+          "Innovation-focused"
+        ],
+        "answer": "Growth-at-all-costs"
+      },
+      {
+        "q": "What does 'profitable' mean?",
+        "options": [
+          "Losing money",
+          "Making money",
+          "Growing quickly",
+          "Innovating rapidly"
+        ],
+        "answer": "Making money"
+      },
+      {
+        "q": "What is a 'milestone' in this context?",
+        "options": [
+          "A minor setback",
+          "A significant achievement",
+          "A routine event",
+          "A future prediction"
+        ],
+        "answer": "A significant achievement"
+      },
+      {
+        "q": "The article mentions a 'shift' in the AI industry. What does 'shift' mean?",
+        "options": [
+          "A decrease",
+          "A change",
+          "An increase",
+          "A pause"
+        ],
+        "answer": "A change"
+      },
+      {
+        "q": "What does 'sustainable' profitability imply?",
+        "options": [
+          "Short-term gains",
+          "Profits that can be maintained over time",
+          "High initial investment",
+          "Government subsidies"
+        ],
+        "answer": "Profits that can be maintained over time"
+      },
+      {
+        "q": "The text states that AI firms are now focusing on financial stability 'alongside' technological advancement. What does 'alongside' mean here?",
+        "options": [
+          "Instead of",
+          "After",
+          "In addition to",
+          "Because of"
+        ],
+        "answer": "In addition to"
+      },
+      {
+        "q": "What does the phrase 'maturing AI market' suggest?",
+        "options": [
+          "The market is new and unpredictable.",
+          "The market is becoming more established and stable.",
+          "The market is declining.",
+          "The market is solely focused on research."
+        ],
+        "answer": "The market is becoming more established and stable."
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
