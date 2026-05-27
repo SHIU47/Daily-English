@@ -15,9 +15,9 @@ const GITHUB_OWNER     = process.env.GITHUB_OWNER || 'SHIU47';
 const GITHUB_REPO      = process.env.GITHUB_REPO  || 'Daily-English';
 const TG_TOKEN         = process.env.TELEGRAM_BOT_TOKEN;
 const TG_CHAT_ID       = process.env.TELEGRAM_CHAT_ID;
-const TELEGRAM_TIMEOUT = 10 * 60 * 1000; // 10 分鐘
+const TELEGRAM_TIMEOUT = parseInt(process.env.TELEGRAM_TIMEOUT) || 10 * 60 * 1000; // 預設 10 分鐘
 
-const GEMINI_TEXT_URL  = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
+const GEMINI_TEXT_URL  = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 const GEMINI_IMAGE_URL = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${GEMINI_API_KEY}`;
 
 // ── 日期工具 ──────────────────────────────────────────────────────────────────
@@ -49,7 +49,13 @@ const warn = (msg) => console.log(`  !!  ${msg}`);
 
 // ── Gemini 文字 API ───────────────────────────────────────────────────────────
 async function geminiChat(prompt, useSearch = false, retries = 5) {
+  // 備用模型清單，包含最新旗艦與輕量化模型，防止單一模型高負載或額度超限
+  const models = ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-3.1-flash-lite'];
+  
   for (let i = 0; i < retries; i++) {
+    const modelName = models[i % models.length];
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+    
     try {
       const payload = {
         contents: [{ parts: [{ text: prompt }] }],
@@ -63,25 +69,39 @@ async function geminiChat(prompt, useSearch = false, retries = 5) {
       } else {
         payload.generationConfig.responseMimeType = "application/json";
       }
-      const res = await fetch(GEMINI_TEXT_URL, {
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 90000); // 90秒超時防止掛起
+      
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
+      
       const data = await res.json();
-      if (data.error) throw new Error(`Gemini Error: ${data.error.message}`);
+      if (data.error) throw new Error(`Gemini Error (${modelName}): ${data.error.message}`);
       return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     } catch (err) {
-      if (err.message.includes('429') || err.message.includes('Quota') || err.message.includes('limit') || err.message.includes('high demand') || err.message.includes('temporarily')) {
-         const wait = 120 + i * 60; // 120s, 180s, 240s, 300s, 360s
-         warn(`API 流量限制 (${i+1}/${retries}): 等待 ${wait} 秒後重試...`);
-         if (i < retries - 1) await new Promise(r => setTimeout(r, wait * 1000));
-         else throw new Error(`Gemini API 流量過高，已重試 ${retries} 次仍失敗`);
-      } else {
-         warn(`Gemini 呼叫失敗 (${i+1}/${retries}): ${err.message}`);
-         if (i < retries - 1) await new Promise(r => setTimeout(r, 3000));
-         else throw err;
+      warn(`Gemini (${modelName}) 呼叫失敗 (${i+1}/${retries}): ${err.message}`);
+      
+      if (i === retries - 1) {
+        throw new Error(`Gemini API 呼叫多次均失敗，最後錯誤: ${err.message}`);
       }
+      
+      const isQuotaOrSpike = err.message.includes('429') || 
+                             err.message.includes('Quota') || 
+                             err.message.includes('limit') || 
+                             err.message.includes('high demand') || 
+                             err.message.includes('temporarily') ||
+                             err.message.includes('503') ||
+                             err.message.includes('UNAVAILABLE');
+                             
+      const wait = isQuotaOrSpike ? (10 + i * 5) : 3; // 縮短重試延遲，並在 503 Spikes 時也能快速備份重試
+      warn(`將在 ${wait} 秒後更換下一個備用模型重試...`);
+      await new Promise(r => setTimeout(r, wait * 1000));
     }
   }
 }
@@ -91,11 +111,15 @@ async function geminiChat(prompt, useSearch = false, retries = 5) {
 async function tgCall(method, params = {}, retries = 4) {
   for (let i = 0; i < retries; i++) {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30秒超時保護
       const res = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/${method}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
+        body: JSON.stringify(params),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
       const data = await res.json();
       if (!data.ok) warn(`Telegram ${method} 失敗: ${data.description}`);
       return data;
@@ -132,7 +156,7 @@ async function waitForSelections(count, prefix, onSelect, initialSelected = []) 
   const deadline = Date.now() + TELEGRAM_TIMEOUT;
 
   const init = await tgCall('getUpdates', { limit: 1, timeout: 1, offset: -1 });
-  if (init.result?.length) {
+  if (init && init.result?.length) {
     offset = init.result[init.result.length - 1].update_id + 1;
   }
 
@@ -142,6 +166,12 @@ async function waitForSelections(count, prefix, onSelect, initialSelected = []) 
       allowed_updates: ['callback_query'],
       ...(offset != null ? { offset } : {})
     });
+
+    if (!updates || !updates.ok) {
+      warn('Telegram getUpdates 失敗，等待 5 秒後重試，防止 active webhook 造成無延遲無限迴圈爆破...');
+      await new Promise(r => setTimeout(r, 5000));
+      continue;
+    }
 
     for (const upd of (updates.result || [])) {
       offset = upd.update_id + 1;
@@ -190,8 +220,12 @@ async function generateNews(dates, excludeTitles = []) {
   }
 
   const prompt = `今天是 ${dates.dotDate}。
-請根據今天最新鮮、真實發生的重大新聞，產生一份新聞清單，用於台灣英文學習網站。
-【關鍵要求】請務必使用連網搜尋 (Google Search) 查證該事件確實是最新的真實新聞，絕對不可憑空捏造。${historyStr}${excludeStr}
+請根據最近 24-48 小時內真實發生的最新重大新聞（包含今天的新聞，若今日新聞較少可直接使用昨日新聞），產生一份新聞清單，用於台灣英文學習網站。
+【重要要求】
+1. 請務必使用連網搜尋 (Google Search) 查證該事件確實是真實發生的重大新聞，絕對不可憑空捏造或通靈。
+2. 你必須且只能輸出符合以下格式的純 JSON 字串，絕對不要包含任何 markdown 標記（如 \`\`\`json）或任何對話式、解釋性或道歉的文字（絕對不要回覆 "I'm sorry, I cannot..." ）。
+3. 即便搜尋結果中符合今天的新聞數量不足，也必須用最近一兩天內查證屬實的新聞填滿。
+${historyStr}${excludeStr}
 
 請產生：
 - 8 則台灣新聞：涵蓋台灣政治、經濟、社會、科技、台積電、半導體等
@@ -202,7 +236,7 @@ async function generateNews(dates, excludeTitles = []) {
 2. 簡短英文標題（10-15個字）
 3. 分類標籤：只能是以下其中一個 [台灣政治, 台灣經濟, 台灣社會, 科技, 地緣政治, 金融市場, 國際大事]
 
-只輸出 JSON，不要 markdown 包裹，格式如下：
+格式如下：
 {
   "taiwan": [{"id":1,"zh":"中文標題","en":"English Headline","tag":"分類"}],
   "international": [{"id":1,"zh":"中文標題","en":"English Headline","tag":"分類"}]
@@ -238,6 +272,7 @@ async function generateNews(dates, excludeTitles = []) {
 async function selectNewsViaTelegram(news, dates) {
   printHeader(2, 'Telegram 互動選新聞');
   let currentNews = news;
+  const AUTO_SELECT = process.env.AUTO_SELECT === 'true';
 
   async function selectCategory(categoryKey, categoryName, emoji, reqCount, prefix) {
     let finalSelectedObjs = [];
@@ -266,6 +301,21 @@ async function selectNewsViaTelegram(news, dates) {
         kb.push(row);
       }
       kb.push([{ text: `🔄 換一批${categoryName}`, callback_data: `${prefix}:REFRESH` }]);
+
+      // 如果是 AUTO_SELECT 模式，直接自動選取前幾則，不發送按鈕等待
+      if (AUTO_SELECT) {
+        info(`[自動選擇模式] 自動選取 ${categoryName}`);
+        const remainingCount = reqCount - finalSelectedObjs.length;
+        let added = 0;
+        for (const n of list) {
+          if (!finalSelectedObjs.find(o => o.id === n.id && o.zh === n.zh)) {
+            finalSelectedObjs.push(n);
+            added++;
+            if (added >= remainingCount) break;
+          }
+        }
+        break;
+      }
 
       const msg = await tgSendButtons(text, kb);
       const msgId = msg.result?.message_id;
@@ -297,13 +347,30 @@ async function selectNewsViaTelegram(news, dates) {
         // 正常選完：把這批結果加進 finalSelectedObjs
         for (const id of result.selected) {
           const found = list.find(n => n.id === parseInt(id));
-          if (found) finalSelectedObjs.push(found);
+          if (found && !finalSelectedObjs.find(o => o.id === found.id && o.zh === found.zh)) {
+            finalSelectedObjs.push(found);
+          }
+        }
+
+        // 檢查是否選滿，若未選滿（超時）則自動補充
+        if (finalSelectedObjs.length < reqCount) {
+          warn(`${categoryName} 選取未完成或超時，自動補充剩餘項目`);
+          const remainingCount = reqCount - finalSelectedObjs.length;
+          let autoSelected = 0;
+          for (const n of list) {
+            if (!finalSelectedObjs.find(o => o.id === n.id && o.zh === n.zh)) {
+              finalSelectedObjs.push(n);
+              autoSelected++;
+              if (autoSelected >= remainingCount) break;
+            }
+          }
+          await tgSend(`⚠️ <b>${categoryName}</b> 選取未完成或超時，系統已自動補充：\n` + 
+            finalSelectedObjs.map(n => `· ${n.zh}`).join('\n'));
         }
         break;
       }
     }
     
-    if (finalSelectedObjs.length < reqCount) throw new Error(`${categoryName}選取超時`);
     ok(`${categoryName}已選: ${finalSelectedObjs.map(n => n.zh).join(' / ')}`);
     return finalSelectedObjs;
   }
@@ -318,21 +385,32 @@ async function selectNewsViaTelegram(news, dates) {
     `🖼️ <b>請選封面新聞</b>（1 則）\n\n` +
     allSelected.map((n, i) => `<b>${i+1}.</b> ${n.zh}`).join('\n');
 
-  const coverKb = allSelected.map((n, i) => ([{
-    text: `${i+1}. ${n.zh}`,
-    callback_data: `COVER:${i}`
-  }]));
+  let coverNews;
+  if (AUTO_SELECT) {
+    info(`[自動選擇模式] 自動選取封面新聞`);
+    coverNews = allSelected[0];
+  } else {
+    const coverKb = allSelected.map((n, i) => ([{
+      text: `${i+1}. ${n.zh}`,
+      callback_data: `COVER:${i}`
+    }]));
 
-  const coverMsg = await tgSendButtons(coverText, coverKb);
-  const coverMsgId = coverMsg.result?.message_id;
+    const coverMsg = await tgSendButtons(coverText, coverKb);
+    const coverMsgId = coverMsg.result?.message_id;
 
-  const coverResult = await waitForSelections(1, 'COVER', async (sel) => {
-    const idx = parseInt(sel[0]);
-    await tgEdit(coverMsgId, coverText + `\n\n✅ 封面：${allSelected[idx].zh}`, []);
-  });
+    const coverResult = await waitForSelections(1, 'COVER', async (sel) => {
+      const idx = parseInt(sel[0]);
+      await tgEdit(coverMsgId, coverText + `\n\n✅ 封面：${allSelected[idx].zh}`, []);
+    });
 
-  if (coverResult.selected.length < 1) throw new Error('封面選取超時');
-  const coverNews = allSelected[parseInt(coverResult.selected[0])];
+    if (coverResult.selected.length < 1) {
+      warn('封面選取超時，自動選擇第一則新聞作為封面');
+      coverNews = allSelected[0];
+      await tgSend(`⚠️ 封面選取超時，系統已自動選擇第一則作為封面：\n· ${coverNews.zh}`);
+    } else {
+      coverNews = allSelected[parseInt(coverResult.selected[0])];
+    }
+  }
   ok(`封面: ${coverNews.zh}`);
 
   await tgSend(
@@ -730,10 +808,16 @@ async function generateCoverImage(coverNews, dates) {
 
 // ── Step 4.5: 更新 index.html ─────────────────────────────────────────────────
 async function fetchCurrentIndex() {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000); // 30秒超時保護
   const res = await fetch(
     `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/index.html`,
-    { headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json' } }
+    { 
+      headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json' },
+      signal: controller.signal
+    }
   );
+  clearTimeout(timeoutId);
   const data = await res.json();
   if (!data.content) throw new Error('無法取得 index.html: ' + JSON.stringify(data));
   return { content: Buffer.from(data.content, 'base64').toString('utf-8'), sha: data.sha };
@@ -775,13 +859,21 @@ async function pushToGitHub(files) {
     info(`上傳: ${file.path}`);
     let sha;
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30秒超時保護
       const r = await fetch(
         `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file.path}`,
-        { headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json' } }
+        { 
+          headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json' },
+          signal: controller.signal
+        }
       );
+      clearTimeout(timeoutId);
       if (r.ok) sha = (await r.json()).sha;
     } catch {}
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30秒超時保護
     const r = await fetch(
       `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodeURIComponent(file.path)}`,
       {
@@ -795,9 +887,11 @@ async function pushToGitHub(files) {
           message: file.message || `Update ${file.path}`,
           content: file.content,
           ...(sha ? { sha } : {})
-        })
+        }),
+        signal: controller.signal
       }
     );
+    clearTimeout(timeoutId);
     r.ok ? ok(file.path) : warn(`失敗 ${file.path}: ${(await r.json()).message}`);
     await new Promise(r => setTimeout(r, 500));
   }
