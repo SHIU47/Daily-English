@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 27, 2026：台灣經濟、地緣政治 與 地緣政治</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台股總市值超越印度，躍居全球第五大股市。\nTaiwan's stock market has achieved a historic milestone by surpassing India's to become the fifth largest in the world by market capitalization. Driven largely by the booming artificial intelligence sector and strong global demand for advanced semiconductors, the Taiwan Stock Exchange (TWSE) has seen unprecedented capital inflows. Analysts attribute this rapid growth to the stellar performance of major tech giants, which continue to dominate global supply chains. This shift highlights Taiwan's growing financial influence and its pivotal role in the global technology ecosystem.\n\n[2] 賴清德總統推出人口對策新戰略，強化家庭支持措施。\nPresident Lai Ching-te has officially unveiled a comprehensive new population strategy aimed at addressing Taiwan's declining birth rates. The initiative focuses on enhancing family support measures, including expanded childcare subsidies, extended parental leave, and affordable housing priority for young families. Government officials believe these proactive steps will alleviate financial burdens on parents and foster a more supportive environment for raising children. The administration emphasizes that securing the nation's demographic future is vital for sustainable economic growth.\n\n[3] 台股狂飆創新高，五月消費者信心指數卻反向下滑。\nTaiwan's stock market recently surged to an all-time high, driven primarily by strong performances in the technology sector. However, despite this booming stock market, the consumer confidence index for May unexpectedly declined. Economists suggest that persistent inflation and rising housing costs are weighing heavily on public sentiment. While investors celebrate the market's record-breaking rally, ordinary citizens remain highly cautious about their personal financial prospects in the coming months. This growing divergence highlights the gap between financial market success and everyday economic reality.",
+    "chinese": "【1】台股總市值超越印度，躍居全球第五大股市。\n台灣股市達成了一項歷史性的里程碑，其總市值已超越印度，躍升為全球第五大股市。在蓬勃發展的人工智慧產業以及全球對先進半導體強勁需求的推動下，台灣證券交易所（TWSE）迎來了前所未有的資金流入。分析師將這一快速增長歸因於各大科技巨頭的傑出表現，這些企業持續主導著全球供應鏈。這一轉變凸顯了台灣日益增長的金融影響力，以及其在全球科技生態系統中扮演的關鍵角色。\n\n【2】賴清德總統推出人口對策新戰略，強化家庭支持措施。\n賴清德總統已正式推出一項全面的新人口對策，旨在解決台灣面臨的少子化問題。該計畫重點在於強化家庭支持措施，包括擴大育兒津貼、延長育嬰假，以及為年輕家庭提供優先的社會住宅。政府官員相信，這些積極的步驟將減輕家長的財務負擔，並營造一個更具支持性的育兒環境。政府強調，確保國家未來的人口結構對於永續經濟成長至關重要。\n\n【3】台股狂飆創新高，五月消費者信心指數卻反向下滑。\n台灣股市最近飆升至歷史新高，主要受到科技板塊強勁表現的推動。然而，儘管股市蓬勃發展，五月份的消費者信心指數卻出乎意料地下降。經濟學家指出，持續的通貨膨脹和不斷上漲的房價正沉重地打擊著公眾情緒。當投資人慶祝股市創紀錄的漲勢時，普通市民對未來幾個月的個人財務前景仍保持高度謹慎。這種日益擴大的分歧凸顯了金融市場的成功與日常經濟現實之間的差距。",
+    "vocabulary": [
+      "milestone (n.): 里程碑",
+      "surpass (v.): 超越，勝過",
+      "market capitalization (n.): 市值",
+      "driven (adj.): 受...驅動的",
+      "booming (adj.): 蓬勃發展的",
+      "artificial intelligence (n.): 人工智慧",
+      "sector (n.): 行業，部門",
+      "semiconductor (n.): 半導體",
+      "unprecedented (adj.): 前所未有的",
+      "capital inflow (n.): 資金流入",
+      "analyst (n.): 分析師",
+      "attribute (v.): 歸因於",
+      "stellar (adj.): 傑出的，優秀的",
+      "dominate (v.): 主導，支配",
+      "supply chain (n.): 供應鏈",
+      "shift (n.): 轉變，變化",
+      "highlight (v.): 凸顯，強調",
+      "financial (adj.): 金融的，財務的",
+      "influence (n.): 影響力",
+      "pivotal (adj.): 關鍵的，核心的",
+      "unveil (v.): 推出；公布",
+      "comprehensive (adj.): 全面的；詳盡的",
+      "population (n.): 人口",
+      "strategy (n.): 對策；策略",
+      "address (v.): 應對；處理",
+      "decline (v.): 下降；減少",
+      "birth rate (n.): 出生率",
+      "initiative (n.): 倡議；新計劃",
+      "enhance (v.): 強化；提升",
+      "subsidy (n.): 津貼；補貼",
+      "parental leave (n. phr.): 育嬰假",
+      "affordable (adj.): 負擔得起的",
+      "priority (n.): 優先權",
+      "proactive (adj.): 積極的；主動的",
+      "alleviate (v.): 減輕；緩和",
+      "burden (n.): 負擔",
+      "foster (v.): 培養；促進",
+      "administration (n.): 政府；行政機構",
+      "demographic (adj.): 人口統計的；人口的",
+      "sustainable (adj.): 永續的；可持續的",
+      "surge (v.): 飆升，急劇上升",
+      "all-time high (n.): 歷史新高",
+      "drive (v.): 推動，驅使",
+      "sector (n.): 部門，板塊",
+      "booming (adj.): 蓬勃發展的，繁榮的",
+      "consumer confidence (n.): 消費者信心",
+      "index (n.): 指數",
+      "unexpectedly (adv.): 出乎意料地",
+      "decline (v.): 下降，衰退",
+      "economist (n.): 經濟學家",
+      "persistent (adj.): 持續的，執著的",
+      "inflation (n.): 通貨膨脹",
+      "weigh heavily on (phr.): 沉重地壓在...之上",
+      "sentiment (n.): 情緒，態度",
+      "investor (n.): 投資人",
+      "record-breaking (adj.): 破紀錄的",
+      "rally (n.): （價格、股市的）回升，漲勢",
+      "cautious (adj.): 謹慎的",
+      "prospect (n.): 前景，展望",
+      "divergence (n.): 分歧，差異"
+    ],
+    "quiz": [
+      {
+        "q": "What historic milestone did Taiwan's stock market achieve?",
+        "options": [
+          "It became the largest stock market in Asia.",
+          "It surpassed India to become the world's fifth largest stock market.",
+          "It merged with the Indian stock market.",
+          "It became the world's largest exporter of semiconductors."
+        ],
+        "answer": "It surpassed India to become the world's fifth largest stock market."
+      },
+      {
+        "q": "Which sector is mentioned as a major driver of Taiwan's stock market growth?",
+        "options": [
+          "The real estate sector",
+          "The agricultural sector",
+          "The artificial intelligence sector",
+          "The tourism sector"
+        ],
+        "answer": "The artificial intelligence sector"
+      },
+      {
+        "q": "What does the word 'surpass' mean in the context of the article?",
+        "options": [
+          "To fall behind",
+          "To exceed or go beyond",
+          "To equal in value",
+          "To control completely"
+        ],
+        "answer": "To exceed or go beyond"
+      },
+      {
+        "q": "According to the text, what has the Taiwan Stock Exchange (TWSE) experienced recently?",
+        "options": [
+          "Unprecedented capital inflows",
+          "A sudden decrease in foreign investment",
+          "A complete shutdown of operations",
+          "A shift toward agricultural trading"
+        ],
+        "answer": "Unprecedented capital inflows"
+      },
+      {
+        "q": "To what do analysts attribute the rapid growth of Taiwan's stock market?",
+        "options": [
+          "The stellar performance of major tech giants",
+          "New government tax regulations",
+          "A decline in global semiconductor demand",
+          "The rise of traditional manufacturing"
+        ],
+        "answer": "The stellar performance of major tech giants"
+      },
+      {
+        "q": "What does the term 'market capitalization' refer to?",
+        "options": [
+          "The total value of a company's outstanding shares of stock",
+          "The physical location of a stock exchange",
+          "The amount of cash a company holds",
+          "The interest rate set by the central bank"
+        ],
+        "answer": "The total value of a company's outstanding shares of stock"
+      },
+      {
+        "q": "Complete the sentence: 'The new technology played a _______ role in the company's success, making it the market leader.'",
+        "options": [
+          "pivotal",
+          "minor",
+          "unnecessary",
+          "negative"
+        ],
+        "answer": "pivotal"
+      },
+      {
+        "q": "What is the meaning of the word 'unprecedented'?",
+        "options": [
+          "Never done or known before",
+          "Very common and expected",
+          "Highly controversial",
+          "Temporarily suspended"
+        ],
+        "answer": "Never done or known before"
+      },
+      {
+        "q": "Which of the following is the closest synonym for the word 'stellar' as used in the text?",
+        "options": [
+          "Average",
+          "Disappointing",
+          "Outstanding",
+          "Mysterious"
+        ],
+        "answer": "Outstanding"
+      },
+      {
+        "q": "What does the shift in stock market ranking highlight about Taiwan?",
+        "options": [
+          "Its dependence on agricultural exports",
+          "Its growing financial influence and pivotal role in tech",
+          "Its declining population",
+          "Its isolation from global supply chains"
+        ],
+        "answer": "Its growing financial influence and pivotal role in tech"
+      },
+      {
+        "q": "What verb is used in the text to mean 'to regard something as being caused by a specific factor'?",
+        "options": [
+          "dominate",
+          "attribute",
+          "highlight",
+          "surpass"
+        ],
+        "answer": "attribute"
+      },
+      {
+        "q": "Which phrase describes the network of organizations and activities involved in moving a product from supplier to customer?",
+        "options": [
+          "Capital inflow",
+          "Stock exchange",
+          "Supply chain",
+          "Market capitalization"
+        ],
+        "answer": "Supply chain"
+      },
+      {
+        "q": "Who unveiled the new population strategy?",
+        "options": [
+          "President Lai Ching-te",
+          "The Minister of Finance",
+          "The Mayor of Taipei",
+          "The Premier of Taiwan"
+        ],
+        "answer": "President Lai Ching-te"
+      },
+      {
+        "q": "What does the word 'unveil' mean in the context of the news?",
+        "options": [
+          "To hide from the public",
+          "To officially introduce or make known",
+          "To cancel a plan",
+          "To criticize a decision"
+        ],
+        "answer": "To officially introduce or make known"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a family support measure?",
+        "options": [
+          "Expanded childcare subsidies",
+          "Extended parental leave",
+          "Affordable housing priority",
+          "Free higher education for all"
+        ],
+        "answer": "Free higher education for all"
+      },
+      {
+        "q": "What is the main target of the new strategy?",
+        "options": [
+          "Increasing national defense budget",
+          "Addressing Taiwan's declining birth rates",
+          "Promoting international tourism",
+          "Improving public transportation"
+        ],
+        "answer": "Addressing Taiwan's declining birth rates"
+      },
+      {
+        "q": "According to the text, what will alleviate financial burdens on parents?",
+        "options": [
+          "Proactive steps like subsidies and housing priority",
+          "Increasing the retirement age",
+          "Reducing the number of public holidays",
+          "Encouraging parents to work longer hours"
+        ],
+        "answer": "Proactive steps like subsidies and housing priority"
+      },
+      {
+        "q": "What does the word 'alleviate' mean?",
+        "options": [
+          "To make something worse",
+          "To ignore a problem",
+          "To make pain or difficulty less severe",
+          "To increase the cost of something"
+        ],
+        "answer": "To make pain or difficulty less severe"
+      },
+      {
+        "q": "Why is securing the nation's demographic future considered vital?",
+        "options": [
+          "For sustainable economic growth",
+          "For winning international awards",
+          "For reducing the government's size",
+          "For increasing military power"
+        ],
+        "answer": "For sustainable economic growth"
+      },
+      {
+        "q": "Fill in the blank: The government hopes to ________ a more supportive environment for raising children.",
+        "options": [
+          "foster",
+          "ignore",
+          "damage",
+          "postpone"
+        ],
+        "answer": "foster"
+      },
+      {
+        "q": "What does the term 'parental leave' refer to?",
+        "options": [
+          "Time off work granted to parents to care for a child",
+          "A vacation taken by teachers",
+          "An early retirement plan for seniors",
+          "A school holiday for students"
+        ],
+        "answer": "Time off work granted to parents to care for a child"
+      },
+      {
+        "q": "Which word is closest in meaning to 'proactive'?",
+        "options": [
+          "Passive",
+          "Taking initiative",
+          "Reluctant",
+          "Delayed"
+        ],
+        "answer": "Taking initiative"
+      },
+      {
+        "q": "What kind of housing is being prioritized for young families?",
+        "options": [
+          "Luxury housing",
+          "Affordable housing",
+          "Temporary shelters",
+          "Commercial offices"
+        ],
+        "answer": "Affordable housing"
+      },
+      {
+        "q": "Complete the sentence: The new policy is a ________ strategy, meaning it is comprehensive and covers many aspects.",
+        "options": [
+          "limited",
+          "demographic",
+          "comprehensive",
+          "temporary"
+        ],
+        "answer": "comprehensive"
+      },
+      {
+        "q": "What drove Taiwan's stock market to an all-time high?",
+        "options": [
+          "The agricultural sector",
+          "The technology sector",
+          "Housing market investments",
+          "Rising consumer confidence"
+        ],
+        "answer": "The technology sector"
+      },
+      {
+        "q": "What happened to the consumer confidence index in May?",
+        "options": [
+          "It reached an all-time high.",
+          "It remained unchanged.",
+          "It unexpectedly declined.",
+          "It surpassed the stock market growth."
+        ],
+        "answer": "It unexpectedly declined."
+      },
+      {
+        "q": "According to economists, what factors are weighing on public sentiment?",
+        "options": [
+          "Low interest rates and high wages",
+          "Stock market volatility and trade wars",
+          "Persistent inflation and rising housing costs",
+          "Technology sector layoffs"
+        ],
+        "answer": "Persistent inflation and rising housing costs"
+      },
+      {
+        "q": "What is the meaning of 'surge' in the context of the passage?",
+        "options": [
+          "To fall suddenly",
+          "To remain stable",
+          "To rise rapidly",
+          "To fluctuate gently"
+        ],
+        "answer": "To rise rapidly"
+      },
+      {
+        "q": "Which word is closest in meaning to 'cautious'?",
+        "options": [
+          "Reckless",
+          "Careful",
+          "Enthusiastic",
+          "Indifferent"
+        ],
+        "answer": "Careful"
+      },
+      {
+        "q": "Fill in the blank: The company's profits have reached an ________ high this quarter.",
+        "options": [
+          "all-time",
+          "all-day",
+          "all-out",
+          "all-around"
+        ],
+        "answer": "all-time"
+      },
+      {
+        "q": "Taiwan's stock market recently surged to an all-time high, ________ primarily by strong performances in the tech sector.",
+        "options": [
+          "driving",
+          "driven",
+          "drove",
+          "to drive"
+        ],
+        "answer": "driven"
+      },
+      {
+        "q": "What does the 'growing divergence' mentioned in the text refer to?",
+        "options": [
+          "The gap between tech stocks and energy stocks",
+          "The difference between housing costs in different cities",
+          "The gap between stock market success and everyday economic reality",
+          "The disagreement between different economists"
+        ],
+        "answer": "The gap between stock market success and everyday economic reality"
+      },
+      {
+        "q": "What is the noun form of the verb 'decline' used in the text?",
+        "options": [
+          "Declination",
+          "Decline",
+          "Declining",
+          "Declinable"
+        ],
+        "answer": "Decline"
+      },
+      {
+        "q": "The word 'sentiment' in 'public sentiment' refers to:",
+        "options": [
+          "Financial wealth",
+          "General feeling or opinion",
+          "Government policy",
+          "Scientific data"
+        ],
+        "answer": "General feeling or opinion"
+      },
+      {
+        "q": "Despite ________ booming stock market, consumers are worried.",
+        "options": [
+          "the",
+          "of the",
+          "that the",
+          "because of the"
+        ],
+        "answer": "the"
+      },
+      {
+        "q": "Which of the following is the best translation for 'prospects'?",
+        "options": [
+          "財產",
+          "挑戰",
+          "前景",
+          "歷史"
+        ],
+        "answer": "前景"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美軍空襲伊朗南部目標，中東地緣政治緊張升溫。",
+    "tabTitle": "地緣政治",
+    "english": "On May 27, 2026, the United States military launched targeted airstrikes against several military facilities in southern Iran. According to defense officials, the operation was executed in response to recent drone attacks on allied bases in the region. The strikes have triggered widespread concern over a potential escalation of conflict in the Middle East. Diplomatic leaders globally are calling for immediate restraint, warning that further retaliatory actions could destabilize international energy markets and disrupt crucial maritime trade routes.",
+    "chinese": "2026年5月27日，美軍對伊朗南部的數個軍事設施發動了針對性的空襲。根據國防官員的說法，此次行動是為了回應近期盟軍在該地區基地遭受的無人機襲擊。這些空襲引發了外界對於中東衝突可能升級的廣泛擔憂。全球外交領袖正呼籲各方立即克制，並警告進一步的報復行動可能會動搖國際能源市場並中斷關鍵的海上貿易航線。",
+    "vocabulary": [
+      "launch (v.): 發起；發動",
+      "targeted (adj.): 有針對性的；目標明確的",
+      "airstrike (n.): 空襲",
+      "facility (n.): 設施；設備",
+      "execute (v.): 執行；實施",
+      "in response to (phr.): 回應；對…做出反應",
+      "allied (adj.): 盟國的；同盟的",
+      "trigger (v.): 引發；觸發",
+      "widespread (adj.): 廣泛的",
+      "escalation (n.): 升級；擴大",
+      "conflict (n.): 衝突；爭端",
+      "diplomatic (adj.): 外交的",
+      "restraint (n.): 克制；節制",
+      "retaliatory (adj.): 報復性的",
+      "destabilize (v.): 使不穩定；動搖",
+      "maritime (adj.): 海事的；航海的",
+      "disrupt (v.): 中斷；擾亂",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張局勢；緊張關係",
+      "potential (adj.): 潛在的；可能的"
+    ],
+    "quiz": [
+      {
+        "q": "What triggered the US military airstrikes in southern Iran?",
+        "options": [
+          "A. A dispute over international maritime trade routes",
+          "B. Recent drone attacks on allied bases in the region",
+          "C. An escalation of energy prices in the Middle East",
+          "D. A direct declaration of war by the Iranian government"
+        ],
+        "answer": "B. Recent drone attacks on allied bases in the region"
+      },
+      {
+        "q": "According to the text, what are diplomatic leaders calling for?",
+        "options": [
+          "A. Immediate restraint",
+          "B. Further retaliatory actions",
+          "C. Increased military spending",
+          "D. Economic sanctions on Iran"
+        ],
+        "answer": "A. Immediate restraint"
+      },
+      {
+        "q": "What is a potential consequence of further retaliatory actions mentioned in the text?",
+        "options": [
+          "A. A reduction in drone production",
+          "B. The stabilization of international energy markets",
+          "C. Disruption of crucial maritime trade routes",
+          "D. Improved diplomatic relations in the Middle East"
+        ],
+        "answer": "C. Disruption of crucial maritime trade routes"
+      },
+      {
+        "q": "Fill in the blank: The government urged both sides to exercise ______ to prevent the conflict from worsening.",
+        "options": [
+          "A. facility",
+          "B. restraint",
+          "C. tension",
+          "D. escalation"
+        ],
+        "answer": "B. restraint"
+      },
+      {
+        "q": "Which word is closest in meaning to 'trigger'?",
+        "options": [
+          "A. Prevent",
+          "B. Solve",
+          "C. Cause",
+          "D. Delay"
+        ],
+        "answer": "C. Cause"
+      },
+      {
+        "q": "What is the meaning of 'destabilize'?",
+        "options": [
+          "A. To make something less steady or secure",
+          "B. To establish a new government",
+          "C. To improve economic conditions",
+          "D. To sign a peace treaty"
+        ],
+        "answer": "A. To make something less steady or secure"
+      },
+      {
+        "q": "Fill in the blank: The navy was deployed to protect ______ trade routes from pirate attacks.",
+        "options": [
+          "A. diplomatic",
+          "B. retaliatory",
+          "C. maritime",
+          "D. allied"
+        ],
+        "answer": "C. maritime"
+      },
+      {
+        "q": "The military operation was ______ smoothly by the special forces last night.",
+        "options": [
+          "A. executed",
+          "B. escalated",
+          "C. disrupted",
+          "D. responded"
+        ],
+        "answer": "A. executed"
+      },
+      {
+        "q": "Where did the US military launch its targeted airstrikes?",
+        "options": [
+          "A. Northern Iraq",
+          "B. Southern Iran",
+          "C. Eastern Syria",
+          "D. Western Yemen"
+        ],
+        "answer": "B. Southern Iran"
+      },
+      {
+        "q": "What does 'retaliatory' mean in the context of the news?",
+        "options": [
+          "A. Done to help allies",
+          "B. Done in order to punish or get revenge",
+          "C. Done to promote peace",
+          "D. Done by accident"
+        ],
+        "answer": "B. Done in order to punish or get revenge"
+      },
+      {
+        "q": "The company's supply chain was severely ______ by the unexpected strike.",
+        "options": [
+          "A. targeted",
+          "B. triggered",
+          "C. disrupted",
+          "D. allied"
+        ],
+        "answer": "C. disrupted"
+      },
+      {
+        "q": "Complete the sentence: The new policy was introduced in response ______ public demand.",
+        "options": [
+          "A. for",
+          "B. to",
+          "C. with",
+          "D. at"
+        ],
+        "answer": "B. to"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "俄羅斯預告猛烈轟炸基輔，促美方撤離官員與公民。",
+    "tabTitle": "地緣政治",
+    "english": "Russia has warned of an imminent and severe bombardment targeting Kyiv, prompting the United States to urge its government officials and citizens to evacuate the capital immediately. Moscow's latest threat has significantly escalated geopolitical tensions, raising fears of a devastating military offensive. International observers have expressed grave concern over the situation, while diplomatic channels remain severely strained. Security measures across Ukraine have been heightened in anticipation of the potential strikes.",
+    "chinese": "俄羅斯警告稱即將對基輔進行猛烈轟炸，此舉促使美國敦促其政府官員與公民立即撤離首都。莫斯科的最新威脅已顯著加劇地緣政治緊張局勢，引發了對毀滅性軍事攻勢的擔憂。國際觀察家對局勢表示嚴重關切，而外交管道依然極度緊張。烏克蘭各地的安全措施已因預期可能發生的襲擊而有所加強。",
+    "vocabulary": [
+      "imminent (adj.): 即將發生的",
+      "severe (adj.): 嚴重的、猛烈的",
+      "bombardment (n.): 轟炸、砲擊",
+      "prompt (v.): 促使、引起",
+      "evacuate (v.): 撤離、疏散",
+      "capital (n.): 首都",
+      "threat (n.): 威脅",
+      "significantly (adv.): 顯著地",
+      "escalate (v.): 升級、加劇",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張局勢",
+      "devastating (adj.): 毀滅性的",
+      "offensive (n.): 攻勢、進攻",
+      "observer (n.): 觀察家、觀察員",
+      "grave (adj.): 嚴重的、重大的",
+      "diplomatic (adj.): 外交的",
+      "strain (v.): 使緊張、拉緊",
+      "security measure (n. phr.): 安全措施",
+      "heighten (v.): 提高、加強",
+      "in anticipation of (prep. phr.): 預料到、預期"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main reason the US urged its citizens to evacuate Kyiv?",
+        "options": [
+          "A sudden natural disaster",
+          "An imminent Russian bombardment",
+          "Economic instability",
+          "A change in diplomatic relations"
+        ],
+        "answer": "An imminent Russian bombardment"
+      },
+      {
+        "q": "According to the text, what has Moscow's latest threat caused?",
+        "options": [
+          "A decrease in military spending",
+          "Improved diplomatic relations",
+          "A significant escalation in geopolitical tensions",
+          "Immediate peace talks"
+        ],
+        "answer": "A significant escalation in geopolitical tensions"
+      },
+      {
+        "q": "What does the word 'imminent' mean in the context of the passage?",
+        "options": [
+          "Unlikely to happen",
+          "Happening very soon",
+          "Already finished",
+          "Delayed indefinitely"
+        ],
+        "answer": "Happening very soon"
+      },
+      {
+        "q": "Which country urged its citizens to leave Kyiv immediately?",
+        "options": [
+          "Russia",
+          "Ukraine",
+          "The United States",
+          "Germany"
+        ],
+        "answer": "The United States"
+      },
+      {
+        "q": "What have international observers expressed regarding the situation?",
+        "options": [
+          "Grave concern",
+          "Total indifference",
+          "Great enthusiasm",
+          "Cautious optimism"
+        ],
+        "answer": "Grave concern"
+      },
+      {
+        "q": "What measures have been heightened across Ukraine?",
+        "options": [
+          "Economic sanctions",
+          "Security measures",
+          "Tourism promotions",
+          "Agricultural outputs"
+        ],
+        "answer": "Security measures"
+      },
+      {
+        "q": "What is the meaning of 'evacuate' as used in the text?",
+        "options": [
+          "To enter a dangerous area",
+          "To move out of a dangerous place",
+          "To rebuild a destroyed city",
+          "To refuse to leave a building"
+        ],
+        "answer": "To move out of a dangerous place"
+      },
+      {
+        "q": "Which word is closest in meaning to 'devastating'?",
+        "options": [
+          "Constructive",
+          "Highly destructive",
+          "Mildly annoying",
+          "Extremely beneficial"
+        ],
+        "answer": "Highly destructive"
+      },
+      {
+        "q": "The phrase 'in anticipation of' means:",
+        "options": [
+          "Because of past events",
+          "In order to ignore",
+          "Looking forward to or expecting",
+          "Without any preparation"
+        ],
+        "answer": "Looking forward to or expecting"
+      },
+      {
+        "q": "What is the state of diplomatic channels according to the passage?",
+        "options": [
+          "Highly successful",
+          "Severely strained",
+          "Completely closed",
+          "Newly established"
+        ],
+        "answer": "Severely strained"
+      },
+      {
+        "q": "The word 'escalate' in the text means to:",
+        "options": [
+          "Make something less intense",
+          "Become more intense or serious",
+          "Stop suddenly",
+          "Remain constant"
+        ],
+        "answer": "Become more intense or serious"
+      },
+      {
+        "q": "Which city is the primary target mentioned in the threat?",
+        "options": [
+          "Moscow",
+          "Washington",
+          "Kyiv",
+          "New York"
+        ],
+        "answer": "Kyiv"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "美國股市再創新高，投資人樂觀看待美伊協議前景。",
+    "tabTitle": "金融市場",
+    "english": "US stock markets reached historic highs on Tuesday as investors reacted positively to progress in negotiations between Washington and Tehran. The potential breakthrough in the US-Iran nuclear deal has fueled optimism about global energy stability and reduced geopolitical tensions. Key indices, including the S&P 500 and the Dow Jones Industrial Average, experienced significant gains. Financial analysts suggest that if a formal agreement is reached, it could lead to eased sanctions and a more predictable economic environment, further boosting market confidence.",
+    "chinese": "由於投資人對華盛頓與德黑蘭之間談判的進展做出積極反應，美國股市週二創下歷史新高。美伊核子協議的潛在突破激發了人們對全球能源穩定和地緣政治緊張局勢緩解的樂觀情緒。包括標準普爾 500 指數和道瓊工業平均指數在內的主要指數均出現顯著增長。金融分析師指出，如果達成正式協議，可能會導致制裁放寬和更具預測性的經濟環境，從而進一步提振市場信心。",
+    "vocabulary": [
+      "historic (adj.): 歷史性的",
+      "negotiation (n.): 談判",
+      "breakthrough (n.): 突破",
+      "optimism (n.): 樂觀主義",
+      "stability (n.): 穩定",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張局勢",
+      "index (n.): 指數",
+      "significant (adj.): 顯著的",
+      "gain (n.): 漲幅、收益",
+      "analyst (n.): 分析師",
+      "formal (adj.): 正式的",
+      "agreement (n.): 協議",
+      "sanction (n.): 制裁",
+      "predictable (adj.): 可預測的",
+      "boost (v.): 促進、提振",
+      "confidence (n.): 信心",
+      "react (v.): 反應",
+      "potential (adj.): 潛在的",
+      "reach (v.): 達到"
+    ],
+    "quiz": [
+      {
+        "q": "What led to the historic highs in the US stock markets?",
+        "options": [
+          "A) Escalating tensions in Europe",
+          "B) Progress in negotiations between Washington and Tehran",
+          "C) A sudden drop in global oil prices",
+          "D) New domestic tax policies"
+        ],
+        "answer": "B) Progress in negotiations between Washington and Tehran"
+      },
+      {
+        "q": "According to the passage, what has the potential breakthrough in the US-Iran deal fueled?",
+        "options": [
+          "A) Pessimism about global trade",
+          "B) Optimism about global energy stability",
+          "C) Concerns over inflation",
+          "D) High volatility in tech stocks"
+        ],
+        "answer": "B) Optimism about global energy stability"
+      },
+      {
+        "q": "Which indices experienced significant gains according to the text?",
+        "options": [
+          "A) S&P 500 and Dow Jones",
+          "B) NASDAQ and FTSE 100",
+          "C) Nikkei 225 and DAX",
+          "D) Hang Seng and Shanghai Composite"
+        ],
+        "answer": "A) S&P 500 and Dow Jones"
+      },
+      {
+        "q": "What could a formal agreement lead to, according to financial analysts?",
+        "options": [
+          "A) Increased military presence",
+          "B) Eased sanctions and a predictable economic environment",
+          "C) Higher tariffs on European goods",
+          "D) A decrease in market confidence"
+        ],
+        "answer": "B) Eased sanctions and a predictable economic environment"
+      },
+      {
+        "q": "What does the word 'breakthrough' mean in the context of the passage?",
+        "options": [
+          "A) A sudden collapse",
+          "B) An important discovery or development",
+          "C) A physical barrier",
+          "D) A minor setback"
+        ],
+        "answer": "B) An important discovery or development"
+      },
+      {
+        "q": "Complete the sentence: 'The government decided to lift the _______ imposed on the neighboring country.'",
+        "options": [
+          "A) index",
+          "B) negotiations",
+          "C) sanctions",
+          "D) stability"
+        ],
+        "answer": "C) sanctions"
+      },
+      {
+        "q": "What is the meaning of the verb 'boost' as used in 'further boosting market confidence'?",
+        "options": [
+          "A) To decrease or reduce",
+          "B) To ignore or overlook",
+          "C) To improve or increase",
+          "D) To analyze or study"
+        ],
+        "answer": "C) To improve or increase"
+      },
+      {
+        "q": "Which word is an adjective meaning 'able to be foreseen or known beforehand'?",
+        "options": [
+          "A) historic",
+          "B) predictable",
+          "C) potential",
+          "D) significant"
+        ],
+        "answer": "B) predictable"
+      },
+      {
+        "q": "Translate 'geopolitical' into Chinese.",
+        "options": [
+          "A) 地質學的",
+          "B) 地理的",
+          "C) 地緣政治的",
+          "D) 地方自治的"
+        ],
+        "answer": "C) 地緣政治的"
+      },
+      {
+        "q": "What is the noun form of the verb 'negotiate'?",
+        "options": [
+          "A) negotiator",
+          "B) negotiation",
+          "C) negotiable",
+          "D) negotiated"
+        ],
+        "answer": "B) negotiation"
+      },
+      {
+        "q": "In the sentence 'investors reacted positively...', what part of speech is 'positively'?",
+        "options": [
+          "A) Noun",
+          "B) Adjective",
+          "C) Verb",
+          "D) Adverb"
+        ],
+        "answer": "D) Adverb"
+      },
+      {
+        "q": "What does 'tension' mean in the phrase 'reduced geopolitical tensions'?",
+        "options": [
+          "A) A state of mental or emotional strain or suspense",
+          "B) A physical expansion",
+          "C) A peaceful agreement",
+          "D) Economic prosperity"
+        ],
+        "answer": "A) A state of mental or emotional strain or suspense"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "美光科技市值首度突破1兆美元，股價飆升。",
+    "tabTitle": "科技",
+    "english": "Micron Technology's market capitalization has officially surpassed the historic $1 trillion milestone for the first time, fueled by an unprecedented surge in its stock price. This remarkable growth is largely driven by the skyrocketing demand for high-bandwidth memory (HBM) chips, which are essential for powering advanced artificial intelligence applications. Industry analysts suggest that Micron's strategic positioning in the semiconductor market has allowed it to outpace several key competitors. Consequently, investors remain highly optimistic about the company's long-term revenue prospects in the rapidly evolving tech landscape.",
+    "chinese": "美光科技（Micron Technology）的市值在其股價飆升的推動下，首次正式突破了歷史性的1兆美元里程碑。這一顯著的增長主要得益於對高頻寬記憶體（HBM）晶片的急劇需求，這些晶片對於驅動先進的人工智慧應用至關重要。行業分析師指出，美光在半導體市場的戰略定位使其超越了數家主要競爭對手。因此，投資者對該公司在快速發展的科技版圖中的長期營收前景保持高度樂觀。",
+    "vocabulary": [
+      "market capitalization (n.): 市值",
+      "surpass (v.): 超過，超越",
+      "milestone (n.): 里程碑",
+      "fuel (v.): 推動，刺激",
+      "unprecedented (adj.): 空前的，前所未有的",
+      "surge (n.): 激增，飆升",
+      "remarkable (adj.): 顯著的，非凡的",
+      "skyrocketing (adj.): 飛漲的，急遽上升的",
+      "high-bandwidth memory (n.): 高頻寬記憶體",
+      "essential (adj.): 至關重要的，不可或缺的",
+      "advanced (adj.): 先進的，進階的",
+      "application (n.): 應用，用途",
+      "analyst (n.): 分析師",
+      "strategic (adj.): 戰略的，策略性的",
+      "positioning (n.): 定位",
+      "semiconductor (n.): 半導體",
+      "outpace (v.): 超越，領先",
+      "optimistic (adj.): 樂觀的",
+      "revenue (n.): 營收，收入",
+      "prospect (n.): 前景，展望"
+    ],
+    "quiz": [
+      {
+        "q": "What does 'surpass' mean in the context of the article?",
+        "options": [
+          "To fall behind",
+          "To stay the same",
+          "To go beyond or exceed",
+          "To decrease rapidly"
+        ],
+        "answer": "To go beyond or exceed"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'unprecedented'?",
+        "options": [
+          "Common and expected",
+          "Never done or known before",
+          "Very expensive",
+          "Disappointing"
+        ],
+        "answer": "Never done or known before"
+      },
+      {
+        "q": "What major milestone did Micron Technology recently reach?",
+        "options": [
+          "It acquired its largest competitor.",
+          "Its market capitalization exceeded $1 trillion.",
+          "It developed a new AI software.",
+          "It closed all of its physical factories."
+        ],
+        "answer": "Its market capitalization exceeded $1 trillion."
+      },
+      {
+        "q": "What is the primary driver behind the skyrocketing demand for Micron's chips?",
+        "options": [
+          "The production of smart televisions",
+          "Advanced artificial intelligence applications",
+          "Traditional desktop computer upgrades",
+          "Automotive entertainment systems"
+        ],
+        "answer": "Advanced artificial intelligence applications"
+      },
+      {
+        "q": "In the text, the word 'surge' refers to a sudden ______.",
+        "options": [
+          "decrease in value",
+          "increase or rise",
+          "change in leadership",
+          "stagnation of technology"
+        ],
+        "answer": "increase or rise"
+      },
+      {
+        "q": "According to the article, why is Micron outpacing its competitors?",
+        "options": [
+          "Due to its strategic positioning in the semiconductor market",
+          "Because it offers the cheapest products",
+          "Because of its focus on consumer software",
+          "Due to government subsidies"
+        ],
+        "answer": "Due to its strategic positioning in the semiconductor market"
+      },
+      {
+        "q": "How do investors feel about Micron's long-term revenue prospects?",
+        "options": [
+          "Indifferent",
+          "Highly pessimistic",
+          "Highly optimistic",
+          "Extremely worried"
+        ],
+        "answer": "Highly optimistic"
+      },
+      {
+        "q": "What does 'essential' mean in the sentence 'essential for powering advanced AI'?",
+        "options": [
+          "Optional",
+          "Extremely important or absolutely necessary",
+          "Outdated",
+          "Cheap"
+        ],
+        "answer": "Extremely important or absolutely necessary"
+      },
+      {
+        "q": "What type of chips is Micron experiencing high demand for?",
+        "options": [
+          "Standard graphics cards",
+          "High-bandwidth memory (HBM) chips",
+          "Low-power audio chips",
+          "Analog sensors"
+        ],
+        "answer": "High-bandwidth memory (HBM) chips"
+      },
+      {
+        "q": "The word 'prospects' in the text refers to ______.",
+        "options": [
+          "past achievements",
+          "financial losses",
+          "future possibilities or chances of success",
+          "current employees"
+        ],
+        "answer": "future possibilities or chances of success"
+      },
+      {
+        "q": "What is the meaning of 'market capitalization'?",
+        "options": [
+          "The total value of a company's outstanding shares of stock",
+          "The amount of cash a company has in the bank",
+          "The number of products a company sells yearly",
+          "The total debt of a corporation"
+        ],
+        "answer": "The total value of a company's outstanding shares of stock"
+      },
+      {
+        "q": "Which word is an antonym of 'optimistic'?",
+        "options": [
+          "Hopeful",
+          "Pessimistic",
+          "Confident",
+          "Positive"
+        ],
+        "answer": "Pessimistic"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
