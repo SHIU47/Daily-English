@@ -15,7 +15,7 @@ const GITHUB_OWNER     = process.env.GITHUB_OWNER || 'SHIU47';
 const GITHUB_REPO      = process.env.GITHUB_REPO  || 'Daily-English';
 const TG_TOKEN         = process.env.TELEGRAM_BOT_TOKEN;
 const TG_CHAT_ID       = process.env.TELEGRAM_CHAT_ID;
-const TELEGRAM_TIMEOUT = parseInt(process.env.TELEGRAM_TIMEOUT) || 10 * 60 * 1000; // 預設 10 分鐘
+const TELEGRAM_TIMEOUT = parseInt(process.env.TELEGRAM_TIMEOUT) || 15 * 60 * 1000; // 預設 15 分鐘
 
 const GEMINI_TEXT_URL  = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 const GEMINI_IMAGE_URL = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${GEMINI_API_KEY}`;
