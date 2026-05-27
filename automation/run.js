@@ -48,7 +48,7 @@ const info = (msg) => console.log(`  >>  ${msg}`);
 const warn = (msg) => console.log(`  !!  ${msg}`);
 
 // ── Gemini 文字 API ───────────────────────────────────────────────────────────
-async function geminiChat(prompt, useSearch = false, retries = 3) {
+async function geminiChat(prompt, useSearch = false, retries = 5) {
   for (let i = 0; i < retries; i++) {
     try {
       const payload = {
@@ -73,8 +73,9 @@ async function geminiChat(prompt, useSearch = false, retries = 3) {
       return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     } catch (err) {
       if (err.message.includes('429') || err.message.includes('Quota') || err.message.includes('limit') || err.message.includes('high demand') || err.message.includes('temporarily')) {
-         warn(`API 流量限制 (${i+1}/${retries}): 等待 65 秒後重試...`);
-         if (i < retries - 1) await new Promise(r => setTimeout(r, 65000));
+         const wait = 120 + i * 60; // 120s, 180s, 240s, 300s, 360s
+         warn(`API 流量限制 (${i+1}/${retries}): 等待 ${wait} 秒後重試...`);
+         if (i < retries - 1) await new Promise(r => setTimeout(r, wait * 1000));
          else throw new Error(`Gemini API 流量過高，已重試 ${retries} 次仍失敗`);
       } else {
          warn(`Gemini 呼叫失敗 (${i+1}/${retries}): ${err.message}`);
@@ -401,9 +402,9 @@ async function generateNewsHTML(selection, dates) {
       });
       ok(`單篇完成: ${n.zh}`);
       
-      // 插入 5 秒安全延遲，避免瞬間打光 Gemini 免費版 15 RPM 的限流額度
-      info('API 限流保護：冷卻 5 秒...');
-      await new Promise(r => setTimeout(r, 5000));
+      // 插入 10 秒安全延遲，避免瞬間打光 Gemini 免費版 15 RPM 的限流額度
+      info('API 限流保護：冷卻 10 秒...');
+      await new Promise(r => setTimeout(r, 10000));
     } catch (err) {
       require('fs').writeFileSync(`./error_json_${i}.txt`, match[0], 'utf8');
       throw new Error(`第 ${i+1} 篇 JSON 解析失敗：${err.message} (已紀錄到 error_json_${i}.txt)`);
