@@ -183,6 +183,9 @@ async function waitForSelections(count, prefix, onSelect, initialSelected = []) 
       if (val === prefix + ':REFRESH') {
         return { action: 'refresh', selected };
       }
+      if (val === prefix + ':CANCEL') {
+        return { action: 'cancel', selected };
+      }
       if (!val.startsWith(prefix + ':')) continue;
       const id = val.replace(prefix + ':', '');
       if (selected.includes(id)) continue;
@@ -300,7 +303,10 @@ async function selectNewsViaTelegram(news, dates) {
         if (list[i+1]) row.push({ text: `${list[i+1].id}. ${list[i+1].zh}`, callback_data: `${prefix}:${list[i+1].id}` });
         kb.push(row);
       }
-      kb.push([{ text: `🔄 換一批${categoryName}`, callback_data: `${prefix}:REFRESH` }]);
+      kb.push([
+        { text: `🔄 換一批${categoryName}`, callback_data: `${prefix}:REFRESH` },
+        { text: `❌ 取消本次執行`, callback_data: `${prefix}:CANCEL` }
+      ]);
 
       // 如果是 AUTO_SELECT 模式，直接自動選取前幾則，不發送按鈕等待
       if (AUTO_SELECT) {
@@ -328,6 +334,11 @@ async function selectNewsViaTelegram(news, dates) {
           done ? [] : kb
         );
       });
+
+      if (result.action === 'cancel') {
+        await tgEdit(msgId, text + `\n\n❌ <b>已取消本次執行！</b>`, []);
+        return null;
+      }
 
       if (result.action === 'refresh') {
         // 換一批：先保留此批中已選的，再重新生成
@@ -377,7 +388,9 @@ async function selectNewsViaTelegram(news, dates) {
 
   await tgSend(`📅 <b>${dates.display}</b>`);
   const selectedTW = await selectCategory('taiwan', '台灣新聞', '🇹🇼', 3, 'TW');
+  if (!selectedTW) return null;
   const selectedINT = await selectCategory('international', '國際新聞', '🌍', 4, 'INT');
+  if (!selectedINT) return null;
 
   // 封面新聞
   const allSelected = [...selectedTW, ...selectedINT];
@@ -394,6 +407,7 @@ async function selectNewsViaTelegram(news, dates) {
       text: `${i+1}. ${n.zh}`,
       callback_data: `COVER:${i}`
     }]));
+    coverKb.push([{ text: `❌ 取消本次執行`, callback_data: `COVER:CANCEL` }]);
 
     const coverMsg = await tgSendButtons(coverText, coverKb);
     const coverMsgId = coverMsg.result?.message_id;
@@ -402,6 +416,11 @@ async function selectNewsViaTelegram(news, dates) {
       const idx = parseInt(sel[0]);
       await tgEdit(coverMsgId, coverText + `\n\n✅ 封面：${allSelected[idx].zh}`, []);
     });
+
+    if (coverResult.action === 'cancel') {
+      await tgEdit(coverMsgId, coverText + `\n\n❌ <b>已取消本次執行！</b>`, []);
+      return null;
+    }
 
     if (coverResult.selected.length < 1) {
       warn('封面選取超時，自動選擇第一則新聞作為封面');
@@ -897,6 +916,26 @@ async function pushToGitHub(files) {
   }
 }
 
+// ── 檢查檔案是否存在 ─────────────────────────────────────────────────────────
+async function checkFileExists(path) {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒超時
+    const res = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodeURIComponent(path)}`,
+      { 
+        headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json' },
+        signal: controller.signal
+      }
+    );
+    clearTimeout(timeoutId);
+    return res.ok;
+  } catch (err) {
+    warn(`檢查檔案是否存在時發生網路錯誤: ${err.message}`);
+    return false;
+  }
+}
+
 // ── 主程式 ────────────────────────────────────────────────────────────────────
 async function main() {
   console.log('\n========================================');
@@ -921,6 +960,20 @@ async function main() {
   const dates = getTodayStrings();
   info(`今日: ${dates.dotDate}`);
 
+  // 檢查今天的新聞是否已經產生過
+  const FORCE_RUN = process.env.FORCE_RUN === 'true';
+  const todayNewsPath = `News/${dates.dotDate}英文新聞.html`;
+  try {
+    const exists = await checkFileExists(todayNewsPath);
+    if (exists && !FORCE_RUN) {
+      console.log(`\n📅 今天的新聞 (${dates.dotDate}) 已經產生並上傳過，跳過本次執行以防重複。`);
+      await tgSend(`ℹ️ <b>系統通知</b>\n📅 ${dates.display} 的英文新聞先前已產生並更新完成。系統已自動跳過本次重複執行。\n\n<i>(若需強制重新產生，請於 GitHub Actions 設定環境變數 FORCE_RUN=true 重新執行)</i>`);
+      return;
+    }
+  } catch (err) {
+    warn(`檢查重複執行時出錯: ${err.message}`);
+  }
+
   try {
     // 1. 產生新聞
     const news = await generateNews(dates);
@@ -928,6 +981,11 @@ async function main() {
     // 2. Telegram 選新聞
     await tgSend(`🚀 <b>每日英文新聞啟動</b>\n📅 ${dates.display}\n\n正在搜尋今日新聞，請稍候...`);
     const selection = await selectNewsViaTelegram(news, dates);
+    if (!selection) {
+      info('使用者取消了本次執行。');
+      await tgSend(`❌ <b>本次執行已被使用者手動取消。</b>`);
+      return;
+    }
 
     // 3. 產生 HTML (改為逐次機制，由內部接管 tgSend)
     const articles = await generateNewsHTML(selection, dates);
