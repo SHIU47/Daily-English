@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 28, 2026：台灣經濟、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電傳年終獎金將大增逾三成\nTaiwan Semiconductor Manufacturing Company (TSMC) is rumored to increase its year-end bonuses by over 30% this year, driven by strong global demand for advanced chips. Insiders suggest that the semiconductor giant's record-breaking revenues have prompted management to reward employees generously. While TSMC has not officially confirmed the exact figures, the speculation has already boosted morale within the tech sector. This potential bonus hike highlights Taiwan's dominant position in the global supply chain and its ability to retain top talent amidst fierce competition.\n\n[2] 黃仁勳喊話台灣需更多電力，輝達在台投資千億美元\nNVIDIA CEO Jensen Huang has urged Taiwan to secure a stable and abundant power supply to support its growing artificial intelligence infrastructure. Speaking at a recent tech forum, Huang emphasized that AI supercomputing requires immense energy, making reliable electricity crucial for Taiwan's technological competitiveness. To demonstrate commitment, NVIDIA plans to invest billions of dollars in Taiwan to build advanced R&D centers and AI factories. This massive investment aims to solidify Taiwan's position as a global hub for next-generation technology, provided the island can meet the escalating energy demands.\n\n[3] 普安科技Computex將展示新世代AI邊緣到雲端架構\nAt the upcoming Computex exhibition, Infortrend Technology is set to unveil its next-generation AI edge-to-cloud storage solutions. This innovative architecture is designed to optimize data processing by seamlessly integrating edge computing with cloud storage, thereby reducing latency for enterprise AI applications. Industry experts expect this advancement to significantly boost operational efficiency and security for businesses handling massive datasets. Visitors will have the opportunity to experience live demonstrations of these cutting-edge storage systems at the company's booth.",
+    "chinese": "【1】台積電傳年終獎金將大增逾三成\n傳台積電（TSMC）今年將因全球對先進晶片的強勁需求，把年終獎金提高三成以上。消息人士透露，這家半導體巨擘創紀錄的營收，促使管理階層慷慨犒賞員工。雖然台積電尚未正式證實確切數據，但此傳言已提振了科技業的士氣。這次潛在的獎金調升，凸顯了台灣在全球供應鏈中的主導地位，以及在激烈競爭中留住頂尖人才的能力。\n\n【2】黃仁勳喊話台灣需更多電力，輝達在台投資千億美元\n輝達（NVIDIA）執行長黃仁勳呼籲台灣確保穩定且充足的電力供應，以支持其日益成長的人工智慧基礎建設。黃仁勳在近期的一場科技論壇上強調，人工智慧超算需要龐大的能源，這使得可靠的電力對台灣的科技競爭力至關重要。為了展現承諾，輝達計劃在台灣投資數十億美元，以建造先進的研發中心和人工智慧工廠。這項龐大的投資旨在鞏固台灣作為下一代科技全球樞紐的地位，前提是這座島嶼能夠滿足不斷攀升的能源需求。\n\n【3】普安科技Computex將展示新世代AI邊緣到雲端架構\n在即將到來的台北國際電腦展（Computex）上，普安科技將展示其新世代 AI 邊緣到雲端儲存解決方案。這種創新架構旨在透過將邊緣運算與雲端儲存無縫整合來優化數據處理，從而降低企業級 AI 應用的延遲。行業專家預計，這一進步將顯著提升處理海量數據之企業的營運效率與安全性。參觀者將有機會在該公司的展位上親身體驗這些尖端儲存系統的現場演示。",
+    "vocabulary": [
+      "rumor (v.): 謠傳、傳言",
+      "boost (v.): 提高、促進",
+      "year-end bonus (n.): 年終獎金",
+      "advanced (adj.): 先進的、高等的",
+      "insider (n.): 消息人士、內部人員",
+      "semiconductor (n.): 半導體",
+      "giant (n.): 巨擘、大企業",
+      "record-breaking (adj.): 創紀錄的",
+      "revenue (n.): 營收、收入",
+      "prompt (v.): 促使、推動",
+      "generously (adv.): 慷慨地、大方地",
+      "confirm (v.): 證實、確認",
+      "speculation (n.): 推測、投機",
+      "morale (n.): 士氣、鬥志",
+      "potential (adj.): 潛在的、可能的",
+      "hike (n.): 增加、上升",
+      "dominant (adj.): 主導的、支配的",
+      "supply chain (n.): 供應鏈",
+      "retain (v.): 留住、保有",
+      "fierce (adj.): 激烈的、猛烈的",
+      "urge (v.): 敦促；大力推薦",
+      "secure (v.): 獲得；確保...安全",
+      "abundant (adj.): 充足的；豐富的",
+      "infrastructure (n.): 基礎建設",
+      "forum (n.): 論壇；研討會",
+      "emphasize (v.): 強調",
+      "supercomputing (n.): 超級運算",
+      "immense (adj.): 巨大的；極大的",
+      "reliable (adj.): 可靠的；可信賴的",
+      "crucial (adj.): 至關重要的；關鍵的",
+      "competitiveness (n.): 競爭力",
+      "demonstrate (v.): 展現；證實",
+      "commitment (n.): 承諾；奉獻",
+      "invest (v.): 投資",
+      "advanced (adj.): 先進的；高等的",
+      "solidify (v.): 鞏固；使凝固",
+      "hub (n.): 樞紐；中心",
+      "next-generation (adj.): 下一代的",
+      "escalating (adj.): 不斷上升的；加劇的",
+      "demand (n.): 需求",
+      "unveil (v.): 發表；推出；揭幕",
+      "next-generation (adj.): 下一代的；新世代的",
+      "edge-to-cloud (adj.): 邊緣到雲端的",
+      "architecture (n.): 架構；結構",
+      "exhibition (n.): 展覽；展覽會",
+      "innovative (adj.): 創新的",
+      "optimize (v.): 優化；使完善",
+      "seamlessly (adv.): 無縫地",
+      "integrate (v.): 整合；合併",
+      "latency (n.): 延遲；潛伏期",
+      "enterprise (n.): 企業；公司",
+      "advancement (n.): 進步；進展",
+      "significantly (adv.): 顯著地",
+      "boost (v.): 提升；促進",
+      "operational (adj.): 營運的；操作上的",
+      "efficiency (n.): 效率",
+      "massive (adj.): 海量的；巨大的",
+      "dataset (n.): 數據集",
+      "demonstration (n.): 演示；示範",
+      "cutting-edge (adj.): 尖端的；最先進的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "TSMC's new factory in the US",
+          "TSMC's rumored year-end bonus increase",
+          "A decline in global chip demand",
+          "Changes in TSMC's management"
+        ],
+        "answer": "TSMC's rumored year-end bonus increase"
+      },
+      {
+        "q": "According to the article, what is driving the rumored bonus increase?",
+        "options": [
+          "Strong global demand for advanced chips",
+          "Government subsidies",
+          "A reduction in employee working hours",
+          "Mergers with other tech companies"
+        ],
+        "answer": "Strong global demand for advanced chips"
+      },
+      {
+        "q": "What has prompted TSMC's management to reward employees generously?",
+        "options": [
+          "Pressure from labor unions",
+          "Record-breaking revenues",
+          "New environmental regulations",
+          "Competitors' hiring strategies"
+        ],
+        "answer": "Record-breaking revenues"
+      },
+      {
+        "q": "Has TSMC officially confirmed the exact figures of the bonus hike?",
+        "options": [
+          "Yes, they released an official statement.",
+          "No, they have not officially confirmed them.",
+          "Yes, but only to the government.",
+          "No, they denied the rumors completely."
+        ],
+        "answer": "No, they have not officially confirmed them."
+      },
+      {
+        "q": "What effect has the speculation already had on the tech sector?",
+        "options": [
+          "It has caused stock prices to crash.",
+          "It has boosted morale.",
+          "It has led to widespread protests.",
+          "It has decreased job applications."
+        ],
+        "answer": "It has boosted morale."
+      },
+      {
+        "q": "What does the word 'dominant' in the text mean?",
+        "options": [
+          "Weak and unstable",
+          "Newly established",
+          "Most important, powerful, or influential",
+          "Dependent on others"
+        ],
+        "answer": "Most important, powerful, or influential"
+      },
+      {
+        "q": "Which word in the text is closest in meaning to 'encourage' or 'cause someone to take action'?",
+        "options": [
+          "retain",
+          "prompt",
+          "confirm",
+          "boost"
+        ],
+        "answer": "prompt"
+      },
+      {
+        "q": "The word 'morale' refers to:",
+        "options": [
+          "The ethical standards of a company",
+          "The amount of money earned",
+          "The level of confidence and enthusiasm of a group",
+          "The physical health of employees"
+        ],
+        "answer": "The level of confidence and enthusiasm of a group"
+      },
+      {
+        "q": "What does the potential bonus hike highlight about Taiwan?",
+        "options": [
+          "Its reliance on foreign agricultural products",
+          "Its dominant position in the global supply chain",
+          "Its high unemployment rate",
+          "Its lack of skilled labor"
+        ],
+        "answer": "Its dominant position in the global supply chain"
+      },
+      {
+        "q": "Complete the sentence: The company hopes to _______ its top talent by offering better benefits.",
+        "options": [
+          "dismiss",
+          "retain",
+          "neglect",
+          "export"
+        ],
+        "answer": "retain"
+      },
+      {
+        "q": "What is the meaning of 'speculation'?",
+        "options": [
+          "A proven scientific fact",
+          "The act of forming opinions without definite proof",
+          "An official government decree",
+          "A detailed financial audit"
+        ],
+        "answer": "The act of forming opinions without definite proof"
+      },
+      {
+        "q": "Which of the following is antonymous to 'fierce' (as in 'fierce competition')?",
+        "options": [
+          "intense",
+          "mild",
+          "aggressive",
+          "severe"
+        ],
+        "answer": "mild"
+      },
+      {
+        "q": "Why did Jensen Huang urge Taiwan to secure a stable power supply?",
+        "options": [
+          "To lower the global price of AI hardware",
+          "To support its growing artificial intelligence infrastructure",
+          "To reduce the carbon emissions of local factories",
+          "To compete with the tourism industry in other countries"
+        ],
+        "answer": "To support its growing artificial intelligence infrastructure"
+      },
+      {
+        "q": "How much money does NVIDIA plan to invest in Taiwan according to the text?",
+        "options": [
+          "Millions of dollars",
+          "Billions of dollars",
+          "Trillions of dollars",
+          "No financial commitment was made"
+        ],
+        "answer": "Billions of dollars"
+      },
+      {
+        "q": "What does NVIDIA plan to build with its investment in Taiwan?",
+        "options": [
+          "Coal-fired power plants",
+          "Advanced R&D centers and AI factories",
+          "Residential buildings for employees",
+          "Traditional manufacturing warehouses"
+        ],
+        "answer": "Advanced R&D centers and AI factories"
+      },
+      {
+        "q": "Which word in the text is closest in meaning to 'vital' or 'extremely important'?",
+        "options": [
+          "abundant",
+          "crucial",
+          "massive",
+          "escalating"
+        ],
+        "answer": "crucial"
+      },
+      {
+        "q": "What is the meaning of the word 'solidify' as used in the passage?",
+        "options": [
+          "To turn a liquid into a gas",
+          "To make a position or relationship stronger and more certain",
+          "To dissolve completely in water",
+          "To break down into smaller parts"
+        ],
+        "answer": "To make a position or relationship stronger and more certain"
+      },
+      {
+        "q": "In the sentence 'NVIDIA plans to invest billions of dollars...', the word 'to invest' is a/an ________.",
+        "options": [
+          "gerund",
+          "infinitive",
+          "past participle",
+          "prepositional phrase"
+        ],
+        "answer": "infinitive"
+      },
+      {
+        "q": "Fill in the blank: The country's technological ________ depends heavily on its ability to innovate.",
+        "options": [
+          "competitiveness",
+          "infrastructure",
+          "commitment",
+          "demand"
+        ],
+        "answer": "competitiveness"
+      },
+      {
+        "q": "What is the main condition for Taiwan to solidify its position as a global tech hub?",
+        "options": [
+          "It must lower its tax rates for foreign companies.",
+          "It must meet the escalating energy demands.",
+          "It must stop investing in other countries.",
+          "It must focus solely on traditional agriculture."
+        ],
+        "answer": "It must meet the escalating energy demands."
+      },
+      {
+        "q": "What does the word 'abundant' mean?",
+        "options": [
+          "Very rare and difficult to find",
+          "Existing or available in large quantities",
+          "Extremely expensive to produce",
+          "Damaged beyond repair"
+        ],
+        "answer": "Existing or available in large quantities"
+      },
+      {
+        "q": "In the phrase 'provided the island can meet...', what does 'provided' mean?",
+        "options": [
+          "given that / on the condition that",
+          "because of",
+          "although",
+          "in spite of"
+        ],
+        "answer": "given that / on the condition that"
+      },
+      {
+        "q": "Which of the following is closest in meaning to the verb 'urge'?",
+        "options": [
+          "To strongly advise or try to persuade",
+          "To ignore or neglect",
+          "To delay a decision",
+          "To prevent someone from acting"
+        ],
+        "answer": "To strongly advise or try to persuade"
+      },
+      {
+        "q": "According to the passage, what requires 'immense energy'?",
+        "options": [
+          "Building traditional offices",
+          "AI supercomputing",
+          "Organizing tech forums",
+          "Securing financial investments"
+        ],
+        "answer": "AI supercomputing"
+      },
+      {
+        "q": "Where will Infortrend Technology unveil its new solutions?",
+        "options": [
+          "At a private press conference",
+          "At the Computex exhibition",
+          "On their official website only",
+          "At a local university"
+        ],
+        "answer": "At the Computex exhibition"
+      },
+      {
+        "q": "What is the main purpose of the new edge-to-cloud architecture?",
+        "options": [
+          "To optimize data processing",
+          "To replace cloud storage entirely",
+          "To increase hardware manufacturing costs",
+          "To limit internet access for security"
+        ],
+        "answer": "To optimize data processing"
+      },
+      {
+        "q": "How does the new architecture reduce latency for enterprise AI applications?",
+        "options": [
+          "By avoiding the use of AI",
+          "By deleting massive datasets",
+          "By seamlessly integrating edge computing with cloud storage",
+          "By limiting the number of users"
+        ],
+        "answer": "By seamlessly integrating edge computing with cloud storage"
+      },
+      {
+        "q": "What does the word 'unveil' mean in the text?",
+        "options": [
+          "To hide or conceal",
+          "To show or introduce for the first time",
+          "To cancel an event",
+          "To purchase new equipment"
+        ],
+        "answer": "To show or introduce for the first time"
+      },
+      {
+        "q": "Which word is closest in meaning to 'cutting-edge'?",
+        "options": [
+          "Outdated",
+          "Sharp-edged",
+          "State-of-the-art",
+          "Low-cost"
+        ],
+        "answer": "State-of-the-art"
+      },
+      {
+        "q": "Complete the sentence: The new system is designed to ________ efficiency.",
+        "options": [
+          "boost",
+          "decline",
+          "neglect",
+          "waste"
+        ],
+        "answer": "boost"
+      },
+      {
+        "q": "What can visitors do at Infortrend's booth?",
+        "options": [
+          "Buy stock options",
+          "Experience live demonstrations",
+          "Attend a coding bootcamp",
+          "Sign a lifetime contract"
+        ],
+        "answer": "Experience live demonstrations"
+      },
+      {
+        "q": "What is the meaning of 'latency'?",
+        "options": [
+          "The speed of light",
+          "The delay before a transfer of data begins",
+          "The storage capacity of a hard drive",
+          "The cost of cloud services"
+        ],
+        "answer": "The delay before a transfer of data begins"
+      },
+      {
+        "q": "Who is expected to benefit from the operational efficiency and security boost?",
+        "options": [
+          "Individual smartphone users only",
+          "Businesses handling massive datasets",
+          "Hardware repair shops",
+          "Competitors of Infortrend"
+        ],
+        "answer": "Businesses handling massive datasets"
+      },
+      {
+        "q": "What is the adverb form used in the text to describe how edge computing and cloud storage are combined?",
+        "options": [
+          "Seamlessly",
+          "Roughly",
+          "Separately",
+          "Temporarily"
+        ],
+        "answer": "Seamlessly"
+      },
+      {
+        "q": "What does 'massive' mean?",
+        "options": [
+          "Very small",
+          "Extremely large",
+          "Unimportant",
+          "Slow-moving"
+        ],
+        "answer": "Extremely large"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a benefit of the new architecture?",
+        "options": [
+          "Reduced latency",
+          "Boosted operational efficiency",
+          "Lower hardware manufacturing costs",
+          "Improved security"
+        ],
+        "answer": "Lower hardware manufacturing costs"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美軍對星鏈依賴加深，SpaceX軍用收費飆漲五倍",
+    "tabTitle": "科技",
+    "english": "The US Pentagon is facing rising costs as its reliance on SpaceX's Starlink satellite network deepens. According to recent reports, SpaceX has increased its military service fees fivefold, citing enhanced security measures and dedicated bandwidth for defense operations. Despite the steep price hike, military officials state that Starlink remains irreplaceable for tactical communications in remote areas. This situation has sparked debates regarding the US military's heavy dependence on a single private contractor for critical national security infrastructure.",
+    "chinese": "由於對 SpaceX 的星鏈（Starlink）衛星網絡依賴加深，美國國防部正面臨不斷上升的成本。根據最新報導，SpaceX 已將其軍用服務費用提高了五倍，理由是加強了安全措施並為國防行動提供了專用頻寬。儘管價格急劇上漲，軍方官員表示，星鏈在偏遠地區的戰術通信中仍具有不可替代的地位。這種局面引發了關於美國軍隊在關鍵國家安全基礎設施上過度依賴單一民營承包商的辯論。",
+    "vocabulary": [
+      "Pentagon (n.): 五角大廈（美國國防部）",
+      "reliance (n.): 依賴，信賴",
+      "satellite (n.): 衛星",
+      "network (n.): 網絡，網狀系統",
+      "military (adj.): 軍事的，軍方的",
+      "fee (n.): 費用，服務費",
+      "fivefold (adv./adj.): 五倍地，五倍的",
+      "cite (v.): 引用，引述（作為理由）",
+      "enhance (v.): 提高，增加，加強",
+      "measure (n.): 措施，方法",
+      "dedicated (adj.): 專用的，專門的",
+      "bandwidth (n.): 頻寬",
+      "defense (n.): 國防，防衛",
+      "steep (adj.): （價格等）急劇升高的，陡峭的",
+      "irreplaceable (adj.): 不可替代的，獨一無二的",
+      "tactical (adj.): 戰術上的",
+      "communication (n.): 通訊，溝通",
+      "debate (n.): 辯論，爭論",
+      "dependence (n.): 依賴，依靠",
+      "infrastructure (n.): 基礎建設，基礎設施"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main reason for the rising costs faced by the Pentagon?",
+        "options": [
+          "A decrease in military budget",
+          "Increased reliance on SpaceX's Starlink",
+          "Building new military bases",
+          "Buying more military aircraft"
+        ],
+        "answer": "Increased reliance on SpaceX's Starlink"
+      },
+      {
+        "q": "How much did SpaceX increase its military service fees?",
+        "options": [
+          "Twofold",
+          "Threefold",
+          "Fourfold",
+          "Fivefold"
+        ],
+        "answer": "Fivefold"
+      },
+      {
+        "q": "What reason did SpaceX give for the price hike?",
+        "options": [
+          "Decreasing demand",
+          "Enhanced security measures and dedicated bandwidth",
+          "Fuel shortages",
+          "Competition from other companies"
+        ],
+        "answer": "Enhanced security measures and dedicated bandwidth"
+      },
+      {
+        "q": "How do military officials view Starlink's role in remote areas?",
+        "options": [
+          "It is useless",
+          "It is easily replaced",
+          "It remains irreplaceable",
+          "It is too slow"
+        ],
+        "answer": "It remains irreplaceable"
+      },
+      {
+        "q": "What debate has this situation sparked?",
+        "options": [
+          "The reliance on private contractors for national security",
+          "The quality of satellite internet",
+          "The salary of military personnel",
+          "The location of SpaceX launch pads"
+        ],
+        "answer": "The reliance on private contractors for national security"
+      },
+      {
+        "q": "What does the word 'reliance' mean?",
+        "options": [
+          "Rejection",
+          "Dependence",
+          "Resistance",
+          "Independence"
+        ],
+        "answer": "Dependence"
+      },
+      {
+        "q": "Which word is closest in meaning to 'steep' as used in the text?",
+        "options": [
+          "Low",
+          "Flat",
+          "Sharp",
+          "Gradual"
+        ],
+        "answer": "Sharp"
+      },
+      {
+        "q": "What does 'dedicated' mean in the phrase 'dedicated bandwidth'?",
+        "options": [
+          "Shared publicly",
+          "Reserved for a specific purpose",
+          "Unstable",
+          "Cheap and affordable"
+        ],
+        "answer": "Reserved for a specific purpose"
+      },
+      {
+        "q": "Complete the sentence: The country built new ________ to support its economic growth.",
+        "options": [
+          "infrastructure",
+          "reliance",
+          "bandwidth",
+          "debate"
+        ],
+        "answer": "infrastructure"
+      },
+      {
+        "q": "What is the Chinese translation for 'tactical'?",
+        "options": [
+          "戰略的",
+          "戰術上的",
+          "技術的",
+          "藝術的"
+        ],
+        "answer": "戰術上的"
+      },
+      {
+        "q": "Which of the following is the opposite of 'irreplaceable'?",
+        "options": [
+          "Essential",
+          "Replaceable",
+          "Unique",
+          "Permanent"
+        ],
+        "answer": "Replaceable"
+      },
+      {
+        "q": "The verb 'cite' is closest in meaning to:",
+        "options": [
+          "ignore",
+          "mention as a reason",
+          "hide",
+          "design"
+        ],
+        "answer": "mention as a reason"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "Meta推出AI聊天機器人訂閱服務，開拓新收入來源",
+    "tabTitle": "科技",
+    "english": "Meta has officially launched a premium subscription service for its advanced AI chatbot, aiming to diversify and boost its revenue streams. The new paid tier offers users exclusive features, including faster response times, priority access during peak hours, and highly personalized assistance. Industry experts suggest this move is a strategic attempt to monetize Meta's heavy investments in artificial intelligence. While the basic version remains free, this subscription model positions Meta to compete directly with other tech giants in the rapidly growing AI market.",
+    "chinese": "Meta 已正式為其先進的 AI 聊天機器人推出付費訂閱服務，旨在實現多元化並提升其收入來源。新的付費層級為用戶提供專屬功能，包括更快的響應時間、尖峰時段的優先使用權以及高度個人化的協助。行業專家表示，此舉是將 Meta 在人工智慧領域的巨額投資轉化為商業利益的策略性嘗試。雖然基本版本仍保持免費，但這種訂閱模式使 Meta 能夠在快速增長的 AI 市場中，直接與其他科技巨頭展開競爭。",
+    "vocabulary": [
+      "launch (v.): 推出；發起",
+      "premium (adj.): 高級的；優質的",
+      "subscription (n.): 訂閱",
+      "aim (v.): 旨在；目標在於",
+      "diversify (v.): 多元化；多樣化",
+      "revenue stream (n. phr.): 收入來源",
+      "tier (n.): 層級；階層",
+      "exclusive (adj.): 專屬的；獨有的",
+      "response (n.): 回應；響應",
+      "priority (n.): 優先權；優先考慮的事",
+      "peak hours (n. phr.): 尖峰時段",
+      "assistance (n.): 協助；幫助",
+      "expert (n.): 專家",
+      "strategic (adj.): 策略性的；戰略的",
+      "monetize (v.): 將……貨幣化；轉化為商業利益",
+      "investment (n.): 投資",
+      "artificial intelligence (n. phr.): 人工智慧",
+      "remain (v.): 保持；依然是",
+      "position (v.): 使處於（某位置）；定位",
+      "compete (v.): 競爭"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of Meta launching the subscription service?",
+        "options": [
+          "To replace the free version completely",
+          "To boost and diversify its revenue streams",
+          "To limit user access to its AI",
+          "To reduce its investments in AI"
+        ],
+        "answer": "To boost and diversify its revenue streams"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as an exclusive feature of the paid tier?",
+        "options": [
+          "Faster response times",
+          "Priority access during peak hours",
+          "Highly personalized assistance",
+          "Free hardware devices"
+        ],
+        "answer": "Free hardware devices"
+      },
+      {
+        "q": "What will happen to the basic version of Meta's AI chatbot?",
+        "options": [
+          "It will be discontinued",
+          "It remains free",
+          "It will require a small fee",
+          "It will only be available on weekends"
+        ],
+        "answer": "It remains free"
+      },
+      {
+        "q": "What does the word 'monetize' mean in the context of the passage?",
+        "options": [
+          "To print paper money",
+          "To make a profit or earn revenue from something",
+          "To spend a large amount of money",
+          "To borrow money from a bank"
+        ],
+        "answer": "To make a profit or earn revenue from something"
+      },
+      {
+        "q": "Fill in the blank: The company decided to _______ its product line to attract different types of customers.",
+        "options": [
+          "diversify",
+          "remain",
+          "compete",
+          "launch"
+        ],
+        "answer": "diversify"
+      },
+      {
+        "q": "What is the synonym of 'premium' as used in the text?",
+        "options": [
+          "Cheap",
+          "Standard",
+          "High-quality",
+          "Free"
+        ],
+        "answer": "High-quality"
+      },
+      {
+        "q": "During _______, the subway is extremely crowded.",
+        "options": [
+          "response times",
+          "peak hours",
+          "revenue streams",
+          "investment tiers"
+        ],
+        "answer": "peak hours"
+      },
+      {
+        "q": "According to the experts, the launch is a strategic attempt to monetize Meta's heavy investments in what field?",
+        "options": [
+          "Virtual reality hardware",
+          "Social media advertising",
+          "Artificial intelligence",
+          "Renewable energy"
+        ],
+        "answer": "Artificial intelligence"
+      },
+      {
+        "q": "Members of the club enjoy _______ benefits that are not available to the public.",
+        "options": [
+          "strategic",
+          "artificial",
+          "exclusive",
+          "basic"
+        ],
+        "answer": "exclusive"
+      },
+      {
+        "q": "The government promised to provide financial _______ to small businesses affected by the pandemic.",
+        "options": [
+          "assistance",
+          "subscription",
+          "priority",
+          "tier"
+        ],
+        "answer": "assistance"
+      },
+      {
+        "q": "Which word means 'a level or grade within a system'?",
+        "options": [
+          "Stream",
+          "Tier",
+          "Peak",
+          "Version"
+        ],
+        "answer": "Tier"
+      },
+      {
+        "q": "The company is well-_______ to take advantage of the new market opportunities.",
+        "options": [
+          "positioned",
+          "competed",
+          "remained",
+          "diversified"
+        ],
+        "answer": "positioned"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "字節跳動傳將投入700億美元鉅資發展AI",
+    "tabTitle": "科技",
+    "english": "ByteDance, the parent company of TikTok, is reportedly planning to invest a staggering $70 billion into artificial intelligence development by the end of 2026. This massive capital injection aims to accelerate the company's research in large language models and advanced algorithm technologies. Industry experts suggest that this strategic move is designed to challenge global tech giants in the highly competitive AI race. While ByteDance has not officially confirmed the budget, sources close to the matter indicate that the funding will also support the construction of new data centers worldwide.",
+    "chinese": "據報導，TikTok的母公司字節跳動計劃在2026年底前，投入高達700億美元的鉅資用於人工智慧（AI）的研發。這筆龐大的資金挹注旨在加速該公司在大語言模型與先進演算法技術方面的研究。行業專家指出，這一戰略舉措旨在高度競爭的AI競賽中挑戰全球科技巨頭。儘管字節跳動尚未正式證實這筆預算，但知情人士透露，這筆資金也將用於支持全球新數據中心的建設。",
+    "vocabulary": [
+      "reportedly (adv.): 據報導地",
+      "staggering (adj.): 令人震驚的；驚人的",
+      "capital (n.): 資金；資本",
+      "injection (n.): 注射；（資金）挹注",
+      "accelerate (v.): 加速",
+      "algorithm (n.): 演算法",
+      "strategic (adj.): 戰略性的",
+      "giant (n.): 巨頭；巨人",
+      "competitive (adj.): 競爭激烈的",
+      "confirm (v.): 證實；確認",
+      "budget (n.): 預算",
+      "source (n.): 消息來源；源頭",
+      "indicate (v.): 指出；顯示",
+      "funding (n.): 資金；資助",
+      "construction (n.): 建設；建造",
+      "parent company (n. phr.): 母公司",
+      "artificial intelligence (n. phr.): 人工智慧",
+      "large language model (n. phr.): 大語言模型",
+      "tech giant (n. phr.): 科技巨頭",
+      "data center (n. phr.): 數據中心"
+    ],
+    "quiz": [
+      {
+        "q": "According to the article, how much is ByteDance reportedly planning to invest in AI?",
+        "options": [
+          "A) $70 million",
+          "B) $17 billion",
+          "C) $70 billion",
+          "D) $700 billion"
+        ],
+        "answer": "C) $70 billion"
+      },
+      {
+        "q": "What is the primary purpose of this massive investment?",
+        "options": [
+          "A) To acquire TikTok's competitors",
+          "B) To accelerate research in large language models and algorithms",
+          "C) To build more entertainment facilities",
+          "D) To pay off company debts"
+        ],
+        "answer": "B) To accelerate research in large language models and algorithms"
+      },
+      {
+        "q": "By when does ByteDance plan to complete this investment?",
+        "options": [
+          "A) By the end of 2026",
+          "B) By the end of 2030",
+          "C) By the middle of 2025",
+          "D) Immediately within this month"
+        ],
+        "answer": "A) By the end of 2026"
+      },
+      {
+        "q": "What does the word 'staggering' mean in the text?",
+        "options": [
+          "A) Extremely small",
+          "B) Very shocking or amazing",
+          "C) Highly expected",
+          "D) Temporarily delayed"
+        ],
+        "answer": "B) Very shocking or amazing"
+      },
+      {
+        "q": "Who has officially confirmed the budget?",
+        "options": [
+          "A) The CEO of TikTok",
+          "B) Industry experts",
+          "C) ByteDance has not officially confirmed it yet",
+          "D) Global tech giants"
+        ],
+        "answer": "C) ByteDance has not officially confirmed it yet"
+      },
+      {
+        "q": "Apart from research, what else will the funding reportedly support?",
+        "options": [
+          "A) Employee vacation bonuses",
+          "B) Traditional marketing campaigns",
+          "C) The construction of new data centers worldwide",
+          "D) Purchasing real estate in Europe"
+        ],
+        "answer": "C) The construction of new data centers worldwide"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'capital injection'?",
+        "options": [
+          "A) Money withdrawal",
+          "B) Financial investment",
+          "C) Medical treatment",
+          "D) Political election"
+        ],
+        "answer": "B) Financial investment"
+      },
+      {
+        "q": "Complete the sentence: 'The new technology will help ________ the production process.'",
+        "options": [
+          "A) accelerate",
+          "B) indicate",
+          "C) confirm",
+          "D) inject"
+        ],
+        "answer": "A) accelerate"
+      },
+      {
+        "q": "What is the relationship between ByteDance and TikTok?",
+        "options": [
+          "A) TikTok is the parent company of ByteDance.",
+          "B) ByteDance is the parent company of TikTok.",
+          "C) They are independent competitors.",
+          "D) ByteDance is a subsidiary of TikTok."
+        ],
+        "answer": "B) ByteDance is the parent company of TikTok."
+      },
+      {
+        "q": "The word 'strategic' is closest in meaning to:",
+        "options": [
+          "A) Random",
+          "B) Unplanned",
+          "C) Tactical or calculated",
+          "D) Accidental"
+        ],
+        "answer": "C) Tactical or calculated"
+      },
+      {
+        "q": "What does 'sources close to the matter' mean?",
+        "options": [
+          "A) People who have insider information about the situation",
+          "B) People who live near the company headquarters",
+          "C) Customers who buy the products",
+          "D) Government officials who regulate the market"
+        ],
+        "answer": "A) People who have insider information about the situation"
+      },
+      {
+        "q": "What is the main goal of ByteDance's strategic move against global tech giants?",
+        "options": [
+          "A) To avoid competition",
+          "B) To challenge them in the AI race",
+          "C) To merge with them",
+          "D) To sell its AI patents to them"
+        ],
+        "answer": "B) To challenge them in the AI race"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "Anthropic與Google Cloud簽署2000億美元AI雲端合作",
+    "tabTitle": "科技",
+    "english": "Artificial intelligence startup Anthropic has signed a massive $200 billion cloud computing partnership with Google Cloud to accelerate its next-generation AI model development. Under this multi-year agreement, Anthropic will utilize Google's advanced TPU clusters and infrastructure to scale its research. This collaboration solidifies Google's position as a primary cloud provider for leading AI firms, while ensuring Anthropic secures the vast computational power required for future breakthroughs. Industry analysts expect this deal to significantly reshape the competitive landscape of the global AI market.",
+    "chinese": "人工智慧新創公司 Anthropic 與 Google Cloud 簽署了一項高達 2000 億美元的龐大雲端運算合作協議，以加速其下一代 AI 模型的開發。根據這項為期多年的協議，Anthropic 將利用 Google 先進的 TPU 叢集和基礎設施來擴大其研究規模。這次合作鞏固了 Google 作為領先 AI 企業主要雲端供應商的地位，同時確保 Anthropic 獲得未來突破所需的大量運算能力。業界分析師預計，這筆交易將顯著重塑全球 AI 市場的競爭格局。",
+    "vocabulary": [
+      "startup (n.): 新創公司",
+      "massive (adj.): 巨大的；龐大的",
+      "partnership (n.): 合作關係",
+      "accelerate (v.): 加速",
+      "next-generation (adj.): 下一代的",
+      "multi-year (adj.): 多年的",
+      "agreement (n.): 協議；協定",
+      "utilize (v.): 利用；使用",
+      "advanced (adj.): 先進的；高等的",
+      "infrastructure (n.): 基礎設施",
+      "scale (v.): 擴展；按比例調整",
+      "collaboration (n.): 合作；協作",
+      "solidify (v.): 鞏固；使凝固",
+      "primary (adj.): 主要的；首要的",
+      "secure (v.): 獲得；確保安全",
+      "computational (adj.): 電腦的；運算的",
+      "breakthrough (n.): 突破；重大進展",
+      "analyst (n.): 分析師",
+      "reshape (v.): 重塑；改變...的形狀",
+      "competitive landscape (n. phr.): 競爭格局；競爭形勢"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of the $200 billion partnership between Anthropic and Google Cloud?",
+        "options": [
+          "To merge the two companies into one entity",
+          "To accelerate Anthropic's next-generation AI model development",
+          "To replace Google's search engine with Anthropic's AI",
+          "To decrease the cost of consumer cloud storage"
+        ],
+        "answer": "To accelerate Anthropic's next-generation AI model development"
+      },
+      {
+        "q": "What will Anthropic utilize under the multi-year agreement?",
+        "options": [
+          "Google's advanced TPU clusters and infrastructure",
+          "Google's office spaces in Silicon Valley",
+          "Android's operating system source code",
+          "Google Search's advertising revenue"
+        ],
+        "answer": "Google's advanced TPU clusters and infrastructure"
+      },
+      {
+        "q": "How does this deal benefit Google Cloud?",
+        "options": [
+          "It gives Google exclusive ownership of Anthropic's models.",
+          "It solidifies Google's position as a primary cloud provider for leading AI firms.",
+          "It allows Google to stop developing its own AI models.",
+          "It eliminates all other cloud computing competitors immediately."
+        ],
+        "answer": "It solidifies Google's position as a primary cloud provider for leading AI firms."
+      },
+      {
+        "q": "Which word in the text is closest in meaning to 'strengthen' or 'make stronger'?",
+        "options": [
+          "utilize",
+          "reshape",
+          "solidify",
+          "accelerate"
+        ],
+        "answer": "solidify"
+      },
+      {
+        "q": "What does 'infrastructure' refer to in the context of cloud computing?",
+        "options": [
+          "The basic physical and organizational structures needed for operation",
+          "The marketing campaigns used to sell software",
+          "The legal contracts signed between executives",
+          "The customer service hotline of a company"
+        ],
+        "answer": "The basic physical and organizational structures needed for operation"
+      },
+      {
+        "q": "In the text, the verb 'scale' means to ________.",
+        "options": [
+          "climb up a steep hill",
+          "measure the weight of something",
+          "expand or increase in size or scale",
+          "remove scales from a fish"
+        ],
+        "answer": "expand or increase in size or scale"
+      },
+      {
+        "q": "Complete the sentence: The partnership is expected to ________ the competitive landscape of the AI market.",
+        "options": [
+          "reshaped",
+          "reshaping",
+          "reshape",
+          "be reshaped"
+        ],
+        "answer": "reshape"
+      },
+      {
+        "q": "What do industry analysts expect as a result of this deal?",
+        "options": [
+          "A decline in global AI research funding",
+          "A significant reshaping of the global AI market's competitive landscape",
+          "Google Cloud to shut down its services",
+          "Anthropic to stop using cloud computing"
+        ],
+        "answer": "A significant reshaping of the global AI market's competitive landscape"
+      },
+      {
+        "q": "What does the word 'breakthrough' mean?",
+        "options": [
+          "An obstacle that prevents progress",
+          "A sudden, dramatic, and important discovery or development",
+          "A physical crack in a stone wall",
+          "A financial loss due to bad investments"
+        ],
+        "answer": "A sudden, dramatic, and important discovery or development"
+      },
+      {
+        "q": "In the phrase 'ensuring Anthropic secures...', what part of speech is 'ensuring'?",
+        "options": [
+          "A noun acting as the subject",
+          "A participle introducing a subordinate clause",
+          "A main verb in the past tense",
+          "An adjective modifying 'computational'"
+        ],
+        "answer": "A participle introducing a subordinate clause"
+      },
+      {
+        "q": "How much is the cloud computing partnership worth?",
+        "options": [
+          "$200 million",
+          "$2 billion",
+          "$200 billion",
+          "$20 billion"
+        ],
+        "answer": "$200 billion"
+      },
+      {
+        "q": "Which of the following is the best synonym for 'massive' as used in the text?",
+        "options": [
+          "tiny",
+          "huge",
+          "temporary",
+          "unimportant"
+        ],
+        "answer": "huge"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
