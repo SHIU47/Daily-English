@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">MAY 29, 2026：金融市場、科技 與 國際大事</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電股價創新高突破2360元，市值達61.2兆台幣\nTaiwan Semiconductor Manufacturing Company (TSMC) saw its stock price surge to a record high of NT$2,360 on Friday, driven by robust global demand for advanced artificial intelligence chips. This historic rally propelled the chipmaker's total market capitalization to an unprecedented NT$61.2 trillion. Financial analysts attribute this remarkable growth to TSMC's dominant position in the semiconductor industry and its cutting-edge manufacturing capabilities. Investors remain highly optimistic about the company's future revenue prospects as tech giants continue to secure its high-end production capacity.\n\n[2] 美國對台灣非半導體產品實施232關稅優惠，台鏈受惠\nThe United States government has announced Section 232 tariff exemptions for Taiwanese non-semiconductor products, including steel and aluminum. This strategic policy aims to strengthen bilateral trade relations and secure key global supply chains. Consequently, Taiwanese manufacturers are expected to benefit significantly from reduced export costs, enhancing their competitiveness in the competitive American market. Industry experts believe this move will foster deeper economic cooperation between Taipei and Washington, paving the way for future bilateral trade agreements.\n\n[3] 微軟增資台灣營運逾86億台幣，強化資訊軟體服務\nMicrosoft has announced a significant capital increase of over NT$8.6 billion in its Taiwan operations to bolster its local information software services. This strategic investment aims to accelerate digital transformation and enhance cloud computing capabilities in the region. By expanding its local infrastructure, Microsoft plans to support Taiwanese businesses in adopting advanced artificial intelligence technologies and strengthening cybersecurity measures. This move underscores Taiwan's growing importance in the global technology supply chain and Microsoft's long-term commitment to the local market.",
+    "chinese": "【1】台積電股價創新高突破2360元，市值達61.2兆台幣\n台灣積體電路製造公司（台積電）股價於週五飆升至新台幣 2,360 元的歷史新高，這主要受到全球對先進人工智慧晶片強勁需求的推動。這波歷史性的漲勢將這家晶片製造商的總市值推升至前所未有的 61.2 兆台幣。金融分析師將這一顯著增長歸因於台積電在半導體產業的領先地位及其尖端製造能力。隨著科技巨頭持續爭取其高端產能，投資人對該公司未來的營收前景保持高度樂觀。\n\n【2】美國對台灣非半導體產品實施232關稅優惠，台鏈受惠\n美國政府宣布對台灣非半導體產品（包括鋼鐵和鋁）實施232條款關稅豁免。這項戰略性政策旨在加強雙邊貿易關係並確保全球關鍵供應鏈的安全。因此，台灣製造商預計將從出口成本降低中顯著受益，從而提升其在競爭激烈的美國市場中的競爭力。行業專家認為，此舉將促進台北與華盛頓之間更深層次的經濟合作，為未來的雙邊貿易協定鋪平道路。\n\n【3】微軟增資台灣營運逾86億台幣，強化資訊軟體服務\n微軟已宣布對其台灣營運進行超過新台幣86億元的重大增資，以強化當地的資訊軟體服務。這項戰略性投資旨在加速數位轉型並提升該地區的雲端運算能力。透過擴展在地基礎設施，微軟計劃支持台灣企業採用先進的人工智慧技術並強化資安防護措施。此舉突顯了台灣在全球科技供應鏈中日益增長的重要性，以及微軟對在地市場的長期承諾。",
+    "vocabulary": [
+      "surge (v.): 飆升，急劇上升",
+      "record high (n. phr.): 歷史新高",
+      "robust (adj.): 強勁的，堅固的",
+      "advanced (adj.): 先進的，高等的",
+      "artificial intelligence (n. phr.): 人工智慧",
+      "historic (adj.): 歷史性的，具歷史意義的",
+      "rally (n.): （股票等價格）回升，漲勢",
+      "propel (v.): 推動，驅策",
+      "market capitalization (n. phr.): 市值",
+      "unprecedented (adj.): 前所未有的，空前的",
+      "analyst (n.): 分析師",
+      "attribute to (v. phr.): 歸因於",
+      "remarkable (adj.): 顯著的，非凡的",
+      "dominant (adj.): 佔優勢的，支配的",
+      "semiconductor (n.): 半導體",
+      "cutting-edge (adj.): 尖端的，最前沿的",
+      "optimistic (adj.): 樂觀的",
+      "revenue (n.): 營收，收入",
+      "prospect (n.): 前景，展望",
+      "capacity (n.): 產能，容量",
+      "implement (v.): 實施，執行",
+      "exemption (n.): 免除，豁免",
+      "tariff (n.): 關稅",
+      "non-semiconductor (adj.): 非半導體的",
+      "strengthen (v.): 加強，增強",
+      "bilateral (adj.): 雙邊的",
+      "secure (v.): 確保，獲得",
+      "supply chain (n.): 供應鏈",
+      "consequently (adv.): 因此，結果",
+      "manufacturer (n.): 製造商",
+      "significantly (adv.): 顯著地，重要地",
+      "export (n./v.): 出口",
+      "enhance (v.): 提升，增加",
+      "competitiveness (n.): 競爭力",
+      "industry (n.): 行業，產業",
+      "expert (n.): 專家",
+      "foster (v.): 促進，培養",
+      "cooperation (n.): 合作",
+      "pave the way (phr.): 鋪平道路，創造條件",
+      "agreement (n.): 協定，協議",
+      "announce (v.): 宣布",
+      "significant (adj.): 重大的；顯著的",
+      "capital increase (n. phr.): 增資",
+      "operation (n.): 營運；運作",
+      "bolster (v.): 強化；支持",
+      "strategic (adj.): 戰略性的",
+      "investment (n.): 投資",
+      "accelerate (v.): 加速",
+      "digital transformation (n. phr.): 數位轉型",
+      "enhance (v.): 提升；增強",
+      "cloud computing (n. phr.): 雲端運算",
+      "capability (n.): 能力；容量",
+      "infrastructure (n.): 基礎設施",
+      "adopt (v.): 採用；收養",
+      "artificial intelligence (n. phr.): 人工智慧",
+      "cybersecurity (n.): 資訊安全；網路安全",
+      "measure (n.): 措施；方法",
+      "underscore (v.): 突顯；強調",
+      "supply chain (n. phr.): 供應鏈",
+      "commitment (n.): 承諾；奉獻"
+    ],
+    "quiz": [
+      {
+        "q": "What was the record high price of TSMC's stock mentioned in the article?",
+        "options": [
+          "NT$2,360",
+          "NT$1,260",
+          "NT$61.2 trillion",
+          "NT$2,000"
+        ],
+        "answer": "NT$2,360"
+      },
+      {
+        "q": "What is the main driver behind the surge in TSMC's stock price?",
+        "options": [
+          "Decreasing global demand",
+          "Robust global demand for advanced AI chips",
+          "A decline in the semiconductor industry",
+          "New government regulations"
+        ],
+        "answer": "Robust global demand for advanced AI chips"
+      },
+      {
+        "q": "What did TSMC's total market capitalization reach?",
+        "options": [
+          "NT$23.6 trillion",
+          "NT$61.2 billion",
+          "NT$61.2 trillion",
+          "NT$2.36 trillion"
+        ],
+        "answer": "NT$61.2 trillion"
+      },
+      {
+        "q": "What does the word 'unprecedented' mean in the context of the article?",
+        "options": [
+          "Never done or known before",
+          "Very common and expected",
+          "Declining rapidly",
+          "Disappointing"
+        ],
+        "answer": "Never done or known before"
+      },
+      {
+        "q": "According to financial analysts, why is TSMC experiencing remarkable growth?",
+        "options": [
+          "Because of its weak competitors",
+          "Because of its dominant position and cutting-edge manufacturing",
+          "Because it is lowering its stock prices",
+          "Because it stopped producing AI chips"
+        ],
+        "answer": "Because of its dominant position and cutting-edge manufacturing"
+      },
+      {
+        "q": "Which word is closest in meaning to 'surge'?",
+        "options": [
+          "Drop",
+          "Stabilize",
+          "Soar",
+          "Fluctuate"
+        ],
+        "answer": "Soar"
+      },
+      {
+        "q": "What are tech giants continuing to secure from TSMC?",
+        "options": [
+          "Low-end production capacity",
+          "High-end production capacity",
+          "Financial loans",
+          "Unused office spaces"
+        ],
+        "answer": "High-end production capacity"
+      },
+      {
+        "q": "How do investors feel about TSMC's future revenue prospects?",
+        "options": [
+          "Pessimistic",
+          "Indifferent",
+          "Highly optimistic",
+          "Anxious"
+        ],
+        "answer": "Highly optimistic"
+      },
+      {
+        "q": "Complete the sentence: The company's market capitalization was ______ to a new high.",
+        "options": [
+          "propelled",
+          "reduced",
+          "delayed",
+          "prevented"
+        ],
+        "answer": "propelled"
+      },
+      {
+        "q": "What does 'cutting-edge' mean?",
+        "options": [
+          "Dull and old",
+          "Extremely sharp",
+          "Highly advanced and innovative",
+          "Cost-effective"
+        ],
+        "answer": "Highly advanced and innovative"
+      },
+      {
+        "q": "Which of the following is the correct translation for 'revenue'?",
+        "options": [
+          "成本",
+          "營收",
+          "債務",
+          "利息"
+        ],
+        "answer": "營收"
+      },
+      {
+        "q": "What does the term 'market capitalization' refer to?",
+        "options": [
+          "The total value of a company's outstanding shares of stock",
+          "The physical size of a company's factories",
+          "The number of employees in a company",
+          "The annual tax paid by a corporation"
+        ],
+        "answer": "The total value of a company's outstanding shares of stock"
+      },
+      {
+        "q": "What is the main focus of the news article?",
+        "options": [
+          "A) US tariffs on Taiwanese microchips",
+          "B) Section 232 tariff exemptions for Taiwan's non-semiconductor goods",
+          "C) A new trade war between Taipei and Washington",
+          "D) Decreased competitiveness of Taiwanese manufacturers"
+        ],
+        "answer": "B) Section 232 tariff exemptions for Taiwan's non-semiconductor goods"
+      },
+      {
+        "q": "Which products are specifically mentioned as examples of exempted goods?",
+        "options": [
+          "A) Semiconductors and microchips",
+          "B) Agricultural products and textiles",
+          "C) Steel and aluminum",
+          "D) Automobiles and software"
+        ],
+        "answer": "C) Steel and aluminum"
+      },
+      {
+        "q": "What is one of the primary goals of this strategic policy?",
+        "options": [
+          "A) To restrict Taiwanese exports",
+          "B) To strengthen bilateral trade relations",
+          "C) To increase US domestic taxes",
+          "D) To isolate Taiwan from global trade"
+        ],
+        "answer": "B) To strengthen bilateral trade relations"
+      },
+      {
+        "q": "How are Taiwanese manufacturers expected to benefit from this policy?",
+        "options": [
+          "A) By receiving direct financial aid from the US",
+          "B) From reduced export costs and enhanced competitiveness",
+          "C) By moving all factories to the United States",
+          "D) By avoiding local taxes in Taiwan"
+        ],
+        "answer": "B) From reduced export costs and enhanced competitiveness"
+      },
+      {
+        "q": "What does the word 'exemption' mean in the context of the article?",
+        "options": [
+          "A) A requirement to pay more taxes",
+          "B) Freedom from an obligation or payment",
+          "C) A ban on importing goods",
+          "D) A strict inspection process"
+        ],
+        "answer": "B) Freedom from an obligation or payment"
+      },
+      {
+        "q": "According to the article, what will this move pave the way for?",
+        "options": [
+          "A) Future bilateral trade agreements",
+          "B) Higher tariffs on semiconductors",
+          "C) An increase in manufacturing costs",
+          "D) A decline in economic cooperation"
+        ],
+        "answer": "A) Future bilateral trade agreements"
+      },
+      {
+        "q": "The word 'bilateral' refers to relations between how many parties?",
+        "options": [
+          "A) One",
+          "B) Two",
+          "C) Three",
+          "D) Multiple"
+        ],
+        "answer": "B) Two"
+      },
+      {
+        "q": "Which word in the text means 'to encourage the development of something'?",
+        "options": [
+          "A) Secure",
+          "B) Foster",
+          "C) Enhance",
+          "D) Implement"
+        ],
+        "answer": "B) Foster"
+      },
+      {
+        "q": "What is the tone of the news article?",
+        "options": [
+          "A) Highly critical",
+          "B) Factual and optimistic",
+          "C) Sarcastic",
+          "D) Indifferent"
+        ],
+        "answer": "B) Factual and optimistic"
+      },
+      {
+        "q": "Who believes that this move will foster deeper economic cooperation?",
+        "options": [
+          "A) Only Taiwanese politicians",
+          "B) Industry experts",
+          "C) American steel workers",
+          "D) Semiconductor consumers"
+        ],
+        "answer": "B) Industry experts"
+      },
+      {
+        "q": "What is the meaning of the phrase 'pave the way'?",
+        "options": [
+          "A) To build a physical road",
+          "B) To make progress difficult",
+          "C) To create a situation in which something can happen",
+          "D) To block future negotiations"
+        ],
+        "answer": "C) To create a situation in which something can happen"
+      },
+      {
+        "q": "Which of the following is an adverb used in the text to mean 'in a sufficiently great or important way'?",
+        "options": [
+          "A) Consequently",
+          "B) Significantly",
+          "C) Competitively",
+          "D) Strategically"
+        ],
+        "answer": "B) Significantly"
+      },
+      {
+        "q": "How much did Microsoft invest in its Taiwan operations?",
+        "options": [
+          "NT$8.6 million",
+          "NT$8.6 billion",
+          "NT$86 billion",
+          "NT$86 million"
+        ],
+        "answer": "NT$8.6 billion"
+      },
+      {
+        "q": "What is the primary purpose of Microsoft's capital increase in Taiwan?",
+        "options": [
+          "To build a new hardware manufacturing factory",
+          "To bolster local information software services",
+          "To acquire a local Taiwanese competitor",
+          "To reduce its workforce in Taiwan"
+        ],
+        "answer": "To bolster local information software services"
+      },
+      {
+        "q": "What does the word 'bolster' mean in the context of the news?",
+        "options": [
+          "To weaken",
+          "To ignore",
+          "To strengthen",
+          "To export"
+        ],
+        "answer": "To strengthen"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a goal of this investment?",
+        "options": [
+          "Accelerating digital transformation",
+          "Enhancing cloud computing capabilities",
+          "Supporting the adoption of AI technologies",
+          "Relocating Microsoft's global headquarters to Taiwan"
+        ],
+        "answer": "Relocating Microsoft's global headquarters to Taiwan"
+      },
+      {
+        "q": "Choose the closest synonym for the word 'significant'.",
+        "options": [
+          "Minor",
+          "Important",
+          "Temporary",
+          "Accidental"
+        ],
+        "answer": "Important"
+      },
+      {
+        "q": "According to the text, what does this investment underscore?",
+        "options": [
+          "Taiwan's declining economic growth",
+          "Taiwan's growing importance in the global technology supply chain",
+          "A shift away from cloud computing",
+          "Microsoft's plan to exit the Asian market"
+        ],
+        "answer": "Taiwan's growing importance in the global technology supply chain"
+      },
+      {
+        "q": "Fill in the blank: 'The company decided to _______ new security measures to protect customer data.'",
+        "options": [
+          "adopt",
+          "bolster",
+          "underscore",
+          "accelerate"
+        ],
+        "answer": "adopt"
+      },
+      {
+        "q": "What is the Chinese meaning of the word 'infrastructure'?",
+        "options": [
+          "基礎設施",
+          "數位轉型",
+          "戰略投資",
+          "資訊安全"
+        ],
+        "answer": "基礎設施"
+      },
+      {
+        "q": "Who is Microsoft planning to support with its expanded local infrastructure?",
+        "options": [
+          "Taiwanese businesses",
+          "Only foreign government agencies",
+          "Individual retail consumers only",
+          "Agricultural sectors exclusively"
+        ],
+        "answer": "Taiwanese businesses"
+      },
+      {
+        "q": "What does 'cybersecurity' refer to?",
+        "options": [
+          "Physical building security",
+          "Internet-connected systems and data protection",
+          "Agricultural safety products",
+          "Financial stock market regulations"
+        ],
+        "answer": "Internet-connected systems and data protection"
+      },
+      {
+        "q": "Fill in the blank: 'The CEO made a long-term _______ to reducing carbon emissions.'",
+        "options": [
+          "capital",
+          "commitment",
+          "infrastructure",
+          "capability"
+        ],
+        "answer": "commitment"
+      },
+      {
+        "q": "What is the part of speech of 'strategic' in 'strategic investment'?",
+        "options": [
+          "Noun",
+          "Verb",
+          "Adjective",
+          "Adverb"
+        ],
+        "answer": "Adjective"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "Meta推出AI聊天機器人訂閱服務，最低月費7.99美元",
+    "tabTitle": "科技",
+    "english": "Meta has officially launched its new AI chatbot subscription service, offering advanced conversational features starting at $7.99 per month. This premium tier provides subscribers with faster response times, priority access during peak hours, and exclusive customization options. By introducing this paid model, Meta aims to monetize its generative AI technology while competing directly with rivals like OpenAI and Google. The service is rolling out globally, targeting both casual users and professionals seeking enhanced productivity.",
+    "chinese": "Meta 已正式推出其全新的 AI 聊天機器人訂閱服務，起價為每月 7.99 美元，提供進階的對話功能。此付費方案為訂閱者提供更快的響應時間、尖峰時段的優先使用權以及獨家的自訂選項。透過引入這種付費模式，Meta 旨在將其生成式 AI 技術變現，同時與 OpenAI 和 Google 等對手直接競爭。該服務正在全球範圍內推出，目標受眾為尋求提升生產力的日常用戶和專業人士。",
+    "vocabulary": [
+      "subscription (n.): 訂閱",
+      "launch (v.): 推出；發起",
+      "advanced (adj.): 進階的；先進的",
+      "conversational (adj.): 對話的",
+      "premium (adj.): 高階的；優質的",
+      "tier (n.): 層級；（服務）等級",
+      "subscriber (n.): 訂閱者",
+      "priority (n.): 優先權",
+      "peak hours (n. phr.): 尖峰時段",
+      "exclusive (adj.): 獨家的；專屬的",
+      "customization (n.): 客製化；自訂",
+      "introduce (v.): 引入；介紹",
+      "monetize (v.): 變現；貨幣化",
+      "generative (adj.): 生成的；有生產力的",
+      "rival (n.): 競爭對手",
+      "compete (v.): 競爭",
+      "roll out (v. phr.): 逐步推出",
+      "globally (adv.): 全球性地",
+      "casual (adj.): 日常的；非正式的",
+      "productivity (n.): 生產力"
+    ],
+    "quiz": [
+      {
+        "q": "What is the starting price of Meta's new subscription service?",
+        "options": [
+          "$5.99/month",
+          "$7.99/month",
+          "$9.99/month",
+          "$12.99/month"
+        ],
+        "answer": "$7.99/month"
+      },
+      {
+        "q": "Which of the following is NOT a benefit of the premium tier?",
+        "options": [
+          "Faster response times",
+          "Priority access during peak hours",
+          "Exclusive customization options",
+          "Free hardware devices"
+        ],
+        "answer": "Free hardware devices"
+      },
+      {
+        "q": "Who is the target audience for this new service?",
+        "options": [
+          "Only software developers",
+          "Casual users and professionals",
+          "Children and students",
+          "Government officials only"
+        ],
+        "answer": "Casual users and professionals"
+      },
+      {
+        "q": "What does the word 'monetize' mean in the text?",
+        "options": [
+          "To spend money",
+          "To earn money from something",
+          "To design software",
+          "To hire new employees"
+        ],
+        "answer": "To earn money from something"
+      },
+      {
+        "q": "Which word is closest in meaning to 'rival'?",
+        "options": [
+          "Partner",
+          "Customer",
+          "Competitor",
+          "Supporter"
+        ],
+        "answer": "Competitor"
+      },
+      {
+        "q": "Meta aims to ______ its generative AI technology to generate revenue.",
+        "options": [
+          "monetize",
+          "ignore",
+          "destroy",
+          "donate"
+        ],
+        "answer": "monetize"
+      },
+      {
+        "q": "Subscribers get ______ access during peak hours, meaning they go first.",
+        "options": [
+          "delayed",
+          "priority",
+          "limited",
+          "random"
+        ],
+        "answer": "priority"
+      },
+      {
+        "q": "Meta is introducing this paid model to compete with which companies?",
+        "options": [
+          "Apple and Microsoft",
+          "Netflix and Disney",
+          "OpenAI and Google",
+          "Amazon and Meta"
+        ],
+        "answer": "OpenAI and Google"
+      },
+      {
+        "q": "The new product is rolling out ______, meaning it will be available all over the world.",
+        "options": [
+          "locally",
+          "globally",
+          "temporarily",
+          "secretly"
+        ],
+        "answer": "globally"
+      },
+      {
+        "q": "'Premium' services are usually ______ than standard services.",
+        "options": [
+          "cheaper",
+          "higher in quality or cost",
+          "less reliable",
+          "slower"
+        ],
+        "answer": "higher in quality or cost"
+      },
+      {
+        "q": "What part of speech is 'subscription' in the phrase 'subscription service'?",
+        "options": [
+          "Verb",
+          "Noun (used as adjective)",
+          "Adverb",
+          "Preposition"
+        ],
+        "answer": "Noun (used as adjective)"
+      },
+      {
+        "q": "What type of technology is Meta's chatbot based on?",
+        "options": [
+          "Blockchain technology",
+          "Generative AI technology",
+          "Virtual reality hardware",
+          "Quantum computing"
+        ],
+        "answer": "Generative AI technology"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "NASA公布月球基地三階段計畫，目標2028登月2032永久駐員",
+    "tabTitle": "國際大事",
+    "english": "NASA has officially unveiled a comprehensive three-phase plan to establish a sustainable moon base. The ambitious initiative aims to land astronauts on the lunar surface by 2028, paving the way for advanced scientific research. Following the initial landing, the space agency plans to construct infrastructure capable of supporting a permanent human crew by 2032. This project represents a critical stepping stone for future crewed missions to Mars, fostering international collaboration and technological innovation in deep space exploration.",
+    "chinese": "美國國家航空暨太空總署（NASA）已正式公布了一項建立永續月球基地的全面性三階段計畫。這項雄心勃勃的倡議旨在於2028年前將太空人送上月球表面，為先進的科學研究鋪路。在首次登陸之後，該太空總署計劃建造能夠在2032年前支持永久駐員的基礎設施。該項目代表了未來載人火星任務的重要基石，促進了深空探索中的國際合作與技術創新。",
+    "vocabulary": [
+      "unveil (v.): 發表；公布",
+      "comprehensive (adj.): 全面的；詳盡的",
+      "phase (n.): 階段；時期",
+      "establish (v.): 建立；設立",
+      "sustainable (adj.): 永續的；可持續的",
+      "ambitious (adj.): 雄心勃勃的；野心勃勃的",
+      "initiative (n.): 倡議；新方案",
+      "lunar (adj.): 月球的；陰曆的",
+      "pave the way (phr.): 鋪路；準備條件",
+      "infrastructure (n.): 基礎建設；基礎設施",
+      "permanent (adj.): 永久的；固定的",
+      "crew (n.): 全體工作人員；（船上、飛機或太空船的）工作人員",
+      "represent (v.): 代表；象徵",
+      "critical (adj.): 關鍵的；至關重要的",
+      "stepping stone (n.): 踏腳石；跳板",
+      "mission (n.): 任務；使命",
+      "foster (v.): 促進；培養",
+      "collaboration (n.): 合作；協同工作",
+      "innovation (n.): 創新；革新",
+      "exploration (n.): 探索；探勘"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main goal of NASA's newly unveiled plan?",
+        "options": [
+          "To explore Mars directly",
+          "To establish a sustainable moon base",
+          "To build a space station near Venus",
+          "To launch a new satellite"
+        ],
+        "answer": "To establish a sustainable moon base"
+      },
+      {
+        "q": "When does NASA aim to land astronauts on the lunar surface?",
+        "options": [
+          "By 2026",
+          "By 2028",
+          "By 2030",
+          "By 2032"
+        ],
+        "answer": "By 2028"
+      },
+      {
+        "q": "By which year does NASA plan to have a permanent human crew on the moon?",
+        "options": [
+          "2028",
+          "2030",
+          "2032",
+          "2035"
+        ],
+        "answer": "2032"
+      },
+      {
+        "q": "According to the passage, the moon base project is a stepping stone for future missions to which planet?",
+        "options": [
+          "Jupiter",
+          "Venus",
+          "Mars",
+          "Saturn"
+        ],
+        "answer": "Mars"
+      },
+      {
+        "q": "What does the word 'unveiled' in the text most closely mean?",
+        "options": [
+          "Hidden",
+          "Revealed",
+          "Cancelled",
+          "Delayed"
+        ],
+        "answer": "Revealed"
+      },
+      {
+        "q": "Which word in the text means 'able to be maintained at a certain rate or level'?",
+        "options": [
+          "Ambitious",
+          "Permanent",
+          "Sustainable",
+          "Critical"
+        ],
+        "answer": "Sustainable"
+      },
+      {
+        "q": "What does the phrase 'paving the way' mean in the context of the passage?",
+        "options": [
+          "Constructing actual roads on the moon",
+          "Making future developments easier or possible",
+          "Stopping all progress",
+          "Destroying existing plans"
+        ],
+        "answer": "Making future developments easier or possible"
+      },
+      {
+        "q": "What is the meaning of 'infrastructure' as used in the passage?",
+        "options": [
+          "The basic systems and structures needed for operation",
+          "The scientific instruments used in space",
+          "The training program for astronauts",
+          "The fuel used for rocket launching"
+        ],
+        "answer": "The basic systems and structures needed for operation"
+      },
+      {
+        "q": "The word 'foster' in the last sentence is closest in meaning to:",
+        "options": [
+          "To prevent",
+          "To encourage or promote",
+          "To ignore",
+          "To study"
+        ],
+        "answer": "To encourage or promote"
+      },
+      {
+        "q": "How many phases does NASA's moon base plan consist of?",
+        "options": [
+          "Two",
+          "Three",
+          "Four",
+          "Five"
+        ],
+        "answer": "Three"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a benefit of the project?",
+        "options": [
+          "Fostering international collaboration",
+          "Technological innovation",
+          "Finding alien life on the moon",
+          "Paving the way for Mars missions"
+        ],
+        "answer": "Finding alien life on the moon"
+      },
+      {
+        "q": "What type of crew is planned for the moon base by 2032?",
+        "options": [
+          "Temporary crew",
+          "Permanent crew",
+          "Robotic crew",
+          "Tourist crew"
+        ],
+        "answer": "Permanent crew"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "戴爾首季營收年增近90%，AI業務飆漲757%",
+    "tabTitle": "科技",
+    "english": "Dell Technologies reported an exceptional first quarter for fiscal year 2027, driven by an unprecedented surge in demand for artificial intelligence infrastructure. The company's total revenue jumped nearly 90% year-on-year, reaching record heights. Most notably, Dell's AI-optimized server business experienced a staggering 757% growth compared to the same period last year. Industry analysts attribute this remarkable expansion to global enterprises aggressively upgrading their data centers to support advanced machine learning workloads.",
+    "chinese": "戴爾科技集團公佈了其2027財年第一季度的亮眼財報，這主要得益於市場對人工智慧基礎設施前所未有的強勁需求。該公司的總營收同比增長了近90%，創下歷史新高。最引人注目的是，戴爾的AI優化伺服器業務與去年同期相比，實現了高達757%的驚人增長。行業分析師將這一顯著的擴張歸功於全球企業正積極升級其數據中心，以支持先進的機器學習工作負載。",
+    "vocabulary": [
+      "exceptional (adj.): 卓越的，傑出的",
+      "fiscal year (n. phr.): 財政年度，會計年度",
+      "unprecedented (adj.): 前所未有的",
+      "surge (n.): 激增，湧流",
+      "infrastructure (n.): 基礎設施，底層架構",
+      "revenue (n.): 收入，收益",
+      "jump (v.): 急劇上升，暴漲",
+      "year-on-year (adj./adv.): 與去年同期相比的",
+      "notably (adv.): 顯著地，特別是",
+      "optimized (adj.): 優化的",
+      "staggering (adj.): 令人驚愕的，難以置信的",
+      "growth (n.): 增長，發展",
+      "compare to (phr. v.): 與...相比",
+      "analyst (n.): 分析師",
+      "attribute... to... (phr. v.): 將...歸因於...",
+      "remarkable (adj.): 顯著的，非凡的",
+      "expansion (n.): 擴張，膨脹",
+      "enterprise (n.): 企業，公司",
+      "aggressively (adv.): 積極地，有闖勁地",
+      "workload (n.): 工作量，工作負荷"
+    ],
+    "quiz": [
+      {
+        "q": "What was the primary driver of Dell's Q1 revenue growth?",
+        "options": [
+          "A) Personal computer sales",
+          "B) Artificial intelligence infrastructure demand",
+          "C) Software licensing fees",
+          "D) Mobile device manufacturing"
+        ],
+        "answer": "B) Artificial intelligence infrastructure demand"
+      },
+      {
+        "q": "By how much did Dell's total revenue increase year-on-year?",
+        "options": [
+          "A) Nearly 50%",
+          "B) Staggering 757%",
+          "C) Nearly 90%",
+          "D) Exactly 100%"
+        ],
+        "answer": "C) Nearly 90%"
+      },
+      {
+        "q": "Which specific business segment experienced a 757% growth?",
+        "options": [
+          "A) Cloud storage services",
+          "B) AI-optimized server business",
+          "C) Laptop and desktop retail",
+          "D) Customer consulting services"
+        ],
+        "answer": "B) AI-optimized server business"
+      },
+      {
+        "q": "What does the word 'exceptional' mean in the text?",
+        "options": [
+          "A) Ordinary and expected",
+          "B) Unusually excellent",
+          "C) Disappointing",
+          "D) Temporary"
+        ],
+        "answer": "B) Unusually excellent"
+      },
+      {
+        "q": "Fill in the blank: 'The company reported a sudden _______ in sales after the marketing campaign.'",
+        "options": [
+          "A) infrastructure",
+          "B) surge",
+          "C) workload",
+          "D) enterprise"
+        ],
+        "answer": "B) surge"
+      },
+      {
+        "q": "What is the meaning of 'unprecedented'?",
+        "options": [
+          "A) Never done or known before",
+          "B) Very common and historical",
+          "C) Extremely expensive",
+          "D) Highly predicted"
+        ],
+        "answer": "A) Never done or known before"
+      },
+      {
+        "q": "Choose the correct translation for 'fiscal year'.",
+        "options": [
+          "A) 物理年份",
+          "B) 財政年度",
+          "C) 曆年",
+          "D) 季度報告"
+        ],
+        "answer": "B) 財政年度"
+      },
+      {
+        "q": "According to industry analysts, why are global enterprises upgrading their data centers?",
+        "options": [
+          "A) To reduce energy consumption",
+          "B) To support advanced machine learning workloads",
+          "C) To comply with new government regulations",
+          "D) To transition to remote work models"
+        ],
+        "answer": "B) To support advanced machine learning workloads"
+      },
+      {
+        "q": "Which word is closest in meaning to 'staggering'?",
+        "options": [
+          "A) Minor",
+          "B) Astounding",
+          "C) Boring",
+          "D) Gradual"
+        ],
+        "answer": "B) Astounding"
+      },
+      {
+        "q": "Fill in the blank: 'She attributes her success _______ hard work and dedication.'",
+        "options": [
+          "A) with",
+          "B) to",
+          "C) for",
+          "D) by"
+        ],
+        "answer": "B) to"
+      },
+      {
+        "q": "What does 'enterprise' refer to?",
+        "options": [
+          "A) A business or company",
+          "B) A government agency",
+          "C) A personal hobby",
+          "D) A scientific experiment"
+        ],
+        "answer": "A) A business or company"
+      },
+      {
+        "q": "What is the Chinese translation of 'workload'?",
+        "options": [
+          "A) 工作地點",
+          "B) 工作量",
+          "C) 工作效率",
+          "D) 工作時間"
+        ],
+        "answer": "B) 工作量"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "蘋果擬將Google Gemini整合至iPhone，強化AI功能",
+    "tabTitle": "科技",
+    "english": "Apple is reportedly in active negotiations with Google to integrate the Gemini artificial intelligence engine into the iPhone. This potential partnership aims to significantly boost the device's generative AI capabilities, allowing users to experience advanced features such as real-time language processing and image creation. While Apple continues to develop its own in-house AI models, collaborating with Google could provide a rapid solution to compete with rivals in the fast-evolving smartphone market. Industry experts suggest this move could redefine the competitive landscape of mobile technology.",
+    "chinese": "據報導，蘋果公司正與Google進行積極談判，擬將Gemini人工智慧引擎整合至iPhone中。這一潛在的合作旨在顯著提升該裝置的生成式AI功能，讓用戶體驗即時語言處理和圖像創建等先進功能。儘管蘋果繼續開發其自家的內部AI模型，但與Google合作可以提供一個快速的解決方案，以便在快速發展的智慧型手機市場中與競爭對手抗衡。行業專家指出，此舉可能會重新定義行動科技的競爭格局。",
+    "vocabulary": [
+      "integrate (v.): 整合，使合併",
+      "negotiation (n.): 談判，協商",
+      "artificial intelligence (n.): 人工智慧",
+      "potential (adj.): 潛在的，可能的",
+      "partnership (n.): 合作關係，合夥",
+      "significantly (adv.): 顯著地，相當大地",
+      "boost (v.): 增強，促進",
+      "generative (adj.): 生成的，有生產力的",
+      "capability (n.): 能力，功能",
+      "advanced (adj.): 先進的，高等的",
+      "feature (n.): 特色，功能",
+      "real-time (adj.): 即時的，同步的",
+      "in-house (adj.): 內部的，機構內的",
+      "collaborate (v.): 合作，協作",
+      "rapid (adj.): 快速的，迅速的",
+      "rival (n.): 競爭對手",
+      "evolve (v.): 演變，發展",
+      "expert (n.): 專家",
+      "redefine (v.): 重新定義",
+      "landscape (n.): 格局，形勢"
+    ],
+    "quiz": [
+      {
+        "q": "Which company is Apple negotiating with to integrate an AI engine into the iPhone?",
+        "options": [
+          "Microsoft",
+          "Google",
+          "Meta",
+          "Amazon"
+        ],
+        "answer": "Google"
+      },
+      {
+        "q": "What is the main purpose of the potential partnership between Apple and Google?",
+        "options": [
+          "To design a new hardware chip",
+          "To boost the iPhone's generative AI capabilities",
+          "To reduce the price of iPhones",
+          "To merge the two companies"
+        ],
+        "answer": "To boost the iPhone's generative AI capabilities"
+      },
+      {
+        "q": "What does the word 'integrate' mean in the text?",
+        "options": [
+          "To separate into parts",
+          "To combine or merge things together",
+          "To delete permanently",
+          "To delay a process"
+        ],
+        "answer": "To combine or merge things together"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'boost'?",
+        "options": [
+          "Decrease",
+          "Enhance",
+          "Ignore",
+          "Destroy"
+        ],
+        "answer": "Enhance"
+      },
+      {
+        "q": "Is Apple still developing its own AI models?",
+        "options": [
+          "Yes, Apple continues to develop its own in-house AI models.",
+          "No, Apple has completely stopped its own AI development.",
+          "Yes, but only for MacBooks, not iPhones.",
+          "No, Google will take over all of Apple's software."
+        ],
+        "answer": "Yes, Apple continues to develop its own in-house AI models."
+      },
+      {
+        "q": "What does 'in-house' mean when describing Apple's AI models?",
+        "options": [
+          "Developed by a third-party agency",
+          "Created inside the user's home",
+          "Developed within the company itself",
+          "Imported from another country"
+        ],
+        "answer": "Developed within the company itself"
+      },
+      {
+        "q": "Complete the sentence: 'The technology is fast-________, meaning it changes very quickly.'",
+        "options": [
+          "evolving",
+          "redefining",
+          "collaborating",
+          "negotiating"
+        ],
+        "answer": "evolving"
+      },
+      {
+        "q": "According to the text, what features could users experience from this integration?",
+        "options": [
+          "Waterproof screens",
+          "Longer battery life",
+          "Real-time language processing and image creation",
+          "Satellite calling"
+        ],
+        "answer": "Real-time language processing and image creation"
+      },
+      {
+        "q": "'A person who is competing with others for the same objective' is a ________.",
+        "options": [
+          "partner",
+          "expert",
+          "rival",
+          "negotiator"
+        ],
+        "answer": "rival"
+      },
+      {
+        "q": "What is the noun form of the verb 'negotiate'?",
+        "options": [
+          "negotiatingly",
+          "negotiable",
+          "negotiation",
+          "negotiated"
+        ],
+        "answer": "negotiation"
+      },
+      {
+        "q": "Why does Apple need a rapid solution according to the text?",
+        "options": [
+          "To compete with rivals in the smartphone market",
+          "To fix a major security bug",
+          "To lower manufacturing costs",
+          "To prepare for a legal trial"
+        ],
+        "answer": "To compete with rivals in the smartphone market"
+      },
+      {
+        "q": "What does 'redefine the competitive landscape' suggest?",
+        "options": [
+          "To paint a new picture of a natural scene",
+          "To change the overall situation of competition",
+          "To stop all competition in the market",
+          "To build new physical office spaces"
+        ],
+        "answer": "To change the overall situation of competition"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
