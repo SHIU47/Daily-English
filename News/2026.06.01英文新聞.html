@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 01, 2026：台灣經濟、地緣政治 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 中市半導體投資動能強勁，三大方案吸金近1500億元\nTaichung is experiencing a robust surge in semiconductor investment, attracting nearly NT$150 billion through three key initiatives. These programs are strategically designed to boost the city's high-tech industry, fostering innovation and creating numerous job opportunities. This strong investment momentum highlights Taichung's growing importance as a major hub for advanced manufacturing and technology within Taiwan, successfully drawing significant capital and talent to the region.\n\n[2] 晶片巨頭齊聚台灣，輝達AMD加碼投資AI基礎建設\nTaiwan is set to become an even more crucial hub for artificial intelligence (AI) development as major chip manufacturers, including NVIDIA and AMD, announced significant new investments. On June 1, 2026, these tech giants confirmed plans to boost AI infrastructure and research capabilities across the island. This strategic move is expected to further solidify Taiwan's leading position in advanced semiconductor technology and high-performance computing, attracting more talent and resources to the region.\n\n[3] 輝達營收貢獻將衝破兩成，成台積電主要成長引擎\nTaiwan Semiconductor Manufacturing Company (TSMC) is set to see NVIDIA become a dominant force in its revenue. By 2026, NVIDIA's contribution is projected to exceed 20% of TSMC's total sales, making it the foundry's primary growth engine. This surge is largely driven by the high demand for NVIDIA's advanced AI chips, which rely heavily on TSMC's cutting-edge manufacturing technology. This partnership underscores TSMC's critical role in the global technology landscape.",
+    "chinese": "【1】中市半導體投資動能強勁，三大方案吸金近1500億元\n台中市正經歷半導體投資的強勁增長，透過三項關鍵計畫，吸引了近1500億新台幣的資金。這些計畫旨在策略性地推動該市的高科技產業，促進創新並創造大量就業機會。這股強勁的投資動能凸顯了台中作為台灣內部先進製造和技術主要樞紐日益增長的重要性，成功吸引了大量資金和人才進入該地區。\n\n【2】晶片巨頭齊聚台灣，輝達AMD加碼投資AI基礎建設\n台灣將成為人工智慧（AI）發展更為關鍵的樞紐，因為包括輝達（NVIDIA）和超微（AMD）在內的主要晶片製造商宣布了重大新投資。2026年6月1日，這些科技巨頭證實計劃增強全島的AI基礎設施和研究能力。這項戰略舉措預計將進一步鞏固台灣在先進半導體技術和高效能運算領域的領先地位，吸引更多人才和資源到該地區。\n\n【3】輝達營收貢獻將衝破兩成，成台積電主要成長引擎\n台灣積體電路製造公司（台積電）預計將看到輝達（NVIDIA）成為其營收的主導力量。到2026年，輝達的貢獻預計將超過台積電總銷售額的20%，使其成為該晶圓代工廠的主要成長引擎。這一增長主要來自於對輝達先進AI晶片的高需求，這些晶片嚴重依賴台積電的尖端製造技術。這次合作突顯了台積電在全球科技格局中的關鍵作用。",
+    "vocabulary": [
+      "semiconductor (n.): 半導體",
+      "investment (n.): 投資",
+      "soar (v.): 飆升，劇增",
+      "attract (v.): 吸引",
+      "program (n.): 計畫，方案",
+      "robust (adj.): 強勁的，穩健的",
+      "surge (n.): 激增，飆升",
+      "initiative (n.): 倡議，計畫",
+      "strategically (adv.): 策略性地",
+      "boost (v.): 提升，促進",
+      "high-tech (adj.): 高科技的",
+      "foster (v.): 促進，培養",
+      "innovation (n.): 創新",
+      "numerous (adj.): 大量的，許多的",
+      "job opportunity (n.): 就業機會",
+      "momentum (n.): 動能，勢頭",
+      "highlight (v.): 凸顯，強調",
+      "hub (n.): 樞紐，中心",
+      "advanced manufacturing (n.): 先進製造",
+      "capital (n.): 資金，資本",
+      "Converge (v.): 匯聚；集中",
+      "Giant (n.): 巨頭；巨人",
+      "Boost (v.): 提升；促進",
+      "Infrastructure (n.): 基礎設施",
+      "Investment (n.): 投資",
+      "Crucial (adj.): 關鍵的；重要的",
+      "Hub (n.): 樞紐；中心",
+      "Artificial intelligence (n.): 人工智慧 (AI)",
+      "Manufacturer (n.): 製造商",
+      "Significant (adj.): 重大的；顯著的",
+      "Confirmed (v.): 證實；確認",
+      "Capability (n.): 能力；功能",
+      "Strategic (adj.): 戰略性的",
+      "Solidify (v.): 鞏固；加強",
+      "Leading position (n.): 領先地位",
+      "Advanced (adj.): 先進的",
+      "Semiconductor (n.): 半導體",
+      "High-performance computing (n.): 高效能運算",
+      "Attract (v.): 吸引",
+      "Resource (n.): 資源",
+      "Taiwan Semiconductor Manufacturing Company (TSMC) (n.): 台灣積體電路製造公司（台積電）",
+      "NVIDIA (n.): 輝達",
+      "revenue (n.): 營收；收益",
+      "contribution (n.): 貢獻",
+      "projected (adj.): 預計的；預測的",
+      "exceed (v.): 超過；超出",
+      "total sales (n. phr.): 總銷售額",
+      "primary (adj.): 主要的；首要的",
+      "growth engine (n. phr.): 成長引擎；成長動力",
+      "surge (n.): 激增；遽增",
+      "largely driven by (phr.): 主要由...驅動",
+      "demand (n.): 需求",
+      "advanced (adj.): 先進的",
+      "AI chips (n. phr.): 人工智慧晶片",
+      "rely heavily on (phr.): 嚴重依賴",
+      "cutting-edge (adj.): 尖端的；領先的",
+      "manufacturing technology (n. phr.): 製造技術",
+      "partnership (n.): 合作關係",
+      "underscores (v.): 強調；凸顯",
+      "critical role (n. phr.): 關鍵作用"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "A. Taichung's tourism industry",
+          "B. Taichung's semiconductor investment",
+          "C. Taichung's agricultural development",
+          "D. Taichung's real estate market"
+        ],
+        "answer": "B. Taichung's semiconductor investment"
+      },
+      {
+        "q": "Approximately how much investment has Taichung attracted in the semiconductor sector?",
+        "options": [
+          "A. NT$15 billion",
+          "B. NT$150 million",
+          "C. Nearly NT$150 billion",
+          "D. Over NT$150 billion"
+        ],
+        "answer": "C. Nearly NT$150 billion"
+      },
+      {
+        "q": "How many key initiatives are mentioned for attracting investment?",
+        "options": [
+          "A. Two",
+          "B. Three",
+          "C. Four",
+          "D. Five"
+        ],
+        "answer": "B. Three"
+      },
+      {
+        "q": "What is one of the primary goals of these programs?",
+        "options": [
+          "A. To reduce carbon emissions",
+          "B. To boost the city's high-tech industry",
+          "C. To improve public transportation",
+          "D. To expand the entertainment sector"
+        ],
+        "answer": "B. To boost the city's high-tech industry"
+      },
+      {
+        "q": "What does the news indicate about Taichung's role in Taiwan?",
+        "options": [
+          "A. It's becoming a major tourist destination.",
+          "B. It's losing its industrial importance.",
+          "C. It's growing as a hub for advanced manufacturing and technology.",
+          "D. It's focusing solely on agricultural exports."
+        ],
+        "answer": "C. It's growing as a hub for advanced manufacturing and technology."
+      },
+      {
+        "q": "The word \"robust\" in the first sentence is closest in meaning to:",
+        "options": [
+          "A. Weak",
+          "B. Fragile",
+          "C. Strong",
+          "D. Slow"
+        ],
+        "answer": "C. Strong"
+      },
+      {
+        "q": "What does \"fostering innovation\" mean in the context of the news?",
+        "options": [
+          "A. Preventing new ideas",
+          "B. Encouraging new ideas and creativity",
+          "C. Limiting technological advancements",
+          "D. Reducing research and development"
+        ],
+        "answer": "B. Encouraging new ideas and creativity"
+      },
+      {
+        "q": "What kind of opportunities are these programs expected to create?",
+        "options": [
+          "A. Housing opportunities",
+          "B. Travel opportunities",
+          "C. Job opportunities",
+          "D. Educational opportunities"
+        ],
+        "answer": "C. Job opportunities"
+      },
+      {
+        "q": "The phrase \"investment momentum\" refers to:",
+        "options": [
+          "A. The speed and force of investments",
+          "B. The hesitation in investing",
+          "C. The decline in investment",
+          "D. The stability of investments"
+        ],
+        "answer": "A. The speed and force of investments"
+      },
+      {
+        "q": "What is being successfully drawn to the region according to the news?",
+        "options": [
+          "A. Only talent",
+          "B. Only capital",
+          "C. Significant capital and talent",
+          "D. Local tourists"
+        ],
+        "answer": "C. Significant capital and talent"
+      },
+      {
+        "q": "The news describes Taichung's semiconductor investment as a \"surge.\" What does \"surge\" imply?",
+        "options": [
+          "A. A gradual decrease",
+          "B. A sudden and significant increase",
+          "C. A stable period",
+          "D. A minor fluctuation"
+        ],
+        "answer": "B. A sudden and significant increase"
+      },
+      {
+        "q": "What industry sector is primarily benefiting from these investments in Taichung?",
+        "options": [
+          "A. Automotive industry",
+          "B. High-tech industry",
+          "C. Textile industry",
+          "D. Food processing industry"
+        ],
+        "answer": "B. High-tech industry"
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A. Taiwan's tourism industry",
+          "B. New phone releases",
+          "C. Chip giants investing in AI in Taiwan",
+          "D. Global economic recession"
+        ],
+        "answer": "C. Chip giants investing in AI in Taiwan"
+      },
+      {
+        "q": "Which companies are mentioned as making significant investments?",
+        "options": [
+          "A. Apple and Microsoft",
+          "B. NVIDIA and AMD",
+          "C. Samsung and Intel",
+          "D. Google and Amazon"
+        ],
+        "answer": "B. NVIDIA and AMD"
+      },
+      {
+        "q": "What type of development is Taiwan becoming a more crucial hub for?",
+        "options": [
+          "A. Automotive technology",
+          "B. Renewable energy",
+          "C. Artificial intelligence",
+          "D. Space exploration"
+        ],
+        "answer": "C. Artificial intelligence"
+      },
+      {
+        "q": "When did the tech giants confirm their plans?",
+        "options": [
+          "A. May 1, 2026",
+          "B. June 1, 2026",
+          "C. July 1, 2026",
+          "D. August 1, 2026"
+        ],
+        "answer": "B. June 1, 2026"
+      },
+      {
+        "q": "What specific areas will the investments boost?",
+        "options": [
+          "A. Manufacturing and sales",
+          "B. AI infrastructure and research capabilities",
+          "C. Marketing and public relations",
+          "D. Employee training and benefits"
+        ],
+        "answer": "B. AI infrastructure and research capabilities"
+      },
+      {
+        "q": "What is expected to be solidified by this strategic move?",
+        "options": [
+          "A. Taiwan's agricultural exports",
+          "B. Taiwan's leading position in advanced semiconductor technology",
+          "C. Taiwan's cultural heritage",
+          "D. Taiwan's political stability"
+        ],
+        "answer": "B. Taiwan's leading position in advanced semiconductor technology"
+      },
+      {
+        "q": "What kind of technology is Taiwan already strong in, according to the article?",
+        "options": [
+          "A. Biotechnology",
+          "B. Aerospace engineering",
+          "C. Advanced semiconductor technology",
+          "D. Textile manufacturing"
+        ],
+        "answer": "C. Advanced semiconductor technology"
+      },
+      {
+        "q": "What does \"converge\" mean in the context of the title?",
+        "options": [
+          "A. To separate",
+          "B. To gather at a point",
+          "C. To compete",
+          "D. To depart"
+        ],
+        "answer": "B. To gather at a point"
+      },
+      {
+        "q": "What is \"AI\" an abbreviation for?",
+        "options": [
+          "A. Advanced Industry",
+          "B. Artificial Intelligence",
+          "C. Automated Information",
+          "D. Applied Innovation"
+        ],
+        "answer": "B. Artificial Intelligence"
+      },
+      {
+        "q": "What is the effect of these investments on Taiwan?",
+        "options": [
+          "A. It will lead to a decline in talent",
+          "B. It will attract more talent and resources",
+          "C. It will decrease economic growth",
+          "D. It will make Taiwan less important"
+        ],
+        "answer": "B. It will attract more talent and resources"
+      },
+      {
+        "q": "The news article describes the style as:",
+        "options": [
+          "A. Opinionated",
+          "B. Humorous",
+          "C. Factual",
+          "D. Poetic"
+        ],
+        "answer": "C. Factual"
+      },
+      {
+        "q": "What is \"high-performance computing\" related to in the article?",
+        "options": [
+          "A. Everyday personal computers",
+          "B. Powerful systems for complex calculations",
+          "C. Gaming consoles",
+          "D. Basic calculators"
+        ],
+        "answer": "B. Powerful systems for complex calculations"
+      },
+      {
+        "q": "What is the main topic of this news article?",
+        "options": [
+          "A. TSMC's new manufacturing plants",
+          "B. NVIDIA's latest product launch",
+          "C. NVIDIA's growing financial impact on TSMC",
+          "D. The global shortage of AI chips"
+        ],
+        "answer": "C. NVIDIA's growing financial impact on TSMC"
+      },
+      {
+        "q": "By what year is NVIDIA's revenue contribution to TSMC projected to exceed 20%?",
+        "options": [
+          "A. 2024",
+          "B. 2025",
+          "C. 2026",
+          "D. 2027"
+        ],
+        "answer": "C. 2026"
+      },
+      {
+        "q": "What makes NVIDIA TSMC's 'primary growth engine'?",
+        "options": [
+          "A. Its investment in TSMC's stock",
+          "B. Its significant and increasing contribution to TSMC's sales",
+          "C. Its partnership in marketing TSMC's products",
+          "D. Its role in TSMC's research and development"
+        ],
+        "answer": "B. Its significant and increasing contribution to TSMC's sales"
+      },
+      {
+        "q": "What is the main reason behind the 'surge' in demand mentioned in the article?",
+        "options": [
+          "A. New gaming consoles",
+          "B. High demand for NVIDIA's advanced AI chips",
+          "C. Increased smartphone sales",
+          "D. Government subsidies for chip production"
+        ],
+        "answer": "B. High demand for NVIDIA's advanced AI chips"
+      },
+      {
+        "q": "What kind of technology does NVIDIA's demand rely on from TSMC?",
+        "options": [
+          "A. Basic circuit boards",
+          "B. Standard chip packaging",
+          "C. Cutting-edge manufacturing technology",
+          "D. Legacy chip designs"
+        ],
+        "answer": "C. Cutting-edge manufacturing technology"
+      },
+      {
+        "q": "The word 'exceed' in the text means:",
+        "options": [
+          "A. to be less than",
+          "B. to be equal to",
+          "C. to go beyond or be greater than",
+          "D. to come close to"
+        ],
+        "answer": "C. to go beyond or be greater than"
+      },
+      {
+        "q": "What does the term 'revenue' refer to?",
+        "options": [
+          "A. Company expenses",
+          "B. Total income from sales",
+          "C. Employee salaries",
+          "D. Investment capital"
+        ],
+        "answer": "B. Total income from sales"
+      },
+      {
+        "q": "What does the phrase 'largely driven by' imply?",
+        "options": [
+          "A. Completely caused by",
+          "B. Only slightly influenced by",
+          "C. Primarily influenced or caused by",
+          "D. Rarely affected by"
+        ],
+        "answer": "C. Primarily influenced or caused by"
+      },
+      {
+        "q": "What does the article suggest about TSMC's position in the global technology industry?",
+        "options": [
+          "A. It's a minor player",
+          "B. It has a critical and essential role",
+          "C. It is struggling to keep up with demand",
+          "D. It focuses mainly on consumer electronics"
+        ],
+        "answer": "B. It has a critical and essential role"
+      },
+      {
+        "q": "Which of the following best describes 'cutting-edge technology'?",
+        "options": [
+          "A. Outdated technology",
+          "B. Simple and basic technology",
+          "C. The most advanced and innovative technology",
+          "D. Technology used for making tools"
+        ],
+        "answer": "C. The most advanced and innovative technology"
+      },
+      {
+        "q": "The article states that NVIDIA's contribution is 'projected.' What does this mean?",
+        "options": [
+          "A. It has already happened",
+          "B. It is a definite outcome",
+          "C. It is an estimated future event",
+          "D. It is a hypothetical scenario"
+        ],
+        "answer": "C. It is an estimated future event"
+      },
+      {
+        "q": "What is the relationship between NVIDIA and TSMC as described in the article?",
+        "options": [
+          "A. Competitors",
+          "B. Customer and supplier, forming a key partnership",
+          "C. Joint venture partners in manufacturing",
+          "D. Marketing collaborators for new products"
+        ],
+        "answer": "B. Customer and supplier, forming a key partnership"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美國查扣伊朗10億美元加密資產，加劇兩國緊張關係",
+    "tabTitle": "地緣政治",
+    "english": "On June 1, 2026, the United States announced it had seized approximately $1 billion in cryptocurrency assets linked to Iran. This action, targeting funds allegedly used to circumvent sanctions, marks a significant escalation in geopolitical tensions between Washington and Tehran. The move is expected to further complicate international efforts to de-escalate regional conflicts and could prompt retaliatory measures from Iran.",
+    "chinese": "2026年6月1日，美國宣布已查扣約10億美元與伊朗相關的加密貨幣資產。此舉旨在打擊據稱用於規避制裁的資金，標誌著華盛頓和德黑蘭之間地緣政治緊張局勢的顯著升級。此舉預計將進一步使國際社會緩和地區衝突的努力複雜化，並可能引發伊朗的報復措施。",
+    "vocabulary": [
+      "seize (v.): 查扣；沒收",
+      "cryptocurrency (n.): 加密貨幣",
+      "asset (n.): 資產",
+      "escalate (v.): 升級；加劇",
+      "tension (n.): 緊張關係；緊張局勢",
+      "geopolitical (adj.): 地緣政治的",
+      "circumvent (v.): 規避；避開",
+      "sanction (n.): 制裁",
+      "allegedly (adv.): 據稱；據說",
+      "Washington (n.): 華盛頓 (代指美國政府)",
+      "Tehran (n.): 德黑蘭 (代指伊朗政府)",
+      "significant (adj.): 顯著的；重要的",
+      "de-escalate (v.): 緩和；降級",
+      "retaliatory (adj.): 報復性的",
+      "measure (n.): 措施；手段",
+      "complicate (v.): 使複雜化",
+      "international (adj.): 國際的",
+      "regional (adj.): 地區的",
+      "conflict (n.): 衝突",
+      "prompt (v.): 促使；引起"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A) The rise of cryptocurrency in the Middle East",
+          "B) US and Iran's efforts to collaborate on financial regulations",
+          "C) The US seizing Iranian crypto assets and escalating tensions",
+          "D) Iran's new strategies for investing in digital currencies"
+        ],
+        "answer": "C) The US seizing Iranian crypto assets and escalating tensions"
+      },
+      {
+        "q": "What was the approximate value of the assets seized by the US?",
+        "options": [
+          "A) $100 million",
+          "B) $500 million",
+          "C) $1 billion",
+          "D) $2 billion"
+        ],
+        "answer": "C) $1 billion"
+      },
+      {
+        "q": "When did this event reportedly occur?",
+        "options": [
+          "A) May 1, 2026",
+          "B) June 1, 2026",
+          "C) July 1, 2026",
+          "D) August 1, 2026"
+        ],
+        "answer": "B) June 1, 2026"
+      },
+      {
+        "q": "Why did the US seize these assets?",
+        "options": [
+          "A) To promote cryptocurrency adoption",
+          "B) To fund humanitarian aid",
+          "C) Because they were allegedly used to circumvent sanctions",
+          "D) To invest in new US technologies"
+        ],
+        "answer": "C) Because they were allegedly used to circumvent sanctions"
+      },
+      {
+        "q": "What is a direct consequence mentioned in the article regarding this action?",
+        "options": [
+          "A) Increased trade between the US and Iran",
+          "B) A significant escalation in geopolitical tensions",
+          "C) A new agreement on cryptocurrency regulation",
+          "D) Reduced regional conflicts"
+        ],
+        "answer": "B) A significant escalation in geopolitical tensions"
+      },
+      {
+        "q": "The word \"escalation\" in the article means:",
+        "options": [
+          "A) A decrease in intensity",
+          "B) A steady maintenance of status quo",
+          "C) An increase in intensity or severity",
+          "D) A peaceful resolution"
+        ],
+        "answer": "C) An increase in intensity or severity"
+      },
+      {
+        "q": "To \"circumvent sanctions\" means to:",
+        "options": [
+          "A) Fully comply with sanctions",
+          "B) Find ways to avoid or bypass sanctions",
+          "C) Directly challenge sanctions through legal means",
+          "D) Implement new sanctions"
+        ],
+        "answer": "B) Find ways to avoid or bypass sanctions"
+      },
+      {
+        "q": "How might this action affect international efforts?",
+        "options": [
+          "A) It will simplify efforts to resolve conflicts",
+          "B) It will complicate efforts to de-escalate regional conflicts",
+          "C) It will have no impact on international efforts",
+          "D) It will lead to new international alliances"
+        ],
+        "answer": "B) It will complicate efforts to de-escalate regional conflicts"
+      },
+      {
+        "q": "What kind of response is anticipated from Iran?",
+        "options": [
+          "A) A formal apology",
+          "B) Increased diplomatic talks",
+          "C) Retaliatory measures",
+          "D) A request for international mediation"
+        ],
+        "answer": "C) Retaliatory measures"
+      },
+      {
+        "q": "In the context of the article, \"Washington\" and \"Tehran\" refer to:",
+        "options": [
+          "A) Two cities known for cryptocurrency trading",
+          "B) The capitals of the US and Iran, representing their governments",
+          "C) Two major international banks",
+          "D) The names of the seized cryptocurrencies"
+        ],
+        "answer": "B) The capitals of the US and Iran, representing their governments"
+      },
+      {
+        "q": "What specific type of assets were seized?",
+        "options": [
+          "A) Oil reserves",
+          "B) Gold bullion",
+          "C) Real estate",
+          "D) Cryptocurrency"
+        ],
+        "answer": "D) Cryptocurrency"
+      },
+      {
+        "q": "What is the overall tone of the news report?",
+        "options": [
+          "A) Optimistic and hopeful",
+          "B) Neutral and factual",
+          "C) Critical and accusatory",
+          "D) Humorous and lighthearted"
+        ],
+        "answer": "B) Neutral and factual"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "微軟自研AI程式模型登場，挑戰OpenAI市場霸權",
+    "tabTitle": "科技",
+    "english": "Microsoft officially unveiled its own internally developed artificial intelligence model today, named 'Orion,' marking a significant move in the competitive AI landscape. This powerful new model aims to offer advanced capabilities for various applications, directly competing with established players like OpenAI, particularly in enterprise solutions. Industry analysts suggest that Orion's launch could reshape the generative AI market, potentially reducing Microsoft's reliance on third-party AI solutions and intensifying the race for innovation and market share. This strategic development underscores Microsoft's commitment to leading the AI revolution.",
+    "chinese": "微軟今天正式發布了其內部自主開發的人工智慧模型，名為「獵戶座」(Orion)，這標誌著在競爭激烈的人工智慧領域邁出了重要一步。這款強大的新模型旨在為各種應用提供先進功能，直接與OpenAI等既有參與者競爭，尤其是在企業解決方案方面。產業分析師指出，「獵戶座」的推出可能會重塑生成式人工智慧市場，潛在降低微軟對第三方人工智慧解決方案的依賴，並加劇創新和市場份額的競爭。這項策略性發展突顯了微軟引領人工智慧革命的決心。",
+    "vocabulary": [
+      "Debuts (v.): 首次亮相",
+      "In-house (adj.): 內部開發的",
+      "AI Model (n.phr.): 人工智慧模型",
+      "Challenging (v.): 挑戰",
+      "Market Dominance (n.phr.): 市場主導地位",
+      "Officially (adv.): 正式地",
+      "Unveiled (v.): 揭曉；發布",
+      "Internally developed (adj.phr.): 內部自主開發的",
+      "Artificial intelligence (n.phr.): 人工智慧",
+      "Significant (adj.): 重要的；重大的",
+      "Competitive (adj.): 競爭激烈的",
+      "Landscape (n.): 局面；領域",
+      "Powerful (adj.): 強大的",
+      "Advanced capabilities (n.phr.): 先進功能",
+      "Established players (n.phr.): 既有參與者",
+      "Enterprise solutions (n.phr.): 企業解決方案",
+      "Industry analysts (n.phr.): 產業分析師",
+      "Reshape (v.): 重塑",
+      "Generative AI (n.phr.): 生成式人工智慧",
+      "Reliance (n.): 依賴"
+    ],
+    "quiz": [
+      {
+        "q": "What is the name of Microsoft's new AI model mentioned in the news?",
+        "options": [
+          "A. Athena",
+          "B. Gemini",
+          "C. Orion",
+          "D. Titan"
+        ],
+        "answer": "C. Orion"
+      },
+      {
+        "q": "What is the main purpose of Microsoft's new AI model?",
+        "options": [
+          "A. To replace all human jobs",
+          "B. To offer advanced capabilities for various applications",
+          "C. To only work within Microsoft's internal systems",
+          "D. To develop new gaming consoles"
+        ],
+        "answer": "B. To offer advanced capabilities for various applications"
+      },
+      {
+        "q": "Which company is Microsoft directly competing with, according to the news?",
+        "options": [
+          "A. Google",
+          "B. Amazon",
+          "C. OpenAI",
+          "D. Apple"
+        ],
+        "answer": "C. OpenAI"
+      },
+      {
+        "q": "What kind of solutions is the new AI model particularly focused on?",
+        "options": [
+          "A. Personal entertainment",
+          "B. Healthcare research",
+          "C. Enterprise solutions",
+          "D. Space exploration"
+        ],
+        "answer": "C. Enterprise solutions"
+      },
+      {
+        "q": "What do industry analysts suggest about Orion's launch?",
+        "options": [
+          "A. It will have no impact on the market.",
+          "B. It could reshape the generative AI market.",
+          "C. It will only benefit Microsoft's competitors.",
+          "D. It signifies the end of AI development."
+        ],
+        "answer": "B. It could reshape the generative AI market."
+      },
+      {
+        "q": "How might Orion's launch affect Microsoft's reliance on third-party AI solutions?",
+        "options": [
+          "A. It will increase reliance.",
+          "B. It will have no effect.",
+          "C. It could potentially reduce reliance.",
+          "D. It will make Microsoft an AI solution provider for others."
+        ],
+        "answer": "C. It could potentially reduce reliance."
+      },
+      {
+        "q": "What is intensifying due to this strategic development?",
+        "options": [
+          "A. The demand for physical products.",
+          "B. The race for innovation and market share.",
+          "C. The cost of raw materials.",
+          "D. The need for traditional software."
+        ],
+        "answer": "B. The race for innovation and market share."
+      },
+      {
+        "q": "What does this strategic development underscore about Microsoft?",
+        "options": [
+          "A. Its plan to exit the AI market.",
+          "B. Its commitment to leading the AI revolution.",
+          "C. Its focus on hardware development.",
+          "D. Its decision to partner exclusively with OpenAI."
+        ],
+        "answer": "B. Its commitment to leading the AI revolution."
+      },
+      {
+        "q": "When was Microsoft's in-house AI model officially unveiled?",
+        "options": [
+          "A. Yesterday",
+          "B. Last week",
+          "C. Today",
+          "D. Next month"
+        ],
+        "answer": "C. Today"
+      },
+      {
+        "q": "What does the term \"in-house\" mean in this context?",
+        "options": [
+          "A. Developed by another company",
+          "B. Developed internally by Microsoft",
+          "C. Developed for home use only",
+          "D. Developed by an external contractor"
+        ],
+        "answer": "B. Developed internally by Microsoft"
+      },
+      {
+        "q": "The news describes the AI landscape as:",
+        "options": [
+          "A. Stagnant",
+          "B. Unchanging",
+          "C. Competitive",
+          "D. Monopolistic"
+        ],
+        "answer": "C. Competitive"
+      },
+      {
+        "q": "What kind of AI is specifically mentioned as being potentially reshaped by Orion's launch?",
+        "options": [
+          "A. Predictive AI",
+          "B. Analytical AI",
+          "C. Generative AI",
+          "D. Robotics AI"
+        ],
+        "answer": "C. Generative AI"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "外媒揭中國AI人才出境受限，防技術外洩與人才流失",
+    "tabTitle": "地緣政治",
+    "english": "Recent foreign media reports indicate that China has placed tighter travel restrictions on domestic artificial intelligence researchers. This policy aims to prevent critical technology leakage and curb brain drain to Western competitors. According to sources, top-tier AI scientists must now obtain special approval before traveling abroad for conferences or academic collaborations. As geopolitical tensions rise, Beijing is prioritizing technological self-reliance and national security over international academic exchange, raising concerns about future scientific progress.",
+    "chinese": "最近的外媒報導指出，中國對國內的人工智慧（AI）研究人員實施了更嚴格的出境限制。這項政策旨在防止關鍵技術外洩，並遏止人才流失到西方競爭對手手中。據消息人士透露，頂尖的 AI 科學家現在出國參加會議或進行學術合作前，必須獲得特別批准。隨著地緣政治緊張局勢升級，北京正將技術自立與國家安全置於國際學術交流之上，這引發了人們對未來科學進展的擔憂。",
+    "vocabulary": [
+      "restrict (v.): 限制",
+      "leakage (n.): 洩漏",
+      "brain drain (n. phr.): 人才流失",
+      "domestic (adj.): 國內的",
+      "critical (adj.): 關鍵的；至關重要的",
+      "curb (v.): 遏止；控制",
+      "competitor (n.): 競爭對手",
+      "top-tier (adj.): 頂尖的；一流的",
+      "approval (n.): 批准；同意",
+      "collaboration (n.): 合作",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張局勢",
+      "prioritize (v.): 優先考慮",
+      "self-reliance (n.): 自力更生；自立",
+      "academic (adj.): 學術的",
+      "exchange (n.): 交流；交換",
+      "raise concerns (v. phr.): 引發擔憂",
+      "scientific (adj.): 科學的",
+      "progress (n.): 進步；進展",
+      "foreign media (n. phr.): 外國媒體"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main reason for China's travel restrictions on AI researchers according to the text?",
+        "options": [
+          "To reduce travel expenses",
+          "To prevent tech leakage and brain drain",
+          "To encourage domestic tourism",
+          "To protest international conferences"
+        ],
+        "answer": "To prevent tech leakage and brain drain"
+      },
+      {
+        "q": "What does the term 'brain drain' refer to in the text?",
+        "options": [
+          "Intellectual exhaustion",
+          "Loss of highly skilled intellectual talent",
+          "Medical brain surgery",
+          "Decline in educational standards"
+        ],
+        "answer": "Loss of highly skilled intellectual talent"
+      },
+      {
+        "q": "What must top-tier AI scientists now do before traveling abroad?",
+        "options": [
+          "Resign from their posts",
+          "Pay a high travel tax",
+          "Obtain special approval",
+          "Publish their research papers"
+        ],
+        "answer": "Obtain special approval"
+      },
+      {
+        "q": "Which word is closest in meaning to 'curb' as used in the text?",
+        "options": [
+          "Encourage",
+          "Restrict",
+          "Ignore",
+          "Accelerate"
+        ],
+        "answer": "Restrict"
+      },
+      {
+        "q": "What is Beijing prioritizing over international academic exchange?",
+        "options": [
+          "Economic tourism",
+          "Technological self-reliance and national security",
+          "Space exploration",
+          "Environmental protection"
+        ],
+        "answer": "Technological self-reliance and national security"
+      },
+      {
+        "q": "What does 'top-tier' mean?",
+        "options": [
+          "Lowest level",
+          "Middle tier",
+          "First-class or highest quality",
+          "Outdated"
+        ],
+        "answer": "First-class or highest quality"
+      },
+      {
+        "q": "Complete the sentence: The government hopes to _______ the flow of illegal goods.",
+        "options": [
+          "curb",
+          "collaborate",
+          "prioritize",
+          "self-reliance"
+        ],
+        "answer": "curb"
+      },
+      {
+        "q": "According to the text, what might be affected by these travel restrictions?",
+        "options": [
+          "Global agricultural output",
+          "Future scientific progress",
+          "Tourism in Europe",
+          "The price of consumer electronics"
+        ],
+        "answer": "Future scientific progress"
+      },
+      {
+        "q": "Choose the synonym for 'collaboration'.",
+        "options": [
+          "Competition",
+          "Isolation",
+          "Cooperation",
+          "Dispute"
+        ],
+        "answer": "Cooperation"
+      },
+      {
+        "q": "The word 'geopolitical' relates to:",
+        "options": [
+          "Local weather patterns",
+          "Politics influenced by geographical factors",
+          "Historical archaeological studies",
+          "Deep-sea explorations"
+        ],
+        "answer": "Politics influenced by geographical factors"
+      },
+      {
+        "q": "What is the noun form of the verb 'approve'?",
+        "options": [
+          "Approvingly",
+          "Approval",
+          "Approver",
+          "Approved"
+        ],
+        "answer": "Approval"
+      },
+      {
+        "q": "Complete the sentence: Because of the economic crisis, the company decided to _______ cost reduction.",
+        "options": [
+          "prioritize",
+          "restrict",
+          "leak",
+          "exchange"
+        ],
+        "answer": "prioritize"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "英特爾攜手3DGS赴印度建廠，加速玻璃基板量產競賽",
+    "tabTitle": "科技",
+    "english": "On June 1, 2026, Intel and 3D Glass Solutions (3DGS) announced a strategic partnership to establish a new manufacturing facility in India. This significant joint venture aims to accelerate the mass production of advanced glass substrates, which are crucial for next-generation semiconductor packaging technologies. The move intensifies the global competition among tech giants to develop high-performance, cost-effective substrate solutions, further positioning India as a key player in the evolving semiconductor supply chain and future chip manufacturing.",
+    "chinese": "2026年6月1日，英特爾和3D Glass Solutions (3DGS) 宣布建立戰略合作夥伴關係，將在印度設立一座新的製造工廠。這項重要的合資企業旨在加速先進玻璃基板的量產，這些基板對於下一代半導體封裝技術至關重要。此舉加劇了全球科技巨頭之間開發高性能、高成本效益基板解決方案的競爭，進一步將印度定位為不斷發展的半導體供應鏈和未來晶片製造的關鍵參與者。",
+    "vocabulary": [
+      "Intel (n.): 英特爾",
+      "3D Glass Solutions (3DGS) (n.): 3D玻璃解決方案公司 (3DGS)",
+      "strategic partnership (n.): 戰略合作夥伴關係",
+      "manufacturing facility (n.): 製造工廠",
+      "joint venture (n.): 合資企業",
+      "accelerate (v.): 加速",
+      "mass production (n.): 量產",
+      "advanced (adj.): 先進的",
+      "glass substrates (n.): 玻璃基板",
+      "crucial (adj.): 至關重要的",
+      "next-generation (adj.): 下一代的",
+      "semiconductor packaging (n.): 半導體封裝",
+      "intensify (v.): 加劇",
+      "global competition (n.): 全球競爭",
+      "tech giants (n.): 科技巨頭",
+      "high-performance (adj.): 高性能的",
+      "cost-effective (adj.): 具有成本效益的",
+      "positioning (v.): 定位",
+      "key player (n.): 關鍵參與者",
+      "supply chain (n.): 供應鏈"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of the partnership between Intel and 3DGS?",
+        "options": [
+          "To develop new software applications.",
+          "To establish a manufacturing facility for glass substrates.",
+          "To design new processor architectures.",
+          "To research renewable energy solutions."
+        ],
+        "answer": "To establish a manufacturing facility for glass substrates."
+      },
+      {
+        "q": "Where will the new manufacturing facility be located?",
+        "options": [
+          "China",
+          "United States",
+          "India",
+          "Germany"
+        ],
+        "answer": "India"
+      },
+      {
+        "q": "What specific product will be mass-produced at the new facility?",
+        "options": [
+          "Silicon wafers",
+          "Advanced glass substrates",
+          "Processor chips",
+          "Memory modules"
+        ],
+        "answer": "Advanced glass substrates"
+      },
+      {
+        "q": "Why are these glass substrates considered 'crucial'?",
+        "options": [
+          "They are used for building construction.",
+          "They are essential for next-generation semiconductor packaging.",
+          "They are a new type of display technology.",
+          "They are components for solar panels."
+        ],
+        "answer": "They are essential for next-generation semiconductor packaging."
+      },
+      {
+        "q": "What is the effect of this move on the global tech industry?",
+        "options": [
+          "It reduces global competition.",
+          "It intensifies global competition in substrate solutions.",
+          "It slows down technological development.",
+          "It has no significant impact."
+        ],
+        "answer": "It intensifies global competition in substrate solutions."
+      },
+      {
+        "q": "What role is India expected to play due to this investment?",
+        "options": [
+          "A minor role in marketing.",
+          "A key player in the semiconductor supply chain.",
+          "A consumer market for the products only.",
+          "A source of raw materials."
+        ],
+        "answer": "A key player in the semiconductor supply chain."
+      },
+      {
+        "q": "What does 'accelerate' mean in the context of the news?",
+        "options": [
+          "To slow down.",
+          "To speed up.",
+          "To stop.",
+          "To maintain."
+        ],
+        "answer": "To speed up."
+      },
+      {
+        "q": "Which term describes the partnership between Intel and 3DGS?",
+        "options": [
+          "Casual agreement.",
+          "Strategic partnership.",
+          "Temporary collaboration.",
+          "Informal discussion."
+        ],
+        "answer": "Strategic partnership."
+      },
+      {
+        "q": "What are 'tech giants' referring to in the article?",
+        "options": [
+          "Large, powerful technology companies.",
+          "Small, startup companies.",
+          "Government agencies.",
+          "Academic institutions."
+        ],
+        "answer": "Large, powerful technology companies."
+      },
+      {
+        "q": "What is the definition of 'mass production'?",
+        "options": [
+          "Producing a small number of items.",
+          "Producing items slowly by hand.",
+          "Manufacturing goods in large quantities.",
+          "Producing customized, one-off items."
+        ],
+        "answer": "Manufacturing goods in large quantities."
+      },
+      {
+        "q": "The new facility aims to produce substrates that are both high-performance and...?",
+        "options": [
+          "Expensive.",
+          "Fragile.",
+          "Cost-effective.",
+          "Outdated."
+        ],
+        "answer": "Cost-effective."
+      },
+      {
+        "q": "What specific date was this announcement made?",
+        "options": [
+          "May 1, 2026.",
+          "June 1, 2026.",
+          "July 1, 2026.",
+          "August 1, 2026."
+        ],
+        "answer": "June 1, 2026."
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
