@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 02, 2026：科技、科技 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 高通攜21家台廠，Computex聚焦AI代理元年\nQualcomm is making a significant impact at Computex 2026, partnering with 21 Taiwanese manufacturers. The event highlights the dawn of the AI Agent era, with Qualcomm showcasing its advanced Snapdragon X Elite processors. These chips are designed to power a new generation of AI PCs, emphasizing on-device intelligence and enhanced user experiences. This collaboration aims to accelerate the development and adoption of AI technologies across various sectors, positioning Taiwan as a key player.\n\n[2] 台電澄清電價爭議，逾97%用戶不受8.86元費率影響\nTaipei, June 2, 2026 – Taipower today clarified recent public concerns regarding electricity price adjustments. The company announced that over 97% of its users will not be impacted by the higher NT$8.86 per kilowatt-hour tariff. This clarification aims to address misunderstandings and assure the public that the significant rate increase primarily affects a small segment of high-consumption industrial users. Residential and most commercial customers will continue to pay existing rates, reflecting Taipower's commitment to stable power supply for general households.\n\n[3] 台積電與輝達深化AI合作，推進晶片製造創新\nTSMC and Nvidia are significantly strengthening their partnership in artificial intelligence. This collaboration aims to accelerate innovation in advanced chip manufacturing, particularly for AI applications. Experts believe this move will drive the development of next-generation processors, enhancing performance and efficiency. Both companies are committed to pushing the boundaries of semiconductor technology, ensuring a competitive edge in the global market.",
+    "chinese": "【1】高通攜21家台廠，Computex聚焦AI代理元年\n高通在2026年台北國際電腦展（Computex）上展現其重要影響力，與21家台灣製造商建立合作夥伴關係。本次展會聚焦於AI代理（AI Agent）時代的來臨，高通展示其先進的Snapdragon X Elite處理器。這些晶片旨在為新一代AI PC提供動力，強調裝置上的智慧功能和增強的使用者體驗。此次合作旨在加速各行各業AI技術的開發和採用，使台灣成為關鍵參與者。\n\n【2】台電澄清電價爭議，逾97%用戶不受8.86元費率影響\n台北，2026年6月2日 – 台電今日澄清近期大眾對電價調整的疑慮。該公司宣布，超過97%的用戶將不受每度新台幣8.86元的高費率影響。這項澄清旨在解決誤解，並向大眾保證，大幅度的電價上漲主要影響一小部分高用電量的工業用戶。住宅用戶和大多數商業用戶將繼續支付現有費率，這反映了台電對一般家庭穩定供電的承諾。\n\n【3】台積電與輝達深化AI合作，推進晶片製造創新\n台積電與輝達正顯著加強他們在人工智慧領域的合作夥伴關係。此次合作旨在加速先進晶片製造的創新，特別是針對AI應用。專家認為，此舉將推動下一代處理器的開發，提升性能和效率。兩家公司都致力於突破半導體技術的界限，確保在全球市場中保持競爭優勢。",
+    "vocabulary": [
+      "Qualcomm (n.): 高通",
+      "partner (v.): 合作",
+      "firm (n.): 公司；廠商",
+      "Computex (n.): 台北國際電腦展",
+      "highlight (v.): 強調；突顯",
+      "AI Agent (n.phr.): AI代理",
+      "era (n.): 時代",
+      "significant (adj.): 重要的",
+      "impact (n.): 影響",
+      "manufacturer (n.): 製造商",
+      "showcase (v.): 展示",
+      "advanced (adj.): 先進的",
+      "processor (n.): 處理器",
+      "power (v.): 為...提供動力",
+      "generation (n.): 一代",
+      "emphasize (v.): 強調",
+      "on-device (adj.): 裝置上的",
+      "intelligence (n.): 智慧",
+      "enhanced (adj.): 增強的",
+      "user experience (n.phr.): 使用者體驗",
+      "clarify (v.): 澄清",
+      "concern (n.): 疑慮；擔憂",
+      "adjustment (n.): 調整",
+      "announce (v.): 宣布",
+      "impact (v.): 影響",
+      "tariff (n.): 費率；關稅",
+      "address (v.): 處理；解決",
+      "misunderstanding (n.): 誤解",
+      "assure (v.): 向…保證",
+      "primarily (adv.): 主要地",
+      "segment (n.): 部分；區塊",
+      "consumption (n.): 消耗；消費",
+      "industrial (adj.): 工業的",
+      "residential (adj.): 住宅的",
+      "commercial (adj.): 商業的",
+      "existing (adj.): 現有的",
+      "reflect (v.): 反映",
+      "commitment (n.): 承諾",
+      "stable (adj.): 穩定的",
+      "household (n.): 家庭",
+      "deepen (v.): 深化",
+      "collaboration (n.): 合作",
+      "artificial intelligence (n.): 人工智慧 (AI)",
+      "advanced (adj.): 先進的",
+      "chip manufacturing (n.): 晶片製造",
+      "innovation (n.): 創新",
+      "partnership (n.): 夥伴關係",
+      "accelerate (v.): 加速",
+      "application (n.): 應用",
+      "expert (n.): 專家",
+      "next-generation (adj.): 下一代的",
+      "processor (n.): 處理器",
+      "enhance (v.): 提升，增強",
+      "performance (n.): 性能",
+      "efficiency (n.): 效率",
+      "commit to (phr. v.): 致力於",
+      "push the boundaries (phr.): 突破界限",
+      "semiconductor (n.): 半導體",
+      "competitive edge (n.): 競爭優勢",
+      "global market (n.): 全球市場"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main focus of Qualcomm's presence at Computex 2026?",
+        "options": [
+          "Showcasing new smartphones",
+          "Partnering with Taiwanese firms for AI PCs",
+          "Discussing quantum computing",
+          "Launching a new gaming console"
+        ],
+        "answer": "Partnering with Taiwanese firms for AI PCs"
+      },
+      {
+        "q": "How many Taiwanese manufacturers is Qualcomm partnering with?",
+        "options": [
+          "10",
+          "15",
+          "21",
+          "26"
+        ],
+        "answer": "21"
+      },
+      {
+        "q": "What specific type of processors is Qualcomm showcasing at Computex?",
+        "options": [
+          "Snapdragon X Elite",
+          "Intel Core Ultra",
+          "Apple M3",
+          "AMD Ryzen 9"
+        ],
+        "answer": "Snapdragon X Elite"
+      },
+      {
+        "q": "The news highlights the \"dawn of the AI Agent era.\" What does \"era\" most closely mean here?",
+        "options": [
+          "A short meeting",
+          "A long period of time",
+          "A type of software",
+          "A business strategy"
+        ],
+        "answer": "A long period of time"
+      },
+      {
+        "q": "What do the new Qualcomm chips for AI PCs emphasize?",
+        "options": [
+          "Cloud-based processing and low battery life",
+          "On-device intelligence and enhanced user experiences",
+          "Only gaming performance",
+          "Reduced manufacturing costs"
+        ],
+        "answer": "On-device intelligence and enhanced user experiences"
+      },
+      {
+        "q": "The word \"impact\" in the first sentence (\"making a significant impact\") is closest in meaning to:",
+        "options": [
+          "Collision",
+          "Effect",
+          "Small change",
+          "Lack of influence"
+        ],
+        "answer": "Effect"
+      },
+      {
+        "q": "What is the primary goal of the collaboration between Qualcomm and Taiwanese firms?",
+        "options": [
+          "To reduce the price of existing PCs",
+          "To slow down AI development",
+          "To accelerate the development and adoption of AI technologies",
+          "To focus solely on smartphone technology"
+        ],
+        "answer": "To accelerate the development and adoption of AI technologies"
+      },
+      {
+        "q": "According to the text, which region is positioned as a \"key player\" in AI technology development due to this collaboration?",
+        "options": [
+          "China",
+          "United States",
+          "Taiwan",
+          "South Korea"
+        ],
+        "answer": "Taiwan"
+      },
+      {
+        "q": "What does \"on-device intelligence\" primarily refer to in the context of AI PCs?",
+        "options": [
+          "AI processing happening remotely on servers",
+          "AI capabilities integrated directly into the device hardware",
+          "AI that requires a constant internet connection",
+          "AI that only works with specific brands"
+        ],
+        "answer": "AI capabilities integrated directly into the device hardware"
+      },
+      {
+        "q": "The word \"accelerate\" in the text means to:",
+        "options": [
+          "Slow down",
+          "Speed up",
+          "Stop completely",
+          "Maintain a steady pace"
+        ],
+        "answer": "Speed up"
+      },
+      {
+        "q": "The news suggests that AI PCs with Qualcomm's chips will offer users a better what?",
+        "options": [
+          "Sound quality",
+          "Visual display",
+          "User experience",
+          "Battery charger"
+        ],
+        "answer": "User experience"
+      },
+      {
+        "q": "Which major event is central to this news report?",
+        "options": [
+          "CES",
+          "Mobile World Congress",
+          "Computex",
+          "IFA"
+        ],
+        "answer": "Computex"
+      },
+      {
+        "q": "What is the main purpose of Taipower's announcement?",
+        "options": [
+          "A. To raise electricity prices for all users.",
+          "B. To clarify misunderstandings about electricity rates.",
+          "C. To introduce new industrial tariffs.",
+          "D. To encourage higher electricity consumption."
+        ],
+        "answer": "B. To clarify misunderstandings about electricity rates."
+      },
+      {
+        "q": "According to Taipower, what percentage of users will NOT be affected by the higher NT$8.86 tariff?",
+        "options": [
+          "A. Less than 50%.",
+          "B. Exactly 8.86%.",
+          "C. Over 97%.",
+          "D. All users."
+        ],
+        "answer": "C. Over 97%."
+      },
+      {
+        "q": "Who is primarily affected by the significant rate increase?",
+        "options": [
+          "A. Residential customers.",
+          "B. Most commercial customers.",
+          "C. A small segment of high-consumption industrial users.",
+          "D. All Taipower users equally."
+        ],
+        "answer": "C. A small segment of high-consumption industrial users."
+      },
+      {
+        "q": "What will residential and most commercial customers continue to pay?",
+        "options": [
+          "A. The new NT$8.86 per kilowatt-hour rate.",
+          "B. Higher rates than before.",
+          "C. Existing rates.",
+          "D. No rates at all."
+        ],
+        "answer": "C. Existing rates."
+      },
+      {
+        "q": "The word \"clarify\" in the news means to:",
+        "options": [
+          "A. Make something difficult.",
+          "B. Make something clear or easier to understand.",
+          "C. Hide information.",
+          "D. Adjust prices."
+        ],
+        "answer": "B. Make something clear or easier to understand."
+      },
+      {
+        "q": "What does Taipower's \"commitment\" to stable power supply imply?",
+        "options": [
+          "A. They promise to change rates frequently.",
+          "B. They are dedicated to providing consistent electricity.",
+          "C. They will only supply power to industries.",
+          "D. They will stop supplying power to households."
+        ],
+        "answer": "B. They are dedicated to providing consistent electricity."
+      },
+      {
+        "q": "The news states that the clarification \"aims to address misunderstandings.\" What does \"address\" mean in this context?",
+        "options": [
+          "A. To ignore.",
+          "B. To send a letter to.",
+          "C. To deal with or resolve.",
+          "D. To create."
+        ],
+        "answer": "C. To deal with or resolve."
+      },
+      {
+        "q": "What type of users are NOT significantly impacted by the new high tariff?",
+        "options": [
+          "A. High-consumption industrial users.",
+          "B. Residential users.",
+          "C. Users with very high electricity bills.",
+          "D. Users who consume more than average."
+        ],
+        "answer": "B. Residential users."
+      },
+      {
+        "q": "What is the unit for the higher electricity rate mentioned?",
+        "options": [
+          "A. NT$8.86 per month.",
+          "B. NT$8.86 per year.",
+          "C. NT$8.86 per kilowatt-hour.",
+          "D. NT$8.86 per household."
+        ],
+        "answer": "C. NT$8.86 per kilowatt-hour."
+      },
+      {
+        "q": "What does \"primarily\" mean in \"primarily affects a small segment\"?",
+        "options": [
+          "A. Rarely.",
+          "B. Equally.",
+          "C. Mostly or mainly.",
+          "D. Never."
+        ],
+        "answer": "C. Mostly or mainly."
+      },
+      {
+        "q": "The term \"tariff\" refers to:",
+        "options": [
+          "A. A type of tax.",
+          "B. A type of electricity meter.",
+          "C. A rate or charge.",
+          "D. A power plant."
+        ],
+        "answer": "C. A rate or charge."
+      },
+      {
+        "q": "According to the news, what is the date of this announcement?",
+        "options": [
+          "A. June 2, 2024.",
+          "B. June 2, 2026.",
+          "C. May 2, 2026.",
+          "D. July 2, 2026."
+        ],
+        "answer": "B. June 2, 2026."
+      },
+      {
+        "q": "What is the primary focus of the collaboration between TSMC and Nvidia?",
+        "options": [
+          "A. Smartphone manufacturing",
+          "B. Artificial intelligence and chip manufacturing",
+          "C. Automotive design",
+          "D. Renewable energy solutions"
+        ],
+        "answer": "B. Artificial intelligence and chip manufacturing"
+      },
+      {
+        "q": "What kind of chips are particularly targeted by this collaboration?",
+        "options": [
+          "A. Memory chips",
+          "B. AI applications chips",
+          "C. Graphics cards for gaming",
+          "D. Basic CPU units"
+        ],
+        "answer": "B. AI applications chips"
+      },
+      {
+        "q": "According to experts, what will this collaboration drive the development of?",
+        "options": [
+          "A. Older generation processors",
+          "B. Next-generation processors",
+          "C. Software applications only",
+          "D. Consumer electronics"
+        ],
+        "answer": "B. Next-generation processors"
+      },
+      {
+        "q": "What two qualities of processors are expected to be enhanced by this partnership?",
+        "options": [
+          "A. Size and weight",
+          "B. Cost and availability",
+          "C. Performance and efficiency",
+          "D. Design and color"
+        ],
+        "answer": "C. Performance and efficiency"
+      },
+      {
+        "q": "What technology are both companies committed to pushing the boundaries of?",
+        "options": [
+          "A. Biotechnology",
+          "B. Aerospace engineering",
+          "C. Semiconductor technology",
+          "D. Financial technology"
+        ],
+        "answer": "C. Semiconductor technology"
+      },
+      {
+        "q": "What does \"deepen\" most closely mean in the context of the news title?",
+        "options": [
+          "A. To make something less important",
+          "B. To make something stronger or more intense",
+          "C. To dig a hole",
+          "D. To hide something"
+        ],
+        "answer": "B. To make something stronger or more intense"
+      },
+      {
+        "q": "The word \"accelerate\" in the news implies:",
+        "options": [
+          "A. Slowing down progress",
+          "B. Speeding up progress",
+          "C. Stopping development",
+          "D. Changing direction"
+        ],
+        "answer": "B. Speeding up progress"
+      },
+      {
+        "q": "What does \"innovation\" refer to in the context of chip manufacturing?",
+        "options": [
+          "A. Repeating old methods",
+          "B. Creating new and better methods or products",
+          "C. Reducing production quantity",
+          "D. Outsourcing labor"
+        ],
+        "answer": "B. Creating new and better methods or products"
+      },
+      {
+        "q": "What is the ultimate goal for TSMC and Nvidia in the global market, as stated in the news?",
+        "options": [
+          "A. To reduce their market share",
+          "B. To ensure a competitive edge",
+          "C. To withdraw from the market",
+          "D. To focus only on local markets"
+        ],
+        "answer": "B. To ensure a competitive edge"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a benefit of the collaboration?",
+        "options": [
+          "A. Driving next-generation processor development",
+          "B. Enhancing performance",
+          "C. Reducing manufacturing costs significantly",
+          "D. Improving efficiency"
+        ],
+        "answer": "C. Reducing manufacturing costs significantly"
+      },
+      {
+        "q": "What does \"commit to\" mean in the phrase \"Both companies are committed to pushing the boundaries\"?",
+        "options": [
+          "A. To casually consider",
+          "B. To be dedicated to",
+          "C. To avoid responsibility for",
+          "D. To criticize"
+        ],
+        "answer": "B. To be dedicated to"
+      },
+      {
+        "q": "What kind of style is the news written in?",
+        "options": [
+          "A. Opinionated and subjective",
+          "B. Factual and objective",
+          "C. Poetic and artistic",
+          "D. Humorous and light-hearted"
+        ],
+        "answer": "B. Factual and objective"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "輝達發表AI超級晶片，聯手微軟革新Windows PC",
+    "tabTitle": "科技",
+    "english": "Nvidia officially unveiled its new AI superchip on June 2, 2026. This powerful chip is designed to transform personal computing. In a major announcement, Nvidia also confirmed its partnership with Microsoft. Together, they aim to reinvent the Windows PC experience, integrating advanced artificial intelligence capabilities directly into the operating system. This collaboration marks a significant step towards more intelligent and efficient computing for users worldwide.",
+    "chinese": "輝達已於2026年6月2日正式發表其全新的AI超級晶片。這款強大的晶片旨在革新個人運算。在一項重大發布中，輝達也證實了與微軟的合作關係。他們共同目標是重塑Windows PC的使用體驗，將先進的人工智慧功能直接整合到作業系統中。這次合作標誌著全球用戶邁向更智慧、更高效運算的重要一步。",
+    "vocabulary": [
+      "Nvidia (n.): 輝達",
+      "unveil (v.): 發表；揭幕",
+      "AI superchip (n.): AI超級晶片",
+      "partner (v.): 合作",
+      "Microsoft (n.): 微軟",
+      "reinvent (v.): 革新；重塑",
+      "Windows PC (n.): 搭載Windows系統的個人電腦",
+      "officially (adv.): 正式地",
+      "transform (v.): 轉變；改造",
+      "personal computing (n.): 個人運算",
+      "major announcement (n.): 重大發布",
+      "collaboration (n.): 合作",
+      "integrate (v.): 整合",
+      "advanced (adj.): 先進的",
+      "artificial intelligence (n.): 人工智慧",
+      "capabilities (n.): 功能；能力",
+      "operating system (n.): 作業系統",
+      "significant step (n.): 重要一步",
+      "intelligent (adj.): 智慧的",
+      "efficient (adj.): 高效的"
+    ],
+    "quiz": [
+      {
+        "q": "What did Nvidia officially unveil on June 2, 2026?",
+        "options": [
+          "A) A new gaming console",
+          "B) An AI superchip",
+          "C) A new operating system",
+          "D) A partnership with Apple"
+        ],
+        "answer": "B) An AI superchip"
+      },
+      {
+        "q": "With which company did Nvidia partner to reinvent Windows PCs?",
+        "options": [
+          "A) Apple",
+          "B) Google",
+          "C) Microsoft",
+          "D) Intel"
+        ],
+        "answer": "C) Microsoft"
+      },
+      {
+        "q": "What is the main goal of the partnership between Nvidia and Microsoft?",
+        "options": [
+          "A) To develop new mobile phones",
+          "B) To create cloud storage solutions",
+          "C) To reinvent the Windows PC experience",
+          "D) To build a new social media platform"
+        ],
+        "answer": "C) To reinvent the Windows PC experience"
+      },
+      {
+        "q": "What kind of capabilities are being integrated into the Windows PC experience?",
+        "options": [
+          "A) Basic graphics",
+          "B) Advanced artificial intelligence",
+          "C) Simple data processing",
+          "D) Old computing methods"
+        ],
+        "answer": "B) Advanced artificial intelligence"
+      },
+      {
+        "q": "According to the news, what does the collaboration mark?",
+        "options": [
+          "A) A decrease in computing power",
+          "B) A step backward for technology",
+          "C) A significant step towards more intelligent and efficient computing",
+          "D) The end of personal computers"
+        ],
+        "answer": "C) A significant step towards more intelligent and efficient computing"
+      },
+      {
+        "q": "The word \"unveil\" in the context of the news means to:",
+        "options": [
+          "A) Hide",
+          "B) Present publicly",
+          "C) Destroy",
+          "D) Repair"
+        ],
+        "answer": "B) Present publicly"
+      },
+      {
+        "q": "What does \"reinvent\" primarily mean in this article?",
+        "options": [
+          "A) To break completely",
+          "B) To create something new and better from existing things",
+          "C) To make minor changes",
+          "D) To copy an old design"
+        ],
+        "answer": "B) To create something new and better from existing things"
+      },
+      {
+        "q": "What is \"personal computing\" referring to?",
+        "options": [
+          "A) Calculations done by individuals without computers",
+          "B) The use of personal computers for various tasks",
+          "C) Supercomputer operations",
+          "D) Gaming on consoles"
+        ],
+        "answer": "B) The use of personal computers for various tasks"
+      },
+      {
+        "q": "The term \"operating system\" refers to:",
+        "options": [
+          "A) A computer's hardware",
+          "B) Software that manages computer hardware and software resources",
+          "C) An application program",
+          "D) A type of computer game"
+        ],
+        "answer": "B) Software that manages computer hardware and software resources"
+      },
+      {
+        "q": "The news states the AI superchip is designed to \"transform personal computing.\" What does \"transform\" mean here?",
+        "options": [
+          "A) To maintain the status quo",
+          "B) To change significantly for the better",
+          "C) To reduce its power",
+          "D) To make it slower"
+        ],
+        "answer": "B) To change significantly for the better"
+      },
+      {
+        "q": "What is the primary function of an \"AI superchip\" as implied by the article?",
+        "options": [
+          "A) To run traditional software faster",
+          "B) To enhance artificial intelligence capabilities",
+          "C) To reduce energy consumption only",
+          "D) To replace all human workers"
+        ],
+        "answer": "B) To enhance artificial intelligence capabilities"
+      },
+      {
+        "q": "The collaboration aims for \"more intelligent and efficient computing.\" What does \"efficient\" mean in this context?",
+        "options": [
+          "A) Using more resources",
+          "B) Achieving maximum productivity with minimum wasted effort or expense",
+          "C) Being slower",
+          "D) Being less smart"
+        ],
+        "answer": "B) Achieving maximum productivity with minimum wasted effort or expense"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "Anthropic獲650億美元融資，估值躍居AI產業龍頭",
+    "tabTitle": "金融市場",
+    "english": "Artificial intelligence startup Anthropic has successfully secured a historic $65 billion in its latest funding round, propelling its valuation beyond its main rival, OpenAI. Industry analysts report that this massive capital influx will accelerate the development of Anthropic's next-generation Claude models. Investors are increasingly favoring Anthropic due to its strong commitment to AI safety and alignment. This milestone represents a significant shift in the competitive landscape of the global AI market, establishing Anthropic as the new industry leader.",
+    "chinese": "人工智慧新創公司 Anthropic 在最新一輪融資中成功獲得了創紀錄的 650 億美元，推動其估值超越了主要對手 OpenAI。行業分析師指出，這筆龐大的資金挹注將加速 Anthropic 下一代 Claude 模型的開發。由於 Anthropic 對於人工智慧安全與對齊（alignment）的承諾，投資人對其青睞有加。這一里程碑標誌著全球人工智慧市場競爭格局的重大轉變，奠定了 Anthropic 作為產業新龍頭的地位。",
+    "vocabulary": [
+      "secure (v.): 獲得、爭取到",
+      "valuation (n.): 估值、評價",
+      "exceed (v.): 超過、越過",
+      "startup (n.): 新創公司",
+      "historic (adj.): 有歷史意義的、創紀錄的",
+      "funding round (n. phr.): 融資輪",
+      "propel (v.): 推動、驅使",
+      "rival (n.): 競爭對手",
+      "analyst (n.): 分析師",
+      "massive (adj.): 龐大的、巨大的",
+      "capital influx (n. phr.): 資金挹注、資金流入",
+      "accelerate (v.): 加速",
+      "next-generation (adj.): 下一代的",
+      "favor (v.): 青睞、偏好",
+      "commitment (n.): 承諾、奉獻",
+      "alignment (n.): 對齊、一致性",
+      "milestone (n.): 里程碑",
+      "significant (adj.): 重大的、顯著的",
+      "competitive landscape (n. phr.): 競爭格局",
+      "establish (v.): 確立、建立"
+    ],
+    "quiz": [
+      {
+        "q": "How much funding did Anthropic secure in its latest round?",
+        "options": [
+          "$6.5 billion",
+          "$15 billion",
+          "$50 billion",
+          "$65 billion"
+        ],
+        "answer": "$65 billion"
+      },
+      {
+        "q": "Which company's valuation did Anthropic exceed?",
+        "options": [
+          "Microsoft",
+          "OpenAI",
+          "Google",
+          "Meta"
+        ],
+        "answer": "OpenAI"
+      },
+      {
+        "q": "What does the word 'secure' mean in the text?",
+        "options": [
+          "To protect from danger",
+          "To obtain or achieve",
+          "To lose money",
+          "To lock a door"
+        ],
+        "answer": "To obtain or achieve"
+      },
+      {
+        "q": "What will the massive capital influx accelerate?",
+        "options": [
+          "The closure of its offices",
+          "The retirement of its founders",
+          "The development of next-generation Claude models",
+          "The sale of its hardware department"
+        ],
+        "answer": "The development of next-generation Claude models"
+      },
+      {
+        "q": "Which word means 'the process of estimating the worth of something, especially a business'?",
+        "options": [
+          "valuation",
+          "alignment",
+          "commitment",
+          "influx"
+        ],
+        "answer": "valuation"
+      },
+      {
+        "q": "Why are investors increasingly favoring Anthropic?",
+        "options": [
+          "Because of its cheap products",
+          "Because it has no competitors",
+          "Due to its strong commitment to AI safety and alignment",
+          "Due to its focus on hardware manufacturing"
+        ],
+        "answer": "Due to its strong commitment to AI safety and alignment"
+      },
+      {
+        "q": "In the text, the word 'propel' is closest in meaning to:",
+        "options": [
+          "stop",
+          "push forward",
+          "delay",
+          "analyze"
+        ],
+        "answer": "push forward"
+      },
+      {
+        "q": "What does 'milestone' refer to in the passage?",
+        "options": [
+          "A stone marking distance",
+          "A minor error",
+          "An important event or turning point",
+          "A financial loss"
+        ],
+        "answer": "An important event or turning point"
+      },
+      {
+        "q": "Complete the sentence: OpenAI is Anthropic's main ________.",
+        "options": [
+          "analyst",
+          "rival",
+          "startup",
+          "alignment"
+        ],
+        "answer": "rival"
+      },
+      {
+        "q": "This funding round represents a significant shift in what?",
+        "options": [
+          "The global energy sector",
+          "The competitive landscape of the global AI market",
+          "The political climate of Europe",
+          "The stock market of traditional banking"
+        ],
+        "answer": "The competitive landscape of the global AI market"
+      },
+      {
+        "q": "What does 'capital influx' refer to?",
+        "options": [
+          "A flow of money into a business",
+          "The tax paid to the government",
+          "A decrease in company value",
+          "The relocation of headquarters"
+        ],
+        "answer": "A flow of money into a business"
+      },
+      {
+        "q": "What is the meaning of 'commitment'?",
+        "options": [
+          "A refusal to cooperate",
+          "A promise or firm decision to do something",
+          "A sudden change of mind",
+          "A financial penalty"
+        ],
+        "answer": "A promise or firm decision to do something"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "美國股市再創新高，科技與AI股領漲大盤",
+    "tabTitle": "金融市場",
+    "english": "On June 2, 2026, major US stock market indexes reached unprecedented heights, driven by a powerful rally in the technology sector. Investors showed strong confidence in artificial intelligence companies, pushing shares of leading AI chipmakers and software developers to record levels. Analysts attribute this bullish trend to robust corporate earnings and optimistic economic forecasts. Despite lingering inflation concerns, the broader market remains resilient, with tech giants continuing to act as the primary engines of economic growth.",
+    "chinese": "2026年6月2日，在科技板塊強勁反彈的推動下，美國主要股市指數創下歷史新高。投資者對人工智慧公司展現出強烈信心，將領先的AI晶片製造商和軟體開發商的股價推升至歷史新高。分析師將這一牛市趨勢歸因於強勁的企業獲利和樂觀的經濟預測。儘管通膨擔憂依然存在，但大盤仍具韌性，科技巨頭繼續發揮著經濟增長主要引擎的作用。",
+    "vocabulary": [
+      "index (n.): 指數",
+      "unprecedented (adj.): 空前的，前所未有的",
+      "rally (n.): （價格、股價等）反彈，回升",
+      "sector (n.): 部門，板塊",
+      "confidence (n.): 信心",
+      "chipmaker (n.): 晶片製造商",
+      "analyst (n.): 分析師",
+      "attribute (v.): 歸因於",
+      "bullish (adj.): 看漲的，牛市的",
+      "robust (adj.): 強勁的，健全的",
+      "earnings (n.): 收益，利潤",
+      "optimistic (adj.): 樂觀的",
+      "forecast (n.): 預測",
+      "lingering (adj.): 揮之不去的，持續的",
+      "inflation (n.): 通貨膨脹",
+      "resilient (adj.): 有韌性的，適應力強的",
+      "giant (n.): 巨頭，大企業",
+      "engine (n.): 引擎，動力來源",
+      "record high (n. phr.): 歷史新高",
+      "corporate (adj.): 公司的，企業的"
+    ],
+    "quiz": [
+      {
+        "q": "What triggered the record highs in the US stock markets on June 2, 2026?",
+        "options": [
+          "A decline in tech shares",
+          "A powerful rally in the technology sector",
+          "Increased government regulations",
+          "High inflation rates"
+        ],
+        "answer": "A powerful rally in the technology sector"
+      },
+      {
+        "q": "Which specific industry within tech boosted investor confidence?",
+        "options": [
+          "Retail e-commerce",
+          "Renewable energy",
+          "Artificial intelligence",
+          "Traditional telecommunications"
+        ],
+        "answer": "Artificial intelligence"
+      },
+      {
+        "q": "What does the word 'unprecedented' mean in the text?",
+        "options": [
+          "Never done or known before",
+          "Extremely common",
+          "Slightly decreased",
+          "Highly expected"
+        ],
+        "answer": "Never done or known before"
+      },
+      {
+        "q": "According to analysts, what is one of the reasons for the bullish trend?",
+        "options": [
+          "High unemployment rates",
+          "Weak corporate earnings",
+          "Robust corporate earnings",
+          "Rising interest rates"
+        ],
+        "answer": "Robust corporate earnings"
+      },
+      {
+        "q": "What is the meaning of the word 'robust'?",
+        "options": [
+          "Weak and fragile",
+          "Strong and healthy",
+          "Unstable",
+          "Declining"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "Despite what concern did the broader market remain resilient?",
+        "options": [
+          "Falling tech stocks",
+          "Lingering inflation",
+          "High corporate taxes",
+          "Lack of investment"
+        ],
+        "answer": "Lingering inflation"
+      },
+      {
+        "q": "What role do tech giants continue to play in the economy?",
+        "options": [
+          "Primary engines of economic growth",
+          "Obstacles to financial stability",
+          "Minor contributors to the market",
+          "Regulatory bodies"
+        ],
+        "answer": "Primary engines of economic growth"
+      },
+      {
+        "q": "Which word is closest in meaning to 'forecast'?",
+        "options": [
+          "History",
+          "Prediction",
+          "Reality",
+          "Mistake"
+        ],
+        "answer": "Prediction"
+      },
+      {
+        "q": "What does the term 'bullish' refer to in a financial context?",
+        "options": [
+          "Expecting prices to fall",
+          "Expecting prices to rise",
+          "Having no market activity",
+          "Experiencing high volatility"
+        ],
+        "answer": "Expecting prices to rise"
+      },
+      {
+        "q": "What is the synonym of 'resilient' as used in the passage?",
+        "options": [
+          "Fragile",
+          "Flexible and strong",
+          "Slow-moving",
+          "Depressed"
+        ],
+        "answer": "Flexible and strong"
+      },
+      {
+        "q": "Who are the primary drivers of the stock market's record levels in the tech sector?",
+        "options": [
+          "Real estate developers",
+          "AI chipmakers and software developers",
+          "Agricultural corporations",
+          "Traditional manufacturing firms"
+        ],
+        "answer": "AI chipmakers and software developers"
+      },
+      {
+        "q": "What does the verb 'attribute' mean in the sentence 'Analysts attribute this bullish trend...'?",
+        "options": [
+          "To deny",
+          "To explain by indicating a cause",
+          "To ignore",
+          "To increase the value of"
+        ],
+        "answer": "To explain by indicating a cause"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "中國AI使用量超越美國，人民幣匯率同步走強",
+    "tabTitle": "科技",
+    "english": "Recent market data reveals that China's artificial intelligence usage has officially surpassed that of the United States, driven by rapid industrial integration. This technological milestone has boosted investor confidence, leading to a significant appreciation of the Chinese Renminbi (RMB) in international currency markets. Analysts suggest that the surge in AI adoption is reshaping global economic dynamics. As China continues to implement advanced digital infrastructure, the Renminbi's exchange rate is expected to maintain its strong momentum.",
+    "chinese": "最近的市場數據顯示，在快速產業整合的推動下，中國的人工智慧使用量已正式超越美國。這一技術里程碑提振了投資者信心，進而導致人民幣在國際貨幣市場上顯著升值。分析師指出，人工智慧採用率的激增正在重塑全球經濟格局。隨著中國持續佈局先進的數位基礎建設，人民幣匯率預期將維持其強勁的勢頭。",
+    "vocabulary": [
+      "reveal (v.): 顯示、透露",
+      "artificial intelligence (n.): 人工智慧",
+      "surpass (v.): 超越、勝過",
+      "industrial (adj.): 工業的、產業的",
+      "integration (n.): 整合、一體化",
+      "milestone (n.): 里程碑",
+      "boost (v.): 提振、促進",
+      "investor (n.): 投資者",
+      "confidence (n.): 信心",
+      "significant (adj.): 顯著的、重要的",
+      "appreciation (n.): 升值、欣賞",
+      "currency (n.): 貨幣",
+      "analyst (n.): 分析師",
+      "surge (n.): 激增、湧現",
+      "adoption (n.): 採用、收養",
+      "reshape (v.): 重塑、改變",
+      "dynamics (n.): 動態、格局",
+      "implement (v.): 實施、執行",
+      "infrastructure (n.): 基礎建設",
+      "momentum (n.): 動能、勢頭"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "The decline of US technology companies.",
+          "China's rising AI usage and its effect on the Renminbi.",
+          "A trade agreement between the US and China.",
+          "The history of international currency markets."
+        ],
+        "answer": "China's rising AI usage and its effect on the Renminbi."
+      },
+      {
+        "q": "According to the text, what has China's AI usage surpassed?",
+        "options": [
+          "Its own previous records.",
+          "The AI usage of the United States.",
+          "European technological standards.",
+          "Market expectations for 2030."
+        ],
+        "answer": "The AI usage of the United States."
+      },
+      {
+        "q": "What factor is driving the rapid increase in China's AI usage?",
+        "options": [
+          "Industrial integration.",
+          "Government tax cuts.",
+          "Foreign investments.",
+          "Education reforms."
+        ],
+        "answer": "Industrial integration."
+      },
+      {
+        "q": "How did international currency markets react to this technological milestone?",
+        "options": [
+          "The US Dollar became stronger.",
+          "The Renminbi experienced a significant appreciation.",
+          "Global currency trading was suspended.",
+          "The Renminbi's value decreased slightly."
+        ],
+        "answer": "The Renminbi experienced a significant appreciation."
+      },
+      {
+        "q": "What does the word 'surpassed' mean in the text?",
+        "options": [
+          "Failed to reach.",
+          "Went beyond or exceeded.",
+          "Kept pace with.",
+          "Substituted for."
+        ],
+        "answer": "Went beyond or exceeded."
+      },
+      {
+        "q": "What is reshaping global economic dynamics according to analysts?",
+        "options": [
+          "The decline of manufacturing.",
+          "The surge in AI adoption.",
+          "Changes in climate policy.",
+          "Fluctuations in gold prices."
+        ],
+        "answer": "The surge in AI adoption."
+      },
+      {
+        "q": "Which word is closest in meaning to 'boosted' as used in the article?",
+        "options": [
+          "Damaged.",
+          "Delayed.",
+          "Enhanced.",
+          "Ignored."
+        ],
+        "answer": "Enhanced."
+      },
+      {
+        "q": "What is China continuing to implement to support this growth?",
+        "options": [
+          "Advanced digital infrastructure.",
+          "Traditional manufacturing techniques.",
+          "Strict currency regulations.",
+          "Agricultural subsidies."
+        ],
+        "answer": "Advanced digital infrastructure."
+      },
+      {
+        "q": "What is expected of the Renminbi's exchange rate in the near future?",
+        "options": [
+          "It will fluctuate wildly.",
+          "It is expected to maintain its strong momentum.",
+          "It will likely drop.",
+          "It will be pegged to the US dollar."
+        ],
+        "answer": "It is expected to maintain its strong momentum."
+      },
+      {
+        "q": "In the sentence '...leading to a significant appreciation...', what does 'appreciation' refer to?",
+        "options": [
+          "An increase in the value of a currency.",
+          "A feeling of gratitude.",
+          "A decrease in market competition.",
+          "An artistic evaluation."
+        ],
+        "answer": "An increase in the value of a currency."
+      },
+      {
+        "q": "Choose the correct synonym for 'milestone'.",
+        "options": [
+          "Obstacle.",
+          "Landmark achievement.",
+          "Minor detail.",
+          "Initial phase."
+        ],
+        "answer": "Landmark achievement."
+      },
+      {
+        "q": "Which of the following statements is TRUE according to the passage?",
+        "options": [
+          "The US still leads China in AI adoption.",
+          "Investor confidence has weakened.",
+          "The Renminbi's exchange rate is weakening.",
+          "China's AI growth has positively impacted the Renminbi."
+        ],
+        "answer": "China's AI growth has positively impacted the Renminbi."
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
