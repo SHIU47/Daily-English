@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 03, 2026：台灣經濟、金融市場 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台股總市值突破5兆美元創新高\nOn June 3, 2026, the total market capitalization of Taiwan's stock market reached a historic milestone, officially surpassing $5 trillion USD. This remarkable surge was primarily driven by the robust performance of local semiconductor and technology giants, which continue to attract significant foreign investment. Analysts attribute this growth to global demand for artificial intelligence chips and Taiwan's pivotal role in the global supply chain. This achievement highlights the resilience and growing influence of Taiwan's financial market on the global stage.\n\n[2] 美國擬因強迫勞動對台灣課徵10%關稅\nThe United States has proposed a 10% tariff on imports from Taiwan, citing concerns over forced labor practices in its distant-water fishing fleet and manufacturing sectors. US officials emphasized that these measures aim to protect human rights and ensure fair trade standards globally. In response, Taiwan's government pledged to investigate the allegations and strengthen labor inspections. If implemented, these tariffs could significantly disrupt bilateral trade and strain the economic relationship between the two partners.\n\n[3] 台灣首輪碳費徵收達49.7億台幣\nTaiwan's Ministry of Environment has successfully completed its first round of carbon fee collection, securing approximately NT$4.97 billion. This landmark initiative targets major industrial emitters, aiming to accelerate the nation's transition toward net-zero emissions. Over 280 companies complied with the new environmental regulations, reflecting a growing corporate commitment to sustainability. The collected funds will be allocated to support green technologies and local climate mitigation projects, marking a significant milestone in Taiwan's climate action strategy.",
+    "chinese": "【1】台股總市值突破5兆美元創新高\n2026年6月3日，台灣股市總市值達到歷史里程碑，正式突破5兆美元。這一顯著增長主要受到本地半導體與科技巨頭強勁表現的推動，這些企業持續吸引大量外資。分析師將此成長歸因於全球對人工智慧晶片的需求，以及台灣在全球供應鏈中扮演的關鍵角色。這項成就突顯了台灣金融市場在國際舞台上的韌性與日益增長的影響力。\n\n【2】美國擬因強迫勞動對台灣課徵10%關稅\n美國提議對來自台灣的進口商品課徵10%的關稅，理由是擔憂其遠洋漁船隊和製造業中存在強迫勞動的現象。美國官員強調，這些措施旨在保護人權並確保全球的公平貿易標準。對此，台灣政府承諾將調查這些指控並加強勞動檢查。如果這些關稅得以實施，可能會嚴重破壞雙邊貿易，並使這兩個夥伴之間的經濟關係面臨緊張。\n\n【3】台灣首輪碳費徵收達49.7億台幣\n台灣環境部已成功完成首輪碳費徵收，共取得約新台幣49.7億元。這項具里程碑意義的倡議主要針對大型工業排放源，旨在加速國家向淨零排放的轉型。超過280家企業遵守了新的環保法規，反映出企業對永續發展日益增長的承諾。徵收到的資金將被分配用於支持綠色技術和地方氣候減緩計畫，標誌著台灣氣候行動戰略的重要里程碑。",
+    "vocabulary": [
+      "market capitalization (n.): 市值",
+      "surpass (v.): 超過，超越",
+      "historic (adj.): 歷史性的",
+      "milestone (n.): 里程碑",
+      "remarkable (adj.): 顯著的，非凡的",
+      "surge (n.): 急遽上升，激增",
+      "primarily (adv.): 主要地",
+      "robust (adj.): 強勁的，穩健的",
+      "semiconductor (n.): 半導體",
+      "giant (n.): 巨頭，大企業",
+      "attract (v.): 吸引",
+      "foreign investment (n.): 外資，外國投資",
+      "analyst (n.): 分析師",
+      "attribute (v.): 歸因於",
+      "pivotal (adj.): 關鍵的，核心的",
+      "supply chain (n.): 供應鏈",
+      "achievement (n.): 成就，成果",
+      "highlight (v.): 突顯，強調",
+      "resilience (n.): 韌性，彈性",
+      "influence (n.): 影響力",
+      "propose (v.): 提議；提出",
+      "tariff (n.): 關稅",
+      "import (n.): 進口商品",
+      "cite (v.): 引用；引述（原因）",
+      "concern (n.): 擔憂；關注",
+      "forced labor (n. phr.): 強迫勞動",
+      "distant-water fishing (n. phr.): 遠洋漁業",
+      "fleet (n.): 船隊；艦隊",
+      "manufacturing (n.): 製造業",
+      "sector (n.): 行業；部門",
+      "emphasize (v.): 強調",
+      "measure (n.): 措施；方法",
+      "aim to (v. phr.): 旨在；以...為目標",
+      "pledge (v.): 承諾；發誓",
+      "investigate (v.): 調查",
+      "allegation (n.): 指控；申訴",
+      "implement (v.): 實施；執行",
+      "disrupt (v.): 破壞；中斷",
+      "bilateral (adj.): 雙邊的",
+      "strain (v.): 使緊張；拉緊",
+      "collect (v.): 收集；徵收",
+      "carbon fee (n. phr.): 碳費",
+      "ministry (n.): （政府的）部",
+      "approximately (adv.): 大約",
+      "landmark (adj.): 具里程碑意義的",
+      "initiative (n.): 倡議；計畫",
+      "target (v.): 以...為目標；針對",
+      "industrial (adj.): 工業的",
+      "emitter (n.): 排放源",
+      "accelerate (v.): 加速",
+      "transition (n.): 轉型；過渡",
+      "net-zero (adj.): 淨零的",
+      "comply with (v. phr.): 遵守；服從",
+      "regulation (n.): 規章；法規",
+      "corporate (adj.): 企業的",
+      "commitment (n.): 承諾；奉獻",
+      "sustainability (n.): 永續性；持續性",
+      "allocate (v.): 分配；撥給",
+      "mitigation (n.): 緩和；減輕",
+      "milestone (n.): 里程碑"
+    ],
+    "quiz": [
+      {
+        "q": "What does the word 'surpass' mean in the context of the passage?",
+        "options": [
+          "To decrease slowly",
+          "To remain stable",
+          "To exceed or go beyond",
+          "To fail to reach"
+        ],
+        "answer": "To exceed or go beyond"
+      },
+      {
+        "q": "What historic milestone did the Taiwan stock market reach on June 3, 2026?",
+        "options": [
+          "It lost half of its value.",
+          "Its market capitalization exceeded $5 trillion USD.",
+          "It banned all foreign investments.",
+          "It merged with another stock market."
+        ],
+        "answer": "Its market capitalization exceeded $5 trillion USD."
+      },
+      {
+        "q": "Which sectors primarily drove the surge in Taiwan's stock market capitalization?",
+        "options": [
+          "Agriculture and tourism",
+          "Semiconductor and technology",
+          "Real estate and construction",
+          "Fashion and entertainment"
+        ],
+        "answer": "Semiconductor and technology"
+      },
+      {
+        "q": "What is the meaning of 'pivotal'?",
+        "options": [
+          "Of crucial importance",
+          "Unimportant",
+          "Slow-moving",
+          "Very expensive"
+        ],
+        "answer": "Of crucial importance"
+      },
+      {
+        "q": "Analysts _______ the growth to global demand for AI chips. (Fill in the blank)",
+        "options": [
+          "attribute",
+          "contribute",
+          "distribute",
+          "retribute"
+        ],
+        "answer": "attribute"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'robust'?",
+        "options": [
+          "Weak",
+          "Fragile",
+          "Strong",
+          "Flexible"
+        ],
+        "answer": "Strong"
+      },
+      {
+        "q": "What global trend is mentioned as a reason for Taiwan's stock market growth?",
+        "options": [
+          "A decline in internet usage",
+          "Global demand for artificial intelligence chips",
+          "A decrease in international trade",
+          "The rise of traditional manufacturing"
+        ],
+        "answer": "Global demand for artificial intelligence chips"
+      },
+      {
+        "q": "'Resilience' refers to the ability to:",
+        "options": [
+          "Recover quickly from difficulties",
+          "Give up easily",
+          "Predict the future accurately",
+          "Spend money wisely"
+        ],
+        "answer": "Recover quickly from difficulties"
+      },
+      {
+        "q": "Who is continuing to invest heavily in Taiwan's tech giants?",
+        "options": [
+          "Only local retail investors",
+          "Foreign investors",
+          "The World Bank",
+          "Agricultural unions"
+        ],
+        "answer": "Foreign investors"
+      },
+      {
+        "q": "Complete the sentence: This achievement highlights the growing _______ of Taiwan's financial market.",
+        "options": [
+          "influence",
+          "influential",
+          "influencing",
+          "influenced"
+        ],
+        "answer": "influence"
+      },
+      {
+        "q": "What is the meaning of 'milestone'?",
+        "options": [
+          "A heavy stone used in building",
+          "An event marking a significant stage in development",
+          "A unit of speed",
+          "A financial loss"
+        ],
+        "answer": "An event marking a significant stage in development"
+      },
+      {
+        "q": "Based on the passage, Taiwan plays a crucial role in the global:",
+        "options": [
+          "supply chain",
+          "food distribution",
+          "space exploration",
+          "education system"
+        ],
+        "answer": "supply chain"
+      },
+      {
+        "q": "Why did the US propose tariffs on Taiwan?",
+        "options": [
+          "A) Due to currency manipulation",
+          "B) Over concerns of forced labor",
+          "C) Because of intellectual property theft",
+          "D) To reduce the trade deficit"
+        ],
+        "answer": "B) Over concerns of forced labor"
+      },
+      {
+        "q": "What is the proposed tariff rate?",
+        "options": [
+          "A) 5%",
+          "B) 10%",
+          "C) 15%",
+          "D) 20%"
+        ],
+        "answer": "B) 10%"
+      },
+      {
+        "q": "Which sectors in Taiwan were specifically mentioned regarding forced labor concerns?",
+        "options": [
+          "A) Agriculture and technology",
+          "B) Distant-water fishing and manufacturing",
+          "C) Tourism and finance",
+          "D) Shipping and construction"
+        ],
+        "answer": "B) Distant-water fishing and manufacturing"
+      },
+      {
+        "q": "What does the word 'cite' mean in the text?",
+        "options": [
+          "A) To ignore",
+          "B) To mention as a reason",
+          "C) To complain about",
+          "D) To approve"
+        ],
+        "answer": "B) To mention as a reason"
+      },
+      {
+        "q": "How did the Taiwanese government respond to the US proposal?",
+        "options": [
+          "A) They immediately imposed retaliatory tariffs.",
+          "B) They rejected the proposal and cut off diplomatic ties.",
+          "C) They pledged to investigate the allegations and strengthen inspections.",
+          "D) They denied all allegations without taking any action."
+        ],
+        "answer": "C) They pledged to investigate the allegations and strengthen inspections."
+      },
+      {
+        "q": "Which word in the text means 'to promise seriously'?",
+        "options": [
+          "A) Cite",
+          "B) Pledge",
+          "C) Strain",
+          "D) Disrupt"
+        ],
+        "answer": "B) Pledge"
+      },
+      {
+        "q": "Complete the sentence: 'The government took strict ______ to prevent further labor violations.'",
+        "options": [
+          "A) tariffs",
+          "B) sectors",
+          "C) measures",
+          "D) allegations"
+        ],
+        "answer": "C) measures"
+      },
+      {
+        "q": "What might happen if the tariffs are implemented?",
+        "options": [
+          "A) Bilateral trade could be disrupted.",
+          "B) Taiwan's fishing fleet will expand.",
+          "C) The US will stop importing all Taiwanese goods.",
+          "D) Labor inspections in the US will increase."
+        ],
+        "answer": "A) Bilateral trade could be disrupted."
+      },
+      {
+        "q": "What is the meaning of 'bilateral' as used in the text?",
+        "options": [
+          "A) Involving only one country",
+          "B) Involving two parties or countries",
+          "C) Occurring every two years",
+          "D) Extremely dangerous"
+        ],
+        "answer": "B) Involving two parties or countries"
+      },
+      {
+        "q": "Distant-water fishing refers to fishing that takes place _______.",
+        "options": [
+          "A) in shallow rivers",
+          "B) far from the coast in deep oceans",
+          "C) only during the winter",
+          "D) without using any boats"
+        ],
+        "answer": "B) far from the coast in deep oceans"
+      },
+      {
+        "q": "What does the verb 'strain' mean in the context of 'strain the economic relationship'?",
+        "options": [
+          "A) To improve and strengthen",
+          "B) To filter out impurities",
+          "C) To put pressure on or make tense",
+          "D) To cancel completely"
+        ],
+        "answer": "C) To put pressure on or make tense"
+      },
+      {
+        "q": "In the phrase 'If implemented, these tariffs...', the word 'implemented' means _______.",
+        "options": [
+          "A) if the tariffs are put into effect",
+          "B) if the tariffs are canceled",
+          "C) before the tariffs are discussed",
+          "D) although the tariffs failed"
+        ],
+        "answer": "A) if the tariffs are put into effect"
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "Taiwan's new tax on foreign imports",
+          "The collection of Taiwan's first carbon fees",
+          "Financial losses in Taiwan's green energy sector",
+          "A reduction in corporate sustainability efforts"
+        ],
+        "answer": "The collection of Taiwan's first carbon fees"
+      },
+      {
+        "q": "How much money did Taiwan collect in its first round of carbon fees?",
+        "options": [
+          "NT$4.97 million",
+          "NT$49.7 billion",
+          "NT$4.97 billion",
+          "NT$497 million"
+        ],
+        "answer": "NT$4.97 billion"
+      },
+      {
+        "q": "Which government body successfully completed the carbon fee collection?",
+        "options": [
+          "Ministry of Economic Affairs",
+          "Ministry of Environment",
+          "Ministry of Finance",
+          "Ministry of Transportation"
+        ],
+        "answer": "Ministry of Environment"
+      },
+      {
+        "q": "The word 'landmark' in the passage is closest in meaning to ________.",
+        "options": [
+          "temporary",
+          "historic",
+          "expensive",
+          "controversial"
+        ],
+        "answer": "historic"
+      },
+      {
+        "q": "Who are the primary targets of this carbon fee initiative?",
+        "options": [
+          "Individual households",
+          "Small retail businesses",
+          "Major industrial emitters",
+          "Foreign tourists"
+        ],
+        "answer": "Major industrial emitters"
+      },
+      {
+        "q": "What is the ultimate goal of accelerating the transition mentioned in the news?",
+        "options": [
+          "High-speed rail expansion",
+          "Net-zero emissions",
+          "Increased coal production",
+          "Tax cuts for corporations"
+        ],
+        "answer": "Net-zero emissions"
+      },
+      {
+        "q": "How many companies complied with the new environmental regulations?",
+        "options": [
+          "Exactly 497",
+          "Under 100",
+          "Over 280",
+          "More than 500"
+        ],
+        "answer": "Over 280"
+      },
+      {
+        "q": "The word 'comply' is best followed by which preposition in the context?",
+        "options": [
+          "at",
+          "with",
+          "for",
+          "to"
+        ],
+        "answer": "with"
+      },
+      {
+        "q": "What does the compliance of over 280 companies reflect?",
+        "options": [
+          "A growing corporate commitment to sustainability",
+          "High levels of corporate resistance",
+          "A decline in industrial production",
+          "Lack of government authority"
+        ],
+        "answer": "A growing corporate commitment to sustainability"
+      },
+      {
+        "q": "How will the collected funds be allocated?",
+        "options": [
+          "To pay off national debt",
+          "To support green technologies and local climate mitigation projects",
+          "To lower corporate income taxes",
+          "To fund international tourism campaigns"
+        ],
+        "answer": "To support green technologies and local climate mitigation projects"
+      },
+      {
+        "q": "What does the word 'allocate' mean in the text?",
+        "options": [
+          "To collect or gather",
+          "To distribute or assign for a specific purpose",
+          "To reject or dismiss",
+          "To calculate or measure"
+        ],
+        "answer": "To distribute or assign for a specific purpose"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a benefit or purpose of the carbon fee collection?",
+        "options": [
+          "Supporting green technologies",
+          "Helping local climate mitigation projects",
+          "Helping Taiwan transition toward net-zero emissions",
+          "Providing direct cash refunds to citizens"
+        ],
+        "answer": "Providing direct cash refunds to citizens"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "標普500指數破7600點創新高，晶片股領漲",
+    "tabTitle": "金融市場",
+    "english": "The S&P 500 index closed at a historic high above the 7,600 threshold on Wednesday, driven by a powerful rally in semiconductor stocks. Investors showed strong confidence in artificial intelligence technologies, pushing major chipmakers to unprecedented valuations. Market analysts attribute this surge to robust quarterly earnings and optimistic projections for global tech infrastructure spending. However, some economists warn of potential volatility ahead as inflation concerns linger in the background.",
+    "chinese": "標準普爾500指數週三收於7,600點關卡以上的歷史新高，主要受到半導體股強勁漲勢的推動。投資人對人工智慧技術展現出強烈信心，將主要晶片製造商的估值推升至前所未有的高度。市場分析師將這一波上漲歸因於強勁的季度財報以及對全球科技基礎設施支出的樂觀預測。然而，由於通膨擔憂依然存在，部分經濟學家警告未來可能出現市場波動。",
+    "vocabulary": [
+      "index (n.): 指數",
+      "historic (adj.): 歷史性的",
+      "threshold (n.): 門檻；關卡",
+      "rally (n.): （價格）回升；反彈；漲勢",
+      "semiconductor (n.): 半導體",
+      "investor (n.): 投資人",
+      "confidence (n.): 信心",
+      "unprecedented (adj.): 前所未有的",
+      "valuation (n.): 估值；評價",
+      "analyst (n.): 分析師",
+      "attribute (v.): 歸因於",
+      "surge (n.): 激增；急升",
+      "robust (adj.): 強勁的；健壯的",
+      "quarterly (adj.): 每季的",
+      "earnings (n.): 收益；盈餘",
+      "projection (n.): 預測；推估",
+      "infrastructure (n.): 基礎建設",
+      "volatility (n.): 波動性；易變性",
+      "inflation (n.): 通貨膨脹",
+      "linger (v.): 殘存；持續"
+    ],
+    "quiz": [
+      {
+        "q": "What milestone did the S&P 500 reach?",
+        "options": [
+          "A) It dropped below 7,600.",
+          "B) It closed above 7,600 for the first time.",
+          "C) It remained stable all week.",
+          "D) It experienced a sudden crash."
+        ],
+        "answer": "B) It closed above 7,600 for the first time."
+      },
+      {
+        "q": "Which sector led the market rally according to the text?",
+        "options": [
+          "A) Energy stocks",
+          "B) Real estate stocks",
+          "C) Chip stocks",
+          "D) Retail stocks"
+        ],
+        "answer": "C) Chip stocks"
+      },
+      {
+        "q": "What has driven investor confidence in chipmakers?",
+        "options": [
+          "A) Artificial intelligence technologies",
+          "B) Government tax cuts",
+          "C) Lower oil prices",
+          "D) Reduced interest rates"
+        ],
+        "answer": "A) Artificial intelligence technologies"
+      },
+      {
+        "q": "What is the meaning of 'unprecedented'?",
+        "options": [
+          "A) Never done or known before",
+          "B) Extremely common",
+          "C) Very disappointing",
+          "D) Temporarily delayed"
+        ],
+        "answer": "A) Never done or known before"
+      },
+      {
+        "q": "To what did market analysts attribute the surge in stock prices?",
+        "options": [
+          "A) High unemployment rates",
+          "B) Strong quarterly earnings and optimistic projections",
+          "C) Decreased consumer spending",
+          "D) Changes in political leadership"
+        ],
+        "answer": "B) Strong quarterly earnings and optimistic projections"
+      },
+      {
+        "q": "What warning do some economists give?",
+        "options": [
+          "A) The market will definitely crash tomorrow.",
+          "B) There is potential volatility ahead due to inflation.",
+          "C) Chip stocks are going out of business.",
+          "D) Technology spending will stop completely."
+        ],
+        "answer": "B) There is potential volatility ahead due to inflation."
+      },
+      {
+        "q": "Complete the sentence: 'The company's _______ earnings exceeded all expectations.'",
+        "options": [
+          "A) quarterly",
+          "B) lingering",
+          "C) unprecedented",
+          "D) volatile"
+        ],
+        "answer": "A) quarterly"
+      },
+      {
+        "q": "What does the word 'robust' mean in the context of the passage?",
+        "options": [
+          "A) Weak and unstable",
+          "B) Strong and healthy",
+          "C) Slow and steady",
+          "D) Secret and hidden"
+        ],
+        "answer": "B) Strong and healthy"
+      },
+      {
+        "q": "Which word is a synonym for 'forecast' or 'prediction' in the text?",
+        "options": [
+          "A) Valuation",
+          "B) Infrastructure",
+          "C) Projection",
+          "D) Threshold"
+        ],
+        "answer": "C) Projection"
+      },
+      {
+        "q": "What does 'attribute... to' mean?",
+        "options": [
+          "A) To explain the cause of something",
+          "B) To deny any connection",
+          "C) To make something larger",
+          "D) To lose value over time"
+        ],
+        "answer": "A) To explain the cause of something"
+      },
+      {
+        "q": "The word 'volatility' refers to:",
+        "options": [
+          "A) Consistent growth",
+          "B) Rapid and unpredictable change",
+          "C) Total financial stability",
+          "D) Government regulations"
+        ],
+        "answer": "B) Rapid and unpredictable change"
+      },
+      {
+        "q": "Why are inflation concerns mentioned in the text?",
+        "options": [
+          "A) Because they are causing stocks to rise",
+          "B) Because they might lead to future market volatility",
+          "C) Because they have been completely resolved",
+          "D) Because they only affect chipmakers"
+        ],
+        "answer": "B) Because they might lead to future market volatility"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "Supermicro攜手AMD/Arm發展機架式AI系統",
+    "tabTitle": "科技",
+    "english": "Super Micro Computer, Inc. has announced a strategic partnership with AMD and Arm to develop next-generation rack-scale AI systems. This collaboration aims to deliver highly optimized, energy-efficient infrastructure designed to handle massive artificial intelligence workloads. By integrating AMD's powerful processors and Arm's energy-efficient architecture, Supermicro plans to accelerate data center modernization. The joint initiative is expected to meet the surging global demand for scalable and sustainable AI computing power, offering enterprise customers superior performance and lower total cost of ownership.",
+    "chinese": "美超微電腦（Super Micro Computer, Inc.）宣布與 AMD 和 Arm 建立戰略合作夥伴關係，共同開發下一代機架級人工智慧（AI）系統。此次合作旨在提供高度優化、節能的基礎設施，以處理龐大的人工智慧工作負載。藉由整合 AMD 的強大處理器與 Arm 的節能架構，美超微計劃加速數據中心的現代化。這項聯合倡議預計將滿足全球對可擴展且永續之 AI 計算能力激增的需求，為企業客戶提供卓越的性能和更低的總體擁有成本。",
+    "vocabulary": [
+      "partnership (n.): 合作夥伴關係",
+      "strategic (adj.): 戰略性的",
+      "rack-scale (adj.): 機架級的",
+      "collaboration (n.): 合作",
+      "optimize (v.): 優化",
+      "infrastructure (n.): 基礎設施",
+      "workload (n.): 工作負載",
+      "integrate (v.): 整合",
+      "processor (n.): 處理器",
+      "architecture (n.): 架構",
+      "modernization (n.): 現代化",
+      "initiative (n.): 倡議；計劃",
+      "surging (adj.): 激增的",
+      "scalable (adj.): 可擴展的",
+      "sustainable (adj.): 永續的；可持續的",
+      "enterprise (n.): 企業",
+      "superior (adj.): 卓越的；優秀的",
+      "ownership (n.): 所有權",
+      "energy-efficient (adj.): 節能的",
+      "accelerate (v.): 加速"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main goal of the partnership between Supermicro, AMD, and Arm?",
+        "options": [
+          "To build consumer laptops",
+          "To develop next-generation rack-scale AI systems",
+          "To design mobile phone applications",
+          "To manufacture solar panels"
+        ],
+        "answer": "To develop next-generation rack-scale AI systems"
+      },
+      {
+        "q": "Which word in the text means 'the basic systems and structures that a country or organization needs to function'?",
+        "options": [
+          "Infrastructure",
+          "Initiative",
+          "Workload",
+          "Architecture"
+        ],
+        "answer": "Infrastructure"
+      },
+      {
+        "q": "What does the term 'energy-efficient' mean?",
+        "options": [
+          "Using a lot of power",
+          "Producing high heat",
+          "Using less energy to perform the same task",
+          "Completely wireless"
+        ],
+        "answer": "Using less energy to perform the same task"
+      },
+      {
+        "q": "According to the text, whose processors are being integrated into the new systems?",
+        "options": [
+          "Intel's",
+          "AMD's",
+          "Nvidia's",
+          "Apple's"
+        ],
+        "answer": "AMD's"
+      },
+      {
+        "q": "What is expected to be accelerated by this collaboration?",
+        "options": [
+          "Software piracy",
+          "Data center modernization",
+          "Global warming",
+          "CPU manufacturing costs"
+        ],
+        "answer": "Data center modernization"
+      },
+      {
+        "q": "The word 'surging' in the text is closest in meaning to:",
+        "options": [
+          "Decreasing rapidly",
+          "Remaining stable",
+          "Increasing suddenly and strongly",
+          "Disappearing"
+        ],
+        "answer": "Increasing suddenly and strongly"
+      },
+      {
+        "q": "Which of the following is NOT a benefit mentioned for enterprise customers?",
+        "options": [
+          "Superior performance",
+          "Lower total cost of ownership",
+          "Free hardware upgrades for life",
+          "Sustainable computing power"
+        ],
+        "answer": "Free hardware upgrades for life"
+      },
+      {
+        "q": "What does 'scalable' mean in the context of computing?",
+        "options": [
+          "Easy to climb",
+          "Able to be changed in size or scale to meet demand",
+          "Heavy and solid",
+          "Limited in performance"
+        ],
+        "answer": "Able to be changed in size or scale to meet demand"
+      },
+      {
+        "q": "Who are the primary target customers for these new AI systems?",
+        "options": [
+          "Individual gamers",
+          "Enterprise customers",
+          "High school students",
+          "Mobile app developers"
+        ],
+        "answer": "Enterprise customers"
+      },
+      {
+        "q": "Which noun in the text refers to 'an act of working together with someone to produce or create something'?",
+        "options": [
+          "Initiative",
+          "Collaboration",
+          "Modernization",
+          "Ownership"
+        ],
+        "answer": "Collaboration"
+      },
+      {
+        "q": "What kind of architecture does Arm provide to the partnership?",
+        "options": [
+          "High-cost architecture",
+          "Energy-efficient architecture",
+          "Legacy architecture",
+          "Analog architecture"
+        ],
+        "answer": "Energy-efficient architecture"
+      },
+      {
+        "q": "Complete the sentence: The joint ______ is expected to meet global demand.",
+        "options": [
+          "initiative",
+          "workload",
+          "processor",
+          "infrastructure"
+        ],
+        "answer": "initiative"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "輝達執行長評論帶動Marvell股價飆漲",
+    "tabTitle": "金融市場",
+    "english": "Marvell Technology's stock price surged significantly following positive remarks from Nvidia's CEO, Jensen Huang. During a recent conference, Huang highlighted Marvell's crucial role in the rapidly growing artificial intelligence infrastructure ecosystem. He emphasized that Marvell's optical fiber technology is indispensable for connecting Nvidia's advanced AI chips. This high-profile endorsement boosted investor confidence, leading to a sharp rise in Marvell's shares as demand for AI-related hardware continues to skyrocket worldwide.",
+    "chinese": "在輝達（Nvidia）執行長黃仁勳發表正面評論後，邁威爾科技（Marvell Technology）的股價大幅飆升。在最近的一次會議上，黃仁勳強調了邁威爾在快速增長的人工智慧基礎設施生態系統中所扮演的關鍵角色。他強調，邁威爾的光纖技術對於連接輝達先進的人工智慧晶片至關重要。這一高調的背書提振了投資者的信心，隨著全球對人工智慧相關硬體的需求持續暴增，邁威爾的股價也隨之急劇上漲。",
+    "vocabulary": [
+      "surge (v.): 飆升，急劇上升",
+      "remark (n.): 言論，評論",
+      "highlight (v.): 強調，突顯",
+      "crucial (adj.): 關鍵的，至關重要的",
+      "infrastructure (n.): 基礎設施",
+      "ecosystem (n.): 生態系統",
+      "emphasize (v.): 強調，著重",
+      "optical fiber (n.): 光纖",
+      "indispensable (adj.): 不可或缺的",
+      "advanced (adj.): 先進的，高等的",
+      "high-profile (adj.): 高調的，引人注目的",
+      "endorsement (n.): 背書，支持",
+      "boost (v.): 提振，促進",
+      "confidence (n.): 信心",
+      "share (n.): 股份，股票",
+      "demand (n.): 需求",
+      "hardware (n.): 硬體",
+      "skyrocket (v.): 飛漲，猛增",
+      "worldwide (adv.): 全球地，在世界各地",
+      "connect (v.): 連接，連結"
+    ],
+    "quiz": [
+      {
+        "q": "What caused Marvell Technology's stock price to surge?",
+        "options": [
+          "A disappointing earnings report",
+          "Positive remarks from Nvidia's CEO",
+          "A merger with another chipmaker",
+          "A decrease in global AI demand"
+        ],
+        "answer": "Positive remarks from Nvidia's CEO"
+      },
+      {
+        "q": "Who is the CEO of Nvidia mentioned in the article?",
+        "options": [
+          "Tim Cook",
+          "Jensen Huang",
+          "Elon Musk",
+          "Sundar Pichai"
+        ],
+        "answer": "Jensen Huang"
+      },
+      {
+        "q": "What role does Marvell play in the AI ecosystem according to the text?",
+        "options": [
+          "A minor role in software development",
+          "A crucial role in AI infrastructure",
+          "No role at all",
+          "A competitor to Nvidia's main chips"
+        ],
+        "answer": "A crucial role in AI infrastructure"
+      },
+      {
+        "q": "Which technology of Marvell was specifically emphasized as indispensable?",
+        "options": [
+          "Software algorithms",
+          "Optical fiber technology",
+          "Mobile phone screens",
+          "Battery manufacturing"
+        ],
+        "answer": "Optical fiber technology"
+      },
+      {
+        "q": "Why is Marvell's technology needed for Nvidia's advanced AI chips?",
+        "options": [
+          "To cool them down",
+          "To reduce their manufacturing cost",
+          "To connect them",
+          "To replace them"
+        ],
+        "answer": "To connect them"
+      },
+      {
+        "q": "What was the effect of Jensen Huang's endorsement on investors?",
+        "options": [
+          "It made them panic and sell",
+          "It boosted their confidence",
+          "It had no impact on them",
+          "It made them invest in software only"
+        ],
+        "answer": "It boosted their confidence"
+      },
+      {
+        "q": "What is happening to the global demand for AI-related hardware?",
+        "options": [
+          "It is declining rapidly",
+          "It is staying completely flat",
+          "It continues to skyrocket",
+          "It is being restricted by governments"
+        ],
+        "answer": "It continues to skyrocket"
+      },
+      {
+        "q": "What does the word 'indispensable' mean in the context of the article?",
+        "options": [
+          "Unnecessary and useless",
+          "Too expensive to buy",
+          "Absolutely necessary",
+          "Easily replaced"
+        ],
+        "answer": "Absolutely necessary"
+      },
+      {
+        "q": "Which word in the text means 'to rise extremely quickly'?",
+        "options": [
+          "Highlight",
+          "Skyrocket",
+          "Connect",
+          "Emphasize"
+        ],
+        "answer": "Skyrocket"
+      },
+      {
+        "q": "What does the term 'high-profile endorsement' refer to in the passage?",
+        "options": [
+          "A secret agreement",
+          "A public and highly noticed approval",
+          "A negative review",
+          "An internal memo"
+        ],
+        "answer": "A public and highly noticed approval"
+      },
+      {
+        "q": "According to the text, what is the current trend for Marvell's shares?",
+        "options": [
+          "They experienced a sharp rise",
+          "They remained completely stable",
+          "They crashed to an all-time low",
+          "They were suspended from trading"
+        ],
+        "answer": "They experienced a sharp rise"
+      },
+      {
+        "q": "What is the main theme of the news article?",
+        "options": [
+          "A decline in the semiconductor industry",
+          "The launch of a new Nvidia smartphone",
+          "How CEO comments influenced a tech company's stock",
+          "A dispute between two chip manufacturers"
+        ],
+        "answer": "How CEO comments influenced a tech company's stock"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "Wolters Kluwer與OpenAI擴展企業AI合作",
+    "tabTitle": "科技",
+    "english": "Wolters Kluwer and OpenAI announced on June 3, 2026, an expansion of their strategic collaboration in enterprise artificial intelligence. This partnership aims to integrate advanced AI capabilities, including generative AI, into Wolters Kluwer's professional solutions across legal, tax, and healthcare sectors. The expanded agreement will enhance efficiency and innovation, helping professionals make better decisions and improve client outcomes. This move solidifies Wolters Kluwer's commitment to leveraging cutting-edge technology for its global client base and driving future advancements.",
+    "chinese": "沃爾特斯‧克魯維爾（Wolters Kluwer）與OpenAI於2026年6月3日宣布，將擴大雙方在企業人工智慧領域的戰略合作。此次合作旨在將包括生成式人工智慧在內的先進AI功能整合到沃爾特斯‧克魯維爾在法律、稅務和醫療保健等領域的專業解決方案中。這項擴展協議將提升效率和創新，幫助專業人士做出更好的決策並改善客戶成果。此舉鞏固了沃爾特斯‧克魯維爾致力於為其全球客戶群體利用尖端技術並推動未來發展的承諾。",
+    "vocabulary": [
+      "Wolters Kluwer (n.): 沃爾特斯‧克魯維爾 (一家全球資訊服務公司)",
+      "OpenAI (n.): OpenAI (一家人工智慧研究實驗室)",
+      "expand (v.): 擴大；擴展",
+      "enterprise (n.): 企業；事業",
+      "artificial intelligence (AI) (n.): 人工智慧",
+      "strategic (adj.): 戰略性的",
+      "collaboration (n.): 合作；協作",
+      "partnership (n.): 合作關係",
+      "integrate (v.): 整合；結合",
+      "advanced (adj.): 先進的",
+      "capability (n.): 能力；功能",
+      "generative AI (n.): 生成式人工智慧",
+      "professional solutions (n. phrase): 專業解決方案",
+      "legal (adj.): 法律的",
+      "tax (n.): 稅務",
+      "healthcare (n.): 醫療保健",
+      "enhance (v.): 提升；加強",
+      "efficiency (n.): 效率",
+      "innovation (n.): 創新",
+      "leverage (v.): 利用；發揮"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news announcement?",
+        "options": [
+          "A) A new product launch by Wolters Kluwer.",
+          "B) Wolters Kluwer and OpenAI expanding their AI collaboration.",
+          "C) OpenAI's new research in generative AI.",
+          "D) Wolters Kluwer acquiring OpenAI."
+        ],
+        "answer": "B) Wolters Kluwer and OpenAI expanding their AI collaboration."
+      },
+      {
+        "q": "When was the announcement made?",
+        "options": [
+          "A) June 3, 2024.",
+          "B) June 3, 2025.",
+          "C) June 3, 2026.",
+          "D) March 6, 2026."
+        ],
+        "answer": "C) June 3, 2026."
+      },
+      {
+        "q": "What kind of AI capabilities are mentioned as being integrated into Wolters Kluwer's solutions?",
+        "options": [
+          "A) Predictive analytics only.",
+          "B) Machine learning only.",
+          "C) Advanced AI, including generative AI.",
+          "D) Robotic process automation."
+        ],
+        "answer": "C) Advanced AI, including generative AI."
+      },
+      {
+        "q": "Which sectors are specifically mentioned where Wolters Kluwer's professional solutions are used?",
+        "options": [
+          "A) Finance, education, and manufacturing.",
+          "B) Legal, tax, and healthcare.",
+          "C) Retail, automotive, and energy.",
+          "D) Agriculture, entertainment, and logistics."
+        ],
+        "answer": "B) Legal, tax, and healthcare."
+      },
+      {
+        "q": "What is one of the aims of the expanded agreement?",
+        "options": [
+          "A) To reduce Wolters Kluwer's operational costs.",
+          "B) To develop new hardware for AI.",
+          "C) To enhance efficiency and innovation.",
+          "D) To train OpenAI's AI models."
+        ],
+        "answer": "C) To enhance efficiency and innovation."
+      },
+      {
+        "q": "What does the partnership help professionals do?",
+        "options": [
+          "A) Manage their personal finances.",
+          "B) Make better decisions and improve client outcomes.",
+          "C) Write code for AI systems.",
+          "D) Market their services more effectively."
+        ],
+        "answer": "B) Make better decisions and improve client outcomes."
+      },
+      {
+        "q": "What does \"solidifies\" mean in the context of the news?",
+        "options": [
+          "A) To weaken.",
+          "B) To make stronger or more definite.",
+          "C) To dissolve.",
+          "D) To create confusion."
+        ],
+        "answer": "B) To make stronger or more definite."
+      },
+      {
+        "q": "What is Wolters Kluwer committed to leveraging?",
+        "options": [
+          "A) Traditional marketing strategies.",
+          "B) Outdated software.",
+          "C) Cutting-edge technology.",
+          "D) Manual processes."
+        ],
+        "answer": "C) Cutting-edge technology."
+      },
+      {
+        "q": "For whom is Wolters Kluwer leveraging cutting-edge technology?",
+        "options": [
+          "A) Its competitors.",
+          "B) Its global client base.",
+          "C) Government agencies.",
+          "D) Academic researchers."
+        ],
+        "answer": "B) Its global client base."
+      },
+      {
+        "q": "What kind of collaboration is described between Wolters Kluwer and OpenAI?",
+        "options": [
+          "A) A casual agreement.",
+          "B) A strategic collaboration.",
+          "C) A short-term project.",
+          "D) A marketing campaign."
+        ],
+        "answer": "B) A strategic collaboration."
+      },
+      {
+        "q": "What is \"enterprise AI\" referring to in the headline?",
+        "options": [
+          "A) AI for small businesses.",
+          "B) AI used for large organizations and businesses.",
+          "C) AI for personal use.",
+          "D) AI for scientific research only."
+        ],
+        "answer": "B) AI used for large organizations and businesses."
+      },
+      {
+        "q": "What is the overall purpose of this expanded partnership?",
+        "options": [
+          "A) To limit AI development.",
+          "B) To drive future advancements.",
+          "C) To only focus on current solutions.",
+          "D) To compete with other AI companies."
+        ],
+        "answer": "B) To drive future advancements."
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
