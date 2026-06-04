@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 04, 2026：科技、地緣政治 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 魏哲家：台積電生態系獨特，對手追上是「做夢」\nTSMC Chairman C.C. Wei emphasized that the company's unique ecosystem remains its greatest competitive advantage, making it nearly impossible for competitors to catch up. Speaking at a recent industry event, Wei stated that rivals claiming they can easily close the technology gap are merely 'dreaming.' He highlighted TSMC's deep-rooted relationships with global clients and its unparalleled manufacturing capabilities. As demand for advanced AI chips continues to surge, TSMC's dominance in the semiconductor industry appears increasingly secure.\n\n[2] 高盛上修台股評等至「加碼」，目標指數衝51,000點\nGoldman Sachs has upgraded Taiwan's stock market rating to 'Overweight,' citing strong global demand for artificial intelligence technologies and robust semiconductor exports. The investment bank raised its target index for the Taiex to an unprecedented 51,000 points. Analysts believe that Taiwan's key position in the global tech supply chain will continue to drive corporate earnings growth. Consequently, foreign capital inflows are expected to accelerate in the coming quarters, further boosting market confidence.\n\n[3] 虛擬資產法初審通過，台灣幣圈納入金融監理\nTaiwan’s legislature has passed the first reading of the Virtual Asset Act, marking a significant milestone in regulating the domestic cryptocurrency sector. Under this new framework, virtual asset service providers must comply with strict financial supervision, including anti-money laundering measures and customer asset protection. The Financial Supervisory Commission will oversee the industry to ensure market stability and investor security. This legislation aims to foster innovation while mitigating financial risks associated with digital currencies.",
+    "chinese": "【1】魏哲家：台積電生態系獨特，對手追上是「做夢」\n台積電董事長魏哲家強調，該公司獨特的生態系統仍是其最大的競爭優勢，使競爭對手幾乎不可能追趕。魏哲家在最近的一次產業活動中表示，聲稱能輕鬆縮小技術差距的對手純粹是在「做夢」。他強調了台積電與全球客戶的深厚關係以及其無與倫比的製造能力。隨著對先進人工智慧晶片的需求持續激增，台積電在半導體產業的霸主地位顯得日益穩固。\n\n【2】高盛上修台股評等至「加碼」，目標指數衝51,000點\n高盛（Goldman Sachs）已將台灣股市的評等上調至「加碼」，理由是全球對人工智慧技術的強勁需求以及半導體出口的蓬勃發展。該投資銀行將台灣加權指數的目標值調升至前所未有的 51,000 點。分析師認為，台灣在全球科技供應鏈中的關鍵地位將繼續推動企業獲利增長。因此，預計未來幾季外資流入將會加速，進一步提振市場信心。\n\n【3】虛擬資產法初審通過，台灣幣圈納入金融監理\n台灣立法院已通過《虛擬資產法》初審，這標誌著監管國內加密貨幣領域的重要里程碑。在此新框架下，虛擬資產服務提供商必須遵守嚴格的金融監理，包括反洗錢措施和客戶資產保護。金融監督管理委員會將監督該行業，以確保市場穩定和投資人安全。該法案旨在促進創新，同時降低與數位貨幣相關的金融風險。",
+    "vocabulary": [
+      "ecosystem (n.): 生態系統",
+      "competitive advantage (n. phr.): 競爭優勢",
+      "competitor (n.): 競爭對手",
+      "catch up (v. phr.): 趕上、追上",
+      "rival (n.): 對手、競爭者",
+      "claim (v.): 聲稱、主張",
+      "close the gap (v. phr.): 縮小差距",
+      "merely (adv.): 僅僅、只不過",
+      "highlight (v.): 強調、突出",
+      "deep-rooted (adj.): 根深蒂固的、深厚的",
+      "client (n.): 客戶",
+      "unparalleled (adj.): 無與倫比的、無雙的",
+      "manufacturing (n.): 製造、製造業",
+      "capability (n.): 能力、實力",
+      "demand (n.): 需求",
+      "advanced (adj.): 先進的、高級的",
+      "surge (v.): 激增、湧動",
+      "dominance (n.): 支配地位、霸主地位",
+      "semiconductor (n.): 半導體",
+      "secure (adj.): 安全的、穩固的",
+      "upgrade (v.): 升級；上調",
+      "rating (n.): 評等；評價",
+      "overweight (adj.): 加碼的；超重的",
+      "cite (v.): 引用；引述",
+      "demand (n.): 需求",
+      "artificial intelligence (n.): 人工智慧",
+      "robust (adj.): 強勁的；健壯的",
+      "semiconductor (n.): 半導體",
+      "export (n.): 出口",
+      "investment bank (n.): 投資銀行",
+      "target (n.): 目標",
+      "index (n.): 指數",
+      "unprecedented (adj.): 前所未有的",
+      "analyst (n.): 分析師",
+      "key position (n. phr.): 關鍵地位",
+      "supply chain (n. phr.): 供應鏈",
+      "corporate earnings (n. phr.): 企業獲利",
+      "capital inflow (n. phr.): 資金流入",
+      "accelerate (v.): 加速",
+      "boost (v.): 提振；促進",
+      "legislature (n.): 立法院；立法機關",
+      "virtual asset (n. phr.): 虛擬資產",
+      "milestone (n.): 里程碑",
+      "regulate (v.): 監管；規範",
+      "domestic (adj.): 國內的",
+      "cryptocurrency (n.): 加密貨幣",
+      "framework (n.): 框架；結構",
+      "comply with (v. phr.): 遵守；服從",
+      "supervision (n.): 監督；管理",
+      "anti-money laundering (n. phr.): 反洗錢",
+      "measure (n.): 措施；方法",
+      "asset (n.): 資產",
+      "protection (n.): 保護",
+      "supervisory (adj.): 監督的；管理的",
+      "commission (n.): 委員會",
+      "oversee (v.): 監督；監察",
+      "stability (n.): 穩定；穩定性",
+      "security (n.): 安全；保障",
+      "foster (v.): 促進；培養",
+      "mitigate (v.): 減輕；緩和"
+    ],
+    "quiz": [
+      {
+        "q": "What did TSMC Chairman C.C. Wei emphasize as the company's greatest competitive advantage?",
+        "options": [
+          "Its low pricing strategy",
+          "Its unique ecosystem",
+          "Its global marketing campaigns",
+          "Its newly built factories"
+        ],
+        "answer": "Its unique ecosystem"
+      },
+      {
+        "q": "According to Wei, what are rivals doing when they claim they can easily catch up?",
+        "options": [
+          "Succeeding",
+          "Investing heavily",
+          "Dreaming",
+          "Collaborating"
+        ],
+        "answer": "Dreaming"
+      },
+      {
+        "q": "What does the word 'unparalleled' mean in the text?",
+        "options": [
+          "Unmatched or having no equal",
+          "Average and common",
+          "Declining rapidly",
+          "Limited in scope"
+        ],
+        "answer": "Unmatched or having no equal"
+      },
+      {
+        "q": "What is driving the surge in demand for TSMC's services?",
+        "options": [
+          "Traditional toy manufacturing",
+          "Fossil fuels",
+          "Advanced AI chips",
+          "Agricultural tools"
+        ],
+        "answer": "Advanced AI chips"
+      },
+      {
+        "q": "Complete the sentence: TSMC has ______ relationships with global clients.",
+        "options": [
+          "temporary",
+          "deep-rooted",
+          "shallow",
+          "hostile"
+        ],
+        "answer": "deep-rooted"
+      },
+      {
+        "q": "What is the Chinese meaning of 'semiconductor'?",
+        "options": [
+          "超導體",
+          "半導體",
+          "絕緣體",
+          "電阻器"
+        ],
+        "answer": "半導體"
+      },
+      {
+        "q": "Which word is closest in meaning to 'rival'?",
+        "options": [
+          "Partner",
+          "Competitor",
+          "Customer",
+          "Employee"
+        ],
+        "answer": "Competitor"
+      },
+      {
+        "q": "What does 'close the gap' mean?",
+        "options": [
+          "To increase the distance",
+          "To end a partnership",
+          "To reduce the difference or deficit",
+          "To close a factory"
+        ],
+        "answer": "To reduce the difference or deficit"
+      },
+      {
+        "q": "The word 'merely' in the text can be replaced by which of the following?",
+        "options": [
+          "simply",
+          "extremely",
+          "completely",
+          "confidently"
+        ],
+        "answer": "simply"
+      },
+      {
+        "q": "What is the noun form of the action 'to dominate' as used in the text?",
+        "options": [
+          "dominant",
+          "dominated",
+          "dominance",
+          "dominating"
+        ],
+        "answer": "dominance"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a strength of TSMC in the text?",
+        "options": [
+          "Unique ecosystem",
+          "Low-cost labor",
+          "Deep-rooted client relationships",
+          "Unparalleled manufacturing capabilities"
+        ],
+        "answer": "Low-cost labor"
+      },
+      {
+        "q": "How does the text describe TSMC's position in the semiconductor industry?",
+        "options": [
+          "Highly vulnerable",
+          "Slowly declining",
+          "Increasingly secure",
+          "Completely irrelevant"
+        ],
+        "answer": "Increasingly secure"
+      },
+      {
+        "q": "What rating did Goldman Sachs give to Taiwan's stock market?",
+        "options": [
+          "A) Underweight",
+          "B) Neutral",
+          "C) Overweight",
+          "D) Sell"
+        ],
+        "answer": "C) Overweight"
+      },
+      {
+        "q": "What is the new target index set by Goldman Sachs for the Taiex?",
+        "options": [
+          "A) 15,000 points",
+          "B) 51,000 points",
+          "C) 20,260 points",
+          "D) 30,000 points"
+        ],
+        "answer": "B) 51,000 points"
+      },
+      {
+        "q": "Which industry's exports are mentioned as a key reason for the upgrade?",
+        "options": [
+          "A) Agricultural",
+          "B) Textile",
+          "C) Semiconductor",
+          "D) Automotive"
+        ],
+        "answer": "C) Semiconductor"
+      },
+      {
+        "q": "What does the word 'robust' mean in the text?",
+        "options": [
+          "A) Weak and declining",
+          "B) Strong and healthy",
+          "C) Slow and steady",
+          "D) Unstable and risky"
+        ],
+        "answer": "B) Strong and healthy"
+      },
+      {
+        "q": "What is the meaning of 'unprecedented'?",
+        "options": [
+          "A) Never done or known before",
+          "B) Very common in history",
+          "C) Expected to happen soon",
+          "D) Decreasing in value"
+        ],
+        "answer": "A) Never done or known before"
+      },
+      {
+        "q": "What is expected to happen to foreign capital in the coming quarters?",
+        "options": [
+          "A) It will completely stop.",
+          "B) It is expected to decrease.",
+          "C) It is expected to accelerate.",
+          "D) It will remain unchanged."
+        ],
+        "answer": "C) It is expected to accelerate."
+      },
+      {
+        "q": "In the phrase 'citing strong global demand', what does 'citing' mean?",
+        "options": [
+          "A) Ignoring",
+          "B) Giving as a reason",
+          "C) Disproving",
+          "D) Predicting"
+        ],
+        "answer": "B) Giving as a reason"
+      },
+      {
+        "q": "According to the text, what will continue to drive corporate earnings growth?",
+        "options": [
+          "A) High inflation rates",
+          "B) Government tax increases",
+          "C) Taiwan's key position in the global tech supply chain",
+          "D) A decline in global tech demand"
+        ],
+        "answer": "C) Taiwan's key position in the global tech supply chain"
+      },
+      {
+        "q": "Which of the following is the closest synonym for 'boost'?",
+        "options": [
+          "A) Reduce",
+          "B) Enhance",
+          "C) Prevent",
+          "D) Describe"
+        ],
+        "answer": "B) Enhance"
+      },
+      {
+        "q": "What does 'capital inflow' refer to?",
+        "options": [
+          "A) Money leaving a country",
+          "B) Money entering a country for investment",
+          "C) Government debt",
+          "D) Bank bankruptcy"
+        ],
+        "answer": "B) Money entering a country for investment"
+      },
+      {
+        "q": "What grammatical tense is used in the phrase 'Goldman Sachs has upgraded...'?",
+        "options": [
+          "A) Present Perfect",
+          "B) Simple Past",
+          "C) Present Continuous",
+          "D) Past Perfect"
+        ],
+        "answer": "A) Present Perfect"
+      },
+      {
+        "q": "What specific technology is mentioned as driving global demand?",
+        "options": [
+          "A) Biotechnology",
+          "B) Artificial intelligence",
+          "C) Green energy",
+          "D) Blockchain"
+        ],
+        "answer": "B) Artificial intelligence"
+      },
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "A decline in Taiwan's stock market",
+          "The first reading of the Virtual Asset Act in Taiwan",
+          "A new technology partnership",
+          "The ban of cryptocurrency in Taiwan"
+        ],
+        "answer": "The first reading of the Virtual Asset Act in Taiwan"
+      },
+      {
+        "q": "Which organization will oversee the virtual asset industry in Taiwan?",
+        "options": [
+          "The Ministry of Economic Affairs",
+          "The Central Bank",
+          "The Financial Supervisory Commission",
+          "The Ministry of Justice"
+        ],
+        "answer": "The Financial Supervisory Commission"
+      },
+      {
+        "q": "What does the word 'mitigate' mean in the text?",
+        "options": [
+          "To increase",
+          "To reduce or lessen",
+          "To ignore",
+          "To initiate"
+        ],
+        "answer": "To reduce or lessen"
+      },
+      {
+        "q": "Under the new framework, virtual asset service providers must comply with which of the following?",
+        "options": [
+          "Tax exemption policies",
+          "Strict financial supervision",
+          "International travel bans",
+          "Social media advertising rules"
+        ],
+        "answer": "Strict financial supervision"
+      },
+      {
+        "q": "The term 'anti-money laundering' is related to preventing what?",
+        "options": [
+          "Legal tax filing",
+          "Illegal financial activities",
+          "Environmental pollution",
+          "Online shopping fraud"
+        ],
+        "answer": "Illegal financial activities"
+      },
+      {
+        "q": "What is one of the main goals of the Virtual Asset Act mentioned in the passage?",
+        "options": [
+          "To ban all digital currencies",
+          "To foster innovation while mitigating risks",
+          "To replace traditional banks",
+          "To increase transaction fees"
+        ],
+        "answer": "To foster innovation while mitigating risks"
+      },
+      {
+        "q": "Complete the sentence: The new policy represents a significant ________ in regulating the crypto sector.",
+        "options": [
+          "milestone",
+          "obstacle",
+          "failure",
+          "conflict"
+        ],
+        "answer": "milestone"
+      },
+      {
+        "q": "Which word is closest in meaning to 'oversee'?",
+        "options": [
+          "Overlook",
+          "Ignore",
+          "Supervise",
+          "Underestimate"
+        ],
+        "answer": "Supervise"
+      },
+      {
+        "q": "According to the text, whose security is the commission trying to ensure?",
+        "options": [
+          "Government officials",
+          "Foreign hackers",
+          "Investors",
+          "Traditional bankers"
+        ],
+        "answer": "Investors"
+      },
+      {
+        "q": "What kind of assets need protection under the new framework?",
+        "options": [
+          "Real estate assets",
+          "Customer assets",
+          "Physical gold",
+          "Government bonds"
+        ],
+        "answer": "Customer assets"
+      },
+      {
+        "q": "The word 'domestic' in the text refers to things happening:",
+        "options": [
+          "Internationally",
+          "Within one's own country",
+          "In the future",
+          "In secret"
+        ],
+        "answer": "Within one's own country"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a requirement for virtual asset service providers?",
+        "options": [
+          "Customer asset protection",
+          "Anti-money laundering measures",
+          "Financial supervision",
+          "Mandatory physical offices"
+        ],
+        "answer": "Mandatory physical offices"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "川普：伊朗已同意放棄核武，美伊談判週末有望達成協議",
+    "tabTitle": "地緣政治",
+    "english": "Former US President Donald Trump announced on Thursday that Iran has agreed to completely abandon its nuclear weapons program. This major diplomatic breakthrough suggests that a formal bilateral agreement between Washington and Tehran could be finalized as early as this weekend. While skeptical observers urge caution, administration officials remain optimistic about establishing long-term peace in the Middle East. The potential deal would likely involve lifting severe economic sanctions in exchange for strict international inspections of Iran's nuclear facilities.",
+    "chinese": "前美國總統唐納·川普於週四宣布，伊朗已同意完全放棄其核武器計劃。這一重大的外交突破表明，華盛頓與德黑蘭之間的正式雙邊協議最早可能在今天週末敲定。儘管持懷疑態度的觀察家呼籲保持謹慎，但政府官員對在中東建立長期和平仍保持樂觀。這項潛在的協議可能涉及取消嚴厲的經濟制裁，以換取對伊朗核設施的嚴格國際審查。",
+    "vocabulary": [
+      "abandon (v.): 放棄；拋棄",
+      "diplomatic (adj.): 外交的",
+      "breakthrough (n.): 突破",
+      "bilateral (adj.): 雙邊的",
+      "agreement (n.): 協定；協議",
+      "finalize (v.): 敲定；完成",
+      "skeptical (adj.): 懷疑的",
+      "observer (n.): 觀察家；觀察員",
+      "urge (v.): 敦促；呼籲",
+      "caution (n.): 謹慎；小心",
+      "administration (n.): 政府；行政機關",
+      "optimistic (adj.): 樂觀的",
+      "establish (v.): 建立；創立",
+      "potential (adj.): 潛在的；可能的",
+      "involve (v.): 涉及；包含",
+      "lift (v.): 解除；撤銷（制裁、限制等）",
+      "severe (adj.): 嚴厲的；嚴重的",
+      "sanction (n.): 制裁",
+      "inspection (n.): 檢查；審查",
+      "facility (n.): 設施；設備"
+    ],
+    "quiz": [
+      {
+        "q": "According to the text, what has Iran agreed to do?",
+        "options": [
+          "A) Increase its nuclear weapons production",
+          "B) Abandon its nuclear weapons program completely",
+          "C) Impose sanctions on the United States",
+          "D) Refuse international inspections"
+        ],
+        "answer": "B) Abandon its nuclear weapons program completely"
+      },
+      {
+        "q": "When could the formal bilateral agreement be finalized?",
+        "options": [
+          "A) Next month",
+          "B) Next year",
+          "C) As early as this weekend",
+          "D) In a few hours"
+        ],
+        "answer": "C) As early as this weekend"
+      },
+      {
+        "q": "What is the attitude of the administration officials regarding the deal?",
+        "options": [
+          "A) Skeptical",
+          "B) Indifferent",
+          "C) Optimistic",
+          "D) Hostile"
+        ],
+        "answer": "C) Optimistic"
+      },
+      {
+        "q": "What would the potential deal likely involve in exchange for international inspections?",
+        "options": [
+          "A) Lifting severe economic sanctions",
+          "B) Providing military aid to Iran",
+          "C) Changing the Iranian government",
+          "D) Establishing a US base in Tehran"
+        ],
+        "answer": "A) Lifting severe economic sanctions"
+      },
+      {
+        "q": "What is the meaning of the word 'breakthrough' in the context of the passage?",
+        "options": [
+          "A) A failure to communicate",
+          "B) A sudden, dramatic, and important discovery or development",
+          "C) A physical wall being broken down",
+          "D) A minor disagreement"
+        ],
+        "answer": "B) A sudden, dramatic, and important discovery or development"
+      },
+      {
+        "q": "Which of the following is the closest synonym for 'bilateral'?",
+        "options": [
+          "A) Unilateral",
+          "B) Multilateral",
+          "C) Two-sided",
+          "D) Internal"
+        ],
+        "answer": "C) Two-sided"
+      },
+      {
+        "q": "If someone is described as 'skeptical,' they are:",
+        "options": [
+          "A) Full of trust and belief",
+          "B) Having doubts or reservations",
+          "C) Extremely angry",
+          "D) Highly enthusiastic"
+        ],
+        "answer": "B) Having doubts or reservations"
+      },
+      {
+        "q": "In the phrase 'lifting severe economic sanctions,' the word 'lifting' most nearly means:",
+        "options": [
+          "A) Raising to a higher position",
+          "B) Stealing or taking away",
+          "C) Removing or ending a restriction",
+          "D) Improving the economy"
+        ],
+        "answer": "C) Removing or ending a restriction"
+      },
+      {
+        "q": "Fill in the blank: The school principal decided to _____ the students to study harder for the upcoming exams.",
+        "options": [
+          "A) abandon",
+          "B) urge",
+          "C) finalize",
+          "D) sanction"
+        ],
+        "answer": "B) urge"
+      },
+      {
+        "q": "The government hopes to _____ long-term diplomatic relations with its neighbors.",
+        "options": [
+          "A) establish",
+          "B) establishing",
+          "C) established",
+          "D) establishment"
+        ],
+        "answer": "A) establish"
+      },
+      {
+        "q": "Who are the two main parties involved in the potential agreement mentioned in the news?",
+        "options": [
+          "A) Iran and Iraq",
+          "B) The US and Iran",
+          "C) The US and Russia",
+          "D) Iran and the United Nations"
+        ],
+        "answer": "B) The US and Iran"
+      },
+      {
+        "q": "Which word refers to 'a place, amenity, or piece of equipment provided for a particular purpose'?",
+        "options": [
+          "A) breakthrough",
+          "B) facility",
+          "C) sanction",
+          "D) caution"
+        ],
+        "answer": "B) facility"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "美國職位空缺創一年新高，美元走強比特幣下探",
+    "tabTitle": "金融市場",
+    "english": "US job openings unexpectedly surged to a one-year high last month, signaling continued resilience in the labor market. This robust data has fueled expectations that the Federal Reserve may keep interest rates elevated for a longer period to combat inflation. Consequently, the US dollar strengthened significantly against major global currencies. Meanwhile, the cryptocurrency market experienced a sharp downturn, with Bitcoin dipping below key support levels as investors shifted away from riskier assets.",
+    "chinese": "上個月美國職位空缺意外飆升至一年新高，顯示出勞動力市場的持續韌性。這一強勁的數據加劇了市場對聯準會可能在更長時間內維持高利率以對抗通膨的預期。因此，美元兌全球主要貨幣顯著走強。與此同時，加密貨幣市場經歷了急劇下滑，隨著投資人撤離高風險資產，比特幣跌破了關鍵支撐價位。",
+    "vocabulary": [
+      "surge (v.): 飆升，急劇上升",
+      "job opening (n. phr.): 職位空缺",
+      "resilience (n.): 韌性，彈性",
+      "labor market (n. phr.): 勞動力市場",
+      "robust (adj.): 強勁的，堅固的",
+      "fuel (v.): 加劇，刺激",
+      "expectation (n.): 預期，期望",
+      "Federal Reserve (n. phr.): 美國聯邦準備理事會（聯準會）",
+      "elevated (adj.): 處於高位的，提高的",
+      "combat (v.): 對抗，打擊",
+      "inflation (n.): 通貨膨脹",
+      "consequently (adv.): 因此，結果",
+      "strengthen (v.): 走強，加強",
+      "currency (n.): 貨幣",
+      "cryptocurrency (n.): 加密貨幣",
+      "downturn (n.): 衰退，下行",
+      "dip (v.): 下跌，微降",
+      "support level (n. phr.): 支撐水準，支撐線",
+      "investor (n.): 投資人",
+      "risky asset (n. phr.): 風險資產"
+    ],
+    "quiz": [
+      {
+        "q": "What triggered the surge in the US dollar?",
+        "options": [
+          "A. A drop in inflation",
+          "B. The surge in US job openings",
+          "C. A rise in Bitcoin's price",
+          "D. Lower interest rates"
+        ],
+        "answer": "B. The surge in US job openings"
+      },
+      {
+        "q": "According to the article, the labor market shows ________.",
+        "options": [
+          "A. weakness",
+          "B. instability",
+          "C. resilience",
+          "D. decline"
+        ],
+        "answer": "C. resilience"
+      },
+      {
+        "q": "What does the Federal Reserve want to combat with high interest rates?",
+        "options": [
+          "A. High employment",
+          "B. Inflation",
+          "C. Strong dollar",
+          "D. Bitcoin growth"
+        ],
+        "answer": "B. Inflation"
+      },
+      {
+        "q": "What is the synonym of 'surge' as used in the text?",
+        "options": [
+          "A. Plummet",
+          "B. Stabilize",
+          "C. Fluctuate",
+          "D. Rise sharply"
+        ],
+        "answer": "D. Rise sharply"
+      },
+      {
+        "q": "Why might interest rates remain elevated?",
+        "options": [
+          "A. Because job openings dropped",
+          "B. To support cryptocurrency",
+          "C. To combat inflation",
+          "D. To weaken the US dollar"
+        ],
+        "answer": "C. To combat inflation"
+      },
+      {
+        "q": "How did the cryptocurrency market react to the news?",
+        "options": [
+          "A. It experienced a sharp downturn.",
+          "B. It reached an all-time high.",
+          "C. It remained completely stable.",
+          "D. It gained more investors."
+        ],
+        "answer": "A. It experienced a sharp downturn."
+      },
+      {
+        "q": "What did Bitcoin dip below?",
+        "options": [
+          "A. Historical average",
+          "B. Key support levels",
+          "C. Zero",
+          "D. Resistance levels"
+        ],
+        "answer": "B. Key support levels"
+      },
+      {
+        "q": "What kind of assets did investors shift away from?",
+        "options": [
+          "A. Safe-haven assets",
+          "B. Riskier assets",
+          "C. Real estate",
+          "D. Government bonds"
+        ],
+        "answer": "B. Riskier assets"
+      },
+      {
+        "q": "The word 'consequently' in the text means ________.",
+        "options": [
+          "A. On the other hand",
+          "B. For example",
+          "C. As a result",
+          "D. In contrast"
+        ],
+        "answer": "C. As a result"
+      },
+      {
+        "q": "Which currency strengthened significantly?",
+        "options": [
+          "A. Euro",
+          "B. Yen",
+          "C. British Pound",
+          "D. US Dollar"
+        ],
+        "answer": "D. US Dollar"
+      },
+      {
+        "q": "What is the opposite of 'robust' in the context of economic data?",
+        "options": [
+          "A. Strong",
+          "B. Weak",
+          "C. Stable",
+          "D. Growing"
+        ],
+        "answer": "B. Weak"
+      },
+      {
+        "q": "How long of a high did the US job openings reach?",
+        "options": [
+          "A. Six-month high",
+          "B. One-year high",
+          "C. Two-year high",
+          "D. Five-year high"
+        ],
+        "answer": "B. One-year high"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "DeepSeek首輪融資達70億美元",
+    "tabTitle": "科技",
+    "english": "Chinese artificial intelligence startup DeepSeek has successfully secured $7 billion in its first major funding round, valuing the company at an unprecedented level. The capital injection, led by prominent global venture capital firms, will be used to accelerate the development of its next-generation open-source models and expand its computing infrastructure. Industry analysts suggest this massive investment underscores the growing confidence in DeepSeek's capability to challenge established market leaders. The company aims to democratize AI technology by providing high-performance, cost-effective solutions worldwide.",
+    "chinese": "中國人工智慧新創公司 DeepSeek 在其首輪重大融資中成功籌集了 70 億美元，使該公司的估值達到前所未有的水平。這次由全球知名風險投資公司領投的資金挹注，將用於加速其下一代開源模型的開發，並擴展其算力基礎設施。行業分析師指出，這筆龐大的投資凸顯了市場對 DeepSeek 挑戰既有市場領導者能力的信心日益增強。該公司旨在透過在全球範圍內提供高性能、具成本效益的解決方案，來推動人工智慧技術的普及化。",
+    "vocabulary": [
+      "secure (v.): 獲得；爭取到",
+      "funding round (n. phr.): 融資輪",
+      "value (v.): 估價；估值",
+      "unprecedented (adj.): 前所未有的",
+      "capital injection (n. phr.): 資金挹注",
+      "prominent (adj.): 著名的；傑出的",
+      "venture capital (n. phr.): 風險投資",
+      "accelerate (v.): 加速",
+      "next-generation (adj.): 下一代的",
+      "open-source (adj.): 開源的",
+      "computing infrastructure (n. phr.): 算力基礎設施",
+      "analyst (n.): 分析師",
+      "massive (adj.): 巨大的；龐大的",
+      "underscore (v.): 強調；突出顯示",
+      "capability (n.): 能力；容量",
+      "established (adj.): 既有的；已確立的",
+      "democratize (v.): 使普及；民主化",
+      "high-performance (adj.): 高性能的",
+      "cost-effective (adj.): 具成本效益的",
+      "solution (n.): 解決方案"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "DeepSeek's acquisition of a rival company",
+          "DeepSeek securing $7 billion in its first funding round",
+          "The release of DeepSeek's new AI model",
+          "A decline in global venture capital investments"
+        ],
+        "answer": "DeepSeek securing $7 billion in its first funding round"
+      },
+      {
+        "q": "How much money did DeepSeek secure in this funding round?",
+        "options": [
+          "$7 million",
+          "$700 million",
+          "$7 billion",
+          "$70 billion"
+        ],
+        "answer": "$7 billion"
+      },
+      {
+        "q": "What does the word 'unprecedented' mean in the context of the article?",
+        "options": [
+          "Never done or known before",
+          "Extremely common and expected",
+          "Decreasing in value",
+          "Temporary"
+        ],
+        "answer": "Never done or known before"
+      },
+      {
+        "q": "Who led the capital injection for DeepSeek?",
+        "options": [
+          "Government grants",
+          "Prominent global venture capital firms",
+          "Individual retail investors",
+          "Established tech giants"
+        ],
+        "answer": "Prominent global venture capital firms"
+      },
+      {
+        "q": "What will the newly acquired capital be primarily used for?",
+        "options": [
+          "Hiring new administrative staff",
+          "Building physical retail stores",
+          "Accelerating open-source model development and expanding infrastructure",
+          "Paying off existing debts"
+        ],
+        "answer": "Accelerating open-source model development and expanding infrastructure"
+      },
+      {
+        "q": "According to industry analysts, what does this investment underscore?",
+        "options": [
+          "The failure of traditional AI models",
+          "Growing confidence in DeepSeek's capability to challenge market leaders",
+          "A decrease in global tech spending",
+          "The rising cost of hardware"
+        ],
+        "answer": "Growing confidence in DeepSeek's capability to challenge market leaders"
+      },
+      {
+        "q": "What is DeepSeek's ultimate goal mentioned in the article?",
+        "options": [
+          "To monopolize the AI market",
+          "To democratize AI technology globally",
+          "To stop using open-source models",
+          "To focus solely on local markets"
+        ],
+        "answer": "To democratize AI technology globally"
+      },
+      {
+        "q": "Which word in the text is closest in meaning to 'strengthen' or 'emphasize'?",
+        "options": [
+          "Value",
+          "Accelerate",
+          "Underscore",
+          "Democratize"
+        ],
+        "answer": "Underscore"
+      },
+      {
+        "q": "What kind of solutions does DeepSeek aim to provide?",
+        "options": [
+          "High-performance and cost-effective solutions",
+          "Expensive and exclusive systems",
+          "Low-performance, free services",
+          "Traditional hardware solutions"
+        ],
+        "answer": "High-performance and cost-effective solutions"
+      },
+      {
+        "q": "What does the term 'venture capital' refer to?",
+        "options": [
+          "Money invested in high-risk startups with growth potential",
+          "Loans provided by traditional commercial banks",
+          "Funds collected from charity donations",
+          "Government tax revenues"
+        ],
+        "answer": "Money invested in high-risk startups with growth potential"
+      },
+      {
+        "q": "The word 'accelerate' in the text is closest in meaning to:",
+        "options": [
+          "Delay",
+          "Speed up",
+          "Cancel",
+          "Analyze"
+        ],
+        "answer": "Speed up"
+      },
+      {
+        "q": "Which of the following is TRUE about DeepSeek based on the article?",
+        "options": [
+          "It is a well-established company with a long history.",
+          "It plans to keep all of its models closed-source.",
+          "It successfully raised $7 billion in its first major funding round.",
+          "It is struggling to gain market confidence."
+        ],
+        "answer": "It successfully raised $7 billion in its first major funding round."
+      }
+    ]
+  },
+  "article-6": {
+    "title": "SpaceX擬IPO募資750億美元，估值上看1.77兆",
+    "tabTitle": "金融市場",
+    "english": "SpaceX is reportedly planning an initial public offering (IPO) to raise $75 billion, pushing its projected valuation to an unprecedented $1.77 trillion. This massive financial move aims to fund the company's ambitious Mars missions and expand its Starlink satellite internet constellation. Financial analysts suggest that the IPO could become one of the largest in history, reflecting strong investor confidence in private space exploration. However, regulatory scrutiny and market volatility remain potential challenges for the aerospace giant.",
+    "chinese": "據報導，SpaceX 計劃進行首次公開募股（IPO）以籌集 750 億美元，將其預估估值推高至前所未有的 1.77 兆美元。這一重大的財務舉措旨在資助該公司雄心勃勃的火星任務，並擴大其星鏈（Starlink）衛星網路星系。金融分析師指出，此次 IPO 可能成為歷史上規模最大的 IPO 之一，反映出投資者對私人太空探索的強烈信心。然而，監管審查和市場波動仍是這家航太巨頭面臨的潛在挑戰。",
+    "vocabulary": [
+      "initial public offering (n.): 首次公開募股 (IPO)",
+      "valuation (n.): 估值，評價",
+      "unprecedented (adj.): 前所未有的，史無前例的",
+      "massive (adj.): 巨大的，大規模的",
+      "ambitious (adj.): 雄心勃勃的，有野心的",
+      "constellation (n.): 星座，（此指衛星）星系/星群",
+      "analyst (n.): 分析師",
+      "reflect (v.): 反映，顯示",
+      "investor (n.): 投資者",
+      "confidence (n.): 信心",
+      "regulatory (adj.): 監管的，管理的",
+      "scrutiny (n.): 仔細檢查，審查",
+      "volatility (n.): 波動性，易變性",
+      "potential (adj.): 潛在的，可能的",
+      "aerospace (n.): 航空航天（工業）",
+      "raise (v.): 籌集（資金）",
+      "projected (adj.): 預計的，推估的",
+      "exploration (n.): 探索，探測",
+      "giant (n.): 巨頭，龐然大物",
+      "fund (v.): 資助，提供資金"
+    ],
+    "quiz": [
+      {
+        "q": "According to the article, what is SpaceX's primary method for raising $75 billion?",
+        "options": [
+          "A. Taking out bank loans",
+          "B. Launching an initial public offering (IPO)",
+          "C. Selling Starlink to another company",
+          "D. Merging with a competitor"
+        ],
+        "answer": "B. Launching an initial public offering (IPO)"
+      },
+      {
+        "q": "What is the projected valuation of SpaceX mentioned in the text?",
+        "options": [
+          "A. $75 billion",
+          "B. $1.77 billion",
+          "C. $1.77 trillion",
+          "D. $750 billion"
+        ],
+        "answer": "C. $1.77 trillion"
+      },
+      {
+        "q": "The word 'unprecedented' in the text most closely means:",
+        "options": [
+          "A. Highly expected",
+          "B. Never done or known before",
+          "C. Temporarily delayed",
+          "D. Decreasing rapidly"
+        ],
+        "answer": "B. Never done or known before"
+      },
+      {
+        "q": "Which of the following projects does SpaceX plan to fund with the raised capital?",
+        "options": [
+          "A. Deep-sea exploration",
+          "B. Electric vehicle manufacturing",
+          "C. Mars missions and Starlink expansion",
+          "D. Artificial intelligence research"
+        ],
+        "answer": "C. Mars missions and Starlink expansion"
+      },
+      {
+        "q": "What does 'constellation' refer to in the context of the Starlink project?",
+        "options": [
+          "A. A group of stars forming a pattern",
+          "B. A network of interconnected satellites",
+          "C. A team of space scientists",
+          "D. A collection of physical offices"
+        ],
+        "answer": "B. A network of interconnected satellites"
+      },
+      {
+        "q": "According to financial analysts, this IPO could become:",
+        "options": [
+          "A. One of the largest in history",
+          "B. A complete market failure",
+          "C. A minor event in the aerospace industry",
+          "D. Restricted to European investors only"
+        ],
+        "answer": "A. One of the largest in history"
+      },
+      {
+        "q": "The huge IPO reflects strong investor confidence in which sector?",
+        "options": [
+          "A. Traditional banking",
+          "B. Private space exploration",
+          "C. Agricultural technology",
+          "D. Real estate development"
+        ],
+        "answer": "B. Private space exploration"
+      },
+      {
+        "q": "What are the two main challenges SpaceX faces according to the text?",
+        "options": [
+          "A. Lack of engineers and high fuel costs",
+          "B. Regulatory scrutiny and market volatility",
+          "C. Competitor lawsuits and public protests",
+          "D. Satellite damage and low internet demand"
+        ],
+        "answer": "B. Regulatory scrutiny and market volatility"
+      },
+      {
+        "q": "What does the verb 'fund' mean in the passage?",
+        "options": [
+          "A. To cancel a project",
+          "B. To organize a meeting",
+          "C. To provide financial resources for",
+          "D. To discover new technology"
+        ],
+        "answer": "C. To provide financial resources for"
+      },
+      {
+        "q": "In the sentence '...market volatility remain potential challenges', 'volatility' refers to:",
+        "options": [
+          "A. Stability and growth",
+          "B. Strict government laws",
+          "C. Unpredictable and rapid changes",
+          "D. High levels of security"
+        ],
+        "answer": "C. Unpredictable and rapid changes"
+      },
+      {
+        "q": "Which word in the text describes SpaceX as a major company in its industry?",
+        "options": [
+          "A. Giant",
+          "B. Analyst",
+          "C. Investor",
+          "D. Constellation"
+        ],
+        "answer": "A. Giant"
+      },
+      {
+        "q": "The word 'scrutiny' in 'regulatory scrutiny' is closest in meaning to:",
+        "options": [
+          "A. Approval",
+          "B. Close examination",
+          "C. Financial aid",
+          "D. Ignorance"
+        ],
+        "answer": "B. Close examination"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
