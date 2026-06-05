@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 05, 2026：科技、地緣政治 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 魏哲家談競爭：台積電將持續領先，對手追趕是「做夢」。\nAt TSMC's recent annual shareholders' meeting, newly appointed Chairman C.C. Wei confidently addressed the company's competitive landscape. He asserted that the Taiwanese chipmaking giant will maintain its technological leadership in the semiconductor industry for the foreseeable future. Wei dismissed competitors' ambitions to catch up to TSMC's advanced manufacturing capabilities, describing their efforts as merely 'dreaming.' He emphasized that TSMC's continuous innovation, robust ecosystem, and deep customer trust remain insurmountable barriers for any global rivals seeking to challenge their dominance.\n\n[2] 南科攜手廠商COMPUTEX秀AI實力，強化台灣供應鏈硬實力。\nAt COMPUTEX 2026, the Southern Taiwan Science Park (STSP) joined forces with leading technology manufacturers to showcase its cutting-edge AI capabilities. By presenting advanced hardware solutions and innovative applications, the exhibition highlighted STSP's pivotal role in the global semiconductor ecosystem. This collaborative effort not only demonstrates Taiwan's technological prowess but also significantly bolsters the resilience of the global high-tech supply chain. Industry experts noted that such integration will secure Taiwan's position as an indispensable hub for future AI development.\n\n[3] 立委鄭麗文訪美談兩岸，籲台灣勿成大國博弈棋子。\nDuring her recent visit to the United States, Taiwanese Legislator Cheng Li-wen addressed the delicate state of cross-strait relations. She emphasized the importance of maintaining regional stability and urged Taiwan's leadership to avoid becoming a pawn in the geopolitical rivalry between major global powers. Cheng advocated for active communication and diplomatic pragmatism to safeguard Taiwan's security. Her remarks highlight the growing domestic debate over Taiwan's strategic positioning amidst escalating tensions between Washington and Beijing.",
+    "chinese": "【1】魏哲家談競爭：台積電將持續領先，對手追趕是「做夢」。\n在台積電最近舉行的股東常會上，新任董事長魏哲家展現出高度自信，對公司的競爭局勢發表了看法。他堅稱，這家台灣晶片製造龍頭在可預見的未來將持續保持其在半導體產業的技術領先地位。魏哲家對競爭對手企圖追趕台積電先進製造能力的野心不以為然，並形容這些企圖不過是「做夢」。他強調，台積電持續不斷的創新、強大的生態系統以及深厚的客戶信任，對於任何試圖挑戰其主導地位的全球對手而言，依然是無法逾越的障礙。\n\n【2】南科攜手廠商COMPUTEX秀AI實力，強化台灣供應鏈硬實力。\n在 2026 年台北國際電腦展（COMPUTEX）上，南部科學園區（南科）攜手領先的科技廠商，展現其尖端的人工智慧（AI）實力。藉由展示先進的硬體解決方案與創新應用，本次展覽突顯了南科在全球半導體生態系統中的關鍵角色。這項合作努力不僅展示了台灣的技術實力，也顯著強化了全球高科技供應鏈的韌性。產業專家指出，此類整合將鞏固台灣作為未來 AI 發展不可或缺之樞紐的地位。\n\n【3】立委鄭麗文訪美談兩岸，籲台灣勿成大國博弈棋子。\n在最近訪問美國期間，台灣立法委員鄭麗文談到了微妙的兩岸關係。她強調了維護區域穩定的重要性，並呼籲台灣領導層避免在世界大國之間的地緣政治對抗中成為棋子。鄭麗文主張透過積極溝通和外交務實態度來維護台灣的安全。她的言論凸顯了在華盛頓與北京緊張局勢升級之際，台灣內部對於自身戰略定位日益增長的辯論。",
+    "vocabulary": [
+      "annual (adj.): 每年的，年度的",
+      "shareholder (n.): 股東",
+      "confidently (adv.): 自信地",
+      "address (v.): 處理，對...發表談話",
+      "competitive (adj.): 競爭的，有競爭力的",
+      "landscape (n.): 局勢，前景",
+      "assert (v.): 斷言，堅稱",
+      "giant (n.): 巨頭，聯邦大企業",
+      "maintain (v.): 維持，保持",
+      "semiconductor (n.): 半導體",
+      "foreseeable (adj.): 可預見的",
+      "dismiss (v.): 對...不予理會，駁回",
+      "ambition (n.): 野心，抱負",
+      "catch up (phr.): 趕上，追上",
+      "advanced (adj.): 先進的，高等的",
+      "emphasize (v.): 強調",
+      "robust (adj.): 強健的，堅固的",
+      "insurmountable (adj.): 無法克服的，難以逾越的",
+      "barrier (n.): 障礙，壁壘",
+      "dominance (n.): 主導地位，優勢",
+      "showcase (v.): 展現；展示",
+      "bolster (v.): 強化；支持",
+      "supply chain (n.): 供應鏈",
+      "join forces (phr.): 攜手合作",
+      "leading (adj.): 領先的；首要的",
+      "manufacturer (n.): 製造商；廠商",
+      "cutting-edge (adj.): 尖端的；最前沿的",
+      "capability (n.): 能力；實力",
+      "advanced (adj.): 先進的；高等的",
+      "solution (n.): 解決方案",
+      "innovative (adj.): 創新的",
+      "application (n.): 應用",
+      "exhibition (n.): 展覽；展示會",
+      "highlight (v.): 突顯；強調",
+      "pivotal (adj.): 關鍵的；核心的",
+      "semiconductor (n.): 半導體",
+      "ecosystem (n.): 生態系統",
+      "prowess (n.): 傑出的才能；實力",
+      "resilience (n.): 韌性；彈性",
+      "indispensable (adj.): 不可或缺的",
+      "legislator (n.): 立法委員",
+      "cross-strait (adj.): 兩岸的",
+      "pawn (n.): 棋子，傀儡",
+      "delicate (adj.): 微妙的，脆弱的",
+      "regional (adj.): 區域的",
+      "stability (n.): 穩定",
+      "urge (v.): 敦促，呼籲",
+      "leadership (n.): 領導層",
+      "geopolitical (adj.): 地緣政治的",
+      "rivalry (n.): 競爭，對抗",
+      "advocate (v.): 主張，提倡",
+      "diplomatic (adj.): 外交的",
+      "pragmatism (n.): 務實主義",
+      "safeguard (v.): 保護，捍衛",
+      "remark (n.): 言論，評論",
+      "domestic (adj.): 國內的",
+      "strategic (adj.): 戰略的",
+      "positioning (n.): 定位",
+      "escalating (adj.): 不斷升級的",
+      "tension (n.): 緊張局勢"
+    ],
+    "quiz": [
+      {
+        "q": "What did Chairman C.C. Wei address at the shareholders' meeting?",
+        "options": [
+          "The company's competitive landscape",
+          "Financial losses in the previous quarter",
+          "Employee benefits and salary increases",
+          "New marketing strategies for consumer electronics"
+        ],
+        "answer": "The company's competitive landscape"
+      },
+      {
+        "q": "How did Wei describe his competitors' hopes of catching up with TSMC?",
+        "options": [
+          "Realistic",
+          "Dreaming",
+          "Inspiring",
+          "Impending"
+        ],
+        "answer": "Dreaming"
+      },
+      {
+        "q": "What does the word 'assert' mean in the text?",
+        "options": [
+          "To deny strongly",
+          "To state confidently",
+          "To ask politely",
+          "To doubt secretly"
+        ],
+        "answer": "To state confidently"
+      },
+      {
+        "q": "Which word is closest in meaning to 'insurmountable'?",
+        "options": [
+          "Easy to overcome",
+          "Extremely expensive",
+          "Impossible to overcome",
+          "Temporary"
+        ],
+        "answer": "Impossible to overcome"
+      },
+      {
+        "q": "In the phrase 'the Taiwanese chipmaking giant will maintain its technological leadership,' what part of speech is 'technological'?",
+        "options": [
+          "Noun",
+          "Verb",
+          "Adjective",
+          "Adverb"
+        ],
+        "answer": "Adjective"
+      },
+      {
+        "q": "According to the passage, what helps TSMC remain ahead of its rivals?",
+        "options": [
+          "Continuous innovation, robust ecosystem, and customer trust",
+          "Lowering the prices of all products",
+          "Relying entirely on government funding",
+          "Hiring competitors' former employees"
+        ],
+        "answer": "Continuous innovation, robust ecosystem, and customer trust"
+      },
+      {
+        "q": "What is the meaning of 'foreseeable'?",
+        "options": [
+          "Happening in the past",
+          "Able to be predicted",
+          "Unbelievable",
+          "Hidden from view"
+        ],
+        "answer": "Able to be predicted"
+      },
+      {
+        "q": "Choose the correct definition of 'dismiss' as used in the context.",
+        "options": [
+          "To hire new staff",
+          "To treat as unworthy of serious consideration",
+          "To praise someone's efforts",
+          "To send away from a classroom"
+        ],
+        "answer": "To treat as unworthy of serious consideration"
+      },
+      {
+        "q": "Wei dismissed competitors' ambitions to catch up ______ TSMC's advanced manufacturing capabilities. Fill in the blank.",
+        "options": [
+          "to",
+          "with",
+          "for",
+          "at"
+        ],
+        "answer": "to"
+      },
+      {
+        "q": "What does the word 'dominance' mean?",
+        "options": [
+          "Submission",
+          "Weakness",
+          "Power and influence over others",
+          "Equality"
+        ],
+        "answer": "Power and influence over others"
+      },
+      {
+        "q": "Who is C.C. Wei?",
+        "options": [
+          "A competitor's CEO",
+          "The Chairman of TSMC",
+          "A government official",
+          "A financial analyst"
+        ],
+        "answer": "The Chairman of TSMC"
+      },
+      {
+        "q": "Which of the following words in the text is an adverb?",
+        "options": [
+          "annual",
+          "confidently",
+          "ecosystem",
+          "barriers"
+        ],
+        "answer": "confidently"
+      },
+      {
+        "q": "What is the main purpose of STSP showcasing at COMPUTEX?",
+        "options": [
+          "To sell consumer electronics",
+          "To showcase AI strength and bolster the supply chain",
+          "To recruit international students",
+          "To replace semiconductor factories"
+        ],
+        "answer": "To showcase AI strength and bolster the supply chain"
+      },
+      {
+        "q": "Which word in the text means 'to support or strengthen'?",
+        "options": [
+          "bolster",
+          "highlight",
+          "showcase",
+          "demonstrate"
+        ],
+        "answer": "bolster"
+      },
+      {
+        "q": "According to the text, what role does STSP play in the global semiconductor ecosystem?",
+        "options": [
+          "A minor role",
+          "A temporary role",
+          "A pivotal role",
+          "An outdated role"
+        ],
+        "answer": "A pivotal role"
+      },
+      {
+        "q": "The phrase 'join forces' is closest in meaning to:",
+        "options": [
+          "compete fiercely",
+          "work together",
+          "force someone",
+          "separate companies"
+        ],
+        "answer": "work together"
+      },
+      {
+        "q": "What kind of solutions did STSP present at the exhibition?",
+        "options": [
+          "Traditional agricultural solutions",
+          "Advanced hardware solutions",
+          "Financial investment solutions",
+          "Software-only solutions"
+        ],
+        "answer": "Advanced hardware solutions"
+      },
+      {
+        "q": "Fill in the blank: The company developed a ______ technology that changed the industry.",
+        "options": [
+          "cutting-edge",
+          "backward",
+          "redundant",
+          "pivotal"
+        ],
+        "answer": "cutting-edge"
+      },
+      {
+        "q": "What does the word 'resilience' in the text refer to?",
+        "options": [
+          "The ability to recover quickly from difficulties",
+          "The speed of light",
+          "The cost of manufacturing",
+          "The size of a factory"
+        ],
+        "answer": "The ability to recover quickly from difficulties"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a benefit of the collaborative effort?",
+        "options": [
+          "Demonstrating Taiwan's technological prowess",
+          "Bolstering supply chain resilience",
+          "Reducing tax rates for local citizens",
+          "Securing Taiwan's position as an AI hub"
+        ],
+        "answer": "Reducing tax rates for local citizens"
+      },
+      {
+        "q": "The word 'indispensable' means:",
+        "options": [
+          "Absolutely necessary",
+          "Easily replaced",
+          "Very expensive",
+          "Highly dangerous"
+        ],
+        "answer": "Absolutely necessary"
+      },
+      {
+        "q": "Fill in the blank: The new smartphone features several ______ applications.",
+        "options": [
+          "innovative",
+          "unwilling",
+          "pivotal",
+          "indispensable"
+        ],
+        "answer": "innovative"
+      },
+      {
+        "q": "Industry experts noted that the integration will secure Taiwan's position as an indispensable ______ for AI.",
+        "options": [
+          "hub",
+          "barrier",
+          "threat",
+          "alternative"
+        ],
+        "answer": "hub"
+      },
+      {
+        "q": "What does the word 'prowess' mean in the context of 'technological prowess'?",
+        "options": [
+          "Failure",
+          "Skill or expertise",
+          "Equipment",
+          "Problem"
+        ],
+        "answer": "Skill or expertise"
+      },
+      {
+        "q": "What is the main purpose of Cheng Li-wen's remarks?",
+        "options": [
+          "To encourage Taiwan to form military alliances",
+          "To warn Taiwan against becoming a pawn in great power conflicts",
+          "To support US foreign policy unconditionally",
+          "To declare independence from China"
+        ],
+        "answer": "To warn Taiwan against becoming a pawn in great power conflicts"
+      },
+      {
+        "q": "Which countries' rivalry is causing escalating tensions mentioned in the passage?",
+        "options": [
+          "Taiwan and Japan",
+          "The US and China",
+          "China and Russia",
+          "The US and Europe"
+        ],
+        "answer": "The US and China"
+      },
+      {
+        "q": "What does the word 'delicate' mean in the context of 'delicate state of cross-strait relations'?",
+        "options": [
+          "Strong and unbreakable",
+          "Fragile and requiring careful handling",
+          "Delicious and tasty",
+          "Simple and straightforward"
+        ],
+        "answer": "Fragile and requiring careful handling"
+      },
+      {
+        "q": "What did Cheng advocate for to protect Taiwan's security?",
+        "options": [
+          "Active communication and diplomatic pragmatism",
+          "Increasing military spending immediately",
+          "Cutting off all ties with the US",
+          "Unilateral declaration of peace"
+        ],
+        "answer": "Active communication and diplomatic pragmatism"
+      },
+      {
+        "q": "Which word is closest in meaning to 'urge' as used in the text?",
+        "options": [
+          "Ignore",
+          "Strongly advise",
+          "Forbid",
+          "Delay"
+        ],
+        "answer": "Strongly advise"
+      },
+      {
+        "q": "The word 'pawn' in the passage refers to:",
+        "options": [
+          "A powerful leader",
+          "A chess piece used to represent someone being manipulated",
+          "A valuable treasure",
+          "A diplomatic representative"
+        ],
+        "answer": "A chess piece used to represent someone being manipulated"
+      },
+      {
+        "q": "According to the passage, what is growing domestically in Taiwan?",
+        "options": [
+          "Economic recession",
+          "Debate over strategic positioning",
+          "Support for a specific political party",
+          "Tourism from the US"
+        ],
+        "answer": "Debate over strategic positioning"
+      },
+      {
+        "q": "What is the meaning of 'safeguard'?",
+        "options": [
+          "To put in danger",
+          "To protect from harm",
+          "To ignore safety rules",
+          "To attack first"
+        ],
+        "answer": "To protect from harm"
+      },
+      {
+        "q": "What kind of stability did Cheng emphasize the importance of maintaining?",
+        "options": [
+          "Financial stability",
+          "Regional stability",
+          "Emotional stability",
+          "Global trade stability"
+        ],
+        "answer": "Regional stability"
+      },
+      {
+        "q": "Complete the sentence: Cheng's remarks highlight the growing _______ debate over Taiwan's strategic positioning.",
+        "options": [
+          "international",
+          "domestic",
+          "secret",
+          "historical"
+        ],
+        "answer": "domestic"
+      },
+      {
+        "q": "What does 'pragmatism' mean?",
+        "options": [
+          "An idealistic approach",
+          "A practical way of thinking about or doing things",
+          "A religious belief",
+          "An aggressive military strategy"
+        ],
+        "answer": "A practical way of thinking about or doing things"
+      },
+      {
+        "q": "Where did Legislator Cheng Li-wen make these statements?",
+        "options": [
+          "In Beijing",
+          "In Taipei",
+          "In the United States",
+          "In London"
+        ],
+        "answer": "In the United States"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美國會眾議院通過決議，限制總統對伊朗動武權力。",
+    "tabTitle": "地緣政治",
+    "english": "The United States House of Representatives has passed a crucial resolution aimed at limiting the President's authority to wage war against Iran without congressional approval. This legislative move reflects growing concerns over potential military escalation in the Middle East. Under the resolution, the administration must cease any military hostilities against Iran within thirty days unless Congress explicitly declares war or authorizes the use of military force. Supporters argue this reasserts constitutional checks and balances, while opponents warn it could weaken national defense.",
+    "chinese": "美國聯邦眾議院通過了一項關鍵決議，旨在限制總統在未經國會批准的情況下對伊朗發動戰爭的權力。此一立法舉措反映了各界對中東地區潛在軍事衝突升級日益加劇的擔憂。根據該決議，除非國會正式宣戰或授權使用武力，否則政府必須在三十天內停止對伊朗的所有軍事敵對行動。支持者認為這重新申明了憲法上的制衡原則，而反對者則警告這可能會削弱國防力量。",
+    "vocabulary": [
+      "resolution (n.): 決議",
+      "limit (v.): 限制",
+      "authority (n.): 權力；授權",
+      "wage war (phr.): 發動戰爭",
+      "congressional (adj.): 國會的",
+      "approval (n.): 批准；同意",
+      "legislative (adj.): 立法的",
+      "reflect (v.): 反映",
+      "potential (adj.): 潛在的",
+      "escalation (n.): 升級；擴大",
+      "administration (n.): 政府；行政機關",
+      "cease (v.): 停止",
+      "hostility (n.): 敵對行動；敵意",
+      "explicitly (adv.): 明確地",
+      "declare war (phr.): 宣戰",
+      "authorize (v.): 授權",
+      "reassert (v.): 重新申明；再次主張",
+      "constitutional (adj.): 憲法的",
+      "checks and balances (n. phr.): 制衡（機制）",
+      "opponent (n.): 反對者"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of the resolution passed by the US House?",
+        "options": [
+          "To declare war on Iran",
+          "To limit the President's war powers against Iran",
+          "To increase military spending",
+          "To elect a new president"
+        ],
+        "answer": "To limit the President's war powers against Iran"
+      },
+      {
+        "q": "According to the text, when must the administration cease hostilities against Iran?",
+        "options": [
+          "Immediately",
+          "Within thirty days unless authorized by Congress",
+          "After the next election",
+          "Only if Iran attacks first"
+        ],
+        "answer": "Within thirty days unless authorized by Congress"
+      },
+      {
+        "q": "Why was this resolution proposed?",
+        "options": [
+          "Due to concerns over potential military escalation",
+          "To support the President's foreign policy",
+          "Because of economic sanctions",
+          "To dissolve the House of Representatives"
+        ],
+        "answer": "Due to concerns over potential military escalation"
+      },
+      {
+        "q": "What does the word 'resolution' mean in the context of the passage?",
+        "options": [
+          "A firm decision to do something",
+          "The quality of being determined",
+          "A formal expression of opinion or intention agreed on by a legislative body",
+          "The density of an image"
+        ],
+        "answer": "A formal expression of opinion or intention agreed on by a legislative body"
+      },
+      {
+        "q": "Which word in the text is closest in meaning to 'stop'?",
+        "options": [
+          "wage",
+          "cease",
+          "reflect",
+          "reassert"
+        ],
+        "answer": "cease"
+      },
+      {
+        "q": "What do supporters of the resolution believe it achieves?",
+        "options": [
+          "It weakens national defense.",
+          "It reasserts constitutional checks and balances.",
+          "It grants the President more power.",
+          "It ends all foreign alliances."
+        ],
+        "answer": "It reasserts constitutional checks and balances."
+      },
+      {
+        "q": "What is the adjective form of 'Congress'?",
+        "options": [
+          "congressing",
+          "congression",
+          "congressional",
+          "congressed"
+        ],
+        "answer": "congressional"
+      },
+      {
+        "q": "Who warns that the resolution could weaken national defense?",
+        "options": [
+          "Supporters",
+          "Opponents",
+          "The President of Iran",
+          "The Supreme Court"
+        ],
+        "answer": "Opponents"
+      },
+      {
+        "q": "What is the meaning of 'hostilities' in the passage?",
+        "options": [
+          "Friendly negotiations",
+          "Economic agreements",
+          "Acts of warfare or conflict",
+          "Cultural exchanges"
+        ],
+        "answer": "Acts of warfare or conflict"
+      },
+      {
+        "q": "Complete the sentence: The government cannot act without ______ approval.",
+        "options": [
+          "legislative",
+          "potential",
+          "congressional",
+          "constitutional"
+        ],
+        "answer": "congressional"
+      },
+      {
+        "q": "What does 'checks and balances' refer to?",
+        "options": [
+          "Financial audits in banks",
+          "A system that prevents any one branch of government from becoming too powerful",
+          "Checking luggage at the airport",
+          "Balancing a budget"
+        ],
+        "answer": "A system that prevents any one branch of government from becoming too powerful"
+      },
+      {
+        "q": "What is the opposite of 'opponent'?",
+        "options": [
+          "Enemy",
+          "Supporter",
+          "Critic",
+          "Stranger"
+        ],
+        "answer": "Supporter"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "道瓊指數再創歷史新高，科技股表現分歧。",
+    "tabTitle": "金融市場",
+    "english": "On June 5, 2026, the Dow Jones Industrial Average reached a historic high, driven by strong gains in traditional sectors such as financials and energy. Investors showed renewed confidence in the broader economy amid stabilizing inflation rates. However, the technology sector experienced a mixed performance. While some major semiconductor companies surged due to persistent artificial intelligence demand, several software giants faced profit-taking pressures, causing the Nasdaq to fluctuate. Analysts suggest that this divergence reflects a healthy rotation of capital across different market sectors.",
+    "chinese": "2026年6月5日，在金融和能源等傳統板塊強勁增長的推動下，道瓊工業平均指數創下歷史新高。在通膨率趨於穩定的背景下，投資人對更廣泛的經濟表現出重拾的信心。然而，科技板塊的表現則呈現分歧。儘管部分主要半導體公司因人工智慧的持續需求而大漲，但幾家軟體巨頭卻面臨獲利回吐的壓力，導致那斯達克指數波動。分析師指出，這種分歧反映了資金在不同市場板塊之間的健康輪動。",
+    "vocabulary": [
+      "industrial (adj.): 工業的",
+      "historic (adj.): 歷史性的",
+      "sector (n.): 板塊、部門",
+      "financials (n.): 金融股",
+      "renewed (adj.): 重拾的、更新的",
+      "confidence (n.): 信心",
+      "stabilize (v.): 穩定",
+      "inflation (n.): 通貨膨脹",
+      "mixed (adj.): 表現分歧的、混合的",
+      "semiconductor (n.): 半導體",
+      "surge (v.): 激增、大漲",
+      "persistent (adj.): 持續的",
+      "giant (n.): 巨頭、大企業",
+      "profit-taking (n.): 獲利回吐、落袋為安",
+      "fluctuate (v.): 波動、起伏",
+      "analyst (n.): 分析師",
+      "divergence (n.): 分歧、差異",
+      "reflect (v.): 反映",
+      "rotation (n.): 輪動、旋轉",
+      "capital (n.): 資金、資本"
+    ],
+    "quiz": [
+      {
+        "q": "What drove the Dow Jones Industrial Average to a historic high?",
+        "options": [
+          "A. Declining tech giants",
+          "B. Strong gains in traditional sectors",
+          "C. A sudden drop in inflation",
+          "D. Decreased global demand"
+        ],
+        "answer": "B. Strong gains in traditional sectors"
+      },
+      {
+        "q": "Which of the following is mentioned as a traditional sector in the text?",
+        "options": [
+          "A. Software",
+          "B. Semiconductors",
+          "C. Financials",
+          "D. Artificial intelligence"
+        ],
+        "answer": "C. Financials"
+      },
+      {
+        "q": "Why did investors show renewed confidence in the broader economy?",
+        "options": [
+          "A. Due to stabilizing inflation rates",
+          "B. Because the Nasdaq reached a record high",
+          "C. Due to a decrease in interest rates",
+          "D. Because tech stocks plummeted"
+        ],
+        "answer": "A. Due to stabilizing inflation rates"
+      },
+      {
+        "q": "How did the technology sector perform on June 5, 2026?",
+        "options": [
+          "A. It experienced a sharp decline across the board.",
+          "B. It showed a mixed performance.",
+          "C. It reached an all-time high.",
+          "D. It remained completely unchanged."
+        ],
+        "answer": "B. It showed a mixed performance."
+      },
+      {
+        "q": "Why did some semiconductor companies surge?",
+        "options": [
+          "A. Because of profit-taking pressures",
+          "B. Due to persistent artificial intelligence demand",
+          "C. Because of government subsidies",
+          "D. Due to a decline in capital rotation"
+        ],
+        "answer": "B. Due to persistent artificial intelligence demand"
+      },
+      {
+        "q": "What pressure did several software giants face?",
+        "options": [
+          "A. Persistent inflation",
+          "B. Labor shortages",
+          "C. Profit-taking pressures",
+          "D. Supply chain issues"
+        ],
+        "answer": "C. Profit-taking pressures"
+      },
+      {
+        "q": "What was the effect of the mixed performance of tech stocks on the Nasdaq?",
+        "options": [
+          "A. It caused the Nasdaq to fluctuate.",
+          "B. It pushed the Nasdaq to a new record high.",
+          "C. It led to a market halt.",
+          "D. It had no impact on the Nasdaq."
+        ],
+        "answer": "A. It caused the Nasdaq to fluctuate."
+      },
+      {
+        "q": "What does the word 'divergence' in the text refer to?",
+        "options": [
+          "A. The decline of all stock markets",
+          "B. The difference in performance between sectors",
+          "C. The steady rise of the Dow Jones",
+          "D. The stabilization of inflation"
+        ],
+        "answer": "B. The difference in performance between sectors"
+      },
+      {
+        "q": "According to analysts, what does the divergence in the market reflect?",
+        "options": [
+          "A. A healthy rotation of capital",
+          "B. An impending economic recession",
+          "C. A lack of investor confidence",
+          "D. The failure of the technology sector"
+        ],
+        "answer": "A. A healthy rotation of capital"
+      },
+      {
+        "q": "What is the meaning of the word 'fluctuate' as used in the text?",
+        "options": [
+          "A. To remain steady",
+          "B. To rise continuously",
+          "C. To shift back and forth uncertainly",
+          "D. To drop suddenly"
+        ],
+        "answer": "C. To shift back and forth uncertainly"
+      },
+      {
+        "q": "Which word is closest in meaning to 'persistent' in the text?",
+        "options": [
+          "A. Temporary",
+          "B. Continuous",
+          "C. Declining",
+          "D. Unstable"
+        ],
+        "answer": "B. Continuous"
+      },
+      {
+        "q": "Fill in the blank: The Dow Jones _______ a historic high on June 5, 2026.",
+        "options": [
+          "A. reached",
+          "B. reaching",
+          "C. was reached",
+          "D. reaches"
+        ],
+        "answer": "A. reached"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "蘋果Siri傳將整合Google雲端與輝達AI晶片。",
+    "tabTitle": "科技",
+    "english": "Apple is reportedly planning a major upgrade for its virtual assistant, Siri, by integrating Google Cloud infrastructure and Nvidia's advanced AI chips. According to industry insiders, this strategic move aims to significantly enhance Siri's natural language processing capabilities and response speed. By leveraging Google's robust cloud services and Nvidia's cutting-edge hardware, Apple hopes to close the gap with its competitors in the rapidly evolving artificial intelligence market. However, neither Apple nor the other tech giants have officially confirmed these rumors yet.",
+    "chinese": "據報導，蘋果公司正計劃為其虛擬助理 Siri 進行重大升級，預計將整合 Google 雲端基礎架構與輝達（Nvidia）的先進人工智慧晶片。根據產業內幕人士透露，這一戰略舉措旨在顯著提升 Siri 的自然語言處理能力和回應速度。透過利用 Google 強大的雲端服務和輝達的頂尖硬體，蘋果希望在快速發展的人工智慧市場中縮小與競爭對手的差距。然而，蘋果及其他科技巨頭目前均尚未正式證實這些傳聞。",
+    "vocabulary": [
+      "reportedly (adv.): 據報導；據稱",
+      "virtual assistant (n.): 虛擬助理",
+      "integrate (v.): 整合；合併",
+      "infrastructure (n.): 基礎建設；基礎架構",
+      "advanced (adj.): 先進的；高等的",
+      "insider (n.): 內部人士；知情者",
+      "strategic (adj.): 戰略性的；策略上的",
+      "enhance (v.): 提升；增強",
+      "capability (n.): 能力；功能",
+      "response (n.): 回應；回答",
+      "leverage (v.): 利用（以達成目的）",
+      "robust (adj.): 強健的；堅固的",
+      "cutting-edge (adj.): 尖端的；最前沿的",
+      "hardware (n.): 硬體",
+      "competitor (n.): 競爭對手",
+      "evolve (v.): 演化；逐步發展",
+      "artificial intelligence (n.): 人工智慧",
+      "giant (n.): 巨頭；大企業",
+      "officially (adv.): 正式地",
+      "confirm (v.): 證實；確認"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "Apple's plan to acquire Nvidia",
+          "Rumors about Siri integrating Google Cloud and Nvidia chips",
+          "Google's new search engine capabilities",
+          "Nvidia's decline in the AI market"
+        ],
+        "answer": "Rumors about Siri integrating Google Cloud and Nvidia chips"
+      },
+      {
+        "q": "What does the word 'integrate' mean in the text?",
+        "options": [
+          "To separate into different parts",
+          "To combine things so they work together",
+          "To cancel a plan",
+          "To investigate a secret"
+        ],
+        "answer": "To combine things so they work together"
+      },
+      {
+        "q": "Which word in the text is closest in meaning to 'improve' or 'boost'?",
+        "options": [
+          "enhance",
+          "leverage",
+          "evolve",
+          "confirm"
+        ],
+        "answer": "enhance"
+      },
+      {
+        "q": "According to the text, who provided the information about Apple's plans?",
+        "options": [
+          "Apple's CEO",
+          "Google's spokesperson",
+          "Industry insiders",
+          "Nvidia's engineers"
+        ],
+        "answer": "Industry insiders"
+      },
+      {
+        "q": "What is one of the goals of this rumored upgrade for Siri?",
+        "options": [
+          "To make Siri completely free of charge",
+          "To replace Siri with Google Assistant",
+          "To improve natural language processing and response speed",
+          "To design Apple's own AI chips"
+        ],
+        "answer": "To improve natural language processing and response speed"
+      },
+      {
+        "q": "What does 'cutting-edge' mean?",
+        "options": [
+          "Extremely sharp",
+          "Outdated and old",
+          "Very modern and advanced",
+          "Cheap and low-quality"
+        ],
+        "answer": "Very modern and advanced"
+      },
+      {
+        "q": "In the sentence 'By leveraging Google's robust cloud...', what part of speech is 'leveraging'?",
+        "options": [
+          "Noun",
+          "Gerund (verb-noun)",
+          "Adjective",
+          "Adverb"
+        ],
+        "answer": "Gerund (verb-noun)"
+      },
+      {
+        "q": "What is Apple hoping to achieve by using Google and Nvidia's technologies?",
+        "options": [
+          "To close the gap with its competitors",
+          "To stop using cloud services altogether",
+          "To lower the price of iPhones",
+          "To buy out Google's cloud division"
+        ],
+        "answer": "To close the gap with its competitors"
+      },
+      {
+        "q": "What is the Chinese meaning of 'infrastructure'?",
+        "options": [
+          "基礎建設；基礎架構",
+          "內部結構",
+          "虛擬空間",
+          "硬體配備"
+        ],
+        "answer": "基礎建設；基礎架構"
+      },
+      {
+        "q": "Have Apple, Google, or Nvidia officially confirmed the rumors?",
+        "options": [
+          "Yes, Apple confirmed it yesterday.",
+          "Yes, Nvidia confirmed it.",
+          "No, none of them have confirmed it yet.",
+          "Only Google has confirmed it."
+        ],
+        "answer": "No, none of them have confirmed it yet."
+      },
+      {
+        "q": "Choose the correct word to fill in: 'The company plans to ___ its new products next month.'",
+        "options": [
+          "officially",
+          "official",
+          "officer",
+          "office"
+        ],
+        "answer": "officially"
+      },
+      {
+        "q": "Grammar Check: 'Neither Apple nor the other tech giants ___ officially confirmed these rumors.'",
+        "options": [
+          "has",
+          "have",
+          "is",
+          "are"
+        ],
+        "answer": "have"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "輝達RTX Spark晶片進軍PC市場，革新Windows筆電體驗。",
+    "tabTitle": "科技",
+    "english": "Nvidia has officially launched its highly anticipated RTX Spark processors, marking a significant entry into the mainstream PC market. These innovative chips are designed to enhance Windows laptops by integrating advanced artificial intelligence capabilities directly into the hardware. Industry experts predict that the RTX Spark series will dramatically improve battery life and processing speed, offering users a seamless computing experience. This strategic move is expected to intensify competition among major chipmakers and redefine performance standards for portable devices.",
+    "chinese": "輝達（Nvidia）已正式推出備受期待的 RTX Spark 處理器，標誌著其正式進軍主流個人電腦（PC）市場。這些創新晶片旨在藉由將先進的人工智慧功能直接整合至硬體中，來提升 Windows 筆記型電腦的效能。業界專家預測，RTX Spark 系列將大幅改善電池壽命與處理速度，為使用者提供無縫的運算體驗。這項策略性舉措預計將加劇主要晶片製造商之間的競爭，並重新定義可攜式裝置的效能標準。",
+    "vocabulary": [
+      "launch (v.): 發表；推出",
+      "anticipate (v.): 期待；預期",
+      "significant (adj.): 顯著的；重要的",
+      "mainstream (adj.): 主流的",
+      "innovative (adj.): 創新的",
+      "enhance (v.): 提升；增強",
+      "integrate (v.): 整合；合併",
+      "capability (n.): 能力；功能",
+      "predict (v.): 預測；預言",
+      "dramatically (adv.): 顯著地；戲劇性地",
+      "seamless (adj.): 無縫的；完美的",
+      "computing (n.): 運算；電腦操作",
+      "strategic (adj.): 策略性的；戰略的",
+      "intensify (v.): 加劇；增強",
+      "chipmaker (n.): 晶片製造商",
+      "redefine (v.): 重新定義",
+      "portable (adj.): 可攜式的；手提的",
+      "device (n.): 裝置；設備",
+      "performance (n.): 效能；表現",
+      "processor (n.): 處理器"
+    ],
+    "quiz": [
+      {
+        "q": "Nvidia has officially _______ its new RTX Spark processors to the public.",
+        "options": [
+          "launched",
+          "ignored",
+          "delayed",
+          "canceled"
+        ],
+        "answer": "launched"
+      },
+      {
+        "q": "The _______ chips are expected to perform better than older models.",
+        "options": [
+          "unwanted",
+          "anticipated",
+          "forgotten",
+          "disliked"
+        ],
+        "answer": "anticipated"
+      },
+      {
+        "q": "The entry of these chips marks a _______ milestone for the PC industry.",
+        "options": [
+          "minor",
+          "significant",
+          "useless",
+          "temporary"
+        ],
+        "answer": "significant"
+      },
+      {
+        "q": "The new chips _______ advanced AI features directly into the hardware.",
+        "options": [
+          "exclude",
+          "integrate",
+          "separate",
+          "destroy"
+        ],
+        "answer": "integrate"
+      },
+      {
+        "q": "These processors are designed to _______ the performance of Windows laptops.",
+        "options": [
+          "reduce",
+          "enhance",
+          "damage",
+          "ignore"
+        ],
+        "answer": "enhance"
+      },
+      {
+        "q": "Industry experts _______ that battery life will improve dramatically.",
+        "options": [
+          "predict",
+          "deny",
+          "forget",
+          "prevent"
+        ],
+        "answer": "predict"
+      },
+      {
+        "q": "Users will enjoy a _______ computing experience without any lag.",
+        "options": [
+          "broken",
+          "seamless",
+          "difficult",
+          "painful"
+        ],
+        "answer": "seamless"
+      },
+      {
+        "q": "This _______ move aims to capture a larger share of the PC market.",
+        "options": [
+          "random",
+          "strategic",
+          "accidental",
+          "careless"
+        ],
+        "answer": "strategic"
+      },
+      {
+        "q": "The new product is likely to _______ competition among tech giants.",
+        "options": [
+          "decrease",
+          "intensify",
+          "stop",
+          "solve"
+        ],
+        "answer": "intensify"
+      },
+      {
+        "q": "The RTX Spark chips are expected to _______ performance standards for laptops.",
+        "options": [
+          "redefine",
+          "repeat",
+          "reduce",
+          "reject"
+        ],
+        "answer": "redefine"
+      },
+      {
+        "q": "What is the main purpose of the RTX Spark chips?",
+        "options": [
+          "To replace desktop computers entirely",
+          "To enhance Windows laptops with built-in AI capabilities",
+          "To increase the price of all laptops",
+          "To slow down competitor production"
+        ],
+        "answer": "To enhance Windows laptops with built-in AI capabilities"
+      },
+      {
+        "q": "According to experts, what will be the impact of the RTX Spark series?",
+        "options": [
+          "Worse battery life and slower speeds",
+          "No change in laptop performance",
+          "Dramatically improved battery life and processing speed",
+          "A complete shutdown of other chipmakers"
+        ],
+        "answer": "Dramatically improved battery life and processing speed"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
