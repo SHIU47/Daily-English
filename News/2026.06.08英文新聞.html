@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 08, 2026：台灣政治、地緣政治 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 美國301調查建議對台加徵關稅，政院啟動強迫勞動審查機制\nOn June 8, 2026, a US Trade Representative (USTR) Section 301 investigation recommended imposing tariffs on certain Taiwanese products. This recommendation stems from concerns regarding Taiwan's trade practices. In response, Taiwan's Executive Yuan (Cabinet) promptly announced the activation of a new review mechanism specifically designed to address issues related to forced labor in its supply chains. This move aims to demonstrate Taiwan's commitment to international labor standards and mitigate potential trade impacts.\n\n[2] 美股重挫影響，台股面臨巨大賣壓開盤狂瀉近2700點\nThe Taiwan Stock Market experienced a historic decline today, plummeting nearly 2,700 points at the opening bell. This massive sell-off was primarily triggered by the recent downturn in the United States stock market, which rattled global investor confidence. Financial analysts are closely monitoring the situation as panic selling continues to grip the local market. Investors are advised to remain cautious while experts assess the long-term impact of this volatility on the broader economy.\n\n[3] 帛琉總統惠恕仁呼籲國際承認台灣主權，副總統蕭美琴訪帛深化邦誼\nPalau President Surangel Whipps Jr. recently called for the international community to recognize Taiwan's sovereignty. This appeal came during the visit of Taiwan's Vice President Hsiao Bi-khim to Palau on June 8, 2026. The high-level visit aimed to deepen the long-standing diplomatic ties and cooperation between the two democratic allies. President Whipps reiterated Palau's unwavering support for Taiwan on the global stage, emphasizing shared values and the importance of international solidarity.",
+    "chinese": "【1】美國301調查建議對台加徵關稅，政院啟動強迫勞動審查機制\n2026年6月8日，美國貿易代表署（USTR）的一項301條款調查建議對台灣某些產品加徵關稅。這項建議源於對台灣貿易慣例的擔憂。對此，台灣行政院（內閣）迅速宣布啟動一項新的審查機制，專門旨在解決其供應鏈中與強迫勞動相關的問題。此舉旨在展現台灣對國際勞工標準的承諾，並減輕潛在的貿易影響。\n\n【2】美股重挫影響，台股面臨巨大賣壓開盤狂瀉近2700點\n台灣股市今日經歷歷史性跌幅，開盤狂瀉近 2700 點。這波巨大的賣壓主要受到近期美國股市下挫的影響，重創了全球投資人的信心。隨著恐慌性拋售持續籠罩本地市場，金融分析師正密切關注局勢。專家建議投資人保持謹慎，同時評估此波動對整體經濟的長期影響。\n\n【3】帛琉總統惠恕仁呼籲國際承認台灣主權，副總統蕭美琴訪帛深化邦誼\n帛琉總統惠恕仁最近呼籲國際社會承認台灣主權。此呼籲是在台灣副總統蕭美琴於2026年6月8日訪問帛琉期間提出的。此次高層訪問旨在深化這兩個民主盟友之間長期存在的邦誼與合作。惠恕仁總統重申帛琉在全球舞台上對台灣堅定不移的支持，強調共同的價值觀和國際團結的重要性。",
+    "vocabulary": [
+      "US Trade Representative (USTR) (n.): 美國貿易代表署",
+      "Section 301 investigation (n.): 301條款調查",
+      "recommend (v.): 建議",
+      "impose tariffs (phr.): 課徵關稅",
+      "certain (adj.): 某些的；特定的",
+      "stem from (phr. v.): 源於；來自",
+      "concern (n.): 擔憂；關切",
+      "trade practices (n.): 貿易慣例",
+      "in response (phr.): 作為回應",
+      "Executive Yuan (n.): 行政院",
+      "Cabinet (n.): 內閣",
+      "promptly (adv.): 迅速地；即時地",
+      "announce (v.): 宣布",
+      "activate (v.): 啟動",
+      "review mechanism (n.): 審查機制",
+      "specifically designed (phr.): 專門設計的",
+      "address (v.): 處理；解決",
+      "forced labor (n.): 強迫勞動",
+      "supply chain (n.): 供應鏈",
+      "mitigate (v.): 減輕；緩和",
+      "experience (v.): 經歷",
+      "historic (adj.): 歷史性的",
+      "decline (n.): 下跌",
+      "plummet (v.): 暴跌",
+      "opening bell (n.): 開盤鐘聲",
+      "massive (adj.): 巨大的",
+      "sell-off (n.): 拋售",
+      "primarily (adv.): 主要地",
+      "trigger (v.): 引發",
+      "downturn (n.): 下滑",
+      "rattle (v.): 使不安",
+      "investor (n.): 投資人",
+      "confidence (n.): 信心",
+      "financial analyst (n.): 金融分析師",
+      "monitor (v.): 監控",
+      "panic selling (n.): 恐慌性拋售",
+      "grip (v.): 緊抓/籠罩",
+      "cautious (adj.): 謹慎的",
+      "assess (v.): 評估",
+      "volatility (n.): 波動性",
+      "President (n.): 總統",
+      "Sovereignty (n.): 主權",
+      "International community (n. phr.): 國際社會",
+      "Vice President (n.): 副總統",
+      "Visit (n.): 訪問",
+      "Diplomatic ties (n. phr.): 邦誼，外交關係",
+      "Cooperation (n.): 合作",
+      "Democratic allies (n. phr.): 民主盟友",
+      "Reiterate (v.): 重申",
+      "Unwavering (adj.): 堅定不移的",
+      "Support (n.): 支持",
+      "Global stage (n. phr.): 全球舞台",
+      "Emphasize (v.): 強調",
+      "Shared values (n. phr.): 共同價值觀",
+      "Solidarity (n.): 團結",
+      "Appeal (n.): 呼籲",
+      "High-level (adj.): 高層次的",
+      "Deepen (v.): 加深，深化",
+      "Recognition (n.): 承認",
+      "Long-standing (adj.): 長期存在的"
+    ],
+    "quiz": [
+      {
+        "q": "What date is mentioned in the news?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "Which US agency conducted the Section 301 investigation?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What did the Section 301 investigation recommend?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "The recommendation for tariffs stems from concerns regarding what?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "Which Taiwanese body responded to the US recommendation?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What new mechanism did Taiwan's Cabinet announce?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What specific issue is the new review mechanism designed to address?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "How did Taiwan's Cabinet respond to the US recommendation?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What does Taiwan aim to demonstrate by activating this mechanism?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What is one of the goals of Taiwan's move?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "The term \"tariffs\" generally refers to:",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "The word \"mitigate\" in the text means to:",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "What was the main reason for the Taiwan stock market plunge?",
+        "options": [
+          "Local political instability",
+          "A downturn in the US market",
+          "A sudden interest rate hike",
+          "New government regulations"
+        ],
+        "answer": "A downturn in the US market"
+      },
+      {
+        "q": "How many points did the market lose at the opening?",
+        "options": [
+          "Nearly 700 points",
+          "Nearly 1,700 points",
+          "Nearly 2,700 points",
+          "Nearly 3,700 points"
+        ],
+        "answer": "Nearly 2,700 points"
+      },
+      {
+        "q": "What term is used to describe the act of selling stocks in a panic?",
+        "options": [
+          "Market growth",
+          "Panic selling",
+          "Steady investment",
+          "Stock gathering"
+        ],
+        "answer": "Panic selling"
+      },
+      {
+        "q": "How should investors behave according to the experts?",
+        "options": [
+          "Be aggressive",
+          "Remain cautious",
+          "Sell everything immediately",
+          "Buy more stocks"
+        ],
+        "answer": "Remain cautious"
+      },
+      {
+        "q": "What word best describes the current state of the market mentioned in the text?",
+        "options": [
+          "Stable",
+          "Volatile",
+          "Prosperous",
+          "Predictable"
+        ],
+        "answer": "Volatile"
+      },
+      {
+        "q": "What is the primary role of financial analysts in this situation?",
+        "options": [
+          "To buy all the stocks",
+          "To ignore the market",
+          "To monitor and assess the situation",
+          "To create new currency"
+        ],
+        "answer": "To monitor and assess the situation"
+      },
+      {
+        "q": "What does 'plummet' mean in this context?",
+        "options": [
+          "To rise slowly",
+          "To stay the same",
+          "To fall sharply",
+          "To fluctuate"
+        ],
+        "answer": "To fall sharply"
+      },
+      {
+        "q": "What does the phrase 'opening bell' refer to?",
+        "options": [
+          "The end of the trading day",
+          "The start of the trading day",
+          "A lunch break",
+          "A government meeting"
+        ],
+        "answer": "The start of the trading day"
+      },
+      {
+        "q": "What is the synonym for 'massive' used in the text?",
+        "options": [
+          "Small",
+          "Tiny",
+          "Huge",
+          "Moderate"
+        ],
+        "answer": "Huge"
+      },
+      {
+        "q": "What happened to investor confidence?",
+        "options": [
+          "It increased",
+          "It was rattled",
+          "It remained the same",
+          "It disappeared completely"
+        ],
+        "answer": "It was rattled"
+      },
+      {
+        "q": "What does 'assess' mean?",
+        "options": [
+          "To avoid",
+          "To evaluate",
+          "To ignore",
+          "To sell"
+        ],
+        "answer": "To evaluate"
+      },
+      {
+        "q": "What is the tone of the news report?",
+        "options": [
+          "Humorous",
+          "Factual",
+          "Optimistic",
+          "Aggressive"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "Who called for international recognition of Taiwan's sovereignty?",
+        "options": [
+          "A. Vice President Hsiao Bi-khim",
+          "B. President Surangel Whipps Jr.",
+          "C. The international community",
+          "D. Democratic allies"
+        ],
+        "answer": "B. President Surangel Whipps Jr."
+      },
+      {
+        "q": "When did Vice President Hsiao Bi-khim visit Palau?",
+        "options": [
+          "A. June 8, 2026",
+          "B. June 26, 2026",
+          "C. June 8, 2024",
+          "D. The news does not specify."
+        ],
+        "answer": "A. June 8, 2026"
+      },
+      {
+        "q": "What was the main purpose of VP Hsiao's visit to Palau?",
+        "options": [
+          "A. To discuss trade agreements",
+          "B. To deepen diplomatic ties and cooperation",
+          "C. To sign a military pact",
+          "D. To promote tourism"
+        ],
+        "answer": "B. To deepen diplomatic ties and cooperation"
+      },
+      {
+        "q": "What term describes the relationship between Taiwan and Palau in the news?",
+        "options": [
+          "A. Economic partners",
+          "B. Cultural exchange partners",
+          "C. Democratic allies",
+          "D. Neighboring countries"
+        ],
+        "answer": "C. Democratic allies"
+      },
+      {
+        "q": "What did President Whipps Jr. reiterate during the visit?",
+        "options": [
+          "A. Palau's economic challenges",
+          "B. Palau's unwavering support for Taiwan",
+          "C. The need for more international aid",
+          "D. His upcoming travel plans"
+        ],
+        "answer": "B. Palau's unwavering support for Taiwan"
+      },
+      {
+        "q": "What did President Whipps Jr. emphasize as important?",
+        "options": [
+          "A. Military strength and defense",
+          "B. Shared values and international solidarity",
+          "C. Economic competition",
+          "D. Individual national interests"
+        ],
+        "answer": "B. Shared values and international solidarity"
+      },
+      {
+        "q": "What does \"sovereignty\" refer to in the context of the news?",
+        "options": [
+          "A. Economic prosperity",
+          "B. The authority of a state to govern itself",
+          "C. Cultural heritage",
+          "D. Military power"
+        ],
+        "answer": "B. The authority of a state to govern itself"
+      },
+      {
+        "q": "What does \"diplomatic ties\" mean?",
+        "options": [
+          "A. Economic connections",
+          "B. Formal relations between countries",
+          "C. Personal friendships",
+          "D. Travel restrictions"
+        ],
+        "answer": "B. Formal relations between countries"
+      },
+      {
+        "q": "The news describes the visit as \"high-level.\" What does this imply?",
+        "options": [
+          "A. It involved only junior officials",
+          "B. It was a very informal meeting",
+          "C. It involved important or senior officials",
+          "D. It took place at a high altitude."
+        ],
+        "answer": "C. It involved important or senior officials"
+      },
+      {
+        "q": "What kind of support did President Whipps Jr. express for Taiwan?",
+        "options": [
+          "A. Conditional support",
+          "B. Unwavering support",
+          "C. Limited support",
+          "D. Financial support only"
+        ],
+        "answer": "B. Unwavering support"
+      },
+      {
+        "q": "On what platform did President Whipps Jr. express his support for Taiwan?",
+        "options": [
+          "A. Local media",
+          "B. Social media",
+          "C. The global stage",
+          "D. A private meeting"
+        ],
+        "answer": "C. The global stage"
+      },
+      {
+        "q": "What was President Whipps Jr.'s main request to the international community?",
+        "options": [
+          "A. To provide financial aid to Palau",
+          "B. To recognize Taiwan's sovereignty",
+          "C. To increase tourism to Palau",
+          "D. To mediate conflicts in the region"
+        ],
+        "answer": "B. To recognize Taiwan's sovereignty"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美以伊衝突升級，伊朗導彈密集發射，國際油價與航空業受衝擊",
+    "tabTitle": "地緣政治",
+    "english": "The US-Israel-Iran conflict intensified significantly on June 8, 2026. Iran launched a series of ballistic missiles towards targets in the region, prompting strong condemnation from the United States and Israel. This escalation immediately sent global oil prices soaring and caused widespread disruptions in the aviation industry, with many airlines rerouting flights or canceling services. International concerns are rising over regional stability and economic repercussions.",
+    "chinese": "美以伊衝突於2026年6月8日顯著升級。伊朗向該地區的目標發射了一系列彈道導彈，促使美國和以色列發出強烈譴責。此次升級立即導致全球油價飆升，並對航空業造成了廣泛的混亂，許多航空公司被迫改變航線或取消服務。國際社會對區域穩定和經濟影響的擔憂正在加劇。",
+    "vocabulary": [
+      "conflict (n.): 衝突",
+      "intensified (v.): 加劇",
+      "significantly (adv.): 顯著地",
+      "launched (v.): 發射",
+      "ballistic missiles (n.): 彈道導彈",
+      "targets (n.): 目標",
+      "prompting (v.): 促使",
+      "condemnation (n.): 譴責",
+      "escalation (n.): 升級",
+      "global (adj.): 全球的",
+      "oil prices (n.): 油價",
+      "soaring (v.): 飆升",
+      "widespread (adj.): 廣泛的",
+      "disruptions (n.): 中斷；混亂",
+      "aviation industry (n.): 航空業",
+      "rerouting (v.): 改變航線",
+      "canceling (v.): 取消",
+      "services (n.): 服務",
+      "regional stability (phr.): 區域穩定",
+      "economic repercussions (phr.): 經濟影響；後果"
+    ],
+    "quiz": [
+      {
+        "q": "When did the US-Israel-Iran conflict significantly intensify?",
+        "options": [
+          "June 8, 2025",
+          "June 8, 2026",
+          "July 8, 2026",
+          "June 18, 2026"
+        ],
+        "answer": "June 8, 2026"
+      },
+      {
+        "q": "What action did Iran take that led to the conflict's escalation?",
+        "options": [
+          "Signed a peace treaty",
+          "Launched ballistic missiles",
+          "Opened new trade routes",
+          "Withdrew from the region"
+        ],
+        "answer": "Launched ballistic missiles"
+      },
+      {
+        "q": "Which countries issued strong condemnation against Iran's actions?",
+        "options": [
+          "China and Russia",
+          "France and Germany",
+          "The United States and Israel",
+          "Saudi Arabia and UAE"
+        ],
+        "answer": "The United States and Israel"
+      },
+      {
+        "q": "What was the immediate impact on global oil prices after the escalation?",
+        "options": [
+          "They dropped significantly",
+          "They remained stable",
+          "They started soaring",
+          "They were unpredictable"
+        ],
+        "answer": "They started soaring"
+      },
+      {
+        "q": "How did the aviation industry react to the conflict's escalation?",
+        "options": [
+          "It saw an increase in flights",
+          "It experienced widespread disruptions",
+          "It remained unaffected",
+          "It expanded its services"
+        ],
+        "answer": "It experienced widespread disruptions"
+      },
+      {
+        "q": "What did many airlines do in response to the situation?",
+        "options": [
+          "Increased ticket prices",
+          "Hired more staff",
+          "Rerouted flights or canceled services",
+          "Launched new destinations"
+        ],
+        "answer": "Rerouted flights or canceled services"
+      },
+      {
+        "q": "What type of missiles did Iran launch?",
+        "options": [
+          "Cruise missiles",
+          "Anti-tank missiles",
+          "Ballistic missiles",
+          "Air-to-air missiles"
+        ],
+        "answer": "Ballistic missiles"
+      },
+      {
+        "q": "What international concerns are rising due to the conflict?",
+        "options": [
+          "Concerns over tourism development",
+          "Concerns over regional stability and economic repercussions",
+          "Concerns over new trade agreements",
+          "Concerns over cultural exchange programs"
+        ],
+        "answer": "Concerns over regional stability and economic repercussions"
+      },
+      {
+        "q": "The word 'intensified' in the text means:",
+        "options": [
+          "Decreased in strength",
+          "Became weaker",
+          "Increased in strength or degree",
+          "Remained unchanged"
+        ],
+        "answer": "Increased in strength or degree"
+      },
+      {
+        "q": "What does 'soaring' imply about global oil prices?",
+        "options": [
+          "They fell sharply",
+          "They rose rapidly",
+          "They fluctuated slightly",
+          "They stagnated"
+        ],
+        "answer": "They rose rapidly"
+      },
+      {
+        "q": "What does 'widespread disruptions' suggest in the context of the aviation industry?",
+        "options": [
+          "Minor, localized problems",
+          "Problems affecting a small number of flights",
+          "Extensive and far-reaching problems",
+          "Improvements in flight schedules"
+        ],
+        "answer": "Extensive and far-reaching problems"
+      },
+      {
+        "q": "What is meant by 'economic repercussions'?",
+        "options": [
+          "Positive financial outcomes",
+          "New economic policies",
+          "Unintended economic benefits",
+          "Negative economic consequences or effects"
+        ],
+        "answer": "Negative economic consequences or effects"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "美國科技與半導體股集體暴跌，費半指數市值單日蒸發逾萬億美元",
+    "tabTitle": "金融市場",
+    "english": "On June 8, 2026, U.S. technology and semiconductor stocks experienced a significant downturn. The Philadelphia Semiconductor Index (SOX) saw its market capitalization plunge by over a trillion U.S. dollars in a single trading session. This sharp decline was attributed to growing concerns over rising interest rates and slowing global demand for electronic devices. Major tech giants and chip manufacturers were particularly affected, leading to widespread investor anxiety across the market. Analysts suggest this event could signal a period of increased volatility for the broader financial sector.",
+    "chinese": "2026年6月8日，美國科技和半導體股經歷了顯著的下跌。費城半導體指數（SOX）的市值在單一交易日中蒸發了超過一萬億美元。這次急劇的下跌歸因於對利率上升和全球電子設備需求放緩日益增長的擔憂。主要的科技巨頭和晶片製造商受到特別嚴重的影響，導致市場普遍存在投資者焦慮。分析師們認為，此次事件可能預示著更廣泛金融領域波動性增加的時期。",
+    "vocabulary": [
+      "significant (adj.): 顯著的",
+      "downturn (n.): 衰退；下跌",
+      "Philadelphia Semiconductor Index (n.): 費城半導體指數",
+      "market capitalization (n.): 市值",
+      "plunge (v.): 暴跌；驟降",
+      "trading session (n.): 交易日",
+      "attributed to (phr.): 歸因於",
+      "growing concerns (phr.): 日益增長的擔憂",
+      "rising interest rates (phr.): 利率上升",
+      "slowing global demand (phr.): 全球需求放緩",
+      "electronic devices (n.): 電子設備",
+      "major tech giants (phr.): 主要科技巨頭",
+      "chip manufacturers (n.): 晶片製造商",
+      "particularly affected (phr.): 特別受到影響",
+      "widespread (adj.): 普遍的；廣泛的",
+      "investor anxiety (phr.): 投資者焦慮",
+      "analysts (n.): 分析師",
+      "suggest (v.): 暗示；表明",
+      "volatility (n.): 波動性",
+      "broader financial sector (phr.): 更廣泛的金融領域"
+    ],
+    "quiz": [
+      {
+        "q": "What happened to US technology and semiconductor stocks on June 8, 2026?",
+        "options": [
+          "A. They experienced a significant upturn.",
+          "B. They remained stable.",
+          "C. They experienced a significant downturn.",
+          "D. They were unaffected by global events."
+        ],
+        "answer": "C. They experienced a significant downturn."
+      },
+      {
+        "q": "Which index is specifically mentioned as having lost market capitalization?",
+        "options": [
+          "A. Dow Jones Industrial Average",
+          "B. S&P 500",
+          "C. NASDAQ Composite",
+          "D. Philadelphia Semiconductor Index (SOX)"
+        ],
+        "answer": "D. Philadelphia Semiconductor Index (SOX)"
+      },
+      {
+        "q": "How much market capitalization did the mentioned index lose in a single day?",
+        "options": [
+          "A. Less than a billion dollars.",
+          "B. Exactly one billion dollars.",
+          "C. Over a trillion U.S. dollars.",
+          "D. Several hundred million dollars."
+        ],
+        "answer": "C. Over a trillion U.S. dollars."
+      },
+      {
+        "q": "What was one of the reasons attributed to the sharp decline?",
+        "options": [
+          "A. Decreasing interest rates.",
+          "B. Increasing global demand for electronic devices.",
+          "C. Growing concerns over rising interest rates.",
+          "D. A sudden boost in investor confidence."
+        ],
+        "answer": "C. Growing concerns over rising interest rates."
+      },
+      {
+        "q": "Besides rising interest rates, what other factor contributed to the decline?",
+        "options": [
+          "A. Rapid growth in the manufacturing sector.",
+          "B. Surging exports of electronic components.",
+          "C. Slowing global demand for electronic devices.",
+          "D. Government subsidies for tech companies."
+        ],
+        "answer": "C. Slowing global demand for electronic devices."
+      },
+      {
+        "q": "Which types of companies were particularly affected by the market downturn?",
+        "options": [
+          "A. Retail chains and food producers.",
+          "B. Major tech giants and chip manufacturers.",
+          "C. Energy companies and utility providers.",
+          "D. Healthcare providers and pharmaceutical companies."
+        ],
+        "answer": "B. Major tech giants and chip manufacturers."
+      },
+      {
+        "q": "What was the general sentiment among investors after this event?",
+        "options": [
+          "A. Optimism and excitement.",
+          "B. Widespread investor anxiety.",
+          "C. Indifference.",
+          "D. Renewed confidence."
+        ],
+        "answer": "B. Widespread investor anxiety."
+      },
+      {
+        "q": "What do analysts suggest this event could signal?",
+        "options": [
+          "A. A period of stable growth.",
+          "B. Increased volatility for the broader financial sector.",
+          "C. A bull market for tech stocks.",
+          "D. A decline in global interest rates."
+        ],
+        "answer": "B. Increased volatility for the broader financial sector."
+      },
+      {
+        "q": "The term \"downturn\" in the context of the news refers to a:",
+        "options": [
+          "A. period of economic growth.",
+          "B. decline in economic activity.",
+          "C. stable market condition.",
+          "D. sudden increase in stock prices."
+        ],
+        "answer": "B. decline in economic activity."
+      },
+      {
+        "q": "\"Market capitalization\" refers to the total value of a company's:",
+        "options": [
+          "A. physical assets.",
+          "B. outstanding shares.",
+          "C. annual revenue.",
+          "D. debt."
+        ],
+        "answer": "B. outstanding shares."
+      },
+      {
+        "q": "What does \"attributed to\" mean in the sentence \"This sharp decline was attributed to growing concerns...\"?",
+        "options": [
+          "A. Was caused by.",
+          "B. Was separate from.",
+          "C. Was unrelated to.",
+          "D. Was followed by."
+        ],
+        "answer": "A. Was caused by."
+      },
+      {
+        "q": "Which of the following best describes the style of the news report?",
+        "options": [
+          "A. Opinionated and speculative.",
+          "B. Humorous and light-hearted.",
+          "C. Factual and objective.",
+          "D. Emotional and persuasive."
+        ],
+        "answer": "C. Factual and objective."
+      }
+    ]
+  },
+  "article-5": {
+    "title": "習近平於北韓媒體發表署名文章，強調中朝加強戰略協作",
+    "tabTitle": "地緣政治",
+    "english": "Chinese President Xi Jinping recently published a signed article in North Korea’s state media, calling for closer ties between the two nations. In the piece, Xi highlighted the importance of strengthening strategic coordination to address regional challenges. Both leaders expressed their commitment to maintaining long-term stability and cooperation in the Korean Peninsula. This move signifies a renewed diplomatic effort to reinforce the historical alliance, aiming to counter shifting geopolitical dynamics in East Asia effectively.",
+    "chinese": "中國國家主席習近平近日在北韓官媒發表署名文章，呼籲兩國建立更緊密的聯繫。習近平在文中強調，加強戰略協作以應對區域挑戰至關重要。兩國領導人皆表示致力於維護朝鮮半島的長期穩定與合作。此舉標誌著雙方為鞏固歷史同盟所做出的外交新努力，旨在有效應對東亞地緣政治格局的變化。",
+    "vocabulary": [
+      "published (v.): 出版、發表",
+      "signed article (n.): 署名文章",
+      "state media (n.): 官媒",
+      "closer ties (n.): 更緊密的關係",
+      "highlight (v.): 強調、突顯",
+      "strengthening (v.): 加強",
+      "strategic coordination (n.): 戰略協作",
+      "address (v.): 處理、應對",
+      "regional (adj.): 區域性的",
+      "commitment (n.): 承諾、投入",
+      "stability (n.): 穩定",
+      "peninsula (n.): 半島",
+      "signify (v.): 象徵、表示",
+      "diplomatic (adj.): 外交的",
+      "effort (n.): 努力",
+      "reinforce (v.): 強化",
+      "historical alliance (n.): 歷史同盟",
+      "counter (v.): 對抗、反制",
+      "shifting (adj.): 變動的",
+      "geopolitical dynamics (n.): 地緣政治動態"
+    ],
+    "quiz": [
+      {
+        "q": "What did Xi Jinping publish in North Korean media?",
+        "options": [
+          "A book",
+          "A signed article",
+          "A secret treaty",
+          "A formal apology"
+        ],
+        "answer": "A signed article"
+      },
+      {
+        "q": "What is the primary goal of the strategic coordination mentioned?",
+        "options": [
+          "To increase trade tariffs",
+          "To address regional challenges",
+          "To withdraw military troops",
+          "To change the border location"
+        ],
+        "answer": "To address regional challenges"
+      },
+      {
+        "q": "How does the article describe the relationship between China and North Korea?",
+        "options": [
+          "A historical alliance",
+          "A hostile rivalry",
+          "A temporary agreement",
+          "A new business partnership"
+        ],
+        "answer": "A historical alliance"
+      },
+      {
+        "q": "What region is specifically mentioned in the text?",
+        "options": [
+          "The Middle East",
+          "The Korean Peninsula",
+          "The South China Sea",
+          "The Arctic Circle"
+        ],
+        "answer": "The Korean Peninsula"
+      },
+      {
+        "q": "What does the word 'stability' mean in this context?",
+        "options": [
+          "Constant change",
+          "A state of being firm and steady",
+          "Economic decline",
+          "Military aggression"
+        ],
+        "answer": "A state of being firm and steady"
+      },
+      {
+        "q": "What does 'address' mean in the sentence 'address regional challenges'?",
+        "options": [
+          "To mail a letter",
+          "To deal with or tackle",
+          "To ignore completely",
+          "To create new problems"
+        ],
+        "answer": "To deal with or tackle"
+      },
+      {
+        "q": "What is the intended effect of the article according to the text?",
+        "options": [
+          "To isolate North Korea",
+          "To reinforce the alliance",
+          "To demand independence",
+          "To decrease diplomatic contact"
+        ],
+        "answer": "To reinforce the alliance"
+      },
+      {
+        "q": "Which term best describes the 'geopolitical dynamics' mentioned?",
+        "options": [
+          "Static and unchanging",
+          "Shifting and evolving",
+          "Irrelevant to the region",
+          "Simple and clear"
+        ],
+        "answer": "Shifting and evolving"
+      },
+      {
+        "q": "What is the tone of the English text?",
+        "options": [
+          "Factual",
+          "Humorous",
+          "Sarcastic",
+          "Personal"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "What does 'signify' mean in the text?",
+        "options": [
+          "To hide",
+          "To represent or mark",
+          "To destroy",
+          "To forget"
+        ],
+        "answer": "To represent or mark"
+      },
+      {
+        "q": "What are the two nations focusing on?",
+        "options": [
+          "Economic competition",
+          "Strategic coordination",
+          "Cultural exchange only",
+          "Individual isolation"
+        ],
+        "answer": "Strategic coordination"
+      },
+      {
+        "q": "Which word is a synonym for 'strengthening'?",
+        "options": [
+          "Weakening",
+          "Reinforcing",
+          "Removing",
+          "Ignoring"
+        ],
+        "answer": "Reinforcing"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "黃仁勳訪韓強調記憶體晶片短缺，輝達與SK海力士深化合作",
+    "tabTitle": "科技",
+    "english": "Nvidia CEO Jensen Huang visited South Korea on June 8, 2026, to discuss critical issues in the semiconductor industry. During his visit, Huang highlighted the significant global shortage of high-bandwidth memory (HBM) chips, which are essential for AI development. Nvidia, a leading AI chip designer, announced deeper collaboration with SK Hynix, a major HBM supplier. This strategic partnership aims to secure a stable supply of advanced memory, crucial for meeting the increasing demand for AI graphics processing units (GPUs) and driving future technological advancements.",
+    "chinese": "輝達執行長黃仁勳於2026年6月8日訪問韓國，討論半導體產業的關鍵議題。訪問期間，黃仁勳強調了全球高頻寬記憶體（HBM）晶片的嚴重短缺，這種晶片對人工智慧發展至關重要。作為領先的人工智慧晶片設計公司，輝達宣布與主要的HBM供應商SK海力士深化合作。這項戰略夥伴關係旨在確保先進記憶體的穩定供應，這對於滿足對人工智慧圖形處理器（GPU）日益增長的需求以及推動未來的技術進步至關重要。",
+    "vocabulary": [
+      "Nvidia (n.): 輝達 (公司名)",
+      "CEO (n.): 執行長",
+      "semiconductor (n.): 半導體",
+      "critical (adj.): 關鍵的；重要的",
+      "highlight (v.): 強調；凸顯",
+      "significant (adj.): 顯著的；重要的",
+      "global shortage (n. phr.): 全球短缺",
+      "high-bandwidth memory (HBM) (n. phr.): 高頻寬記憶體 (HBM)",
+      "essential (adj.): 必要的；不可或缺的",
+      "AI development (n. phr.): 人工智慧發展",
+      "leading (adj.): 領先的",
+      "AI chip designer (n. phr.): 人工智慧晶片設計公司",
+      "deepen (v.): 深化",
+      "collaboration (n.): 合作",
+      "supplier (n.): 供應商",
+      "strategic (adj.): 策略性的；戰略性的",
+      "secure (v.): 確保；獲得",
+      "stable supply (n. phr.): 穩定供應",
+      "graphics processing unit (GPU) (n. phr.): 圖形處理器 (GPU)",
+      "technological advancements (n. phr.): 技術進步"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of Jensen Huang's visit to South Korea?",
+        "options": [
+          "A) To sign a new trade agreement.",
+          "B) To discuss critical issues in the semiconductor industry.",
+          "C) To introduce a new Nvidia product.",
+          "D) To visit a new manufacturing plant."
+        ],
+        "answer": "B) To discuss critical issues in the semiconductor industry."
+      },
+      {
+        "q": "When did Jensen Huang visit South Korea according to the news?",
+        "options": [
+          "A) June 8, 2025.",
+          "B) June 8, 2026.",
+          "C) July 8, 2026.",
+          "D) August 8, 2026."
+        ],
+        "answer": "B) June 8, 2026."
+      },
+      {
+        "q": "What specific type of chip shortage did Huang highlight?",
+        "options": [
+          "A) CPU chips.",
+          "B) Low-bandwidth memory chips.",
+          "C) High-bandwidth memory (HBM) chips.",
+          "D) Storage chips."
+        ],
+        "answer": "C) High-bandwidth memory (HBM) chips."
+      },
+      {
+        "q": "Why are HBM chips considered essential?",
+        "options": [
+          "A) For smartphone production.",
+          "B) For general computing tasks.",
+          "C) For AI development.",
+          "D) For car manufacturing."
+        ],
+        "answer": "C) For AI development."
+      },
+      {
+        "q": "Which company is Nvidia deepening its collaboration with?",
+        "options": [
+          "A) Samsung.",
+          "B) Intel.",
+          "C) SK Hynix.",
+          "D) TSMC."
+        ],
+        "answer": "C) SK Hynix."
+      },
+      {
+        "q": "What is SK Hynix primarily known for in this context?",
+        "options": [
+          "A) Being an AI chip designer.",
+          "B) Being a major HBM supplier.",
+          "C) Being a GPU manufacturer.",
+          "D) Being a software developer."
+        ],
+        "answer": "B) Being a major HBM supplier."
+      },
+      {
+        "q": "What is the goal of the partnership between Nvidia and SK Hynix?",
+        "options": [
+          "A) To reduce chip prices.",
+          "B) To secure a stable supply of advanced memory.",
+          "C) To develop new AI software.",
+          "D) To expand into new markets."
+        ],
+        "answer": "B) To secure a stable supply of advanced memory."
+      },
+      {
+        "q": "What does 'GPU' stand for?",
+        "options": [
+          "A) General Processing Unit.",
+          "B) Graphics Power Unit.",
+          "C) Global Production Unit.",
+          "D) Graphics Processing Unit."
+        ],
+        "answer": "D) Graphics Processing Unit."
+      },
+      {
+        "q": "The demand for which product is increasing, requiring more HBM chips?",
+        "options": [
+          "A) Traditional desktop computers.",
+          "B) AI graphics processing units (GPUs).",
+          "C) Server motherboards.",
+          "D) Networking equipment."
+        ],
+        "answer": "B) AI graphics processing units (GPUs)."
+      },
+      {
+        "q": "What kind of company is Nvidia described as?",
+        "options": [
+          "A) A memory manufacturer.",
+          "B) A major HBM supplier.",
+          "C) A leading AI chip designer.",
+          "D) A software solutions provider."
+        ],
+        "answer": "C) A leading AI chip designer."
+      },
+      {
+        "q": "What does the word 'critical' mean in the context of 'critical issues'?",
+        "options": [
+          "A) Minor.",
+          "B) Unimportant.",
+          "C) Crucial.",
+          "D) Simple."
+        ],
+        "answer": "C) Crucial."
+      },
+      {
+        "q": "The partnership between Nvidia and SK Hynix is described as:",
+        "options": [
+          "A) Temporary.",
+          "B) Informal.",
+          "C) Strategic.",
+          "D) Experimental."
+        ],
+        "answer": "C) Strategic."
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
