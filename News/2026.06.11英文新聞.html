@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 11, 2026：台灣經濟、金融市場 與 國際大事</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電暗示晶片可能漲價，因營運成本攀升\nTSMC recently signaled that chip prices may increase in the near future. The company cited rising operating costs, including higher electricity rates and supply chain expenses, as the primary reasons. As the world's largest contract chipmaker, TSMC aims to maintain its profit margins while continuing to invest in advanced manufacturing technologies. Industry analysts believe these adjustments are necessary to offset inflation. Customers should prepare for potential price hikes as the market evolves.\n\n[2] 全球半導體設備銷售額創新高，台灣Q1排名第三\nGlobal sales of semiconductor manufacturing equipment reached an all-time high in the first quarter of 2026, driven by strong demand for advanced chips. The industry saw significant growth worldwide, indicating a robust expansion phase. Taiwan emerged as a key player, securing the third position globally in equipment sales during this period. This performance highlights Taiwan's crucial role in the semiconductor supply chain and its continued investment in technological advancements.\n\n[3] 台灣陸軍實彈演習，海馬士火箭展現防衛能力\nOn June 11, 2026, the Taiwan Army successfully conducted a significant live-fire drill featuring the M142 High Mobility Artillery Rocket System (HIMARS). The exercise, held in Pingtung, aimed to enhance the military's rapid response capabilities and validate the accuracy of its precision strike weapons. This demonstration showcased Taiwan's robust defense posture and its commitment to safeguarding national security against potential threats. Senior military officials observed the drill, emphasizing its importance for regional stability and deterrence.",
+    "chinese": "【1】台積電暗示晶片可能漲價，因營運成本攀升\n台積電近期暗示晶片價格可能在不久的將來上漲。該公司指出，營運成本攀升（包括電費上漲及供應鏈支出增加）是主要原因。作為全球最大的晶圓代工廠，台積電旨在維持利潤率的同時，持續投資於先進製造技術。產業分析師認為，這些調整對於抵銷通膨影響有其必要。隨著市場發展，客戶應為潛在的漲價做好準備。\n\n【2】全球半導體設備銷售額創新高，台灣Q1排名第三\n2026年第一季度，全球半導體製造設備銷售額創下歷史新高，主要受先進晶片強勁需求的推動。該產業在全球範圍內呈現顯著增長，預示著一個強勁的擴張階段。台灣在此期間成為關鍵參與者，在全球設備銷售中位居第三。這一表現凸顯了台灣在半導體供應鏈中的關鍵作用及其在技術進步方面的持續投資。\n\n【3】台灣陸軍實彈演習，海馬士火箭展現防衛能力\n在2026年6月11日，台灣陸軍成功舉行了一場重要的M142高機動性多管火箭系統（HIMARS）實彈演習。這場在屏東舉行的演習，旨在提升國軍的快速反應能力，並驗證其精準打擊武器的準確性。此次展示彰顯了台灣強大的防衛態勢，以及其致力於防範潛在威脅、維護國家安全的決心。高級軍事官員觀摩了此次演習，強調其對於區域穩定和威懾的重要性。",
+    "vocabulary": [
+      "signal (v.): 表明、示意",
+      "near future (n.): 不久的將來",
+      "cite (v.): 提及、引用",
+      "operating cost (n.): 營運成本",
+      "electricity rate (n.): 電費率",
+      "supply chain (n.): 供應鏈",
+      "expense (n.): 支出、開銷",
+      "primary (adj.): 主要的",
+      "contract chipmaker (n.): 晶圓代工廠",
+      "maintain (v.): 維持",
+      "profit margin (n.): 利潤率",
+      "advanced (adj.): 先進的",
+      "manufacturing (n.): 製造",
+      "technology (n.): 技術",
+      "analyst (n.): 分析師",
+      "adjustment (n.): 調整",
+      "necessary (adj.): 必要的",
+      "offset (v.): 抵銷、彌補",
+      "inflation (n.): 通膨",
+      "evolve (v.): 進化、發展",
+      "semiconductor (n.): 半導體",
+      "manufacturing (n.): 製造",
+      "equipment (n.): 設備",
+      "all-time high (phr.): 歷史新高",
+      "first quarter (phr.): 第一季度",
+      "driven by (phr.): 受…驅動",
+      "strong demand (phr.): 強勁需求",
+      "advanced chips (phr.): 先進晶片",
+      "industry (n.): 產業",
+      "significant (adj.): 顯著的",
+      "worldwide (adv.): 全球範圍內",
+      "robust (adj.): 強勁的，穩健的",
+      "expansion (n.): 擴張",
+      "emerged (v.): 嶄露頭角，出現",
+      "key player (phr.): 關鍵參與者",
+      "securing (v.): 獲得，確保",
+      "position (n.): 位置，排名",
+      "highlight (v.): 凸顯",
+      "crucial (adj.): 關鍵的",
+      "supply chain (n.): 供應鏈",
+      "conduct (v.): 舉行，執行",
+      "live-fire (adj.): 實彈的",
+      "drill (n.): 演習",
+      "featuring (v.): 以...為特色；展示",
+      "High Mobility Artillery Rocket System (n.): 高機動性多管火箭系統",
+      "exercise (n.): 演習",
+      "Pingtung (n.): 屏東",
+      "aimed to (phr.): 旨在",
+      "enhance (v.): 提升，加強",
+      "rapid response (phr.): 快速反應",
+      "capabilities (n.): 能力",
+      "validate (v.): 驗證",
+      "accuracy (n.): 準確性",
+      "precision strike (phr.): 精準打擊",
+      "weapons (n.): 武器",
+      "demonstration (n.): 演示，展示",
+      "robust (adj.): 強大的，堅固的",
+      "defense posture (phr.): 防衛態勢",
+      "safeguarding (v.): 維護，保護",
+      "deterrence (n.): 威懾"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main reason for TSMC's potential price hike?",
+        "options": [
+          "Decreased demand",
+          "Rising operating costs",
+          "Government subsidies",
+          "Labor strikes"
+        ],
+        "answer": "Rising operating costs"
+      },
+      {
+        "q": "What is TSMC's position in the chip market?",
+        "options": [
+          "Small local startup",
+          "World's largest contract chipmaker",
+          "Retail electronics store",
+          "Software developer"
+        ],
+        "answer": "World's largest contract chipmaker"
+      },
+      {
+        "q": "Which of the following is mentioned as an operating cost?",
+        "options": [
+          "Electricity rates",
+          "Marketing fees",
+          "Rent",
+          "Legal fees"
+        ],
+        "answer": "Electricity rates"
+      },
+      {
+        "q": "Why does TSMC need to maintain profit margins?",
+        "options": [
+          "To pay dividends",
+          "To invest in advanced technologies",
+          "To buy competitors",
+          "To lower stock prices"
+        ],
+        "answer": "To invest in advanced technologies"
+      },
+      {
+        "q": "How do analysts view the price adjustments?",
+        "options": [
+          "As a mistake",
+          "As unnecessary",
+          "As necessary to offset inflation",
+          "As a temporary trend"
+        ],
+        "answer": "As necessary to offset inflation"
+      },
+      {
+        "q": "What does the word 'signal' mean in this context?",
+        "options": [
+          "To shout",
+          "To indicate or suggest",
+          "To ignore",
+          "To hide"
+        ],
+        "answer": "To indicate or suggest"
+      },
+      {
+        "q": "What should customers expect according to the text?",
+        "options": [
+          "Price drops",
+          "Potential price hikes",
+          "Free services",
+          "Faster delivery"
+        ],
+        "answer": "Potential price hikes"
+      },
+      {
+        "q": "What is the purpose of offsetting inflation?",
+        "options": [
+          "To increase spending",
+          "To balance financial impact",
+          "To stop manufacturing",
+          "To change the product"
+        ],
+        "answer": "To balance financial impact"
+      },
+      {
+        "q": "What does 'contract chipmaker' imply?",
+        "options": [
+          "They only make chips for themselves",
+          "They manufacture chips for other companies",
+          "They sell chips in retail stores",
+          "They do not produce chips"
+        ],
+        "answer": "They manufacture chips for other companies"
+      },
+      {
+        "q": "What does 'evolve' describe regarding the market?",
+        "options": [
+          "The market is disappearing",
+          "The market is changing and developing",
+          "The market is static",
+          "The market is controlled by one entity"
+        ],
+        "answer": "The market is changing and developing"
+      },
+      {
+        "q": "What is the tone of the news report?",
+        "options": [
+          "Emotional",
+          "Factual",
+          "Humorous",
+          "Critical"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "Which word is a synonym for 'primary'?",
+        "options": [
+          "Secondary",
+          "Main",
+          "Final",
+          "Hidden"
+        ],
+        "answer": "Main"
+      },
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "A. Taiwan's new technology",
+          "B. Global semiconductor equipment sales",
+          "C. The demand for advanced chips",
+          "D. The expansion of the supply chain"
+        ],
+        "answer": "B. Global semiconductor equipment sales"
+      },
+      {
+        "q": "When did global semiconductor equipment sales reach an all-time high?",
+        "options": [
+          "A. In 2026",
+          "B. In the first quarter of 2026",
+          "C. Last year",
+          "D. This quarter"
+        ],
+        "answer": "B. In the first quarter of 2026"
+      },
+      {
+        "q": "What was the primary reason for the record sales?",
+        "options": [
+          "A. Increased investment in Taiwan",
+          "B. A new expansion phase",
+          "C. Strong demand for advanced chips",
+          "D. More manufacturing equipment"
+        ],
+        "answer": "C. Strong demand for advanced chips"
+      },
+      {
+        "q": "How did the industry perform worldwide?",
+        "options": [
+          "A. It saw a slight decrease.",
+          "B. It remained stable.",
+          "C. It experienced significant growth.",
+          "D. It faced some challenges."
+        ],
+        "answer": "C. It experienced significant growth."
+      },
+      {
+        "q": "What does the news suggest about the industry's current state?",
+        "options": [
+          "A. It is slowing down.",
+          "B. It is in a robust expansion phase.",
+          "C. It is facing a crisis.",
+          "D. It is stable but not growing."
+        ],
+        "answer": "B. It is in a robust expansion phase."
+      },
+      {
+        "q": "What was Taiwan's global ranking in equipment sales during Q1?",
+        "options": [
+          "A. First",
+          "B. Second",
+          "C. Third",
+          "D. Fourth"
+        ],
+        "answer": "C. Third"
+      },
+      {
+        "q": "What does Taiwan's performance highlight?",
+        "options": [
+          "A. Its reliance on foreign technology.",
+          "B. Its crucial role in the semiconductor supply chain.",
+          "C. Its decreasing investment in technology.",
+          "D. Its focus on traditional industries."
+        ],
+        "answer": "B. Its crucial role in the semiconductor supply chain."
+      },
+      {
+        "q": "Which word is closest in meaning to \"robust\" in this context?",
+        "options": [
+          "A. Weak",
+          "B. Fragile",
+          "C. Strong",
+          "D. Slow"
+        ],
+        "answer": "C. Strong"
+      },
+      {
+        "q": "What does \"all-time high\" mean?",
+        "options": [
+          "A. The lowest point ever",
+          "B. The highest point ever",
+          "C. A stable level",
+          "D. A moderate increase"
+        ],
+        "answer": "B. The highest point ever"
+      },
+      {
+        "q": "The term \"key player\" refers to:",
+        "options": [
+          "A. Someone who plays a game.",
+          "B. An unimportant participant.",
+          "C. An important participant or entity.",
+          "D. A musical instrument."
+        ],
+        "answer": "C. An important participant or entity."
+      },
+      {
+        "q": "What is \"semiconductor manufacturing equipment\"?",
+        "options": [
+          "A. Devices used to make computers.",
+          "B. Tools and machinery for producing semiconductor components.",
+          "C. Software for designing chips.",
+          "D. Products made from semiconductors."
+        ],
+        "answer": "B. Tools and machinery for producing semiconductor components."
+      },
+      {
+        "q": "The news implies that Taiwan is actively doing what in the semiconductor sector?",
+        "options": [
+          "A. Reducing its involvement.",
+          "B. Investing in technological advancements.",
+          "C. Shifting its focus away from chips.",
+          "D. Importing all its equipment."
+        ],
+        "answer": "B. Investing in technological advancements."
+      },
+      {
+        "q": "What date did the Taiwan Army conduct the live-fire drill?",
+        "options": [
+          "A) June 10, 2026",
+          "B) June 11, 2026",
+          "C) July 11, 2026",
+          "D) July 10, 2026"
+        ],
+        "answer": "B) June 11, 2026"
+      },
+      {
+        "q": "What specific rocket system was featured in the drill?",
+        "options": [
+          "A) Patriot Missile System",
+          "B) M142 High Mobility Artillery Rocket System",
+          "C) Javelin Anti-Tank System",
+          "D) Stinger Missile"
+        ],
+        "answer": "B) M142 High Mobility Artillery Rocket System"
+      },
+      {
+        "q": "Where was the exercise held?",
+        "options": [
+          "A) Taipei",
+          "B) Kaohsiung",
+          "C) Pingtung",
+          "D) Hualien"
+        ],
+        "answer": "C) Pingtung"
+      },
+      {
+        "q": "What was one of the primary aims of the exercise?",
+        "options": [
+          "A) To test new communication systems",
+          "B) To enhance rapid response capabilities",
+          "C) To train new recruits",
+          "D) To conduct search and rescue operations"
+        ],
+        "answer": "B) To enhance rapid response capabilities"
+      },
+      {
+        "q": "The drill aimed to validate the accuracy of what type of weapons?",
+        "options": [
+          "A) Naval artillery",
+          "B) Air-to-air missiles",
+          "C) Precision strike weapons",
+          "D) Infantry rifles"
+        ],
+        "answer": "C) Precision strike weapons"
+      },
+      {
+        "q": "What did this demonstration showcase about Taiwan?",
+        "options": [
+          "A) Its economic growth",
+          "B) Its robust defense posture",
+          "C) Its cultural heritage",
+          "D) Its agricultural exports"
+        ],
+        "answer": "B) Its robust defense posture"
+      },
+      {
+        "q": "What is Taiwan committed to safeguarding?",
+        "options": [
+          "A) Its tourism industry",
+          "B) Its national security",
+          "C) Its historical sites",
+          "D) Its fishing fleet"
+        ],
+        "answer": "B) Its national security"
+      },
+      {
+        "q": "Who observed the drill and emphasized its importance?",
+        "options": [
+          "A) International observers",
+          "B) Local residents",
+          "C) Senior military officials",
+          "D) Environmental activists"
+        ],
+        "answer": "C) Senior military officials"
+      },
+      {
+        "q": "The word \"enhance\" in the text is closest in meaning to:",
+        "options": [
+          "A) decrease",
+          "B) weaken",
+          "C) improve",
+          "D) destroy"
+        ],
+        "answer": "C) improve"
+      },
+      {
+        "q": "What does \"live-fire\" mean in the context of a drill?",
+        "options": [
+          "A) Using simulated weapons",
+          "B) Using actual ammunition",
+          "C) Practicing firefighting",
+          "D) Observing from a distance"
+        ],
+        "answer": "B) Using actual ammunition"
+      },
+      {
+        "q": "The term \"defense posture\" refers to:",
+        "options": [
+          "A) A military parade",
+          "B) The way a country arranges its military for protection",
+          "C) A defensive sports strategy",
+          "D) An international peace treaty"
+        ],
+        "answer": "B) The way a country arranges its military for protection"
+      },
+      {
+        "q": "What is the main purpose of \"deterrence\" in national security?",
+        "options": [
+          "A) To encourage trade",
+          "B) To prevent an attack by instilling fear",
+          "C) To promote cultural exchange",
+          "D) To establish alliances"
+        ],
+        "answer": "B) To prevent an attack by instilling fear"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "歐洲央行升息25基點，近三年首度調高利率",
+    "tabTitle": "金融市場",
+    "english": "The European Central Bank (ECB) has announced a significant policy change, raising its key interest rates by 25 basis points. This move marks the first interest rate hike in nearly three years, signaling a notable shift in the Eurozone's monetary policy. The decision comes as the ECB seeks to combat persistent inflation, which has reached record highs across the region. While aiming to stabilize prices, the central bank also faces the challenge of potential economic slowdown. Analysts are now closely observing future policy adjustments and their impact on the market.",
+    "chinese": "歐洲央行（ECB）宣布了一項重大的政策轉變，將其主要利率上調25個基點。此舉標誌著近三年來的首次升息，預示著歐元區貨幣政策的顯著轉變。這項決定是在歐洲央行尋求對抗該地區已達歷史新高的持續性通膨之際做出的。儘管旨在穩定物價，該央行也面臨潛在經濟放緩的挑戰。分析師們目前正密切關注未來的政策調整及其對市場的影響。",
+    "vocabulary": [
+      "European Central Bank (n.): 歐洲央行",
+      "ECB (abbr.): 歐洲央行 (縮寫)",
+      "policy change (n.): 政策轉變",
+      "key interest rates (n.pl.): 主要利率",
+      "raise (v.): 提高，上調",
+      "basis point (n.): 基點",
+      "rate hike (n.): 升息",
+      "monetary policy (n.): 貨幣政策",
+      "signal (v.): 預示，示意",
+      "significant (adj.): 重大的，顯著的",
+      "Eurozone (n.): 歐元區",
+      "combat (v.): 對抗，打擊",
+      "persistent (adj.): 持續的",
+      "inflation (n.): 通貨膨脹",
+      "record high (n.): 歷史新高",
+      "stabilize (v.): 穩定",
+      "central bank (n.): 中央銀行",
+      "economic slowdown (n.): 經濟放緩",
+      "analyst (n.): 分析師",
+      "policy adjustment (n.): 政策調整"
+    ],
+    "quiz": [
+      {
+        "q": "What organization is mentioned in the news as raising interest rates?",
+        "options": [
+          "A. International Monetary Fund (IMF)",
+          "B. European Central Bank (ECB)",
+          "C. Federal Reserve (Fed)",
+          "D. Bank of England (BoE)"
+        ],
+        "answer": "B. European Central Bank (ECB)"
+      },
+      {
+        "q": "By how many basis points did the ECB increase its key interest rates?",
+        "options": [
+          "A. 10 basis points",
+          "B. 20 basis points",
+          "C. 25 basis points",
+          "D. 50 basis points"
+        ],
+        "answer": "C. 25 basis points"
+      },
+      {
+        "q": "How long has it been since the ECB last hiked interest rates?",
+        "options": [
+          "A. One year",
+          "B. Two years",
+          "C. Nearly three years",
+          "D. Five years"
+        ],
+        "answer": "C. Nearly three years"
+      },
+      {
+        "q": "What does this rate hike signal for the Eurozone's monetary policy?",
+        "options": [
+          "A. A continuation of previous policy",
+          "B. A notable shift",
+          "C. A temporary measure",
+          "D. A policy of easing"
+        ],
+        "answer": "B. A notable shift"
+      },
+      {
+        "q": "What is the primary goal of the ECB's decision to raise rates?",
+        "options": [
+          "A. To boost economic growth",
+          "B. To increase exports",
+          "C. To combat persistent inflation",
+          "D. To reduce unemployment"
+        ],
+        "answer": "C. To combat persistent inflation"
+      },
+      {
+        "q": "According to the news, what state has inflation reached across the Eurozone?",
+        "options": [
+          "A. Moderate levels",
+          "B. Declining rates",
+          "C. Record lows",
+          "D. Record highs"
+        ],
+        "answer": "D. Record highs"
+      },
+      {
+        "q": "Besides stabilizing prices, what challenge does the central bank face?",
+        "options": [
+          "A. Increasing consumer spending",
+          "B. Potential economic slowdown",
+          "C. Strengthening the Euro",
+          "D. Managing government debt"
+        ],
+        "answer": "B. Potential economic slowdown"
+      },
+      {
+        "q": "What are analysts currently doing regarding future policy adjustments?",
+        "options": [
+          "A. Ignoring them",
+          "B. Predicting no changes",
+          "C. Closely observing them",
+          "D. Recommending immediate cuts"
+        ],
+        "answer": "C. Closely observing them"
+      },
+      {
+        "q": "The term \"monetary policy\" refers to:",
+        "options": [
+          "A. Government spending and taxation",
+          "B. Policies related to money supply and interest rates",
+          "C. International trade agreements",
+          "D. Environmental regulations"
+        ],
+        "answer": "B. Policies related to money supply and interest rates"
+      },
+      {
+        "q": "If an analyst is \"closely observing\" something, they are:",
+        "options": [
+          "A. Ignoring it completely",
+          "B. Watching it carefully",
+          "C. Criticizing it harshly",
+          "D. Trying to change it"
+        ],
+        "answer": "B. Watching it carefully"
+      },
+      {
+        "q": "What does \"persistent inflation\" imply?",
+        "options": [
+          "A. Inflation that is temporary and quickly disappears.",
+          "B. Inflation that remains high over a period of time.",
+          "C. Inflation caused by a single event.",
+          "D. Inflation that only affects specific goods."
+        ],
+        "answer": "B. Inflation that remains high over a period of time."
+      },
+      {
+        "q": "The phrase \"basis points\" is commonly used in finance to describe:",
+        "options": [
+          "A. A unit of change in interest rates, equal to one-hundredth of a percentage point.",
+          "B. The fundamental principles of a financial market.",
+          "C. The lowest possible value of a stock.",
+          "D. A measure of a company's financial stability."
+        ],
+        "answer": "A. A unit of change in interest rates, equal to one-hundredth of a percentage point."
+      }
+    ]
+  },
+  "article-4": {
+    "title": "韓國電商Coupang用戶資料外洩，遭巨額罰款",
+    "tabTitle": "國際大事",
+    "english": "South Korean e-commerce leader Coupang has been hit with a massive fine following a significant data breach. The incident exposed the personal information of millions of users, raising serious concerns about digital privacy. Regulatory authorities stated that the company failed to implement adequate security measures to protect sensitive customer data. Consequently, Coupang must pay a substantial penalty as a result of these security shortcomings. This case serves as a stern reminder for tech companies to prioritize cybersecurity and data protection protocols.",
+    "chinese": "韓國電子商務巨頭 Coupang 因發生重大資料外洩事件，被處以巨額罰款。此次事件導致數百萬用戶的個人資訊暴露，引發了對數位隱私的嚴重擔憂。監管機構指出，該公司未能實施足夠的安全措施來保護敏感的客戶資料。因此，Coupang 因這些安全漏洞必須支付鉅額罰款。此案例嚴厲提醒了科技公司必須優先考慮網路安全及資料保護協定。",
+    "vocabulary": [
+      "e-commerce (n.): 電子商務",
+      "massive (adj.): 大規模的",
+      "fine (n.): 罰款",
+      "data breach (n.): 資料外洩",
+      "incident (n.): 事件",
+      "expose (v.): 暴露",
+      "personal information (n.): 個人資訊",
+      "regulatory (adj.): 監管的",
+      "authority (n.): 當局",
+      "implement (v.): 實施",
+      "adequate (adj.): 足夠的",
+      "security measure (n.): 安全措施",
+      "sensitive (adj.): 敏感的",
+      "consequently (adv.): 因此",
+      "substantial (adj.): 重大的",
+      "penalty (n.): 懲罰",
+      "shortcoming (n.): 缺點",
+      "stern (adj.): 嚴厲的",
+      "cybersecurity (n.): 網路安全",
+      "protocol (n.): 協定"
+    ],
+    "quiz": [
+      {
+        "q": "What happened to Coupang?",
+        "options": [
+          "It went bankrupt",
+          "It merged with a rival",
+          "It suffered a data breach",
+          "It stopped operations"
+        ],
+        "answer": "It suffered a data breach"
+      },
+      {
+        "q": "What was the result of the incident?",
+        "options": [
+          "A major fine",
+          "Increased stock prices",
+          "New CEO appointment",
+          "Expansion to Europe"
+        ],
+        "answer": "A major fine"
+      },
+      {
+        "q": "What information was affected?",
+        "options": [
+          "Company financial reports",
+          "Employee internal emails",
+          "Personal user information",
+          "Server hardware specs"
+        ],
+        "answer": "Personal user information"
+      },
+      {
+        "q": "Why did authorities fine the company?",
+        "options": [
+          "Poor marketing",
+          "Inadequate security measures",
+          "Late tax payments",
+          "Illegal hiring practices"
+        ],
+        "answer": "Inadequate security measures"
+      },
+      {
+        "q": "How many users were approximately affected?",
+        "options": [
+          "Thousands",
+          "Millions",
+          "Billions",
+          "Hundreds"
+        ],
+        "answer": "Millions"
+      },
+      {
+        "q": "What does the text suggest tech companies should prioritize?",
+        "options": [
+          "Lowering prices",
+          "Cybersecurity",
+          "Office expansion",
+          "Social media growth"
+        ],
+        "answer": "Cybersecurity"
+      },
+      {
+        "q": "What is the tone of the news report?",
+        "options": [
+          "Factual",
+          "Humorous",
+          "Optimistic",
+          "Fictional"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "What does 'substantial' mean in this context?",
+        "options": [
+          "Small",
+          "Negligible",
+          "Significant",
+          "Temporary"
+        ],
+        "answer": "Significant"
+      },
+      {
+        "q": "Who issued the fine?",
+        "options": [
+          "Coupang itself",
+          "Regulatory authorities",
+          "The users",
+          "Hackers"
+        ],
+        "answer": "Regulatory authorities"
+      },
+      {
+        "q": "What is a 'shortcoming'?",
+        "options": [
+          "A strength",
+          "A failure or flaw",
+          "A future goal",
+          "A software update"
+        ],
+        "answer": "A failure or flaw"
+      },
+      {
+        "q": "What is the primary concern mentioned regarding the leak?",
+        "options": [
+          "Digital privacy",
+          "Shipping delays",
+          "Product quality",
+          "Website design"
+        ],
+        "answer": "Digital privacy"
+      },
+      {
+        "q": "What is the purpose of this news report?",
+        "options": [
+          "To promote Coupang",
+          "To explain cybersecurity risks",
+          "To entertain readers",
+          "To sell software"
+        ],
+        "answer": "To explain cybersecurity risks"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "微軟GitHub遭蠕蟲攻擊，AI開發者憑證恐外洩",
+    "tabTitle": "科技",
+    "english": "Microsoft’s GitHub platform recently experienced a significant security breach caused by a malicious worm. This automated attack targeted AI developers, potentially exposing sensitive authentication credentials and private repositories. Security experts warn that the incident highlights vulnerabilities in automated software supply chains. Microsoft has launched an urgent investigation to mitigate the damage and reset compromised access tokens. Users are strongly advised to enable multi-factor authentication immediately to protect their accounts from further unauthorized access during this critical recovery period.",
+    "chinese": "微軟的 GitHub 平台近期遭遇了一次由惡意蠕蟲引起的重大安全漏洞。這次自動化攻擊的目標是 AI 開發者，可能導致敏感的驗證憑證與私人儲存庫外洩。安全專家警告，此事件凸顯了自動化軟體供應鏈中的弱點。微軟已啟動緊急調查以減輕損害並重置受影響的存取權杖。官方強烈建議使用者立即啟用多重身份驗證，以保護帳戶在關鍵修復期間免受進一步的未經授權存取。",
+    "vocabulary": [
+      "platform (n.): 平台",
+      "experience (v.): 經歷/遭遇",
+      "significant (adj.): 重大的",
+      "security breach (n.): 安全漏洞/入侵",
+      "malicious (adj.): 惡意的",
+      "automated (adj.): 自動化的",
+      "target (v.): 鎖定/目標",
+      "potentially (adv.): 潛在地",
+      "expose (v.): 暴露/洩漏",
+      "sensitive (adj.): 敏感的",
+      "authentication (n.): 驗證",
+      "credentials (n.): 憑證",
+      "vulnerability (n.): 弱點/漏洞",
+      "supply chain (n.): 供應鏈",
+      "investigation (n.): 調查",
+      "mitigate (v.): 減輕/緩和",
+      "compromised (adj.): 受損的/被洩漏的",
+      "access token (n.): 存取權杖",
+      "multi-factor authentication (n.): 多重身份驗證",
+      "unauthorized (adj.): 未經授權的"
+    ],
+    "quiz": [
+      {
+        "q": "What caused the security incident on GitHub?",
+        "options": [
+          "A human hacker",
+          "A malicious worm",
+          "A system update",
+          "A server crash"
+        ],
+        "answer": "A malicious worm"
+      },
+      {
+        "q": "Who was the primary target of this attack?",
+        "options": [
+          "General users",
+          "AI developers",
+          "Microsoft executives",
+          "Government officials"
+        ],
+        "answer": "AI developers"
+      },
+      {
+        "q": "What might have been exposed during the attack?",
+        "options": [
+          "Public weather data",
+          "Authentication credentials",
+          "Marketing strategies",
+          "Hardware blueprints"
+        ],
+        "answer": "Authentication credentials"
+      },
+      {
+        "q": "What does the incident highlight according to experts?",
+        "options": [
+          "The speed of AI",
+          "Vulnerabilities in software supply chains",
+          "The need for more developers",
+          "The cost of cloud storage"
+        ],
+        "answer": "Vulnerabilities in software supply chains"
+      },
+      {
+        "q": "What is Microsoft doing in response to the attack?",
+        "options": [
+          "Ignoring the issue",
+          "Shutting down GitHub permanently",
+          "Launching an investigation",
+          "Increasing subscription prices"
+        ],
+        "answer": "Launching an investigation"
+      },
+      {
+        "q": "What should users enable to protect their accounts?",
+        "options": [
+          "Guest login",
+          "Multi-factor authentication",
+          "Public sharing",
+          "Auto-reply"
+        ],
+        "answer": "Multi-factor authentication"
+      },
+      {
+        "q": "What does 'mitigate' mean in this context?",
+        "options": [
+          "To increase",
+          "To ignore",
+          "To reduce the severity of",
+          "To create"
+        ],
+        "answer": "To reduce the severity of"
+      },
+      {
+        "q": "What is a 'compromised' account?",
+        "options": [
+          "A secure account",
+          "An account that has been accessed by unauthorized parties",
+          "A deleted account",
+          "A premium account"
+        ],
+        "answer": "An account that has been accessed by unauthorized parties"
+      },
+      {
+        "q": "What is the main goal of an 'access token'?",
+        "options": [
+          "To verify identity",
+          "To store music",
+          "To send emails",
+          "To print documents"
+        ],
+        "answer": "To verify identity"
+      },
+      {
+        "q": "What is the tone of the news report?",
+        "options": [
+          "Factual",
+          "Humorous",
+          "Romantic",
+          "Fictional"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "What does 'unauthorized' mean?",
+        "options": [
+          "Official",
+          "Permitted",
+          "Without permission",
+          "Expensive"
+        ],
+        "answer": "Without permission"
+      },
+      {
+        "q": "What is the primary concern regarding the private repositories?",
+        "options": [
+          "They are too large",
+          "They might be exposed",
+          "They are empty",
+          "They are too fast"
+        ],
+        "answer": "They might be exposed"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "Anthropic發布最強AI模型Fable 5，引發關注",
+    "tabTitle": "科技",
+    "english": "On June 11, 2026, AI research company Anthropic officially unveiled Fable 5, marking the release of its most powerful artificial intelligence model to date. This advanced model promises significant breakthroughs in complex reasoning, language understanding, and creative generation, setting a new benchmark for AI capabilities. The launch has quickly garnered widespread attention from experts and the public, highlighting Anthropic's continued leadership in the rapidly evolving field of AI.",
+    "chinese": "2026年6月11日，人工智慧研究公司Anthropic正式發布了Fable 5，這是其迄今為止最強大的人工智慧模型。這款先進的模型有望在複雜推理、語言理解和創意生成方面取得重大突破，為人工智慧能力設定了新基準。此次發布迅速引起了專家和大眾的廣泛關注，彰顯了Anthropic在快速發展的人工智慧領域的持續領先地位。",
+    "vocabulary": [
+      "unveiled (v.): 發布，揭幕",
+      "marking (v.): 標誌著",
+      "release (n.): 發布",
+      "most powerful (adj. phr.): 最強大的",
+      "artificial intelligence (n.): 人工智慧",
+      "model (n.): 模型",
+      "to date (phr.): 迄今為止",
+      "advanced (adj.): 先進的",
+      "promises (v.): 承諾，有望",
+      "significant breakthroughs (n. phr.): 重大突破",
+      "complex reasoning (n. phr.): 複雜推理",
+      "language understanding (n. phr.): 語言理解",
+      "creative generation (n. phr.): 創意生成",
+      "setting a new benchmark (phr.): 設定新基準",
+      "capabilities (n.): 能力",
+      "garnered (v.): 獲得，引起",
+      "widespread attention (n. phr.): 廣泛關注",
+      "experts (n.): 專家",
+      "public (n.): 大眾",
+      "evolving (adj.): 不斷發展的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the name of the new AI model released by Anthropic?",
+        "options": [
+          "Fable AI",
+          "Anthropic 5",
+          "Fable 5",
+          "AI Model X"
+        ],
+        "answer": "Fable 5"
+      },
+      {
+        "q": "According to the news, when was Fable 5 officially unveiled?",
+        "options": [
+          "June 11, 2025",
+          "July 11, 2026",
+          "June 11, 2026",
+          "May 11, 2026"
+        ],
+        "answer": "June 11, 2026"
+      },
+      {
+        "q": "How is Fable 5 described in comparison to Anthropic's previous models?",
+        "options": [
+          "Its least complex model",
+          "Its most powerful model to date",
+          "Its first AI model",
+          "Its most user-friendly model"
+        ],
+        "answer": "Its most powerful model to date"
+      },
+      {
+        "q": "What kind of company is Anthropic?",
+        "options": [
+          "A software development company",
+          "An AI research company",
+          "A hardware manufacturing company",
+          "A social media platform"
+        ],
+        "answer": "An AI research company"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as an area where Fable 5 promises significant breakthroughs?",
+        "options": [
+          "Complex reasoning",
+          "Language understanding",
+          "Creative generation",
+          "Financial analysis"
+        ],
+        "answer": "Financial analysis"
+      },
+      {
+        "q": "What does the word \"unveiled\" most closely mean in the context of the news?",
+        "options": [
+          "Hidden",
+          "Discovered",
+          "Officially launched",
+          "Kept secret"
+        ],
+        "answer": "Officially launched"
+      },
+      {
+        "q": "The phrase \"to date\" in the sentence \"its most powerful artificial intelligence model to date\" means:",
+        "options": [
+          "For a specific appointment",
+          "Until now",
+          "In the future",
+          "On a particular day"
+        ],
+        "answer": "Until now"
+      },
+      {
+        "q": "How has the launch of Fable 5 been received by experts and the public?",
+        "options": [
+          "With indifference",
+          "With limited interest",
+          "It has garnered widespread attention",
+          "It was largely ignored"
+        ],
+        "answer": "It has garnered widespread attention"
+      },
+      {
+        "q": "What does \"setting a new benchmark\" imply for Fable 5?",
+        "options": [
+          "It is a standard model",
+          "It fails to meet expectations",
+          "It establishes a new standard or level of performance",
+          "It is only for testing purposes"
+        ],
+        "answer": "It establishes a new standard or level of performance"
+      },
+      {
+        "q": "In which domain does the news suggest Anthropic maintains leadership?",
+        "options": [
+          "Social media marketing",
+          "Traditional manufacturing",
+          "The rapidly evolving field of AI",
+          "Space exploration"
+        ],
+        "answer": "The rapidly evolving field of AI"
+      },
+      {
+        "q": "What is the meaning of \"capabilities\" as used in the text?",
+        "options": [
+          "Weaknesses",
+          "Limitations",
+          "Skills or abilities",
+          "Problems"
+        ],
+        "answer": "Skills or abilities"
+      },
+      {
+        "q": "The word \"evolving\" in \"rapidly evolving field of AI\" suggests the field is:",
+        "options": [
+          "Stagnant and unchanging",
+          "Declining in importance",
+          "Developing and changing quickly",
+          "Well-established and mature"
+        ],
+        "answer": "Developing and changing quickly"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
