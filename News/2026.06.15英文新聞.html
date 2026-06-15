@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 15, 2026：半導體、地緣政治 與 國際大事</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 專家預測台積電未來40座廠 台南將佔18座\nAn industry expert predicts that Taiwan Semiconductor Manufacturing Company (TSMC) will eventually operate forty fabrication plants, or fabs, globally. Among these advanced facilities, Tainan is projected to host eighteen, making the southern city the most critical hub for TSMC's cutting-edge chip production. This concentration highlights southern Taiwan's growing strategic importance in the global semiconductor supply chain. Local authorities are already upgrading infrastructure to support this massive industrial expansion and meet high resource demands.\n\n[2] 鄭麗文訪美受挫 白宮行程破局言論遭質疑\nTaiwanese politician Cheng Li-wun's recent visit to the United States reportedly faced difficulties, with her anticipated White House meetings being called off. This development sparked debate after her remarks about the trip's arrangements were questioned by various sources. Critics suggest her statements regarding high-level engagements might have been misleading or exaggerated. The incident has drawn significant attention in political circles, leading to scrutiny of her diplomatic efforts.\n\n[3] 蘋果iPhone 18今秋登場 折疊機明年初上市\nApple is set to launch its highly anticipated iPhone 18 series this coming fall, featuring advanced artificial intelligence integration and upgraded camera systems. Industry insiders reveal that these new models will boost global supply chain demands, benefiting several Taiwanese manufacturers. Furthermore, tech enthusiasts can look forward to Apple's first-ever foldable smartphone, which is rumored to debut early next year. This strategic move aims to challenge competitors in the premium foldable market segment.",
+    "chinese": "【1】專家預測台積電未來40座廠 台南將佔18座\n一名產業專家預測，台積電（TSMC）未來將在全球營運四十座晶圓廠。在這些先進設施中，台南預計將容納十八座，使這座南部城市成為台積電最尖端晶片生產的關鍵樞紐。這種高度集中凸顯了台灣南部在全球半導體供應鏈中日益增長的戰略重要性。地方政府已在升級基礎設施，以支持這一龐大的工業擴張並滿足高資源需求。\n\n【2】鄭麗文訪美受挫 白宮行程破局言論遭質疑\n台灣政治人物鄭麗文近期訪問美國據報導遭遇挫折，她預期的白宮會面遭到取消。這一進展在她就行程安排發表的言論受到多方質疑後引發了爭議。批評者認為，她關於高層接觸的說法可能具有誤導性或誇大其詞。此事件已在政治圈引起廣泛關注，導致外界對其外交努力進行審查。\n\n【3】蘋果iPhone 18今秋登場 折疊機明年初上市\n蘋果公司預計將於今年秋季推出備受期待的 iPhone 18 系列，其特點是整合了先進的人工智慧並升級了相機系統。業界人士透露，這些新機型將刺激全球供應鏈需求，使幾家台灣製造商受益。此外，科技愛好者可以期待蘋果首款折疊智慧型手機，據傳該手機將於明年初問世。這一戰略舉措旨在挑戰高端折疊手機市場中的競爭對手。",
+    "vocabulary": [
+      "predict (v.): 預測",
+      "fabrication plant (n.): 晶圓廠",
+      "globally (adv.): 全球地",
+      "advanced (adj.): 先進的",
+      "facility (n.): 設施",
+      "project (v.): 預計、規劃",
+      "host (v.): 主辦、容納、設有",
+      "critical (adj.): 關鍵的",
+      "hub (n.): 樞紐、中心",
+      "cutting-edge (adj.): 最尖端的、前沿的",
+      "concentration (n.): 集中",
+      "highlight (v.): 凸顯、強調",
+      "strategic (adj.): 戰略性的",
+      "semiconductor (n.): 半導體",
+      "supply chain (n.): 供應鏈",
+      "authority (n.): 當局、官方",
+      "upgrade (v.): 升級",
+      "infrastructure (n.): 基礎建設",
+      "expansion (n.): 擴張",
+      "resource (n.): 資源",
+      "politician (n.): 政治人物",
+      "visit (n.): 訪問",
+      "reportedly (adv.): 據報導",
+      "face difficulties (phr.): 面臨困難",
+      "anticipated (adj.): 預期的",
+      "White House (n.): 白宮",
+      "meetings (n.): 會面",
+      "call off (phr. v.): 取消",
+      "development (n.): 進展",
+      "spark debate (phr.): 引發爭議",
+      "remarks (n.): 言論，評論",
+      "arrangements (n.): 安排",
+      "questioned (v.): 受到質疑",
+      "sources (n.): 消息來源",
+      "critics (n.): 批評者",
+      "misleading (adj.): 誤導性的",
+      "exaggerated (adj.): 誇大其詞的",
+      "draw attention (phr.): 引起關注",
+      "scrutiny (n.): 審查",
+      "diplomatic efforts (phr.): 外交努力",
+      "anticipate (v.): 預期、期待",
+      "integration (n.): 整合、一體化",
+      "upgraded (adj.): 升級的",
+      "insider (n.): 業內人士、知情者",
+      "reveal (v.): 透露、揭露",
+      "boost (v.): 促進、推動",
+      "supply chain (n.): 供應鏈",
+      "manufacturer (n.): 製造商",
+      "enthusiast (n.): 熱衷者、愛好者",
+      "foldable (adj.): 可折疊的",
+      "rumor (v.): 謠傳、據傳",
+      "debut (v.): 首次亮相、問世",
+      "strategic (adj.): 戰略性的",
+      "competitor (n.): 競爭對手",
+      "premium (adj.): 高端的、優質的",
+      "segment (n.): 部分、板塊",
+      "launch (v.): 推出、發起",
+      "feature (v.): 以...為特色",
+      "benefit (v.): 得益、受惠",
+      "aim (v.): 旨在、目標在於"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A) TSMC's plans to shut down old fabs",
+          "B) The prediction of TSMC's future fabs and Tainan's role",
+          "C) A shortage of water and electricity in Tainan",
+          "D) Global semiconductor market decline"
+        ],
+        "answer": "B) The prediction of TSMC's future fabs and Tainan's role"
+      },
+      {
+        "q": "How many total fabs is TSMC predicted to operate globally in the future?",
+        "options": [
+          "A) 18",
+          "B) 40",
+          "C) 58",
+          "D) 24"
+        ],
+        "answer": "B) 40"
+      },
+      {
+        "q": "How many of the future fabs are projected to be located in Tainan?",
+        "options": [
+          "A) 18",
+          "B) 40",
+          "C) 12",
+          "D) 8"
+        ],
+        "answer": "A) 18"
+      },
+      {
+        "q": "Which word in the text means 'extremely modern and advanced'?",
+        "options": [
+          "A) strategic",
+          "B) cutting-edge",
+          "C) global",
+          "D) industrial"
+        ],
+        "answer": "B) cutting-edge"
+      },
+      {
+        "q": "According to the text, what is the strategic importance of southern Taiwan?",
+        "options": [
+          "A) It is the main agricultural exporter.",
+          "B) It is growing in importance in the global semiconductor supply chain.",
+          "C) It has the cheapest labor in Asia.",
+          "D) It is the center of global software development."
+        ],
+        "answer": "B) It is growing in importance in the global semiconductor supply chain."
+      },
+      {
+        "q": "What are local authorities doing to prepare for TSMC's expansion?",
+        "options": [
+          "A) Upgrading local infrastructure",
+          "B) Building new residential areas",
+          "C) Decreasing taxes for foreign employees",
+          "D) Closing older factories"
+        ],
+        "answer": "A) Upgrading local infrastructure"
+      },
+      {
+        "q": "What does the term 'fab' refer to in the semiconductor industry?",
+        "options": [
+          "A) Fabric store",
+          "B) Fabrication plant",
+          "C) Fabulous design",
+          "D) Fiber network"
+        ],
+        "answer": "B) Fabrication plant"
+      },
+      {
+        "q": "What is the meaning of the word 'hub' as used in the text?",
+        "options": [
+          "A) A wheel cover",
+          "B) A central or most active point",
+          "C) A minor branch",
+          "D) A type of computer virus"
+        ],
+        "answer": "B) A central or most active point"
+      },
+      {
+        "q": "Which of the following is closest in meaning to the word 'projected' in the text?",
+        "options": [
+          "A) thrown",
+          "B) estimated",
+          "C) rejected",
+          "D) completed"
+        ],
+        "answer": "B) estimated"
+      },
+      {
+        "q": "The word 'concentration' in the text refers to:",
+        "options": [
+          "A) Mental focus",
+          "B) The gathering of resources or facilities in one area",
+          "C) Chemical density",
+          "D) Educational degree"
+        ],
+        "answer": "B) The gathering of resources or facilities in one area"
+      },
+      {
+        "q": "Fill in the blank: 'The company plans to ______ its system to improve efficiency.'",
+        "options": [
+          "A) project",
+          "B) host",
+          "C) upgrade",
+          "D) highlight"
+        ],
+        "answer": "C) upgrade"
+      },
+      {
+        "q": "Which word is a synonym for 'massive' as used in the text?",
+        "options": [
+          "A) tiny",
+          "B) huge",
+          "C) temporary",
+          "D) minor"
+        ],
+        "answer": "B) huge"
+      },
+      {
+        "q": "What is the main subject of the news article?",
+        "options": [
+          "A) Taiwan's economic growth",
+          "B) Cheng Li-wun's US trip issues",
+          "C) US-Taiwan trade talks",
+          "D) White House security changes"
+        ],
+        "answer": "B) Cheng Li-wun's US trip issues"
+      },
+      {
+        "q": "What specifically sparked debate regarding Cheng Li-wun's trip?",
+        "options": [
+          "A) The cost of her travel",
+          "B) Her remarks about trip arrangements",
+          "C) Her choice of hotel",
+          "D) The weather during her visit"
+        ],
+        "answer": "B) Her remarks about trip arrangements"
+      },
+      {
+        "q": "What happened to Cheng Li-wun's anticipated White House meetings?",
+        "options": [
+          "A) They were postponed",
+          "B) They were successfully held",
+          "C) They were called off",
+          "D) They were moved to a different location"
+        ],
+        "answer": "C) They were called off"
+      },
+      {
+        "q": "How did critics describe Cheng Li-wun's statements about high-level engagements?",
+        "options": [
+          "A) Insightful and accurate",
+          "B) Misleading or exaggerated",
+          "C) Too brief and uninformative",
+          "D) Highly professional"
+        ],
+        "answer": "B) Misleading or exaggerated"
+      },
+      {
+        "q": "What has the incident drawn in political circles?",
+        "options": [
+          "A) Praise and admiration",
+          "B) Indifference",
+          "C) Significant attention and scrutiny",
+          "D) New policy proposals"
+        ],
+        "answer": "C) Significant attention and scrutiny"
+      },
+      {
+        "q": "In the sentence 'Cheng Li-wun's recent visit to the United States reportedly faced difficulties,' what does 'reportedly' mean?",
+        "options": [
+          "A) Confirmed by official sources",
+          "B) According to what is being said",
+          "C) Without any doubt",
+          "D) Secretly"
+        ],
+        "answer": "B) According to what is being said"
+      },
+      {
+        "q": "What is the meaning of 'called off' in the context of the White House meetings?",
+        "options": [
+          "A) Rescheduled",
+          "B) Postponed",
+          "C) Canceled",
+          "D) Announced"
+        ],
+        "answer": "C) Canceled"
+      },
+      {
+        "q": "The phrase 'sparked debate' suggests that the development:",
+        "options": [
+          "A) Ended all discussions",
+          "B) Initiated a heated discussion",
+          "C) Was met with universal agreement",
+          "D) Was ignored by the public"
+        ],
+        "answer": "B) Initiated a heated discussion"
+      },
+      {
+        "q": "What does 'scrutiny' imply regarding her diplomatic efforts?",
+        "options": [
+          "A) Casual observation",
+          "B) Careful and thorough examination",
+          "C) Public approval",
+          "D) Immediate acceptance"
+        ],
+        "answer": "B) Careful and thorough examination"
+      },
+      {
+        "q": "Her remarks about the trip's arrangements were questioned by whom?",
+        "options": [
+          "A) Only the White House staff",
+          "B) Only her political opponents",
+          "C) Various sources",
+          "D) Only the media"
+        ],
+        "answer": "C) Various sources"
+      },
+      {
+        "q": "The news primarily discusses which type of figures?",
+        "options": [
+          "A) Business leaders",
+          "B) Entertainment celebrities",
+          "C) Political figures",
+          "D) Academic researchers"
+        ],
+        "answer": "C) Political figures"
+      },
+      {
+        "q": "What is the overall tone of the news article?",
+        "options": [
+          "A) Celebratory",
+          "B) Critical",
+          "C) Neutral and factual",
+          "D) Humorous"
+        ],
+        "answer": "C) Neutral and factual"
+      },
+      {
+        "q": "When is the iPhone 18 series expected to be launched?",
+        "options": [
+          "A) Early next year",
+          "B) This coming fall",
+          "C) Next summer",
+          "D) Late 2027"
+        ],
+        "answer": "B) This coming fall"
+      },
+      {
+        "q": "What is one of the main features of the upcoming iPhone 18?",
+        "options": [
+          "A) Solar charging",
+          "B) Advanced AI integration",
+          "C) Holographic display",
+          "D) Waterproof casing"
+        ],
+        "answer": "B) Advanced AI integration"
+      },
+      {
+        "q": "Which group of people is expected to benefit from the new iPhone models?",
+        "options": [
+          "A) Agricultural workers",
+          "B) Taiwanese manufacturers",
+          "C) Car designers",
+          "D) Fashion brands"
+        ],
+        "answer": "B) Taiwanese manufacturers"
+      },
+      {
+        "q": "When is Apple's first foldable smartphone rumored to debut?",
+        "options": [
+          "A) This fall",
+          "B) Late next year",
+          "C) Early next year",
+          "D) In three years"
+        ],
+        "answer": "C) Early next year"
+      },
+      {
+        "q": "What is the main goal of releasing a foldable phone for Apple?",
+        "options": [
+          "A) To lower production costs",
+          "B) To challenge competitors in the premium market",
+          "C) To replace the iPad",
+          "D) To reduce supply chain demands"
+        ],
+        "answer": "B) To challenge competitors in the premium market"
+      },
+      {
+        "q": "Which word is closest in meaning to 'anticipate'?",
+        "options": [
+          "A) Ignore",
+          "B) Expect",
+          "C) Dislike",
+          "D) Delay"
+        ],
+        "answer": "B) Expect"
+      },
+      {
+        "q": "Complete the sentence: 'The company plans to _______ a new product line next month.'",
+        "options": [
+          "A) launch",
+          "B) segment",
+          "C) rumor",
+          "D) benefit"
+        ],
+        "answer": "A) launch"
+      },
+      {
+        "q": "What does the word 'premium' mean in the context of the passage?",
+        "options": [
+          "A) Low-quality and cheap",
+          "B) High-quality and expensive",
+          "C) Free of charge",
+          "D) Outdated"
+        ],
+        "answer": "B) High-quality and expensive"
+      },
+      {
+        "q": "In the text, who revealed information about the supply chain demands?",
+        "options": [
+          "A) Competitors",
+          "B) Industry insiders",
+          "C) Customers",
+          "D) Government officials"
+        ],
+        "answer": "B) Industry insiders"
+      },
+      {
+        "q": "The word 'debut' in the text most closely means:",
+        "options": [
+          "A) To retire from the market",
+          "B) To perform poorly",
+          "C) To appear in public for the first time",
+          "D) To increase in price"
+        ],
+        "answer": "C) To appear in public for the first time"
+      },
+      {
+        "q": "Complete the sentence: 'The new software update will _______ the overall performance of the device.'",
+        "options": [
+          "A) integration",
+          "B) boost",
+          "C) strategic",
+          "D) enthusiast"
+        ],
+        "answer": "B) boost"
+      },
+      {
+        "q": "Which of the following is an adjective meaning 'capable of being folded'?",
+        "options": [
+          "A) Foldable",
+          "B) Premium",
+          "C) Strategic",
+          "D) Upgraded"
+        ],
+        "answer": "A) Foldable"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美伊達成和平協議 荷莫茲海峽重開油價大跌",
+    "tabTitle": "地緣政治",
+    "english": "The United States and Iran have officially signed a historic peace agreement, leading to the immediate reopening of the strategic Strait of Hormuz. This diplomatic breakthrough has successfully resolved years of maritime tensions and restored stability to critical global shipping lanes. Following the official announcement, global crude oil prices plummeted significantly as market supply concerns eased. Financial analysts predict that this landmark accord will foster broader economic cooperation and drastically reduce geopolitical risks across the Middle East.",
+    "chinese": "美國與伊朗已正式簽署一項歷史性的和平協議，促使具戰略地位的荷莫茲海峽立即重新開放。這項外交突破成功解決了長年來的海上緊張局勢，並恢復了關鍵全球航道的穩定。在官方聲明發布後，隨著市場供應擔憂的緩解，全球原油價格大幅下跌。金融分析師預測，這項里程碑式的協定將促進更廣泛的經濟合作，並大幅降低中東地區的地緣政治風險。",
+    "vocabulary": [
+      "historic (adj.): 歷史性的",
+      "agreement (n.): 協議",
+      "strategic (adj.): 戰略性的",
+      "breakthrough (n.): 突破",
+      "maritime (adj.): 海事的海上的",
+      "tension (n.): 緊張局勢",
+      "restore (v.): 恢復",
+      "stability (n.): 穩定",
+      "critical (adj.): 關鍵的",
+      "shipping lane (n. phr.): 航道",
+      "crude oil (n. phr.): 原油",
+      "plummet (v.): 暴跌",
+      "significantly (adv.): 顯著地",
+      "ease (v.): 緩解減輕",
+      "analyst (n.): 分析師",
+      "landmark (adj.): 里程碑式的",
+      "accord (n.): 協定協議",
+      "foster (v.): 促進培養",
+      "cooperation (n.): 合作",
+      "geopolitical (adj.): 地緣政治的"
+    ],
+    "quiz": [
+      {
+        "q": "According to the news, what led to the reopening of the Strait of Hormuz?",
+        "options": [
+          "A military intervention",
+          "A historic peace agreement",
+          "A sudden rise in oil demand",
+          "An economic sanction"
+        ],
+        "answer": "A historic peace agreement"
+      },
+      {
+        "q": "What was the immediate reaction of global crude oil prices to the announcement?",
+        "options": [
+          "They remained unchanged",
+          "They rose sharply",
+          "They plummeted significantly",
+          "They fluctuated unpredictably"
+        ],
+        "answer": "They plummeted significantly"
+      },
+      {
+        "q": "Which of the following is closest in meaning to the word 'plummet'?",
+        "options": [
+          "To stabilize",
+          "To drop rapidly",
+          "To increase gradually",
+          "To fluctuate"
+        ],
+        "answer": "To drop rapidly"
+      },
+      {
+        "q": "The adjective 'maritime' is associated with which of the following?",
+        "options": [
+          "Outer space",
+          "The sea and shipping",
+          "Mountainous terrain",
+          "Agricultural development"
+        ],
+        "answer": "The sea and shipping"
+      },
+      {
+        "q": "What did the peace agreement successfully resolve?",
+        "options": [
+          "Years of maritime tensions",
+          "Domestic inflation in the US",
+          "Global climate change issues",
+          "European border disputes"
+        ],
+        "answer": "Years of maritime tensions"
+      },
+      {
+        "q": "In the sentence 'market supply concerns eased', what does 'eased' mean?",
+        "options": [
+          "Became more intense",
+          "Became less severe",
+          "Remained hidden",
+          "Caused panic"
+        ],
+        "answer": "Became less severe"
+      },
+      {
+        "q": "Complete the sentence: 'The agreement restored stability ________ critical global shipping lanes.'",
+        "options": [
+          "to",
+          "at",
+          "with",
+          "by"
+        ],
+        "answer": "to"
+      },
+      {
+        "q": "What does a 'landmark' accord refer to?",
+        "options": [
+          "An agreement about land ownership",
+          "An agreement of major historical importance",
+          "A temporary deal",
+          "A secret political contract"
+        ],
+        "answer": "An agreement of major historical importance"
+      },
+      {
+        "q": "Who predicted that the accord would reduce geopolitical risks in the Middle East?",
+        "options": [
+          "Military generals",
+          "Oil company CEOs",
+          "Financial analysts",
+          "Environmental activists"
+        ],
+        "answer": "Financial analysts"
+      },
+      {
+        "q": "Which of the following is a synonym for 'foster' as used in the text?",
+        "options": [
+          "To discourage",
+          "To ignore",
+          "To promote",
+          "To delay"
+        ],
+        "answer": "To promote"
+      },
+      {
+        "q": "Which region is expected to see a reduction in geopolitical risks?",
+        "options": [
+          "East Asia",
+          "The Middle East",
+          "South America",
+          "Eastern Europe"
+        ],
+        "answer": "The Middle East"
+      },
+      {
+        "q": "What is another word used in the text that means 'agreement'?",
+        "options": [
+          "Accord",
+          "Tension",
+          "Breakthrough",
+          "Milestone"
+        ],
+        "answer": "Accord"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "南極半島異常高溫 超正常水平20度",
+    "tabTitle": "國際大事",
+    "english": "The Antarctic Peninsula is currently experiencing an unprecedented heatwave, with temperatures soaring up to 20 degrees Celsius above normal levels for this season. Scientists warn that this abnormal warming could accelerate ice shelf collapse, drastically contributing to rising global sea levels. This extreme weather event highlights the intensifying impacts of climate change on the Earth's polar regions. Consequently, experts are urging immediate international action to mitigate further ecological damage before the damage becomes irreversible.",
+    "chinese": "南極半島目前正經歷一場前所未有的熱浪，氣溫比往年同期的正常水平高出高達攝氏20度。科學家警告，這種異常的升溫可能會加速冰架崩塌，從而劇烈地導致全球海平面上升。這一極端天氣事件凸顯了氣候變遷對地球極地地區日益加劇的影響。因此，專家們正敦促國際社會立即採取行動，以在生態破壞變得不可逆轉之前減輕其影響。",
+    "vocabulary": [
+      "peninsula (n.): 半島",
+      "unprecedented (adj.): 前所未有的",
+      "heatwave (n.): 熱浪",
+      "soar (v.): 急升，猛增",
+      "abnormal (adj.): 異常的",
+      "accelerate (v.): 加速",
+      "collapse (n./v.): 崩塌，倒塌",
+      "drastically (adv.): 徹底地，劇烈地",
+      "contribute to (phr.): 導致，貢獻於",
+      "extreme (adj.): 極端的",
+      "highlight (v.): 凸顯，強調",
+      "intensifying (adj.): 加劇的，增強的",
+      "impact (n.): 影響，衝擊",
+      "polar (adj.): 極地的",
+      "consequently (adv.): 因此，結果",
+      "urge (v.): 敦促，催促",
+      "mitigate (v.): 減輕，緩和",
+      "ecological (adj.): 生態的",
+      "irreversible (adj.): 不可逆轉的",
+      "level (n.): 水平，標準"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A. A sudden drop in global sea levels",
+          "B. Unprecedented high temperatures in the Antarctic Peninsula",
+          "C. A successful international ecological mission",
+          "D. The discovery of new species in polar regions"
+        ],
+        "answer": "B. Unprecedented high temperatures in the Antarctic Peninsula"
+      },
+      {
+        "q": "How much higher are the current temperatures in the Antarctic Peninsula compared to normal levels?",
+        "options": [
+          "A. 10 degrees Celsius",
+          "B. 15 degrees Celsius",
+          "C. 20 degrees Celsius",
+          "D. 25 degrees Celsius"
+        ],
+        "answer": "C. 20 degrees Celsius"
+      },
+      {
+        "q": "According to scientists, what could the abnormal warming accelerate?",
+        "options": [
+          "A. The growth of polar forests",
+          "B. The collapse of ice shelves",
+          "C. The cooling of the oceans",
+          "D. The reduction of carbon emissions"
+        ],
+        "answer": "B. The collapse of ice shelves"
+      },
+      {
+        "q": "What does the word 'unprecedented' mean in the text?",
+        "options": [
+          "A. Never having happened or existed before",
+          "B. Occurring at regular intervals",
+          "C. Expected and planned for",
+          "D. Extremely dangerous and harmful"
+        ],
+        "answer": "A. Never having happened or existed before"
+      },
+      {
+        "q": "Which word is closest in meaning to 'soaring'?",
+        "options": [
+          "A. Dropping",
+          "B. Fluctuating",
+          "C. Stabilizing",
+          "D. Rising rapidly"
+        ],
+        "answer": "D. Rising rapidly"
+      },
+      {
+        "q": "Complete the sentence: 'The government took steps to _______ the economic impact of the crisis.'",
+        "options": [
+          "A. accelerate",
+          "B. mitigate",
+          "C. collapse",
+          "D. highlight"
+        ],
+        "answer": "B. mitigate"
+      },
+      {
+        "q": "What is the noun form of 'intensifying' as used in the context of making something stronger?",
+        "options": [
+          "A. Intensity",
+          "B. Intensively",
+          "C. Intense",
+          "D. Intensifier"
+        ],
+        "answer": "A. Intensity"
+      },
+      {
+        "q": "'The damage caused by the oil spill is _______, meaning it cannot be undone.'",
+        "options": [
+          "A. irreversible",
+          "B. abnormal",
+          "C. polar",
+          "D. unprecedented"
+        ],
+        "answer": "A. irreversible"
+      },
+      {
+        "q": "What do experts urge the international community to do?",
+        "options": [
+          "A. Stop scientific research in Antarctica",
+          "B. Take immediate action to mitigate ecological damage",
+          "C. Relocate coastal populations",
+          "D. Increase carbon emissions"
+        ],
+        "answer": "B. Take immediate action to mitigate ecological damage"
+      },
+      {
+        "q": "The word 'consequently' is used to show:",
+        "options": [
+          "A. Contrast",
+          "B. Cause and effect",
+          "C. Comparison",
+          "D. Time sequence"
+        ],
+        "answer": "B. Cause and effect"
+      },
+      {
+        "q": "In the sentence 'Scientists warn that this abnormal warming could accelerate...', the word 'that' functions as:",
+        "options": [
+          "A. A relative pronoun",
+          "B. A demonstrative pronoun",
+          "C. A conjunction introducing a noun clause",
+          "D. An adverb of degree"
+        ],
+        "answer": "C. A conjunction introducing a noun clause"
+      },
+      {
+        "q": "Which of the following is the opposite of 'abnormal'?",
+        "options": [
+          "A. Extreme",
+          "B. Normal",
+          "C. Ecological",
+          "D. Irreversible"
+        ],
+        "answer": "B. Normal"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "三星推海上浮動數據中心 助解AI算力瓶頸",
+    "tabTitle": "科技",
+    "english": "Samsung has proposed building floating data centers on the ocean to address the growing compute bottlenecks of artificial intelligence. These offshore facilities will utilize seawater for cooling, significantly reducing the massive energy and water consumption associated with traditional land-based servers. By placing data centers on water, Samsung aims to bypass land acquisition challenges and minimize environmental impacts. If implemented, this innovative approach could provide a sustainable and scalable infrastructure solution to support the global surge in AI workloads.",
+    "chinese": "三星提議在海上建造浮動數據中心，以解決人工智慧日益增長的算力瓶頸。這些離岸設施將利用海水進行冷卻，從而顯著減少傳統陸基伺服器所帶來的龐大能源與水資源消耗。透過將數據中心置於水面上，三星旨在繞過土地取得的挑戰並最大程度地減少對環境的影響。如果得以實施，這種創新方法將能提供一個具備永續性且可擴展的基礎設施解決方案，以支持全球人工智慧工作負載的急遽增長。",
+    "vocabulary": [
+      "propose (v.): 提議；提出",
+      "floating (adj.): 浮動的；漂浮的",
+      "address (v.): 解決；處理",
+      "compute (n.): 算力；計算",
+      "bottleneck (n.): 瓶頸",
+      "artificial intelligence (n.): 人工智慧",
+      "offshore (adj.): 離岸的；海上的",
+      "facility (n.): 設施；設備",
+      "utilize (v.): 利用；使用",
+      "cooling (n.): 冷卻",
+      "significantly (adv.): 顯著地",
+      "massive (adj.): 巨大的；龐大的",
+      "consumption (n.): 消耗；消耗量",
+      "traditional (adj.): 傳統的",
+      "bypass (v.): 繞過；避開",
+      "acquisition (n.): 取得；獲得",
+      "minimize (v.): 使減到最少；最小化",
+      "implement (v.): 實施；執行",
+      "sustainable (adj.): 永續的；可持續的",
+      "infrastructure (n.): 基礎設施"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of Samsung's proposed floating data centers?",
+        "options": [
+          "To generate renewable wave energy",
+          "To solve AI compute bottlenecks",
+          "To conduct marine research",
+          "To manufacture semiconductors at sea"
+        ],
+        "answer": "To solve AI compute bottlenecks"
+      },
+      {
+        "q": "How will these offshore facilities cool their servers?",
+        "options": [
+          "By using liquid nitrogen",
+          "By utilizing seawater",
+          "By relying on powerful wind turbines",
+          "By importing ice from polar regions"
+        ],
+        "answer": "By utilizing seawater"
+      },
+      {
+        "q": "What major issue of land-based servers does this proposal aim to reduce?",
+        "options": [
+          "High construction labor costs",
+          "Massive energy and water consumption",
+          "Cyber security vulnerabilities",
+          "Slow internet connection speeds"
+        ],
+        "answer": "Massive energy and water consumption"
+      },
+      {
+        "q": "By placing data centers on water, which challenge does Samsung hope to bypass?",
+        "options": [
+          "Land acquisition challenges",
+          "Strict maritime laws",
+          "Satellite communication delays",
+          "High tax rates in cities"
+        ],
+        "answer": "Land acquisition challenges"
+      },
+      {
+        "q": "Which word in the text means 'to deal with or take action on a problem'?",
+        "options": [
+          "propose",
+          "address",
+          "bypass",
+          "implement"
+        ],
+        "answer": "address"
+      },
+      {
+        "q": "What does the word 'offshore' mean?",
+        "options": [
+          "Far away from any water source",
+          "Located in the deep underground",
+          "Situated at a distance from the shore",
+          "Built on the top of a mountain"
+        ],
+        "answer": "Situated at a distance from the shore"
+      },
+      {
+        "q": "According to the text, the proposed floating data centers are described as a(n) ________ approach.",
+        "options": [
+          "outdated",
+          "illegal",
+          "innovative",
+          "expensive"
+        ],
+        "answer": "innovative"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a benefit of the floating data centers?",
+        "options": [
+          "Reducing environmental impact",
+          "Eliminating the need for internet cables",
+          "Bypassing land acquisition challenges",
+          "Using seawater for cooling"
+        ],
+        "answer": "Eliminating the need for internet cables"
+      },
+      {
+        "q": "Fill in the blank: The global surge in AI ________ requires more advanced infrastructure.",
+        "options": [
+          "workloads",
+          "regulations",
+          "marketing",
+          "hardware"
+        ],
+        "answer": "workloads"
+      },
+      {
+        "q": "What is the meaning of the word 'sustainable' in the context of the passage?",
+        "options": [
+          "Able to be maintained at a certain level without depleting resources",
+          "Highly profitable in a short period of time",
+          "Difficult to replicate by competitors",
+          "Extremely fast and powerful"
+        ],
+        "answer": "Able to be maintained at a certain level without depleting resources"
+      },
+      {
+        "q": "What does the word 'bottleneck' refer to in the text?",
+        "options": [
+          "A container for storing liquids",
+          "A situation that causes delay or stops progress",
+          "A narrow path on a mountain",
+          "A type of security breach"
+        ],
+        "answer": "A situation that causes delay or stops progress"
+      },
+      {
+        "q": "If the proposal is ________, it could provide a scalable solution.",
+        "options": [
+          "implemented",
+          "ignored",
+          "delayed",
+          "prohibited"
+        ],
+        "answer": "implemented"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "英特爾14A製程劍指晶圓代工龍頭 展現美國決心",
+    "tabTitle": "科技",
+    "english": "Intel has officially unveiled its advanced 14A semiconductor manufacturing process, signaling a major step forward in its quest to challenge TSMC for foundry leadership. This milestone underscores the United States' determination to reclaim its dominant position in global chip manufacturing. By integrating cutting-edge High-NA EUV lithography technology, Intel aims to deliver unprecedented performance and efficiency. Industry analysts believe that the 14A process will play a pivotal role in securing domestic supply chains and driving artificial intelligence innovations worldwide.",
+    "chinese": "英特爾正式推出了其先進的 14A 半導體製造製程，這標誌著其在挑戰台積電以爭奪晶圓代工龍頭地位的過程中邁出了重要一步。這一里程碑凸顯了美國重奪全球晶片製造主導地位的決心。藉由整合尖端的高數值孔徑極紫外光（High-NA EUV）微影技術，英特爾旨在提供前所未有的效能與效率。產業分析師認為，14A 製程將在保障國內供應鏈以及推動全球人工智慧創新方面發揮關鍵作用。",
+    "vocabulary": [
+      "unveil (v.): 發表；推出",
+      "advanced (adj.): 先進的",
+      "semiconductor (n.): 半導體",
+      "foundry (n.): 晶圓代工廠",
+      "quest (n.): 追求；探索",
+      "milestone (n.): 里程碑",
+      "underscore (v.): 強調；凸顯",
+      "determination (n.): 決心",
+      "reclaim (v.): 奪回；收回",
+      "dominant (adj.): 主導的；支配的",
+      "integrate (v.): 整合；合併",
+      "cutting-edge (adj.): 尖端的；最前沿的",
+      "lithography (n.): 微影技術；光刻",
+      "unprecedented (adj.): 前所未有的",
+      "efficiency (n.): 效率",
+      "analyst (n.): 分析師",
+      "pivotal (adj.): 關鍵的；核心的",
+      "secure (v.): 鞏固；保障",
+      "domestic (adj.): 國內的",
+      "innovation (n.): 創新"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main objective of Intel's 14A process mentioned in the text?",
+        "options": [
+          "To reduce the price of consumer electronics",
+          "To challenge TSMC for foundry leadership",
+          "To expand its software development department",
+          "To transition entirely into a cloud service provider"
+        ],
+        "answer": "To challenge TSMC for foundry leadership"
+      },
+      {
+        "q": "Which country's determination to reclaim chip manufacturing dominance is highlighted?",
+        "options": [
+          "Taiwan",
+          "South Korea",
+          "The United States",
+          "Germany"
+        ],
+        "answer": "The United States"
+      },
+      {
+        "q": "What cutting-edge technology is integrated into the 14A process?",
+        "options": [
+          "High-NA EUV lithography",
+          "Quantum computing algorithms",
+          "6G wireless communication",
+          "Carbon nanotube packaging"
+        ],
+        "answer": "High-NA EUV lithography"
+      },
+      {
+        "q": "According to the text, what will the 14A process help to secure?",
+        "options": [
+          "International trade agreements",
+          "Domestic supply chains",
+          "Intellectual property rights",
+          "Software patent laws"
+        ],
+        "answer": "Domestic supply chains"
+      },
+      {
+        "q": "What does the word 'underscore' mean in the text?",
+        "options": [
+          "To ignore or overlook",
+          "To draw a line under a word",
+          "To emphasize or highlight",
+          "To decrease in value"
+        ],
+        "answer": "To emphasize or highlight"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'unprecedented'?",
+        "options": [
+          "Highly predictable",
+          "Never done or known before",
+          "Extremely expensive",
+          "Outdated and obsolete"
+        ],
+        "answer": "Never done or known before"
+      },
+      {
+        "q": "The word 'quest' in the first sentence is closest in meaning to:",
+        "options": [
+          "Request",
+          "Question",
+          "Search or pursuit",
+          "Failure"
+        ],
+        "answer": "Search or pursuit"
+      },
+      {
+        "q": "What role is the 14A process expected to play in AI innovations, according to analysts?",
+        "options": [
+          "A minor, negligible role",
+          "A pivotal role",
+          "A destructive role",
+          "A temporary role"
+        ],
+        "answer": "A pivotal role"
+      },
+      {
+        "q": "Fill in the blank: Intel has officially ______ its new manufacturing process.",
+        "options": [
+          "concealed",
+          "unveiled",
+          "postponed",
+          "rejected"
+        ],
+        "answer": "unveiled"
+      },
+      {
+        "q": "What is the primary focus of a 'foundry' in the semiconductor industry?",
+        "options": [
+          "Designing software applications",
+          "Manufacturing chips designed by other companies",
+          "Mining raw silicon from the earth",
+          "Selling retail electronic devices"
+        ],
+        "answer": "Manufacturing chips designed by other companies"
+      },
+      {
+        "q": "Which word describes something that is 'at the forefront of trend or technology'?",
+        "options": [
+          "Domestic",
+          "Cutting-edge",
+          "Obsolete",
+          "Pivotal"
+        ],
+        "answer": "Cutting-edge"
+      },
+      {
+        "q": "What is the tone of the news article?",
+        "options": [
+          "Factual and informative",
+          "Sarcastic and skeptical",
+          "Emotional and dramatic",
+          "Disappointed and critical"
+        ],
+        "answer": "Factual and informative"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
