@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 16, 2026：科技、金融市場 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電攜手揖斐電、群創，推進玻璃基板封裝技術。\nTSMC is reportedly collaborating with Japanese supplier Ibiden and Taiwanese panel maker Innolux to advance glass substrate packaging technology. This partnership aims to address the physical limitations of organic materials currently used in advanced packaging. Glass substrates offer superior flatness and thermal stability, which are crucial for next-generation AI chips. By leveraging Ibiden's substrate expertise and Innolux's panel production capabilities, TSMC hopes to accelerate the commercialization of this cutting-edge technology to meet growing high-performance computing demands.\n\n[2] 亞馬遜AWS宣布在台投資數十億美元，建雲端基礎設施。\nAmazon Web Services (AWS) has announced a major investment of billions of dollars in Taiwan over the next fifteen years to build its cloud infrastructure. This initiative includes launching a new AWS infrastructure region in Taiwan by early 2025, enabling local businesses to store data securely and run applications with lower latency. Furthermore, the tech giant plans to collaborate with local partners to cultivate digital talent and accelerate cloud adoption across various industries, reinforcing Taiwan's position as a key technology hub in the Asia-Pacific region.\n\n[3] 環球晶圓遭駭客攻擊，部分半導體產線營運受影響。\nGlobalWafers, one of the world's largest silicon wafer manufacturers, recently experienced a major cyberattack that disrupted some of its semiconductor production lines. The company immediately initiated emergency response procedures, isolating affected systems to prevent further damage. While some operations were temporarily halted, GlobalWafers stated that it is working closely with cybersecurity experts to restore full capacity safely. The incident highlights the growing vulnerability of critical supply chains to digital threats in the tech industry.",
+    "chinese": "【1】台積電攜手揖斐電、群創，推進玻璃基板封裝技術。\n據報導，台積電正與日本供應商揖斐電（Ibiden）及台灣面板大廠群創光電（Innolux）合作，共同推進玻璃基板封裝技術。此合作夥伴關係旨在解決目前先進封裝中使用的有機材料之物理限制。玻璃基板具有優異的平整度與熱穩定性，這對於下一代人工智慧（AI）晶片至關重要。藉由結合揖斐電的基板專業技術與群創的面板生產能力，台積電期望加速這項前沿技術的商業化，以滿足日益增長的高效能運算需求。\n\n【2】亞馬遜AWS宣布在台投資數十億美元，建雲端基礎設施。\n亞馬遜網路服務（AWS）宣布將在未來十五年內，於台灣投資數十億美元以建設其雲端基礎設施。此項計畫包括在2025年初前於台灣啟用全新的 AWS 基礎設施區域，使在地企業能夠安全地儲存數據，並以更低的延遲執行應用程式。此外，這家科技巨頭計畫與在地夥伴合作，培育數位人才並加速各行各業的雲端導入，進一步鞏固台灣作為亞太地區關鍵科技樞紐的地位。\n\n【3】環球晶圓遭駭客攻擊，部分半導體產線營運受影響。\n全球最大矽晶圓製造商之一的環球晶圓，最近遭受了嚴重的網路攻擊，導致其部分半導體生產線中斷。該公司立即啟動了緊急應變程序，隔離受影響的系統以防止進一步的損害。雖然部分營運暫時中止，但環球晶圓表示，目前正與網路安全專家密切合作，以安全地恢復全部產能。此事件凸顯了科技產業中關鍵供應鏈面對數位威脅時，其脆弱性正日益增加。",
+    "vocabulary": [
+      "collaborate (v.): 合作",
+      "supplier (n.): 供應商",
+      "advance (v.): 推進；促進",
+      "substrate (n.): 基板；底層",
+      "packaging (n.): 封裝；包裝",
+      "partnership (n.): 合作夥伴關係",
+      "address (v.): 處理；應對",
+      "physical (adj.): 物理的；身體的",
+      "limitation (n.): 限制；局限",
+      "organic (adj.): 有機的",
+      "currently (adv.): 目前",
+      "superior (adj.): 優異的；較佳的",
+      "flatness (n.): 平整度",
+      "thermal stability (n. phr.): 熱穩定性",
+      "crucial (adj.): 至關重要的",
+      "leverage (v.): 利用；槓桿化",
+      "expertise (n.): 專業知識；專長",
+      "accelerate (v.): 加速",
+      "commercialization (n.): 商業化",
+      "high-performance computing (n. phr.): 高效能運算",
+      "infrastructure (n.): 基礎設施",
+      "investment (n.): 投資",
+      "initiative (n.): 倡議；計畫",
+      "launch (v.): 啟用；發起",
+      "securely (adv.): 安全地",
+      "latency (n.): 延遲",
+      "collaborate (v.): 合作",
+      "cultivate (v.): 培育；培養",
+      "talent (n.): 人才",
+      "accelerate (v.): 加速",
+      "adoption (n.): 採用；導入",
+      "reinforce (v.): 鞏固；加強",
+      "key (adj.): 關鍵的",
+      "hub (n.): 樞紐；中心",
+      "various (adj.): 各種不同的",
+      "industry (n.): 行業；產業",
+      "local (adj.): 在地的；當地的",
+      "giant (n.): 巨頭；大企業",
+      "enable (v.): 使能夠",
+      "application (n.): 應用程式",
+      "manufacturer (n.): 製造商",
+      "silicon wafer (n.): 矽晶圓",
+      "cyberattack (n.): 網路攻擊",
+      "disrupt (v.): 中斷；擾亂",
+      "semiconductor (n.): 半導體",
+      "initiate (v.): 啟動；開始",
+      "emergency response (n.): 緊急應變",
+      "procedure (n.): 程序；步驟",
+      "isolate (v.): 隔離；孤立",
+      "temporary (adj.): 暫時的",
+      "halt (v.): 停止；中止",
+      "capacity (n.): 產能；容量",
+      "restore (v.): 恢復；重建",
+      "incident (n.): 事件",
+      "highlight (v.): 凸顯；強調",
+      "vulnerability (n.): 脆弱性；弱點",
+      "critical (adj.): 關鍵的；至關重要的",
+      "supply chain (n.): 供應鏈",
+      "threat (n.): 威脅",
+      "cybersecurity (n.): 網路安全"
+    ],
+    "quiz": [
+      {
+        "q": "Who is TSMC collaborating with for the glass substrate packaging technology?",
+        "options": [
+          "Intel and Samsung",
+          "Ibiden and Innolux",
+          "Sony and Foxconn",
+          "NVIDIA and AMD"
+        ],
+        "answer": "Ibiden and Innolux"
+      },
+      {
+        "q": "What is the main purpose of using glass substrates instead of organic materials?",
+        "options": [
+          "To reduce production costs drastically",
+          "To overcome physical limitations of organic materials",
+          "To make chips lighter and more flexible",
+          "To replace silicon completely"
+        ],
+        "answer": "To overcome physical limitations of organic materials"
+      },
+      {
+        "q": "Which of the following properties makes glass substrates suitable for next-generation AI chips?",
+        "options": [
+          "High flexibility and low cost",
+          "Superior flatness and thermal stability",
+          "Transparency and water resistance",
+          "Biodegradability and softness"
+        ],
+        "answer": "Superior flatness and thermal stability"
+      },
+      {
+        "q": "What does Innolux contribute to this partnership?",
+        "options": [
+          "Software development",
+          "Panel production capabilities",
+          "Glass raw materials",
+          "AI algorithms"
+        ],
+        "answer": "Panel production capabilities"
+      },
+      {
+        "q": "What is the meaning of the verb 'leverage' in the context of the passage?",
+        "options": [
+          "To ignore",
+          "To negotiate",
+          "To utilize or take advantage of",
+          "To borrow money"
+        ],
+        "answer": "To utilize or take advantage of"
+      },
+      {
+        "q": "What demand is driving the commercialization of this new technology?",
+        "options": [
+          "Consumer smartphone displays",
+          "Automotive engine efficiency",
+          "High-performance computing",
+          "Solar panel installation"
+        ],
+        "answer": "High-performance computing"
+      },
+      {
+        "q": "Choose the word closest in meaning to 'crucial' as used in the text.",
+        "options": [
+          "Optional",
+          "Essential",
+          "Difficult",
+          "Minor"
+        ],
+        "answer": "Essential"
+      },
+      {
+        "q": "Complete the sentence: The new partnership aims to ________ the physical limitations of current materials.",
+        "options": [
+          "address",
+          "addressing",
+          "addressed",
+          "addresses"
+        ],
+        "answer": "address"
+      },
+      {
+        "q": "What does 'commercialization' mean?",
+        "options": [
+          "The process of making something available on the market",
+          "The process of scientific research in a lab",
+          "The reduction of advertising budgets",
+          "The regulation of international trade"
+        ],
+        "answer": "The process of making something available on the market"
+      },
+      {
+        "q": "Which word is a synonym for 'advance' as used in 'advance glass substrate packaging technology'?",
+        "options": [
+          "delay",
+          "promote",
+          "retreat",
+          "purchase"
+        ],
+        "answer": "promote"
+      },
+      {
+        "q": "Ibiden is a supplier based in which country?",
+        "options": [
+          "Taiwan",
+          "South Korea",
+          "Japan",
+          "The United States"
+        ],
+        "answer": "Japan"
+      },
+      {
+        "q": "What is the noun form of 'stable' used in the text?",
+        "options": [
+          "stability",
+          "stabilize",
+          "stably",
+          "stabilization"
+        ],
+        "answer": "stability"
+      },
+      {
+        "q": "What is the main announcement made by AWS regarding Taiwan?",
+        "options": [
+          "A) To acquire a local tech company",
+          "B) To invest billions of dollars in cloud infrastructure",
+          "C) To close its offices in Taipei",
+          "D) To launch a new smartphone"
+        ],
+        "answer": "B) To invest billions of dollars in cloud infrastructure"
+      },
+      {
+        "q": "Over what period is the investment planned to take place?",
+        "options": [
+          "A) The next five years",
+          "B) The next ten years",
+          "C) The next fifteen years",
+          "D) The next twenty years"
+        ],
+        "answer": "C) The next fifteen years"
+      },
+      {
+        "q": "When does AWS plan to launch its new infrastructure region in Taiwan?",
+        "options": [
+          "A) By early 2025",
+          "B) By late 2026",
+          "C) By the end of 2030",
+          "D) In 2024"
+        ],
+        "answer": "A) By early 2025"
+      },
+      {
+        "q": "What benefit will the new infrastructure region bring to local businesses?",
+        "options": [
+          "A) Free hardware upgrades",
+          "B) Secure data storage and lower latency",
+          "C) Unlimited internet access",
+          "D) Reduced tax rates"
+        ],
+        "answer": "B) Secure data storage and lower latency"
+      },
+      {
+        "q": "Which word is closest in meaning to 'initiative' as used in the text?",
+        "options": [
+          "A) Obstacle",
+          "B) Plan",
+          "C) Decline",
+          "D) Conclusion"
+        ],
+        "answer": "B) Plan"
+      },
+      {
+        "q": "Besides building infrastructure, what else does AWS plan to do with local partners?",
+        "options": [
+          "A) Manufacture hardware parts",
+          "B) Cultivate digital talent",
+          "C) Open retail stores",
+          "D) Sponsor sports events"
+        ],
+        "answer": "B) Cultivate digital talent"
+      },
+      {
+        "q": "What is the primary goal of accelerating cloud adoption across various industries?",
+        "options": [
+          "A) To replace human workers with AI",
+          "B) To reinforce Taiwan's position as a key technology hub",
+          "C) To lower the cost of local electricity",
+          "D) To decrease international trade"
+        ],
+        "answer": "B) To reinforce Taiwan's position as a key technology hub"
+      },
+      {
+        "q": "What does the word 'latency' refer to in the context of computing?",
+        "options": [
+          "A) The storage capacity of a hard drive",
+          "B) The delay before a transfer of data begins",
+          "C) The physical size of a server",
+          "D) The cost of cloud services"
+        ],
+        "answer": "B) The delay before a transfer of data begins"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a goal of AWS's investment?",
+        "options": [
+          "A) Storing data securely",
+          "B) Cultivating digital talent",
+          "C) Accelerating cloud adoption",
+          "D) Relocating its global headquarters to Taiwan"
+        ],
+        "answer": "D) Relocating its global headquarters to Taiwan"
+      },
+      {
+        "q": "What part of speech is 'reinforce' as used in the sentence '...reinforcing Taiwan's position...'?",
+        "options": [
+          "A) Noun",
+          "B) Verb",
+          "C) Adjective",
+          "D) Adverb"
+        ],
+        "answer": "B) Verb"
+      },
+      {
+        "q": "The word 'giant' in 'tech giant' refers to:",
+        "options": [
+          "A) A very tall person",
+          "B) A large and powerful company",
+          "C) An ancient mythological creature",
+          "D) A new startup"
+        ],
+        "answer": "B) A large and powerful company"
+      },
+      {
+        "q": "Which region is Taiwan expected to strengthen its position in as a technology hub?",
+        "options": [
+          "A) Europe",
+          "B) North America",
+          "C) Asia-Pacific",
+          "D) Middle East"
+        ],
+        "answer": "C) Asia-Pacific"
+      },
+      {
+        "q": "What is the main subject of the news?",
+        "options": [
+          "A) GlobalWafers expanding its factories",
+          "B) A cyberattack disrupting GlobalWafers' production",
+          "C) A major drop in silicon wafer prices",
+          "D) Cybersecurity experts launching a new defense system"
+        ],
+        "answer": "B) A cyberattack disrupting GlobalWafers' production"
+      },
+      {
+        "q": "What did GlobalWafers do immediately after the attack?",
+        "options": [
+          "A) They shut down all global offices",
+          "B) They initiated emergency response procedures and isolated affected systems",
+          "C) They paid a ransom to the hackers",
+          "D) They bought new semiconductor lines"
+        ],
+        "answer": "B) They initiated emergency response procedures and isolated affected systems"
+      },
+      {
+        "q": "According to the passage, what was the impact on production lines?",
+        "options": [
+          "A) Some production lines were affected and temporarily halted",
+          "B) All production lines were permanently closed",
+          "C) Production capacity doubled",
+          "D) Production lines were completely unaffected"
+        ],
+        "answer": "A) Some production lines were affected and temporarily halted"
+      },
+      {
+        "q": "Who is GlobalWafers working with to restore capacity?",
+        "options": [
+          "A) The local police",
+          "B) Cybersecurity experts",
+          "C) Silicon suppliers",
+          "D) Competitors in the industry"
+        ],
+        "answer": "B) Cybersecurity experts"
+      },
+      {
+        "q": "What does the word 'disrupt' mean in the text?",
+        "options": [
+          "A) To improve or enhance",
+          "B) To cause disorder or temporary halt",
+          "C) To build from scratch",
+          "D) To protect from harm"
+        ],
+        "answer": "B) To cause disorder or temporary halt"
+      },
+      {
+        "q": "What is highlighted by this incident?",
+        "options": [
+          "A) The high cost of silicon wafers",
+          "B) The speed of modern internet connections",
+          "C) The vulnerability of critical supply chains to digital threats",
+          "D) The lack of emergency plans in tech companies"
+        ],
+        "answer": "C) The vulnerability of critical supply chains to digital threats"
+      },
+      {
+        "q": "Which word is closest in meaning to 'initiate'?",
+        "options": [
+          "A) Terminate",
+          "B) Postpone",
+          "C) Start",
+          "D) Investigate"
+        ],
+        "answer": "C) Start"
+      },
+      {
+        "q": "What is the role of GlobalWafers in the global market?",
+        "options": [
+          "A) A small software development firm",
+          "B) One of the world's largest silicon wafer manufacturers",
+          "C) A leading cybersecurity provider",
+          "D) A consumer electronics retailer"
+        ],
+        "answer": "B) One of the world's largest silicon wafer manufacturers"
+      },
+      {
+        "q": "The word 'isolate' in the text means to ________.",
+        "options": [
+          "A) connect together",
+          "B) separate from others",
+          "C) delete permanently",
+          "D) upgrade immediately"
+        ],
+        "answer": "B) separate from others"
+      },
+      {
+        "q": "What does 'capacity' refer to in 'restore full capacity'?",
+        "options": [
+          "A) The maximum amount that can be produced",
+          "B) The physical size of the factory",
+          "C) The total number of employees",
+          "D) The financial budget of the company"
+        ],
+        "answer": "A) The maximum amount that can be produced"
+      },
+      {
+        "q": "Which of the following is an adjective meaning 'lasting for only a limited period of time'?",
+        "options": [
+          "A) Critical",
+          "B) Temporary",
+          "C) Digital",
+          "D) Factual"
+        ],
+        "answer": "B) Temporary"
+      },
+      {
+        "q": "What kind of threat did GlobalWafers face?",
+        "options": [
+          "A) A natural disaster",
+          "B) A physical break-in",
+          "C) A digital threat (cyberattack)",
+          "D) A financial lawsuit"
+        ],
+        "answer": "C) A digital threat (cyberattack)"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美國5月PPI意外下滑，通膨壓力放緩股市創新高。",
+    "tabTitle": "金融市場",
+    "english": "The US Producer Price Index (PPI) unexpectedly declined by 0.2% in May, providing strong evidence that inflationary pressures are finally beginning to ease. This unexpected drop was largely driven by lower energy costs, which relieved some burden on manufacturers and consumers alike. Following the optimistic report, Wall Street responded enthusiastically, sending both the S&P 500 and the Nasdaq to new record highs. Investors are now increasingly hopeful that the Federal Reserve might consider cutting interest rates sooner than previously anticipated.",
+    "chinese": "美國5月份生產者物價指數（PPI）意外下降0.2%，為通膨壓力終於開始放緩提供了強有力的證據。這一出乎意料的下跌主要是由能源成本下降所推動，從而減輕了製造商和消費者的部分負擔。在這份樂觀的報告公布後，華爾街做出熱烈回應，推動標準普爾500指數和那斯達克指數均創下歷史新高。投資人目前越來越希望聯準會可能會考慮比先前預期更早調降利率。",
+    "vocabulary": [
+      "Producer Price Index (n.): 生產者物價指數 (PPI)",
+      "unexpectedly (adv.): 意外地，出乎意料地",
+      "decline (v.): 下降，減少",
+      "inflationary (adj.): 通貨膨脹的",
+      "pressure (n.): 壓力",
+      "ease (v.): 緩和，減輕",
+      "be driven by (phr.): 由...所驅動/推動",
+      "relieve (v.): 減輕，解除",
+      "burden (n.): 負擔",
+      "manufacturer (n.): 製造商，生產商",
+      "consumer (n.): 消費者",
+      "alike (adv.): 同樣地，兩者都",
+      "optimistic (adj.): 樂觀的",
+      "respond (v.): 回應，做出反應",
+      "enthusiastically (adv.): 熱烈地，狂熱地",
+      "record high (n.): 歷史新高",
+      "increasingly (adv.): 漸增地，越來越...",
+      "Federal Reserve (n.): 美國聯邦準備理事會 (美聯儲/聯準會)",
+      "interest rate (n.): 利率",
+      "anticipate (v.): 預期，預料"
+    ],
+    "quiz": [
+      {
+        "q": "What does 'PPI' stand for in the context of this news?",
+        "options": [
+          "Producer Price Index",
+          "Product Promotion Indicator",
+          "Private Purchasing Inflation",
+          "Public Price Initiative"
+        ],
+        "answer": "Producer Price Index"
+      },
+      {
+        "q": "By how much did the US PPI decline in May?",
+        "options": [
+          "0.5%",
+          "0.2%",
+          "1.2%",
+          "2.0%"
+        ],
+        "answer": "0.2%"
+      },
+      {
+        "q": "What was the main driver of the unexpected drop in PPI?",
+        "options": [
+          "Higher food prices",
+          "Increased labor costs",
+          "Lower energy costs",
+          "New government taxes"
+        ],
+        "answer": "Lower energy costs"
+      },
+      {
+        "q": "How did Wall Street react to the optimistic report?",
+        "options": [
+          "Stocks crashed significantly",
+          "Both S&P 500 and Nasdaq hit new records",
+          "Trading was temporarily suspended",
+          "Investors panicked and sold assets"
+        ],
+        "answer": "Both S&P 500 and Nasdaq hit new records"
+      },
+      {
+        "q": "What are investors now hopeful about regarding the Federal Reserve?",
+        "options": [
+          "Raising interest rates immediately",
+          "Cutting interest rates sooner than expected",
+          "Increasing taxes on manufacturers",
+          "Stopping the release of economic reports"
+        ],
+        "answer": "Cutting interest rates sooner than expected"
+      },
+      {
+        "q": "Which word is closest in meaning to 'decline' as used in the text?",
+        "options": [
+          "Improve",
+          "Increase",
+          "Decrease",
+          "Stabilize"
+        ],
+        "answer": "Decrease"
+      },
+      {
+        "q": "The word 'optimistic' in the text is best described as meaning:",
+        "options": [
+          "Hopeful and confident about the future",
+          "Doubtful and suspicious",
+          "Extremely worried",
+          "Neutral and unconcerned"
+        ],
+        "answer": "Hopeful and confident about the future"
+      },
+      {
+        "q": "Who benefited from the relieved burden mentioned in the news?",
+        "options": [
+          "Only foreign governments",
+          "Only energy companies",
+          "Both manufacturers and consumers",
+          "Neither manufacturers nor consumers"
+        ],
+        "answer": "Both manufacturers and consumers"
+      },
+      {
+        "q": "Fill in the blank: The drop in PPI provided evidence that inflationary pressures are starting to _____.",
+        "options": [
+          "intensify",
+          "ease",
+          "fluctuate",
+          "disappear completely"
+        ],
+        "answer": "ease"
+      },
+      {
+        "q": "What does the adverb 'unexpectedly' suggest about the PPI decline?",
+        "options": [
+          "It was predicted by everyone.",
+          "It came as a surprise.",
+          "It was a planned policy.",
+          "It happens every month."
+        ],
+        "answer": "It came as a surprise."
+      },
+      {
+        "q": "Which of the following indexes reached new record highs?",
+        "options": [
+          "Only the Dow Jones",
+          "The S&P 500 and the Nasdaq",
+          "European stock markets only",
+          "Cryptocurrency markets"
+        ],
+        "answer": "The S&P 500 and the Nasdaq"
+      },
+      {
+        "q": "What is the part of speech and meaning of the word 'anticipate' in the text?",
+        "options": [
+          "noun: standard rule",
+          "verb: to expect or predict",
+          "adjective: very old",
+          "adverb: quickly"
+        ],
+        "answer": "verb: to expect or predict"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "蘋果市值超越微軟，重奪全球最有價值公司寶座。",
+    "tabTitle": "科技",
+    "english": "Apple Inc. has overtaken Microsoft to reclaim its position as the world's most valuable company. This shift comes after a surge in Apple's stock price, driven by growing investor confidence in its artificial intelligence initiatives. Microsoft had previously held the top spot due to its early lead in AI partnerships. However, Apple's recent product announcements have successfully reassured Wall Street of its long-term competitiveness in the tech sector.",
+    "chinese": "蘋果公司（Apple Inc.）已超越微軟（Microsoft），重新奪回全球市值最高公司的寶座。這一轉變源於蘋果股價的飆升，主要受到投資者對其人工智慧計畫信心增強的推動。微軟先前因其在人工智慧合作夥伴關係中的領先地位而一直佔據榜首。然而，蘋果最近發布的產品已成功讓華爾街對其在科技領域的長期競爭力感到放心。",
+    "vocabulary": [
+      "overtake (v.): 超越，趕上",
+      "reclaim (v.): 奪回，收回",
+      "valuable (adj.): 有價值的",
+      "shift (n.): 轉變，變化",
+      "surge (n.): 激增，飆升",
+      "investor (n.): 投資者",
+      "confidence (n.): 信心",
+      "initiative (n.): 倡議，計畫",
+      "previously (adv.): 以前，先前",
+      "partnership (n.): 合作夥伴關係",
+      "announcement (n.): 宣布，公告",
+      "reassure (v.): 使放心，消除...的疑慮",
+      "competitiveness (n.): 競爭力",
+      "sector (n.): 領域，部門",
+      "stock price (n. phr.): 股價",
+      "artificial intelligence (n. phr.): 人工智慧",
+      "Wall Street (n. phr.): 華爾街（指美國金融界）",
+      "hold the top spot (v. phr.): 佔據榜首",
+      "lead in (n. phr.): 在...方面的領先",
+      "long-term (adj.): 長期的"
+    ],
+    "quiz": [
+      {
+        "q": "Which company did Apple overtake to become the world's most valuable company?",
+        "options": [
+          "Google",
+          "Microsoft",
+          "Amazon",
+          "Meta"
+        ],
+        "answer": "Microsoft"
+      },
+      {
+        "q": "What mainly drove the surge in Apple's stock price?",
+        "options": [
+          "A decrease in manufacturing costs",
+          "Growing investor confidence in its AI initiatives",
+          "The launch of a new electric car",
+          "An increase in iPhone prices"
+        ],
+        "answer": "Growing investor confidence in its AI initiatives"
+      },
+      {
+        "q": "Why did Microsoft previously hold the top spot?",
+        "options": [
+          "Due to its early lead in AI partnerships",
+          "Because of its hardware sales",
+          "Due to a decline in Apple's reputation",
+          "Because of its search engine dominance"
+        ],
+        "answer": "Due to its early lead in AI partnerships"
+      },
+      {
+        "q": "What helped Apple reassure Wall Street of its competitiveness?",
+        "options": [
+          "A change in its executive team",
+          "Its recent product announcements",
+          "An increase in dividend payments",
+          "A merger with another tech giant"
+        ],
+        "answer": "Its recent product announcements"
+      },
+      {
+        "q": "What is the meaning of 'reclaim'?",
+        "options": [
+          "To give away something valuable",
+          "To take back something that was yours",
+          "To damage a reputation",
+          "To invest in a new company"
+        ],
+        "answer": "To take back something that was yours"
+      },
+      {
+        "q": "Choose the word that best fits: 'The company's stock experienced a sudden ______ after the successful product launch.'",
+        "options": [
+          "surge",
+          "decline",
+          "stability",
+          "recession"
+        ],
+        "answer": "surge"
+      },
+      {
+        "q": "What does 'reassure' mean?",
+        "options": [
+          "To make someone feel less worried",
+          "To warn someone of danger",
+          "To demand immediate action",
+          "To confuse someone"
+        ],
+        "answer": "To make someone feel less worried"
+      },
+      {
+        "q": "Complete the sentence: 'We need to maintain our market ______ to survive against new rivals.'",
+        "options": [
+          "competitiveness",
+          "limitation",
+          "hesitation",
+          "distraction"
+        ],
+        "answer": "competitiveness"
+      },
+      {
+        "q": "In the context of the article, what does 'Wall Street' refer to?",
+        "options": [
+          "A physical wall in New York",
+          "The US financial industry",
+          "A software development company",
+          "A local retail market"
+        ],
+        "answer": "The US financial industry"
+      },
+      {
+        "q": "Apple's success was driven ______ growing investor confidence.",
+        "options": [
+          "by",
+          "with",
+          "at",
+          "for"
+        ],
+        "answer": "by"
+      },
+      {
+        "q": "According to the text, which sector is Apple competing in?",
+        "options": [
+          "The agricultural sector",
+          "The automotive sector",
+          "The tech sector",
+          "The energy sector"
+        ],
+        "answer": "The tech sector"
+      },
+      {
+        "q": "What is the noun form of 'announce'?",
+        "options": [
+          "announcement",
+          "announcing",
+          "announced",
+          "announcer"
+        ],
+        "answer": "announcement"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "Anthropic獲350億美元巨額支持，投入AI基礎建設。",
+    "tabTitle": "科技",
+    "english": "Anthropic, a leading artificial intelligence safety and research company, has successfully secured $35 billion in funding to expand its AI infrastructure. This massive investment will be used to construct state-of-the-art data centers and acquire advanced microchips to train the next generation of large language models. Industry analysts suggest that this capital injection will significantly accelerate the race for artificial general intelligence (AGI). By scaling up its computational power, Anthropic aims to enhance the reliability and safety of future AI systems.",
+    "chinese": "領先的人工智慧安全與研究公司 Anthropic 已成功獲得 350 億美元的資金，用於擴展其 AI 基礎建設。這筆巨額投資將用於建造最先進的數據中心，並採購先進的微晶片，以訓練下一代的大型語言模型。行業分析師指出，這筆資金注入將顯著加速通用人工智慧（AGI）的競爭。透過擴大其計算能力，Anthropic 旨在提高未來 AI 系統的可靠性與安全性。",
+    "vocabulary": [
+      "secure (v.): 獲得、爭取到",
+      "infrastructure (n.): 基礎建設",
+      "funding (n.): 資金、提供資金",
+      "state-of-the-art (adj.): 最先進的",
+      "acquire (v.): 獲得、採購",
+      "advanced (adj.): 先進的、高級的",
+      "microchip (n.): 微晶片",
+      "generation (n.): 世代、產生",
+      "analyst (n.): 分析師",
+      "suggest (v.): 暗示、指出、建議",
+      "capital (n.): 資金、資本",
+      "injection (n.): 注射、注入",
+      "significantly (adv.): 顯著地、重大地",
+      "accelerate (v.): 加速",
+      "general intelligence (n. phr.): 通用智能",
+      "computational (adj.): 計算的、電腦的",
+      "aim (v.): 旨在、瞄準",
+      "enhance (v.): 提高、增加",
+      "reliability (n.): 可靠性、可信度",
+      "construct (v.): 建造、構建"
+    ],
+    "quiz": [
+      {
+        "q": "What does the word 'secure' mean in the context of the passage?",
+        "options": [
+          "To lose something valuable",
+          "To obtain or achieve something with effort",
+          "To lock a door",
+          "To protect from danger"
+        ],
+        "answer": "To obtain or achieve something with effort"
+      },
+      {
+        "q": "Which of the following is the closest meaning to 'infrastructure'?",
+        "options": [
+          "The basic physical and organizational structures needed for an operation",
+          "A type of software program",
+          "The financial profit of a company",
+          "A team of researchers"
+        ],
+        "answer": "The basic physical and organizational structures needed for an operation"
+      },
+      {
+        "q": "How much funding did Anthropic secure for its AI infrastructure?",
+        "options": [
+          "$3.5 billion",
+          "$35 billion",
+          "$350 million",
+          "$350 billion"
+        ],
+        "answer": "$35 billion"
+      },
+      {
+        "q": "What will the investment primarily be used for?",
+        "options": [
+          "Hiring new marketing executives",
+          "Constructing data centers and acquiring microchips",
+          "Paying off historical debts",
+          "Developing mobile applications"
+        ],
+        "answer": "Constructing data centers and acquiring microchips"
+      },
+      {
+        "q": "If a technology is described as 'state-of-the-art', it is ________.",
+        "options": [
+          "outdated and obsolete",
+          "very cheap to manufacture",
+          "the most modern and advanced",
+          "related to artistic design"
+        ],
+        "answer": "the most modern and advanced"
+      },
+      {
+        "q": "What is the meaning of the verb 'accelerate'?",
+        "options": [
+          "To slow down",
+          "To make something happen faster",
+          "To stop completely",
+          "To change direction"
+        ],
+        "answer": "To make something happen faster"
+      },
+      {
+        "q": "What does Anthropic aim to enhance by scaling up its computational power?",
+        "options": [
+          "The price of its stock shares",
+          "The physical size of its offices",
+          "The reliability and safety of future AI systems",
+          "The number of employees in the company"
+        ],
+        "answer": "The reliability and safety of future AI systems"
+      },
+      {
+        "q": "The word 'acquire' in the text is closest in meaning to ________.",
+        "options": [
+          "sell",
+          "obtain",
+          "discard",
+          "design"
+        ],
+        "answer": "obtain"
+      },
+      {
+        "q": "According to industry analysts, what will this capital injection do?",
+        "options": [
+          "Slow down the development of AI",
+          "Cause a major financial crisis",
+          "Accelerate the race for artificial general intelligence (AGI)",
+          "Lead to stricter government regulations"
+        ],
+        "answer": "Accelerate the race for artificial general intelligence (AGI)"
+      },
+      {
+        "q": "'Reliability' refers to the quality of being ________.",
+        "options": [
+          "fast and unstable",
+          "trustworthy and dependable",
+          "expensive and rare",
+          "creative and unpredictable"
+        ],
+        "answer": "trustworthy and dependable"
+      },
+      {
+        "q": "In the phrase 'capital injection', what does the word 'capital' refer to?",
+        "options": [
+          "The city where the government is located",
+          "An uppercase letter",
+          "Wealth in the form of money or assets",
+          "The most important part of a book"
+        ],
+        "answer": "Wealth in the form of money or assets"
+      },
+      {
+        "q": "What will the acquired microchips be used to train?",
+        "options": [
+          "Human research assistants",
+          "The next generation of large language models",
+          "Autonomous electric vehicles",
+          "Robots for manufacturing"
+        ],
+        "answer": "The next generation of large language models"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "SpaceX完成歷史性IPO，估值突破2兆美元。",
+    "tabTitle": "金融市場",
+    "english": "SpaceX has officially completed its highly anticipated initial public offering (IPO), marking a historic milestone in the aerospace and financial sectors. Upon debuting on the stock market, the company's valuation soared past the unprecedented $2 trillion mark, driven by immense investor confidence in its Starlink and Starship programs. Financial analysts suggest that this landmark event not only solidifies SpaceX's dominance in the private space industry but also reshapes the global market landscape for aerospace investments.",
+    "chinese": "SpaceX 已正式完成其備受期待的首次公開募股（IPO），這標誌著航太與金融領域的一個歷史性里程碑。在股票市場首度亮相後，該公司的估值飆升並突破了前所未有的 2 兆美元大關，這主要得益於投資人對其星鏈（Starlink）和星艦（Starship）計畫的巨大信心。金融分析師指出，這一具有里程碑意義的事件不僅鞏固了 SpaceX 在私營航太領域的霸主地位，也重塑了全球航太投資的市場格局。",
+    "vocabulary": [
+      "complete (v.): 完成；結束",
+      "landmark (adj.): 具里程碑意義的；重大的",
+      "initial public offering (n. phr.): 首次公開募股 (IPO)",
+      "valuation (n.): 估值；評價",
+      "exceed (v.): 超過；超越",
+      "anticipate (v.): 預期；期待",
+      "milestone (n.): 里程碑",
+      "aerospace (n.): 航空航太（空間）",
+      "sector (n.): 行業；部門",
+      "debut (v.): 首次亮相；初次登場",
+      "soar (v.): 猛增；飆升",
+      "unprecedented (adj.): 前所未有的",
+      "immense (adj.): 巨大的；無限的",
+      "confidence (n.): 信心；信任",
+      "analyst (n.): 分析師",
+      "solidify (v.): 鞏固；使凝固",
+      "dominance (n.): 支配地位；優勢",
+      "private (adj.): 私營的；私人的",
+      "reshape (v.): 重塑；改變...的形狀",
+      "landscape (n.): 格局；前景；風景"
+    ],
+    "quiz": [
+      {
+        "q": "What major financial event did SpaceX recently complete?",
+        "options": [
+          "A merger with another aerospace company",
+          "An initial public offering (IPO)",
+          "A series of private funding rounds",
+          "A bankruptcy restructuring"
+        ],
+        "answer": "An initial public offering (IPO)"
+      },
+      {
+        "q": "What is the historic valuation that SpaceX exceeded after its market debut?",
+        "options": [
+          "$2 billion",
+          "$200 billion",
+          "$2 trillion",
+          "$20 trillion"
+        ],
+        "answer": "$2 trillion"
+      },
+      {
+        "q": "Which two programs heavily drove investor confidence in SpaceX?",
+        "options": [
+          "Falcon 9 and Dragon",
+          "Starlink and Starship",
+          "Artemis and Apollo",
+          "Blue Origin and Kuiper"
+        ],
+        "answer": "Starlink and Starship"
+      },
+      {
+        "q": "According to financial analysts, what is one of the impacts of SpaceX's IPO?",
+        "options": [
+          "It will lead to the decline of private space exploration.",
+          "It solidifies SpaceX's dominance in the private space industry.",
+          "It forces the company to shut down its Starlink program.",
+          "It decreases the global market for aerospace investments."
+        ],
+        "answer": "It solidifies SpaceX's dominance in the private space industry."
+      },
+      {
+        "q": "What does the word 'landmark' mean in the context of the passage?",
+        "options": [
+          "A physical building or monument",
+          "An event of great historic importance",
+          "A piece of land for sale",
+          "A mark on a map"
+        ],
+        "answer": "An event of great historic importance"
+      },
+      {
+        "q": "Which word is closest in meaning to 'soared'?",
+        "options": [
+          "Dropped rapidly",
+          "Remained stable",
+          "Fluctuated slightly",
+          "Risen quickly"
+        ],
+        "answer": "Risen quickly"
+      },
+      {
+        "q": "What is the meaning of 'unprecedented'?",
+        "options": [
+          "Never done or known before",
+          "Commonly expected",
+          "Highly controversial",
+          "Outdated and useless"
+        ],
+        "answer": "Never done or known before"
+      },
+      {
+        "q": "Choose the word that best fits the blank: 'The company's ________ was calculated at over $2 trillion.'",
+        "options": [
+          "expense",
+          "valuation",
+          "deficit",
+          "subsidy"
+        ],
+        "answer": "valuation"
+      },
+      {
+        "q": "What does 'solidify' mean in the text?",
+        "options": [
+          "To melt into liquid",
+          "To make stronger or more certain",
+          "To dissolve completely",
+          "To decrease in value"
+        ],
+        "answer": "To make stronger or more certain"
+      },
+      {
+        "q": "The word 'sectors' in the first sentence refers to:",
+        "options": [
+          "Areas of economic or business activity",
+          "Geographical regions",
+          "Different rocket parts",
+          "Time periods in history"
+        ],
+        "answer": "Areas of economic or business activity"
+      },
+      {
+        "q": "Based on the news, SpaceX is a company in which industry?",
+        "options": [
+          "Agriculture",
+          "Automotive",
+          "Aerospace",
+          "Biotechnology"
+        ],
+        "answer": "Aerospace"
+      },
+      {
+        "q": "Which of the following is the best antonym for 'immense'?",
+        "options": [
+          "Huge",
+          "Tiny",
+          "Massive",
+          "Vast"
+        ],
+        "answer": "Tiny"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
