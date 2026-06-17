@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 17, 2026：科技、金融市場 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣面板廠發展FOPLP技術，為半導體封裝注入新動能。\nTaiwanese panel manufacturers are actively developing Fan-Out Panel Level Packaging (FOPLP) technology. This innovative approach leverages their expertise in large-area substrate processing, traditionally used for displays. By adapting FOPLP, these companies aim to provide more cost-effective and efficient solutions for advanced semiconductor packaging. This move is expected to inject new momentum into the global semiconductor industry, enhancing Taiwan's competitive edge in high-tech manufacturing.\n\n[2] AI晶片需求狂飆 台灣半導體供應鏈全面爆發\nTaiwan's semiconductor industry is currently experiencing a significant surge, driven by the exploding global demand for advanced AI chips. This unprecedented growth is powering a comprehensive boom across the island's entire supply chain, from design services to manufacturing and packaging. Taiwanese companies are seeing a massive increase in orders and production capacities. Experts predict this robust trend will continue, further solidifying Taiwan's crucial role in the future of artificial intelligence technology and its global development.\n\n[3] AI新應用帶動台灣用電需求 景氣亮綠燈\nTaiwan's economy is currently flashing a 'green light,' signaling robust growth and a positive outlook. This strong performance is primarily fueled by the rapid expansion of new Artificial Intelligence (AI) applications across various sectors. As a direct result, the nation's electricity demand has seen a significant boost, reflecting the intensified industrial activity. This surge underscores Taiwan's successful integration of advanced technology into its economic development.",
+    "chinese": "【1】台灣面板廠發展FOPLP技術，為半導體封裝注入新動能。\n台灣面板製造商正積極發展扇出型面板級封裝 (FOPLP) 技術。這種創新方法利用了他們在大面積基板處理方面的專業知識，這項技術傳統上用於顯示器製造。透過應用 FOPLP，這些公司旨在為先進半導體封裝提供更具成本效益和效率的解決方案。此舉預計將為全球半導體產業注入新動能，提升台灣在高科技製造領域的競爭優勢。\n\n【2】AI晶片需求狂飆 台灣半導體供應鏈全面爆發\n台灣半導體產業目前正經歷顯著的增長，這得益於全球對先進AI晶片需求的爆炸性增長。這種前所未有的增長正在推動全島從設計服務到製造和封裝的整個供應鏈全面蓬勃發展。台灣公司正看到訂單和產能的大幅增加。專家預計這種強勁趨勢將持續下去，進一步鞏固台灣在人工智慧技術未來及其全球發展中的關鍵作用。\n\n【3】AI新應用帶動台灣用電需求 景氣亮綠燈\n台灣經濟目前閃爍著『綠燈』，預示著強勁的成長和積極的前景。這種強勁的表現主要由人工智慧（AI）新應用在各個領域的迅速擴張所推動。作為直接結果，全國的用電需求顯著增加，反映出產業活動的加劇。這次激增凸顯了台灣將先進技術成功整合到其經濟發展中。",
+    "vocabulary": [
+      "panel manufacturer (n.): 面板製造商",
+      "actively (adv.): 積極地",
+      "develop (v.): 發展",
+      "Fan-Out Panel Level Packaging (n.): 扇出型面板級封裝 (FOPLP)",
+      "technology (n.): 技術",
+      "innovative (adj.): 創新的",
+      "leverage (v.): 利用",
+      "expertise (n.): 專業知識",
+      "large-area substrate (n.): 大面積基板",
+      "processing (n.): 處理",
+      "traditionally (adv.): 傳統上",
+      "display (n.): 顯示器",
+      "adapt (v.): 應用；改編",
+      "cost-effective (adj.): 具成本效益的",
+      "efficient (adj.): 高效率的",
+      "solution (n.): 解決方案",
+      "semiconductor packaging (n.): 半導體封裝",
+      "inject (v.): 注入",
+      "momentum (n.): 動能；動力",
+      "competitive edge (n.): 競爭優勢",
+      "semiconductor (n.): 半導體",
+      "surge (n.): 激增；猛漲",
+      "exploding (adj.): 爆炸性增長的",
+      "demand (n.): 需求",
+      "advanced (adj.): 先進的",
+      "AI chips (n.): AI晶片",
+      "unprecedented (adj.): 前所未有的",
+      "growth (n.): 增長；發展",
+      "powering (v.): 推動；驅動",
+      "comprehensive (adj.): 全面的；綜合的",
+      "boom (n.): 繁榮；快速發展",
+      "supply chain (n.): 供應鏈",
+      "design services (n.): 設計服務",
+      "manufacturing (n.): 製造",
+      "packaging (n.): 封裝",
+      "capacities (n.): 產能；能力 (複數)",
+      "robust (adj.): 強勁的；穩健的",
+      "trend (n.): 趨勢",
+      "solidify (v.): 鞏固；強化",
+      "crucial (adj.): 關鍵的；至關重要的",
+      "economy (n.): 經濟",
+      "flash (v.): 閃爍",
+      "green light (n.phr.): 綠燈（指允許、順利或景氣良好）",
+      "signal (v.): 預示，示意",
+      "robust (adj.): 強勁的，穩健的",
+      "outlook (n.): 前景，展望",
+      "primarily (adv.): 主要地",
+      "fueled by (phr.): 由...推動/助長",
+      "rapid (adj.): 迅速的",
+      "expansion (n.): 擴張，擴大",
+      "Artificial Intelligence (AI) (n.): 人工智慧",
+      "application (n.): 應用，應用程式",
+      "sector (n.): 領域，部門",
+      "as a direct result (phr.): 作為直接結果",
+      "electricity demand (n.phr.): 用電需求",
+      "significant (adj.): 顯著的，重大的",
+      "boost (v.): 提升，促進",
+      "reflect (v.): 反映",
+      "intensified (adj.): 加劇的，增強的",
+      "underscore (v.): 強調，凸顯"
+    ],
+    "quiz": [
+      {
+        "q": "What new technology are Taiwanese panel manufacturers actively developing?",
+        "options": [
+          "A. AI integration",
+          "B. Fan-Out Panel Level Packaging",
+          "C. Quantum computing",
+          "D. Advanced display materials"
+        ],
+        "answer": "B. Fan-Out Panel Level Packaging"
+      },
+      {
+        "q": "What existing expertise are these companies leveraging for FOPLP?",
+        "options": [
+          "A. Software development",
+          "B. Large-area substrate processing",
+          "C. Chemical engineering",
+          "D. Financial analysis"
+        ],
+        "answer": "B. Large-area substrate processing"
+      },
+      {
+        "q": "What was the leveraged expertise traditionally used for?",
+        "options": [
+          "A. Automotive production",
+          "B. Medical devices",
+          "C. Displays",
+          "D. Renewable energy"
+        ],
+        "answer": "C. Displays"
+      },
+      {
+        "q": "What is the primary goal of adapting FOPLP technology for semiconductor packaging?",
+        "options": [
+          "A. To reduce display production costs",
+          "B. To create new types of sensors",
+          "C. To provide cost-effective and efficient solutions",
+          "D. To increase memory storage capacity"
+        ],
+        "answer": "C. To provide cost-effective and efficient solutions"
+      },
+      {
+        "q": "What is expected to be injected into the global semiconductor industry by this move?",
+        "options": [
+          "A. New regulations",
+          "B. Political debate",
+          "C. New momentum",
+          "D. Environmental concerns"
+        ],
+        "answer": "C. New momentum"
+      },
+      {
+        "q": "What aspect of Taiwan is expected to be enhanced through this development?",
+        "options": [
+          "A. Its tourism industry",
+          "B. Its competitive edge",
+          "C. Its agricultural output",
+          "D. Its cultural exchange programs"
+        ],
+        "answer": "B. Its competitive edge"
+      },
+      {
+        "q": "The term 'innovative' in the text suggests FOPLP technology is:",
+        "options": [
+          "A. Outdated",
+          "B. Revolutionary",
+          "C. Complex",
+          "D. Common"
+        ],
+        "answer": "B. Revolutionary"
+      },
+      {
+        "q": "What does 'leverage' most closely mean in the context of the news?",
+        "options": [
+          "A. To ignore",
+          "B. To utilize",
+          "C. To discard",
+          "D. To complicate"
+        ],
+        "answer": "B. To utilize"
+      },
+      {
+        "q": "What kind of manufacturing is Taiwan enhancing its competitive edge in?",
+        "options": [
+          "A. Textile manufacturing",
+          "B. Heavy industry",
+          "C. High-tech manufacturing",
+          "D. Food processing"
+        ],
+        "answer": "C. High-tech manufacturing"
+      },
+      {
+        "q": "Which of the following is NOT a characteristic of the solutions FOPLP aims to provide for semiconductor packaging?",
+        "options": [
+          "A. Cost-effective",
+          "B. Efficient",
+          "C. Environmentally friendly",
+          "D. Advanced"
+        ],
+        "answer": "C. Environmentally friendly"
+      },
+      {
+        "q": "According to the article, FOPLP technology utilizes expertise in:",
+        "options": [
+          "A. Small-scale component assembly",
+          "B. Large-area substrate processing",
+          "C. Chemical waste management",
+          "D. Software algorithm design"
+        ],
+        "answer": "B. Large-area substrate processing"
+      },
+      {
+        "q": "The development of FOPLP by Taiwanese panel makers primarily benefits which sector?",
+        "options": [
+          "A. Display manufacturing",
+          "B. Automotive industry",
+          "C. Global semiconductor industry",
+          "D. Consumer electronics retail"
+        ],
+        "answer": "C. Global semiconductor industry"
+      },
+      {
+        "q": "What is the main reason for the current surge in Taiwan's semiconductor industry?",
+        "options": [
+          "A. Increased government investment",
+          "B. Exploding global demand for AI chips",
+          "C. New trade agreements",
+          "D. Discovery of new raw materials"
+        ],
+        "answer": "B. Exploding global demand for AI chips"
+      },
+      {
+        "q": "What does the article describe as \"unprecedented growth\"?",
+        "options": [
+          "A. The number of new semiconductor companies",
+          "B. The expansion of Taiwan's tourism sector",
+          "C. The current boom in the semiconductor industry",
+          "D. The amount of foreign investment in general"
+        ],
+        "answer": "C. The current boom in the semiconductor industry"
+      },
+      {
+        "q": "Which part of Taiwan's economy is experiencing a \"comprehensive boom\" according to the news?",
+        "options": [
+          "A. Only chip design services",
+          "B. The entire semiconductor supply chain",
+          "C. Primarily the packaging sector",
+          "D. Just the advanced manufacturing plants"
+        ],
+        "answer": "B. The entire semiconductor supply chain"
+      },
+      {
+        "q": "What kind of companies are seeing a \"massive increase in orders and production capacities\"?",
+        "options": [
+          "A. Companies in the agriculture sector",
+          "B. Taiwanese semiconductor companies",
+          "C. Global shipping companies",
+          "D. Software development firms"
+        ],
+        "answer": "B. Taiwanese semiconductor companies"
+      },
+      {
+        "q": "What do experts predict about this trend?",
+        "options": [
+          "A. It will slow down significantly next year.",
+          "B. It will continue.",
+          "C. It will only affect smaller companies.",
+          "D. It will shift to other countries."
+        ],
+        "answer": "B. It will continue."
+      },
+      {
+        "q": "How is Taiwan's role in artificial intelligence technology described?",
+        "options": [
+          "A. Minor",
+          "B. Decreasing",
+          "C. Crucial",
+          "D. Temporary"
+        ],
+        "answer": "C. Crucial"
+      },
+      {
+        "q": "The word \"surge\" in the first sentence most closely means:",
+        "options": [
+          "A. A slight decrease",
+          "B. A sudden large increase",
+          "C. A period of stability",
+          "D. A gradual decline"
+        ],
+        "answer": "B. A sudden large increase"
+      },
+      {
+        "q": "\"Comprehensive\" in \"comprehensive boom\" implies that the boom is:",
+        "options": [
+          "A. Limited to a few areas",
+          "B. Wide-ranging and inclusive of many parts",
+          "C. Difficult to understand",
+          "D. Only affecting advanced technology"
+        ],
+        "answer": "B. Wide-ranging and inclusive of many parts"
+      },
+      {
+        "q": "What are \"AI chips\"?",
+        "options": [
+          "A. Chips used exclusively for gaming",
+          "B. Advanced chips designed for artificial intelligence applications",
+          "C. Chips for basic electronic devices",
+          "D. Chips made from artificial materials"
+        ],
+        "answer": "B. Advanced chips designed for artificial intelligence applications"
+      },
+      {
+        "q": "The article mentions \"design services, manufacturing and packaging\" as parts of what?",
+        "options": [
+          "A. Global trade agreements",
+          "B. Taiwan's export products",
+          "C. The semiconductor supply chain",
+          "D. New government initiatives"
+        ],
+        "answer": "C. The semiconductor supply chain"
+      },
+      {
+        "q": "What does the phrase \"solidifying Taiwan's crucial role\" suggest?",
+        "options": [
+          "A. Taiwan's role is becoming less important.",
+          "B. Taiwan's role is becoming more firmly established and important.",
+          "C. Taiwan is making its role more flexible.",
+          "D. Taiwan is changing its role in AI technology."
+        ],
+        "answer": "B. Taiwan's role is becoming more firmly established and important."
+      },
+      {
+        "q": "The overall tone of the news article is:",
+        "options": [
+          "A. Pessimistic",
+          "B. Neutral and factual",
+          "C. Overly enthusiastic",
+          "D. Critical"
+        ],
+        "answer": "B. Neutral and factual"
+      },
+      {
+        "q": "What is the current economic signal for Taiwan mentioned in the news?",
+        "options": [
+          "A red light",
+          "A green light",
+          "A yellow light",
+          "A blue light"
+        ],
+        "answer": "A green light"
+      },
+      {
+        "q": "What is primarily driving Taiwan's strong economic performance?",
+        "options": [
+          "Increased tourism",
+          "Agricultural exports",
+          "New Artificial Intelligence (AI) applications",
+          "Government spending"
+        ],
+        "answer": "New Artificial Intelligence (AI) applications"
+      },
+      {
+        "q": "What has seen a significant boost as a direct result of AI expansion?",
+        "options": [
+          "The nation's population",
+          "The nation's electricity demand",
+          "The nation's public transportation",
+          "The nation's food supply"
+        ],
+        "answer": "The nation's electricity demand"
+      },
+      {
+        "q": "What does the surge in electricity demand reflect?",
+        "options": [
+          "A decline in manufacturing",
+          "A decrease in consumer spending",
+          "Intensified industrial activity",
+          "A shift to renewable energy"
+        ],
+        "answer": "Intensified industrial activity"
+      },
+      {
+        "q": "What does the news article underscore about Taiwan's economic development?",
+        "options": [
+          "Its reliance on traditional industries",
+          "Its challenges in technological adoption",
+          "Its successful integration of advanced technology",
+          "Its struggles with energy conservation"
+        ],
+        "answer": "Its successful integration of advanced technology"
+      },
+      {
+        "q": "The economic outlook for Taiwan is described as...",
+        "options": [
+          "Uncertain",
+          "Negative",
+          "Stagnant",
+          "Positive"
+        ],
+        "answer": "Positive"
+      },
+      {
+        "q": "What does 'robust' mean in the context of 'robust growth'?",
+        "options": [
+          "Weak and slow",
+          "Strong and healthy",
+          "Unpredictable and volatile",
+          "Minimal and insignificant"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "If something is 'fueled by' AI applications, what does that mean?",
+        "options": [
+          "It is hindered by AI",
+          "It is powered or driven by AI",
+          "It is unrelated to AI",
+          "It replaces AI"
+        ],
+        "answer": "It is powered or driven by AI"
+      },
+      {
+        "q": "What is another word for 'sector' in this context?",
+        "options": [
+          "A small part",
+          "A division or area",
+          "A problem",
+          "A solution"
+        ],
+        "answer": "A division or area"
+      },
+      {
+        "q": "What does 'underscore' mean?",
+        "options": [
+          "To hide or conceal",
+          "To underestimate",
+          "To emphasize or highlight",
+          "To ignore"
+        ],
+        "answer": "To emphasize or highlight"
+      },
+      {
+        "q": "Which term describes a major increase in something?",
+        "options": [
+          "A decline",
+          "A stagnation",
+          "A boost",
+          "A reduction"
+        ],
+        "answer": "A boost"
+      },
+      {
+        "q": "What does 'green light' signify in an economic context?",
+        "options": [
+          "Economic downturn",
+          "Economic uncertainty",
+          "Economic growth or permission to proceed",
+          "Economic recession"
+        ],
+        "answer": "Economic growth or permission to proceed"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "聯準會6月會議 新主席華許首秀受關注",
+    "tabTitle": "金融市場",
+    "english": "The Federal Reserve's highly anticipated June meeting on 2026.06.17 will mark a significant moment as Kevin Warsh makes his debut as the new Fed Chair. Markets are keenly scrutinizing his first public appearance for any signals regarding future monetary policy. Investors will be watching closely for clues on interest rates and the central bank's economic outlook. Warsh's initial remarks and the committee's statement are expected to set the tone for the coming months, with particular attention paid to his communication style and approach to inflation.",
+    "chinese": "聯準會備受期待的2026年6月17日六月會議將標誌著一個重要時刻，因為凱文·華許將首次以新任聯準會主席的身份亮相。市場正密切審視他的首次公開露面，以尋找任何關於未來貨幣政策的信號。投資者將密切關注有關利率和央行經濟前景的線索。華許的初步發言和委員會的聲明預計將為未來幾個月定下基調，特別是他的溝通風格和對通膨的處理方式將受到關注。",
+    "vocabulary": [
+      "Federal Reserve (n.): 聯準會",
+      "anticipated (adj.): 備受期待的",
+      "significant (adj.): 重要的",
+      "mark (v.): 標誌，象徵",
+      "debut (n.): 首秀，首次亮相",
+      "Chair (n.): 主席",
+      "keenly (adv.): 熱切地，敏銳地",
+      "scrutinize (v.): 仔細審查，密切關注",
+      "monetary policy (n.): 貨幣政策",
+      "investors (n.): 投資者",
+      "clues (n.): 線索",
+      "interest rates (n.): 利率",
+      "central bank (n.): 中央銀行",
+      "economic outlook (n.): 經濟前景",
+      "initial (adj.): 最初的，初步的",
+      "remarks (n.): 發言，評論",
+      "committee (n.): 委員會",
+      "statement (n.): 聲明",
+      "set the tone (phr.): 定下基調",
+      "inflation (n.): 通貨膨脹"
+    ],
+    "quiz": [
+      {
+        "q": "What is the primary focus of the Federal Reserve's June meeting as reported in the news?",
+        "options": [
+          "A. Discussing global trade agreements",
+          "B. Kevin Warsh's first appearance as Fed Chair",
+          "C. Reviewing past economic reports",
+          "D. Announcing new environmental policies"
+        ],
+        "answer": "B. Kevin Warsh's first appearance as Fed Chair"
+      },
+      {
+        "q": "According to the article, what are markets doing regarding Chair Warsh's debut?",
+        "options": [
+          "A. Ignoring it completely",
+          "B. Keenly scrutinizing it for policy signals",
+          "C. Celebrating it with a party",
+          "D. Expressing disinterest"
+        ],
+        "answer": "B. Keenly scrutinizing it for policy signals"
+      },
+      {
+        "q": "What specific information are investors hoping to find clues about from the meeting?",
+        "options": [
+          "A. The next presidential election",
+          "B. Future interest rates and the economic outlook",
+          "C. New technology advancements",
+          "D. Social media trends"
+        ],
+        "answer": "B. Future interest rates and the economic outlook"
+      },
+      {
+        "q": "What is expected to \"set the tone for the coming months\" after the meeting?",
+        "options": [
+          "A. Global stock market performance",
+          "B. Warsh's initial remarks and the committee's statement",
+          "C. Consumer spending habits",
+          "D. International political events"
+        ],
+        "answer": "B. Warsh's initial remarks and the committee's statement"
+      },
+      {
+        "q": "Which two aspects of Warsh's leadership will receive \"particular attention\"?",
+        "options": [
+          "A. His background and hobbies",
+          "B. His communication style and approach to inflation",
+          "C. His travel plans and diet",
+          "D. His clothing choices and favorite books"
+        ],
+        "answer": "B. His communication style and approach to inflation"
+      },
+      {
+        "q": "The word \"anticipated\" in the text means something is:",
+        "options": [
+          "A. Unexpected",
+          "B. Postponed",
+          "C. Highly expected",
+          "D. Disregarded"
+        ],
+        "answer": "C. Highly expected"
+      },
+      {
+        "q": "What is the role of the \"Federal Reserve\" as implied by the context?",
+        "options": [
+          "A. A private investment firm",
+          "B. The central bank of the U.S.",
+          "C. A national park service",
+          "D. A charity organization"
+        ],
+        "answer": "B. The central bank of the U.S."
+      },
+      {
+        "q": "If someone \"makes their debut,\" what are they doing?",
+        "options": [
+          "A. Retiring from their position",
+          "B. Making their first public appearance",
+          "C. Taking a vacation",
+          "D. Writing a book"
+        ],
+        "answer": "B. Making their first public appearance"
+      },
+      {
+        "q": "What does \"monetary policy\" primarily involve?",
+        "options": [
+          "A. Government spending on infrastructure",
+          "B. Decisions by a central bank affecting money supply and credit",
+          "C. International trade agreements",
+          "D. Environmental regulations"
+        ],
+        "answer": "B. Decisions by a central bank affecting money supply and credit"
+      },
+      {
+        "q": "What does \"scrutinizing\" mean in the context of markets scrutinizing Warsh?",
+        "options": [
+          "A. Ignoring",
+          "B. Praising",
+          "C. Carefully examining",
+          "D. Criticizing lightly"
+        ],
+        "answer": "C. Carefully examining"
+      },
+      {
+        "q": "The news item mentions \"inflation.\" What does inflation generally refer to?",
+        "options": [
+          "A. A decrease in prices",
+          "B. A general increase in prices and fall in the purchasing value of money",
+          "C. A stable economic environment",
+          "D. An increase in unemployment"
+        ],
+        "answer": "B. A general increase in prices and fall in the purchasing value of money"
+      },
+      {
+        "q": "When the news states Warsh's remarks will \"set the tone,\" it means they will:",
+        "options": [
+          "A. Create a musical composition",
+          "B. Establish the general character or attitude",
+          "C. Determine the color scheme",
+          "D. Provide a specific sound"
+        ],
+        "answer": "B. Establish the general character or attitude"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "日本央行升息至1.0% 日圓貶值壓力仍存",
+    "tabTitle": "金融市場",
+    "english": "The Bank of Japan (BOJ) raised its benchmark interest rate to 1.0% on June 17, 2026, marking a notable shift in its monetary policy. This decision aims to address rising inflation and gradually normalize the economy. However, despite the rate hike, the Japanese yen continues to face significant depreciation pressure. Experts suggest this ongoing weakness is primarily due to the wide interest rate differentials between Japan and other major global economies, making the yen less attractive.",
+    "chinese": "日本央行（BOJ）於2026年6月17日將基準利率提高至1.0%，標誌著其貨幣政策的顯著轉變。此舉旨在應對不斷上升的通膨並逐步使經濟正常化。然而，儘管升息，日圓仍面臨巨大的貶值壓力。專家指出，這種持續的疲軟主要是由於日本與其他主要全球經濟體之間巨大的利率差異，使得日圓的吸引力下降。",
+    "vocabulary": [
+      "Bank of Japan (n.): 日本央行",
+      "benchmark interest rate (n.phr.): 基準利率",
+      "monetary policy (n.phr.): 貨幣政策",
+      "notable (adj.): 顯著的，值得注意的",
+      "shift (n.): 轉變，變動",
+      "aim (v.): 旨在，目標是",
+      "address (v.): 處理，應對",
+      "rising inflation (n.phr.): 不斷上升的通膨",
+      "gradually (adv.): 逐漸地",
+      "normalize (v.): 使正常化",
+      "despite (prep.): 儘管",
+      "rate hike (n.phr.): 升息",
+      "depreciation pressure (n.phr.): 貶值壓力",
+      "experts (n.): 專家",
+      "suggest (v.): 指出，建議",
+      "ongoing (adj.): 持續的",
+      "primarily (adv.): 主要地",
+      "wide (adj.): 巨大的，廣泛的",
+      "interest rate differentials (n.phr.): 利率差異",
+      "attractive (adj.): 有吸引力的"
+    ],
+    "quiz": [
+      {
+        "q": "What date did the BOJ raise its interest rate?",
+        "options": [
+          "A. June 17, 2025",
+          "B. June 17, 2026",
+          "C. July 17, 2026",
+          "D. June 1, 2026"
+        ],
+        "answer": "B. June 17, 2026"
+      },
+      {
+        "q": "What is the new benchmark interest rate set by the BOJ?",
+        "options": [
+          "A. 0.5%",
+          "B. 0.75%",
+          "C. 1.0%",
+          "D. 1.5%"
+        ],
+        "answer": "C. 1.0%"
+      },
+      {
+        "q": "The BOJ's decision to raise rates marks a significant _____ in its monetary policy.",
+        "options": [
+          "A. decline",
+          "B. expansion",
+          "C. shift",
+          "D. pause"
+        ],
+        "answer": "C. shift"
+      },
+      {
+        "q": "One of the primary goals of the BOJ's rate hike is to address _____",
+        "options": [
+          "A. economic stagnation",
+          "B. rising inflation",
+          "C. trade deficits",
+          "D. unemployment rates"
+        ],
+        "answer": "B. rising inflation"
+      },
+      {
+        "q": "What is the state of the Japanese yen despite the rate hike?",
+        "options": [
+          "A. It is appreciating significantly.",
+          "B. It is stable.",
+          "C. It is facing significant depreciation pressure.",
+          "D. It is experiencing a sharp rebound."
+        ],
+        "answer": "C. It is facing significant depreciation pressure."
+      },
+      {
+        "q": "According to experts, what is the main reason for the yen's ongoing weakness?",
+        "options": [
+          "A. Low export volumes.",
+          "B. High national debt.",
+          "C. Wide interest rate differentials with other major economies.",
+          "D. Political instability."
+        ],
+        "answer": "C. Wide interest rate differentials with other major economies."
+      },
+      {
+        "q": "The term 'normalize the economy' in this context most likely refers to:",
+        "options": [
+          "A. Returning to a period of deflation.",
+          "B. Reducing government spending.",
+          "C. Moving away from unconventional monetary easing.",
+          "D. Increasing trade surpluses."
+        ],
+        "answer": "C. Moving away from unconventional monetary easing."
+      },
+      {
+        "q": "Which word is a synonym for 'ongoing' in the context of the news?",
+        "options": [
+          "A. finished",
+          "B. temporary",
+          "C. persistent",
+          "D. halted"
+        ],
+        "answer": "C. persistent"
+      },
+      {
+        "q": "If a currency faces 'depreciation pressure,' what is happening to its value?",
+        "options": [
+          "A. It is increasing.",
+          "B. It is decreasing.",
+          "C. It is staying the same.",
+          "D. It is fluctuating wildly without a clear trend."
+        ],
+        "answer": "B. It is decreasing."
+      },
+      {
+        "q": "What does 'monetary policy' primarily involve?",
+        "options": [
+          "A. Government spending and taxation.",
+          "B. Decisions made by central banks regarding interest rates and money supply.",
+          "C. International trade agreements.",
+          "D. Regulations on financial institutions."
+        ],
+        "answer": "B. Decisions made by central banks regarding interest rates and money supply."
+      },
+      {
+        "q": "What does 'rate hike' mean?",
+        "options": [
+          "A. A decrease in interest rates.",
+          "B. An increase in interest rates.",
+          "C. A stabilization of interest rates.",
+          "D. A discussion about interest rates."
+        ],
+        "answer": "B. An increase in interest rates."
+      },
+      {
+        "q": "The phrase 'making the yen less attractive' implies that:",
+        "options": [
+          "A. People are buying more yen.",
+          "B. People are selling yen or prefer other currencies.",
+          "C. The yen's physical appearance has deteriorated.",
+          "D. The yen's value is expected to rise soon."
+        ],
+        "answer": "B. People are selling yen or prefer other currencies."
+      }
+    ]
+  },
+  "article-5": {
+    "title": "蘋果首款折疊iPhone Ultra傳延至2027年初",
+    "tabTitle": "科技",
+    "english": "Apple’s highly anticipated foldable iPhone, rumored to be the 'iPhone Ultra,' has reportedly been delayed. Industry analysts suggest that the launch date is now pushed back to early 2027. This postponement is allegedly due to technical challenges in meeting Apple's high standards for display durability and hinge design. While competitors have already released similar devices, Apple remains cautious about entering the market. The company aims to ensure the product offers a superior user experience before its official release.",
+    "chinese": "蘋果備受期待的折疊式 iPhone（傳聞稱為「iPhone Ultra」）據報導已延後推出。產業分析師指出，發布日期現已推遲至 2027 年初。此次延期據稱是因為在滿足蘋果對螢幕耐用性和鉸鏈設計的高標準方面遇到了技術挑戰。儘管競爭對手已經推出了類似的設備，但蘋果對進入該市場仍保持謹慎。該公司目標是在正式發布前，確保產品能提供優質的使用者體驗。",
+    "vocabulary": [
+      "anticipated (adj.): 被期待的",
+      "foldable (adj.): 可折疊的",
+      "rumored (adj.): 傳聞中的",
+      "reportedly (adv.): 據報導",
+      "delayed (adj.): 被延遲的",
+      "industry (n.): 產業",
+      "analyst (n.): 分析師",
+      "launch (n.): 發布",
+      "postponement (n.): 延期",
+      "allegedly (adv.): 據稱",
+      "technical (adj.): 技術性的",
+      "challenge (n.): 挑戰",
+      "standard (n.): 標準",
+      "durability (n.): 耐用性",
+      "hinge (n.): 鉸鏈",
+      "competitor (n.): 競爭對手",
+      "cautious (adj.): 謹慎的",
+      "market (n.): 市場",
+      "superior (adj.): 優越的",
+      "experience (n.): 體驗"
+    ],
+    "quiz": [
+      {
+        "q": "What is the rumored name of Apple's foldable phone?",
+        "options": [
+          "iPhone Fold",
+          "iPhone Ultra",
+          "iPhone Pro Max",
+          "iPhone Air"
+        ],
+        "answer": "iPhone Ultra"
+      },
+      {
+        "q": "When is the new expected launch date for the device?",
+        "options": [
+          "Late 2025",
+          "Early 2026",
+          "Early 2027",
+          "Late 2027"
+        ],
+        "answer": "Early 2027"
+      },
+      {
+        "q": "What is one of the reasons for the delay mentioned in the text?",
+        "options": [
+          "Low market demand",
+          "Technical challenges",
+          "Lack of funding",
+          "Supply chain issues"
+        ],
+        "answer": "Technical challenges"
+      },
+      {
+        "q": "What specific components are causing design difficulties?",
+        "options": [
+          "Battery and camera",
+          "Processor and RAM",
+          "Display and hinge",
+          "Case and charger"
+        ],
+        "answer": "Display and hinge"
+      },
+      {
+        "q": "How does the text describe Apple's approach to the foldable market?",
+        "options": [
+          "Aggressive",
+          "Cautious",
+          "Indifferent",
+          "Unprepared"
+        ],
+        "answer": "Cautious"
+      },
+      {
+        "q": "Have competitors already released foldable devices?",
+        "options": [
+          "Yes",
+          "No",
+          "Not yet",
+          "Only in Asia"
+        ],
+        "answer": "Yes"
+      },
+      {
+        "q": "What is Apple's primary goal before releasing the product?",
+        "options": [
+          "To beat competitors",
+          "To lower costs",
+          "To ensure a superior user experience",
+          "To maximize profit"
+        ],
+        "answer": "To ensure a superior user experience"
+      },
+      {
+        "q": "What is the tone of the news report?",
+        "options": [
+          "Factual",
+          "Emotional",
+          "Critical",
+          "Promotional"
+        ],
+        "answer": "Factual"
+      },
+      {
+        "q": "What does the word 'postponement' mean in this context?",
+        "options": [
+          "Cancellation",
+          "Delay",
+          "Success",
+          "Improvement"
+        ],
+        "answer": "Delay"
+      },
+      {
+        "q": "What does 'durability' refer to regarding the phone?",
+        "options": [
+          "Battery life",
+          "Resistance to wear and tear",
+          "Internet speed",
+          "Camera quality"
+        ],
+        "answer": "Resistance to wear and tear"
+      },
+      {
+        "q": "Who suggested the new launch date?",
+        "options": [
+          "Apple CEO",
+          "Industry analysts",
+          "Customers",
+          "Retailers"
+        ],
+        "answer": "Industry analysts"
+      },
+      {
+        "q": "What does 'allegedly' imply in the text?",
+        "options": [
+          "It is a confirmed fact",
+          "It is based on reports without official proof",
+          "It is a lie",
+          "It is a personal opinion"
+        ],
+        "answer": "It is based on reports without official proof"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "SpaceX收購AI公司 市值一度超越微軟",
+    "tabTitle": "科技",
+    "english": "SpaceX, the aerospace giant, announced on June 17, 2026, its acquisition of Anysphere, a cutting-edge artificial intelligence company. This strategic move aims to integrate advanced AI capabilities into SpaceX's ambitious projects, including its Starship development and satellite internet service, Starlink. Following the news, SpaceX's valuation surged, with its market capitalization briefly surpassing that of tech titan Microsoft. This landmark event highlights the growing convergence of space technology and artificial intelligence, marking a significant moment in the tech industry.",
+    "chinese": "太空探索科技公司（SpaceX），這家航空航天巨頭，於2026年6月17日宣布收購尖端人工智慧公司Anysphere。此一策略性舉動旨在將先進的人工智慧能力整合到SpaceX的宏偉計畫中，包括其星艦開發和星鏈衛星網路服務。消息傳出後，SpaceX的估值飆升，其市值一度超越科技巨頭微軟。這一里程碑事件凸顯了太空技術與人工智慧日益融合的趨勢，標誌著科技產業的一個重要時刻。",
+    "vocabulary": [
+      "Acquires (v.): 收購",
+      "AI Firm (n.): 人工智慧公司",
+      "Market Cap (n.): 市值",
+      "Briefly (adv.): 短暫地",
+      "Tops (v.): 超越",
+      "Aerospace giant (n.): 航空航天巨頭",
+      "Announced (v.): 宣布",
+      "Cutting-edge (adj.): 尖端的",
+      "Strategic move (n.): 策略性舉動",
+      "Integrate (v.): 整合",
+      "Advanced (adj.): 先進的",
+      "Capabilities (n.): 能力",
+      "Ambitious projects (n.): 宏偉計畫",
+      "Starship development (n.): 星艦開發",
+      "Satellite internet service (n.): 衛星網路服務",
+      "Valuation (n.): 估值",
+      "Surged (v.): 飆升",
+      "Tech titan (n.): 科技巨頭",
+      "Landmark event (n.): 里程碑事件",
+      "Convergence (n.): 融合"
+    ],
+    "quiz": [
+      {
+        "q": "What company did SpaceX acquire?",
+        "options": [
+          "A. Microsoft",
+          "B. Starlink",
+          "C. Anysphere",
+          "D. Starship"
+        ],
+        "answer": "C. Anysphere"
+      },
+      {
+        "q": "When did SpaceX announce the acquisition?",
+        "options": [
+          "A. June 17, 2025",
+          "B. June 17, 2026",
+          "C. July 17, 2026",
+          "D. June 17, 2024"
+        ],
+        "answer": "B. June 17, 2026"
+      },
+      {
+        "q": "What type of company is Anysphere?",
+        "options": [
+          "A. An aerospace company",
+          "B. A satellite internet provider",
+          "C. An artificial intelligence company",
+          "D. A software development firm"
+        ],
+        "answer": "C. An artificial intelligence company"
+      },
+      {
+        "q": "What was the immediate effect on SpaceX's market capitalization after the news?",
+        "options": [
+          "A. It decreased significantly",
+          "B. It remained stable",
+          "C. It briefly surpassed Microsoft",
+          "D. It was acquired by Microsoft"
+        ],
+        "answer": "C. It briefly surpassed Microsoft"
+      },
+      {
+        "q": "What is the main purpose of this acquisition for SpaceX?",
+        "options": [
+          "A. To compete directly with Microsoft",
+          "B. To sell its Starlink service",
+          "C. To integrate advanced AI into its projects",
+          "D. To develop new aerospace hardware"
+        ],
+        "answer": "C. To integrate advanced AI into its projects"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a SpaceX project that will benefit from AI integration?",
+        "options": [
+          "A. Starship development",
+          "B. Satellite internet service",
+          "C. Starlink",
+          "D. Autonomous driving systems"
+        ],
+        "answer": "D. Autonomous driving systems"
+      },
+      {
+        "q": "How is SpaceX described in the article?",
+        "options": [
+          "A. A software startup",
+          "B. An aerospace giant",
+          "C. A telecommunications provider",
+          "D. A financial institution"
+        ],
+        "answer": "B. An aerospace giant"
+      },
+      {
+        "q": "What does the article suggest about the relationship between space technology and artificial intelligence?",
+        "options": [
+          "A. They are completely separate fields",
+          "B. They are in growing competition",
+          "C. They are experiencing increasing convergence",
+          "D. Space technology is replacing AI"
+        ],
+        "answer": "C. They are experiencing increasing convergence"
+      },
+      {
+        "q": "What term is used to describe Microsoft in the article?",
+        "options": [
+          "A. An AI startup",
+          "B. A market leader",
+          "C. A tech titan",
+          "D. An aerospace competitor"
+        ],
+        "answer": "C. A tech titan"
+      },
+      {
+        "q": "What happened to SpaceX's valuation after the acquisition news?",
+        "options": [
+          "A. It declined",
+          "B. It remained unchanged",
+          "C. It surged",
+          "D. It was frozen"
+        ],
+        "answer": "C. It surged"
+      },
+      {
+        "q": "The acquisition of Anysphere is referred to as a \"strategic move.\" What does this imply?",
+        "options": [
+          "A. It was a spontaneous decision",
+          "B. It was a carefully planned action",
+          "C. It was forced by external factors",
+          "D. It was a minor event"
+        ],
+        "answer": "B. It was a carefully planned action"
+      },
+      {
+        "q": "What does the phrase \"briefly surpassing\" imply about SpaceX's market cap compared to Microsoft's?",
+        "options": [
+          "A. It permanently exceeded Microsoft's",
+          "B. It was higher for a short period",
+          "C. It was always lower than Microsoft's",
+          "D. It was equal to Microsoft's"
+        ],
+        "answer": "B. It was higher for a short period"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
