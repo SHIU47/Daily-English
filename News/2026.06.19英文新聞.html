@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 19, 2026：台灣經濟、科技 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 央行上修全年GDP至9.45%，AI紅利推升經濟動能\nTaiwan's Central Bank announced on June 19, 2026, a significant revision to its full-year Gross Domestic Product (GDP) growth forecast. The bank now expects the economy to expand by 9.45%, an upward adjustment from previous estimates. This optimistic outlook is primarily driven by the robust benefits from the artificial intelligence (AI) boom, which is significantly boosting the nation's economic momentum. The strong performance of AI-related industries is a key factor in this improved projection.\n\n[2] 台股再創歷史新高，指數衝破46465點挑戰5萬大關\nOn June 19, 2026, Taiwan's stock market achieved a significant milestone, with the benchmark index reaching an unprecedented high. The Taiex surged past 46,465 points, setting a new historical record for the island's equities. This remarkable performance reflects robust investor confidence and strong market momentum, driven by various economic factors. Analysts are now closely watching to see if the index can break the psychological barrier of 50,000 points in the near future, indicating continued bullish sentiment among traders.\n\n[3] 台積電攜手安靠，擴大美國先進封裝服務布局\nTSMC announced on June 19, 2026, a strategic partnership with Amkor Technology to significantly expand its advanced chip packaging services in the United States. This collaboration aims to meet the growing demand for high-performance computing components within the US market. The initiative is expected to strengthen domestic semiconductor supply chains and support local manufacturing capabilities. Both companies will combine their expertise to accelerate the deployment of cutting-edge packaging technologies.",
+    "chinese": "【1】央行上修全年GDP至9.45%，AI紅利推升經濟動能\n台灣央行於2026年6月19日宣布，大幅上修其全年國內生產毛額（GDP）成長預測。央行目前預計經濟將擴張9.45%，這比先前估計有所上調。這一樂觀前景主要受到人工智慧（AI）榮景所帶來的強勁效益推動，AI正顯著提振該國的經濟動能。AI相關產業的強勁表現是此次預測改善的關鍵因素。\n\n【2】台股再創歷史新高，指數衝破46465點挑戰5萬大關\n2026年6月19日，台灣股市達成一個重要里程碑，基準指數創下前所未有的新高。台灣加權指數衝破46,465點，為台灣股市寫下新的歷史紀錄。這項卓越的表現反映了投資者強勁的信心和強勁的市場動能，由多種經濟因素所驅動。分析師們正密切關注該指數是否能在不久的將來突破5萬點的心理關卡，這將預示著交易員之間持續的看漲情緒。\n\n【3】台積電攜手安靠，擴大美國先進封裝服務布局\n台積電於2026年6月19日宣布，與安靠科技建立戰略合作夥伴關係，旨在大幅擴大其在美國的先進晶片封裝服務。此次合作旨在滿足美國市場對高性能運算組件日益增長的需求。這項計畫預計將強化國內半導體供應鏈並支持本地製造能力。兩家公司將結合各自的專業知識，加速尖端封裝技術的部署。",
+    "vocabulary": [
+      "Central Bank (n.): 央行",
+      "announced (v.): 宣布",
+      "significant (adj.): 顯著的，重大的",
+      "revision (n.): 修正，修訂",
+      "full-year (adj.): 全年的",
+      "Gross Domestic Product (GDP) (n.): 國內生產毛額",
+      "growth forecast (n.): 成長預測",
+      "expect (v.): 預期",
+      "expand (v.): 擴張",
+      "upward adjustment (n.): 上修，向上調整",
+      "previous estimates (n.pl.): 先前估計",
+      "optimistic outlook (n.): 樂觀前景",
+      "primarily (adv.): 主要地",
+      "robust (adj.): 強勁的，穩健的",
+      "benefits (n.pl.): 效益，好處",
+      "artificial intelligence (AI) (n.): 人工智慧",
+      "boom (n.): 榮景，蓬勃發展",
+      "boosting (v.): 提振，推動",
+      "economic momentum (n.): 經濟動能",
+      "key factor (n.): 關鍵因素",
+      "milestone (n.): 里程碑",
+      "benchmark index (n.): 基準指數",
+      "unprecedented (adj.): 前所未有的",
+      "Taiex (n.): 台灣加權指數 (台股指數)",
+      "surge past (phr.v.): 飆升超越",
+      "historical record (n.): 歷史紀錄",
+      "equities (n.): 股票；股權",
+      "remarkable (adj.): 卓越的；非凡的",
+      "performance (n.): 表現；業績",
+      "robust (adj.): 強勁的；穩健的",
+      "investor confidence (n.): 投資者信心",
+      "market momentum (n.): 市場動能",
+      "economic factors (n.): 經濟因素",
+      "closely watching (phr.): 密切關注",
+      "psychological barrier (n.): 心理關卡",
+      "in the near future (phr.): 在不久的將來",
+      "indicating (v.): 指示；預示 (現在分詞)",
+      "continued (adj.): 持續的",
+      "bullish sentiment (n.): 看漲情緒",
+      "traders (n.): 交易員",
+      "TSMC (n.): 台積電",
+      "Amkor Technology (n.): 安靠科技",
+      "strategic (adj.): 戰略性的",
+      "partnership (n.): 合作夥伴關係",
+      "expand (v.): 擴大",
+      "advanced (adj.): 先進的",
+      "chip packaging (n.): 晶片封裝",
+      "services (n.): 服務",
+      "collaboration (n.): 合作",
+      "growing demand (n.): 日益增長的需求",
+      "high-performance computing (n.): 高性能運算",
+      "components (n.): 組件",
+      "initiative (n.): 計畫；倡議",
+      "strengthen (v.): 強化",
+      "domestic (adj.): 國內的",
+      "semiconductor (n.): 半導體",
+      "supply chains (n.): 供應鏈",
+      "manufacturing capabilities (n.): 製造能力",
+      "expertise (n.): 專業知識",
+      "cutting-edge (adj.): 尖端的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of the news report?",
+        "options": [
+          "A. Taiwan's new AI policies",
+          "B. The Central Bank's GDP forecast",
+          "C. Global economic trends",
+          "D. The stock market performance"
+        ],
+        "answer": "B. The Central Bank's GDP forecast"
+      },
+      {
+        "q": "According to the news, when did the Central Bank make this announcement?",
+        "options": [
+          "A. June 19, 2025",
+          "B. June 19, 2026",
+          "C. July 19, 2026",
+          "D. June 9, 2026"
+        ],
+        "answer": "B. June 19, 2026"
+      },
+      {
+        "q": "What is the Central Bank's revised full-year GDP growth forecast?",
+        "options": [
+          "A. 9.00%",
+          "B. 9.45%",
+          "C. 4.95%",
+          "D. 5.49%"
+        ],
+        "answer": "B. 9.45%"
+      },
+      {
+        "q": "How does the new GDP forecast compare to previous estimates?",
+        "options": [
+          "A. It is lower",
+          "B. It remains unchanged",
+          "C. It is an upward adjustment",
+          "D. It is a downward revision"
+        ],
+        "answer": "C. It is an upward adjustment"
+      },
+      {
+        "q": "What is the primary factor driving this optimistic economic outlook?",
+        "options": [
+          "A. Increased domestic consumption",
+          "B. A global trade agreement",
+          "C. The robust benefits from the artificial intelligence (AI) boom",
+          "D. Government stimulus packages"
+        ],
+        "answer": "C. The robust benefits from the artificial intelligence (AI) boom"
+      },
+      {
+        "q": "What does \"GDP\" stand for in the context of this news?",
+        "options": [
+          "A. General Development Plan",
+          "B. Gross Domestic Product",
+          "C. Global Digital Platform",
+          "D. Government Data Protocol"
+        ],
+        "answer": "B. Gross Domestic Product"
+      },
+      {
+        "q": "Which word best describes the Central Bank's current outlook on the economy?",
+        "options": [
+          "A. Pessimistic",
+          "B. Neutral",
+          "C. Cautious",
+          "D. Optimistic"
+        ],
+        "answer": "D. Optimistic"
+      },
+      {
+        "q": "What is being \"boosted\" by the AI boom, according to the article?",
+        "options": [
+          "A. The nation's agricultural output",
+          "B. The nation's economic momentum",
+          "C. The nation's education system",
+          "D. The nation's population growth"
+        ],
+        "answer": "B. The nation's economic momentum"
+      },
+      {
+        "q": "What type of industries are highlighted as a \"key factor\" in the improved projection?",
+        "options": [
+          "A. Agricultural industries",
+          "B. Traditional manufacturing industries",
+          "C. AI-related industries",
+          "D. Tourism industries"
+        ],
+        "answer": "C. AI-related industries"
+      },
+      {
+        "q": "In the phrase \"AI boom,\" what does \"boom\" refer to?",
+        "options": [
+          "A. A sudden loud noise",
+          "B. A period of rapid economic growth",
+          "C. A type of weapon",
+          "D. A decline in activity"
+        ],
+        "answer": "B. A period of rapid economic growth"
+      },
+      {
+        "q": "What action did the Central Bank take regarding its GDP forecast?",
+        "options": [
+          "A. It lowered it",
+          "B. It maintained it",
+          "C. It revised it upwards",
+          "D. It canceled it"
+        ],
+        "answer": "C. It revised it upwards"
+      },
+      {
+        "q": "The word \"robust\" in \"robust benefits\" suggests the benefits are:",
+        "options": [
+          "A. Weak and uncertain",
+          "B. Small and insignificant",
+          "C. Strong and healthy",
+          "D. Temporary and short-lived"
+        ],
+        "answer": "C. Strong and healthy"
+      },
+      {
+        "q": "What date did Taiwan's stock market achieve a significant milestone?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. June 19, 2026"
+      },
+      {
+        "q": "What did the benchmark index reach?",
+        "options": [
+          "A. A new low",
+          "B. An unprecedented high",
+          "C. A stable level",
+          "D. Its previous record"
+        ],
+        "answer": "B. An unprecedented high"
+      },
+      {
+        "q": "What is the name of Taiwan's benchmark index mentioned in the article?",
+        "options": [
+          "A. Nasdaq",
+          "B. Dow Jones",
+          "C. Taiex",
+          "D. S&P 500"
+        ],
+        "answer": "C. Taiex"
+      },
+      {
+        "q": "What specific point level did the Taiex surge past?",
+        "options": [
+          "A. 45,000 points",
+          "B. 46,465 points",
+          "C. 50,000 points",
+          "D. 40,000 points"
+        ],
+        "answer": "B. 46,465 points"
+      },
+      {
+        "q": "What does \"setting a new historical record\" mean in this context?",
+        "options": [
+          "A. The index reached its lowest point ever.",
+          "B. The index surpassed all previous highest points.",
+          "C. The index remained unchanged for a long time.",
+          "D. The index was recorded in history books for the first time."
+        ],
+        "answer": "B. The index surpassed all previous highest points."
+      },
+      {
+        "q": "What does the \"remarkable performance\" reflect?",
+        "options": [
+          "A. Decreased investor confidence.",
+          "B. Weak market momentum.",
+          "C. Robust investor confidence and strong market momentum.",
+          "D. Political instability."
+        ],
+        "answer": "C. Robust investor confidence and strong market momentum."
+      },
+      {
+        "q": "What is driving this performance according to the article?",
+        "options": [
+          "A. Single political event.",
+          "B. Various economic factors.",
+          "C. A sudden decrease in trading volume.",
+          "D. International conflicts."
+        ],
+        "answer": "B. Various economic factors."
+      },
+      {
+        "q": "What are analysts closely watching for in the near future?",
+        "options": [
+          "A. The index to fall significantly.",
+          "B. The index to remain stable.",
+          "C. The index to break the psychological barrier of 50,000 points.",
+          "D. The index to drop below 40,000 points."
+        ],
+        "answer": "C. The index to break the psychological barrier of 50,000 points."
+      },
+      {
+        "q": "What would breaking the 50,000-point barrier indicate?",
+        "options": [
+          "A. Bearish sentiment among traders.",
+          "B. Continued bullish sentiment among traders.",
+          "C. A stagnant market.",
+          "D. A market crash."
+        ],
+        "answer": "B. Continued bullish sentiment among traders."
+      },
+      {
+        "q": "The word \"unprecedented\" in the text means:",
+        "options": [
+          "A. Expected",
+          "B. Never done or known before",
+          "C. Common",
+          "D. Predicted"
+        ],
+        "answer": "B. Never done or known before"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a factor reflecting the market's performance?",
+        "options": [
+          "A. Robust investor confidence",
+          "B. Strong market momentum",
+          "C. Various economic factors",
+          "D. Government intervention"
+        ],
+        "answer": "D. Government intervention"
+      },
+      {
+        "q": "What kind of sentiment is expected if the index breaks 50,000 points?",
+        "options": [
+          "A. Neutral",
+          "B. Bearish",
+          "C. Bullish",
+          "D. Volatile"
+        ],
+        "answer": "C. Bullish"
+      },
+      {
+        "q": "Which company did TSMC partner with?",
+        "options": [
+          "Intel",
+          "Samsung",
+          "Amkor Technology",
+          "Qualcomm"
+        ],
+        "answer": "Amkor Technology"
+      },
+      {
+        "q": "What type of services are being expanded in the US?",
+        "options": [
+          "Software development",
+          "Advanced chip packaging",
+          "Cloud computing",
+          "Retail sales"
+        ],
+        "answer": "Advanced chip packaging"
+      },
+      {
+        "q": "The expansion of services is happening in which country?",
+        "options": [
+          "Taiwan",
+          "South Korea",
+          "China",
+          "the United States"
+        ],
+        "answer": "the United States"
+      },
+      {
+        "q": "What is the main goal of this collaboration?",
+        "options": [
+          "To reduce production costs",
+          "To increase global market share",
+          "To meet demand for high-performance computing components",
+          "To develop new consumer electronics"
+        ],
+        "answer": "To meet demand for high-performance computing components"
+      },
+      {
+        "q": "The partnership aims to strengthen which aspect of the US economy?",
+        "options": [
+          "Agricultural exports",
+          "Tourism industry",
+          "Domestic semiconductor supply chains",
+          "Automotive manufacturing"
+        ],
+        "answer": "Domestic semiconductor supply chains"
+      },
+      {
+        "q": "What kind of components are specifically mentioned as having growing demand?",
+        "options": [
+          "Basic memory chips",
+          "High-performance computing",
+          "Standard logic circuits",
+          "Analog sensors"
+        ],
+        "answer": "High-performance computing"
+      },
+      {
+        "q": "What will both companies combine to achieve their goals?",
+        "options": [
+          "Their financial resources",
+          "Their marketing strategies",
+          "Their existing customer bases",
+          "Their expertise"
+        ],
+        "answer": "Their expertise"
+      },
+      {
+        "q": "What kind of packaging technologies will be deployed faster?",
+        "options": [
+          "Outdated",
+          "Standard",
+          "Cutting-edge",
+          "Experimental"
+        ],
+        "answer": "Cutting-edge"
+      },
+      {
+        "q": "According to the news, when was this partnership announced?",
+        "options": [
+          "June 19, 2025",
+          "June 19, 2026",
+          "July 19, 2026",
+          "August 19, 2025"
+        ],
+        "answer": "June 19, 2026"
+      },
+      {
+        "q": "What does the term \"initiative\" refer to in this context?",
+        "options": [
+          "A personal idea",
+          "A new business branch",
+          "A proposed plan or action",
+          "A competitive product"
+        ],
+        "answer": "A proposed plan or action"
+      },
+      {
+        "q": "What is expected to be supported by this initiative besides supply chains?",
+        "options": [
+          "International trade agreements",
+          "Local manufacturing capabilities",
+          "Software innovation",
+          "Overseas investments"
+        ],
+        "answer": "Local manufacturing capabilities"
+      },
+      {
+        "q": "What adjective describes the demand for HPC components?",
+        "options": [
+          "Declining",
+          "Stable",
+          "Fluctuating",
+          "Growing"
+        ],
+        "answer": "Growing"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "Google Gemini共同負責人跳槽OpenAI，AI人才戰白熱化",
+    "tabTitle": "科技",
+    "english": "A key co-lead of Google's Gemini project has recently departed the tech giant. This prominent individual has reportedly joined OpenAI, a major competitor in the artificial intelligence sector. This high-profile move is seen as a significant development, further intensifying the ongoing global talent war among leading AI companies striving for innovation and market dominance.",
+    "chinese": "Google Gemini專案的一位主要共同負責人最近已離開這家科技巨頭。這位知名人士據報導已加入人工智慧領域的主要競爭對手OpenAI。這一備受矚目的舉動被視為一項重大發展，進一步加劇了領先的人工智慧公司之間為追求創新和市場主導地位而持續進行的全球人才戰。",
+    "vocabulary": [
+      "Co-lead (n.): 共同負責人",
+      "Jumps (v.): 跳槽 / 轉投",
+      "Intensifying (v. participle): 加劇",
+      "Talent war (n.): 人才戰",
+      "Departed (v.): 離開",
+      "Tech giant (n.): 科技巨頭",
+      "Prominent (adj.): 知名/重要的",
+      "Reportedly (adv.): 據報導",
+      "Competitor (n.): 競爭對手",
+      "Artificial intelligence (n.): 人工智慧",
+      "Sector (n.): 領域/部門",
+      "High-profile (adj.): 備受矚目的",
+      "Significant (adj.): 重大的",
+      "Development (n.): 發展",
+      "Ongoing (adj.): 持續進行的",
+      "Leading (adj.): 領先的",
+      "Striving for (phr. v.): 努力爭取",
+      "Innovation (n.): 創新",
+      "Market dominance (n.): 市場主導地位",
+      "Project (n.): 專案/計畫"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "Who is the individual mentioned in the news?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "Where did the individual previously work?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "Which company did the individual reportedly join?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      },
+      {
+        "q": "How is this move described in the article?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What industry is primarily affected by this event?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What is 'talent war' referring to in this context?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What are leading AI companies striving for, according to the article?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "The word 'departed' in the text means:",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What does 'intensifying' suggest about the AI talent war?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "The news title mentions 'AI Talent War white-hot' (白熱化). What does 'white-hot' imply?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B"
+      },
+      {
+        "q": "What is Google's Gemini project?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "日圓兌美元跌破160關卡，創40年新低引發干預擔憂",
+    "tabTitle": "金融市場",
+    "english": "On June 19, 2026, the Japanese Yen sharply depreciated against the U.S. Dollar, breaking the 160 threshold. This marked a significant 40-year low for the currency. The rapid decline has intensified market speculation regarding potential intervention from Japanese authorities. Investors are closely watching for any signs of action to stabilize the Yen, as its weakness impacts import costs and economic stability.",
+    "chinese": "2026年6月19日，日圓兌美元大幅貶值，跌破160關卡。這標誌著該貨幣創下40年來的新低。日圓的迅速下跌加劇了市場對日本當局可能進行干預的猜測。投資者正密切關注任何穩定日圓的行動跡象，因為其疲軟影響進口成本和經濟穩定。",
+    "vocabulary": [
+      "sharply (adv.): 大幅地，急劇地",
+      "depreciated (v.): 貶值",
+      "against (prep.): 兌，對",
+      "U.S. Dollar (n. phrase): 美元",
+      "break (v.): 突破，跌破",
+      "threshold (n.): 關卡，門檻",
+      "mark (v.): 標誌著",
+      "significant (adj.): 顯著的，重大的",
+      "40-year low (n. phrase): 40年新低",
+      "rapid (adj.): 迅速的",
+      "decline (n.): 下跌，下降",
+      "intensify (v.): 加劇",
+      "market speculation (n. phrase): 市場猜測",
+      "potential (adj.): 潛在的",
+      "intervention (n.): 干預",
+      "Japanese authorities (n. phrase): 日本當局",
+      "closely watch (v. phrase): 密切關注",
+      "stabilize (v.): 穩定",
+      "weakness (n.): 疲軟，弱勢",
+      "import costs (n. phrase): 進口成本"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main subject of this news article?",
+        "options": [
+          "A) Japanese trade policy",
+          "B) The appreciation of the U.S. Dollar",
+          "C) The depreciation of the Japanese Yen",
+          "D) Global economic growth"
+        ],
+        "answer": "C) The depreciation of the Japanese Yen"
+      },
+      {
+        "q": "According to the article, when did the Yen's significant depreciation occur?",
+        "options": [
+          "A) June 19, 2025",
+          "B) June 19, 2026",
+          "C) July 19, 2026",
+          "D) June 9, 2026"
+        ],
+        "answer": "B) June 19, 2026"
+      },
+      {
+        "q": "Against which currency did the Japanese Yen depreciate?",
+        "options": [
+          "A) The Euro",
+          "B) The British Pound",
+          "C) The U.S. Dollar",
+          "D) The Chinese Yuan"
+        ],
+        "answer": "C) The U.S. Dollar"
+      },
+      {
+        "q": "What specific exchange rate threshold did the Yen break?",
+        "options": [
+          "A) 150 against the Dollar",
+          "B) 160 against the Dollar",
+          "C) 140 against the Dollar",
+          "D) 170 against the Dollar"
+        ],
+        "answer": "B) 160 against the Dollar"
+      },
+      {
+        "q": "The Yen's decline marked a significant low for how many years?",
+        "options": [
+          "A) 10 years",
+          "B) 20 years",
+          "C) 30 years",
+          "D) 40 years"
+        ],
+        "answer": "D) 40 years"
+      },
+      {
+        "q": "What has the rapid decline of the Yen intensified?",
+        "options": [
+          "A) Japanese export growth",
+          "B) Market speculation regarding intervention",
+          "C) Domestic consumption",
+          "D) Global interest rates"
+        ],
+        "answer": "B) Market speculation regarding intervention"
+      },
+      {
+        "q": "Who are investors closely watching for potential action?",
+        "options": [
+          "A) The International Monetary Fund",
+          "B) The U.S. Federal Reserve",
+          "C) Japanese authorities",
+          "D) European Central Bank"
+        ],
+        "answer": "C) Japanese authorities"
+      },
+      {
+        "q": "What is one key impact of the Yen's weakness mentioned in the article?",
+        "options": [
+          "A) Increased tourism",
+          "B) Lower export prices",
+          "C) Higher import costs",
+          "D) Stronger economic growth"
+        ],
+        "answer": "C) Higher import costs"
+      },
+      {
+        "q": "In the context of currency, what does \"depreciated\" mean?",
+        "options": [
+          "A) Increased in value",
+          "B) Decreased in value",
+          "C) Remained stable",
+          "D) Was exchanged for gold"
+        ],
+        "answer": "B) Decreased in value"
+      },
+      {
+        "q": "What does \"threshold\" refer to in the phrase \"breaking the 160 threshold\"?",
+        "options": [
+          "A) A physical barrier",
+          "B) A critical level or limit",
+          "C) A new trading strategy",
+          "D) An economic indicator"
+        ],
+        "answer": "B) A critical level or limit"
+      },
+      {
+        "q": "What is the meaning of \"intensified\" in the sentence \"The rapid decline has intensified market speculation\"?",
+        "options": [
+          "A) Reduced",
+          "B) Weakened",
+          "C) Increased or made stronger",
+          "D) Stabilized"
+        ],
+        "answer": "C) Increased or made stronger"
+      },
+      {
+        "q": "What is the primary concern that the Yen's weakness impacts, besides import costs?",
+        "options": [
+          "A) Export volume",
+          "B) Domestic tourism",
+          "C) Economic stability",
+          "D) Stock market performance"
+        ],
+        "answer": "C) Economic stability"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "SpaceX成功發行200億美元公司債，再擴大資金版圖",
+    "tabTitle": "金融市場",
+    "english": "SpaceX successfully issued $20 billion in corporate bonds on June 19, 2026. This significant move aims to further expand the company's capital base, supporting its ambitious projects in space exploration and satellite internet services. The bond issuance demonstrates strong investor confidence in SpaceX's future growth and technological advancements. This strategic financing will enable the company to accelerate its development and operational capabilities globally.",
+    "chinese": "SpaceX於2026年6月19日成功發行了200億美元的公司債。這項重大舉措旨在進一步擴大公司的資金基礎，以支持其在太空探索和衛星網路服務方面的宏偉計畫。此次債券發行顯示了投資者對SpaceX未來成長和技術進步的強烈信心。這項策略性融資將使公司能夠加速其全球發展和營運能力。",
+    "vocabulary": [
+      "issue (v.): 發行",
+      "corporate bonds (n.phr.): 公司債券",
+      "expand (v.): 擴大",
+      "capital (n.): 資金；資本",
+      "significant (adj.): 重大的",
+      "move (n.): 舉措",
+      "aim to (v.phr.): 旨在",
+      "further (adv.): 進一步地",
+      "capital base (n.phr.): 資金基礎",
+      "support (v.): 支持",
+      "ambitious (adj.): 宏偉的；有抱負的",
+      "projects (n.): 專案；計畫",
+      "space exploration (n.phr.): 太空探索",
+      "satellite internet services (n.phr.): 衛星網路服務",
+      "demonstrate (v.): 展現；證明",
+      "investor confidence (n.phr.): 投資者信心",
+      "technological advancements (n.phr.): 技術進步",
+      "strategic (adj.): 策略性的",
+      "financing (n.): 融資",
+      "operational capabilities (n.phr.): 營運能力"
+    ],
+    "quiz": [
+      {
+        "q": "The news primarily reports on SpaceX's...",
+        "options": [
+          "A. new rocket launch.",
+          "B. financial strategy.",
+          "C. latest satellite.",
+          "D. change in leadership."
+        ],
+        "answer": "B. financial strategy."
+      },
+      {
+        "q": "How much money did SpaceX raise through corporate bonds?",
+        "options": [
+          "A. $2 billion",
+          "B. $20 billion",
+          "C. $200 million",
+          "D. $200 billion"
+        ],
+        "answer": "B. $20 billion"
+      },
+      {
+        "q": "What date is mentioned for the bond issuance?",
+        "options": [
+          "A. June 19, 2026",
+          "B. July 19, 2026",
+          "C. June 19, 2025",
+          "D. July 19, 2025"
+        ],
+        "answer": "A. June 19, 2026"
+      },
+      {
+        "q": "The main purpose of issuing these bonds is to...",
+        "options": [
+          "A. pay off old debts.",
+          "B. increase employee salaries.",
+          "C. expand the company's capital base.",
+          "D. buy other companies."
+        ],
+        "answer": "C. expand the company's capital base."
+      },
+      {
+        "q": "Which of these is NOT mentioned as a project the capital will support?",
+        "options": [
+          "A. Space exploration",
+          "B. Satellite internet services",
+          "C. Terrestrial vehicle development",
+          "D. Technological advancements"
+        ],
+        "answer": "C. Terrestrial vehicle development"
+      },
+      {
+        "q": "What does the bond issuance demonstrate?",
+        "options": [
+          "A. SpaceX is struggling financially.",
+          "B. Investors have strong confidence in SpaceX.",
+          "C. SpaceX is selling off its assets.",
+          "D. The bond market is unstable."
+        ],
+        "answer": "B. Investors have strong confidence in SpaceX."
+      },
+      {
+        "q": "In the phrase \"corporate bonds,\" what does \"corporate\" refer to?",
+        "options": [
+          "A. Government",
+          "B. Individual",
+          "C. Company",
+          "D. Bank"
+        ],
+        "answer": "C. Company"
+      },
+      {
+        "q": "What is the meaning of \"ambitious\" in \"ambitious projects\"?",
+        "options": [
+          "A. Small and easy",
+          "B. Boring and simple",
+          "C. Challenging and grand",
+          "D. Cheap and quick"
+        ],
+        "answer": "C. Challenging and grand"
+      },
+      {
+        "q": "\"Capital base\" most closely means:",
+        "options": [
+          "A. The main office building.",
+          "B. The fundamental amount of money a company has.",
+          "C. The total number of employees.",
+          "D. The lowest price of a stock."
+        ],
+        "answer": "B. The fundamental amount of money a company has."
+      },
+      {
+        "q": "What kind of services does SpaceX provide that are directly mentioned in the text?",
+        "options": [
+          "A. Mobile phone services",
+          "B. Cable TV services",
+          "C. Satellite internet services",
+          "D. Landline telephone services"
+        ],
+        "answer": "C. Satellite internet services"
+      },
+      {
+        "q": "What will \"strategic financing\" enable SpaceX to do?",
+        "options": [
+          "A. Reduce its workforce.",
+          "B. Accelerate its development and operational capabilities.",
+          "C. Stop all current projects.",
+          "D. Focus only on one specific project."
+        ],
+        "answer": "B. Accelerate its development and operational capabilities."
+      },
+      {
+        "q": "The term \"technological advancements\" refers to:",
+        "options": [
+          "A. Decreases in technology.",
+          "B. Progress and improvements in technology.",
+          "C. The cost of technology.",
+          "D. Old technology."
+        ],
+        "answer": "B. Progress and improvements in technology."
+      }
+    ]
+  },
+  "article-6": {
+    "title": "日本TDK固態電池材料突破，電力效能提升百倍",
+    "tabTitle": "科技",
+    "english": "On June 19, 2026, Japan's TDK announced a significant breakthrough in solid-state battery technology. The company developed new materials that dramatically improve battery performance and power efficiency. This innovation could lead to a 100-fold increase in energy output, potentially revolutionizing various electronic devices. Experts believe this advancement marks a major step towards safer and more powerful energy storage solutions.",
+    "chinese": "2026年6月19日，日本TDK宣布在固態電池技術方面取得重大突破。該公司開發出能大幅提升電池性能和電力效能的新材料。這項創新可能使能量輸出增加100倍，潛在地革新各種電子設備。專家認為，這項進展標誌著朝向更安全、更強大儲能解決方案邁出的一大步。",
+    "vocabulary": [
+      "breakthrough (n.): 突破",
+      "solid-state battery (n.): 固態電池",
+      "technology (n.): 技術",
+      "material (n.): 材料",
+      "dramatically (adv.): 大幅地；顯著地",
+      "improve (v.): 改善；提升",
+      "performance (n.): 性能；表現",
+      "power efficiency (n.): 電力效能",
+      "innovation (n.): 創新；革新",
+      "lead to (phr. v.): 導致；促成",
+      "increase (v./n.): 增加；增長",
+      "energy output (n. phr.): 能量輸出",
+      "potentially (adv.): 潛在地；可能地",
+      "revolutionize (v.): 徹底改變；革新",
+      "electronic device (n. phr.): 電子設備",
+      "expert (n.): 專家",
+      "advancement (n.): 進展；發展",
+      "mark (v.): 標誌著",
+      "major step (n. phr.): 重大一步",
+      "energy storage solution (n. phr.): 儲能解決方案"
+    ],
+    "quiz": [
+      {
+        "q": "What company announced the breakthrough?",
+        "options": [
+          "A) Sony",
+          "B) Panasonic",
+          "C) TDK",
+          "D) Samsung"
+        ],
+        "answer": "C) TDK"
+      },
+      {
+        "q": "What type of battery technology is mentioned in the news?",
+        "options": [
+          "A) Lithium-ion",
+          "B) Solid-state",
+          "C) Nickel-cadmium",
+          "D) Fuel cell"
+        ],
+        "answer": "B) Solid-state"
+      },
+      {
+        "q": "How much is the energy output expected to increase?",
+        "options": [
+          "A) 10 times",
+          "B) 50 times",
+          "C) 100 times",
+          "D) 1000 times"
+        ],
+        "answer": "C) 100 times"
+      },
+      {
+        "q": "What is the potential impact of this innovation?",
+        "options": [
+          "A) Lower manufacturing costs",
+          "B) Revolutionize electronic devices",
+          "C) Reduce battery size",
+          "D) Increase charging speed"
+        ],
+        "answer": "B) Revolutionize electronic devices"
+      },
+      {
+        "q": "What does the word \"breakthrough\" mean in this context?",
+        "options": [
+          "A) A small improvement",
+          "B) A significant discovery or achievement",
+          "C) A problem",
+          "D) A setback"
+        ],
+        "answer": "B) A significant discovery or achievement"
+      },
+      {
+        "q": "The new materials developed by TDK dramatically ______ battery performance.",
+        "options": [
+          "A) decrease",
+          "B) maintain",
+          "C) improve",
+          "D) complicate"
+        ],
+        "answer": "C) improve"
+      },
+      {
+        "q": "What phrase means \"the ability to do work or produce power efficiently\"?",
+        "options": [
+          "A) energy output",
+          "B) power efficiency",
+          "C) material development",
+          "D) battery performance"
+        ],
+        "answer": "B) power efficiency"
+      },
+      {
+        "q": "According to experts, what does this advancement mark?",
+        "options": [
+          "A) A minor adjustment",
+          "B) A market saturation",
+          "C) A major step",
+          "D) A temporary solution"
+        ],
+        "answer": "C) A major step"
+      },
+      {
+        "q": "What are the mentioned benefits of this advancement regarding energy storage?",
+        "options": [
+          "A) Cheaper and faster",
+          "B) Smaller and lighter",
+          "C) Safer and more powerful",
+          "D) Simpler and more durable"
+        ],
+        "answer": "C) Safer and more powerful"
+      },
+      {
+        "q": "What kind of objects might be \"revolutionized\" by this battery technology?",
+        "options": [
+          "A) Household appliances",
+          "B) Electronic devices",
+          "C) Industrial machinery",
+          "D) Medical equipment"
+        ],
+        "answer": "B) Electronic devices"
+      },
+      {
+        "q": "Which word describes something that is \"capable of happening or being achieved\"?",
+        "options": [
+          "A) dramatically",
+          "B) potentially",
+          "C) significantly",
+          "D) actually"
+        ],
+        "answer": "B) potentially"
+      },
+      {
+        "q": "What is the main subject of the news report?",
+        "options": [
+          "A) TDK's financial results",
+          "B) New battery materials",
+          "C) Global energy policies",
+          "D) Electronic device manufacturing"
+        ],
+        "answer": "B) New battery materials"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
