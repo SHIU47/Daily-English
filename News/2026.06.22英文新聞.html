@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 22, 2026：科技、金融市場 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電德國廠建造加速，預計下半年設備進駐\nTSMC's new semiconductor fabrication plant in Dresden, Germany, is progressing ahead of schedule, with construction accelerating rapidly. Industry sources indicate that the facility is preparing to install its first batch of advanced manufacturing equipment in the second half of this year. This European expansion aims to address the growing demand for automotive and industrial chips within the region. Local government officials have pledged continued support to ensure the plant's timely completion and integration into the global supply chain.\n\n[2] 立院審議關鍵基礎設施法，強化國家韌性\nTaiwan's legislature is currently debating a crucial bill aimed at safeguarding the nation's critical infrastructure against cyber threats and physical sabotage. The proposed legislation seeks to enhance national resilience by imposing stricter security protocols on essential sectors, including energy, transportation, and telecommunications. Supporters argue that the law is vital for national security amid growing geopolitical tensions. However, some lawmakers have raised concerns regarding the potential compliance costs for private operators and the scope of government oversight.\n\n[3] 美中高層會談觸及台灣，地緣政治情勢受關注\nHigh-level officials from the United States and China recently met to discuss critical bilateral issues, with the Taiwan Strait taking center stage. During the talks, the US reiterated its commitment to maintaining peace and stability in the region, urging Beijing to exercise restraint. Meanwhile, Chinese representatives emphasized that Taiwan remains their most sensitive core interest, warning against external interference. As global observers closely watch the diplomatic outcomes, these discussions highlight the complex geopolitical dynamics currently shaping the Indo-Pacific region.",
+    "chinese": "【1】台積電德國廠建造加速，預計下半年設備進駐\n台積電位於德國德勒斯登的新半導體晶圓廠進度超前，建設工作正迅速加速。產業消息來源指出，該廠正準備於今年下半年進駐首批先進製造設備。這項歐洲擴張計劃旨在滿足該地區對車用與工業晶片日益增長的需求。當地政府官員已承諾持續給予支持，以確保該廠如期完工並融入全球供應鏈。\n\n【2】立院審議關鍵基礎設施法，強化國家韌性\n台灣立法院目前正在審議一項旨在保護國家關鍵基礎設施免受網路威脅和實體破壞的關鍵法案。該草案尋求透過對能源、交通和電信等重要部門實施更嚴格的安全協定，來強化國家韌性。支持者認為，在面臨日益緊張的地緣政治局勢下，該法對國家安全至關重要。然而，部分立法委員對私營營運商的潛在合規成本以及政府監督的範圍表示擔憂。\n\n【3】美中高層會談觸及台灣，地緣政治情勢受關注\n美中高層官員近日舉行會談，討論關鍵的雙邊議題，其中台灣海峽局勢成為焦點。會談期間，美方重申其維護該地區和平與穩定的承諾，並敦促北京保持克制。與此同時，中方代表強調，台灣仍是其最敏感的核心利益，並警告外部勢力不要干涉。隨著全球觀察家密切關注外交成果，這些討論凸顯了當前形勢下形塑印太地區的複雜地緣政治動態。",
+    "vocabulary": [
+      "semiconductor (n.): 半導體",
+      "fabrication plant (n.): 晶圓廠、製造廠",
+      "progress (v.): 進展、前進",
+      "ahead of schedule (phr.): 提前、超前進度",
+      "accelerate (v.): 加速",
+      "industry (n.): 產業、行業",
+      "source (n.): 來源、消息來源",
+      "indicate (v.): 指出、顯示",
+      "facility (n.): 設施、廠房",
+      "install (v.): 安裝、裝設",
+      "batch (n.): 一批、一組",
+      "advanced (adj.): 先進的、高等的",
+      "equipment (n.): 設備、器材",
+      "expansion (n.): 擴張、擴展",
+      "address (v.): 處理、應對",
+      "automotive (adj.): 汽車的",
+      "pledge (v.): 承諾、發誓",
+      "timely (adj.): 及時的、適時的",
+      "integration (n.): 整合、融入",
+      "supply chain (n.): 供應鏈",
+      "legislature (n.): 立法機關",
+      "debate (v.): 辯論；審議",
+      "crucial (adj.): 關鍵的；至關重要的",
+      "bill (n.): 法案",
+      "safeguard (v.): 保護；捍衛",
+      "critical infrastructure (n. phr.): 關鍵基礎設施",
+      "cyber threat (n. phr.): 網路威脅",
+      "sabotage (n.): 蓄意破壞",
+      "legislation (n.): 法律；法規",
+      "enhance (v.): 強化；提升",
+      "resilience (n.): 韌性；彈性",
+      "impose (v.): 強制實施；施加",
+      "protocol (n.): 協定；規範",
+      "sector (n.): 部門；領域",
+      "telecommunications (n.): 電信",
+      "geopolitical (adj.): 地緣政治的",
+      "compliance cost (n. phr.): 合規成本",
+      "operator (n.): 營運商；操作員",
+      "scope (n.): 範圍",
+      "oversight (n.): 監督；監管",
+      "high-level (adj.): 高層的",
+      "bilateral (adj.): 雙邊的",
+      "center stage (n.): 焦點；中心舞台",
+      "reiterate (v.): 重申",
+      "commitment (n.): 承諾；奉獻",
+      "stability (n.): 穩定",
+      "urge (v.): 敦促；催促",
+      "exercise restraint (phr.): 保持克制",
+      "representative (n.): 代表",
+      "emphasize (v.): 強調",
+      "sensitive (adj.): 敏感的",
+      "core interest (n.): 核心利益",
+      "external interference (phr.): 外部干涉",
+      "observer (n.): 觀察家；觀察員",
+      "diplomatic (adj.): 外交的",
+      "outcome (n.): 結果；成果",
+      "geopolitical (adj.): 地緣政治的",
+      "dynamics (n.): 動態；動力",
+      "Indo-Pacific (adj.): 印太地區的",
+      "maintain (v.): 維持；保持"
+    ],
+    "quiz": [
+      {
+        "q": "Where is TSMC's new semiconductor fabrication plant located?",
+        "options": [
+          "France",
+          "Germany",
+          "Japan",
+          "USA"
+        ],
+        "answer": "Germany"
+      },
+      {
+        "q": "When is the plant expected to begin installing its manufacturing equipment?",
+        "options": [
+          "First half of next year",
+          "Second half of this year",
+          "Late next year",
+          "Immediately"
+        ],
+        "answer": "Second half of this year"
+      },
+      {
+        "q": "What does the phrase 'ahead of schedule' mean?",
+        "options": [
+          "Delayed",
+          "Cancelled",
+          "Earlier than planned",
+          "On time"
+        ],
+        "answer": "Earlier than planned"
+      },
+      {
+        "q": "Which word is closest in meaning to 'accelerate'?",
+        "options": [
+          "Slow down",
+          "Speed up",
+          "Postpone",
+          "Stop"
+        ],
+        "answer": "Speed up"
+      },
+      {
+        "q": "What type of chips is this European expansion primarily aiming to address?",
+        "options": [
+          "Smartphone and PC chips",
+          "AI and graphics chips",
+          "Automotive and industrial chips",
+          "Memory and storage chips"
+        ],
+        "answer": "Automotive and industrial chips"
+      },
+      {
+        "q": "What is the meaning of 'pledge' in the article?",
+        "options": [
+          "To deny",
+          "To promise",
+          "To delay",
+          "To ignore"
+        ],
+        "answer": "To promise"
+      },
+      {
+        "q": "What does 'facility' refer to in the text?",
+        "options": [
+          "The machinery only",
+          "The factory building and site",
+          "The local government",
+          "The transport system"
+        ],
+        "answer": "The factory building and site"
+      },
+      {
+        "q": "Why is the local government supporting the project?",
+        "options": [
+          "To stop the construction",
+          "To increase taxes",
+          "To ensure timely completion and integration",
+          "To move the plant to another country"
+        ],
+        "answer": "To ensure timely completion and integration"
+      },
+      {
+        "q": "Choose the correct Chinese translation for 'supply chain'.",
+        "options": [
+          "供應鏈",
+          "需求鏈",
+          "生產線",
+          "銷售管道"
+        ],
+        "answer": "供應鏈"
+      },
+      {
+        "q": "What does 'address' mean in the sentence 'aims to address the growing demand'?",
+        "options": [
+          "To write a location",
+          "To speak to an audience",
+          "To deal with or satisfy",
+          "To avoid"
+        ],
+        "answer": "To deal with or satisfy"
+      },
+      {
+        "q": "The team worked hard to ensure the ________ completion of the project.",
+        "options": [
+          "timely",
+          "delayed",
+          "ancient",
+          "temporary"
+        ],
+        "answer": "timely"
+      },
+      {
+        "q": "Which of the following is the noun form of 'expand'?",
+        "options": [
+          "expansive",
+          "expander",
+          "expansion",
+          "expanding"
+        ],
+        "answer": "expansion"
+      },
+      {
+        "q": "What is the main purpose of the bill being debated in Taiwan's legislature?",
+        "options": [
+          "A) To reduce energy consumption",
+          "B) To safeguard critical infrastructure",
+          "C) To privatize the telecommunications sector",
+          "D) To decrease government oversight"
+        ],
+        "answer": "B) To safeguard critical infrastructure"
+      },
+      {
+        "q": "Which word in the text means 'the ability to recover quickly from difficulties; toughness'?",
+        "options": [
+          "A) Sabotage",
+          "B) Oversight",
+          "C) Resilience",
+          "D) Compliance"
+        ],
+        "answer": "C) Resilience"
+      },
+      {
+        "q": "Which of the following sectors is NOT explicitly mentioned as an essential sector in the text?",
+        "options": [
+          "A) Energy",
+          "B) Transportation",
+          "C) Agriculture",
+          "D) Telecommunications"
+        ],
+        "answer": "C) Agriculture"
+      },
+      {
+        "q": "What does the word 'sabotage' mean in the context of the passage?",
+        "options": [
+          "A) Construction of new facilities",
+          "B) Deliberate destruction or damage",
+          "C) International cooperation",
+          "D) Financial investment"
+        ],
+        "answer": "B) Deliberate destruction or damage"
+      },
+      {
+        "q": "Why do supporters believe the law is vital?",
+        "options": [
+          "A) Due to rising geopolitical tensions",
+          "B) To help private operators make more profit",
+          "C) To reduce the power of the legislature",
+          "D) To lower the cost of internet services"
+        ],
+        "answer": "A) Due to rising geopolitical tensions"
+      },
+      {
+        "q": "In the phrase 'imposing stricter security protocols,' what does 'impose' mean?",
+        "options": [
+          "A) To cancel or lift",
+          "B) To force the acceptance or implementation of",
+          "C) To negotiate peacefully",
+          "D) To delay indefinitely"
+        ],
+        "answer": "B) To force the acceptance or implementation of"
+      },
+      {
+        "q": "What concern did some lawmakers raise regarding the proposed legislation?",
+        "options": [
+          "A) The lack of support from the public",
+          "B) The potential compliance costs for private operators",
+          "C) The decrease in national security",
+          "D) The exclusion of the energy sector"
+        ],
+        "answer": "B) The potential compliance costs for private operators"
+      },
+      {
+        "q": "The word 'crucial' in the first sentence is closest in meaning to ________.",
+        "options": [
+          "A) optional",
+          "B) minor",
+          "C) essential",
+          "D) temporary"
+        ],
+        "answer": "C) essential"
+      },
+      {
+        "q": "Besides physical sabotage, what other type of threat does the bill aim to protect infrastructure against?",
+        "options": [
+          "A) Natural disasters",
+          "B) Cyber threats",
+          "C) Economic inflation",
+          "D) Labor strikes"
+        ],
+        "answer": "B) Cyber threats"
+      },
+      {
+        "q": "What is the meaning of 'oversight' as used in the final sentence?",
+        "options": [
+          "A) An unintentional omission or mistake",
+          "B) Regulatory supervision and monitoring",
+          "C) The process of overlooking a beautiful view",
+          "D) Extreme negligence"
+        ],
+        "answer": "B) Regulatory supervision and monitoring"
+      },
+      {
+        "q": "Fill in the blank: 'The proposed legislation seeks ________ national resilience.'",
+        "options": [
+          "A) enhancing",
+          "B) to enhance",
+          "C) enhanced",
+          "D) enhance"
+        ],
+        "answer": "B) to enhance"
+      },
+      {
+        "q": "Based on the passage, who would be responsible for paying 'compliance costs'?",
+        "options": [
+          "A) Only the lawmakers",
+          "B) Foreign governments",
+          "C) Private operators",
+          "D) Cyber hackers"
+        ],
+        "answer": "C) Private operators"
+      },
+      {
+        "q": "What was the central focus of the recent US-China high-level talks?",
+        "options": [
+          "Trade tariffs",
+          "The Taiwan Strait",
+          "Climate change",
+          "Space exploration"
+        ],
+        "answer": "The Taiwan Strait"
+      },
+      {
+        "q": "Which word means 'to say something again, once or several times, typically for emphasis or clarity'?",
+        "options": [
+          "reiterate",
+          "reject",
+          "restrict",
+          "resolve"
+        ],
+        "answer": "reiterate"
+      },
+      {
+        "q": "What did the US urge Beijing to do during the talks?",
+        "options": [
+          "Increase military spending",
+          "Sever diplomatic ties",
+          "Exercise restraint",
+          "Sign a new trade agreement"
+        ],
+        "answer": "Exercise restraint"
+      },
+      {
+        "q": "What is the meaning of the word 'bilateral'?",
+        "options": [
+          "Involving only one country",
+          "Involving two parties or countries",
+          "Occurring every two years",
+          "Secret or confidential"
+        ],
+        "answer": "Involving two parties or countries"
+      },
+      {
+        "q": "How does China view the Taiwan issue according to the text?",
+        "options": [
+          "As a minor trade dispute",
+          "As its most sensitive core interest",
+          "As a resolved historical matter",
+          "As an external diplomatic tool"
+        ],
+        "answer": "As its most sensitive core interest"
+      },
+      {
+        "q": "Fill in the blank: The two nations signed a treaty to maintain peace and ________ in the region.",
+        "options": [
+          "stability",
+          "suspicion",
+          "struggle",
+          "separation"
+        ],
+        "answer": "stability"
+      },
+      {
+        "q": "What warning did the Chinese representatives issue?",
+        "options": [
+          "Against economic cooperation",
+          "Against external interference",
+          "Against environmental regulations",
+          "Against technological advancement"
+        ],
+        "answer": "Against external interference"
+      },
+      {
+        "q": "What does the word 'outcome' refer to?",
+        "options": [
+          "The beginning of an event",
+          "A system of rules",
+          "The final result of a process or meeting",
+          "An income tax"
+        ],
+        "answer": "The final result of a process or meeting"
+      },
+      {
+        "q": "In the phrase 'urging Beijing to exercise restraint,' what does 'restraint' mean?",
+        "options": [
+          "Calm and controlled behavior",
+          "Immediate action",
+          "Physical punishment",
+          "Financial support"
+        ],
+        "answer": "Calm and controlled behavior"
+      },
+      {
+        "q": "Which adjective describes things relating to international politics influenced by geographical factors?",
+        "options": [
+          "Geopolitical",
+          "Geological",
+          "Biographical",
+          "Demographic"
+        ],
+        "answer": "Geopolitical"
+      },
+      {
+        "q": "Who is closely watching the diplomatic outcomes of these discussions?",
+        "options": [
+          "Only local residents",
+          "Global observers",
+          "Military generals only",
+          "Corporate CEOs"
+        ],
+        "answer": "Global observers"
+      },
+      {
+        "q": "Complete the sentence: The government made a strong ________ to reduce carbon emissions by 2030.",
+        "options": [
+          "commitment",
+          "compromise",
+          "competition",
+          "confusion"
+        ],
+        "answer": "commitment"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "黃金價格持續上漲，投資者避險需求升溫",
+    "tabTitle": "金融市場",
+    "english": "Gold prices surged to a historic high on Monday as escalating geopolitical tensions and persistent inflation fears drove investors toward safe-haven assets. Analysts point out that market volatility has prompted both retail and institutional investors to diversify their portfolios, with gold being the preferred choice to hedge against economic uncertainty. Furthermore, expectations of interest rate cuts by major central banks have added upward pressure on the precious metal. Experts forecast that this bullish trend may continue if global market instability persists.",
+    "chinese": "由於地緣政治緊張局勢升級以及對通膨的持續擔憂促使投資者轉向避險資產，黃金價格於週一飆升至歷史新高。分析師指出，市場波動已促使零售和機構投資者將其投資組合多元化，而黃金是規避經濟不確定性風險的首選。此外，主要央行降息的預期也為這一貴金屬增添了上行壓力。專家預測，如果全球市場不穩定持續存在，這種牛市趨勢可能會繼續下去。",
+    "vocabulary": [
+      "surge (v.): 急遽上升",
+      "historic (adj.): 歷史性的",
+      "escalating (adj.): 不斷加劇的",
+      "geopolitical (adj.): 地緣政治的",
+      "persistent (adj.): 持續的",
+      "inflation (n.): 通貨膨脹",
+      "safe-haven (n.): 避風港",
+      "asset (n.): 資產",
+      "analyst (n.): 分析師",
+      "volatility (n.): 波動性",
+      "prompt (v.): 促使",
+      "retail (adj.): 零售的",
+      "institutional (adj.): 機構的",
+      "diversify (v.): 使多樣化",
+      "portfolio (n.): 投資組合",
+      "hedge (v.): 避險/規避",
+      "precious metal (n.): 貴金屬",
+      "bullish (adj.): 看漲的/牛市的",
+      "instability (n.): 不穩定",
+      "persist (v.): 持續"
+    ],
+    "quiz": [
+      {
+        "q": "According to the text, what drove investors toward safe-haven assets?",
+        "options": [
+          "Low inflation fears",
+          "Decreasing geopolitical tensions",
+          "Escalating geopolitical tensions and inflation fears",
+          "Stable global markets"
+        ],
+        "answer": "Escalating geopolitical tensions and inflation fears"
+      },
+      {
+        "q": "Which word in the text means 'to spread investment among different assets'?",
+        "options": [
+          "Diversify",
+          "Surge",
+          "Hedge",
+          "Persist"
+        ],
+        "answer": "Diversify"
+      },
+      {
+        "q": "Why is gold considered a preferred choice by investors in this context?",
+        "options": [
+          "It has low value",
+          "To hedge against economic uncertainty",
+          "Because interest rates are rising",
+          "It is a high-risk asset"
+        ],
+        "answer": "To hedge against economic uncertainty"
+      },
+      {
+        "q": "What does the term 'bullish' imply about gold prices?",
+        "options": [
+          "Prices are expected to fall",
+          "Prices will remain completely flat",
+          "Prices are expected to rise",
+          "Gold is losing its value"
+        ],
+        "answer": "Prices are expected to rise"
+      },
+      {
+        "q": "What has prompted investors to diversify their portfolios?",
+        "options": [
+          "Market volatility",
+          "High interest rates",
+          "Decreased demand",
+          "Government regulations"
+        ],
+        "answer": "Market volatility"
+      },
+      {
+        "q": "What does the word 'surge' mean in the passage?",
+        "options": [
+          "To decrease slowly",
+          "To rise rapidly",
+          "To fluctuate wildly",
+          "To remain stable"
+        ],
+        "answer": "To rise rapidly"
+      },
+      {
+        "q": "Which of the following is identified as a 'precious metal' in the passage?",
+        "options": [
+          "Copper",
+          "Gold",
+          "Steel",
+          "Aluminum"
+        ],
+        "answer": "Gold"
+      },
+      {
+        "q": "What action by major central banks is expected to add upward pressure on gold?",
+        "options": [
+          "Raising interest rates",
+          "Cutting interest rates",
+          "Stopping gold trades",
+          "Printing less money"
+        ],
+        "answer": "Cutting interest rates"
+      },
+      {
+        "q": "What are 'institutional investors' compared to 'retail investors'?",
+        "options": [
+          "Individual small-scale investors",
+          "Large organizations that invest",
+          "Government tax collectors",
+          "Foreign tourists"
+        ],
+        "answer": "Large organizations that invest"
+      },
+      {
+        "q": "The word 'persist' in the last sentence is closest in meaning to:",
+        "options": [
+          "Disappear",
+          "Continue",
+          "Decline",
+          "Improve"
+        ],
+        "answer": "Continue"
+      },
+      {
+        "q": "What kind of asset is gold referred to in times of economic uncertainty?",
+        "options": [
+          "Safe-haven asset",
+          "High-risk asset",
+          "Depreciating asset",
+          "Intangible asset"
+        ],
+        "answer": "Safe-haven asset"
+      },
+      {
+        "q": "Under what condition might the bullish trend of gold continue?",
+        "options": [
+          "If global market instability persists",
+          "If inflation completely stops",
+          "If geopolitical tensions are resolved immediately",
+          "If central banks raise interest rates significantly"
+        ],
+        "answer": "If global market instability persists"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "量子計算突破加密技術，資安領域迎新挑戰",
+    "tabTitle": "科技",
+    "english": "Researchers have achieved a major breakthrough in quantum computing, successfully demonstrating the ability to crack traditional encryption methods much faster than previously anticipated. This technological leap poses an immediate threat to global data security, particularly for financial transactions and classified government communications. In response, cybersecurity experts are urgently calling for the adoption of post-quantum cryptography. While this advancement promises to revolutionize computational power, it simultaneously demands a rapid overhaul of our current digital defense systems to prevent widespread vulnerability.",
+    "chinese": "研究人員在量子計算領域取得了重大突破，成功展示了比預期更快破解傳統加密方法的能力。這一技術飛躍對全球數據安全構成了即時威脅，特別是對於金融交易和政府機密通信。作為回應，網絡安全專家正緊急呼籲採用後量子密碼學。雖然這一進步有望徹底改變計算能力，但它同時也要求對我們現有的數位防禦系統進行快速變革，以防止廣泛的安全漏洞。",
+    "vocabulary": [
+      "breakthrough (n.): 重大突破",
+      "quantum computing (n. phr.): 量子計算",
+      "encryption (n.): 加密",
+      "demonstrate (v.): 展示、證明",
+      "anticipate (v.): 預期、預料",
+      "technological leap (n. phr.): 技術飛躍",
+      "immediate threat (n. phr.): 即時威脅",
+      "classified (adj.): 機密的、分類的",
+      "cybersecurity (n.): 網絡安全",
+      "cryptography (n.): 密碼學",
+      "revolutionize (v.): 徹底改變、改革",
+      "computational (adj.): 計算的",
+      "overhaul (n.): 徹底檢修、大修、變革",
+      "vulnerability (n.): 漏洞、脆弱性",
+      "adopt (v.): 採用、採納",
+      "transaction (n.): 交易",
+      "simultaneously (adv.): 同時地",
+      "digital defense (n. phr.): 數位防禦",
+      "widespread (adj.): 廣泛的",
+      "response (n.): 回應、反應"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main threat posed by the breakthrough in quantum computing?",
+        "options": [
+          "High energy consumption",
+          "Cracking traditional encryption",
+          "Slowing down internet speeds",
+          "Loss of hardware durability"
+        ],
+        "answer": "Cracking traditional encryption"
+      },
+      {
+        "q": "What does the word 'breakthrough' mean?",
+        "options": [
+          "A sudden collapse",
+          "An important discovery or development",
+          "A security failure",
+          "A slow process"
+        ],
+        "answer": "An important discovery or development"
+      },
+      {
+        "q": "According to the passage, which sectors are particularly threatened by this technology?",
+        "options": [
+          "Agriculture and forestry",
+          "Entertainment and gaming",
+          "Finance and classified government communications",
+          "Education and tourism"
+        ],
+        "answer": "Finance and classified government communications"
+      },
+      {
+        "q": "What is the meaning of 'classified' in the context of the news?",
+        "options": [
+          "Divided into categories",
+          "Publicly available",
+          "Officially secret",
+          "Outdated"
+        ],
+        "answer": "Officially secret"
+      },
+      {
+        "q": "What are cybersecurity experts urgently calling for?",
+        "options": [
+          "Shutting down all computers",
+          "Adopting post-quantum cryptography",
+          "Decreasing computational power",
+          "Ignoring the threat"
+        ],
+        "answer": "Adopting post-quantum cryptography"
+      },
+      {
+        "q": "Which word is closest in meaning to 'revolutionize'?",
+        "options": [
+          "Maintain",
+          "Transform radically",
+          "Destroy completely",
+          "Postpone"
+        ],
+        "answer": "Transform radically"
+      },
+      {
+        "q": "The word 'simultaneously' means ________.",
+        "options": [
+          "At the same time",
+          "In the near future",
+          "Very slowly",
+          "One after another"
+        ],
+        "answer": "At the same time"
+      },
+      {
+        "q": "Why is a rapid overhaul of digital defense systems required?",
+        "options": [
+          "To reduce electricity costs",
+          "To prevent widespread vulnerability",
+          "To make computers look modern",
+          "To increase internet bandwidth"
+        ],
+        "answer": "To prevent widespread vulnerability"
+      },
+      {
+        "q": "'Vulnerability' refers to ________.",
+        "options": [
+          "A state of being strong and secure",
+          "A weakness that can be exploited",
+          "An advanced encryption key",
+          "A type of supercomputer"
+        ],
+        "answer": "A weakness that can be exploited"
+      },
+      {
+        "q": "How fast can the new quantum computing technology crack traditional encryption compared to expectations?",
+        "options": [
+          "Much slower",
+          "At the exact expected speed",
+          "Much faster",
+          "It cannot crack encryption at all"
+        ],
+        "answer": "Much faster"
+      },
+      {
+        "q": "What does 'overhaul' mean in the text?",
+        "options": [
+          "A minor adjustment",
+          "A complete examination and improvement",
+          "A cancellation of services",
+          "A loss of data"
+        ],
+        "answer": "A complete examination and improvement"
+      },
+      {
+        "q": "What is the tone of the passage regarding the future of digital defense?",
+        "options": [
+          "Indifferent",
+          "Highly optimistic without caution",
+          "Urgent and demanding action",
+          "Purely negative and hopeless"
+        ],
+        "answer": "Urgent and demanding action"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "OpenAI推全球夥伴計畫，拓展企業AI解決方案",
+    "tabTitle": "科技",
+    "english": "OpenAI has officially launched its Global Partner Program, aiming to accelerate the adoption of enterprise AI solutions worldwide. This initiative connects global system integrators and technology providers with OpenAI's cutting-edge models to build customized, secure AI applications for corporate clients. By offering specialized training, technical support, and co-selling opportunities, OpenAI seeks to help businesses integrate artificial intelligence seamlessly into their existing workflows. The program marks a significant step in scaling enterprise AI deployment globally.",
+    "chinese": "OpenAI 已正式推出其「全球夥伴計畫」，旨在加速全球企業級人工智慧（AI）解決方案的採用。該倡議將全球系統整合商與技術提供商與 OpenAI 的前沿模型連結，為企業客戶構建客製化且安全的 AI 應用。藉由提供專業培訓、技術支援以及共同銷售機會，OpenAI 旨在幫助企業將人工智慧無縫整合至其現有的工作流程中。該計畫標誌著在全球擴大企業 AI 部署邁出了重要的一步。",
+    "vocabulary": [
+      "launch (v.): 推出；發起",
+      "accelerate (v.): 加速",
+      "adoption (n.): 採用；收養",
+      "enterprise (n.): 企業；公司",
+      "initiative (n.): 倡議；主動權",
+      "integrator (n.): 整合商",
+      "cutting-edge (adj.): 前沿的；最先進的",
+      "customized (adj.): 客製化的",
+      "corporate (adj.): 企業的",
+      "specialized (adj.): 專業的；專門的",
+      "integrate (v.): 整合",
+      "seamlessly (adv.): 無縫地",
+      "workflow (n.): 工作流程",
+      "significant (adj.): 顯著的；重要的",
+      "deployment (n.): 部署",
+      "globally (adv.): 全球性地",
+      "provider (n.): 提供者",
+      "co-selling (n.): 共同銷售",
+      "technical (adj.): 技術的",
+      "application (n.): 應用程式；申請"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main goal of OpenAI's new program?",
+        "options": [
+          "To train individual software developers",
+          "To accelerate the adoption of enterprise AI solutions",
+          "To reduce the cost of personal computers",
+          "To launch a new search engine"
+        ],
+        "answer": "To accelerate the adoption of enterprise AI solutions"
+      },
+      {
+        "q": "Who does the initiative connect with OpenAI's cutting-edge models?",
+        "options": [
+          "System integrators and technology providers",
+          "University students and professors",
+          "Government regulators",
+          "Individual artists and designers"
+        ],
+        "answer": "System integrators and technology providers"
+      },
+      {
+        "q": "What does the word 'customized' mean in the text?",
+        "options": [
+          "Standardized and cheap",
+          "Tailored to specific needs",
+          "Difficult to operate",
+          "Highly traditional"
+        ],
+        "answer": "Tailored to specific needs"
+      },
+      {
+        "q": "Which of the following is NOT offered by OpenAI in this program?",
+        "options": [
+          "Specialized training",
+          "Free hardware for all employees",
+          "Technical support",
+          "Co-selling opportunities"
+        ],
+        "answer": "Free hardware for all employees"
+      },
+      {
+        "q": "What is the meaning of the word 'seamlessly'?",
+        "options": [
+          "Roughly and incompletely",
+          "Smoothly and without trouble",
+          "By combining separate parts physically",
+          "With a high financial cost"
+        ],
+        "answer": "Smoothly and without trouble"
+      },
+      {
+        "q": "Fill in the blank: The program marks a ________ step in scaling enterprise AI deployment.",
+        "options": [
+          "minor",
+          "temporary",
+          "significant",
+          "negative"
+        ],
+        "answer": "significant"
+      },
+      {
+        "q": "What is the noun form of the verb 'adopt'?",
+        "options": [
+          "Adoptable",
+          "Adoption",
+          "Adoptingly",
+          "Adopter"
+        ],
+        "answer": "Adoption"
+      },
+      {
+        "q": "What does 'cutting-edge' refer to?",
+        "options": [
+          "Very sharp knives",
+          "Outdated technology",
+          "The most advanced stage of development",
+          "A dangerous situation"
+        ],
+        "answer": "The most advanced stage of development"
+      },
+      {
+        "q": "According to the text, what kind of applications will be built for corporate clients?",
+        "options": [
+          "Entertainment games",
+          "Customized and secure AI applications",
+          "Open-source operating systems",
+          "Social media platforms"
+        ],
+        "answer": "Customized and secure AI applications"
+      },
+      {
+        "q": "What is the meaning of 'deployment' in this context?",
+        "options": [
+          "The action of bringing resources into effective action",
+          "The process of retiring old employees",
+          "Financial investment strategies",
+          "Designing corporate logos"
+        ],
+        "answer": "The action of bringing resources into effective action"
+      },
+      {
+        "q": "The word 'corporate' is closest in meaning to:",
+        "options": [
+          "Academic",
+          "Individual",
+          "Business-related",
+          "Governmental"
+        ],
+        "answer": "Business-related"
+      },
+      {
+        "q": "What is the primary target audience for the AI solutions mentioned?",
+        "options": [
+          "Individual households",
+          "High school students",
+          "Enterprise and corporate clients",
+          "Non-profit environmental groups"
+        ],
+        "answer": "Enterprise and corporate clients"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "Getty Images與OpenAI合作，強化ChatGPT視覺內容",
+    "tabTitle": "科技",
+    "english": "Getty Images has announced a strategic partnership with OpenAI to enhance the visual capabilities of ChatGPT. Under this agreement, OpenAI will gain access to Getty's vast library of high-quality, licensed images and videos to train its generative models. This collaboration aims to provide users with safer, higher-resolution visual content while respecting intellectual property rights. Additionally, the partnership will establish a compensation framework for content creators whose works contribute to the AI training process.",
+    "chinese": "Getty Images 宣布與 OpenAI 建立戰略合作夥伴關係，以強化 ChatGPT 的視覺功能。根據這項協議，OpenAI 將獲得 Getty 龐大的高畫質、獲授權圖像及影片庫的存取權，用以訓練其生成式模型。此合作旨在向用戶提供更安全、解析度更高的視覺內容，同時尊重智慧財產權。此外，該合作夥伴關係將為那些作品對 AI 訓練過程有所貢獻的內容創作者建立補償機制。",
+    "vocabulary": [
+      "strategic (adj.): 戰略性的",
+      "partnership (n.): 合作夥伴關係",
+      "enhance (v.): 強化；提升",
+      "capability (n.): 能力；功能",
+      "agreement (n.): 協議；協定",
+      "access (n.): 存取權；使用權",
+      "vast (adj.): 龐大的；巨大的",
+      "licensed (adj.): 經授權的",
+      "generative (adj.): 生成的；產生能力的",
+      "collaboration (n.): 合作",
+      "aim (v.): 旨在；以...為目標",
+      "resolution (n.): 解析度",
+      "respect (v.): 尊重",
+      "intellectual property (n.): 智慧財產",
+      "establish (v.): 建立",
+      "compensation (n.): 補償；報酬",
+      "framework (n.): 框架；機制",
+      "creator (n.): 創作者",
+      "contribute (v.): 貢獻",
+      "process (n.): 過程；步驟"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of the partnership between Getty Images and OpenAI?",
+        "options": [
+          "To replace human artists entirely",
+          "To enhance the visual capabilities of ChatGPT",
+          "To shut down Getty's website",
+          "To create a new search engine"
+        ],
+        "answer": "To enhance the visual capabilities of ChatGPT"
+      },
+      {
+        "q": "Under the agreement, what will OpenAI gain access to?",
+        "options": [
+          "Getty's financial records",
+          "Google's search database",
+          "Getty's vast library of licensed images and videos",
+          "Only low-resolution text files"
+        ],
+        "answer": "Getty's vast library of licensed images and videos"
+      },
+      {
+        "q": "What kind of models will be trained using Getty's library?",
+        "options": [
+          "Financial forecasting models",
+          "Generative models",
+          "Weather prediction models",
+          "Hardware manufacturing models"
+        ],
+        "answer": "Generative models"
+      },
+      {
+        "q": "The collaboration aims to provide users with visual content that is safer and has higher what?",
+        "options": [
+          "Price",
+          "Resolution",
+          "File size",
+          "Loading time"
+        ],
+        "answer": "Resolution"
+      },
+      {
+        "q": "Whose rights will be respected through this collaboration?",
+        "options": [
+          "Only the software developers'",
+          "Intellectual property rights holders'",
+          "The government's exclusive rights",
+          "No rights will be respected"
+        ],
+        "answer": "Intellectual property rights holders'"
+      },
+      {
+        "q": "What will the partnership establish for content creators?",
+        "options": [
+          "A compensation framework",
+          "A punishment system",
+          "A new social media platform",
+          "A tax collection agency"
+        ],
+        "answer": "A compensation framework"
+      },
+      {
+        "q": "Which word in the text means 'to improve or increase the quality, value, or strength of something'?",
+        "options": [
+          "Establish",
+          "Enhance",
+          "Contribute",
+          "Respect"
+        ],
+        "answer": "Enhance"
+      },
+      {
+        "q": "What does the word 'vast' mean in the context of the news?",
+        "options": [
+          "Extremely small",
+          "Very expensive",
+          "Extremely large in area or size",
+          "Highly illegal"
+        ],
+        "answer": "Extremely large in area or size"
+      },
+      {
+        "q": "The word 'compensation' is closest in meaning to which of the following?",
+        "options": [
+          "Payment or reward",
+          "Argument or dispute",
+          "Permission or license",
+          "Training or practice"
+        ],
+        "answer": "Payment or reward"
+      },
+      {
+        "q": "What does 'licensed' mean in the phrase 'licensed images'?",
+        "options": [
+          "Stolen without permission",
+          "Having official permission to be used",
+          "Created by an artificial intelligence",
+          "Free for anyone to use without rules"
+        ],
+        "answer": "Having official permission to be used"
+      },
+      {
+        "q": "Which of the following is NOT a goal mentioned in the text?",
+        "options": [
+          "Providing higher-resolution visual content",
+          "Respecting intellectual property rights",
+          "Establishing a compensation framework",
+          "Restricting users from accessing ChatGPT"
+        ],
+        "answer": "Restricting users from accessing ChatGPT"
+      },
+      {
+        "q": "Who will benefit from the compensation framework established by the partnership?",
+        "options": [
+          "Only the executives of OpenAI",
+          "Content creators whose works contribute to AI training",
+          "People who do not use the internet",
+          "Only government regulators"
+        ],
+        "answer": "Content creators whose works contribute to AI training"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
