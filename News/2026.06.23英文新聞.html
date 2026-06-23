@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 23, 2026：台灣經濟、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電股價破2500元大關 台股創新高\nOn June 23, 2026, Taiwan Semiconductor Manufacturing Company (TSMC) shares experienced an extraordinary surge, breaking the NT$2500 threshold for the first time. This remarkable achievement pushed the Taiwan Stock Exchange (TAIEX) to an unprecedented record high. Market analysts widely attribute this impressive rally to sustained global demand for advanced AI chips and strong investor confidence in TSMC's future technological advancements and profitability.\n\n[2] 中探針受惠AI晶片測試需求 2026年營收拚雙位數成長\nMedium Probe, a leading provider of testing components, expects to achieve double-digit revenue growth by 2026, driven by surging demand for AI chip testing. As global tech giants accelerate their artificial intelligence initiatives, the need for high-performance semiconductor testing has increased significantly. The company is actively expanding its production capacity and upgrading its probe card technologies to secure a larger market share. Industry analysts believe that this strategic positioning will help Medium Probe capitalize on the booming AI sector and sustain long-term profitability.\n\n[3] 國防部宣布今年起全面實施14天教召\nTaiwan's Ministry of National Defense (MND) has announced that a universal 14-day military call-up system will be fully implemented starting this year to bolster national defense capabilities. Under this new policy, reservists will undergo more intensive training, focusing on combat readiness, weapon proficiency, and emergency response coordination. This transition from the previous sporadic training periods aims to establish a more formidable deterrent force. Officials emphasize that the upgraded training is essential to ensure regional stability and safeguard democratic values amidst rising geopolitical tensions.",
+    "chinese": "【1】台積電股價破2500元大關 台股創新高\n2026年6月23日，台灣積體電路製造公司（台積電）股價經歷了一次非凡的飆升，首次突破了新台幣2500元的關卡。這項卓越的成就推動台灣證券交易所（台股）創下歷史新高。市場分析師普遍將這次令人印象深刻的上漲歸因於全球對先進人工智慧晶片持續的需求，以及投資者對台積電未來技術發展和獲利能力的強勁信心。\n\n【2】中探針受惠AI晶片測試需求 2026年營收拚雙位數成長\n測試元件領先供應商中探針（Medium Probe）預計，在人工智慧（AI）晶片測試需求激增的推動下，該公司將於2026年實現雙位數的營收成長。隨著全球科技巨頭加速推進其人工智慧計畫，對高效能半導體測試的需求已顯著增加。該公司正積極擴大產能並升級其探針卡技術，以爭取更大的市場份額。行業分析師認為，這一戰略定位將有助於中探針利用蓬勃發展的AI領域，並維持長期獲利能力。\n\n【3】國防部宣布今年起全面實施14天教召\n台灣國防部宣布，今年起將全面實施14天教召制度，以強化國防能力。在新政策下，後備軍人將接受更密集的訓練，重點在於戰鬥準備、武器熟練度以及緊急應變協調。此一由以往零星訓練期間的轉變，旨在建立更強大的威懾力量。官員強調，在地理政治緊張局勢升級之際，升級訓練對於確保區域穩定和捍衛民主價值至關重要。",
+    "vocabulary": [
+      "experienced (v.): 經歷",
+      "extraordinary (adj.): 非凡的；特別的",
+      "surge (n./v.): 飆升；急劇上漲",
+      "threshold (n.): 門檻；關卡",
+      "remarkable (adj.): 卓越的；引人注目的",
+      "achievement (n.): 成就；達成",
+      "pushed (v.): 推動；促使",
+      "unprecedented (adj.): 前所未有的",
+      "record high (n. phrase): 歷史新高",
+      "market analysts (n. phrase): 市場分析師",
+      "widely attribute (v. phrase): 普遍歸因於",
+      "impressive (adj.): 令人印象深刻的",
+      "rally (n.): 上漲；反彈 (股市用語)",
+      "sustained (adj.): 持續的",
+      "global demand (n. phrase): 全球需求",
+      "advanced AI chips (n. phrase): 先進人工智慧晶片",
+      "investor confidence (n. phrase): 投資者信心",
+      "technological advancements (n. phrase): 技術進步",
+      "profitability (n.): 獲利能力",
+      "Taiwan Semiconductor Manufacturing Company (n. phrase): 台灣積體電路製造公司 (台積電)",
+      "component (n.): 元件，組件",
+      "revenue (n.): 營收，收入",
+      "double-digit (adj.): 雙位數的",
+      "surging (adj.): 急遽上升的，激增的",
+      "demand (n.): 需求",
+      "giant (n.): 巨頭，大企業",
+      "accelerate (v.): 加速",
+      "initiative (n.): 計畫，倡議",
+      "semiconductor (n.): 半導體",
+      "significantly (adv.): 顯著地",
+      "actively (adv.): 積極地",
+      "expand (v.): 擴大，擴展",
+      "capacity (n.): 產能，容量",
+      "upgrade (v.): 升級",
+      "probe (n.): 探針",
+      "secure (v.): 獲得，爭取到",
+      "analyst (n.): 分析師",
+      "strategic (adj.): 戰略性的，策略的",
+      "capitalize on (phr.): 利用，從中獲利",
+      "profitability (n.): 獲利能力，盈利能力",
+      "Ministry of National Defense (n.): 國防部",
+      "universal (adj.): 全面的；普遍的",
+      "military call-up (n.): 軍事召集；教召",
+      "implement (v.): 實施；執行",
+      "bolster (v.): 強化；支持",
+      "capability (n.): 能力；實力",
+      "reservist (n.): 後備軍人",
+      "undergo (v.): 接受；經歷",
+      "intensive (adj.): 密集的",
+      "combat readiness (n.): 戰備狀態",
+      "proficiency (n.): 熟練；精通",
+      "coordination (n.): 協調；配合",
+      "transition (n.): 過渡；轉變",
+      "sporadic (adj.): 零星的；斷斷續續的",
+      "formidable (adj.): 強大的；令人敬畏的",
+      "deterrent (n.): 威懾力量；遏制力",
+      "emphasize (v.): 強調",
+      "safeguard (v.): 捍衛；保護",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張局勢；緊繃"
+    ],
+    "quiz": [
+      {
+        "q": "What company's stock price is the main subject of the news?",
+        "options": [
+          "A. Apple Inc.",
+          "B. Taiwan Semiconductor Manufacturing Company",
+          "C. Google LLC",
+          "D. Samsung Electronics"
+        ],
+        "answer": "Taiwan Semiconductor Manufacturing Company"
+      },
+      {
+        "q": "What significant price point did TSMC shares break?",
+        "options": [
+          "A. NT$1500",
+          "B. NT$2000",
+          "C. NT$2500",
+          "D. NT$3000"
+        ],
+        "answer": "NT$2500"
+      },
+      {
+        "q": "What happened to the Taiwan Stock Exchange (TAIEX) as a result of TSMC's performance?",
+        "options": [
+          "A. It declined significantly",
+          "B. It remained stable",
+          "C. It reached an unprecedented record high",
+          "D. It experienced a slight dip"
+        ],
+        "answer": "It reached an unprecedented record high"
+      },
+      {
+        "q": "When did this event occur?",
+        "options": [
+          "A. June 23, 2025",
+          "B. July 23, 2026",
+          "C. June 23, 2026",
+          "D. June 30, 2026"
+        ],
+        "answer": "June 23, 2026"
+      },
+      {
+        "q": "According to market analysts, what is one major reason for the stock rally?",
+        "options": [
+          "A. Decreased demand for chips",
+          "B. A new government policy",
+          "C. Global demand for advanced AI chips",
+          "D. Low investor confidence"
+        ],
+        "answer": "Global demand for advanced AI chips"
+      },
+      {
+        "q": "What does \"unprecedented\" mean in the context of the news?",
+        "options": [
+          "A. Expected",
+          "B. Common",
+          "C. Never happened before",
+          "D. Predictable"
+        ],
+        "answer": "Never happened before"
+      },
+      {
+        "q": "The word \"surge\" in the headline suggests:",
+        "options": [
+          "A. A small increase",
+          "B. A sudden and significant increase",
+          "C. A decrease",
+          "D. A stable period"
+        ],
+        "answer": "A sudden and significant increase"
+      },
+      {
+        "q": "What is \"investor confidence\" mentioned in the article?",
+        "options": [
+          "A. Investors' fear of losing money",
+          "B. Investors' belief in the future success of a company or market",
+          "C. Investors' disagreement on market trends",
+          "D. Investors' withdrawal from the market"
+        ],
+        "answer": "Investors' belief in the future success of a company or market"
+      },
+      {
+        "q": "The news describes TSMC's shares breaking a \"threshold.\" What does \"threshold\" mean here?",
+        "options": [
+          "A. A physical barrier",
+          "B. A significant level or point",
+          "C. A type of financial product",
+          "D. A legal limit"
+        ],
+        "answer": "A significant level or point"
+      },
+      {
+        "q": "What kind of chips are specifically mentioned as being in high demand?",
+        "options": [
+          "A. Basic memory chips",
+          "B. Advanced AI chips",
+          "C. Automotive chips",
+          "D. Consumer electronics chips"
+        ],
+        "answer": "Advanced AI chips"
+      },
+      {
+        "q": "What is implied about TSMC's future based on the analysts' view?",
+        "options": [
+          "A. It faces significant challenges",
+          "B. Its technological advancements and profitability are promising",
+          "C. It will diversify into new industries",
+          "D. Its market share will decrease"
+        ],
+        "answer": "Its technological advancements and profitability are promising"
+      },
+      {
+        "q": "Which of the following best describes the overall tone of the news?",
+        "options": [
+          "A. Pessimistic",
+          "B. Neutral",
+          "C. Optimistic",
+          "D. Sarcastic"
+        ],
+        "answer": "Optimistic"
+      },
+      {
+        "q": "According to the article, what is driving Medium Probe's expected revenue growth in 2026?",
+        "options": [
+          "A decline in global tech initiatives",
+          "Surging demand for AI chip testing",
+          "A reduction in semiconductor production",
+          "Lowering their probe card technologies"
+        ],
+        "answer": "Surging demand for AI chip testing"
+      },
+      {
+        "q": "What does the term 'revenue' refer to in a business context?",
+        "options": [
+          "The total money a company receives from its sales",
+          "The expenses spent on manufacturing",
+          "The number of employees in a company",
+          "The tax paid to the government"
+        ],
+        "answer": "The total money a company receives from its sales"
+      },
+      {
+        "q": "How much revenue growth does Medium Probe expect to achieve by 2026?",
+        "options": [
+          "Single-digit growth",
+          "Double-digit growth",
+          "Triple-digit growth",
+          "No growth"
+        ],
+        "answer": "Double-digit growth"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'semiconductor'?",
+        "options": [
+          "A type of software program",
+          "A material used in electronic chips",
+          "An energy-saving light bulb",
+          "A heavy metal used in construction"
+        ],
+        "answer": "A material used in electronic chips"
+      },
+      {
+        "q": "If global tech giants 'accelerate' their initiatives, what are they doing?",
+        "options": [
+          "Slowing down their progress",
+          "Canceling their plans",
+          "Speeding up their efforts",
+          "Keeping the same pace"
+        ],
+        "answer": "Speeding up their efforts"
+      },
+      {
+        "q": "What is Medium Probe doing to secure a larger market share?",
+        "options": [
+          "Reducing its workforce and cutting costs",
+          "Expanding production capacity and upgrading technologies",
+          "Stopping the development of probe cards",
+          "Merging with another semiconductor company"
+        ],
+        "answer": "Expanding production capacity and upgrading technologies"
+      },
+      {
+        "q": "What does the phrase 'capitalize on' mean in the passage?",
+        "options": [
+          "To invest money in capital letters",
+          "To write off a financial loss",
+          "To take advantage of an opportunity",
+          "To ignore a growing market trend"
+        ],
+        "answer": "To take advantage of an opportunity"
+      },
+      {
+        "q": "Complete the sentence: The company is ______ expanding its production capacity to meet the high demand.",
+        "options": [
+          "actively",
+          "passive",
+          "activity",
+          "acted"
+        ],
+        "answer": "actively"
+      },
+      {
+        "q": "In the context of manufacturing, what does 'capacity' mean?",
+        "options": [
+          "The physical weight of a product",
+          "The maximum amount that can be produced",
+          "The cost of transporting goods",
+          "The legal regulations of a country"
+        ],
+        "answer": "The maximum amount that can be produced"
+      },
+      {
+        "q": "Who believes that Medium Probe's strategic positioning will help it sustain profitability?",
+        "options": [
+          "Government regulators",
+          "Competitors",
+          "Industry analysts",
+          "Customers only"
+        ],
+        "answer": "Industry analysts"
+      },
+      {
+        "q": "Which word is the noun form of 'profitable'?",
+        "options": [
+          "Profitability",
+          "Profitably",
+          "Profited",
+          "Profiteer"
+        ],
+        "answer": "Profitability"
+      },
+      {
+        "q": "What specific technology is Medium Probe upgrading?",
+        "options": [
+          "Software operating systems",
+          "Probe card technologies",
+          "AI algorithms",
+          "Server cooling systems"
+        ],
+        "answer": "Probe card technologies"
+      },
+      {
+        "q": "What is the main objective of the new 14-day military call-up system?",
+        "options": [
+          "To reduce military spending",
+          "To bolster national defense capabilities",
+          "To recruit new full-time soldiers",
+          "To replace the professional army"
+        ],
+        "answer": "To bolster national defense capabilities"
+      },
+      {
+        "q": "According to the article, what will reservists focus on during their training?",
+        "options": [
+          "Physical fitness only",
+          "Administrative tasks",
+          "Combat readiness, weapon proficiency, and emergency response",
+          "Foreign languages and diplomacy"
+        ],
+        "answer": "Combat readiness, weapon proficiency, and emergency response"
+      },
+      {
+        "q": "Which of the following is closest in meaning to the word 'bolster'?",
+        "options": [
+          "Weaken",
+          "Strengthen",
+          "Ignore",
+          "Postpone"
+        ],
+        "answer": "Strengthen"
+      },
+      {
+        "q": "What does the word 'reservist' refer to in the context of the military?",
+        "options": [
+          "Active-duty generals",
+          "Military cooks",
+          "Soldiers who are not on active duty but can be called up",
+          "Newly recruited teenagers"
+        ],
+        "answer": "Soldiers who are not on active duty but can be called up"
+      },
+      {
+        "q": "What is the antonym of the word 'sporadic'?",
+        "options": [
+          "Occasional",
+          "Continuous",
+          "Random",
+          "Infrequent"
+        ],
+        "answer": "Continuous"
+      },
+      {
+        "q": "Why do officials believe this upgraded training is essential?",
+        "options": [
+          "To cut down training costs",
+          "To ensure regional stability and safeguard democratic values",
+          "To prepare for space exploration",
+          "To shorten the service time of active soldiers"
+        ],
+        "answer": "To ensure regional stability and safeguard democratic values"
+      },
+      {
+        "q": "A 'deterrent' force is designed to do what?",
+        "options": [
+          "Encourage enemies to attack",
+          "Discourage or prevent an action through fear of consequences",
+          "Facilitate international trade",
+          "Provide medical assistance"
+        ],
+        "answer": "Discourage or prevent an action through fear of consequences"
+      },
+      {
+        "q": "The new system represents a ________ from the previous sporadic training periods.",
+        "options": [
+          "transition",
+          "translation",
+          "transaction",
+          "transplant"
+        ],
+        "answer": "transition"
+      },
+      {
+        "q": "If someone has 'proficiency' in a skill, it means they are:",
+        "options": [
+          "Incompetent",
+          "Skilled and experienced",
+          "Uninterested",
+          "Fearful"
+        ],
+        "answer": "Skilled and experienced"
+      },
+      {
+        "q": "How long is the newly announced military call-up period?",
+        "options": [
+          "7 days",
+          "14 days",
+          "30 days",
+          "1 year"
+        ],
+        "answer": "14 days"
+      },
+      {
+        "q": "Which word is a synonym for 'implement'?",
+        "options": [
+          "Cancel",
+          "Execute",
+          "Delay",
+          "Oppose"
+        ],
+        "answer": "Execute"
+      },
+      {
+        "q": "The word 'geopolitical' relates to:",
+        "options": [
+          "The study of ancient rocks",
+          "Politics, especially international relations, influenced by geographical factors",
+          "The weather patterns of a specific region",
+          "Local municipal elections"
+        ],
+        "answer": "Politics, especially international relations, influenced by geographical factors"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "微軟CEO警告AI巨頭壟斷經濟 倡導模型普及",
+    "tabTitle": "科技",
+    "english": "Microsoft CEO Satya Nadella recently expressed concerns about the potential for a few dominant companies to control the artificial intelligence economy. He warned that concentrating AI development and power in the hands of a few \"super-giants\" could stifle innovation and create an unhealthy market. Nadella strongly advocated for the widespread availability and accessibility of AI models, emphasizing that this approach would foster broader participation and prevent a technological monopoly. This vision aims to ensure AI benefits society widely, rather than just a select few.",
+    "chinese": "微軟執行長薩提亞·納德拉最近對少數主導公司可能控制人工智慧經濟表達了擔憂。他警告說，將人工智慧的發展和權力集中在少數「超級巨頭」手中，可能會扼殺創新並創造不健康的市場。納德拉強烈倡導人工智慧模型的廣泛可用性和普及性，強調這種方法將促進更廣泛的參與，並防止技術壟斷。這一願景旨在確保人工智慧能廣泛造福社會，而不僅僅是少數人。",
+    "vocabulary": [
+      "CEO (n.): 執行長",
+      "warn against (phr.v.): 警告...的危險",
+      "monopoly (n.): 壟斷",
+      "advocate for (phr.v.): 倡導；主張",
+      "accessible (adj.): 易於使用的；可取得的",
+      "model (n.): 模型；模式",
+      "express concerns (phr.): 表達擔憂",
+      "potential (n.): 潛力；可能性",
+      "dominant (adj.): 佔主導地位的",
+      "control (v.): 控制",
+      "artificial intelligence (n.): 人工智慧 (AI)",
+      "concentrate (v.): 集中",
+      "super-giant (n.): 超級巨頭",
+      "stifle (v.): 扼殺；抑制",
+      "innovation (n.): 創新",
+      "unhealthy (adj.): 不健康的",
+      "widespread (adj.): 廣泛的；普及的",
+      "availability (n.): 可用性；可得性",
+      "foster (v.): 促進；培養",
+      "participation (n.): 參與"
+    ],
+    "quiz": [
+      {
+        "q": "Who expressed concerns about AI monopoly?",
+        "options": [
+          "Satya Nadella",
+          "Microsoft's Board",
+          "A group of AI researchers",
+          "The government"
+        ],
+        "answer": "Satya Nadella"
+      },
+      {
+        "q": "What is Satya Nadella's current position?",
+        "options": [
+          "AI Developer",
+          "Chief Technology Officer",
+          "Microsoft CEO",
+          "Market Analyst"
+        ],
+        "answer": "Microsoft CEO"
+      },
+      {
+        "q": "What did Nadella warn about regarding AI development?",
+        "options": [
+          "It's too slow.",
+          "It's too expensive.",
+          "Its concentration in a few \"super-giants.\"",
+          "Its lack of computing power."
+        ],
+        "answer": "Its concentration in a few \"super-giants.\""
+      },
+      {
+        "q": "What negative outcome could arise from AI power being concentrated?",
+        "options": [
+          "Increased competition",
+          "Stifled innovation",
+          "Faster development",
+          "More diverse models"
+        ],
+        "answer": "Stifled innovation"
+      },
+      {
+        "q": "What kind of market could be created by AI concentration?",
+        "options": [
+          "A competitive market",
+          "A healthy market",
+          "An unhealthy market",
+          "A global market"
+        ],
+        "answer": "An unhealthy market"
+      },
+      {
+        "q": "What did Nadella strongly advocate for?",
+        "options": [
+          "Centralized AI control",
+          "Limited access to AI models",
+          "Widespread availability and accessibility of AI models",
+          "Government regulation of AI"
+        ],
+        "answer": "Widespread availability and accessibility of AI models"
+      },
+      {
+        "q": "What does \"this approach\" (referring to widespread availability) aim to foster?",
+        "options": [
+          "Narrower participation",
+          "Broader participation",
+          "Exclusive development",
+          "Technical bottlenecks"
+        ],
+        "answer": "Broader participation"
+      },
+      {
+        "q": "What does Nadella want to prevent with his advocated approach?",
+        "options": [
+          "Economic growth",
+          "Technological advancement",
+          "A technological monopoly",
+          "Public awareness"
+        ],
+        "answer": "A technological monopoly"
+      },
+      {
+        "q": "What is the ultimate goal of Nadella's vision for AI?",
+        "options": [
+          "To benefit only a select few.",
+          "To benefit society widely.",
+          "To increase Microsoft's profits.",
+          "To reduce AI development costs."
+        ],
+        "answer": "To benefit society widely."
+      },
+      {
+        "q": "The term \"super-giants\" in the text refers to:",
+        "options": [
+          "Extremely tall people.",
+          "Very large technological companies.",
+          "Powerful AI models.",
+          "Ancient mythological creatures."
+        ],
+        "answer": "Very large technological companies."
+      },
+      {
+        "q": "What does \"stifle\" most closely mean in this context?",
+        "options": [
+          "Encourage",
+          "Promote",
+          "Suppress",
+          "Expand"
+        ],
+        "answer": "Suppress"
+      },
+      {
+        "q": "According to the text, what is a potential consequence of a few dominant companies controlling the AI economy?",
+        "options": [
+          "Enhanced collaboration",
+          "Increased market diversity",
+          "Reduced innovation",
+          "Greater consumer choice"
+        ],
+        "answer": "Reduced innovation"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "高通CEO預言AI代理人將成下一代應用",
+    "tabTitle": "科技",
+    "english": "Qualcomm CEO Cristiano Amon recently predicted that AI agents will become the next generation of mobile applications. He explained that instead of users opening individual apps, these intelligent agents will perform tasks across various platforms on behalf of users. Amon emphasized that on-device AI capabilities will be crucial for this transition, enabling faster response times and better privacy protection. This shift could fundamentally change how consumers interact with their smartphones and other devices in the near future.",
+    "chinese": "高通執行長克里斯蒂亞諾·阿蒙（Cristiano Amon）近日預測，AI代理人將成為下一代行動應用程式。他解釋，未來的用戶將不再需要打開各個獨立的應用程式，而是由這些智慧代理人代表用戶跨平台執行任務。阿蒙強調，裝置端AI能力對於這一轉變至關重要，能實現更快的反應時間與更好的隱私保護。這一轉變可能會在不久的將來，從根本上改變消費者與智慧型手機及其他裝置的互動方式。",
+    "vocabulary": [
+      "predict (v.): 預測",
+      "agent (n.): 代理人；代理商",
+      "generation (n.): 世代；一代",
+      "application (n.): 應用程式；申請",
+      "individual (adj.): 個別的；單獨的",
+      "intelligent (adj.): 聰明的；有才智的",
+      "perform (v.): 執行；表演",
+      "platform (n.): 平台",
+      "on behalf of (phr.): 代表...",
+      "emphasize (v.): 強調",
+      "capability (n.): 能力；功能",
+      "crucial (adj.): 至關重要的",
+      "transition (n.): 過渡；轉變",
+      "enable (v.): 使能夠；啟用",
+      "response (n.): 回應；反應",
+      "privacy (n.): 隱私",
+      "protection (n.): 保護",
+      "shift (n.): 轉變；輪班",
+      "fundamentally (adv.): 根本上地",
+      "interact (v.): 互動"
+    ],
+    "quiz": [
+      {
+        "q": "Who predicted that AI agents will become the next-generation applications?",
+        "options": [
+          "Apple's CEO",
+          "Qualcomm's CEO",
+          "Google's CEO",
+          "Microsoft's CEO"
+        ],
+        "answer": "Qualcomm's CEO"
+      },
+      {
+        "q": "According to the text, what will AI agents do instead of users opening individual apps?",
+        "options": [
+          "Delete the apps from the device",
+          "Perform tasks across various platforms",
+          "Charge users for each service",
+          "Limit internet access"
+        ],
+        "answer": "Perform tasks across various platforms"
+      },
+      {
+        "q": "What kind of AI capabilities did Amon emphasize as crucial for the transition?",
+        "options": [
+          "Cloud-only AI",
+          "On-device AI",
+          "Text-to-image AI",
+          "Voice-only AI"
+        ],
+        "answer": "On-device AI"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a benefit of on-device AI?",
+        "options": [
+          "Faster response times",
+          "Better privacy protection",
+          "Lower device costs",
+          "Crucial support for transition"
+        ],
+        "answer": "Lower device costs"
+      },
+      {
+        "q": "What is the meaning of the word 'predict' in the text?",
+        "options": [
+          "To remember the past",
+          "To say that something will happen in the future",
+          "To ignore current trends",
+          "To fix a broken machine"
+        ],
+        "answer": "To say that something will happen in the future"
+      },
+      {
+        "q": "Fill in the blank: 'The intelligent agents will perform tasks _______ behalf of users.'",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "with"
+        ],
+        "answer": "on"
+      },
+      {
+        "q": "What word is closest in meaning to 'crucial' as used in the text?",
+        "options": [
+          "Optional",
+          "Minor",
+          "Essential",
+          "Difficult"
+        ],
+        "answer": "Essential"
+      },
+      {
+        "q": "The text suggests that the shift to AI agents could fundamentally change how consumers ________ with their devices.",
+        "options": [
+          "interact",
+          "manufacture",
+          "sell",
+          "ignore"
+        ],
+        "answer": "interact"
+      },
+      {
+        "q": "What does the word 'transition' refer to in the text?",
+        "options": [
+          "The physical movement of devices",
+          "The change to AI-agent-based applications",
+          "The upgrade of internet speed",
+          "The replacement of old phone batteries"
+        ],
+        "answer": "The change to AI-agent-based applications"
+      },
+      {
+        "q": "Which word in the text means 'completely or in a basic way'?",
+        "options": [
+          "Fundamentally",
+          "Recently",
+          "Crucially",
+          "Individually"
+        ],
+        "answer": "Fundamentally"
+      },
+      {
+        "q": "What is the part of speech and meaning of 'capability' in the text?",
+        "options": [
+          "verb: to make possible",
+          "noun: the ability to do something",
+          "adjective: very important",
+          "adverb: quickly"
+        ],
+        "answer": "noun: the ability to do something"
+      },
+      {
+        "q": "What is the main idea of the passage?",
+        "options": [
+          "Smartphones will become completely obsolete in the near future.",
+          "AI agents are expected to replace individual apps as the next-gen applications.",
+          "On-device AI is too slow and insecure for modern consumers.",
+          "Qualcomm is shutting down its mobile application development."
+        ],
+        "answer": "AI agents are expected to replace individual apps as the next-gen applications."
+      }
+    ]
+  },
+  "article-5": {
+    "title": "中國限制稀土出口56家美企 針對國防航太",
+    "tabTitle": "地緣政治",
+    "english": "On June 23, 2026, China announced new restrictions on rare earth exports. These measures specifically target 56 United States defense and aerospace companies. The move is widely seen as a geopolitical response, potentially impacting global supply chains for advanced military technologies. This action highlights ongoing tensions between the two nations over critical materials.",
+    "chinese": "2026年6月23日，中國宣布對稀土出口實施新的限制措施。這些措施明確針對56家美國國防和航空航天公司。此舉被廣泛視為一項地緣政治回應，可能影響全球先進軍事技術的供應鏈。這項行動突顯了兩國在關鍵材料方面的持續緊張關係。",
+    "vocabulary": [
+      "geopolitical (adj.): 地緣政治的",
+      "restrict (v.): 限制",
+      "rare earth (n.): 稀土",
+      "export (n.): 出口",
+      "firm (n.): 公司，商行",
+      "defense (n.): 國防",
+      "aerospace (n.): 航空航天",
+      "measure (n.): 措施",
+      "specifically (adv.): 特別地，明確地",
+      "target (v.): 針對",
+      "widely seen as (phrase): 被廣泛視為",
+      "response (n.): 回應",
+      "potentially (adv.): 可能地",
+      "impact (v.): 影響",
+      "global (adj.): 全球的",
+      "supply chain (n.): 供應鏈",
+      "advanced (adj.): 先進的",
+      "military technology (n.): 軍事技術",
+      "highlight (v.): 突顯",
+      "ongoing tensions (n. phrase): 持續的緊張關係"
+    ],
+    "quiz": [
+      {
+        "q": "What date did China announce new restrictions on rare earth exports?",
+        "options": [
+          "June 23, 2025",
+          "June 23, 2026",
+          "July 23, 2026",
+          "June 23, 2024"
+        ],
+        "answer": "June 23, 2026"
+      },
+      {
+        "q": "What material is China restricting the export of?",
+        "options": [
+          "Coal",
+          "Oil",
+          "Rare earth",
+          "Steel"
+        ],
+        "answer": "Rare earth"
+      },
+      {
+        "q": "How many US companies are specifically targeted by these measures?",
+        "options": [
+          "65",
+          "56",
+          "60",
+          "50"
+        ],
+        "answer": "56"
+      },
+      {
+        "q": "Which sectors do the targeted US companies belong to?",
+        "options": [
+          "Automotive and tech",
+          "Agriculture and finance",
+          "Defense and aerospace",
+          "Energy and manufacturing"
+        ],
+        "answer": "Defense and aerospace"
+      },
+      {
+        "q": "How is China's move generally interpreted?",
+        "options": [
+          "An economic reform",
+          "A humanitarian effort",
+          "A geopolitical response",
+          "A trade agreement"
+        ],
+        "answer": "A geopolitical response"
+      },
+      {
+        "q": "What potential consequence of these restrictions is mentioned?",
+        "options": [
+          "Increased global trade",
+          "Impact on global supply chains",
+          "Reduced international tensions",
+          "Boost in US economy"
+        ],
+        "answer": "Impact on global supply chains"
+      },
+      {
+        "q": "What kind of technologies might be affected by disruptions to the supply chain?",
+        "options": [
+          "Basic consumer goods",
+          "Agricultural machinery",
+          "Advanced military technologies",
+          "Renewable energy systems"
+        ],
+        "answer": "Advanced military technologies"
+      },
+      {
+        "q": "The term \"geopolitical\" most closely relates to:",
+        "options": [
+          "Geography and politics",
+          "Geology and resources",
+          "Global warming and policy",
+          "Government and population"
+        ],
+        "answer": "Geography and politics"
+      },
+      {
+        "q": "If a country \"restricts\" exports, it means it:",
+        "options": [
+          "Encourages them",
+          "Allows them freely",
+          "Limits or controls them",
+          "Bans them completely"
+        ],
+        "answer": "Limits or controls them"
+      },
+      {
+        "q": "In the news, a \"firm\" refers to a:",
+        "options": [
+          "Strong belief",
+          "Solid object",
+          "Business or company",
+          "Fixed price"
+        ],
+        "answer": "Business or company"
+      },
+      {
+        "q": "What does it mean to \"highlight\" ongoing tensions?",
+        "options": [
+          "To reduce them",
+          "To make them less noticeable",
+          "To emphasize or draw attention to them",
+          "To resolve them"
+        ],
+        "answer": "To emphasize or draw attention to them"
+      },
+      {
+        "q": "\"Ongoing tensions\" between two nations suggest:",
+        "options": [
+          "A period of peace and cooperation",
+          "Disagreements and conflicts that are continuing",
+          "New trade agreements being signed",
+          "Mutual understanding and friendship"
+        ],
+        "answer": "Disagreements and conflicts that are continuing"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "韓國AI晶片新創聚焦推論與邊緣運算",
+    "tabTitle": "科技",
+    "english": "South Korean artificial intelligence (AI) chip startups are rapidly gaining traction by shifting their focus toward inference and edge computing. While global giants like Nvidia dominate the heavy training market, these agile startups are developing specialized, low-power chips designed for local data processing. By optimizing hardware for specific edge devices, such as smartphones and autonomous vehicles, they aim to reduce latency and energy consumption. Industry experts believe this strategic pivot will secure South Korea a vital position in the next generation of global semiconductor supply chains.",
+    "chinese": "韓國人工智慧（AI）晶片新創公司正藉由將焦點轉向推論與邊緣運算，迅速獲得市場關注。在全球巨頭如輝達（Nvidia）主導重度訓練市場之際，這些敏捷的新創公司正在開發專為本地數據處理設計的專用、低功耗晶片。透過針對智慧型手機和自動駕駛汽車等特定邊緣設備進行硬體優化，他們旨在降低延遲和能源消耗。行業專家認為，這一戰略轉向將確保韓國在全球下一代半導體供應鏈中佔據至關重要的地位。",
+    "vocabulary": [
+      "startup (n.): 新創公司",
+      "traction (n.): 阻力、拉力；（在此指）受歡迎程度、進展",
+      "inference (n.): 推論",
+      "edge computing (n.): 邊緣運算",
+      "dominate (v.): 主導、支配",
+      "heavy (adj.): 重度的、大量的",
+      "agile (adj.): 敏捷的、靈活的",
+      "specialized (adj.): 專門的、專用的",
+      "low-power (adj.): 低功耗的",
+      "optimize (v.): 優化、使完善",
+      "autonomous vehicle (n.): 自動駕駛汽車",
+      "latency (n.): 延遲",
+      "energy consumption (n.): 能源消耗",
+      "strategic (adj.): 戰略性的",
+      "pivot (n.): 關鍵轉變、樞軸",
+      "secure (v.): 獲得、確保",
+      "vital (adj.): 至關重要的",
+      "semiconductor (n.): 半導體",
+      "supply chain (n.): 供應鏈",
+      "gain traction (phr.): 取得進展、獲得關注"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main focus of South Korean AI chip startups according to the article?",
+        "options": [
+          "Heavy model training",
+          "Inference and edge computing",
+          "Cloud storage solutions",
+          "Social media algorithms"
+        ],
+        "answer": "Inference and edge computing"
+      },
+      {
+        "q": "Which company currently dominates the heavy training market?",
+        "options": [
+          "Intel",
+          "Samsung",
+          "Nvidia",
+          "TSMC"
+        ],
+        "answer": "Nvidia"
+      },
+      {
+        "q": "What is a key feature of the chips being developed by these startups?",
+        "options": [
+          "High energy consumption",
+          "Low-power design",
+          "Large physical size",
+          "Dependence on cloud servers"
+        ],
+        "answer": "Low-power design"
+      },
+      {
+        "q": "What does 'latency' mean in the context of technology?",
+        "options": [
+          "The cost of manufacturing",
+          "The delay before a transfer of data begins",
+          "The storage capacity of a hard drive",
+          "The physical weight of a chip"
+        ],
+        "answer": "The delay before a transfer of data begins"
+      },
+      {
+        "q": "Which of the following is mentioned as an example of an edge device?",
+        "options": [
+          "Supercomputers",
+          "Autonomous vehicles",
+          "Mainframe servers",
+          "Desktop PCs"
+        ],
+        "answer": "Autonomous vehicles"
+      },
+      {
+        "q": "What is the primary goal of optimizing hardware for edge devices?",
+        "options": [
+          "To increase latency",
+          "To reduce latency and energy consumption",
+          "To replace cloud computing entirely",
+          "To lower the cost of raw silicon"
+        ],
+        "answer": "To reduce latency and energy consumption"
+      },
+      {
+        "q": "The word 'agile' in the text is closest in meaning to:",
+        "options": [
+          "Slow and steady",
+          "Quick and adaptable",
+          "Rigid and strict",
+          "Fragile and weak"
+        ],
+        "answer": "Quick and adaptable"
+      },
+      {
+        "q": "What do industry experts believe this strategic pivot will secure for South Korea?",
+        "options": [
+          "A monopoly on raw materials",
+          "A vital position in global semiconductor supply chains",
+          "Complete independence from global markets",
+          "The highest GDP in Asia"
+        ],
+        "answer": "A vital position in global semiconductor supply chains"
+      },
+      {
+        "q": "What does the phrase 'gain traction' mean in the passage?",
+        "options": [
+          "To slip and fall",
+          "To lose popularity",
+          "To become popular or make progress",
+          "To slow down production"
+        ],
+        "answer": "To become popular or make progress"
+      },
+      {
+        "q": "How do these startups differentiate themselves from global giants like Nvidia?",
+        "options": [
+          "By focusing on heavy training",
+          "By targeting edge computing instead of heavy training",
+          "By manufacturing cheaper smartphones",
+          "By ignoring the global supply chain"
+        ],
+        "answer": "By targeting edge computing instead of heavy training"
+      },
+      {
+        "q": "What does 'inference' refer to in AI?",
+        "options": [
+          "The process of gathering raw data",
+          "Using a trained model to make predictions or decisions",
+          "Writing the initial code for an algorithm",
+          "Selling hardware to consumers"
+        ],
+        "answer": "Using a trained model to make predictions or decisions"
+      },
+      {
+        "q": "Which adjective is used to describe South Korea's position in the next generation of supply chains?",
+        "options": [
+          "Minor",
+          "Vital",
+          "Optional",
+          "Temporary"
+        ],
+        "answer": "Vital"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
