@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 24, 2026：科技、科技 與 地緣政治</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 美國「矽盛世」峰會登場 台灣受邀強化AI供應鏈\nOn June 24, 2026, the United States hosted the inaugural \"Pax Silica\" Summit, a significant event aimed at enhancing global semiconductor cooperation. Taiwan was a key participant, invited to contribute its expertise in advanced chip manufacturing and bolster the security of the artificial intelligence (AI) supply chain. The summit focused on strategic alliances and ensuring stable, resilient access to critical AI components amidst growing global demand. This collaboration is crucial for future technological advancements and economic stability.\n\n[2] 台灣5月失業率創26年新低 勞動市場持續穩定\nTaiwan's unemployment rate fell to 3.34% in May, marking the lowest level for the month in 26 years, according to the Directorate-General of Budget, Accounting and Statistics (DGBAS). The decline indicates a highly stable domestic labor market, driven by robust demand in the service sector and a steady recovery in manufacturing. Officials noted that business hiring remained active, which helped absorb first-time job seekers. Overall, the employment situation is expected to remain favorable in the coming months.\n\n[3] 台灣5月外銷訂單連16紅 AI需求推升近900億美元\nTaiwan's export orders in May marked their sixteenth consecutive month of growth, reaching a significant value of nearly $90 billion. This impressive surge was primarily fueled by robust global demand for artificial intelligence (AI) related products, including servers and advanced chips. The strong performance underscores Taiwan's critical position in the global technology supply chain and its economic resilience.",
+    "chinese": "【1】美國「矽盛世」峰會登場 台灣受邀強化AI供應鏈\n2026年6月24日，美國主辦了首屆「矽盛世」峰會，這是一項旨在加強全球半導體合作的重要活動。台灣作為關鍵參與者受邀出席，貢獻其在先進晶片製造方面的專業知識，並強化人工智慧（AI）供應鏈的安全性。峰會重點關注戰略聯盟，並確保在全球需求不斷增長的情況下，穩定且有彈性地獲取關鍵AI組件。這次合作對於未來的技術進步和經濟穩定至關重要。\n\n【2】台灣5月失業率創26年新低 勞動市場持續穩定\n根據行政院主計總處（DGBAS）的數據，台灣5月份失業率降至3.34%，創下26年來同月的最低紀錄。這一降幅顯示出國內勞動力市場高度穩定，主要受到服務業強勁需求和製造業穩步復甦的推動。官員指出，企業招聘保持活躍，有助於吸收初次尋職者。整體而言，預計未來幾個月的就業形勢將持續看好。\n\n【3】台灣5月外銷訂單連16紅 AI需求推升近900億美元\n台灣五月份的外銷訂單連續第十六個月成長，金額達到近900億美元的顯著水準。這一顯著增長主要得益於全球對人工智慧（AI）相關產品的強勁需求，其中包括伺服器和先進晶片。這一強勁表現凸顯了台灣在全球科技供應鏈中的關鍵地位及其經濟韌性。",
+    "vocabulary": [
+      "inaugural (adj.): 首屆的",
+      "summit (n.): 峰會",
+      "aimed at (phr. v.): 旨在；目標是",
+      "enhancing (v.): 加強；提升",
+      "semiconductor (n.): 半導體",
+      "cooperation (n.): 合作",
+      "participant (n.): 參與者",
+      "contribute (v.): 貢獻",
+      "expertise (n.): 專業知識",
+      "advanced (adj.): 先進的",
+      "chip manufacturing (n.): 晶片製造",
+      "bolster (v.): 強化；支持",
+      "artificial intelligence (AI) (n.): 人工智慧",
+      "supply chain (n.): 供應鏈",
+      "security (n.): 安全性",
+      "strategic alliances (n.): 戰略聯盟",
+      "ensuring (v.): 確保",
+      "resilient (adj.): 有彈性的；有韌性的",
+      "critical (adj.): 關鍵的；重要的",
+      "technological advancements (n.): 技術進步",
+      "unemployment rate (n.): 失業率",
+      "decline (n.): 下降；衰退",
+      "indicate (v.): 顯示；指出",
+      "stable (adj.): 穩定的",
+      "domestic (adj.): 國內的",
+      "labor market (n.): 勞動力市場",
+      "robust (adj.): 強勁的；健壯的",
+      "demand (n.): 需求",
+      "sector (n.): 行業；部門",
+      "steady (adj.): 穩步的；持續的",
+      "recovery (n.): 復甦；恢復",
+      "manufacturing (n.): 製造業",
+      "official (n.): 官員",
+      "hiring (n.): 招聘；雇用",
+      "active (adj.): 活躍的；積極的",
+      "absorb (v.): 吸收；接納",
+      "job seeker (n.): 求職者",
+      "overall (adv.): 整體而言；總共",
+      "favorable (adj.): 有利的；看好的",
+      "budget (n.): 預算",
+      "export orders (n.): 外銷訂單",
+      "consecutive (adj.): 連續的",
+      "growth (n.): 成長",
+      "significant (adj.): 顯著的",
+      "value (n.): 價值；金額",
+      "primarily (adv.): 主要地",
+      "fueled by (phr. v.): 由...推動；因...而增長",
+      "robust (adj.): 強勁的；穩健的",
+      "demand (n.): 需求",
+      "artificial intelligence (n.): 人工智慧 (AI)",
+      "related products (n.): 相關產品",
+      "servers (n.): 伺服器",
+      "advanced chips (n.): 先進晶片",
+      "performance (n.): 表現；業績",
+      "underscores (v.): 強調；凸顯",
+      "critical (adj.): 關鍵的",
+      "position (n.): 地位",
+      "global (adj.): 全球的",
+      "technology supply chain (n.): 科技供應鏈",
+      "economic resilience (n.): 經濟韌性"
+    ],
+    "quiz": [
+      {
+        "q": "When did the \"Pax Silica\" Summit take place?",
+        "options": [
+          "A) June 24, 2025",
+          "B) June 24, 2026",
+          "C) July 24, 2026",
+          "D) July 24, 2025"
+        ],
+        "answer": "B) June 24, 2026"
+      },
+      {
+        "q": "What was the name of the summit hosted by the United States?",
+        "options": [
+          "A) Global Tech Forum",
+          "B) AI Innovation Conference",
+          "C) Pax Silica Summit",
+          "D) Semiconductor Future Meeting"
+        ],
+        "answer": "C) Pax Silica Summit"
+      },
+      {
+        "q": "What was the primary goal of the \"Pax Silica\" Summit?",
+        "options": [
+          "A) To discuss climate change",
+          "B) To enhance global semiconductor cooperation",
+          "C) To promote tourism",
+          "D) To sign new trade agreements"
+        ],
+        "answer": "B) To enhance global semiconductor cooperation"
+      },
+      {
+        "q": "Which country was a key participant in the summit?",
+        "options": [
+          "A) China",
+          "B) Japan",
+          "C) South Korea",
+          "D) Taiwan"
+        ],
+        "answer": "D) Taiwan"
+      },
+      {
+        "q": "What specific expertise was Taiwan invited to contribute?",
+        "options": [
+          "A) Software development",
+          "B) Advanced chip manufacturing",
+          "C) Renewable energy",
+          "D) Biotechnology"
+        ],
+        "answer": "B) Advanced chip manufacturing"
+      },
+      {
+        "q": "What did Taiwan aim to bolster by attending the summit?",
+        "options": [
+          "A) Its tourism industry",
+          "B) Its defense capabilities",
+          "C) The security of the artificial intelligence (AI) supply chain",
+          "D) Its agricultural exports"
+        ],
+        "answer": "C) The security of the artificial intelligence (AI) supply chain"
+      },
+      {
+        "q": "What kind of alliances did the summit focus on?",
+        "options": [
+          "A) Cultural exchange alliances",
+          "B) Strategic alliances",
+          "C) Educational alliances",
+          "D) Environmental alliances"
+        ],
+        "answer": "B) Strategic alliances"
+      },
+      {
+        "q": "The summit aimed to ensure stable and ________ access to critical AI components.",
+        "options": [
+          "A) Cheap",
+          "B) Limited",
+          "C) Resilient",
+          "D) Exclusive"
+        ],
+        "answer": "C) Resilient"
+      },
+      {
+        "q": "What is AI an abbreviation for?",
+        "options": [
+          "A) Automated Industry",
+          "B) Artificial Intelligence",
+          "C) Advanced Information",
+          "D) Applied Informatics"
+        ],
+        "answer": "B) Artificial Intelligence"
+      },
+      {
+        "q": "What is mentioned as a factor increasing the importance of stable access to AI components?",
+        "options": [
+          "A) Decreasing global demand",
+          "B) Growing global demand",
+          "C) Political instability",
+          "D) Natural disasters"
+        ],
+        "answer": "B) Growing global demand"
+      },
+      {
+        "q": "The collaboration discussed at the summit is crucial for what two main areas?",
+        "options": [
+          "A) Social media trends and fashion",
+          "B) Future technological advancements and economic stability",
+          "C) Space exploration and deep-sea research",
+          "D) Sports and entertainment"
+        ],
+        "answer": "B) Future technological advancements and economic stability"
+      },
+      {
+        "q": "What does \"bolster\" mean in the context of the news?",
+        "options": [
+          "A) To weaken",
+          "B) To support or strengthen",
+          "C) To ignore",
+          "D) To dismantle"
+        ],
+        "answer": "B) To support or strengthen"
+      },
+      {
+        "q": "According to the news, what was Taiwan's unemployment rate in May?",
+        "options": [
+          "A) 3.34%",
+          "B) 2.6%",
+          "C) 5%",
+          "D) 3.43%"
+        ],
+        "answer": "A) 3.34%"
+      },
+      {
+        "q": "The May unemployment rate is the lowest for the month in how many years?",
+        "options": [
+          "A) 10 years",
+          "B) 15 years",
+          "C) 26 years",
+          "D) 30 years"
+        ],
+        "answer": "C) 26 years"
+      },
+      {
+        "q": "Which government agency provided the data?",
+        "options": [
+          "A) Ministry of Labor",
+          "B) DGBAS",
+          "C) Ministry of Economic Affairs",
+          "D) National Development Council"
+        ],
+        "answer": "B) DGBAS"
+      },
+      {
+        "q": "What does the decline in the unemployment rate indicate?",
+        "options": [
+          "A) A highly stable domestic labor market",
+          "B) A sudden economic depression",
+          "C) A decrease in business hiring",
+          "D) High inflation rates"
+        ],
+        "answer": "A) A highly stable domestic labor market"
+      },
+      {
+        "q": "What has driven the stable labor market besides the steady recovery in manufacturing?",
+        "options": [
+          "A) High taxes",
+          "B) Robust demand in the service sector",
+          "C) Government subsidies for housing",
+          "D) Foreign investments in agriculture"
+        ],
+        "answer": "B) Robust demand in the service sector"
+      },
+      {
+        "q": "What helped absorb first-time job seekers according to officials?",
+        "options": [
+          "A) Active business hiring",
+          "B) New government training programs",
+          "C) Emigration to other countries",
+          "D) Early retirement policies"
+        ],
+        "answer": "A) Active business hiring"
+      },
+      {
+        "q": "What is the meaning of the word 'robust' as used in the text?",
+        "options": [
+          "A) Weak and fragile",
+          "B) Strong and healthy",
+          "C) Slow and sluggish",
+          "D) Unpredictable"
+        ],
+        "answer": "B) Strong and healthy"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'decline'?",
+        "options": [
+          "A) Increase",
+          "B) Drop",
+          "C) Peak",
+          "D) Stability"
+        ],
+        "answer": "B) Drop"
+      },
+      {
+        "q": "What is the expected outlook for the employment situation in the coming months?",
+        "options": [
+          "A) It will remain favorable.",
+          "B) It will worsen rapidly.",
+          "C) It is highly unpredictable.",
+          "D) It will remain unchanged forever."
+        ],
+        "answer": "A) It will remain favorable."
+      },
+      {
+        "q": "In the phrase 'absorb first-time job seekers,' what does 'absorb' mean?",
+        "options": [
+          "A) To decline employment",
+          "B) To integrate or take in",
+          "C) To ignore completely",
+          "D) To train for free"
+        ],
+        "answer": "B) To integrate or take in"
+      },
+      {
+        "q": "What is the Chinese meaning of the word 'manufacturing'?",
+        "options": [
+          "A) 製造業",
+          "B) 服務業",
+          "C) 農業",
+          "D) 科技業"
+        ],
+        "answer": "A) 製造業"
+      },
+      {
+        "q": "Which word is an adjective meaning 'giving a benefit or pointing to a good result'?",
+        "options": [
+          "A) Favorable",
+          "B) Active",
+          "C) Domestic",
+          "D) Steady"
+        ],
+        "answer": "A) Favorable"
+      },
+      {
+        "q": "What was the total value of Taiwan's export orders in May?",
+        "options": [
+          "Exactly $90 billion",
+          "Less than $90 billion",
+          "Nearly $90 billion",
+          "Over $90 billion"
+        ],
+        "answer": "Nearly $90 billion"
+      },
+      {
+        "q": "How many consecutive months have Taiwan's export orders shown growth?",
+        "options": [
+          "5",
+          "10",
+          "16",
+          "20"
+        ],
+        "answer": "16"
+      },
+      {
+        "q": "What was the primary driver for the increase in export orders?",
+        "options": [
+          "Domestic consumption",
+          "Global demand for AI-related products",
+          "Increased tourism",
+          "New trade agreements"
+        ],
+        "answer": "Global demand for AI-related products"
+      },
+      {
+        "q": "Which of the following are mentioned as examples of AI-related products driving demand?",
+        "options": [
+          "Smartphones and laptops",
+          "Servers and advanced chips",
+          "Textiles and apparel",
+          "Agricultural goods"
+        ],
+        "answer": "Servers and advanced chips"
+      },
+      {
+        "q": "What does the strong performance of export orders highlight about Taiwan?",
+        "options": [
+          "Its declining manufacturing sector",
+          "Its reliance on agricultural exports",
+          "Its crucial role in the global technology supply chain",
+          "Its new focus on renewable energy"
+        ],
+        "answer": "Its crucial role in the global technology supply chain"
+      },
+      {
+        "q": "The word \"consecutive\" in the text means:",
+        "options": [
+          "Intermittent",
+          "Following one after another without interruption",
+          "Unexpected",
+          "Decreasing"
+        ],
+        "answer": "Following one after another without interruption"
+      },
+      {
+        "q": "What does \"fueled by\" most closely mean in this context?",
+        "options": [
+          "Damaged by",
+          "Caused by or driven by",
+          "Rejected by",
+          "Limited by"
+        ],
+        "answer": "Caused by or driven by"
+      },
+      {
+        "q": "What is the meaning of \"robust\" as used in the news?",
+        "options": [
+          "Weak",
+          "Inconsistent",
+          "Strong and healthy",
+          "Declining"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "The news suggests Taiwan's economy is:",
+        "options": [
+          "Struggling to find new markets",
+          "Showing signs of resilience",
+          "Primarily focused on services",
+          "Facing severe downturns"
+        ],
+        "answer": "Showing signs of resilience"
+      },
+      {
+        "q": "What kind of chips are specifically mentioned as contributing to the demand?",
+        "options": [
+          "Basic chips",
+          "Memory chips",
+          "Advanced chips",
+          "Optical chips"
+        ],
+        "answer": "Advanced chips"
+      },
+      {
+        "q": "What does the term \"underscores\" imply in the sentence \"The strong performance underscores Taiwan's critical position...\"?",
+        "options": [
+          "It hides",
+          "It downplays",
+          "It emphasizes or highlights",
+          "It questions"
+        ],
+        "answer": "It emphasizes or highlights"
+      },
+      {
+        "q": "According to the news, what is Taiwan's position in the global technology supply chain?",
+        "options": [
+          "Minor",
+          "Irrelevant",
+          "Critical",
+          "Peripheral"
+        ],
+        "answer": "Critical"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "特朗普簽署行政命令 加速美國量子電腦發展",
+    "tabTitle": "科技",
+    "english": "On June 24, 2026, President Donald Trump signed a series of executive orders aimed at accelerating the development of quantum computing in the United States. The directives establish new federal initiatives to boost funding, secure supply chains, and foster collaboration between government agencies and private tech firms. Officials state that these measures are crucial for maintaining America's technological edge and national security. By prioritizing quantum research, the administration hopes to outpace global competitors in this rapidly evolving field.",
+    "chinese": "2026年6月24日，總統唐納·川普簽署了一系列行政命令，旨在加速美國量子運算的發展。這些指令建立了新的聯邦計劃，以增加資金投入、保障供應鏈安全，並促進政府機構與私營科技公司之間的合作。官員表示，這些措施對於維持美國的技術優勢和國家安全至關重要。透過優先考慮量子研究，政府希望在這個快速發展的領域中超越全球競爭對手。",
+    "vocabulary": [
+      "executive order (n. phr.): 行政命令",
+      "accelerate (v.): 加速",
+      "quantum computing (n. phr.): 量子運算",
+      "directive (n.): 指令；指示",
+      "federal (adj.): 聯邦的",
+      "initiative (n.): 倡議；計劃",
+      "boost (v.): 促進；推動",
+      "funding (n.): 資金；經費",
+      "secure (v.): 獲得；保護；使安全",
+      "supply chain (n. phr.): 供應鏈",
+      "foster (v.): 培養；促進",
+      "collaboration (n.): 合作",
+      "agency (n.): 機構",
+      "crucial (adj.): 至關重要的",
+      "maintain (v.): 維持",
+      "edge (n.): 優勢",
+      "national security (n. phr.): 國家安全",
+      "prioritize (v.): 優先考慮",
+      "outpace (v.): 趕過；超越",
+      "evolving (adj.): 發展中的；演變中的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main objective of the executive orders signed on June 24, 2026?",
+        "options": [
+          "To restrict tech companies",
+          "To accelerate US quantum computing development",
+          "To reduce federal funding",
+          "To ban foreign supply chains"
+        ],
+        "answer": "To accelerate US quantum computing development"
+      },
+      {
+        "q": "According to the text, which of the following is NOT a goal of the new initiatives?",
+        "options": [
+          "Boosting funding",
+          "Securing supply chains",
+          "Fostering collaboration",
+          "Lowering taxes for tech workers"
+        ],
+        "answer": "Lowering taxes for tech workers"
+      },
+      {
+        "q": "What does the word 'foster' mean in the context of the passage?",
+        "options": [
+          "To discourage",
+          "To ignore",
+          "To promote or encourage",
+          "To control strictly"
+        ],
+        "answer": "To promote or encourage"
+      },
+      {
+        "q": "Why does the administration believe these measures are crucial?",
+        "options": [
+          "To lower the national debt",
+          "To maintain America's technological edge and national security",
+          "To replace traditional computers completely",
+          "To decrease federal spending"
+        ],
+        "answer": "To maintain America's technological edge and national security"
+      },
+      {
+        "q": "Which word in the passage is closest in meaning to 'extremely important'?",
+        "options": [
+          "Federal",
+          "Crucial",
+          "Evolving",
+          "Private"
+        ],
+        "answer": "Crucial"
+      },
+      {
+        "q": "What is the meaning of the verb 'outpace' in the text?",
+        "options": [
+          "To move slower than",
+          "To match the speed of",
+          "To surpass or go faster than",
+          "To stop completely"
+        ],
+        "answer": "To surpass or go faster than"
+      },
+      {
+        "q": "In the phrase 'technological edge,' what does the word 'edge' mean?",
+        "options": [
+          "The outer limit of an object",
+          "An advantage over competitors",
+          "A sharp side of a tool",
+          "A dangerous situation"
+        ],
+        "answer": "An advantage over competitors"
+      },
+      {
+        "q": "The word 'funding' is closest in meaning to which of the following?",
+        "options": [
+          "Regulations",
+          "Financial support",
+          "Personnel",
+          "Equipment"
+        ],
+        "answer": "Financial support"
+      },
+      {
+        "q": "Complete the sentence based on the text: The directives establish new federal ______ to boost funding.",
+        "options": [
+          "initiatives",
+          "obstacles",
+          "taxes",
+          "protests"
+        ],
+        "answer": "initiatives"
+      },
+      {
+        "q": "Which of the following is a synonym for 'directive' as used in the text?",
+        "options": [
+          "Suggestion",
+          "Instruction or order",
+          "Question",
+          "Apology"
+        ],
+        "answer": "Instruction or order"
+      },
+      {
+        "q": "The text describes the field of quantum computing as 'rapidly evolving.' What does 'evolving' mean?",
+        "options": [
+          "Disappearing",
+          "Developing and changing",
+          "Remaining identical",
+          "Failing"
+        ],
+        "answer": "Developing and changing"
+      },
+      {
+        "q": "Who are the key parties encouraged to collaborate under the new executive orders?",
+        "options": [
+          "Only foreign governments",
+          "Government agencies and private tech firms",
+          "Strictly military organizations",
+          "Universities and local schools"
+        ],
+        "answer": "Government agencies and private tech firms"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "美國向菲律賓移交太陽能無人艇 強化南海監測",
+    "tabTitle": "地緣政治",
+    "english": "The United States has officially transferred a fleet of solar-powered unmanned surface vessels to the Philippine Navy to boost its maritime surveillance capabilities. These advanced solar drones are designed to conduct long-endurance patrols in the disputed waters of the South China Sea. By deploying this eco-friendly technology, Manila aims to enhance its real-time monitoring of maritime activities and secure its territorial waters. This strategic move strengthens the defense alliance between the US and the Philippines amid rising regional tensions.",
+    "chinese": "美國已正式向菲律賓海軍移交了一批太陽能無人艇，以提升其海上監視能力。這些先進的太陽能無人艇旨在南海爭議水域進行持久的巡邏。藉由部署這項環保技術，馬尼拉當局旨在加強對海上活動的即時監測，並維護其領海安全。在區域緊張局勢升溫之際，這一戰略舉措強化了美菲之間的防務同盟。",
+    "vocabulary": [
+      "transfer (v.): 移交；轉移",
+      "fleet (n.): 船隊；艦隊",
+      "solar-powered (adj.): 太陽能驅動的",
+      "unmanned (adj.): 無人的；無人駕駛的",
+      "vessel (n.): 船隻；艦艇",
+      "boost (v.): 提升；促進",
+      "maritime (adj.): 海事的；海洋的",
+      "surveillance (n.): 監視；監測",
+      "capability (n.): 能力；容量",
+      "advanced (adj.): 先進的；高等的",
+      "conduct (v.): 進行；實施",
+      "long-endurance (adj.): 高續航力的；持久的",
+      "patrol (n.): 巡邏；巡查",
+      "disputed (adj.): 有爭議的",
+      "deploy (v.): 部署；配置",
+      "eco-friendly (adj.): 環保的；對環境友善的",
+      "real-time (adj.): 即時的；同步的",
+      "territorial (adj.): 領土的；領海的",
+      "strategic (adj.): 戰略的；策略性的",
+      "alliance (n.): 同盟；聯盟"
+    ],
+    "quiz": [
+      {
+        "q": "What did the United States transfer to the Philippine Navy?",
+        "options": [
+          "Nuclear submarines",
+          "Fighter jets",
+          "Solar-powered unmanned surface vessels",
+          "Radar communication towers"
+        ],
+        "answer": "Solar-powered unmanned surface vessels"
+      },
+      {
+        "q": "What is the primary purpose of these solar drones?",
+        "options": [
+          "Underwater treasure hunting",
+          "Long-endurance patrols in disputed waters",
+          "Commercial fishing operations",
+          "Rescuing stranded tourists"
+        ],
+        "answer": "Long-endurance patrols in disputed waters"
+      },
+      {
+        "q": "Which body of water will these drones monitor?",
+        "options": [
+          "The Indian Ocean",
+          "The South China Sea",
+          "The Pacific Ocean",
+          "The Mediterranean Sea"
+        ],
+        "answer": "The South China Sea"
+      },
+      {
+        "q": "What does the word 'boost' mean in the text?",
+        "options": [
+          "To delay",
+          "To ignore",
+          "To decrease",
+          "To improve or increase"
+        ],
+        "answer": "To improve or increase"
+      },
+      {
+        "q": "According to the text, how are the drones powered?",
+        "options": [
+          "Nuclear energy",
+          "Solar energy",
+          "Diesel fuel",
+          "Wind power"
+        ],
+        "answer": "Solar energy"
+      },
+      {
+        "q": "What is Manila's goal in deploying this technology?",
+        "options": [
+          "To expand its territory into other countries",
+          "To enhance real-time monitoring of maritime activities",
+          "To replace all human sailors with robots",
+          "To sell the technology to neighboring nations"
+        ],
+        "answer": "To enhance real-time monitoring of maritime activities"
+      },
+      {
+        "q": "Which word in the text is closest in meaning to 'watchful observation'?",
+        "options": [
+          "Alliance",
+          "Patrol",
+          "Surveillance",
+          "Fleet"
+        ],
+        "answer": "Surveillance"
+      },
+      {
+        "q": "The text mentions 'rising regional tensions.' What is strengthening as a result of this strategic move?",
+        "options": [
+          "The defense alliance between the US and the Philippines",
+          "Trade agreements between China and the US",
+          "Tourism in the South China Sea",
+          "Fishery disputes in Europe"
+        ],
+        "answer": "The defense alliance between the US and the Philippines"
+      },
+      {
+        "q": "What does the adjective 'unmanned' mean?",
+        "options": [
+          "Lacking energy",
+          "Not having or needing a crew",
+          "Extremely dangerous",
+          "Highly expensive"
+        ],
+        "answer": "Not having or needing a crew"
+      },
+      {
+        "q": "Complete the sentence: The new technology is described as ________ because it uses solar energy.",
+        "options": [
+          "disputed",
+          "strategic",
+          "eco-friendly",
+          "territorial"
+        ],
+        "answer": "eco-friendly"
+      },
+      {
+        "q": "Which of the following is NOT a goal of the Philippines mentioned in the text?",
+        "options": [
+          "Securing its territorial waters",
+          "Enhancing real-time maritime monitoring",
+          "Conducting long-endurance patrols",
+          "Attacking foreign naval bases"
+        ],
+        "answer": "Attacking foreign naval bases"
+      },
+      {
+        "q": "What part of speech is the word 'alliance' in the last sentence?",
+        "options": [
+          "Verb",
+          "Noun",
+          "Adjective",
+          "Adverb"
+        ],
+        "answer": "Noun"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "德國全國鐵路系統中斷 無線電故障致列車停擺",
+    "tabTitle": "國際大事",
+    "english": "Germany's national railway operator, Deutsche Bahn, experienced widespread disruptions across its network today, June 24, 2026. A major radio communication failure brought train services to a complete halt in several regions, causing significant delays and cancellations. Technicians are currently investigating the cause of the outage, which has stranded thousands of passengers. Authorities are working to restore full service as quickly as possible, though the exact timeline remains unclear.",
+    "chinese": "德國國家鐵路營運商德鐵（Deutsche Bahn）於2026年6月24日今日在其全國網絡遭遇大範圍中斷。一次重大的無線電通訊故障導致多個地區的列車服務完全停擺，造成了嚴重的延誤和取消。技術人員目前正在調查此次故障的原因，該故障已導致數千名乘客滯留。當局正努力盡快恢復全面服務，但確切時間表仍不明朗。",
+    "vocabulary": [
+      "national (adj.): 國家的",
+      "railway operator (n.): 鐵路營運商",
+      "widespread (adj.): 廣泛的，普遍的",
+      "disruptions (n.): 中斷，混亂",
+      "network (n.): 網絡，系統",
+      "radio communication (n.): 無線電通訊",
+      "failure (n.): 故障，失敗",
+      "brought to a halt (phr.): 使停擺",
+      "train services (n.): 列車服務",
+      "complete (adj.): 完全的，徹底的",
+      "regions (n.): 地區",
+      "significant (adj.): 顯著的，重大的",
+      "delays (n.): 延誤",
+      "cancellations (n.): 取消",
+      "technicians (n.): 技術人員",
+      "investigating (v.): 調查",
+      "outage (n.): 斷電；服務中斷",
+      "stranded (adj.): 滯留的",
+      "passengers (n.): 乘客",
+      "restore (v.): 恢復"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main reason for the disruption of Germany's national rail system?",
+        "options": [
+          "A) A railway workers' strike",
+          "B) A major radio communication failure",
+          "C) Severe weather conditions",
+          "D) A power outage at train stations"
+        ],
+        "answer": "B) A major radio communication failure"
+      },
+      {
+        "q": "Which company operates Germany's national railway system?",
+        "options": [
+          "A) Siemens",
+          "B) Lufthansa",
+          "C) Deutsche Bahn",
+          "D) Volkswagen"
+        ],
+        "answer": "C) Deutsche Bahn"
+      },
+      {
+        "q": "When did the disruptions occur?",
+        "options": [
+          "A) June 24, 2025",
+          "B) June 24, 2026",
+          "C) July 24, 2026",
+          "D) June 26, 2026"
+        ],
+        "answer": "B) June 24, 2026"
+      },
+      {
+        "q": "What were the immediate consequences of the communication failure?",
+        "options": [
+          "A) Minor delays only",
+          "B) Significant delays and cancellations",
+          "C) A temporary increase in train fares",
+          "D) Introduction of new train routes"
+        ],
+        "answer": "B) Significant delays and cancellations"
+      },
+      {
+        "q": "Who is currently investigating the cause of the outage?",
+        "options": [
+          "A) Government officials",
+          "B) Police officers",
+          "C) Technicians",
+          "D) Train conductors"
+        ],
+        "answer": "C) Technicians"
+      },
+      {
+        "q": "What does the article state about thousands of passengers?",
+        "options": [
+          "A) They were offered free hotel stays.",
+          "B) They were provided with alternative transport immediately.",
+          "C) They were stranded.",
+          "D) They arrived at their destinations on time."
+        ],
+        "answer": "C) They were stranded."
+      },
+      {
+        "q": "What are authorities working to do?",
+        "options": [
+          "A) Build a new railway network",
+          "B) Restore full service",
+          "C) Replace all train communication systems",
+          "D) Close down affected train lines permanently"
+        ],
+        "answer": "B) Restore full service"
+      },
+      {
+        "q": "Is the exact timeline for restoring full service known?",
+        "options": [
+          "A) Yes, it's expected by tomorrow.",
+          "B) Yes, it's expected within a few hours.",
+          "C) No, it remains unclear.",
+          "D) The article does not mention the timeline."
+        ],
+        "answer": "C) No, it remains unclear."
+      },
+      {
+        "q": "The word 'widespread' in the text implies the disruptions were:",
+        "options": [
+          "A) Limited to one specific area",
+          "B) Affecting only a small number of trains",
+          "C) Occurring over a large area or many parts of the network",
+          "D) Quickly resolved without much impact"
+        ],
+        "answer": "C) Occurring over a large area or many parts of the network"
+      },
+      {
+        "q": "The phrase 'brought train services to a complete halt' means the train services:",
+        "options": [
+          "A) Started moving very slowly",
+          "B) Stopped entirely",
+          "C) Were redirected to different routes",
+          "D) Continued with minor interruptions"
+        ],
+        "answer": "B) Stopped entirely"
+      },
+      {
+        "q": "What kind of style is this news article written in?",
+        "options": [
+          "A) Opinionated",
+          "B) Humorous",
+          "C) Factual",
+          "D) Poetic"
+        ],
+        "answer": "C) Factual"
+      },
+      {
+        "q": "What does 'outage' refer to in the context of the news?",
+        "options": [
+          "A) A new system installation",
+          "B) A period when a service is not available",
+          "C) An increase in service capacity",
+          "D) A scheduled maintenance break"
+        ],
+        "answer": "B) A period when a service is not available"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "SpaceX斬獲AI算力大單 合同價值高達63億美元",
+    "tabTitle": "科技",
+    "english": "SpaceX has secured a massive artificial intelligence computing contract valued at $6.3 billion. Under this landmark agreement, the aerospace company will leverage its advanced Starlink satellite constellation to provide global, low-latency AI data processing services. Industry analysts suggest this deal positions SpaceX as a major player in the rapidly expanding cloud infrastructure market. The contract marks a significant diversification of the company's revenue streams beyond satellite launches and space exploration.",
+    "chinese": "SpaceX 斬獲了一項價值高達 63 億美元的巨額人工智慧算力合約。根據這項具備里程碑意義的協議，這家航太公司將利用其先進的「星鏈」（Starlink）衛星星座，提供全球低延遲的 AI 數據處理服務。行業分析師指出，這筆交易使 SpaceX 在快速擴張的雲端基礎設施市場中成為重要參與者。該合約標誌著該公司收入來源的重大多元化，已超越了衛星發射和太空探索的範疇。",
+    "vocabulary": [
+      "secure (v.): 獲得；爭取到",
+      "massive (adj.): 巨大的；規模宏大的",
+      "contract (n.): 合約；合同",
+      "value (v.): 估價；評價",
+      "landmark (adj.): 具里程碑意義的",
+      "agreement (n.): 協議；協定",
+      "aerospace (adj.): 航空航天的；航太的",
+      "leverage (v.): 利用（以達成目的）",
+      "advanced (adj.): 先進的；高等的",
+      "constellation (n.): 星座；（相似事物的）群體",
+      "low-latency (adj.): 低延遲的",
+      "processing (n.): 處理；加工",
+      "analyst (n.): 分析師",
+      "position (v.): 安置；使處於（特定位置）",
+      "infrastructure (n.): 基礎建設；基礎設施",
+      "significant (adj.): 顯著的；重要的",
+      "diversification (n.): 多元化；多樣化",
+      "revenue stream (n. phr.): 收入來源",
+      "exploration (n.): 探索；探勘",
+      "beyond (prep.): 超越；在...之外"
+    ],
+    "quiz": [
+      {
+        "q": "What is the estimated value of SpaceX's new contract?",
+        "options": [
+          "$3.6 billion",
+          "$6.3 billion",
+          "$63 billion",
+          "$6.3 million"
+        ],
+        "answer": "$6.3 billion"
+      },
+      {
+        "q": "What technology will SpaceX leverage to provide AI services?",
+        "options": [
+          "Falcon Heavy rockets",
+          "Starlink satellite constellation",
+          "Dragon spacecraft",
+          "Tesla supercomputers"
+        ],
+        "answer": "Starlink satellite constellation"
+      },
+      {
+        "q": "What kind of services will SpaceX provide under this contract?",
+        "options": [
+          "Global, low-latency AI data processing",
+          "Asteroid mining operations",
+          "Deep space tourism",
+          "Satellite manufacturing"
+        ],
+        "answer": "Global, low-latency AI data processing"
+      },
+      {
+        "q": "According to analysts, this deal positions SpaceX as a major player in which market?",
+        "options": [
+          "Electric vehicle manufacturing",
+          "Cloud infrastructure",
+          "Social media networks",
+          "Traditional telecommunications"
+        ],
+        "answer": "Cloud infrastructure"
+      },
+      {
+        "q": "What does this contract represent for SpaceX's business model?",
+        "options": [
+          "A reduction in overall revenue",
+          "A complete abandonment of space travel",
+          "A significant diversification of revenue streams",
+          "An exclusive partnership with NASA"
+        ],
+        "answer": "A significant diversification of revenue streams"
+      },
+      {
+        "q": "What is the meaning of the word 'secure' as used in the text?",
+        "options": [
+          "To make something safe",
+          "To lock a door",
+          "To obtain or achieve something",
+          "To worry about the future"
+        ],
+        "answer": "To obtain or achieve something"
+      },
+      {
+        "q": "Which word is closest in meaning to 'massive'?",
+        "options": [
+          "Tiny",
+          "Huge",
+          "Ordinary",
+          "Expensive"
+        ],
+        "answer": "Huge"
+      },
+      {
+        "q": "What does the term 'low-latency' refer to in data processing?",
+        "options": [
+          "High cost",
+          "Minimal delay",
+          "Low security",
+          "High capacity"
+        ],
+        "answer": "Minimal delay"
+      },
+      {
+        "q": "In the sentence 'SpaceX will leverage its advanced Starlink...', what does 'leverage' mean?",
+        "options": [
+          "To sell for profit",
+          "To ignore completely",
+          "To use to maximum advantage",
+          "To build from scratch"
+        ],
+        "answer": "To use to maximum advantage"
+      },
+      {
+        "q": "What is the noun form of the verb 'diversify' used in the text?",
+        "options": [
+          "Diverse",
+          "Diversely",
+          "Diversification",
+          "Diversified"
+        ],
+        "answer": "Diversification"
+      },
+      {
+        "q": "What are SpaceX's traditional business areas mentioned in the text?",
+        "options": [
+          "Satellite launches and space exploration",
+          "AI chip manufacturing and cloud hosting",
+          "Electric cars and solar panels",
+          "Global defense and military equipment"
+        ],
+        "answer": "Satellite launches and space exploration"
+      },
+      {
+        "q": "Which of the following is the best synonym for 'landmark' in 'landmark agreement'?",
+        "options": [
+          "Minor",
+          "Historic",
+          "Secret",
+          "Temporary"
+        ],
+        "answer": "Historic"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
