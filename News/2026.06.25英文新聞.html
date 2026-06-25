@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 25, 2026：科技、科技 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 日月光：台灣半導體優勢在產業鏈協作與客戶信任\nASE (Advanced Semiconductor Engineering), a leading chip packaging and testing company, recently highlighted Taiwan's enduring competitive advantages in the global semiconductor industry. According to the company, these strengths primarily stem from the island's robust industry collaboration and deep-seated customer trust. This collaborative ecosystem, alongside reliable partnerships, ensures a stable and efficient supply chain, reinforcing Taiwan's crucial role in advanced chip manufacturing worldwide. Such strategic advantages are vital for future growth.\n\n[2] 南台灣豪雨警戒，米克拉颱風影響全台降雨\nTaiwan is bracing for significant rainfall nationwide as Typhoon Mikla approaches. A heavy rain alert has been issued for southern Taiwan, particularly affecting regions like Kaohsiung and Pingtung. Forecasters predict continuous downpours throughout Thursday, June 25, 2026, raising concerns about potential flooding and landslides. Residents are advised to take precautions and stay updated on weather advisories from the Central Weather Bureau.\n\n[3] 外資單日賣超台股1774億，創歷史新高\nOn June 25, 2026, foreign investors executed a massive net sell-off of Taiwan stocks, totaling an unprecedented NT$177.4 billion. This single-day divestment marks a new historic high, significantly impacting the local financial market and raising concerns among regulators. Analysts suggest this record outflow might be attributed to increasing global economic uncertainties, rising interest rates, or a strategic reallocation of capital by large institutional funds. The Taiwan Stock Exchange experienced substantial downward pressure, with its key indices registering a sharp decline by market close.",
+    "chinese": "【1】日月光：台灣半導體優勢在產業鏈協作與客戶信任\n日月光（先進半導體製造），一家領先的晶片封裝測試公司，近日強調台灣在全球半導體產業中持久的競爭優勢。根據該公司，這些優勢主要源於台灣堅實的產業協作和深厚的客戶信任。這種協作生態系統，加上可靠的合作夥伴關係，確保了穩定高效的供應鏈，鞏固了台灣在全球先進晶片製造中的關鍵作用。這些戰略優勢對未來的成長至關重要。\n\n【2】南台灣豪雨警戒，米克拉颱風影響全台降雨\n隨著米克拉颱風逼近，台灣全島正嚴陣以待迎接顯著降雨。南台灣已發布豪雨警報，特別是高雄和屏東等地區。氣象預報員預測，在2026年6月25日星期四全天將持續降下傾盆大雨，引發對潛在洪水和山體滑坡的擔憂。當局建議居民採取預防措施，並隨時關注中央氣象局發布的天氣警報。\n\n【3】外資單日賣超台股1774億，創歷史新高\n2026年6月25日，外國投資者對台灣股市執行了大規模的淨賣出，總額達到前所未有的新台幣1774億元。這次單日撤資創下歷史新高，對當地金融市場造成顯著影響，並引起監管機構的擔憂。分析師指出，這次創紀錄的資金流出可能歸因於日益加劇的全球經濟不確定性、利率上升，或是大型機構基金的戰略性資本重新配置。台灣證券交易所承受了巨大的下行壓力，其主要指數在收盤時錄得大幅下跌。",
+    "vocabulary": [
+      "ASE (abbr.): 日月光 (先進半導體製造)",
+      "semiconductor (n.): 半導體",
+      "edge (n.): 優勢，邊緣",
+      "industry (n.): 產業，工業",
+      "collaboration (n.): 協作，合作",
+      "trust (n.): 信任",
+      "leading (adj.): 領先的",
+      "chip packaging (n. phrase): 晶片封裝",
+      "testing company (n. phrase): 測試公司",
+      "highlight (v.): 強調，凸顯",
+      "enduring (adj.): 持久的，持續的",
+      "competitive advantage (n. phrase): 競爭優勢",
+      "primarily (adv.): 主要地",
+      "stem from (phr. v.): 源於，來自",
+      "robust (adj.): 堅實的，強健的",
+      "deep-seated (adj.): 根深蒂固的，深厚的",
+      "ecosystem (n.): 生態系統",
+      "reliable (adj.): 可靠的",
+      "supply chain (n. phrase): 供應鏈",
+      "reinforce (v.): 鞏固，加強",
+      "brace for (phr.v.): 嚴陣以待",
+      "significant (adj.): 顯著的",
+      "rainfall (n.): 降雨量",
+      "nationwide (adv.): 全國範圍地",
+      "approach (v.): 接近",
+      "heavy rain alert (n.phr.): 豪雨警報",
+      "issue (v.): 發布",
+      "particularly (adv.): 尤其地",
+      "region (n.): 地區",
+      "forecaster (n.): 氣象預報員",
+      "predict (v.): 預測",
+      "continuous (adj.): 持續的",
+      "downpour (n.): 傾盆大雨",
+      "throughout (prep.): 遍及；在...期間",
+      "raise concerns (phr.v.): 引發擔憂",
+      "potential (adj.): 潛在的",
+      "flooding (n.): 洪水",
+      "landslide (n.): 山體滑坡",
+      "precaution (n.): 預防措施",
+      "weather advisory (n.phr.): 天氣警報",
+      "foreign investors (n.phr.): 外國投資者",
+      "net sell-off (n.phr.): 淨賣出",
+      "Taiwan stocks (n.phr.): 台灣股票",
+      "totaling (v.ing.): 總計",
+      "unprecedented (adj.): 前所未有的",
+      "divestment (n.): 撤資",
+      "historic high (n.phr.): 歷史新高",
+      "significantly (adv.): 顯著地",
+      "impacting (v.ing.): 影響",
+      "local financial market (n.phr.): 當地金融市場",
+      "raising concerns (v.phr.): 引起擔憂",
+      "regulators (n.): 監管機構",
+      "analysts (n.): 分析師",
+      "attributed to (phr.v.): 歸因於",
+      "global economic uncertainties (n.phr.): 全球經濟不確定性",
+      "rising interest rates (n.phr.): 利率上升",
+      "strategic reallocation (n.phr.): 戰略性重新配置",
+      "institutional funds (n.phr.): 機構基金",
+      "downward pressure (n.phr.): 下行壓力",
+      "key indices (n.phr.): 主要指數"
+    ],
+    "quiz": [
+      {
+        "q": "What company is mentioned in the news?",
+        "options": [
+          "A",
+          "TSMC",
+          "Intel",
+          "Samsung"
+        ],
+        "answer": "A"
+      },
+      {
+        "q": "What is ASE's primary business?",
+        "options": [
+          "Software development",
+          "Chip packaging and testing",
+          "Automobile manufacturing",
+          "Food processing"
+        ],
+        "answer": "Chip packaging and testing"
+      },
+      {
+        "q": "According to ASE, what is one of Taiwan's key advantages in the semiconductor industry?",
+        "options": [
+          "Abundant natural resources",
+          "Low labor costs",
+          "Robust industry collaboration",
+          "Large domestic market"
+        ],
+        "answer": "Robust industry collaboration"
+      },
+      {
+        "q": "Besides industry collaboration, what other factor does ASE emphasize as Taiwan's strength?",
+        "options": [
+          "Government subsidies",
+          "Customer trust",
+          "Geographical location",
+          "High population density"
+        ],
+        "answer": "Customer trust"
+      },
+      {
+        "q": "What does the 'collaborative ecosystem' ensure?",
+        "options": [
+          "Increased competition",
+          "A stable and efficient supply chain",
+          "Higher product prices",
+          "Reduced innovation"
+        ],
+        "answer": "A stable and efficient supply chain"
+      },
+      {
+        "q": "What role does Taiwan play in advanced chip manufacturing worldwide?",
+        "options": [
+          "A minor role",
+          "A declining role",
+          "A crucial role",
+          "A supporting role"
+        ],
+        "answer": "A crucial role"
+      },
+      {
+        "q": "What does 'enduring competitive advantages' mean?",
+        "options": [
+          "Advantages that are temporary",
+          "Advantages that last a long time",
+          "Advantages that are easily lost",
+          "Advantages that are not competitive"
+        ],
+        "answer": "Advantages that last a long time"
+      },
+      {
+        "q": "What does 'stem from' mean in the context of the news?",
+        "options": [
+          "To branch out from",
+          "To originate from",
+          "To be separate from",
+          "To prevent from"
+        ],
+        "answer": "To originate from"
+      },
+      {
+        "q": "The news implies that Taiwan's semiconductor strengths are important for what?",
+        "options": [
+          "Short-term profits",
+          "Future growth",
+          "Local consumption",
+          "Military applications"
+        ],
+        "answer": "Future growth"
+      },
+      {
+        "q": "What kind of partnerships are mentioned as contributing to Taiwan's advantages?",
+        "options": [
+          "Experimental partnerships",
+          "Unreliable partnerships",
+          "Reliable partnerships",
+          "Casual partnerships"
+        ],
+        "answer": "Reliable partnerships"
+      },
+      {
+        "q": "The term 'deep-seated customer trust' suggests that the trust is:",
+        "options": [
+          "Superficial",
+          "New and developing",
+          "Strong and established",
+          "Easily broken"
+        ],
+        "answer": "Strong and established"
+      },
+      {
+        "q": "What is the overall tone of the news report regarding Taiwan's semiconductor industry?",
+        "options": [
+          "Pessimistic",
+          "Neutral",
+          "Optimistic and confident",
+          "Critical"
+        ],
+        "answer": "Optimistic and confident"
+      },
+      {
+        "q": "What is the main topic of the news report?",
+        "options": [
+          "A. A new weather app",
+          "B. A typhoon approaching Taiwan and causing heavy rain",
+          "C. The opening of a new bureau",
+          "D. Tourism in southern Taiwan"
+        ],
+        "answer": "B. A typhoon approaching Taiwan and causing heavy rain"
+      },
+      {
+        "q": "Which part of Taiwan is specifically mentioned for a heavy rain alert?",
+        "options": [
+          "A. Northern Taiwan",
+          "B. Central Taiwan",
+          "C. Southern Taiwan",
+          "D. Eastern Taiwan"
+        ],
+        "answer": "C. Southern Taiwan"
+      },
+      {
+        "q": "What is the name of the typhoon mentioned in the news?",
+        "options": [
+          "A. Mikla",
+          "B. Kaohsiung",
+          "C. Pingtung",
+          "D. Bureau"
+        ],
+        "answer": "A. Mikla"
+      },
+      {
+        "q": "When are continuous downpours predicted?",
+        "options": [
+          "A. Next week",
+          "B. Throughout Thursday, June 25, 2026",
+          "C. Only in the morning",
+          "D. Only at night"
+        ],
+        "answer": "B. Throughout Thursday, June 25, 2026"
+      },
+      {
+        "q": "What are two potential risks mentioned due to the heavy rain?",
+        "options": [
+          "A. Drought and heatwaves",
+          "B. Flooding and landslides",
+          "C. Earthquakes and tsunamis",
+          "D. Forest fires and strong winds"
+        ],
+        "answer": "B. Flooding and landslides"
+      },
+      {
+        "q": "Who advises residents to take precautions?",
+        "options": [
+          "A. The President",
+          "B. Forecasters",
+          "C. The Central Weather Bureau",
+          "D. Residents themselves"
+        ],
+        "answer": "C. The Central Weather Bureau"
+      },
+      {
+        "q": "The word \"nationwide\" in the text means:",
+        "options": [
+          "A. Only in the capital city",
+          "B. Across the entire country",
+          "C. In neighboring countries",
+          "D. In coastal areas"
+        ],
+        "answer": "B. Across the entire country"
+      },
+      {
+        "q": "What does it mean to \"brace for\" something?",
+        "options": [
+          "A. To ignore it",
+          "B. To prepare for something difficult or unpleasant",
+          "C. To celebrate it",
+          "D. To avoid it completely"
+        ],
+        "answer": "B. To prepare for something difficult or unpleasant"
+      },
+      {
+        "q": "A \"downpour\" refers to:",
+        "options": [
+          "A. A light drizzle",
+          "B. A period of heavy rain",
+          "C. A strong wind",
+          "D. A sunny spell"
+        ],
+        "answer": "B. A period of heavy rain"
+      },
+      {
+        "q": "What kind of information should residents stay \"updated\" on?",
+        "options": [
+          "A. International news",
+          "B. Sports scores",
+          "C. Weather advisories",
+          "D. Stock market prices"
+        ],
+        "answer": "C. Weather advisories"
+      },
+      {
+        "q": "Which two cities/regions are specifically mentioned as being affected in southern Taiwan?",
+        "options": [
+          "A. Taipei and New Taipei",
+          "B. Taichung and Changhua",
+          "C. Kaohsiung and Pingtung",
+          "D. Hualien and Taitung"
+        ],
+        "answer": "C. Kaohsiung and Pingtung"
+      },
+      {
+        "q": "The news report is primarily:",
+        "options": [
+          "A. An opinion piece",
+          "B. A factual report",
+          "C. A fictional story",
+          "D. A travel guide"
+        ],
+        "answer": "B. A factual report"
+      },
+      {
+        "q": "What date did the record net sell-off occur?",
+        "options": [
+          "A) June 25, 2024",
+          "B) June 25, 2025",
+          "C) June 25, 2026",
+          "D) July 25, 2026"
+        ],
+        "answer": "C) June 25, 2026"
+      },
+      {
+        "q": "Who executed the massive net sell-off?",
+        "options": [
+          "A) Local retail investors",
+          "B) Domestic corporations",
+          "C) Foreign investors",
+          "D) Government funds"
+        ],
+        "answer": "C) Foreign investors"
+      },
+      {
+        "q": "What was the total amount of the single-day net sell-off in Taiwan stocks?",
+        "options": [
+          "A) NT$17.74 billion",
+          "B) NT$177.4 billion",
+          "C) NT$1.774 trillion",
+          "D) NT$1774 million"
+        ],
+        "answer": "B) NT$177.4 billion"
+      },
+      {
+        "q": "How is this single-day divestment described in the news?",
+        "options": [
+          "A) A minor adjustment",
+          "B) A seasonal correction",
+          "C) A new historic high",
+          "D) A common market fluctuation"
+        ],
+        "answer": "C) A new historic high"
+      },
+      {
+        "q": "What was significantly impacted by this event?",
+        "options": [
+          "A) Global commodity prices",
+          "B) Local financial market",
+          "C) Taiwan's export volume",
+          "D) International trade agreements"
+        ],
+        "answer": "B) Local financial market"
+      },
+      {
+        "q": "What group expressed concerns due to this market activity?",
+        "options": [
+          "A) Shareholders",
+          "B) Regulators",
+          "C) Economists",
+          "D) Journalists"
+        ],
+        "answer": "B) Regulators"
+      },
+      {
+        "q": "Which of the following is NOT suggested as a possible reason for the outflow by analysts?",
+        "options": [
+          "A) Increasing global economic uncertainties",
+          "B) Rising interest rates",
+          "C) Strategic reallocation of capital",
+          "D) Strong domestic consumer spending"
+        ],
+        "answer": "D) Strong domestic consumer spending"
+      },
+      {
+        "q": "What happened to the Taiwan Stock Exchange's key indices by market close?",
+        "options": [
+          "A) They remained stable",
+          "B) They registered a sharp decline",
+          "C) They showed a slight increase",
+          "D) They fluctuated wildly"
+        ],
+        "answer": "B) They registered a sharp decline"
+      },
+      {
+        "q": "The term \"unprecedented\" means:",
+        "options": [
+          "A) Expected",
+          "B) Never done or known before",
+          "C) Small in scale",
+          "D) Easily predicted"
+        ],
+        "answer": "B) Never done or known before"
+      },
+      {
+        "q": "What does \"net sell-off\" refer to?",
+        "options": [
+          "A) Buying more than selling",
+          "B) Selling more than buying",
+          "C) Equal buying and selling",
+          "D) Only selling"
+        ],
+        "answer": "B) Selling more than buying"
+      },
+      {
+        "q": "\"Attributed to\" in the context means:",
+        "options": [
+          "A) Contrasted with",
+          "B) Caused by",
+          "C) Independent of",
+          "D) Similar to"
+        ],
+        "answer": "B) Caused by"
+      },
+      {
+        "q": "What kind of funds were mentioned as potentially reallocating capital?",
+        "options": [
+          "A) Small individual funds",
+          "B) Local government funds",
+          "C) Large institutional funds",
+          "D) Charity funds"
+        ],
+        "answer": "C) Large institutional funds"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "OpenAI與博通發布首款AI推理芯片，規劃多代平台",
+    "tabTitle": "科技",
+    "english": "OpenAI and Broadcom have officially launched their first custom AI inference chip, a significant step in optimizing large language models. This collaboration aims to enhance the efficiency and reduce the operational costs associated with running advanced AI systems. The new chip is designed to accelerate AI model processing directly within data centers. This initial release marks the beginning of a multi-generational platform strategy, with plans for more advanced versions in the future to meet growing AI demands.",
+    "chinese": "OpenAI與博通已正式發布他們的首款客製化AI推理芯片，這是優化大型語言模型的重要一步。此次合作旨在提升運行先進AI系統的效率並降低其營運成本。這款新芯片設計用於直接加速數據中心內的AI模型處理。這次的初步發布標誌著多代平台策略的開始，未來計劃推出更先進的版本以滿足日益增長的AI需求。",
+    "vocabulary": [
+      "Launch (v.): 發布",
+      "Custom (adj.): 客製化的",
+      "AI inference chip (n. phrase): AI推理芯片",
+      "Significant (adj.): 重大的",
+      "Optimize (v.): 優化",
+      "Large language models (n. phrase): 大型語言模型",
+      "Collaboration (n.): 合作",
+      "Enhance (v.): 提升",
+      "Efficiency (n.): 效率",
+      "Reduce (v.): 降低",
+      "Operational costs (n. phrase): 營運成本",
+      "Associated with (phr. v.): 與...相關的",
+      "Running (v.): 運行",
+      "Advanced (adj.): 先進的",
+      "Accelerate (v.): 加速",
+      "Processing (n.): 處理",
+      "Data centers (n. phrase): 數據中心",
+      "Initial (adj.): 初步的",
+      "Multi-generational (adj.): 多代的",
+      "Platform strategy (n. phrase): 平台策略"
+    ],
+    "quiz": [
+      {
+        "q": "What have OpenAI and Broadcom officially launched?",
+        "options": [
+          "A custom AI training chip",
+          "Their first custom AI inference chip",
+          "A new software platform",
+          "An advanced data storage system"
+        ],
+        "answer": "Their first custom AI inference chip"
+      },
+      {
+        "q": "What is the main purpose of this collaboration?",
+        "options": [
+          "To create new AI models",
+          "To develop faster internet connections",
+          "To optimize large language models",
+          "To build more data centers"
+        ],
+        "answer": "To optimize large language models"
+      },
+      {
+        "q": "What are two key benefits expected from the new chip?",
+        "options": [
+          "Increased security and faster internet",
+          "Enhanced efficiency and reduced operational costs",
+          "Better graphics and longer battery life",
+          "More storage and easier installation"
+        ],
+        "answer": "Enhanced efficiency and reduced operational costs"
+      },
+      {
+        "q": "Where is the new chip designed to accelerate AI model processing?",
+        "options": [
+          "On personal computers",
+          "In mobile devices",
+          "Directly within data centers",
+          "In cloud computing platforms only"
+        ],
+        "answer": "Directly within data centers"
+      },
+      {
+        "q": "What does \"multi-generational platform strategy\" imply for the future?",
+        "options": [
+          "They will only release one version of the chip",
+          "They plan to release more advanced versions",
+          "They will stop developing chips after this one",
+          "They will focus on software development instead"
+        ],
+        "answer": "They plan to release more advanced versions"
+      },
+      {
+        "q": "What does the word \"custom\" mean in \"custom AI inference chip\"?",
+        "options": [
+          "Standardized and widely available",
+          "Designed for general use",
+          "Tailored to specific requirements",
+          "Cheap to produce"
+        ],
+        "answer": "Tailored to specific requirements"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a direct impact of the new chip?",
+        "options": [
+          "Reducing operational costs",
+          "Enhancing efficiency",
+          "Accelerating AI model processing",
+          "Creating new programming languages"
+        ],
+        "answer": "Creating new programming languages"
+      },
+      {
+        "q": "The phrase \"associated with\" in the text means:",
+        "options": [
+          "Separate from",
+          "In opposition to",
+          "Connected with",
+          "Different from"
+        ],
+        "answer": "Connected with"
+      },
+      {
+        "q": "What kind of models are primarily targeted for optimization by this chip?",
+        "options": [
+          "Small data models",
+          "Large language models",
+          "Image recognition models",
+          "Predictive weather models"
+        ],
+        "answer": "Large language models"
+      },
+      {
+        "q": "What does \"initial release\" suggest about the product?",
+        "options": [
+          "It's the final version",
+          "It's the first version in a series",
+          "It's a limited edition",
+          "It's a prototype not for sale"
+        ],
+        "answer": "It's the first version in a series"
+      },
+      {
+        "q": "The news highlights a collaboration between which two entities?",
+        "options": [
+          "Google and Apple",
+          "Microsoft and Intel",
+          "OpenAI and Broadcom",
+          "Nvidia and AMD"
+        ],
+        "answer": "OpenAI and Broadcom"
+      },
+      {
+        "q": "What is the overall tone of this news report?",
+        "options": [
+          "Skeptical and critical",
+          "Neutral and informative",
+          "Alarmist and warning",
+          "Humorous and lighthearted"
+        ],
+        "answer": "Neutral and informative"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "OpenAI發布GPT-5.5 Instant更新，強化意圖理解與推薦",
+    "tabTitle": "科技",
+    "english": "OpenAI announced a significant update for GPT-5.5 Instant on June 25, 2026. This new version aims to greatly improve the AI's ability to understand user intent, making interactions more precise. Furthermore, it enhances the quality and relevance of recommendations provided by the model. Developers can now integrate these advanced features to create more intuitive and personalized AI applications, promising a more efficient and user-friendly experience.",
+    "chinese": "OpenAI 於 2026 年 6 月 25 日宣布了 GPT-5.5 Instant 的一項重大更新。這個新版本旨在大幅提升 AI 理解用戶意圖的能力，使互動更加精確。此外，它還強化了模型所提供推薦的品質和相關性。開發者現在可以整合這些先進功能，以創建更直觀和個性化的 AI 應用程式，承諾提供更高效且用戶友好的體驗。",
+    "vocabulary": [
+      "announce (v.): 宣布",
+      "significant (adj.): 重大的",
+      "update (n.): 更新",
+      "aim (v.): 旨在",
+      "greatly (adv.): 大幅地",
+      "improve (v.): 提升",
+      "ability (n.): 能力",
+      "understand (v.): 理解",
+      "user intent (n. phr.): 用戶意圖",
+      "precise (adj.): 精確的",
+      "furthermore (adv.): 此外",
+      "enhance (v.): 強化",
+      "quality (n.): 品質",
+      "relevance (n.): 相關性",
+      "provided by (phr.): 由...提供",
+      "integrate (v.): 整合",
+      "advanced features (n. phr.): 先進功能",
+      "intuitive (adj.): 直觀的",
+      "personalized (adj.): 個性化的",
+      "user-friendly (adj.): 用戶友好的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news?",
+        "options": [
+          "A) OpenAI's new CEO",
+          "B) A major update for GPT-5.5 Instant",
+          "C) A new programming language",
+          "D) The future of robotics"
+        ],
+        "answer": "B) A major update for GPT-5.5 Instant"
+      },
+      {
+        "q": "When was the GPT-5.5 Instant update announced?",
+        "options": [
+          "A) June 25, 2025",
+          "B) June 25, 2026",
+          "C) July 25, 2026",
+          "D) August 25, 2025"
+        ],
+        "answer": "B) June 25, 2026"
+      },
+      {
+        "q": "What is one key improvement of the new GPT-5.5 Instant version?",
+        "options": [
+          "A) Faster internet speed",
+          "B) Better graphics processing",
+          "C) Enhanced user intent understanding",
+          "D) Reduced battery consumption"
+        ],
+        "answer": "C) Enhanced user intent understanding"
+      },
+      {
+        "q": "Besides intent understanding, what else does the update enhance?",
+        "options": [
+          "A) Hardware compatibility",
+          "B) Quality and relevance of recommendations",
+          "C) Cloud storage capacity",
+          "D) Security protocols for email"
+        ],
+        "answer": "B) Quality and relevance of recommendations"
+      },
+      {
+        "q": "What does \"precise\" mean in the context of user interactions?",
+        "options": [
+          "A) Less accurate",
+          "B) More accurate",
+          "C) Slower",
+          "D) More confusing"
+        ],
+        "answer": "B) More accurate"
+      },
+      {
+        "q": "Who can integrate these advanced features?",
+        "options": [
+          "A) Only OpenAI employees",
+          "B) General users",
+          "C) Developers",
+          "D) Government officials"
+        ],
+        "answer": "C) Developers"
+      },
+      {
+        "q": "What kind of AI applications can be created with these new features?",
+        "options": [
+          "A) Only gaming applications",
+          "B) More intuitive and personalized applications",
+          "C) Only scientific research applications",
+          "D) Simple calculator applications"
+        ],
+        "answer": "B) More intuitive and personalized applications"
+      },
+      {
+        "q": "What is the promised outcome of using these advanced features?",
+        "options": [
+          "A) A more expensive experience",
+          "B) A slower and more complex experience",
+          "C) A more efficient and user-friendly experience",
+          "D) A less secure experience"
+        ],
+        "answer": "C) A more efficient and user-friendly experience"
+      },
+      {
+        "q": "The word \"significant\" in the news implies the update is:",
+        "options": [
+          "A) Minor",
+          "B) Unimportant",
+          "C) Important",
+          "D) Difficult"
+        ],
+        "answer": "C) Important"
+      },
+      {
+        "q": "What does \"user intent\" refer to?",
+        "options": [
+          "A) The user's location",
+          "B) The user's age",
+          "C) What the user wants to achieve or find",
+          "D) The user's preferred language"
+        ],
+        "answer": "C) What the user wants to achieve or find"
+      },
+      {
+        "q": "The update makes interactions \"more precise.\" This means they are:",
+        "options": [
+          "A) Less exact",
+          "B) More exact",
+          "C) More random",
+          "D) More general"
+        ],
+        "answer": "B) More exact"
+      },
+      {
+        "q": "Which of the following is NOT an expected benefit for developers?",
+        "options": [
+          "A) Creating more intuitive AI applications",
+          "B) Creating more personalized AI applications",
+          "C) Creating more complex and difficult-to-use applications",
+          "D) Integrating advanced features"
+        ],
+        "answer": "C) Creating more complex and difficult-to-use applications"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "秘魯前總統之女有望勝選，右翼勢力再掌權",
+    "tabTitle": "國際大事",
+    "english": "Dated: 2026.06.25\nKeiko Fujimori, daughter of former Peruvian President Alberto Fujimori, is poised to secure victory in Peru's presidential election. Her anticipated win signals a significant right-wing resurgence in the South American nation's political landscape. This outcome marks a potential shift in national policy and international relations, reflecting a conservative mandate from the electorate after a period of political instability. Observers are closely watching how her administration will address economic challenges and social reforms.",
+    "chinese": "日期：2026.06.25\n秘魯前總統阿爾貝托·藤森之女藤森慶子有望在秘魯總統大選中勝選。她預期的勝利預示著這個南美國家的政治版圖將迎來顯著的右翼勢力復興。這一結果標誌著國家政策和國際關係可能發生轉變，反映了在一段政治不穩定時期後，選民賦予了保守派執政的權力。觀察家們正密切關注她的政府將如何應對經濟挑戰和社會改革。",
+    "vocabulary": [
+      "poised (adj.): 有望的；準備好的",
+      "secure (v.): 贏得；確保",
+      "victory (n.): 勝利",
+      "presidential election (n.): 總統大選",
+      "anticipated (adj.): 預期的",
+      "signal (v.): 預示；發出信號",
+      "significant (adj.): 顯著的；重要的",
+      "right-wing (adj.): 右翼的",
+      "resurgence (n.): 復興；捲土重來",
+      "political landscape (n.): 政治版圖",
+      "outcome (n.): 結果",
+      "shift (n.): 轉變",
+      "national policy (n.): 國家政策",
+      "international relations (n.): 國際關係",
+      "reflect (v.): 反映",
+      "conservative (adj.): 保守的",
+      "mandate (n.): 授權；委任",
+      "electorate (n.): 全體選民",
+      "political instability (n.): 政治不穩定",
+      "address (v.): 處理；應對"
+    ],
+    "quiz": [
+      {
+        "q": "Who is Keiko Fujimori?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. The daughter of a former Peruvian President."
+      },
+      {
+        "q": "What is Keiko Fujimori poised to do?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C. Secure victory in the presidential election."
+      },
+      {
+        "q": "What does her anticipated win signal for Peru's political landscape?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. A significant right-wing resurgence."
+      },
+      {
+        "q": "What kind of shift might this outcome mark in Peru?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. A potential change in national policy and international relations."
+      },
+      {
+        "q": "What does the phrase \"conservative mandate\" imply?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. The electorate has given authority to conservative leaders."
+      },
+      {
+        "q": "What was the political situation in Peru before this election, according to the text?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C. A period of political instability."
+      },
+      {
+        "q": "What are observers closely watching regarding her administration?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. How she will address economic challenges and social reforms."
+      },
+      {
+        "q": "In the context of the news, what does \"poised\" mean?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. Ready and likely to do something."
+      },
+      {
+        "q": "Which country is the subject of this news article?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C. Peru."
+      },
+      {
+        "q": "What is the approximate word count of the English news article?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. Around 80 words."
+      },
+      {
+        "q": "What is the stated date of this news article?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. 2026.06.25"
+      },
+      {
+        "q": "The news describes Keiko Fujimori's potential win as a \"right-wing resurgence.\" What does \"resurgence\" suggest?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B. A return or revival of something that was previously present."
+      }
+    ]
+  },
+  "article-6": {
+    "title": "MirendilAI獲2億美元融資，專注自加速AI研發",
+    "tabTitle": "科技",
+    "english": "MirendilAI, a leading AI research company, announced on June 25, 2026, that it has successfully raised $200 million in its latest funding round. This significant investment will primarily support the company's dedicated research and development efforts in self-accelerating artificial intelligence. The new capital aims to speed up the creation of AI systems that can independently enhance their own performance and learning capabilities.",
+    "chinese": "MirendilAI，一家領先的人工智慧研究公司，於2026年6月25日宣布，它已成功在其最新一輪融資中籌集到2億美元。這筆可觀的投資將主要用於支持該公司在自加速人工智慧領域的專門研發工作。這筆新資金旨在加速開發能夠獨立提升自身性能和學習能力的人工智慧系統。",
+    "vocabulary": [
+      "MirendilAI (n.): MirendilAI (公司名)",
+      "secures (v.): 獲得；取得",
+      "funding (n.): 融資；資金",
+      "self-accelerating (adj.): 自加速的",
+      "R&D (n.): 研發 (research and development 的縮寫)",
+      "leading (adj.): 領先的；主要的",
+      "announced (v.): 宣布；公布",
+      "successfully (adv.): 成功地",
+      "raised (v.): 籌集；募集",
+      "significant (adj.): 重要的；可觀的",
+      "investment (n.): 投資",
+      "primarily (adv.): 主要地",
+      "support (v.): 支持；資助",
+      "dedicated (adj.): 專注的；專門的",
+      "efforts (n.): 努力；嘗試",
+      "capital (n.): 資金；資本",
+      "aims to (phr.): 旨在；目標是",
+      "speed up (phr.): 加速",
+      "independently (adv.): 獨立地",
+      "enhance (v.): 提升；增強"
+    ],
+    "quiz": [
+      {
+        "q": "What is the name of the company mentioned in the news?",
+        "options": [
+          "A. AccelerateAI",
+          "B. MirendilAI",
+          "C. FutureTech",
+          "D. Global Robotics"
+        ],
+        "answer": "B. MirendilAI"
+      },
+      {
+        "q": "How much funding did MirendilAI secure?",
+        "options": [
+          "A. $20 million",
+          "B. $200 million",
+          "C. $2 billion",
+          "D. $200 thousand"
+        ],
+        "answer": "B. $200 million"
+      },
+      {
+        "q": "What is MirendilAI primarily focusing its R&D efforts on?",
+        "options": [
+          "A. Robotics manufacturing",
+          "B. Quantum computing",
+          "C. Self-accelerating artificial intelligence",
+          "D. Space exploration technology"
+        ],
+        "answer": "C. Self-accelerating artificial intelligence"
+      },
+      {
+        "q": "What does the abbreviation \"R&D\" stand for?",
+        "options": [
+          "A. Research and Design",
+          "B. Resources and Development",
+          "C. Research and Development",
+          "D. Regulation and Data"
+        ],
+        "answer": "C. Research and Development"
+      },
+      {
+        "q": "According to the news, what is the main goal of the new capital?",
+        "options": [
+          "A. To expand marketing campaigns",
+          "B. To acquire other AI companies",
+          "C. To speed up the creation of AI systems",
+          "D. To reduce operational costs"
+        ],
+        "answer": "C. To speed up the creation of AI systems"
+      },
+      {
+        "q": "What characteristic defines \"self-accelerating AI systems\"?",
+        "options": [
+          "A. They require constant human supervision",
+          "B. They can independently enhance their own performance",
+          "C. They are designed for military use only",
+          "D. They operate without any power source."
+        ],
+        "answer": "B. They can independently enhance their own performance"
+      },
+      {
+        "q": "When was the funding announcement made?",
+        "options": [
+          "A. June 25, 2025",
+          "B. June 26, 2026",
+          "C. June 25, 2026",
+          "D. May 25, 2026"
+        ],
+        "answer": "C. June 25, 2026"
+      },
+      {
+        "q": "In the context of the news, what is a synonym for \"secures\"?",
+        "options": [
+          "A. Loses",
+          "B. Acquires",
+          "C. Releases",
+          "D. Postpones"
+        ],
+        "answer": "B. Acquires"
+      },
+      {
+        "q": "How is MirendilAI described in the news?",
+        "options": [
+          "A. A new startup company",
+          "B. A leading AI research company",
+          "C. A struggling tech firm",
+          "D. A government-funded agency"
+        ],
+        "answer": "B. A leading AI research company"
+      },
+      {
+        "q": "What does \"primarily\" mean in the sentence \"This significant investment will primarily support...\"?",
+        "options": [
+          "A. Secondly",
+          "B. Rarely",
+          "C. Mainly",
+          "D. Partially"
+        ],
+        "answer": "C. Mainly"
+      },
+      {
+        "q": "The new capital aims to ______ the creation of AI systems.",
+        "options": [
+          "A. slow down",
+          "B. halt",
+          "C. speed up",
+          "D. delay"
+        ],
+        "answer": "C. speed up"
+      },
+      {
+        "q": "What does \"enhance\" mean in the phrase \"independently enhance their own performance\"?",
+        "options": [
+          "A. Decrease",
+          "B. Worsen",
+          "C. Improve",
+          "D. Limit"
+        ],
+        "answer": "C. Improve"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
