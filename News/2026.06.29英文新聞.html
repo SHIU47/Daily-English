@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 29, 2026：金融市場、國際大事 與 國際大事</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台股單週重挫後反彈 台積電穩守45K\nTaiwan's stock market experienced a significant rebound on June 29, 2026, after a sharp drop earlier in the week. The benchmark TAIEX index recovered some losses, signaling renewed investor confidence. Notably, Taiwan Semiconductor Manufacturing Company (TSMC) played a crucial role, firmly holding the 45,000 NTD mark. This stability from the tech giant helped prevent further market declines and supported the overall recovery. The market's performance suggests a cautious optimism following recent volatility.\n\n[2] 台積電海外擴廠助攻 帆宣獲千億訂單\nTSMC's global expansion strategy is significantly boosting its supply chain. Fanxuan, a key equipment supplier, has secured new orders worth over NT$100 billion, driven by TSMC's overseas fab construction. This substantial increase reflects the robust demand for advanced manufacturing facilities worldwide. The orders are expected to significantly contribute to Fanxuan's revenue and market position over the next few years.\n\n[3] 依托咪酯列一級毒品 首日逮63毒駕嫌犯\nTaiwan officially designated etomidate as a Class 1 controlled drug on June 28, 2026, aiming to curb its misuse. On the first day of enforcement, authorities arrested 63 individuals suspected of drug driving. This reclassification highlights the government's commitment to public safety and stricter control over psychoactive substances, signaling a zero-tolerance approach to drug-related offenses.",
+    "chinese": "【1】台股單週重挫後反彈 台積電穩守45K\n2026年6月29日，台灣股市在經歷本週稍早的急劇下跌後，出現了顯著反彈。基準加權指數收復了部分失地，顯示投資者信心有所恢復。值得注意的是，台灣積體電路製造公司（台積電）扮演了關鍵角色，穩穩守住45,000新台幣大關。這家科技巨頭的穩定性有助於防止市場進一步下跌，並支撐了整體復甦。市場表現顯示，在近期波動之後，市場情緒持謹慎樂觀態度。\n\n【2】台積電海外擴廠助攻 帆宣獲千億訂單\n台積電的全球擴張策略正顯著推動其供應鏈。關鍵設備供應商帆宣已獲得超過新台幣1,000億元的新訂單，這主要受台積電海外晶圓廠建設的帶動。這筆可觀的增長反映了全球對先進製造設施的強勁需求。預計這些訂單將在未來幾年內顯著貢獻帆宣的營收和市場地位。\n\n【3】依托咪酯列一級毒品 首日逮63毒駕嫌犯\n台灣於2026年6月28日正式將依托咪酯列為一級管制藥品，旨在遏制其濫用。執法首日，當局逮捕了63名涉嫌毒駕的個人。此次重新分類凸顯了政府對公共安全以及對精神活性物質更嚴格控制的承諾，預示著對毒品相關違規行為採取零容忍態度。",
+    "vocabulary": [
+      "rebound (v.): 反彈",
+      "sharp drop (n. phr.): 急劇下跌",
+      "hold (v.): 守住；維持",
+      "mark (n.): 關卡；標誌",
+      "stock market (n.): 股票市場",
+      "significant (adj.): 顯著的；重大的",
+      "benchmark (n.): 基準",
+      "TAIEX index (n. phr.): 加權指數",
+      "recover losses (v. phr.): 收復失地",
+      "signal (v.): 顯示；發出信號",
+      "renewed (adj.): 重拾的；更新的",
+      "investor confidence (n. phr.): 投資者信心",
+      "notably (adv.): 尤其；顯著地",
+      "crucial role (n. phr.): 關鍵角色",
+      "firmly (adv.): 穩固地",
+      "tech giant (n. phr.): 科技巨頭",
+      "prevent (v.): 阻止；預防",
+      "further declines (n. phr.): 進一步下跌",
+      "overall recovery (n. phr.): 整體復甦",
+      "cautious optimism (n. phr.): 謹慎樂觀",
+      "global (adj.): 全球的",
+      "expansion (n.): 擴張；擴大",
+      "strategy (n.): 策略；戰略",
+      "significantly (adv.): 顯著地；意義重大地",
+      "boost (v.): 提升；促進",
+      "supply chain (n.): 供應鏈",
+      "key (adj.): 關鍵的；主要的",
+      "equipment (n.): 設備",
+      "supplier (n.): 供應商",
+      "secure (v.): 獲得；取得",
+      "order (n.): 訂單",
+      "worth (adj.): 價值...的",
+      "driven by (phr.): 受...驅動；由...帶動",
+      "overseas (adj.): 海外的",
+      "fab (n.): 晶圓廠 (fabrication plant 的縮寫)",
+      "construction (n.): 建設；建造",
+      "substantial (adj.): 大量的；可觀的",
+      "robust (adj.): 強勁的；穩健的",
+      "revenue (n.): 營收；收益",
+      "market position (n.): 市場地位",
+      "Etomidate (n.): 依托咪酯",
+      "Class 1 controlled drug (n. phr.): 一級管制藥品",
+      "Designate (v.): 指定，列為",
+      "Curb (v.): 遏制，抑制",
+      "Misuse (n.): 濫用",
+      "Enforcement (n.): 執行，實施",
+      "Authorities (n.): 當局，官方",
+      "Arrest (v.): 逮捕",
+      "Suspected of (phr.): 涉嫌...",
+      "Drug driving (n. phr.): 毒駕",
+      "Reclassification (n.): 重新分類",
+      "Highlight (v.): 凸顯，強調",
+      "Commitment (n.): 承諾，奉獻",
+      "Public safety (n. phr.): 公共安全",
+      "Stricter (adj.): 更嚴格的",
+      "Control (n.): 控制",
+      "Psychoactive substances (n. phr.): 精神活性物質",
+      "Signal (v.): 預示，表明",
+      "Zero-tolerance (adj.): 零容忍的",
+      "Offense (n.): 違規行為，罪行"
+    ],
+    "quiz": [
+      {
+        "q": "What was the main event in Taiwan's stock market on June 29, 2026?",
+        "options": [
+          "A. A sharp decline",
+          "B. A significant rebound",
+          "C. No significant change",
+          "D. A market closure"
+        ],
+        "answer": "B. A significant rebound"
+      },
+      {
+        "q": "What preceded the market's rebound earlier in the week?",
+        "options": [
+          "A. A period of steady growth",
+          "B. A sharp drop",
+          "C. A merger of major companies",
+          "D. A government intervention"
+        ],
+        "answer": "B. A sharp drop"
+      },
+      {
+        "q": "Which company was highlighted for its crucial role in the market's stability?",
+        "options": [
+          "A. Foxconn",
+          "B. MediaTek",
+          "C. Taiwan Semiconductor Manufacturing Company (TSMC)",
+          "D. Chunghwa Telecom"
+        ],
+        "answer": "C. Taiwan Semiconductor Manufacturing Company (TSMC)"
+      },
+      {
+        "q": "What specific price mark did TSMC firmly hold?",
+        "options": [
+          "A. 4,500 NTD",
+          "B. 450 NTD",
+          "C. 45,000 NTD",
+          "D. 450,000 NTD"
+        ],
+        "answer": "C. 45,000 NTD"
+      },
+      {
+        "q": "What does the term \"rebound\" mean in the context of a stock market?",
+        "options": [
+          "A. To fall rapidly",
+          "B. To remain stable",
+          "C. To increase again after a decrease",
+          "D. To close for the day"
+        ],
+        "answer": "C. To increase again after a decrease"
+      },
+      {
+        "q": "The phrase \"recover losses\" suggests that the market:",
+        "options": [
+          "A. Gained new profits",
+          "B. Made up for previous financial declines",
+          "C. Experienced no changes",
+          "D. Lost more money"
+        ],
+        "answer": "B. Made up for previous financial declines"
+      },
+      {
+        "q": "What does \"investor confidence\" refer to?",
+        "options": [
+          "A. The amount of money investors have",
+          "B. Investors' belief in the market's future performance",
+          "C. The number of investors in the market",
+          "D. Government regulations on investments"
+        ],
+        "answer": "B. Investors' belief in the market's future performance"
+      },
+      {
+        "q": "What was the general sentiment observed in the market after the rebound?",
+        "options": [
+          "A. Extreme pessimism",
+          "B. Unbridled enthusiasm",
+          "C. Cautious optimism",
+          "D. Indifference"
+        ],
+        "answer": "C. Cautious optimism"
+      },
+      {
+        "q": "What is the TAIEX index?",
+        "options": [
+          "A. A type of stock",
+          "B. Taiwan's benchmark stock market index",
+          "C. A currency exchange rate",
+          "D. A technology company"
+        ],
+        "answer": "B. Taiwan's benchmark stock market index"
+      },
+      {
+        "q": "TSMC's stability helped prevent what?",
+        "options": [
+          "A. Further market gains",
+          "B. Further market declines",
+          "C. New investments",
+          "D. International trade"
+        ],
+        "answer": "B. Further market declines"
+      },
+      {
+        "q": "What kind of company is TSMC described as in the news?",
+        "options": [
+          "A. A financial institution",
+          "B. A retail chain",
+          "C. A tech giant",
+          "D. An energy provider"
+        ],
+        "answer": "C. A tech giant"
+      },
+      {
+        "q": "What does \"volatility\" in financial markets generally refer to?",
+        "options": [
+          "A. A period of stable prices",
+          "B. Rapid and unpredictable price changes",
+          "C. A long-term uptrend",
+          "D. A fixed interest rate"
+        ],
+        "answer": "B. Rapid and unpredictable price changes"
+      },
+      {
+        "q": "What is the primary reason for Fanxuan securing new orders?",
+        "options": [
+          "A. Increased domestic demand",
+          "B. TSMC's global expansion strategy",
+          "C. New product development by Fanxuan",
+          "D. Government subsidies for suppliers"
+        ],
+        "answer": "B. TSMC's global expansion strategy"
+      },
+      {
+        "q": "Approximately how much are the new orders Fanxuan has secured?",
+        "options": [
+          "A. Under NT$10 billion",
+          "B. Exactly NT$100 billion",
+          "C. Over NT$100 billion",
+          "D. Billions of US dollars"
+        ],
+        "answer": "C. Over NT$100 billion"
+      },
+      {
+        "q": "What role does Fanxuan play in TSMC's operations?",
+        "options": [
+          "A. A direct competitor",
+          "B. A key equipment supplier",
+          "C. A logistics partner",
+          "D. A research and development collaborator"
+        ],
+        "answer": "B. A key equipment supplier"
+      },
+      {
+        "q": "The \"robust demand\" mentioned in the article refers to the need for what?",
+        "options": [
+          "A. Consumer electronics",
+          "B. Raw materials",
+          "C. Advanced manufacturing facilities",
+          "D. Skilled labor"
+        ],
+        "answer": "C. Advanced manufacturing facilities"
+      },
+      {
+        "q": "What does \"fab\" in the context of this article most likely refer to?",
+        "options": [
+          "A. A fabulous design",
+          "B. A fabrication plant",
+          "C. A factory automation system",
+          "D. A famous brand"
+        ],
+        "answer": "B. A fabrication plant"
+      },
+      {
+        "q": "What is expected to be boosted for Fanxuan as a result of these orders?",
+        "options": [
+          "A. Its stock price and employee morale",
+          "B. Its revenue and market position",
+          "C. Its overseas sales team and marketing budget",
+          "D. Its research and development capabilities"
+        ],
+        "answer": "B. Its revenue and market position"
+      },
+      {
+        "q": "What is the overall impact of TSMC's global expansion on its supply chain?",
+        "options": [
+          "A. It causes disruptions and delays.",
+          "B. It significantly boosts the supply chain.",
+          "C. It leads to increased competition.",
+          "D. It has no significant impact."
+        ],
+        "answer": "B. It significantly boosts the supply chain."
+      },
+      {
+        "q": "The news article describes TSMC's expansion as a \"strategy.\" What does this imply?",
+        "options": [
+          "A. It's an accidental occurrence.",
+          "B. It's a carefully planned approach.",
+          "C. It's a short-term reaction.",
+          "D. It's a spontaneous decision."
+        ],
+        "answer": "B. It's a carefully planned approach."
+      },
+      {
+        "q": "The phrase \"driven by TSMC's overseas fab construction\" means:",
+        "options": [
+          "A. Fanxuan is building TSMC's fabs.",
+          "B. TSMC's overseas fab construction is the cause of Fanxuan's orders.",
+          "C. Fanxuan is driving equipment to TSMC's overseas fabs.",
+          "D. TSMC is driving Fanxuan to expand overseas."
+        ],
+        "answer": "B. TSMC's overseas fab construction is the cause of Fanxuan's orders."
+      },
+      {
+        "q": "What is the tone of the English news content?",
+        "options": [
+          "A. Speculative",
+          "B. Critical",
+          "C. Factual",
+          "D. Humorous"
+        ],
+        "answer": "C. Factual"
+      },
+      {
+        "q": "For how long are these orders expected to contribute to Fanxuan's financials?",
+        "options": [
+          "A. For the next few months only.",
+          "B. For the next few years.",
+          "C. Indefinitely.",
+          "D. Until TSMC stops expanding."
+        ],
+        "answer": "B. For the next few years."
+      },
+      {
+        "q": "Which of the following is NOT directly mentioned as a beneficiary of TSMC's expansion in the article?",
+        "options": [
+          "A. Fanxuan",
+          "B. TSMC's supply chain",
+          "C. Global demand for facilities",
+          "D. TSMC's competitors"
+        ],
+        "answer": "D. TSMC's competitors"
+      },
+      {
+        "q": "What new classification did etomidate receive in Taiwan?",
+        "options": [
+          "Class 2 controlled drug",
+          "Class 3 controlled drug",
+          "Class 1 controlled drug",
+          "A prescription-only medicine"
+        ],
+        "answer": "Class 1 controlled drug"
+      },
+      {
+        "q": "When did Taiwan officially reclassify etomidate?",
+        "options": [
+          "June 28, 2025",
+          "June 29, 2026",
+          "June 28, 2026",
+          "July 1, 2026"
+        ],
+        "answer": "June 28, 2026"
+      },
+      {
+        "q": "What was the primary reason for reclassifying etomidate?",
+        "options": [
+          "To increase its medical use",
+          "To make it more accessible",
+          "To combat its misuse",
+          "To reduce its cost"
+        ],
+        "answer": "To combat its misuse"
+      },
+      {
+        "q": "How many individuals were arrested on the first day of enforcement?",
+        "options": [
+          "28",
+          "63",
+          "80",
+          "over 100"
+        ],
+        "answer": "63"
+      },
+      {
+        "q": "What specific offense were the arrested individuals suspected of?",
+        "options": [
+          "Drug trafficking",
+          "Drug possession",
+          "Drug manufacturing",
+          "Drug driving"
+        ],
+        "answer": "Drug driving"
+      },
+      {
+        "q": "The reclassification highlights the government's commitment to what?",
+        "options": [
+          "Economic growth",
+          "International relations",
+          "Public safety",
+          "Technological advancement"
+        ],
+        "answer": "Public safety"
+      },
+      {
+        "q": "In the context of the news, what does 'curb' most closely mean?",
+        "options": [
+          "To encourage",
+          "To allow",
+          "To restrict or limit",
+          "To ignore"
+        ],
+        "answer": "To restrict or limit"
+      },
+      {
+        "q": "Which phrase describes the government's attitude towards drug-related offenses on the roads?",
+        "options": [
+          "Lax enforcement",
+          "Flexible approach",
+          "Zero-tolerance approach",
+          "Advisory stance"
+        ],
+        "answer": "Zero-tolerance approach"
+      },
+      {
+        "q": "What are 'psychoactive substances'?",
+        "options": [
+          "Substances that calm the body",
+          "Substances that affect the mind or behavior",
+          "Substances used for cleaning",
+          "Substances found in food"
+        ],
+        "answer": "Substances that affect the mind or behavior"
+      },
+      {
+        "q": "What does 'enforcement' refer to in the news?",
+        "options": [
+          "The act of making a law public",
+          "The act of making people obey a law",
+          "The act of drafting a new law",
+          "The act of debating a law"
+        ],
+        "answer": "The act of making people obey a law"
+      },
+      {
+        "q": "Which word best describes the government's 'commitment' mentioned in the article?",
+        "options": [
+          "Indifference",
+          "Hesitation",
+          "Dedication",
+          "Opposition"
+        ],
+        "answer": "Dedication"
+      },
+      {
+        "q": "The article mentions 'stricter control' over what?",
+        "options": [
+          "Traffic laws",
+          "Imported goods",
+          "Psychoactive substances",
+          "Public gatherings"
+        ],
+        "answer": "Psychoactive substances"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "委內瑞拉強震逾1400死 近7萬人失蹤",
+    "tabTitle": "國際大事",
+    "english": "A powerful earthquake devastated Venezuela on June 29, 2026, causing widespread destruction and a significant humanitarian crisis. Official reports confirm that the tragic death toll has now exceeded 1,400 people. Alarmingly, nearly 70,000 individuals are reported missing, prompting urgent and large-scale search and rescue operations across the affected regions. International aid organizations are rapidly mobilizing resources to provide essential support and assistance to the thousands of victims displaced by the disaster.",
+    "chinese": "一場強烈地震於2026年6月29日重創委內瑞拉，造成廣泛破壞和嚴重的人道危機。官方報告證實，死亡人數已悲劇性地超過1,400人。令人震驚的是，近70,000人被通報失蹤，促使受災地區展開緊急且大規模的搜救行動。國際援助組織正迅速調動資源，為數千名因災情而流離失所的受害者提供必要的支援和協助。",
+    "vocabulary": [
+      "earthquake (n.): 地震",
+      "death toll (n.): 死亡人數",
+      "exceed (v.): 超過",
+      "missing (adj.): 失蹤的",
+      "powerful (adj.): 強烈的",
+      "devastate (v.): 摧毀",
+      "widespread (adj.): 廣泛的",
+      "destruction (n.): 破壞",
+      "significant (adj.): 顯著的",
+      "humanitarian crisis (n.): 人道危機",
+      "official (adj.): 官方的",
+      "tragically (adv.): 悲劇性地",
+      "alarmingly (adv.): 令人震驚地",
+      "prompt (v.): 促使",
+      "urgent (adj.): 緊急的",
+      "large-scale (adj.): 大規模的",
+      "search and rescue (n.): 搜救",
+      "affected region (n.): 受災地區",
+      "international aid (n.): 國際援助",
+      "mobilize (v.): 調動"
+    ],
+    "quiz": [
+      {
+        "q": "What natural disaster hit Venezuela on June 29, 2026?",
+        "options": [
+          "A. Tsunami",
+          "B. Volcano Eruption",
+          "C. Earthquake",
+          "D. Flood"
+        ],
+        "answer": "C. Earthquake"
+      },
+      {
+        "q": "According to the news, what was the estimated number of deaths?",
+        "options": [
+          "A. Exactly 1,400",
+          "B. Less than 1,400",
+          "C. Over 1,400",
+          "D. About 70,000"
+        ],
+        "answer": "C. Over 1,400"
+      },
+      {
+        "q": "How many individuals are reported missing after the earthquake?",
+        "options": [
+          "A. Roughly 1,400",
+          "B. Nearly 70,000",
+          "C. Exactly 70,000",
+          "D. Over 100,000"
+        ],
+        "answer": "B. Nearly 70,000"
+      },
+      {
+        "q": "The earthquake caused a 'significant humanitarian crisis.' What does 'humanitarian' refer to?",
+        "options": [
+          "A. Related to economy",
+          "B. Related to human welfare",
+          "C. Related to politics",
+          "D. Related to infrastructure"
+        ],
+        "answer": "B. Related to human welfare"
+      },
+      {
+        "q": "What type of operations were launched due to the large number of missing people?",
+        "options": [
+          "A. Economic recovery",
+          "B. Political negotiations",
+          "C. Search and rescue",
+          "D. Scientific research"
+        ],
+        "answer": "C. Search and rescue"
+      },
+      {
+        "q": "Which organizations are mobilizing resources to help?",
+        "options": [
+          "A. Local government only",
+          "B. Military forces",
+          "C. International aid organizations",
+          "D. Private businesses"
+        ],
+        "answer": "C. International aid organizations"
+      },
+      {
+        "q": "What word describes the destruction caused by the earthquake?",
+        "options": [
+          "A. Localized",
+          "B. Minor",
+          "C. Widespread",
+          "D. Contained"
+        ],
+        "answer": "C. Widespread"
+      },
+      {
+        "q": "What is the primary purpose of the international aid?",
+        "options": [
+          "A. To rebuild infrastructure",
+          "B. To provide essential support and assistance",
+          "C. To investigate the cause of the earthquake",
+          "D. To monitor political stability"
+        ],
+        "answer": "B. To provide essential support and assistance"
+      },
+      {
+        "q": "The news states the death toll has 'exceeded 1,400.' What does 'exceeded' mean?",
+        "options": [
+          "A. Was less than",
+          "B. Was exactly",
+          "C. Went above",
+          "D. Was equal to"
+        ],
+        "answer": "C. Went above"
+      },
+      {
+        "q": "Who are the 'victims displaced by the disaster'?",
+        "options": [
+          "A. People who lost their jobs",
+          "B. People who moved to a new country",
+          "C. People forced to leave their homes",
+          "D. People injured in the earthquake"
+        ],
+        "answer": "C. People forced to leave their homes"
+      },
+      {
+        "q": "What adverb describes how the death toll was reported?",
+        "options": [
+          "A. Joyfully",
+          "B. Tragically",
+          "C. Hopefully",
+          "D. Enthusiastically"
+        ],
+        "answer": "B. Tragically"
+      },
+      {
+        "q": "The search and rescue operations are described as 'large-scale.' What does this imply about their scope?",
+        "options": [
+          "A. Limited to a small area",
+          "B. Involving many resources and a wide area",
+          "C. Focused on specific individuals",
+          "D. Conducted by a single team"
+        ],
+        "answer": "B. Involving many resources and a wide area"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "日本岩手縣近海6.1級地震 多地有感",
+    "tabTitle": "國際大事",
+    "english": "A 6.1 magnitude earthquake struck off the coast of Iwate Prefecture, Japan, on June 29, 2026. The tremor occurred at a shallow depth, causing significant shaking across multiple regions in northeastern Japan. While no tsunami warning was issued, local authorities reported that the quake was widely felt, prompting temporary disruptions. There were no immediate reports of major damage or serious injuries.",
+    "chinese": "2026年6月29日，日本岩手縣近海發生規模6.1級地震。此次地震震源深度較淺，導致日本東北部多個地區有明顯震感。雖然沒有發布海嘯警報，但地方當局報告稱地震影響廣泛，造成暫時性中斷。目前尚未接獲重大損壞或嚴重人員傷亡的報告。",
+    "vocabulary": [
+      "magnitude (n.): 規模",
+      "earthquake (n.): 地震",
+      "strike (v.): 襲擊，發生",
+      "coast (n.): 海岸",
+      "Prefecture (n.): 縣",
+      "tremor (n.): 震動",
+      "occur (v.): 發生",
+      "shallow (adj.): 淺的",
+      "depth (n.): 深度",
+      "cause (v.): 導致",
+      "significant (adj.): 顯著的，重大的",
+      "region (n.): 地區",
+      "northeastern (adj.): 東北部的",
+      "tsunami (n.): 海嘯",
+      "warning (n.): 警報",
+      "issue (v.): 發布",
+      "authority (n.): 當局，官方",
+      "widely (adv.): 廣泛地",
+      "disruption (n.): 中斷",
+      "damage (n.): 損壞"
+    ],
+    "quiz": [
+      {
+        "q": "What was the magnitude of the earthquake that struck off Japan's Iwate coast?",
+        "options": [
+          "5.1",
+          "6.1",
+          "7.1",
+          "8.1"
+        ],
+        "answer": "6.1"
+      },
+      {
+        "q": "According to the news, when did this earthquake occur?",
+        "options": [
+          "June 19, 2026",
+          "July 29, 2026",
+          "June 29, 2026",
+          "June 29, 2025"
+        ],
+        "answer": "June 29, 2026"
+      },
+      {
+        "q": "Which Japanese prefecture was mentioned as the location where the earthquake struck off its coast?",
+        "options": [
+          "Tokyo",
+          "Fukushima",
+          "Iwate",
+          "Miyagi"
+        ],
+        "answer": "Iwate"
+      },
+      {
+        "q": "What was the reported depth of the tremor?",
+        "options": [
+          "Deep",
+          "Moderate",
+          "Unknown",
+          "Shallow"
+        ],
+        "answer": "Shallow"
+      },
+      {
+        "q": "Which part of Japan experienced significant shaking due to the earthquake?",
+        "options": [
+          "Southern Japan",
+          "Western Japan",
+          "Central Japan",
+          "Northeastern Japan"
+        ],
+        "answer": "Northeastern Japan"
+      },
+      {
+        "q": "Was a tsunami warning issued after the earthquake?",
+        "options": [
+          "Yes, immediately",
+          "No, it was not issued",
+          "Only a minor warning",
+          "It was issued and then cancelled"
+        ],
+        "answer": "No, it was not issued"
+      },
+      {
+        "q": "What did local authorities report regarding the quake's impact?",
+        "options": [
+          "Major damage",
+          "No impact at all",
+          "Widespread feeling and temporary disruptions",
+          "Only minor feeling in a few areas"
+        ],
+        "answer": "Widespread feeling and temporary disruptions"
+      },
+      {
+        "q": "What was the immediate report concerning major damage or serious injuries?",
+        "options": [
+          "Many injuries reported",
+          "Extensive damage confirmed",
+          "No immediate reports of major damage or serious injuries",
+          "Reports are still coming in"
+        ],
+        "answer": "No immediate reports of major damage or serious injuries"
+      },
+      {
+        "q": "In the context of the article, what does \"magnitude\" refer to?",
+        "options": [
+          "The time of day the quake occurred",
+          "The location of the epicenter",
+          "The size or intensity of the earthquake",
+          "The number of people affected"
+        ],
+        "answer": "The size or intensity of the earthquake"
+      },
+      {
+        "q": "The word \"tremor\" in the text is closest in meaning to:",
+        "options": [
+          "A loud noise",
+          "A small earthquake or vibration",
+          "A strong wind",
+          "A warning signal"
+        ],
+        "answer": "A small earthquake or vibration"
+      },
+      {
+        "q": "What does \"prompting temporary disruptions\" imply about the earthquake's effect?",
+        "options": [
+          "It caused permanent changes",
+          "It led to brief interruptions of normal activities",
+          "It had no effect on daily life",
+          "It encouraged new developments"
+        ],
+        "answer": "It led to brief interruptions of normal activities"
+      },
+      {
+        "q": "If something is \"widely felt,\" it means it was:",
+        "options": [
+          "Felt only by a few people",
+          "Felt in a narrow, specific area",
+          "Experienced by many people over a large area",
+          "Emotionally felt by the population"
+        ],
+        "answer": "Experienced by many people over a large area"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "SpaceX將納斯達克100指數 獲數十億資金",
+    "tabTitle": "金融市場",
+    "english": "On June 29, 2026, SpaceX is set to join the prestigious Nasdaq 100 index, a significant move for the private aerospace company. This inclusion is widely anticipated to trigger billions of dollars in capital inflows, reflecting strong investor confidence. The decision underscores SpaceX's growing influence in both the technology and financial sectors, potentially boosting its valuation and future projects.",
+    "chinese": "2026年6月29日，SpaceX將加入著名的那斯達克100指數，這對於這家私人航太公司來說是一個重要的舉動。此次納入預計將引發數十億美元的資金流入，反映出投資者強烈的信心。這項決定突顯了SpaceX在科技和金融領域日益增長的影響力，潛在地提升其估值和未來項目。",
+    "vocabulary": [
+      "SpaceX (n.): 斯佩斯艾克斯 (美國太空探索技術公司)",
+      "Nasdaq 100 (n.): 那斯達克100指數",
+      "inflows (n.): 資金流入",
+      "anticipated (adj.): 預期的；預料的",
+      "prestigious (adj.): 有聲望的；享有盛譽的",
+      "index (n.): 指數",
+      "significant (adj.): 重要的；意義重大的",
+      "aerospace (adj.): 航空航太的",
+      "private company (n.): 私人公司；非上市公司",
+      "trigger (v.): 觸發；引起",
+      "capital (n.): 資本；資金",
+      "reflecting (v.): 反映出",
+      "investor confidence (n.): 投資者信心",
+      "underscores (v.): 強調；突顯",
+      "growing influence (n.): 日益增長的影響力",
+      "technology sector (n.): 科技領域",
+      "financial sector (n.): 金融領域",
+      "potentially (adv.): 可能地；潛在地",
+      "boosting (v.): 提升；促進",
+      "valuation (n.): 估值"
+    ],
+    "quiz": [
+      {
+        "q": "What major event is scheduled for SpaceX on June 29, 2026?",
+        "options": [
+          "A. Launching a new rocket",
+          "B. Joining the Nasdaq 100 index",
+          "C. Announcing new CEO",
+          "D. Merging with another company"
+        ],
+        "answer": "B. Joining the Nasdaq 100 index"
+      },
+      {
+        "q": "The news states that SpaceX is a 'private ______ company.'",
+        "options": [
+          "A. software",
+          "B. automotive",
+          "C. aerospace",
+          "D. pharmaceutical"
+        ],
+        "answer": "C. aerospace"
+      },
+      {
+        "q": "What is expected to be triggered by SpaceX's inclusion in the Nasdaq 100?",
+        "options": [
+          "A. A new product launch",
+          "B. Billions of dollars in capital outflows",
+          "C. Billions of dollars in capital inflows",
+          "D. A stock market crash"
+        ],
+        "answer": "C. Billions of dollars in capital inflows"
+      },
+      {
+        "q": "What does the anticipated capital inflow reflect?",
+        "options": [
+          "A. Low investor interest",
+          "B. Strong investor confidence",
+          "C. Government subsidies",
+          "D. Decreased market value"
+        ],
+        "answer": "B. Strong investor confidence"
+      },
+      {
+        "q": "The decision to include SpaceX in the index 'underscores' what?",
+        "options": [
+          "A. Its financial difficulties",
+          "B. Its limited market reach",
+          "C. Its growing influence in technology and finance",
+          "D. Its plan to go public immediately"
+        ],
+        "answer": "C. Its growing influence in technology and finance"
+      },
+      {
+        "q": "What could potentially be boosted by this move?",
+        "options": [
+          "A. Its debt",
+          "B. Its valuation and future projects",
+          "C. Its competition",
+          "D. Its operating costs"
+        ],
+        "answer": "B. Its valuation and future projects"
+      },
+      {
+        "q": "Which word best describes the Nasdaq 100 index as mentioned in the text?",
+        "options": [
+          "A. Obscure",
+          "B. Prestigious",
+          "C. Declining",
+          "D. Unimportant"
+        ],
+        "answer": "B. Prestigious"
+      },
+      {
+        "q": "In the context of financial markets, what does 'inflows' mean?",
+        "options": [
+          "A. Money leaving a market",
+          "B. Money entering an investment or market",
+          "C. Money being borrowed",
+          "D. Money being spent on operations"
+        ],
+        "answer": "B. Money entering an investment or market"
+      },
+      {
+        "q": "What kind of company is SpaceX, according to the news?",
+        "options": [
+          "A. A public company",
+          "B. A non-profit organization",
+          "C. A private aerospace company",
+          "D. A government agency"
+        ],
+        "answer": "C. A private aerospace company"
+      },
+      {
+        "q": "The news highlights SpaceX's influence in which two sectors?",
+        "options": [
+          "A. Agriculture and manufacturing",
+          "B. Education and healthcare",
+          "C. Technology and financial",
+          "D. Retail and entertainment"
+        ],
+        "answer": "C. Technology and financial"
+      },
+      {
+        "q": "What is the primary purpose of an 'index' in the financial market?",
+        "options": [
+          "A. To list all available stocks",
+          "B. To measure the performance of a market segment",
+          "C. To predict individual stock prices",
+          "D. To facilitate direct trading"
+        ],
+        "answer": "B. To measure the performance of a market segment"
+      },
+      {
+        "q": "If something is 'anticipated,' it means it is:",
+        "options": [
+          "A. Unexpected",
+          "B. Postponed",
+          "C. Predicted or foreseen",
+          "D. Canceled"
+        ],
+        "answer": "C. Predicted or foreseen"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "OpenAI發布GPT-5.6模型 僅限夥伴預覽",
+    "tabTitle": "科技",
+    "english": "OpenAI officially announced the release of its highly anticipated GPT-5.6 artificial intelligence model on June 29, 2026. This advanced version is currently available exclusively for a private preview by a select group of trusted partners. The company stated that this limited release allows for crucial feedback and further refinement before a potential wider public rollout. GPT-5.6 is expected to offer significantly enhanced capabilities in natural language understanding, reasoning, and generation, building upon its predecessors.",
+    "chinese": "OpenAI於2026年6月29日正式宣布發布其備受期待的GPT-5.6人工智慧模型。這個進階版本目前僅限於由一小群信任的合作夥伴進行私下預覽。該公司表示，這次有限的發布是為了在潛在的更廣泛公開推出之前，收集關鍵回饋並進行進一步的改進。GPT-5.6預計將在其前身模型的基礎上，在自然語言理解、推理和生成方面提供顯著增強的功能。",
+    "vocabulary": [
+      "OpenAI (n.): 開放人工智慧公司",
+      "officially (adv.): 正式地",
+      "announced (v.): 宣布",
+      "release (n.): 發布；釋出",
+      "highly anticipated (adj. phr.): 備受期待的",
+      "artificial intelligence (n. phr.): 人工智慧 (AI)",
+      "model (n.): 模型",
+      "advanced (adj.): 進階的；先進的",
+      "currently (adv.): 目前",
+      "exclusively (adv.): 獨家地；專門地",
+      "private preview (n. phr.): 私人預覽",
+      "select group (n. phr.): 精選小組",
+      "trusted partners (n. phr.): 信任的合作夥伴",
+      "crucial feedback (n. phr.): 關鍵回饋",
+      "refinement (n.): 改進；精煉",
+      "potential (adj.): 潛在的",
+      "wider public rollout (n. phr.): 更廣泛的公開推出",
+      "significantly enhanced (adj. phr.): 顯著增強的",
+      "capabilities (n.): 能力；功能",
+      "natural language understanding (n. phr.): 自然語言理解"
+    ],
+    "quiz": [
+      {
+        "q": "What is the name of the new AI model released by OpenAI?",
+        "options": [
+          "A) GPT-4.5",
+          "B) GPT-5.6",
+          "C) AI-GPT 5.6",
+          "D) Open AI Model X"
+        ],
+        "answer": "B) GPT-5.6"
+      },
+      {
+        "q": "When was the GPT-5.6 model officially announced?",
+        "options": [
+          "A) June 29, 2025",
+          "B) June 29, 2026",
+          "C) July 29, 2026",
+          "D) The date is not mentioned."
+        ],
+        "answer": "B) June 29, 2026"
+      },
+      {
+        "q": "Who can currently access the GPT-5.6 model?",
+        "options": [
+          "A) All OpenAI users",
+          "B) Beta testers worldwide",
+          "C) A select group of trusted partners",
+          "D) Only OpenAI employees"
+        ],
+        "answer": "C) A select group of trusted partners"
+      },
+      {
+        "q": "What is the current access to GPT-5.6 described as?",
+        "options": [
+          "A) A public beta",
+          "B) A limited commercial release",
+          "C) A private preview",
+          "D) A free trial"
+        ],
+        "answer": "C) A private preview"
+      },
+      {
+        "q": "Why is the release currently limited?",
+        "options": [
+          "A) To save server costs",
+          "B) To gather crucial feedback and refine the model",
+          "C) To create exclusivity",
+          "D) To fix major bugs"
+        ],
+        "answer": "B) To gather crucial feedback and refine the model"
+      },
+      {
+        "q": "What does \"refinement\" mean in the context of the news?",
+        "options": [
+          "A) To make it more expensive",
+          "B) To make it more exclusive",
+          "C) To improve or perfect it",
+          "D) To restrict its use"
+        ],
+        "answer": "C) To improve or perfect it"
+      },
+      {
+        "q": "What kind of capabilities is GPT-5.6 expected to offer?",
+        "options": [
+          "A) Enhanced graphic design",
+          "B) Advanced robotic control",
+          "C) Significantly enhanced natural language understanding, reasoning, and generation",
+          "D) Improved video editing"
+        ],
+        "answer": "C) Significantly enhanced natural language understanding, reasoning, and generation"
+      },
+      {
+        "q": "What does the phrase \"building upon its predecessors\" imply about GPT-5.6?",
+        "options": [
+          "A) It's a completely new invention",
+          "B) It's a downgrade from previous models",
+          "C) It uses and improves upon earlier versions",
+          "D) It requires entirely new hardware"
+        ],
+        "answer": "C) It uses and improves upon earlier versions"
+      },
+      {
+        "q": "What is the ultimate goal of the \"limited release\" mentioned in the article?",
+        "options": [
+          "A) To keep the model secret",
+          "B) To prevent competitors from copying it",
+          "C) To prepare for a potential wider public rollout",
+          "D) To test its security features"
+        ],
+        "answer": "C) To prepare for a potential wider public rollout"
+      },
+      {
+        "q": "Which company is responsible for releasing the GPT-5.6 model?",
+        "options": [
+          "A) Google",
+          "B) Microsoft",
+          "C) OpenAI",
+          "D) IBM"
+        ],
+        "answer": "C) OpenAI"
+      },
+      {
+        "q": "What is one key function that GPT-5.6 is expected to improve?",
+        "options": [
+          "A) Image recognition",
+          "B) Data encryption",
+          "C) Natural language understanding",
+          "D) Financial forecasting"
+        ],
+        "answer": "C) Natural language understanding"
+      },
+      {
+        "q": "What does \"highly anticipated\" suggest about the GPT-5.6 model?",
+        "options": [
+          "A) It was a surprise announcement",
+          "B) Many people were eagerly waiting for its release",
+          "C) It faced a lot of criticism before release",
+          "D) It is not expected to perform well"
+        ],
+        "answer": "B) Many people were eagerly waiting for its release"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
