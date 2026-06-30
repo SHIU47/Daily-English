@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUN 30, 2026：台灣社會、國際大事 與 國際大事</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 新北捷運三鶯線今日通車，提供兩個月免費試乘\nThe New Taipei MRT Sanying Line officially commenced operations today, marking a significant milestone in northern Taiwan's transit expansion. Connecting Tucheng, Sanxia, and Yingge districts, the new line is expected to greatly reduce travel times and ease traffic congestion. To celebrate the grand opening and encourage public transit usage, the New Taipei City Government is offering commuters a two-month free trial period. Passengers can enjoy unlimited rides on the Sanying Line until late August, allowing residents to familiarize themselves with the new route.\n\n[2] 台股融資遭請出場，大盤46000點面臨壓力\nThe Taiwan stock market is currently experiencing significant volatility, putting immense pressure on the benchmark index as it hovers around the critical 46,000-point mark. A sharp increase in margin calls has forced many retail investors to liquidate their positions rapidly. Market analysts suggest that this sudden wave of forced selling could trigger further short-term corrections. Nevertheless, some institutional investors are closely monitoring the situation, waiting for potential entry points once the market stabilizes.\n\n[3] 國民黨提無人機條例，2400億預算助國防\nThe Kuomintang (KMT) has proposed a new Drone Act, aiming to allocate a budget of NT$240 billion over the next five years to bolster Taiwan's defense capabilities. This legislative initiative focuses on accelerating the domestic production of military-grade unmanned aerial vehicles (UAVs) and establishing a comprehensive supply chain. Supporters argue that integrating advanced drone technology is crucial for modern warfare and national security. However, critics have raised concerns regarding the massive budget allocation and the efficiency of technology transfer.",
+    "chinese": "【1】新北捷運三鶯線今日通車，提供兩個月免費試乘\n新北市捷運三鶯線今日正式通車，標誌著北台灣大眾運輸擴建的重要里程碑。這條新路線連接土城、三峽與鶯歌區，預計將大幅縮短通勤時間並緩解交通擁堵。為了慶祝隆重開幕並鼓勵民眾搭乘大眾運輸，新北市政府為通勤族提供為期兩個月的免費試乘期。乘客在八月下旬前可無限次免費搭乘三鶯線，讓居民熟悉這條新路線。\n\n【2】台股融資遭請出場，大盤46000點面臨壓力\n台灣股市目前正經歷劇烈波動，在大盤指數於46,000點關鍵關卡附近徘徊之際，面臨著巨大的壓力。融資追繳令的急遽增加，已迫使許多散戶投資人迅速清算其部位。市場分析師指出，這波突如其來的斷頭賣壓可能會引發進一步的短期修正。儘管如此，部分法人機構投資人正密切關注局勢，等待市場穩定後潛在的進場時機。\n\n【3】國民黨提無人機條例，2400億預算助國防\n國民黨提出了一項新的《無人機條例》草案，旨在未來五年內撥款新台幣2400億元預算，以強化台灣的國防能力。這項立法倡議重點在於加速軍用級無人飛行載具（UAV）的國內生產，並建立完整的供應鏈。支持者認為，整合先進的無人機技術對於現代戰爭和國家安全至關重要。然而，反對者則對如此龐大的預算分配以及技術轉移的效率提出了擔憂。",
+    "vocabulary": [
+      "commence (v.): 開始，著手",
+      "operation (n.): 營運，運作",
+      "milestone (n.): 里程碑",
+      "transit (n.): 大眾運輸，運輸",
+      "expansion (n.): 擴建，擴張",
+      "connect (v.): 連接，連結",
+      "district (n.): 區域，行政區",
+      "reduce (v.): 減少，降低",
+      "congestion (n.): 擁擠，堵塞",
+      "grand (adj.): 盛大的，隆重的",
+      "encourage (v.): 鼓勵，促進",
+      "commuter (n.): 通勤者",
+      "trial period (n. phr.): 試用期，試乘期",
+      "passenger (n.): 乘客",
+      "unlimited (adj.): 無限制的",
+      "familiarize oneself with (v. phr.): 使自己熟悉...",
+      "route (n.): 路線，航線",
+      "officially (adv.): 正式地",
+      "significantly (adv.): 顯著地，大幅地",
+      "resident (n.): 居民",
+      "volatility (n.): 波動，易變",
+      "benchmark (n.): 基準，指標",
+      "hover (v.): 盤旋，徘徊",
+      "critical (adj.): 關鍵的，危急的",
+      "margin call (n. phr.): 融資追繳",
+      "retail investor (n. phr.): 散戶投資人",
+      "liquidate (v.): 清算，變現",
+      "position (n.): （投資）部位，頭寸",
+      "analyst (n.): 分析師",
+      "trigger (v.): 引發，觸發",
+      "forced selling (n. phr.): 強制賣出，斷頭拋售",
+      "correction (n.): （股市）修正，回檔",
+      "institutional investor (n. phr.): 機構投資人，法人",
+      "monitor (v.): 監視，密切關注",
+      "stabilize (v.): 穩定",
+      "immense (adj.): 巨大的，極大的",
+      "rapid (adj.): 迅速的，快速的",
+      "potential (adj.): 潛在的，可能的",
+      "entry point (n. phr.): 進場點",
+      "wave (n.): 浪潮，股（風潮）",
+      "propose (v.): 提議；提出",
+      "allocate (v.): 撥款；分配",
+      "budget (n.): 預算",
+      "bolster (v.): 強化；支持",
+      "capability (n.): 能力",
+      "legislative (adj.): 立法的",
+      "initiative (n.): 倡議；主動行動",
+      "accelerate (v.): 加速",
+      "domestic (adj.): 國內的；本國的",
+      "military-grade (adj.): 軍用級的",
+      "unmanned aerial vehicle (n.): 無人飛行載具 (UAV)",
+      "comprehensive (adj.): 全面的；綜合的",
+      "supply chain (n.): 供應鏈",
+      "integrate (v.): 整合",
+      "crucial (adj.): 至關重要的",
+      "warfare (n.): 戰爭；衝突",
+      "critic (n.): 批評者；反對者",
+      "concern (n.): 擔憂；關注",
+      "massive (adj.): 龐大的；巨大的",
+      "technology transfer (n.): 技術轉移"
+    ],
+    "quiz": [
+      {
+        "q": "Which of the following districts is NOT directly mentioned as being connected by the Sanying Line?",
+        "options": [
+          "Tucheng",
+          "Sanxia",
+          "Yingge",
+          "Banqiao"
+        ],
+        "answer": "Banqiao"
+      },
+      {
+        "q": "What is the main goal of offering a two-month free trial period?",
+        "options": [
+          "To raise money for the government",
+          "To celebrate the grand opening and encourage public transit usage",
+          "To test the train speed limits",
+          "To reduce the number of stations"
+        ],
+        "answer": "To celebrate the grand opening and encourage public transit usage"
+      },
+      {
+        "q": "What does the word 'commenced' mean in the text?",
+        "options": [
+          "Finished",
+          "Delayed",
+          "Started",
+          "Cancelled"
+        ],
+        "answer": "Started"
+      },
+      {
+        "q": "According to the text, the new line is expected to ease traffic ______.",
+        "options": [
+          "congestion",
+          "expansion",
+          "operation",
+          "milestone"
+        ],
+        "answer": "congestion"
+      },
+      {
+        "q": "How long can passengers enjoy free rides on the Sanying Line?",
+        "options": [
+          "Two weeks",
+          "Two months",
+          "Until the end of the year",
+          "One month"
+        ],
+        "answer": "Two months"
+      },
+      {
+        "q": "The word 'milestone' in the text refers to:",
+        "options": [
+          "A physical stone on the road",
+          "A significant event or stage in development",
+          "A type of train engine",
+          "A financial loss"
+        ],
+        "answer": "A significant event or stage in development"
+      },
+      {
+        "q": "Fill in the blank: The free trial allows residents to ______ themselves with the new route.",
+        "options": [
+          "familiarize",
+          "ignore",
+          "reduce",
+          "commence"
+        ],
+        "answer": "familiarize"
+      },
+      {
+        "q": "Until when can passengers enjoy unlimited free rides?",
+        "options": [
+          "Late June",
+          "Late July",
+          "Late August",
+          "Late September"
+        ],
+        "answer": "Late August"
+      },
+      {
+        "q": "Who are 'commuters'?",
+        "options": [
+          "People who travel long distances for vacation",
+          "People who travel regularly to and from work or school",
+          "People who design train tracks",
+          "Government officials who run the transit system"
+        ],
+        "answer": "People who travel regularly to and from work or school"
+      },
+      {
+        "q": "The Sanying Line is part of the transit expansion in which part of Taiwan?",
+        "options": [
+          "Southern Taiwan",
+          "Eastern Taiwan",
+          "Central Taiwan",
+          "Northern Taiwan"
+        ],
+        "answer": "Northern Taiwan"
+      },
+      {
+        "q": "Which word is an antonym (opposite) of 'unlimited'?",
+        "options": [
+          "Restricted",
+          "Infinite",
+          "Free",
+          "Grand"
+        ],
+        "answer": "Restricted"
+      },
+      {
+        "q": "What is expected to happen to travel times because of the new line?",
+        "options": [
+          "They will increase significantly.",
+          "They will remain exactly the same.",
+          "They will be greatly reduced.",
+          "They will become unpredictable."
+        ],
+        "answer": "They will be greatly reduced."
+      },
+      {
+        "q": "What is putting pressure on the Taiwan stock market according to the text?",
+        "options": [
+          "A sudden drop in global oil prices",
+          "A rise in margin calls near the 46,000-point mark",
+          "The entry of too many institutional investors",
+          "A decrease in market volatility"
+        ],
+        "answer": "A rise in margin calls near the 46,000-point mark"
+      },
+      {
+        "q": "What does the word 'liquidate' mean in the context of the news?",
+        "options": [
+          "To buy more shares on margin",
+          "To freeze a bank account",
+          "To sell assets or positions to convert them into cash",
+          "To merge two companies together"
+        ],
+        "answer": "To sell assets or positions to convert them into cash"
+      },
+      {
+        "q": "Which of the following is a synonym for 'volatility'?",
+        "options": [
+          "Stability",
+          "Fluctuating movement",
+          "Gradual growth",
+          "Total stagnation"
+        ],
+        "answer": "Fluctuating movement"
+      },
+      {
+        "q": "Who is being forced to sell their positions rapidly?",
+        "options": [
+          "Institutional investors",
+          "Retail investors",
+          "Market analysts",
+          "Government regulatory bodies"
+        ],
+        "answer": "Retail investors"
+      },
+      {
+        "q": "Fill in the blank: The stock price has been ______ around $50 all week, unable to break through.",
+        "options": [
+          "hovering",
+          "triggering",
+          "liquidating",
+          "stabilizing"
+        ],
+        "answer": "hovering"
+      },
+      {
+        "q": "What do market analysts suggest might happen because of the forced selling?",
+        "options": [
+          "An immediate market recovery",
+          "Further short-term market corrections",
+          "A complete shutdown of the stock exchange",
+          "A decrease in overall market volatility"
+        ],
+        "answer": "Further short-term market corrections"
+      },
+      {
+        "q": "What does 'institutional investor' refer to?",
+        "options": [
+          "Individual day traders working from home",
+          "Large organizations, such as banks or mutual funds, that invest money",
+          "Government offices that regulate the stock market",
+          "Companies that write news reports about finance"
+        ],
+        "answer": "Large organizations, such as banks or mutual funds, that invest money"
+      },
+      {
+        "q": "Fill in the blank: The bad economic news ______ a panic sell-off in the market.",
+        "options": [
+          "stabilized",
+          "hovered",
+          "triggered",
+          "liquidated"
+        ],
+        "answer": "triggered"
+      },
+      {
+        "q": "What are institutional investors waiting for before entering the market?",
+        "options": [
+          "The market to stabilize",
+          "More retail investors to buy shares",
+          "The index to drop to zero",
+          "Margin calls to increase further"
+        ],
+        "answer": "The market to stabilize"
+      },
+      {
+        "q": "What is the meaning of 'benchmark index'?",
+        "options": [
+          "A secondary market for small companies",
+          "A standard indicator used to measure the performance of the stock market",
+          "A system used to calculate margin calls",
+          "The maximum price a stock can reach in a day"
+        ],
+        "answer": "A standard indicator used to measure the performance of the stock market"
+      },
+      {
+        "q": "Fill in the blank: The company faced ______ pressure from its competitors to lower prices.",
+        "options": [
+          "rapid",
+          "critical",
+          "immense",
+          "potential"
+        ],
+        "answer": "immense"
+      },
+      {
+        "q": "At what index level is the Taiwan stock market currently facing immense pressure?",
+        "options": [
+          "4,600 points",
+          "46,000 points",
+          "460,000 points",
+          "460 points"
+        ],
+        "answer": "46,000 points"
+      },
+      {
+        "q": "What is the main purpose of the proposed Drone Act?",
+        "options": [
+          "To ban commercial drones",
+          "To allocate NT$240 billion to bolster defense",
+          "To reduce military spending",
+          "To promote international tourism"
+        ],
+        "answer": "To allocate NT$240 billion to bolster defense"
+      },
+      {
+        "q": "How long is the proposed budget expected to span?",
+        "options": [
+          "One year",
+          "Five years",
+          "Ten years",
+          "Two years"
+        ],
+        "answer": "Five years"
+      },
+      {
+        "q": "What does the word 'bolster' mean in the text?",
+        "options": [
+          "To weaken",
+          "To ignore",
+          "To strengthen",
+          "To delay"
+        ],
+        "answer": "To strengthen"
+      },
+      {
+        "q": "Which word in the text means 'relating to or happening within a particular country'?",
+        "options": [
+          "Domestic",
+          "Legislative",
+          "Comprehensive",
+          "Massive"
+        ],
+        "answer": "Domestic"
+      },
+      {
+        "q": "What does the legislative initiative focus on accelerating?",
+        "options": [
+          "Import of foreign weapons",
+          "Domestic production of military-grade UAVs",
+          "Training of traditional pilots",
+          "General tax cuts"
+        ],
+        "answer": "Domestic production of military-grade UAVs"
+      },
+      {
+        "q": "What is a synonym for 'crucial' as used in the text?",
+        "options": [
+          "Minor",
+          "Optional",
+          "Essential",
+          "Expensive"
+        ],
+        "answer": "Essential"
+      },
+      {
+        "q": "The government decided to ________ more resources to education next year.",
+        "options": [
+          "allocate",
+          "accelerate",
+          "bolster",
+          "propose"
+        ],
+        "answer": "allocate"
+      },
+      {
+        "q": "What concern have critics raised?",
+        "options": [
+          "The lack of drone operators",
+          "The massive budget allocation and technology transfer efficiency",
+          "The color of the drones",
+          "The location of the factories"
+        ],
+        "answer": "The massive budget allocation and technology transfer efficiency"
+      },
+      {
+        "q": "A ________ supply chain includes all stages of production and distribution.",
+        "options": [
+          "domestic",
+          "massive",
+          "comprehensive",
+          "military-grade"
+        ],
+        "answer": "comprehensive"
+      },
+      {
+        "q": "The new environmental ________ aims to reduce plastic waste in cities.",
+        "options": [
+          "capability",
+          "initiative",
+          "warfare",
+          "budget"
+        ],
+        "answer": "initiative"
+      },
+      {
+        "q": "What does UAV stand for in the context of defense?",
+        "options": [
+          "Unmanned Aerial Vehicle",
+          "United Army Vehicle",
+          "Undersea Advanced Vessel",
+          "Utility Aerospace Value"
+        ],
+        "answer": "Unmanned Aerial Vehicle"
+      },
+      {
+        "q": "Who proposed the Drone Act according to the text?",
+        "options": [
+          "The Democratic Progressive Party",
+          "The Kuomintang (KMT)",
+          "The Ministry of National Defense",
+          "Drone manufacturers"
+        ],
+        "answer": "The Kuomintang (KMT)"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "熱穹襲美，國慶週高溫籠罩逾億人口",
+    "tabTitle": "國際大事",
+    "english": "A massive heat dome is trapping hot air over the United States, threatening to shatter temperature records as millions prepare for the Independence Day holiday. Over 100 million people are currently under heat alerts from the Southwest to the East Coast. Forecasters warn that the extreme heat, combined with high humidity, could push heat indices well above 100 degrees Fahrenheit. Authorities urge residents to stay hydrated, limit outdoor activities, and check on vulnerable neighbors during this prolonged weather event.",
+    "chinese": "一個巨大的熱穹正將熱空氣鎖在美國上空，隨著數百萬人準備迎接獨立紀念日假期，這場高溫威脅著要打破歷史溫度紀錄。從西南部到東海岸，目前有超過一億人口處於高溫警報之下。氣象預報員警告，極端高溫加上高濕度，可能會使體感溫度飆升至華氏100度以上。當局敦促居民在這段持續的氣候事件期間保持水分、限制戶外活動，並關心易受影響的鄰居。",
+    "vocabulary": [
+      "heat dome (n.): 熱穹",
+      "trap (v.): 困住；限制",
+      "shatter (v.): 打破；粉碎",
+      "alert (n.): 警報",
+      "forecaster (n.): 氣象預報員",
+      "humidity (n.): 濕度",
+      "heat index (n.): 體感溫度（熱指數）",
+      "authority (n.): 當局；官方",
+      "urge (v.): 敦促；催促",
+      "hydrated (adj.): 有充足水分的",
+      "vulnerable (adj.): 脆弱的；易受影響的",
+      "prolonged (adj.): 持續很久的；長期的",
+      "extreme (adj.): 極端的",
+      "resident (n.): 居民",
+      "record (n.): 紀錄",
+      "heatwave (n.): 熱浪",
+      "advisory (n.): 警告；公告",
+      "dehydrate (v.): 脫水",
+      "peak (n.): 頂峰；高峰",
+      "shelter (n.): 避難所；遮蔽處"
+    ],
+    "quiz": [
+      {
+        "q": "What is trapping hot air over the United States?",
+        "options": [
+          "A cold front",
+          "A heat dome",
+          "A tropical storm",
+          "A polar vortex"
+        ],
+        "answer": "A heat dome"
+      },
+      {
+        "q": "Approximately how many people are under heat alerts?",
+        "options": [
+          "Under 10 million",
+          "Around 50 million",
+          "Over 100 million",
+          "Exactly 200 million"
+        ],
+        "answer": "Over 100 million"
+      },
+      {
+        "q": "Which holiday are millions of Americans preparing for?",
+        "options": [
+          "Thanksgiving",
+          "Christmas",
+          "Labor Day",
+          "Independence Day"
+        ],
+        "answer": "Independence Day"
+      },
+      {
+        "q": "What does the word 'shatter' mean in the text?",
+        "options": [
+          "To maintain",
+          "To break or exceed",
+          "To lower",
+          "To record"
+        ],
+        "answer": "To break or exceed"
+      },
+      {
+        "q": "Forecasters warn that the extreme heat is combined with what weather factor?",
+        "options": [
+          "High winds",
+          "Heavy snow",
+          "High humidity",
+          "Acid rain"
+        ],
+        "answer": "High humidity"
+      },
+      {
+        "q": "What temperature unit is used to describe the heat indices in the text?",
+        "options": [
+          "Celsius",
+          "Fahrenheit",
+          "Kelvin",
+          "Rankine"
+        ],
+        "answer": "Fahrenheit"
+      },
+      {
+        "q": "What are residents urged to do to stay safe?",
+        "options": [
+          "Stay hydrated",
+          "Exercise outdoors at noon",
+          "Turn off air conditioners",
+          "Travel to the desert"
+        ],
+        "answer": "Stay hydrated"
+      },
+      {
+        "q": "Who should residents check on during this weather event?",
+        "options": [
+          "Tourists",
+          "Vulnerable neighbors",
+          "Foreign officials",
+          "Weather forecasters"
+        ],
+        "answer": "Vulnerable neighbors"
+      },
+      {
+        "q": "What does the word 'prolonged' mean?",
+        "options": [
+          "Very short",
+          "Continuing for a long time",
+          "Suddenly changing",
+          "Extremely cold"
+        ],
+        "answer": "Continuing for a long time"
+      },
+      {
+        "q": "Which of the following is an antonym of 'vulnerable' in this context?",
+        "options": [
+          "Weak",
+          "Protected/Resilient",
+          "Exposed",
+          "Sensitive"
+        ],
+        "answer": "Protected/Resilient"
+      },
+      {
+        "q": "What is the main purpose of the text?",
+        "options": [
+          "To promote tourism",
+          "To report on extreme heat and safety warnings",
+          "To analyze economic changes",
+          "To celebrate a national holiday"
+        ],
+        "answer": "To report on extreme heat and safety warnings"
+      },
+      {
+        "q": "Where are the heat alerts currently active?",
+        "options": [
+          "Only in the Southwest",
+          "Only on the East Coast",
+          "From the Southwest to the East Coast",
+          "In Alaska and Hawaii"
+        ],
+        "answer": "From the Southwest to the East Coast"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "中國核反應堆頻傳故障，安全問題引發關注",
+    "tabTitle": "國際大事",
+    "english": "Recent reports of frequent technical faults at several nuclear power plants in China have sparked serious international safety concerns. Industry experts warn that these recurring operational glitches, if left unaddressed, could potentially lead to severe environmental hazards. While Chinese authorities maintain that the mechanical issues are minor and have been swiftly resolved, neighboring countries are urgently calling for greater operational transparency. Consequently, the international community emphasizes the critical need for independent safety inspections to ensure long-term regional security.",
+    "chinese": "最近關於中國幾家核電廠頻繁發生技術故障的報導，引發了國際社會對安全問題的嚴重關切。行業專家警告說，這些反覆出現的運行小故障如果得不到解決，可能會導致嚴重的環境危害。儘管中國官方堅稱這些機械問題微不足道且已迅速得到解決，但鄰國仍緊急呼籲提高運行透明度。因此，國際社會強調，迫切需要進行獨立的安全檢查，以確保長期的區域安全。",
+    "vocabulary": [
+      "frequent (adj.): 頻繁的",
+      "technical (adj.): 技術的",
+      "fault (n.): 故障；缺陷",
+      "nuclear power plant (n. phr.): 核電廠",
+      "spark (v.): 引發；觸發",
+      "concern (n.): 擔憂；關切",
+      "expert (n.): 專家",
+      "recurring (adj.): 循環的；反覆出現的",
+      "operational (adj.): 運作上的；經營的",
+      "glitch (n.): 小故障；失靈",
+      "unaddressed (adj.): 未解決的；未處理的",
+      "potential (adj.): 潛在的",
+      "severe (adj.): 嚴重的",
+      "hazard (n.): 危險；危害",
+      "authority (n.): 官方；當局",
+      "maintain (v.): 堅持；主張",
+      "resolve (v.): 解決",
+      "transparency (n.): 透明度",
+      "emphasize (v.): 強調",
+      "inspection (n.): 檢查；視察"
+    ],
+    "quiz": [
+      {
+        "q": "What has sparked international safety concerns recently?",
+        "options": [
+          "A. A sudden earthquake near nuclear plants",
+          "B. Frequent technical faults at Chinese nuclear power plants",
+          "C. The construction of new nuclear reactors",
+          "D. High electricity prices in neighboring countries"
+        ],
+        "answer": "B. Frequent technical faults at Chinese nuclear power plants"
+      },
+      {
+        "q": "What do experts warn could happen if the operational glitches are left unaddressed?",
+        "options": [
+          "A. An immediate shutdown of all plants",
+          "B. A decrease in global energy prices",
+          "C. Severe environmental hazards",
+          "D. A conflict between neighboring nations"
+        ],
+        "answer": "C. Severe environmental hazards"
+      },
+      {
+        "q": "How do Chinese authorities view the reported mechanical issues?",
+        "options": [
+          "A. They believe the issues are minor and resolved.",
+          "B. They admit the issues are catastrophic.",
+          "C. They refuse to acknowledge any issues.",
+          "D. They blame neighboring countries for the faults."
+        ],
+        "answer": "A. They believe the issues are minor and resolved."
+      },
+      {
+        "q": "What are neighboring countries calling for?",
+        "options": [
+          "A. Financial compensation",
+          "B. Greater operational transparency",
+          "C. The immediate closure of all reactors",
+          "D. Joint military drills"
+        ],
+        "answer": "B. Greater operational transparency"
+      },
+      {
+        "q": "What does the international community emphasize to ensure regional security?",
+        "options": [
+          "A. Building more nuclear reactors",
+          "B. Independent safety inspections",
+          "C. Reducing energy consumption",
+          "D. Signing a new trade agreement"
+        ],
+        "answer": "B. Independent safety inspections"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'sparked' as used in the text?",
+        "options": [
+          "A. extinguished",
+          "B. ignored",
+          "C. triggered",
+          "D. delayed"
+        ],
+        "answer": "C. triggered"
+      },
+      {
+        "q": "If a problem is 'recurring,' it means the problem ________.",
+        "options": [
+          "A. happens only once",
+          "B. happens repeatedly",
+          "C. never happens",
+          "D. is easily solved"
+        ],
+        "answer": "B. happens repeatedly"
+      },
+      {
+        "q": "In a professional context, 'transparency' refers to being ________.",
+        "options": [
+          "A. invisible and hidden",
+          "B. open and honest about information",
+          "C. extremely quick to react",
+          "D. financially wealthy"
+        ],
+        "answer": "B. open and honest about information"
+      },
+      {
+        "q": "Complete the sentence: 'If these issues are left ________, they may cause bigger problems.'",
+        "options": [
+          "A. unaddressed",
+          "B. address",
+          "C. addressing",
+          "D. to address"
+        ],
+        "answer": "A. unaddressed"
+      },
+      {
+        "q": "Choose the correct word: 'The government maintains ________ the situation is under control.'",
+        "options": [
+          "A. what",
+          "B. which",
+          "C. that",
+          "D. who"
+        ],
+        "answer": "C. that"
+      },
+      {
+        "q": "Which of the following is a synonym for 'hazard'?",
+        "options": [
+          "A. safety",
+          "B. benefit",
+          "C. danger",
+          "D. solution"
+        ],
+        "answer": "C. danger"
+      },
+      {
+        "q": "An 'independent safety inspection' is conducted by someone who is ________.",
+        "options": [
+          "A. biased and involved in the project",
+          "B. not controlled by the plant owners",
+          "C. unqualified to do the job",
+          "D. working secretively"
+        ],
+        "answer": "B. not controlled by the plant owners"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "南韓重金打造AI社會，三星SK海力士擴建晶圓廠",
+    "tabTitle": "科技",
+    "english": "South Korea has announced a massive investment plan to transition into an advanced AI-driven society. To support this national initiative, tech giants Samsung Electronics and SK Hynix are rapidly expanding their semiconductor fabrication plants, commonly known as fabs. These upgraded facilities will focus on producing next-generation high-bandwidth memory (HBM) chips, which are essential for processing complex artificial intelligence workloads. The government hopes this strategic expansion will secure the country's leading position in the global technology supply chain amid growing international competition.",
+    "chinese": "南韓宣布了一項龐大的投資計畫，以轉型為先進的人工智慧（AI）驅動社會。為了支持這項國家倡議，科技巨頭三星電子和 SK 海力士正迅速擴建其半導體晶圓廠。這些升級後的設施將專注於生產次世代高頻寬記憶體（HBM）晶片，這對於處理複雜的人工智慧工作負載至關重要。政府希望這項戰略性擴張能在日益激烈的國際競爭中，確保該國在全球科技供應鏈中的領先地位。",
+    "vocabulary": [
+      "massive (adj.): 巨大的；龐大的",
+      "investment (n.): 投資",
+      "transition (v.): 轉型；過渡",
+      "initiative (n.): 倡議；計畫",
+      "giant (n.): 巨頭；大企業",
+      "semiconductor (n.): 半導體",
+      "fabrication plant (n.): 晶圓廠",
+      "expand (v.): 擴建；擴張",
+      "facility (n.): 設施；設備",
+      "next-generation (adj.): 次世代的；下一代的",
+      "high-bandwidth (adj.): 高頻寬的",
+      "essential (adj.): 至關重要的；不可或缺的",
+      "process (v.): 處理",
+      "workload (n.): 工作負載；工作量",
+      "strategic (adj.): 戰略性的；策略上的",
+      "secure (v.): 確保；獲得",
+      "supply chain (n.): 供應鏈",
+      "competition (n.): 競爭",
+      "announce (v.): 宣布",
+      "memory (n.): 記憶體"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main goal of South Korea's massive investment plan?",
+        "options": [
+          "To reduce technology exports",
+          "To transition into an advanced AI-driven society",
+          "To close down semiconductor fabs",
+          "To focus solely on agricultural development"
+        ],
+        "answer": "To transition into an advanced AI-driven society"
+      },
+      {
+        "q": "Which two companies are expanding their fabrication plants?",
+        "options": [
+          "Apple and Google",
+          "TSMC and Intel",
+          "Samsung Electronics and SK Hynix",
+          "Sony and Panasonic"
+        ],
+        "answer": "Samsung Electronics and SK Hynix"
+      },
+      {
+        "q": "What type of chips will the upgraded facilities focus on producing?",
+        "options": [
+          "Low-power analog chips",
+          "Next-generation high-bandwidth memory (HBM) chips",
+          "Legacy logic chips",
+          "Solar panel sensors"
+        ],
+        "answer": "Next-generation high-bandwidth memory (HBM) chips"
+      },
+      {
+        "q": "What is the meaning of the word 'massive' as used in the text?",
+        "options": [
+          "Very small",
+          "Extremely large or powerful",
+          "Temporary",
+          "Secret"
+        ],
+        "answer": "Extremely large or powerful"
+      },
+      {
+        "q": "Why are high-bandwidth memory (HBM) chips essential?",
+        "options": [
+          "They are cheap to produce",
+          "They process complex AI workloads",
+          "They do not require electricity",
+          "They are used in mechanical watches"
+        ],
+        "answer": "They process complex AI workloads"
+      },
+      {
+        "q": "Which word in the text means 'a plan or program intended to solve a problem or build something new'?",
+        "options": [
+          "Initiative",
+          "Facility",
+          "Workload",
+          "Supply chain"
+        ],
+        "answer": "Initiative"
+      },
+      {
+        "q": "What does the government hope to secure through this strategic expansion?",
+        "options": [
+          "Lower taxes for foreign citizens",
+          "A leading position in the global tech supply chain",
+          "Monopolistic control over all global industries",
+          "A reduction in AI research funding"
+        ],
+        "answer": "A leading position in the global tech supply chain"
+      },
+      {
+        "q": "What is the verb form of 'expansion'?",
+        "options": [
+          "Expansive",
+          "Expand",
+          "Expansionism",
+          "Expansively"
+        ],
+        "answer": "Expand"
+      },
+      {
+        "q": "In the phrase 'essential for processing,' what does 'essential' mean?",
+        "options": [
+          "Optional",
+          "Unnecessary",
+          "Absolutely necessary",
+          "Harmful"
+        ],
+        "answer": "Absolutely necessary"
+      },
+      {
+        "q": "What context is driving South Korea's strategic expansion?",
+        "options": [
+          "Growing international competition",
+          "A decline in global internet usage",
+          "High levels of environmental pollution",
+          "A lack of interest in AI technologies"
+        ],
+        "answer": "Growing international competition"
+      },
+      {
+        "q": "In the context of technology, what does 'fab' stand for?",
+        "options": [
+          "Fabulous design",
+          "Fabrication plant",
+          "Fiber cable",
+          "Fabric material"
+        ],
+        "answer": "Fabrication plant"
+      },
+      {
+        "q": "Choose the word that is closest in meaning to 'secure' in the sentence '...secure the country's leading position...'.",
+        "options": [
+          "Lose",
+          "Protect or guarantee",
+          "Release",
+          "Ignore"
+        ],
+        "answer": "Protect or guarantee"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "中國港印AI發展趨緩，龍頭企業市值占比降",
+    "tabTitle": "科技",
+    "english": "Recent market data indicates that artificial intelligence development in China, Hong Kong, and India is experiencing a significant slowdown. Consequently, the combined market share of leading AI enterprises in these regions has dipped noticeably. Analysts attribute this trend to tightening regulatory frameworks and intense global competition. Despite these setbacks, local tech giants are actively restructuring their investment strategies to regain momentum. Industry experts warn that failing to innovate rapidly could result in a wider technological gap with Western counterparts.",
+    "chinese": "最近的市場數據顯示，中國、香港和印度的人工智慧發展正經歷顯著的放緩。因此，這些地區領先的 AI 企業之合併市值占比已明顯下降。分析師將這一趨勢歸因於監管框架的收緊以及激烈的全球競爭。儘管面臨這些挫折，本地科技巨頭正積極重組其投資策略以重新獲取動力。行業專家警告說，若無法快速創新，可能會導致與西方同行之間的技術差距進一步擴大。",
+    "vocabulary": [
+      "indicate (v.): 顯示，指出",
+      "artificial intelligence (n.): 人工智慧",
+      "experience (v.): 經歷，體驗",
+      "significant (adj.): 顯著的，重要的",
+      "slowdown (n.): 放緩，減速",
+      "consequently (adv.): 因此，結果",
+      "combined (adj.): 合併的，聯合的",
+      "market share (n. phr.): 市值占比，市場份額",
+      "leading (adj.): 領先的，首要的",
+      "enterprise (n.): 企業，公司",
+      "dip (v.): 下降，下沉",
+      "noticeably (adv.): 明顯地",
+      "attribute (v.): 歸因於",
+      "regulatory framework (n. phr.): 監管框架",
+      "intense (adj.): 激烈的，強烈的",
+      "setback (n.): 挫折，阻礙",
+      "restructure (v.): 重組，改組",
+      "momentum (n.): 動力，勢頭",
+      "innovate (v.): 創新",
+      "counterpart (n.): 對應的人或物，同行"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "The rapid growth of AI in Western countries",
+          "The slowdown of AI development in China, HK, and India",
+          "New regulations in the US tech sector",
+          "The rise of new AI start-ups in Europe"
+        ],
+        "answer": "The slowdown of AI development in China, HK, and India"
+      },
+      {
+        "q": "According to the text, what has happened to the market share of leading AI firms in the mentioned regions?",
+        "options": [
+          "It has remained stable",
+          "It has increased significantly",
+          "It has dipped noticeably",
+          "It has doubled in size"
+        ],
+        "answer": "It has dipped noticeably"
+      },
+      {
+        "q": "What does the word 'consequently' mean in the context of the passage?",
+        "options": [
+          "Previously",
+          "As a result",
+          "On the other hand",
+          "In contrast"
+        ],
+        "answer": "As a result"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a reason for the slowdown?",
+        "options": [
+          "Tightening regulatory frameworks",
+          "Intense global competition",
+          "Lack of skilled labor",
+          "The text does not mention lack of skilled labor"
+        ],
+        "answer": "Lack of skilled labor"
+      },
+      {
+        "q": "What are local tech giants doing to regain momentum?",
+        "options": [
+          "Hiring more foreign executives",
+          "Restructuring their investment strategies",
+          "Moving their headquarters to the West",
+          "Reducing their product prices"
+        ],
+        "answer": "Restructuring their investment strategies"
+      },
+      {
+        "q": "What is the meaning of the word 'dip' as used in the text?",
+        "options": [
+          "To plunge into liquid",
+          "To increase slightly",
+          "To decrease or drop",
+          "To maintain a level"
+        ],
+        "answer": "To decrease or drop"
+      },
+      {
+        "q": "Industry experts warn that a failure to innovate rapidly could lead to what?",
+        "options": [
+          "A wider technological gap with Western counterparts",
+          "Lower taxes for tech companies",
+          "An increase in global market share",
+          "Better relationship with regulators"
+        ],
+        "answer": "A wider technological gap with Western counterparts"
+      },
+      {
+        "q": "Choose the synonym for 'significant' as used in the passage.",
+        "options": [
+          "Minor",
+          "Meaningless",
+          "Substantial",
+          "Temporary"
+        ],
+        "answer": "Substantial"
+      },
+      {
+        "q": "The word 'counterparts' in the text refers to:",
+        "options": [
+          "Competitors or equivalents in other regions",
+          "Government officials",
+          "Financial advisors",
+          "Customers"
+        ],
+        "answer": "Competitors or equivalents in other regions"
+      },
+      {
+        "q": "Complete the sentence: 'Analysts _______ this trend to tightening regulatory frameworks.'",
+        "options": [
+          "contribute",
+          "attribute",
+          "distribute",
+          "substitute"
+        ],
+        "answer": "attribute"
+      },
+      {
+        "q": "What is the tone of the news article?",
+        "options": [
+          "Extremely optimistic",
+          "Factual and cautious",
+          "Highly emotional",
+          "Indifferent"
+        ],
+        "answer": "Factual and cautious"
+      },
+      {
+        "q": "Which word in the text means 'to organize something differently in order to make it work better'?",
+        "options": [
+          "Innovate",
+          "Restructure",
+          "Attribute",
+          "Experience"
+        ],
+        "answer": "Restructure"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
