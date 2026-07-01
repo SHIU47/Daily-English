@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUL 01, 2026：台灣社會、地緣政治 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 菲律賓延長台灣旅客免簽一年 促進觀光交流\nMANILA, July 1, 2026 – The Philippine government has announced a one-year extension of its visa-free entry privilege for Taiwanese passport holders. This decision, effective immediately, allows Taiwanese travelers to continue enjoying visa-free stays of up to 14 days until July 2027. The move aims to further boost tourism and strengthen cultural and economic ties between the Philippines and Taiwan. This policy was initially implemented in 2017 and has been renewed multiple times.\n\n[2] 台灣漁船太平洋神救援 受困8天男子奇蹟獲救\nA Taiwanese fishing vessel operating in the Pacific Ocean has successfully rescued a foreign national who had been drifting at sea for eight days. The crew spotted the man waving desperately from a damaged inflatable boat on Monday. Despite challenging weather conditions, the captain navigated the vessel close enough to pull the exhausted survivor aboard. The rescued individual, who was suffering from severe dehydration, received immediate first aid and is currently in stable condition as the ship heads to port.\n\n[3] 國泰金上修台灣GDP至10.1% AI出口需求強勁\nCathay Financial Holding Co. has significantly upgraded its economic growth forecast for Taiwan, projecting a GDP growth rate of 10.1% for the year. This upward revision is primarily driven by the unprecedented global demand for artificial intelligence (AI) technologies and advanced semiconductor exports. Analysts point out that Taiwan's key tech manufacturers are experiencing record-breaking orders, which have boosted industrial production. However, the financial institution also warns of potential risks, including global inflation and geopolitical tensions that could impact supply chains.",
+    "chinese": "【1】菲律賓延長台灣旅客免簽一年 促進觀光交流\n馬尼拉，2026年7月1日 – 菲律賓政府宣布將台灣護照持有者的免簽證入境特權延長一年。這項立即生效的決定，允許台灣旅客繼續享有最長14天的免簽證停留，直至2027年7月。此舉旨在進一步促進菲律賓和台灣之間的觀光旅遊，並加強文化和經濟聯繫。這項政策最初於2017年實施，並已多次續簽。\n\n【2】台灣漁船太平洋神救援 受困8天男子奇蹟獲救\n一艘在太平洋作業的台灣漁船成功營救了一名在海上漂流了八天的外籍男子。船員於週一發現該名男子在一艘受損的充氣船上拼命揮手。儘管天候狀況惡劣，船長仍將船隻駛近，將疲憊不堪的生還者拉上船。這名獲救男子因嚴重脫水，接受了即時的急救，目前在船隻駛往港口途中情況穩定。\n\n【3】國泰金上修台灣GDP至10.1% AI出口需求強勁\n國泰金控已大幅上調台灣的經濟成長預測，預估全年GDP成長率將達到10.1%。這一上修主要是受到全球對人工智慧（AI）技術和先進半導體出口前所未有的強勁需求所驅動。分析師指出，台灣的主要科技製造商正迎來創紀錄的訂單，進而帶動了工業生產。然而，該金融機構也警告潛在的風險，包括可能影響供應鏈的全球通膨與地緣政治緊張局勢。",
+    "vocabulary": [
+      "extends (v.): 延長",
+      "visa-free (adj.): 免簽證的",
+      "entry (n.): 入境",
+      "traveler (n.): 旅客",
+      "privilege (n.): 特權",
+      "passport holder (n. phr.): 護照持有人",
+      "effective (adj.): 生效的",
+      "immediately (adv.): 立即地",
+      "allow (v.): 允許",
+      "enjoy (v.): 享有",
+      "visa-free stay (n. phr.): 免簽證停留",
+      "aim (v.): 旨在",
+      "boost (v.): 促進，提升",
+      "tourism (n.): 觀光業",
+      "strengthen (v.): 加強",
+      "cultural (adj.): 文化的",
+      "economic (adj.): 經濟的",
+      "ties (n.): 聯繫，關係",
+      "implement (v.): 實施",
+      "renew (v.): 續簽",
+      "vessel (n.): 船隻，艦艇",
+      "operating (adj.): 運作中的，作業中的",
+      "successfully (adv.): 成功地",
+      "foreign national (n.): 外籍人士",
+      "drift (v.): 漂流，漂泊",
+      "crew (n.): 全體船員",
+      "spot (v.): 看見，發現",
+      "desperately (adv.): 拼命地，不顧一切地",
+      "damaged (adj.): 受損的",
+      "inflatable boat (n.): 充氣船，橡皮艇",
+      "despite (prep.): 儘管，雖然",
+      "challenging (adj.): 具挑戰性的，艱難的",
+      "navigate (v.): 駕駛，導航",
+      "exhausted (adj.): 筋疲力竭的",
+      "survivor (n.): 倖存者，生還者",
+      "individual (n.): 個人，個體",
+      "suffer from (phr.): 遭受...之苦",
+      "severe (adj.): 嚴重的",
+      "dehydration (n.): 脫水",
+      "stable (adj.): 穩定的",
+      "forecast (n.): 預測",
+      "project (v.): 預估；估算",
+      "upward revision (n. phr.): 上修",
+      "primarily (adv.): 主要地",
+      "unprecedented (adj.): 前所未有的",
+      "semiconductor (n.): 半導體",
+      "export (n.): 出口",
+      "analyst (n.): 分析師",
+      "manufacturer (n.): 製造商",
+      "record-breaking (adj.): 創紀錄的",
+      "boost (v.): 促進；推動",
+      "industrial production (n. phr.): 工業生產",
+      "financial institution (n. phr.): 金融機構",
+      "potential (adj.): 潛在的",
+      "inflation (n.): 通貨膨脹",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張局勢",
+      "supply chain (n. phr.): 供應鏈",
+      "significantly (adv.): 顯著地",
+      "driven by (v. phr.): 由...所驅動"
+    ],
+    "quiz": [
+      {
+        "q": "What did the Philippine government announce on July 1, 2026?",
+        "options": [
+          "A. A new visa requirement for Taiwanese travelers.",
+          "B. A one-year extension of visa-free entry for Taiwanese.",
+          "C. A ban on Taiwanese visitors.",
+          "D. A reduction in the visa-free stay duration."
+        ],
+        "answer": "B. A one-year extension of visa-free entry for Taiwanese."
+      },
+      {
+        "q": "How long is the extension for visa-free entry for Taiwanese passport holders?",
+        "options": [
+          "A. Six months",
+          "B. Two years",
+          "C. One year",
+          "D. Three months"
+        ],
+        "answer": "C. One year"
+      },
+      {
+        "q": "Who benefits from this extended visa-free entry privilege?",
+        "options": [
+          "A. All international travelers.",
+          "B. Taiwanese passport holders.",
+          "C. Filipino citizens visiting Taiwan.",
+          "D. Business travelers only."
+        ],
+        "answer": "B. Taiwanese passport holders."
+      },
+      {
+        "q": "When does this decision become effective?",
+        "options": [
+          "A. Next year.",
+          "B. From August 1, 2026.",
+          "C. Immediately.",
+          "D. After a three-month waiting period."
+        ],
+        "answer": "C. Immediately."
+      },
+      {
+        "q": "What is the maximum duration Taiwanese travelers can stay visa-free under this policy?",
+        "options": [
+          "A. 7 days",
+          "B. 30 days",
+          "C. 14 days",
+          "D. 60 days"
+        ],
+        "answer": "C. 14 days"
+      },
+      {
+        "q": "Until when can Taiwanese travelers enjoy this extended visa-free stay?",
+        "options": [
+          "A. July 2026",
+          "B. July 2027",
+          "C. December 2026",
+          "D. January 2027"
+        ],
+        "answer": "B. July 2027"
+      },
+      {
+        "q": "What is one of the main goals of this policy extension?",
+        "options": [
+          "A. To limit the number of Taiwanese visitors.",
+          "B. To reduce cultural exchanges.",
+          "C. To boost tourism.",
+          "D. To impose stricter travel rules."
+        ],
+        "answer": "C. To boost tourism."
+      },
+      {
+        "q": "Besides tourism, what other aspect does the policy aim to strengthen?",
+        "options": [
+          "A. Military alliances.",
+          "B. Educational reforms.",
+          "C. Cultural and economic ties.",
+          "D. Environmental regulations."
+        ],
+        "answer": "C. Cultural and economic ties."
+      },
+      {
+        "q": "Between which two regions does this policy aim to strengthen ties?",
+        "options": [
+          "A. The Philippines and China.",
+          "B. The Philippines and Japan.",
+          "C. The Philippines and Taiwan.",
+          "D. The Philippines and the United States."
+        ],
+        "answer": "C. The Philippines and Taiwan."
+      },
+      {
+        "q": "When was this visa-free policy initially implemented?",
+        "options": [
+          "A. 2026",
+          "B. 2017",
+          "C. 2020",
+          "D. 2015"
+        ],
+        "answer": "B. 2017"
+      },
+      {
+        "q": "How many times has this policy been renewed?",
+        "options": [
+          "A. Only once.",
+          "B. Not at all, this is the first extension.",
+          "C. Multiple times.",
+          "D. It is a permanent policy."
+        ],
+        "answer": "C. Multiple times."
+      },
+      {
+        "q": "The word \"privilege\" in the text refers to:",
+        "options": [
+          "A. A special right or advantage.",
+          "B. A mandatory requirement.",
+          "C. A financial burden.",
+          "D. A temporary restriction."
+        ],
+        "answer": "A. A special right or advantage."
+      },
+      {
+        "q": "How long had the man been drifting at sea before being rescued?",
+        "options": [
+          "Three days",
+          "Five days",
+          "Eight days",
+          "Two weeks"
+        ],
+        "answer": "Eight days"
+      },
+      {
+        "q": "What does the word 'vessel' mean in the passage?",
+        "options": [
+          "A type of container",
+          "A ship or large boat",
+          "A medical tube",
+          "A stormy wave"
+        ],
+        "answer": "A ship or large boat"
+      },
+      {
+        "q": "What was the rescued man waving from?",
+        "options": [
+          "A wooden raft",
+          "A damaged inflatable boat",
+          "A deserted island",
+          "A helicopter"
+        ],
+        "answer": "A damaged inflatable boat"
+      },
+      {
+        "q": "Which word is closest in meaning to 'exhausted'?",
+        "options": [
+          "Extremely tired",
+          "Very excited",
+          "Slightly injured",
+          "Deeply confused"
+        ],
+        "answer": "Extremely tired"
+      },
+      {
+        "q": "What medical condition was the survivor suffering from?",
+        "options": [
+          "Hypothermia",
+          "Severe dehydration",
+          "A broken leg",
+          "Food poisoning"
+        ],
+        "answer": "Severe dehydration"
+      },
+      {
+        "q": "What is the meaning of 'navigate' in the context of the story?",
+        "options": [
+          "To swim in the water",
+          "To direct the course of a ship",
+          "To search for gold",
+          "To construct a boat"
+        ],
+        "answer": "To direct the course of a ship"
+      },
+      {
+        "q": "Why did the captain have to navigate carefully?",
+        "options": [
+          "Because of the dark night",
+          "Because of challenging weather conditions",
+          "Because of engine failure",
+          "Because of sharks in the water"
+        ],
+        "answer": "Because of challenging weather conditions"
+      },
+      {
+        "q": "What is the Chinese translation for the preposition 'despite'?",
+        "options": [
+          "因為",
+          "儘管",
+          "除了",
+          "因此"
+        ],
+        "answer": "儘管"
+      },
+      {
+        "q": "What is the current condition of the rescued man?",
+        "options": [
+          "He is in critical danger.",
+          "He has returned home.",
+          "He is in stable condition.",
+          "He is still missing."
+        ],
+        "answer": "He is in stable condition."
+      },
+      {
+        "q": "Fill in the blank: 'The desert travelers suffered from extreme heat and _______.'",
+        "options": [
+          "dehydration",
+          "navigation",
+          "vessel",
+          "crew"
+        ],
+        "answer": "dehydration"
+      },
+      {
+        "q": "Who spotted the drifting man?",
+        "options": [
+          "The local coast guard",
+          "The crew of a Taiwanese fishing vessel",
+          "A passing airplane pilot",
+          "A tourist on the beach"
+        ],
+        "answer": "The crew of a Taiwanese fishing vessel"
+      },
+      {
+        "q": "Choose the correct phrase: 'The patient is ________ severe headaches.'",
+        "options": [
+          "navigating from",
+          "spotting with",
+          "suffering from",
+          "drifting to"
+        ],
+        "answer": "suffering from"
+      },
+      {
+        "q": "According to the article, what is Cathay Financial's new GDP growth forecast for Taiwan?",
+        "options": [
+          "8.5%",
+          "10.1%",
+          "12.0%",
+          "5.5%"
+        ],
+        "answer": "10.1%"
+      },
+      {
+        "q": "What is the primary driver behind Taiwan's upward economic revision?",
+        "options": [
+          "Tourism recovery",
+          "Agricultural exports",
+          "AI and semiconductor demand",
+          "Real estate boom"
+        ],
+        "answer": "AI and semiconductor demand"
+      },
+      {
+        "q": "What does the word 'projecting' mean in the context of the article?",
+        "options": [
+          "Throwing an object",
+          "Estimating or predicting",
+          "Displaying an image",
+          "Planning a construction"
+        ],
+        "answer": "Estimating or predicting"
+      },
+      {
+        "q": "Which of the following is mentioned as a potential risk to the economy?",
+        "options": [
+          "Labor shortages",
+          "Geopolitical tensions",
+          "Currency devaluation",
+          "Stock market crashes"
+        ],
+        "answer": "Geopolitical tensions"
+      },
+      {
+        "q": "Complete the sentence: 'The high demand for new smartphones has _______ the company's annual revenue.'",
+        "options": [
+          "boosted",
+          "reduced",
+          "stabilized",
+          "ignored"
+        ],
+        "answer": "boosted"
+      },
+      {
+        "q": "What is the meaning of the word 'unprecedented'?",
+        "options": [
+          "Never done or known before",
+          "Happening very slowly",
+          "Extremely expensive",
+          "Commonly expected"
+        ],
+        "answer": "Never done or known before"
+      },
+      {
+        "q": "Complete the sentence: 'Companies must manage their _______ carefully to avoid manufacturing delays.'",
+        "options": [
+          "supply chains",
+          "weather forecasts",
+          "social media",
+          "political opinions"
+        ],
+        "answer": "supply chains"
+      },
+      {
+        "q": "Who is experiencing record-breaking orders according to analysts?",
+        "options": [
+          "Local farmers",
+          "Key tech manufacturers",
+          "Traditional retailers",
+          "Foreign tourists"
+        ],
+        "answer": "Key tech manufacturers"
+      },
+      {
+        "q": "Complete the sentence: 'Taiwan is globally famous for its advanced _______ manufacturing.'",
+        "options": [
+          "agriculture",
+          "semiconductor",
+          "textile",
+          "automobile"
+        ],
+        "answer": "semiconductor"
+      },
+      {
+        "q": "What does the phrase 'upward revision' refer to?",
+        "options": [
+          "A decrease in estimated values",
+          "An increase in estimated values",
+          "A decision to cancel a plan",
+          "A physical movement upwards"
+        ],
+        "answer": "An increase in estimated values"
+      },
+      {
+        "q": "Which institution upgraded Taiwan's economic growth forecast?",
+        "options": [
+          "The Central Bank",
+          "Cathay Financial Holding Co.",
+          "The Ministry of Economic Affairs",
+          "Fubon Financial"
+        ],
+        "answer": "Cathay Financial Holding Co."
+      },
+      {
+        "q": "Complete the sentence: 'Rising energy costs have contributed to global _______, increasing the cost of living.'",
+        "options": [
+          "inflation",
+          "decline",
+          "stability",
+          "deflation"
+        ],
+        "answer": "inflation"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "英國宣布3.1兆英鎊軍費 震懾俄羅斯加速軍隊現代化",
+    "tabTitle": "地緣政治",
+    "english": "The United Kingdom announced on July 1, 2026, a significant increase in its defense budget, committing a record £300 billion over the next decade. This substantial investment aims to bolster national security and address evolving geopolitical threats, particularly from Russia. The government emphasized that the funding will accelerate the modernization of its armed forces, focusing on advanced technology and readiness. Key areas include upgrading naval capabilities, air defense systems, and cyber warfare capacities. The move signals the UK's determination to maintain its position as a leading military power and enhance its deterrent posture.",
+    "chinese": "英國於2026年7月1日宣布大幅增加其國防預算，承諾在未來十年內投入創紀錄的3000億英鎊。這項龐大的投資旨在加強國家安全，並應對不斷演變的地緣政治威脅，特別是來自俄羅斯的威脅。政府強調，這筆資金將加速其武裝部隊的現代化，重點關注先進技術和戰備狀態。關鍵領域包括升級海軍能力、防空系統和網路戰能力。此舉顯示英國決心維持其作為主要軍事強國的地位，並提升其威懾態勢。",
+    "vocabulary": [
+      "unveil (v.): 公布；揭示",
+      "record (adj.): 創紀錄的",
+      "defense spending (n.phr.): 國防開支",
+      "deter (v.): 嚇阻；阻止",
+      "modernize (v.): 現代化",
+      "military (n.): 軍隊；軍事",
+      "significant (adj.): 顯著的；重大的",
+      "budget (n.): 預算",
+      "commit (v.): 承諾投入",
+      "substantial (adj.): 大量的；實質性的",
+      "investment (n.): 投資",
+      "bolster (v.): 加強；支持",
+      "national security (n.phr.): 國家安全",
+      "geopolitical (adj.): 地緣政治的",
+      "threat (n.): 威脅",
+      "accelerate (v.): 加速",
+      "armed forces (n.phr.): 武裝部隊",
+      "advanced technology (n.phr.): 先進技術",
+      "readiness (n.): 戰備狀態",
+      "deterrent posture (n.phr.): 威懾態勢"
+    ],
+    "quiz": [
+      {
+        "q": "When did the United Kingdom announce its new defense budget?",
+        "options": [
+          "June 1, 2026",
+          "July 1, 2026",
+          "July 1, 2025",
+          "August 1, 2026"
+        ],
+        "answer": "July 1, 2026"
+      },
+      {
+        "q": "How much money did the UK commit to its defense budget over the next decade?",
+        "options": [
+          "£30 billion",
+          "£300 million",
+          "£300 billion",
+          "£3 trillion"
+        ],
+        "answer": "£300 billion"
+      },
+      {
+        "q": "What is one of the primary goals of this substantial investment?",
+        "options": [
+          "To reduce national debt",
+          "To bolster national security",
+          "To fund social programs",
+          "To develop new trade agreements"
+        ],
+        "answer": "To bolster national security"
+      },
+      {
+        "q": "Which country is specifically mentioned as a source of geopolitical threat?",
+        "options": [
+          "China",
+          "North Korea",
+          "Russia",
+          "Iran"
+        ],
+        "answer": "Russia"
+      },
+      {
+        "q": "What will the funding primarily accelerate within the armed forces?",
+        "options": [
+          "Recruitment drives",
+          "Modernization",
+          "Peacekeeping missions",
+          "International aid"
+        ],
+        "answer": "Modernization"
+      },
+      {
+        "q": "What two aspects are the focus of the modernization efforts?",
+        "options": [
+          "Personnel and training",
+          "Logistics and infrastructure",
+          "Advanced technology and readiness",
+          "Cybersecurity and intelligence gathering"
+        ],
+        "answer": "Advanced technology and readiness"
+      },
+      {
+        "q": "Which of the following is NOT listed as a key area for upgrading?",
+        "options": [
+          "Naval capabilities",
+          "Air defense systems",
+          "Ground transportation networks",
+          "Cyber warfare capacities"
+        ],
+        "answer": "Ground transportation networks"
+      },
+      {
+        "q": "What does the UK aim to maintain with this move?",
+        "options": [
+          "Its economic dominance",
+          "Its position as a leading military power",
+          "Its cultural influence",
+          "Its diplomatic neutrality"
+        ],
+        "answer": "Its position as a leading military power"
+      },
+      {
+        "q": "What is the overall purpose of enhancing the UK's 'deterrent posture'?",
+        "options": [
+          "To encourage tourism",
+          "To attract foreign investment",
+          "To prevent potential aggression",
+          "To promote cultural exchange"
+        ],
+        "answer": "To prevent potential aggression"
+      },
+      {
+        "q": "The term 'geopolitical threats' refers to threats related to what?",
+        "options": [
+          "Internal economic issues",
+          "Environmental changes",
+          "International relations and power dynamics",
+          "Social unrest"
+        ],
+        "answer": "International relations and power dynamics"
+      },
+      {
+        "q": "What does 'unveils' mean in the context of the announcement?",
+        "options": [
+          "Hides",
+          "Cancels",
+          "Reveals or makes public",
+          "Postpones"
+        ],
+        "answer": "Reveals or makes public"
+      },
+      {
+        "q": "The new defense spending is described as 'record.' What does this imply?",
+        "options": [
+          "It is the first time they have spent on defense.",
+          "It is a historically low amount.",
+          "It is the highest amount ever committed.",
+          "It is a standard annual budget."
+        ],
+        "answer": "It is the highest amount ever committed."
+      }
+    ]
+  },
+  "article-4": {
+    "title": "南韓9兆晶片AI超級項目啟動 鞏固產業領先地位",
+    "tabTitle": "科技",
+    "english": "South Korea has officially launched a massive KRW 9 trillion (approximately USD 6.5 billion) initiative aimed at bolstering its semiconductor and artificial intelligence sectors. This ambitious project seeks to secure the nation's leadership position in the global tech industry amid intensifying international competition. The funding will support advanced research and development, infrastructure construction, and talent cultivation. By integrating AI technology with its world-class chip manufacturing capabilities, South Korea hopes to foster groundbreaking innovations and maintain a competitive edge.",
+    "chinese": "南韓已正式啟動一項耗資9兆韓元（約合65億美元）的龐大計畫，旨在加強其半導體與人工智慧產業。這項雄心勃勃的項目旨在國際競爭日益加劇之際，鞏固該國在全球科技產業中的領先地位。這筆資金將用於支持先進的研發、基礎設施建設以及人才培育。藉由將人工智慧技術與其世界級的晶片製造能力相結合，南韓希望藉此促進突破性的創新並保持競爭優勢。",
+    "vocabulary": [
+      "launch (v.): 啟動，發起",
+      "massive (adj.): 巨大的，龐大的",
+      "initiative (n.): 倡議，計畫",
+      "aim at (phr.): 旨在，針對",
+      "bolster (v.): 增強，鞏固",
+      "semiconductor (n.): 半導體",
+      "ambitious (adj.): 雄心勃勃的，有野心的",
+      "secure (v.): 獲得，鞏固，確保",
+      "leadership (n.): 領導地位，領導力",
+      "amid (prep.): 在...之中，在...期間",
+      "intensify (v.): 加劇，強化",
+      "funding (n.): 資金，資助",
+      "infrastructure (n.): 基礎設施",
+      "cultivation (n.): 培育，培養",
+      "integrate (v.): 整合，結合",
+      "capability (n.): 能力，實力",
+      "foster (v.): 促進，培養",
+      "groundbreaking (adj.): 突破性的，開創性的",
+      "innovation (n.): 創新，革新",
+      "competitive edge (phr.): 競爭優勢"
+    ],
+    "quiz": [
+      {
+        "q": "What does the word 'launched' in the text most closely mean?",
+        "options": [
+          "Postponed",
+          "Started",
+          "Cancelled",
+          "Financed"
+        ],
+        "answer": "Started"
+      },
+      {
+        "q": "How much money has South Korea allocated for this new project?",
+        "options": [
+          "KRW 9 billion",
+          "USD 9 billion",
+          "KRW 9 trillion",
+          "USD 65 billion"
+        ],
+        "answer": "KRW 9 trillion"
+      },
+      {
+        "q": "Which of the following is closest in meaning to the word 'bolster'?",
+        "options": [
+          "Weaken",
+          "Strengthen",
+          "Ignore",
+          "Evaluate"
+        ],
+        "answer": "Strengthen"
+      },
+      {
+        "q": "What is one of the main goals of South Korea's new initiative?",
+        "options": [
+          "To reduce the use of artificial intelligence",
+          "To secure its leadership in the global tech industry",
+          "To decrease funding for research and development",
+          "To stop semiconductor manufacturing"
+        ],
+        "answer": "To secure its leadership in the global tech industry"
+      },
+      {
+        "q": "An 'ambitious' project is one that is ________.",
+        "options": [
+          "easy and simple",
+          "requiring great effort and resources",
+          "cheap and quick",
+          "already completed"
+        ],
+        "answer": "requiring great effort and resources"
+      },
+      {
+        "q": "According to the text, what will the funding NOT be used for?",
+        "options": [
+          "Infrastructure construction",
+          "Talent cultivation",
+          "Advanced research and development",
+          "Importing foreign agricultural goods"
+        ],
+        "answer": "Importing foreign agricultural goods"
+      },
+      {
+        "q": "To 'integrate' AI technology with chip manufacturing means to ________.",
+        "options": [
+          "separate them completely",
+          "stop using both technologies",
+          "combine them to work together",
+          "replace chips with AI"
+        ],
+        "answer": "combine them to work together"
+      },
+      {
+        "q": "What does South Korea hope to maintain by combining AI and chip manufacturing?",
+        "options": [
+          "A competitive edge",
+          "High tax rates",
+          "A small population",
+          "A traditional economy"
+        ],
+        "answer": "A competitive edge"
+      },
+      {
+        "q": "What is the meaning of the word 'groundbreaking'?",
+        "options": [
+          "Damaging the earth",
+          "Very traditional",
+          "Innovative and pioneering",
+          "Extremely slow"
+        ],
+        "answer": "Innovative and pioneering"
+      },
+      {
+        "q": "The word 'amid' in the second sentence suggests that the project is happening ________.",
+        "options": [
+          "before competition started",
+          "in the middle of intensifying competition",
+          "without any competition",
+          "after competition ended"
+        ],
+        "answer": "in the middle of intensifying competition"
+      },
+      {
+        "q": "In the context of 'talent cultivation,' what does 'cultivation' refer to?",
+        "options": [
+          "Farming and planting crops",
+          "Developing and nurturing skills",
+          "Exporting goods",
+          "Reducing the number of workers"
+        ],
+        "answer": "Developing and nurturing skills"
+      },
+      {
+        "q": "What is the overall tone of the news article?",
+        "options": [
+          "Pessimistic",
+          "Factual and objective",
+          "Humorous",
+          "Sarcastic"
+        ],
+        "answer": "Factual and objective"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "剛果伊波拉疫情惡化迅速 感染者數突破千例",
+    "tabTitle": "國際大事",
+    "english": "The Ebola outbreak in the Democratic Republic of Congo has deteriorated rapidly, with the number of confirmed cases officially surpassing one thousand. Health authorities warn that the highly contagious virus is spreading faster than containment efforts can manage, particularly in remote regions. International medical organizations are urgently deploying additional resources and medical personnel to the affected areas. However, local conflict and limited infrastructure continue to severely hinder emergency response efforts, raising fears of a wider regional crisis.",
+    "chinese": "剛果民主共和國的伊波拉疫情迅速惡化，官方確認病例數已突破一千例。衛生當局警告，這種高傳染性病毒的傳播速度已超過了防控工作的應對能力，特別是在偏遠地區。國際醫療組織正緊急向受影響地區部署額外資源和醫療人員。然而，當地的衝突和有限的基礎設施仍嚴重阻礙了緊急應對工作，引發了人們對更大範圍區域性危機的擔憂。",
+    "vocabulary": [
+      "outbreak (n.): 爆發",
+      "deteriorate (v.): 惡化",
+      "rapidly (adv.): 迅速地",
+      "confirmed (adj.): 已證實的",
+      "surpass (v.): 超過",
+      "authority (n.): 當局、官方",
+      "contagious (adj.): 具傳染性的",
+      "containment (n.): 控制、抑制",
+      "particularly (adv.): 特別是、尤其",
+      "remote (adj.): 偏遠的",
+      "urgently (adv.): 緊急地",
+      "deploy (v.): 部署",
+      "personnel (n.): 人員、員工",
+      "affected (adj.): 受影響的",
+      "conflict (n.): 衝突",
+      "infrastructure (n.): 基礎建設",
+      "severely (adv.): 嚴重地",
+      "hinder (v.): 阻礙",
+      "response (n.): 回應、應對",
+      "regional (adj.): 區域的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A successful medical breakthrough in Congo",
+          "The worsening Ebola outbreak in Congo",
+          "A political conflict in remote regions",
+          "The construction of new infrastructure in Africa"
+        ],
+        "answer": "The worsening Ebola outbreak in Congo"
+      },
+      {
+        "q": "What does the word 'surpass' mean in the context of the passage?",
+        "options": [
+          "To fall behind",
+          "To remain stable",
+          "To go beyond or exceed",
+          "To decrease slowly"
+        ],
+        "answer": "To go beyond or exceed"
+      },
+      {
+        "q": "How many confirmed cases of Ebola have been reported?",
+        "options": [
+          "Exactly one thousand",
+          "Under one thousand",
+          "More than one thousand",
+          "Around one hundred"
+        ],
+        "answer": "More than one thousand"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'deteriorated'?",
+        "options": [
+          "Improved",
+          "Worsened",
+          "Stabilized",
+          "Disappeared"
+        ],
+        "answer": "Worsened"
+      },
+      {
+        "q": "Why is the virus spreading so fast according to health authorities?",
+        "options": [
+          "Because there are no vaccines",
+          "Because containment efforts cannot keep up with its speed",
+          "Because international organizations refused to help",
+          "Because people are traveling abroad"
+        ],
+        "answer": "Because containment efforts cannot keep up with its speed"
+      },
+      {
+        "q": "What does 'contagious' mean?",
+        "options": [
+          "Extremely rare",
+          "Easily spread from one person to another",
+          "Difficult to cure",
+          "Mild and harmless"
+        ],
+        "answer": "Easily spread from one person to another"
+      },
+      {
+        "q": "What are international medical organizations doing to help?",
+        "options": [
+          "Building new hospitals in the capital",
+          "Deploying additional resources and medical personnel",
+          "Developing a new cure in their own countries",
+          "Stopping all travel to Congo"
+        ],
+        "answer": "Deploying additional resources and medical personnel"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a factor hindering emergency response efforts?",
+        "options": [
+          "Local conflict",
+          "Limited infrastructure",
+          "Lack of international interest",
+          "None of the above"
+        ],
+        "answer": "Lack of international interest"
+      },
+      {
+        "q": "What is the meaning of the word 'hinder'?",
+        "options": [
+          "To facilitate",
+          "To delay or obstruct",
+          "To accelerate",
+          "To support"
+        ],
+        "answer": "To delay or obstruct"
+      },
+      {
+        "q": "What does the word 'personnel' refer to?",
+        "options": [
+          "Personal belongings",
+          "People employed in an organization",
+          "Medical equipment",
+          "Financial funds"
+        ],
+        "answer": "People employed in an organization"
+      },
+      {
+        "q": "What is the meaning of 'infrastructure'?",
+        "options": [
+          "The basic physical and organizational structures needed for the operation of a society",
+          "The natural environment of a remote region",
+          "The political system of a democratic republic",
+          "The medical treatment for a virus"
+        ],
+        "answer": "The basic physical and organizational structures needed for the operation of a society"
+      },
+      {
+        "q": "What is the ultimate fear mentioned at the end of the article?",
+        "options": [
+          "A global economic collapse",
+          "A wider regional crisis",
+          "The mutation of the virus",
+          "A shortage of medical supplies worldwide"
+        ],
+        "answer": "A wider regional crisis"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "美國多州高溫熱浪籠罩 恐影響世界盃足球賽事",
+    "tabTitle": "國際大事",
+    "english": "Several US states are currently experiencing an intense heatwave, with temperatures soaring well above average. This extreme weather, which began in late June, poses significant challenges for the upcoming World Cup football matches scheduled across various host cities. Organizers are closely monitoring conditions and considering measures to protect players and fans from heat-related illnesses. The unprecedented temperatures could necessitate adjustments to game schedules or venue operations, impacting the global sporting event.",
+    "chinese": "美國多個州目前正遭受強烈熱浪侵襲，氣溫遠高於平均水平。這股始於六月下旬的極端天氣，對即將在多個主辦城市舉行的世界盃足球賽事構成重大挑戰。賽事組織者正密切監測情況，並考慮採取措施保護球員和球迷免受與熱相關疾病的影響。前所未有的高溫可能需要調整比賽時間或場地運作，進而影響這項全球體育盛事。",
+    "vocabulary": [
+      "grapple (v.): 努力應對；搏鬥",
+      "severe (adj.): 嚴重的；劇烈的",
+      "heatwave (n.): 熱浪",
+      "potentially (adv.): 潛在地；可能地",
+      "impacting (v.): 影響 (動名詞)",
+      "currently (adv.): 目前；現在",
+      "intense (adj.): 強烈的；劇烈的",
+      "soaring (v.): 急升；飆升 (動名詞)",
+      "well above average (phr.): 遠高於平均水平",
+      "extreme weather (phr.): 極端天氣",
+      "poses challenges (phr.): 構成挑戰",
+      "upcoming (adj.): 即將到來的",
+      "scheduled (adj.): 預定的；排定的",
+      "host cities (phr.): 主辦城市",
+      "organizers (n.): 組織者",
+      "monitoring (v.): 監測；監控 (動名詞)",
+      "conditions (n.): 情況；條件",
+      "heat-related illnesses (phr.): 與熱相關的疾病",
+      "unprecedented (adj.): 前所未有的",
+      "necessitate (v.): 使…成為必需；迫使"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A. New World Cup stadiums",
+          "B. US heatwave and its World Cup impact",
+          "C. Global warming solutions",
+          "D. Football player injuries"
+        ],
+        "answer": "B. US heatwave and its World Cup impact"
+      },
+      {
+        "q": "What kind of weather phenomenon is affecting several US states?",
+        "options": [
+          "A. Heavy snowfall",
+          "B. Intense heatwave",
+          "C. Severe thunderstorms",
+          "D. Prolonged drought"
+        ],
+        "answer": "B. Intense heatwave"
+      },
+      {
+        "q": "When did the extreme weather described in the article begin?",
+        "options": [
+          "A. Early July",
+          "B. Late June",
+          "C. Mid-May",
+          "D. Early August"
+        ],
+        "answer": "B. Late June"
+      },
+      {
+        "q": "What major international event might be affected by the heatwave?",
+        "options": [
+          "A. Olympic Games",
+          "B. World Cup football matches",
+          "C. G7 Summit",
+          "D. International Film Festival"
+        ],
+        "answer": "B. World Cup football matches"
+      },
+      {
+        "q": "What are the organizers doing in response to the heatwave?",
+        "options": [
+          "A. Canceling all games immediately",
+          "B. Ignoring the weather warnings",
+          "C. Closely monitoring conditions",
+          "D. Building new air-conditioned stadiums"
+        ],
+        "answer": "C. Closely monitoring conditions"
+      },
+      {
+        "q": "Why are measures being considered by the organizers?",
+        "options": [
+          "A. To attract more tourists",
+          "B. To protect players and fans from heat-related illnesses",
+          "C. To increase ticket sales",
+          "D. To test new stadium technologies"
+        ],
+        "answer": "B. To protect players and fans from heat-related illnesses"
+      },
+      {
+        "q": "In the context of the article, what does 'temperatures soaring well above average' mean?",
+        "options": [
+          "A. Temperatures are falling rapidly",
+          "B. Temperatures are slightly below average",
+          "C. Temperatures are increasing significantly",
+          "D. Temperatures are stable"
+        ],
+        "answer": "C. Temperatures are increasing significantly"
+      },
+      {
+        "q": "What does 'unprecedented temperatures' suggest about the current heat?",
+        "options": [
+          "A. It happens every year",
+          "B. It is not as hot as expected",
+          "C. It is hotter than ever experienced before",
+          "D. It is a normal summer temperature"
+        ],
+        "answer": "C. It is hotter than ever experienced before"
+      },
+      {
+        "q": "What adjustments might be necessary due to the high temperatures?",
+        "options": [
+          "A. Changing team uniforms",
+          "B. Adjusting game schedules or venue operations",
+          "C. Hiring more medical staff",
+          "D. Promoting indoor sports"
+        ],
+        "answer": "B. Adjusting game schedules or venue operations"
+      },
+      {
+        "q": "What is the overall tone of this news report?",
+        "options": [
+          "A. Alarming and speculative",
+          "B. Humorous and lighthearted",
+          "C. Factual and concerned",
+          "D. Indifferent and neutral"
+        ],
+        "answer": "C. Factual and concerned"
+      },
+      {
+        "q": "Based on the article, what can be inferred about the World Cup?",
+        "options": [
+          "A. It will definitely be canceled",
+          "B. It is scheduled to take place in the near future",
+          "C. It only occurs in winter",
+          "D. It will not be affected at all"
+        ],
+        "answer": "B. It is scheduled to take place in the near future"
+      },
+      {
+        "q": "If the temperatures 'necessitate adjustments,' what does 'necessitate' mean?",
+        "options": [
+          "A. To prevent",
+          "B. To make optional",
+          "C. To make necessary",
+          "D. To delay"
+        ],
+        "answer": "C. To make necessary"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
