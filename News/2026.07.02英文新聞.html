@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUL 02, 2026：科技、金融市場 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電亞利桑那廠擴建一倍，川普稱助美晶片市占達50%\nTSMC has officially announced the doubling of its manufacturing capacity at the Arizona semiconductor plant. Former President Donald Trump praised the expansion, stating it will significantly boost the United States' global chip market share to 50%. The expansion is seen as a strategic move to secure the technology supply chain and reduce dependency on foreign manufacturing. Industry experts believe this massive investment will create thousands of high-tech jobs and foster local economic growth.\n\n[2] 台股站上4萬7000點，矽晶圓、被動元件漲價題材旺\nThe Taiwan Stock Exchange capitalized on strong momentum on Thursday, with the benchmark index soaring past the historic 47,000-point milestone. This unprecedented rally was primarily driven by robust demand in the semiconductor sector, where silicon wafer prices have surged significantly. Additionally, passive component manufacturers are experiencing a massive boost due to supply shortages and rising market prices. Analysts project that this upward trend will continue to bolster Taiwan's export-driven economy in the coming quarters.\n\n[3] 台灣11縣市高溫警戒，兩個熱帶擾動恐形成颱風\nTaiwan's Central Weather Administration has issued high-temperature warnings for 11 counties and cities, advising residents to stay hydrated and avoid prolonged outdoor activities. Meanwhile, meteorologists are closely monitoring two tropical disturbances in the western Pacific, which have a high probability of developing into typhoons later this week. These dual threats of extreme heat and potential storms highlight the volatile weather conditions currently facing the region, prompting local authorities to urge preparedness.",
+    "chinese": "【1】台積電亞利桑那廠擴建一倍，川普稱助美晶片市占達50%\n台積電已正式宣布將其亞利桑那州半導體廠的產能擴大一倍。前總統唐納·川普對此擴建表示讚賞，並指出這將顯著提升美國在全球晶片市場的市占率至50%。此次擴建被視為保障技術供應鏈並減少對外國製造依賴的戰略舉措。行業專家認為，這項龐大的投資將創造數千個高科技就業機會並促進地方經濟增長。\n\n【2】台股站上4萬7000點，矽晶圓、被動元件漲價題材旺\n台灣證券交易所週四乘著強勁的動能，基準指數一舉突破歷史性的47,000點大關。這波前所未有的漲勢主要受到半導體板塊強勁需求的推動，其中矽晶圓價格大幅攀升。此外，由於供應短缺和市場價格上漲，被動元件製造商也迎來巨大的助力。分析師預測，這一上升趨勢將在未來幾季繼續支持台灣以出口為導向的經濟。\n\n【3】台灣11縣市高溫警戒，兩個熱帶擾動恐形成颱風\n台灣中央氣象署已針對11個縣市發布高溫警戒，建議居民保持水分並避免長時間的戶外活動。與此同時，氣象學家正密切監測西太平洋上的兩個熱帶擾動，這兩個擾動在本週晚些時候有很高機率發展為颱風。極端高溫與潛在風暴的雙重威脅突顯了該地區目前面臨的不穩定天氣狀況，促使地方政府呼籲民眾做好防範準備。",
+    "vocabulary": [
+      "capacity (n.): 產能；容量",
+      "semiconductor (n.): 半導體",
+      "expansion (n.): 擴建；擴張",
+      "praise (v.): 讚賞；稱讚",
+      "significantly (adv.): 顯著地",
+      "boost (v.): 提升；促進",
+      "global (adj.): 全球的",
+      "market share (n.): 市場佔有率",
+      "strategic (adj.): 戰略性的",
+      "secure (v.): 保障；獲得",
+      "supply chain (n.): 供應鏈",
+      "dependency (n.): 依賴；依靠",
+      "manufacturing (n.): 製造業",
+      "expert (n.): 專家",
+      "massive (adj.): 龐大的；巨大的",
+      "investment (n.): 投資",
+      "create (v.): 創造",
+      "high-tech (adj.): 高科技的",
+      "foster (v.): 促進；培養",
+      "economic growth (n.): 經濟增長",
+      "capitalize on (v. phr.): 利用；從中獲利",
+      "momentum (n.): 動能；勢頭",
+      "benchmark index (n. phr.): 基準指數",
+      "soar (v.): 急升；猛增",
+      "historic (adj.): 歷史性的；具歷史意義的",
+      "milestone (n.): 里程碑",
+      "unprecedented (adj.): 前所未有的",
+      "rally (n.): （價格、股市的）回升；反彈",
+      "primarily (adv.): 主要地",
+      "robust (adj.): 強勁的；蓬勃的",
+      "semiconductor (n.): 半導體",
+      "silicon wafer (n. phr.): 矽晶圓",
+      "surge (v.): 激增；急湧",
+      "passive component (n. phr.): 被動元件",
+      "manufacturer (n.): 製造商",
+      "shortage (n.): 短缺",
+      "analyst (n.): 分析師",
+      "project (v.): 預測；推估",
+      "bolster (v.): 扶持；支撐",
+      "export-driven (adj.): 出口導向的",
+      "issue (v.): 發布",
+      "warning (n.): 警告；警戒",
+      "hydrate (v.): 補充水分",
+      "prolonged (adj.): 長時間的",
+      "meteorologist (n.): 氣象學家",
+      "monitor (v.): 監測",
+      "tropical disturbance (n. phr.): 熱帶擾動",
+      "probability (n.): 機率",
+      "develop into (v. phr.): 發展為",
+      "dual (adj.): 雙重的",
+      "threat (n.): 威脅",
+      "extreme (adj.): 極端的",
+      "potential (adj.): 潛在的",
+      "volatile (adj.): 不溫定的；易變的",
+      "currently (adv.): 目前",
+      "prompt (v.): 促使；引起",
+      "authority (n.): 當局；官方",
+      "urge (v.): 呼籲；敦促",
+      "preparedness (n.): 防備；準備狀態",
+      "region (n.): 地區"
+    ],
+    "quiz": [
+      {
+        "q": "What does the word 'capacity' mean in the context of the article?",
+        "options": [
+          "A) The maximum amount that can be produced",
+          "B) The physical size of a building",
+          "C) The cost of shipping goods",
+          "D) The number of employees in a company"
+        ],
+        "answer": "A) The maximum amount that can be produced"
+      },
+      {
+        "q": "Which word is closest in meaning to 'boost'?",
+        "options": [
+          "A) Decrease",
+          "B) Enhance",
+          "C) Ignore",
+          "D) Maintain"
+        ],
+        "answer": "B) Enhance"
+      },
+      {
+        "q": "According to the article, what did TSMC announce regarding its Arizona plant?",
+        "options": [
+          "A) It is closing the plant.",
+          "B) It is doubling its manufacturing capacity.",
+          "C) It is relocating to another state.",
+          "D) It is reducing its workforce."
+        ],
+        "answer": "B) It is doubling its manufacturing capacity."
+      },
+      {
+        "q": "What target did Trump cite for the US global chip market share?",
+        "options": [
+          "A) 15%",
+          "B) 30%",
+          "C) 50%",
+          "D) 75%"
+        ],
+        "answer": "C) 50%"
+      },
+      {
+        "q": "What does 'strategic' mean in the text?",
+        "options": [
+          "A) Done by accident",
+          "B) Unimportant and minor",
+          "C) Carefully planned to achieve a specific goal",
+          "D) Extremely expensive"
+        ],
+        "answer": "C) Carefully planned to achieve a specific goal"
+      },
+      {
+        "q": "What is one of the strategic reasons mentioned for the expansion?",
+        "options": [
+          "A) To increase dependency on foreign manufacturing",
+          "B) To secure the technology supply chain",
+          "C) To lower the quality of chips",
+          "D) To shut down local businesses"
+        ],
+        "answer": "B) To secure the technology supply chain"
+      },
+      {
+        "q": "In the sentence '...foster local economic growth,' what does 'foster' mean?",
+        "options": [
+          "A) To discourage",
+          "B) To delay",
+          "C) To promote the development of",
+          "D) To prevent"
+        ],
+        "answer": "C) To promote the development of"
+      },
+      {
+        "q": "What do industry experts believe this investment will create?",
+        "options": [
+          "A) Thousands of high-tech jobs",
+          "B) More environmental issues",
+          "C) Higher taxes for citizens",
+          "D) Fewer trade opportunities"
+        ],
+        "answer": "A) Thousands of high-tech jobs"
+      },
+      {
+        "q": "Complete the sentence: The company made a _____ investment to build the new facility.",
+        "options": [
+          "A) massive",
+          "B) massiveness",
+          "C) massively",
+          "D) massed"
+        ],
+        "answer": "A) massive"
+      },
+      {
+        "q": "What is the noun form representing 'the state of relying on someone or something else'?",
+        "options": [
+          "A) Depend",
+          "B) Dependent",
+          "C) Dependency",
+          "D) Dependable"
+        ],
+        "answer": "C) Dependency"
+      },
+      {
+        "q": "Who praised the TSMC plant expansion?",
+        "options": [
+          "A) The CEO of a rival company",
+          "B) Donald Trump",
+          "C) The Governor of California",
+          "D) A local university professor"
+        ],
+        "answer": "B) Donald Trump"
+      },
+      {
+        "q": "Which of the following is a synonym for 'secure' as used in 'secure the technology supply chain'?",
+        "options": [
+          "A) Lose",
+          "B) Safeguard",
+          "C) Release",
+          "D) Threaten"
+        ],
+        "answer": "B) Safeguard"
+      },
+      {
+        "q": "What historic milestone did the Taiwan stock index pass on Thursday?",
+        "options": [
+          "30,000 points",
+          "40,000 points",
+          "47,000 points",
+          "50,000 points"
+        ],
+        "answer": "47,000 points"
+      },
+      {
+        "q": "According to the passage, what primarily drove the unprecedented market rally?",
+        "options": [
+          "A decline in technology exports",
+          "Robust demand in the semiconductor sector",
+          "Foreign currency fluctuations",
+          "Government tax cuts"
+        ],
+        "answer": "Robust demand in the semiconductor sector"
+      },
+      {
+        "q": "Which of the following products experienced a significant price surge?",
+        "options": [
+          "Silicon wafers",
+          "Crude oil",
+          "Agricultural products",
+          "Real estate"
+        ],
+        "answer": "Silicon wafers"
+      },
+      {
+        "q": "Why are passive component manufacturers experiencing a massive boost?",
+        "options": [
+          "Decreased global demand",
+          "Supply shortages and rising market prices",
+          "High labor costs",
+          "New government regulations"
+        ],
+        "answer": "Supply shortages and rising market prices"
+      },
+      {
+        "q": "What is the meaning of the word 'bolster' as used in the text?",
+        "options": [
+          "To weaken",
+          "To support or strengthen",
+          "To ignore",
+          "To decrease"
+        ],
+        "answer": "To support or strengthen"
+      },
+      {
+        "q": "What kind of economy does Taiwan have, as described in the article?",
+        "options": [
+          "Import-dependent economy",
+          "Agriculture-driven economy",
+          "Export-driven economy",
+          "Service-only economy"
+        ],
+        "answer": "Export-driven economy"
+      },
+      {
+        "q": "The word 'unprecedented' is closest in meaning to:",
+        "options": [
+          "Never done or known before",
+          "Very common and expected",
+          "Highly predictable",
+          "Disappointing and slow"
+        ],
+        "answer": "Never done or known before"
+      },
+      {
+        "q": "What do analysts project for the future of Taiwan's economy?",
+        "options": [
+          "An immediate market crash",
+          "That the upward trend will continue",
+          "A sharp decline in exports",
+          "A sudden decrease in wafer prices"
+        ],
+        "answer": "That the upward trend will continue"
+      },
+      {
+        "q": "Complete the sentence: 'The Taiwan Stock Exchange capitalized on strong ______ on Thursday.'",
+        "options": [
+          "momentum",
+          "resistance",
+          "inflation",
+          "hesitation"
+        ],
+        "answer": "momentum"
+      },
+      {
+        "q": "What does 'robust' mean in the phrase 'robust demand'?",
+        "options": [
+          "Weak and unstable",
+          "Strong and healthy",
+          "Declining rapidly",
+          "Unpredictable"
+        ],
+        "answer": "Strong and healthy"
+      },
+      {
+        "q": "Which components are experiencing a boost alongside silicon wafers?",
+        "options": [
+          "Active components",
+          "Passive components",
+          "Optical fibers",
+          "Software applications"
+        ],
+        "answer": "Passive components"
+      },
+      {
+        "q": "What does a 'benchmark index' refer to in the context of stock markets?",
+        "options": [
+          "An index used to measure the performance of the entire market",
+          "An index that sets the maximum price of a single stock",
+          "A tool used to regulate foreign investments",
+          "A system for printing physical paper money"
+        ],
+        "answer": "An index used to measure the performance of the entire market"
+      },
+      {
+        "q": "What has the Central Weather Administration issued for 11 counties and cities?",
+        "options": [
+          "Typhoon warnings",
+          "High-temperature warnings",
+          "Flood alerts",
+          "Earthquake warnings"
+        ],
+        "answer": "High-temperature warnings"
+      },
+      {
+        "q": "What are residents advised to do during the heat alert?",
+        "options": [
+          "Stay hydrated",
+          "Exercise outdoors",
+          "Travel abroad",
+          "Conserve electricity"
+        ],
+        "answer": "Stay hydrated"
+      },
+      {
+        "q": "How many tropical disturbances are meteorologists currently monitoring?",
+        "options": [
+          "One",
+          "Two",
+          "Three",
+          "Four"
+        ],
+        "answer": "Two"
+      },
+      {
+        "q": "Where are the tropical disturbances located?",
+        "options": [
+          "The Indian Ocean",
+          "The Atlantic Ocean",
+          "The western Pacific",
+          "The South China Sea"
+        ],
+        "answer": "The western Pacific"
+      },
+      {
+        "q": "What does the word 'prolonged' mean in the text?",
+        "options": [
+          "Short and quick",
+          "Continuing for a long time",
+          "High in temperature",
+          "Extremely dangerous"
+        ],
+        "answer": "Continuing for a long time"
+      },
+      {
+        "q": "Which word is closest in meaning to 'volatile' in the context of weather?",
+        "options": [
+          "Stable",
+          "Unpredictable",
+          "Freezing",
+          "Humid"
+        ],
+        "answer": "Unpredictable"
+      },
+      {
+        "q": "What are the two tropical disturbances expected to potentially become?",
+        "options": [
+          "Heatwaves",
+          "Earthquakes",
+          "Typhoons",
+          "Monsoons"
+        ],
+        "answer": "Typhoons"
+      },
+      {
+        "q": "Fill in the blank: Local authorities urge ______ among the citizens.",
+        "options": [
+          "ignorance",
+          "preparedness",
+          "panic",
+          "indifference"
+        ],
+        "answer": "preparedness"
+      },
+      {
+        "q": "What does the verb 'prompt' mean in the sentence '...prompting local authorities to urge preparedness'?",
+        "options": [
+          "To prevent",
+          "To delay",
+          "To cause or encourage",
+          "To ignore"
+        ],
+        "answer": "To cause or encourage"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a current weather concern for Taiwan?",
+        "options": [
+          "Extreme heat",
+          "Heavy snowfall",
+          "Potential typhoons",
+          "Tropical disturbances"
+        ],
+        "answer": "Heavy snowfall"
+      },
+      {
+        "q": "What is the noun form of the word 'warn'?",
+        "options": [
+          "Warning",
+          "Warned",
+          "Warnful",
+          "Warningly"
+        ],
+        "answer": "Warning"
+      },
+      {
+        "q": "The phrase 'dual threats' refers to which two weather conditions?",
+        "options": [
+          "Rain and snow",
+          "Heat and drought",
+          "High heat and potential storms",
+          "Earthquakes and tsunamis"
+        ],
+        "answer": "High heat and potential storms"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美股科技股下跌，道瓊漲跌互見，AI晶片股獲利了結",
+    "tabTitle": "金融市場",
+    "english": "US technology stocks declined significantly on Thursday as investors engaged in profit-taking, particularly targeting high-flying artificial intelligence chipmakers. While the Nasdaq Composite bore the brunt of the sell-off, the Dow Jones Industrial Average remained mixed, supported by gains in traditional sectors. Financial analysts attribute this market correction to growing concerns over high valuations in the tech sector. Despite the temporary pullback, some traders view this consolidation as a healthy adjustment for long-term market stability.",
+    "chinese": "由於投資人進行獲利了結，特別是針對漲幅已高的人工智慧晶片製造商，美國科技股週四大幅下跌。雖然那斯達克綜合指數承受了大部分的賣壓，但受到傳統板塊上漲的支撐，道瓊工業平均指數呈現漲跌互見。金融分析師將此次市場修正歸因於對科技板塊高估值的擔憂日益增加。儘管出現暫時的回檔，部分交易員仍將此次盤整視為有利於市場長期穩定的健康調整。",
+    "vocabulary": [
+      "profit-taking (n.): 獲利了結",
+      "chipmaker (n.): 晶片製造商",
+      "bear the brunt (phr.): 首當其衝；承受大部分衝擊",
+      "sell-off (n.): 拋售；賣壓",
+      "mixed (adj.): 漲跌互見的；混雜的",
+      "traditional sector (n.): 傳統板塊；傳統產業",
+      "attribute to (v. phr.): 歸因於",
+      "market correction (n.): 市場修正；市場拉回",
+      "valuation (n.): 估值；評價",
+      "pullback (n.): 拉回；回檔",
+      "consolidation (n.): 盤整；鞏固",
+      "stability (n.): 穩定；穩定性",
+      "decline (v.): 下跌；衰退",
+      "significantly (adv.): 顯著地；大幅地",
+      "investor (n.): 投資人",
+      "high-flying (adj.): 飛漲的；極成功的",
+      "analyst (n.): 分析師",
+      "concern (n.): 擔憂；關切",
+      "temporary (adj.): 暫時的",
+      "adjustment (n.): 調整"
+    ],
+    "quiz": [
+      {
+        "q": "What does 'profit-taking' mean in the context of the stock market?",
+        "options": [
+          "Selling assets to realize gains",
+          "Buying more shares at a discount",
+          "Losing money on an investment",
+          "Borrowing money to trade"
+        ],
+        "answer": "Selling assets to realize gains"
+      },
+      {
+        "q": "Which index bore the brunt of the sell-off?",
+        "options": [
+          "The Dow Jones Industrial Average",
+          "The Nasdaq Composite",
+          "The S&P 500",
+          "The Russell 2000"
+        ],
+        "answer": "The Nasdaq Composite"
+      },
+      {
+        "q": "What is the meaning of the phrase 'bear the brunt'?",
+        "options": [
+          "To avoid a difficult situation",
+          "To experience the worst part of something",
+          "To profit from a market decline",
+          "To change investment strategies"
+        ],
+        "answer": "To experience the worst part of something"
+      },
+      {
+        "q": "Why did the Dow Jones remain mixed instead of dropping sharply?",
+        "options": [
+          "Because AI chips performed exceptionally well",
+          "Because of gains in traditional sectors",
+          "Because the Federal Reserve cut interest rates",
+          "Because tech stocks suddenly recovered"
+        ],
+        "answer": "Because of gains in traditional sectors"
+      },
+      {
+        "q": "What does 'market correction' refer to?",
+        "options": [
+          "A permanent crash in stock prices",
+          "A short-term price decline after a period of growth",
+          "An illegal manipulation of stock data",
+          "An increase in trading volume"
+        ],
+        "answer": "A short-term price decline after a period of growth"
+      },
+      {
+        "q": "What did financial analysts blame for the market correction?",
+        "options": [
+          "High valuations in the tech sector",
+          "A sudden decrease in global oil prices",
+          "New government regulations on AI",
+          "A lack of interest from retail investors"
+        ],
+        "answer": "High valuations in the tech sector"
+      },
+      {
+        "q": "Which word is closest in meaning to 'pullback'?",
+        "options": [
+          "Surge",
+          "Retreat",
+          "Expansion",
+          "Insolvency"
+        ],
+        "answer": "Retreat"
+      },
+      {
+        "q": "How do some traders view the current market consolidation?",
+        "options": [
+          "As a sign of an impending economic depression",
+          "As a healthy adjustment for long-term stability",
+          "As a failure of artificial intelligence technology",
+          "As a temporary error in stock pricing"
+        ],
+        "answer": "As a healthy adjustment for long-term stability"
+      },
+      {
+        "q": "What is a 'chipmaker'?",
+        "options": [
+          "A company that produces semiconductor devices",
+          "A factory that manufactures potato chips",
+          "A software development firm",
+          "A financial consulting agency"
+        ],
+        "answer": "A company that produces semiconductor devices"
+      },
+      {
+        "q": "In the sentence 'financial analysts attribute this market correction to...', what preposition must follow 'attribute'?",
+        "options": [
+          "for",
+          "with",
+          "to",
+          "by"
+        ],
+        "answer": "to"
+      },
+      {
+        "q": "What is the meaning of 'consolidation' in finance?",
+        "options": [
+          "A period where stock prices move within a tight pattern",
+          "The process of declaring bankruptcy",
+          "A sudden, uncontrolled drop in stock prices",
+          "The launching of a new public company"
+        ],
+        "answer": "A period where stock prices move within a tight pattern"
+      },
+      {
+        "q": "Which sector was specifically targeted for profit-taking?",
+        "options": [
+          "Energy and utilities",
+          "AI chipmakers",
+          "Traditional retail",
+          "Real estate"
+        ],
+        "answer": "AI chipmakers"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "Meta進軍雲端業務，出售過剩AI算力",
+    "tabTitle": "科技",
+    "english": "Meta has officially entered the cloud computing market by offering its excess artificial intelligence computing power to external enterprises. Having heavily invested in advanced GPUs for training its own large language models, the tech giant now possesses a surplus of infrastructure. By leasing these valuable resources, Meta aims to generate a steady stream of revenue while helping smaller companies train their AI models without massive upfront hardware investments. Industry experts suggest this move could disrupt the traditional cloud dominance of Amazon, Microsoft, and Google.",
+    "chinese": "Meta已正式進入雲端運算市場，向外部企業提供其過剩的人工智慧算力。在投入巨資購買先進GPU以訓練其自身的大型語言模型後，這家科技巨頭現在擁有了過剩的基礎設施。藉由出租這些寶貴的資源，Meta旨在創造穩定的收入來源，同時幫助規模較小的公司在不進行大規模前期硬體投資的情況下訓練其AI模型。產業專家表示，此舉可能會顛覆亞馬遜、微軟和Google在傳統雲端領域的霸主地位。",
+    "vocabulary": [
+      "officially (adv.): 正式地",
+      "excess (adj.): 過剩的，多餘的",
+      "computing power (n. phr.): 算力，計算能力",
+      "external (adj.): 外部的",
+      "enterprise (n.): 企業，公司",
+      "heavily (adv.): 沉重地，大量地",
+      "invest (v.): 投資",
+      "advanced (adj.): 先進的，進階的",
+      "possess (v.): 擁有，具有",
+      "surplus (n.): 過剩，剩餘",
+      "infrastructure (n.): 基礎設施，底層架構",
+      "lease (v.): 出租，租借",
+      "valuable (adj.): 有價值的，寶貴的",
+      "revenue (n.): 收入，收益",
+      "upfront (adj.): 前期的，預付的",
+      "hardware (n.): 硬體",
+      "expert (n.): 專家",
+      "disrupt (v.): 顛覆，中斷，擾亂",
+      "dominance (n.): 支配地位，優勢",
+      "steady (adj.): 穩定的"
+    ],
+    "quiz": [
+      {
+        "q": "What market has Meta officially entered?",
+        "options": [
+          "A. E-commerce",
+          "B. Cloud computing",
+          "C. Smartphone manufacturing",
+          "D. Renewable energy"
+        ],
+        "answer": "B. Cloud computing"
+      },
+      {
+        "q": "Why does Meta have a surplus of infrastructure?",
+        "options": [
+          "A. Because they bought too many offices.",
+          "B. Because they heavily invested in GPUs for training AI models.",
+          "C. Because they stopped developing software.",
+          "D. Because they merged with another cloud provider."
+        ],
+        "answer": "B. Because they heavily invested in GPUs for training AI models."
+      },
+      {
+        "q": "What is the meaning of the word 'excess' as used in the text?",
+        "options": [
+          "A. Lacking or insufficient",
+          "B. Extremely expensive",
+          "C. More than what is needed",
+          "D. Highly confidential"
+        ],
+        "answer": "C. More than what is needed"
+      },
+      {
+        "q": "By leasing its resources, Meta aims to generate a steady stream of ______.",
+        "options": [
+          "A. users",
+          "B. hardware",
+          "C. revenue",
+          "D. hardware damage"
+        ],
+        "answer": "C. revenue"
+      },
+      {
+        "q": "How does Meta's new service help smaller companies?",
+        "options": [
+          "A. By giving them free office spaces.",
+          "B. By allowing them to train AI models without massive upfront hardware investments.",
+          "C. By acquiring their businesses.",
+          "D. By providing them with free marketing campaigns."
+        ],
+        "answer": "B. By allowing them to train AI models without massive upfront hardware investments."
+      },
+      {
+        "q": "Which word is a synonym for 'surplus'?",
+        "options": [
+          "A. Shortage",
+          "B. Deficit",
+          "C. Excess",
+          "D. Demand"
+        ],
+        "answer": "C. Excess"
+      },
+      {
+        "q": "What does the verb 'lease' mean?",
+        "options": [
+          "A. To sell permanently",
+          "B. To grant temporary use of something for payment",
+          "C. To destroy completely",
+          "D. To manufacture new products"
+        ],
+        "answer": "B. To grant temporary use of something for payment"
+      },
+      {
+        "q": "According to industry experts, Meta's move could ______ the traditional cloud dominance.",
+        "options": [
+          "A. support",
+          "B. disrupt",
+          "C. ignore",
+          "D. decrease"
+        ],
+        "answer": "B. disrupt"
+      },
+      {
+        "q": "Which companies currently dominate the traditional cloud market mentioned in the text?",
+        "options": [
+          "A. Apple, Samsung, and Sony",
+          "B. Amazon, Microsoft, and Google",
+          "C. Meta, Netflix, and ByteDance",
+          "D. Intel, AMD, and Nvidia"
+        ],
+        "answer": "B. Amazon, Microsoft, and Google"
+      },
+      {
+        "q": "What does the adjective 'upfront' mean in 'upfront hardware investments'?",
+        "options": [
+          "A. Paid or done in advance",
+          "B. Hidden or secret",
+          "C. Postponed to a later date",
+          "D. Highly profitable"
+        ],
+        "answer": "A. Paid or done in advance"
+      },
+      {
+        "q": "Complete the sentence: 'Meta now ______ a surplus of infrastructure.'",
+        "options": [
+          "A. lacks",
+          "B. ignores",
+          "C. possesses",
+          "D. avoids"
+        ],
+        "answer": "C. possesses"
+      },
+      {
+        "q": "What is the part of speech and meaning of 'dominance'?",
+        "options": [
+          "A. (v.): 支配，統治",
+          "B. (n.): 支配地位，優勢",
+          "C. (adj.): 支配的，主要的",
+          "D. (adv.): 支配地"
+        ],
+        "answer": "B. (n.): 支配地位，優勢"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "全球海洋溫度創新高，氣候變遷風險加劇",
+    "tabTitle": "國際大事",
+    "english": "According to recent scientific reports, global ocean temperatures have reached an unprecedented high, raising severe concerns among climate scientists worldwide. This dramatic warming trend accelerates polar ice melt and triggers extreme weather events, including more intense hurricanes and prolonged droughts. Experts warn that if greenhouse gas emissions are not drastically reduced, marine ecosystems will face irreversible damage. The escalating climate risks highlight the urgent need for international cooperation to implement effective environmental policies immediately.",
+    "chinese": "根據最新的科學報告，全球海洋溫度已達到前所未有的新高，引發了全球氣候科學家的嚴重擔憂。這種劇烈的變暖趨勢加速了極地冰川的融化，並引發了包括更強烈颶風和長期乾旱在內的極端天氣事件。專家警告說，如果不大幅減少溫室氣體排放，海洋生態系統將面臨不可逆轉的損害。不斷加劇的氣候風險突顯了國際合作立即實施有效環境政策的迫切需要。",
+    "vocabulary": [
+      "unprecedented (adj.): 前所未有的",
+      "concern (n.): 擔憂；關切",
+      "dramatic (adj.): 劇烈的；顯著的",
+      "accelerate (v.): 加速",
+      "polar (adj.): 極地的",
+      "trigger (v.): 引發；觸發",
+      "intense (adj.): 強烈的；劇烈的",
+      "prolonged (adj.): 長期的；持續很久的",
+      "drought (n.): 乾旱",
+      "greenhouse gas (n.): 溫室氣體",
+      "emission (n.): 排放；排放物",
+      "drastically (adv.): 大幅地；徹底地",
+      "marine (adj.): 海洋的",
+      "ecosystem (n.): 生態系統",
+      "irreversible (adj.): 不可逆轉的",
+      "escalating (adj.): 不斷加劇的；逐步上升的",
+      "highlight (v.): 突顯；強調",
+      "cooperation (n.): 合作",
+      "implement (v.): 實施；執行",
+      "environmental policy (n.): 環境政策"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "A) Polar bear migration",
+          "B) Rising global ocean temperatures",
+          "C) Economic impacts of droughts",
+          "D) Technological solutions to emissions"
+        ],
+        "answer": "B) Rising global ocean temperatures"
+      },
+      {
+        "q": "According to the text, what does the warming trend accelerate?",
+        "options": [
+          "A) Marine life reproduction",
+          "B) Polar ice melt",
+          "C) International trade",
+          "D) Scientific research funding"
+        ],
+        "answer": "B) Polar ice melt"
+      },
+      {
+        "q": "What extreme weather events are mentioned as being triggered by ocean warming?",
+        "options": [
+          "A) Earthquakes and tsunamis",
+          "B) Blizzards and sandstorms",
+          "C) Intense hurricanes and prolonged droughts",
+          "D) Volcanic eruptions and floods"
+        ],
+        "answer": "C) Intense hurricanes and prolonged droughts"
+      },
+      {
+        "q": "What will happen to marine ecosystems if greenhouse gas emissions are not reduced?",
+        "options": [
+          "A) They will adapt quickly.",
+          "B) They will face irreversible damage.",
+          "C) They will expand in size.",
+          "D) They will become cooler."
+        ],
+        "answer": "B) They will face irreversible damage."
+      },
+      {
+        "q": "The word 'unprecedented' in the text most closely means:",
+        "options": [
+          "A) Never done or known before",
+          "B) Highly predicted",
+          "C) Extremely beneficial",
+          "D) Temporary and minor"
+        ],
+        "answer": "A) Never done or known before"
+      },
+      {
+        "q": "Fill in the blank: The rising temperatures have raised severe ______ among scientists.",
+        "options": [
+          "A) solutions",
+          "B) concerns",
+          "C) benefits",
+          "D) agreements"
+        ],
+        "answer": "B) concerns"
+      },
+      {
+        "q": "Which word is a synonym for 'accelerate'?",
+        "options": [
+          "A) Slow down",
+          "B) Speed up",
+          "C) Maintain",
+          "D) Postpone"
+        ],
+        "answer": "B) Speed up"
+      },
+      {
+        "q": "What does the escalating climate risk highlight the urgent need for?",
+        "options": [
+          "A) Space exploration",
+          "B) International cooperation",
+          "C) Deep-sea mining",
+          "D) Industrial expansion"
+        ],
+        "answer": "B) International cooperation"
+      },
+      {
+        "q": "What is the meaning of the word 'implement'?",
+        "options": [
+          "A) To put a decision or plan into effect",
+          "B) To reject an idea",
+          "C) To study a phenomenon",
+          "D) To complain about a situation"
+        ],
+        "answer": "A) To put a decision or plan into effect"
+      },
+      {
+        "q": "If something is 'irreversible', it means:",
+        "options": [
+          "A) It can be easily repaired.",
+          "B) It cannot be undone or changed back.",
+          "C) It is very expensive.",
+          "D) It happens very slowly."
+        ],
+        "answer": "B) It cannot be undone or changed back."
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a consequence of rising ocean temperatures?",
+        "options": [
+          "A) Polar ice melt",
+          "B) Prolonged droughts",
+          "C) Marine ecosystem damage",
+          "D) Increased volcanic activity"
+        ],
+        "answer": "D) Increased volcanic activity"
+      },
+      {
+        "q": "Complete the sentence: To combat climate change, we must ______ reduce greenhouse gas emissions.",
+        "options": [
+          "A) drastically",
+          "B) slightly",
+          "C) occasionally",
+          "D) secretly"
+        ],
+        "answer": "A) drastically"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "巴基斯坦補習中心屋頂坍塌，14名兒童死亡",
+    "tabTitle": "國際大事",
+    "english": "At least fourteen children lost their lives when the roof of a tuition center collapsed in Pakistan on Thursday. The tragic incident occurred during afternoon classes, trapping dozens of students and teachers under the rubble. Local residents and rescue teams rushed to the scene to conduct search operations, pulling survivors from the debris. Authorities have launched an investigation into the structural integrity of the building, raising serious concerns about safety standards in local educational facilities.",
+    "chinese": "週四，巴基斯坦一所補習中心的屋頂坍塌，造成至少14名兒童喪生。這起悲劇發生在下午上課期間，導致數十名學生和教師被困在瓦礫堆下。當地居民和救援隊迅速趕往現場展開搜救行動，並從殘骸中救出倖存者。當局已對該建築物的結構完整性展開調查，這引發了人們對當地教育設施安全標準的嚴重關切。",
+    "vocabulary": [
+      "tuition center (n. phr.): 補習班、補習中心",
+      "collapse (v.): 倒塌、坍塌",
+      "tragic (adj.): 悲劇的、悲慘的",
+      "incident (n.): 事件、事故",
+      "occur (v.): 發生",
+      "trap (v.): 使受困、限制行動",
+      "dozen (n.): 數十個、十二個",
+      "rubble (n.): 瓦礫、碎石",
+      "resident (n.): 居民",
+      "rescue (v./n.): 救援、營救",
+      "conduct (v.): 進行、實施",
+      "operation (n.): 行動、運作",
+      "survivor (n.): 倖存者、生還者",
+      "debris (n.): 殘骸、碎片",
+      "authority (n.): 當局、官方",
+      "launch (v.): 發起、展開",
+      "investigation (n.): 調查",
+      "structural (adj.): 結構的、結構上的",
+      "integrity (n.): 完整性、完好",
+      "facility (n.): 設施、設備"
+    ],
+    "quiz": [
+      {
+        "q": "What caused the tragedy in Pakistan?",
+        "options": [
+          "A severe earthquake",
+          "A fire in a school",
+          "The collapse of a tuition center's roof",
+          "A heavy flood"
+        ],
+        "answer": "The collapse of a tuition center's roof"
+      },
+      {
+        "q": "How many children lost their lives in this incident?",
+        "options": [
+          "Under 10",
+          "Exactly 12",
+          "At least 14",
+          "More than 20"
+        ],
+        "answer": "At least 14"
+      },
+      {
+        "q": "When did the incident occur?",
+        "options": [
+          "During afternoon classes",
+          "Late at night",
+          "Early in the morning",
+          "During the weekend"
+        ],
+        "answer": "During afternoon classes"
+      },
+      {
+        "q": "What is the meaning of 'rubble' in the article?",
+        "options": [
+          "Valuable treasures",
+          "Broken stones and bricks from a collapsed building",
+          "Safe shelters",
+          "Educational materials"
+        ],
+        "answer": "Broken stones and bricks from a collapsed building"
+      },
+      {
+        "q": "Which word has a similar meaning to 'occur'?",
+        "options": [
+          "Prevent",
+          "Happen",
+          "Delay",
+          "Finish"
+        ],
+        "answer": "Happen"
+      },
+      {
+        "q": "Choose the correct word to fill in the blank: 'The police have launched a thorough _____ into the cause of the accident.'",
+        "options": [
+          "operation",
+          "integrity",
+          "resident",
+          "investigation"
+        ],
+        "answer": "investigation"
+      },
+      {
+        "q": "Who rushed to the scene first to search for survivors?",
+        "options": [
+          "Government inspectors and lawyers",
+          "Local residents and rescue teams",
+          "International journalists",
+          "Construction engineers"
+        ],
+        "answer": "Local residents and rescue teams"
+      },
+      {
+        "q": "What are the authorities investigating about the building?",
+        "options": [
+          "Its history of ownership",
+          "Its structural integrity",
+          "Its paint colors",
+          "Its electricity bill"
+        ],
+        "answer": "Its structural integrity"
+      },
+      {
+        "q": "What does 'debris' refer to in the text?",
+        "options": [
+          "The school curriculum",
+          "Scattered pieces of waste or remains",
+          "The students' personal belongings",
+          "Financial reports"
+        ],
+        "answer": "Scattered pieces of waste or remains"
+      },
+      {
+        "q": "The tragedy has raised serious concerns about what?",
+        "options": [
+          "The quality of teachers in Pakistan",
+          "Tuition fees in local centers",
+          "Safety standards in local educational facilities",
+          "The weather conditions on Thursday"
+        ],
+        "answer": "Safety standards in local educational facilities"
+      },
+      {
+        "q": "What is the meaning of the verb 'trap'?",
+        "options": [
+          "To set someone free",
+          "To prevent someone from escaping",
+          "To build a new house",
+          "To teach a lesson"
+        ],
+        "answer": "To prevent someone from escaping"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'tragic'?",
+        "options": [
+          "Extremely sad and shocking",
+          "Highly exciting",
+          "Very boring",
+          "Surprisingly funny"
+        ],
+        "answer": "Extremely sad and shocking"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
