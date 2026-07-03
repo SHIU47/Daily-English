@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUL 03, 2026：台灣經濟、金融市場 與 金融市場</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 投審會核准台積電200億美元增資美國廠\nTaiwan's Investment Commission has officially approved TSMC's plan to inject an additional $20 billion into its Arizona subsidiary. This massive capital boost aims to accelerate the construction of advanced semiconductor fabrication plants in the United States. Observers note that this move strengthens Taiwan's strategic partnership with the US while expanding TSMC's global manufacturing footprint. Despite concerns over rising production costs overseas, the chipmaker remains committed to meeting international demand for cutting-edge microchips.\n\n[2] 國民黨忠誠轉變引發美國關切\nRecent shifts in the Kuomintang's (KMT) political stance have sparked significant concern in Washington regarding Taiwan's future defense policies. US officials are reportedly worried that the opposition party's growing advocacy for closer ties with Beijing could undermine bilateral security cooperation. While the KMT maintains that its approach aims to reduce cross-strait tensions through dialogue, critics argue it may weaken Taiwan's deterrence capabilities. As regional stability remains crucial, US observers are closely monitoring how these internal political dynamics will influence Taiwan's strategic commitments.\n\n[3] 中油凍漲11週後汽油降1元穩定物價\nCPC Corporation, Taiwan, announced a price cut of NT$1 per liter for gasoline starting Monday, ending a consecutive 11-week price freeze implemented to curb rising inflation. The state-owned enterprise stated that this adjustment reflects recent downward trends in international crude oil prices. This strategic move aims to relieve financial pressure on local consumers and maintain overall domestic market stability. Meanwhile, diesel prices will remain unchanged for the week to prevent sudden market fluctuations.",
+    "chinese": "【1】投審會核准台積電200億美元增資美國廠\n台灣投審會已正式核准台積電向其亞利桑那州子公司增資200億美元的計畫。這筆龐大的資金挹注旨在加速美國先進半導體晶圓廠的建設。觀察家指出，此舉在擴大台積電全球製造版圖的同時，也強化了台灣與美國的戰略夥伴關係。儘管外界對海外生產成本上升感到擔憂，這家晶片製造商仍致力於滿足國際對尖端晶片的需求。\n\n【2】國民黨忠誠轉變引發美國關切\n國民黨（KMT）近期政治立場的轉變，引發了華府對台灣未來國防政策的重大關切。據報導，美國官員擔心該反對黨日益主張與北京建立更緊密的關係，可能會削弱雙邊的安全合作。儘管國民黨堅稱其作法旨在透過對話降低兩岸緊張局勢，但批評者認為這可能會削弱台灣的威懾能力。由於區域穩定至關重要，美國觀察家正密切關注這些內部政治動態將如何影響台灣的戰略承諾。\n\n【3】中油凍漲11週後汽油降1元穩定物價\n台灣中油公司宣布自週一起汽油每公升調降新台幣1元，結束了先前為抑制通膨而實施的連續11週價格凍漲。這家國營企業表示，此次調整反映了近期國際原油價格的下跌趨勢。此策略性舉措旨在減輕本地消費者的財務壓力，並維持國內市場的整體穩定。與此同時，本週柴油價格將維持不變，以防止市場出現劇烈波動。",
+    "vocabulary": [
+      "investment (n.): 投資",
+      "commission (n.): 委員會",
+      "approve (v.): 批准；核准",
+      "inject (v.): 注資；投入",
+      "subsidiary (n.): 子公司",
+      "massive (adj.): 巨大的；龐大的",
+      "capital (n.): 資金；資本",
+      "boost (n.): 增加；推動",
+      "accelerate (v.): 加速",
+      "semiconductor (n.): 半導體",
+      "fabrication (n.): 製造；組裝",
+      "observer (n.): 觀察家；觀察員",
+      "strengthen (v.): 加強；強化",
+      "strategic (adj.): 戰略性的",
+      "partnership (n.): 夥伴關係",
+      "footprint (n.): 腳印；（此指）版圖、足跡",
+      "overseas (adv.): 海外地；在國外",
+      "chipmaker (n.): 晶片製造商",
+      "committed (adj.): 致力於...的；承諾的",
+      "cutting-edge (adj.): 最前沿的；尖端的",
+      "shift (n.): 轉變，變化",
+      "stance (n.): 立場，態度",
+      "spark (v.): 引發，導火",
+      "concern (n.): 關切，憂慮",
+      "defense (n.): 國防，防禦",
+      "opposition party (n. phr.): 反對黨",
+      "advocacy (n.): 擁護，倡導",
+      "undermine (v.): 削弱，損害",
+      "bilateral (adj.): 雙邊的",
+      "cooperation (n.): 合作",
+      "maintain (v.): 堅稱，主張",
+      "approach (n.): 方法，作法",
+      "cross-strait (adj.): 兩岸的",
+      "tension (n.): 緊張局勢",
+      "dialogue (n.): 對話",
+      "critic (n.): 批評者",
+      "deterrence (n.): 威懾，嚇阻",
+      "regional (adj.): 區域的",
+      "dynamics (n. pl.): 動態，互動關係",
+      "strategic (adj.): 戰略的",
+      "corporation (n.): 大企業、股份有限公司",
+      "announce (v.): 宣布、公告",
+      "consecutive (adj.): 連續的、接連的",
+      "freeze (n.): 凍結、限額",
+      "implement (v.): 實施、執行",
+      "curb (v.): 抑制、控制",
+      "inflation (n.): 通貨膨脹",
+      "state-owned (adj.): 國營的、政府所有的",
+      "enterprise (n.): 企業、公司",
+      "adjustment (n.): 調整、適應",
+      "reflect (v.): 反映、映射",
+      "downward (adj.): 向下的、衰退的",
+      "crude oil (n. phr.): 原油",
+      "strategic (adj.): 戰略性的、策略上的",
+      "relieve (v.): 減輕、緩和",
+      "consumer (n.): 消費者",
+      "domestic (adj.): 國內的、家庭的",
+      "stability (n.): 穩定、穩定性",
+      "diesel (n.): 柴油",
+      "fluctuation (n.): 波動、起伏"
+    ],
+    "quiz": [
+      {
+        "q": "How much money did the Investment Commission approve for TSMC's US subsidiary?",
+        "options": [
+          "$2 billion",
+          "$20 billion",
+          "$200 million",
+          "$200 billion"
+        ],
+        "answer": "$20 billion"
+      },
+      {
+        "q": "Which word in the text means 'a company that is completely controlled by another company'?",
+        "options": [
+          "subsidiary",
+          "commission",
+          "chipmaker",
+          "footprint"
+        ],
+        "answer": "subsidiary"
+      },
+      {
+        "q": "Where are the new semiconductor fabrication plants being built?",
+        "options": [
+          "Taiwan",
+          "Arizona",
+          "Tokyo",
+          "Europe"
+        ],
+        "answer": "Arizona"
+      },
+      {
+        "q": "What is the meaning of the word 'accelerate' in the text?",
+        "options": [
+          "To slow down",
+          "To make something happen faster",
+          "To cancel a project",
+          "To inspect carefully"
+        ],
+        "answer": "To make something happen faster"
+      },
+      {
+        "q": "Complete the sentence: The company is highly ______ to reducing its carbon footprint by 2030.",
+        "options": [
+          "committed",
+          "strategic",
+          "massive",
+          "overseas"
+        ],
+        "answer": "committed"
+      },
+      {
+        "q": "According to the text, what is one concern regarding TSMC's expansion?",
+        "options": [
+          "Lack of advanced technology",
+          "Rising production costs overseas",
+          "Decreasing international demand",
+          "A weak strategic partnership"
+        ],
+        "answer": "Rising production costs overseas"
+      },
+      {
+        "q": "What does 'cutting-edge' mean?",
+        "options": [
+          "Very sharp",
+          "Highly advanced",
+          "Outdated",
+          "Low cost"
+        ],
+        "answer": "Highly advanced"
+      },
+      {
+        "q": "In the phrase 'to inject an additional $20 billion', what does 'inject' mean?",
+        "options": [
+          "To withdraw",
+          "To introduce or put money into",
+          "To borrow from",
+          "To waste"
+        ],
+        "answer": "To introduce or put money into"
+      },
+      {
+        "q": "What is one of the positive outcomes of TSMC's move mentioned in the article?",
+        "options": [
+          "It lowers the cost of manufacturing in Taiwan.",
+          "It strengthens Taiwan's strategic partnership with the US.",
+          "It stops the construction of foreign plants.",
+          "It reduces international demand."
+        ],
+        "answer": "It strengthens Taiwan's strategic partnership with the US."
+      },
+      {
+        "q": "Which of the following is the closest synonym to 'massive'?",
+        "options": [
+          "Tiny",
+          "Huge",
+          "Ordinary",
+          "Temporary"
+        ],
+        "answer": "Huge"
+      },
+      {
+        "q": "Choose the correct preposition: TSMC remains committed ______ meeting international demand.",
+        "options": [
+          "to",
+          "for",
+          "at",
+          "with"
+        ],
+        "answer": "to"
+      },
+      {
+        "q": "What does the term 'capital' refer to in the context of the article?",
+        "options": [
+          "The city where the government is located",
+          "Large letters used in writing",
+          "Financial assets or money used for investment",
+          "Legal punishment"
+        ],
+        "answer": "Financial assets or money used for investment"
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "US presidential election",
+          "KMT's shifting stance and US concerns",
+          "Beijing's economic policies",
+          "Military drills in the South China Sea"
+        ],
+        "answer": "KMT's shifting stance and US concerns"
+      },
+      {
+        "q": "According to the article, who is concerned about the KMT's political stance?",
+        "options": [
+          "Washington",
+          "Tokyo",
+          "London",
+          "Canberra"
+        ],
+        "answer": "Washington"
+      },
+      {
+        "q": "What does the KMT hope to achieve through dialogue with Beijing?",
+        "options": [
+          "Increase military spending",
+          "Reduce cross-strait tensions",
+          "Form a new coalition",
+          "Cut ties with the US"
+        ],
+        "answer": "Reduce cross-strait tensions"
+      },
+      {
+        "q": "What are US officials worried might be undermined?",
+        "options": [
+          "Economic trade agreements",
+          "Bilateral security cooperation",
+          "Climate change initiatives",
+          "Educational exchange programs"
+        ],
+        "answer": "Bilateral security cooperation"
+      },
+      {
+        "q": "Which word in the text is closest in meaning to 'weaken' or 'damage'?",
+        "options": [
+          "Spark",
+          "Maintain",
+          "Undermine",
+          "Influence"
+        ],
+        "answer": "Undermine"
+      },
+      {
+        "q": "What do critics argue the KMT's approach might weaken?",
+        "options": [
+          "Taiwan's deterrence capabilities",
+          "US domestic policies",
+          "Global supply chains",
+          "Beijing's economic growth"
+        ],
+        "answer": "Taiwan's deterrence capabilities"
+      },
+      {
+        "q": "The word 'bilateral' refers to relations between how many parties?",
+        "options": [
+          "One",
+          "Two",
+          "Three",
+          "Many"
+        ],
+        "answer": "Two"
+      },
+      {
+        "q": "What is the KMT's role in Taiwanese politics as mentioned in the text?",
+        "options": [
+          "The ruling party",
+          "The opposition party",
+          "A minor coalition partner",
+          "An outlawed group"
+        ],
+        "answer": "The opposition party"
+      },
+      {
+        "q": "What are US observers closely monitoring?",
+        "options": [
+          "Taiwan's tourism industry",
+          "Internal political dynamics and strategic commitments",
+          "Tech stock market trends",
+          "Changes in US tax laws"
+        ],
+        "answer": "Internal political dynamics and strategic commitments"
+      },
+      {
+        "q": "Which of the following is antonymous to 'strengthen' based on the context?",
+        "options": [
+          "Advocate",
+          "Monitor",
+          "Undermine",
+          "Maintain"
+        ],
+        "answer": "Undermine"
+      },
+      {
+        "q": "What does the word 'stance' mean in the context of the article?",
+        "options": [
+          "Physical posture",
+          "Political position or attitude",
+          "Financial status",
+          "Geographic location"
+        ],
+        "answer": "Political position or attitude"
+      },
+      {
+        "q": "Why is the situation being closely watched by US observers?",
+        "options": [
+          "Because regional stability remains crucial",
+          "Because of a natural disaster",
+          "Because of an upcoming sporting event",
+          "Because of a decline in bilateral trade"
+        ],
+        "answer": "Because regional stability remains crucial"
+      },
+      {
+        "q": "Why did CPC Taiwan freeze gas prices for 11 weeks?",
+        "options": [
+          "To increase company profits",
+          "To curb rising inflation",
+          "To compete with international markets",
+          "To encourage diesel usage"
+        ],
+        "answer": "To curb rising inflation"
+      },
+      {
+        "q": "By how much did CPC cut the gasoline price per liter?",
+        "options": [
+          "NT$11",
+          "NT$2",
+          "NT$1",
+          "NT$0.5"
+        ],
+        "answer": "NT$1"
+      },
+      {
+        "q": "What will happen to diesel prices this week?",
+        "options": [
+          "They will increase by NT$1",
+          "They will decrease by NT$1",
+          "They will remain unchanged",
+          "They will be frozen for another 11 weeks"
+        ],
+        "answer": "They will remain unchanged"
+      },
+      {
+        "q": "Which word means 'to limit or control something, especially something bad'?",
+        "options": [
+          "reflect",
+          "curb",
+          "implement",
+          "relieve"
+        ],
+        "answer": "curb"
+      },
+      {
+        "q": "What is the meaning of the word 'consecutive'?",
+        "options": [
+          "Happening in a regular, unbroken sequence",
+          "Occurring by chance",
+          "Extremely slow",
+          "Having a negative effect"
+        ],
+        "answer": "Happening in a regular, unbroken sequence"
+      },
+      {
+        "q": "Complete the sentence: 'The government decided to ________ a new policy to boost the economy.'",
+        "options": [
+          "implement",
+          "fluctuate",
+          "freeze",
+          "reflect"
+        ],
+        "answer": "implement"
+      },
+      {
+        "q": "According to the text, what caused the price adjustment of gasoline?",
+        "options": [
+          "An increase in domestic demand",
+          "Downward trends in international crude oil prices",
+          "A new government tax policy",
+          "Fluctuations in diesel production"
+        ],
+        "answer": "Downward trends in international crude oil prices"
+      },
+      {
+        "q": "What is 'crude oil'?",
+        "options": [
+          "Refined gasoline",
+          "Oil in its natural, unrefined state",
+          "A type of vegetable oil",
+          "Diesel fuel"
+        ],
+        "answer": "Oil in its natural, unrefined state"
+      },
+      {
+        "q": "'Stability' is the noun form of which adjective?",
+        "options": [
+          "Stabilize",
+          "Stable",
+          "Stably",
+          "Stabilizing"
+        ],
+        "answer": "Stable"
+      },
+      {
+        "q": "Which word is the opposite of 'upward'?",
+        "options": [
+          "downward",
+          "forward",
+          "backward",
+          "outward"
+        ],
+        "answer": "downward"
+      },
+      {
+        "q": "Who is the strategic move of cutting gas prices intended to help?",
+        "options": [
+          "International oil exporters",
+          "Local consumers",
+          "Foreign investors",
+          "Diesel manufacturers"
+        ],
+        "answer": "Local consumers"
+      },
+      {
+        "q": "Frequent changes in prices or levels can be described as ________.",
+        "options": [
+          "stability",
+          "adjustments",
+          "fluctuations",
+          "freezes"
+        ],
+        "answer": "fluctuations"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美國六月就業成長大幅放緩失業率下降",
+    "tabTitle": "金融市場",
+    "english": "The United States labor market showed signs of cooling in June, as job growth slowed down significantly compared to previous months. According to the latest report, employers added fewer positions than expected, reflecting a broader economic deceleration. Despite the slower hiring pace, the national unemployment rate unexpectedly dipped slightly, indicating a tight labor market where active job seekers remain relatively scarce. Economists suggest this combination of slower growth and low unemployment could influence the Federal Reserve's upcoming decisions regarding interest rate adjustments.",
+    "chinese": "美國勞動力市場在六月份出現降溫跡象，就業成長與前幾個月相比顯著放緩。根據最新報告，雇主新增的職位少於預期，反映出更廣泛的經濟減速。儘管招聘步伐放緩，但全國失業率卻出乎意料地輕微下降，表明勞動力市場依舊緊繃，活躍的求職者仍然相對稀缺。經濟學家指出，這種增長放緩與低失業率的結合，可能會影響聯邦準備理事會（美聯儲）即將做出的利率調整決策。",
+    "vocabulary": [
+      "labor market (n.): 勞動力市場",
+      "show signs of (phr.): 顯露出...的跡象",
+      "cool (v.): 降溫；冷卻",
+      "significantly (adv.): 顯著地；大幅地",
+      "compare to (phr.): 與...相比",
+      "employer (n.): 雇主",
+      "position (n.): 職位",
+      "reflect (v.): 反映；顯示",
+      "economic deceleration (n.): 經濟減速",
+      "hiring pace (n.): 招聘步伐",
+      "unexpectedly (adv.): 出乎意料地",
+      "dip (v.): 微幅下降",
+      "tight labor market (n.): 緊繃的勞動力市場",
+      "active (adj.): 活躍的；積極的",
+      "job seeker (n.): 求職者",
+      "scarce (adj.): 稀缺的；缺乏的",
+      "combination (n.): 結合；組合",
+      "influence (v.): 影響",
+      "Federal Reserve (n.): 聯邦準備理事會（美聯儲）",
+      "interest rate adjustment (n.): 利率調整"
+    ],
+    "quiz": [
+      {
+        "q": "What happened to the US labor market in June?",
+        "options": [
+          "It expanded rapidly",
+          "It showed signs of cooling",
+          "It collapsed completely",
+          "It remained unchanged"
+        ],
+        "answer": "It showed signs of cooling"
+      },
+      {
+        "q": "How did the job growth in June compare to previous months?",
+        "options": [
+          "It slowed down significantly",
+          "It accelerated greatly",
+          "It stopped completely",
+          "It doubled in size"
+        ],
+        "answer": "It slowed down significantly"
+      },
+      {
+        "q": "According to the report, how many positions did employers add?",
+        "options": [
+          "More than expected",
+          "Fewer than expected",
+          "The exact number expected",
+          "No positions at all"
+        ],
+        "answer": "Fewer than expected"
+      },
+      {
+        "q": "What does the slower hiring pace reflect?",
+        "options": [
+          "Rapid inflation",
+          "A broader economic deceleration",
+          "A sudden stock market crash",
+          "An increase in consumer spending"
+        ],
+        "answer": "A broader economic deceleration"
+      },
+      {
+        "q": "What happened to the national unemployment rate in June?",
+        "options": [
+          "It rose sharply",
+          "It remained the same",
+          "It dipped slightly",
+          "It was not measured"
+        ],
+        "answer": "It dipped slightly"
+      },
+      {
+        "q": "What does the slight dip in the unemployment rate indicate about the labor market?",
+        "options": [
+          "It is very loose",
+          "It is tight",
+          "It is oversupplied with workers",
+          "It is inactive"
+        ],
+        "answer": "It is tight"
+      },
+      {
+        "q": "In the context of the passage, what is the meaning of the word 'scarce'?",
+        "options": [
+          "Abundant and easy to find",
+          "Frightened or scared",
+          "Hard to find or insufficient",
+          "Highly qualified"
+        ],
+        "answer": "Hard to find or insufficient"
+      },
+      {
+        "q": "Who might be influenced by these economic indicators?",
+        "options": [
+          "The Supreme Court",
+          "The Federal Reserve",
+          "The United Nations",
+          "The World Bank"
+        ],
+        "answer": "The Federal Reserve"
+      },
+      {
+        "q": "What decisions of the Federal Reserve could be affected?",
+        "options": [
+          "Tax rate increases",
+          "Interest rate adjustments",
+          "Government spending cuts",
+          "Trade tariff policies"
+        ],
+        "answer": "Interest rate adjustments"
+      },
+      {
+        "q": "Which word is closest in meaning to 'deceleration'?",
+        "options": [
+          "Speeding up",
+          "Slowing down",
+          "Stabilizing",
+          "Fluctuating"
+        ],
+        "answer": "Slowing down"
+      },
+      {
+        "q": "What does 'unexpectedly' imply about the unemployment rate's dip?",
+        "options": [
+          "It was predicted by everyone",
+          "It surprised economists",
+          "It was planned by the government",
+          "It was a mistake in calculation"
+        ],
+        "answer": "It surprised economists"
+      },
+      {
+        "q": "Which of the following is true according to the passage?",
+        "options": [
+          "Active job seekers are abundant.",
+          "The economy is accelerating.",
+          "Job growth and the unemployment rate both decreased.",
+          "The Federal Reserve has already changed the interest rates."
+        ],
+        "answer": "Job growth and the unemployment rate both decreased."
+      }
+    ]
+  },
+  "article-4": {
+    "title": "Palantir獲買入評級被視為AI編排平台",
+    "tabTitle": "金融市場",
+    "english": "Palantir Technologies has been upgraded to a \"Buy\" rating by financial analysts, who now view the company as a leading Artificial Intelligence (AI) orchestration platform. Market experts highlight that Palantir's specialized software effectively integrates machine learning models into enterprise operations. As businesses increasingly seek structured ways to deploy AI, Palantir's unique data integration capabilities position it for substantial growth. This upgrade reflects growing confidence in the company's ability to monetize its advanced technology in a highly competitive market.",
+    "chinese": "Palantir Technologies 已被金融分析師調升至「買入」評級，分析師目前將該公司視為領先的人工智慧（AI）編排平台。市場專家強調，Palantir 的專業軟體能有效將機器學習模型整合至企業營運中。隨著企業越來越尋求結構化的方式來部署 AI，Palantir 獨特的數據整合能力使其處於大幅增長的有利位置。此次評級調升反映出市場對該公司在競爭激烈的市場中將其先進技術變現的能力信心大增。",
+    "vocabulary": [
+      "upgrade (v.): 升級；調升",
+      "rating (n.): 評級；評價",
+      "orchestration (n.): 編排；協調",
+      "analyst (n.): 分析師",
+      "highlight (v.): 強調；突出",
+      "specialized (adj.): 專業的；專門的",
+      "integrate (v.): 整合；合併",
+      "enterprise (n.): 企業；公司",
+      "operation (n.): 營運；操作",
+      "deploy (v.): 部署；配置",
+      "capability (n.): 能力；功能",
+      "substantial (adj.): 大幅的；實質的",
+      "reflect (v.): 反映；顯示",
+      "monetize (v.): 變現；貨幣化",
+      "competitive (adj.): 競爭激烈的",
+      "market expert (n. phr.): 市場專家",
+      "machine learning (n. phr.): 機器學習",
+      "data integration (n. phr.): 數據整合",
+      "position (v.): 使處於（特定位置）",
+      "growing confidence (n. phr.): 增長的信心"
+    ],
+    "quiz": [
+      {
+        "q": "What rating was Palantir upgraded to?",
+        "options": [
+          "Hold",
+          "Sell",
+          "Buy",
+          "Underperform"
+        ],
+        "answer": "Buy"
+      },
+      {
+        "q": "How do financial analysts currently view Palantir?",
+        "options": [
+          "As a declining hardware manufacturer",
+          "As a key AI orchestration platform",
+          "As a social media network",
+          "As a traditional retail company"
+        ],
+        "answer": "As a key AI orchestration platform"
+      },
+      {
+        "q": "What does Palantir's specialized software integrate into enterprise operations?",
+        "options": [
+          "Machine learning models",
+          "Manual accounting systems",
+          "Social media feeds",
+          "Hardware components"
+        ],
+        "answer": "Machine learning models"
+      },
+      {
+        "q": "What are businesses increasingly seeking according to the article?",
+        "options": [
+          "To reduce their reliance on computers",
+          "Structured ways to deploy AI",
+          "To avoid data integration",
+          "To lower their stock ratings"
+        ],
+        "answer": "Structured ways to deploy AI"
+      },
+      {
+        "q": "What capability positions Palantir for substantial growth?",
+        "options": [
+          "Its hardware manufacturing",
+          "Its unique data integration capabilities",
+          "Its customer service hotline",
+          "Its physical retail stores"
+        ],
+        "answer": "Its unique data integration capabilities"
+      },
+      {
+        "q": "What does the stock upgrade reflect?",
+        "options": [
+          "Growing confidence in Palantir's ability to monetize its technology",
+          "A decline in the AI market",
+          "The company's decision to stop software development",
+          "An increase in operational costs"
+        ],
+        "answer": "Growing confidence in Palantir's ability to monetize its technology"
+      },
+      {
+        "q": "Which word is closest in meaning to 'substantial' in the text?",
+        "options": [
+          "Minor",
+          "Significant",
+          "Temporary",
+          "Unnecessary"
+        ],
+        "answer": "Significant"
+      },
+      {
+        "q": "What is the verb form of 'orchestration'?",
+        "options": [
+          "Orchestra",
+          "Orchestrate",
+          "Orchestrated",
+          "Orchestrating"
+        ],
+        "answer": "Orchestrate"
+      },
+      {
+        "q": "In the context of the article, what does 'monetize' mean?",
+        "options": [
+          "To print paper money",
+          "To earn revenue from an asset or technology",
+          "To borrow money from a bank",
+          "To spend money on marketing"
+        ],
+        "answer": "To earn revenue from an asset or technology"
+      },
+      {
+        "q": "What kind of market is Palantir operating in, as mentioned at the end of the text?",
+        "options": [
+          "A non-competitive market",
+          "A highly competitive market",
+          "A local agricultural market",
+          "A declining market"
+        ],
+        "answer": "A highly competitive market"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a factor in Palantir's positive outlook?",
+        "options": [
+          "Data integration capabilities",
+          "Specialized software",
+          "Acquisition of a major competitor",
+          "AI orchestration platform status"
+        ],
+        "answer": "Acquisition of a major competitor"
+      },
+      {
+        "q": "Who upgraded Palantir's rating?",
+        "options": [
+          "Government regulators",
+          "Financial analysts",
+          "Software engineers",
+          "Palantir's customers"
+        ],
+        "answer": "Financial analysts"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "Kimi K2.7 Code模型全面登陸GitHub Copilot",
+    "tabTitle": "科技",
+    "english": "On July 3, 2026, the Kimi K2.7 Code model officially completed its full integration into GitHub Copilot, marking a significant milestone for AI-assisted programming. Developed by Moonshot AI, this advanced model is designed to handle complex coding tasks with higher accuracy and speed. Developers worldwide can now leverage Kimi's superior understanding of Chinese and English coding logic directly within their IDEs. This partnership aims to boost developer productivity and foster global software innovation by bridging language barriers in programming.",
+    "chinese": "2026年7月3日，Kimi K2.7 Code模型正式完成與GitHub Copilot的全面整合，這標誌著人工智慧輔輔助編程領域的一個重要里程碑。這款由月之暗面（Moonshot AI）開發的先進模型旨在以更高的準確性和速度處理複雜的編碼任務。全球開發者現在可以直接在他們的整合開發環境（IDE）中，利用Kimi對中英文編碼邏輯的卓越理解。此次合作旨在通過消除編程中的語言障礙，來提高開發者的生產力並促進全球軟體創新。",
+    "vocabulary": [
+      "integrate (v.): 整合，合併",
+      "milestone (n.): 里程碑",
+      "advanced (adj.): 先進的，高級的",
+      "accuracy (n.): 準確性，精確度",
+      "leverage (v.): 利用，發揮...的影響力",
+      "superior (adj.): 卓越的，優秀的",
+      "productivity (n.): 生產力，生產率",
+      "foster (v.): 促進，培養",
+      "innovation (n.): 創新，革新",
+      "barrier (n.): 障礙，隔閡",
+      "officially (adv.): 正式地",
+      "completion (n.): 完成，結束",
+      "assist (v.): 協助，幫助",
+      "complex (adj.): 複雜的",
+      "logic (n.): 邏輯",
+      "partnership (n.): 合作關係，合夥關係",
+      "developer (n.): 開發者，研發人員",
+      "aim to (phr.): 旨在，以...為目標",
+      "directly (adv.): 直接地",
+      "programming (n.): 編程，程式設計"
+    ],
+    "quiz": [
+      {
+        "q": "What does the word 'integrate' mean in the context of the news?",
+        "options": [
+          "A. To separate into different parts",
+          "B. To combine things so they work together",
+          "C. To delete unnecessary files",
+          "D. To translate languages"
+        ],
+        "answer": "B. To combine things so they work together"
+      },
+      {
+        "q": "Which company developed the Kimi K2.7 Code model?",
+        "options": [
+          "A. GitHub",
+          "B. Microsoft",
+          "C. Moonshot AI",
+          "D. OpenAI"
+        ],
+        "answer": "C. Moonshot AI"
+      },
+      {
+        "q": "What is the main purpose of integrating Kimi K2.7 into GitHub Copilot?",
+        "options": [
+          "A. To replace human developers entirely",
+          "B. To boost developer productivity and foster innovation",
+          "C. To shut down GitHub's main servers",
+          "D. To restrict coding access to Chinese developers only"
+        ],
+        "answer": "B. To boost developer productivity and foster innovation"
+      },
+      {
+        "q": "What is the meaning of 'milestone'?",
+        "options": [
+          "A. A heavy stone used in construction",
+          "B. An important event in the development of something",
+          "C. A unit of measurement for speed",
+          "D. A minor error in software"
+        ],
+        "answer": "B. An important event in the development of something"
+      },
+      {
+        "q": "Choose the closest synonym for 'foster' as used in the text.",
+        "options": [
+          "A. Prevent",
+          "B. Promote",
+          "C. Ignore",
+          "D. Destroy"
+        ],
+        "answer": "B. Promote"
+      },
+      {
+        "q": "Where can developers directly leverage Kimi's coding logic?",
+        "options": [
+          "A. Only on social media",
+          "B. Within their IDEs",
+          "C. In physical classrooms",
+          "D. Through offline textbooks"
+        ],
+        "answer": "B. Within their IDEs"
+      },
+      {
+        "q": "What does 'accuracy' refer to?",
+        "options": [
+          "A. The state of being correct or precise",
+          "B. The speed of internet connection",
+          "C. The cost of software licensing",
+          "D. The size of a database"
+        ],
+        "answer": "A. The state of being correct or precise"
+      },
+      {
+        "q": "Fill in the blank: The new partnership aims to _______ language barriers in programming.",
+        "options": [
+          "A. bridge",
+          "B. build",
+          "C. block",
+          "D. ignore"
+        ],
+        "answer": "A. bridge"
+      },
+      {
+        "q": "According to the text, what language logic does Kimi K2.7 have a superior understanding of?",
+        "options": [
+          "A. Only Japanese and Korean",
+          "B. Chinese and English",
+          "C. Spanish and German",
+          "D. Latin and Greek"
+        ],
+        "answer": "B. Chinese and English"
+      },
+      {
+        "q": "What does 'leverage' mean in the text?",
+        "options": [
+          "A. To pay a high price",
+          "B. To make use of something to achieve a desired result",
+          "C. To cancel a subscription",
+          "D. To write a physical letter"
+        ],
+        "answer": "B. To make use of something to achieve a desired result"
+      },
+      {
+        "q": "What is the meaning of 'barrier'?",
+        "options": [
+          "A. A tool used to connect two devices",
+          "B. A rule that encourages people to talk",
+          "C. A fence or obstacle that prevents movement or access",
+          "D. A type of computer keyboard"
+        ],
+        "answer": "C. A fence or obstacle that prevents movement or access"
+      },
+      {
+        "q": "When did the full integration of Kimi K2.7 into GitHub Copilot officially complete?",
+        "options": [
+          "A. July 3, 2024",
+          "B. July 3, 2025",
+          "C. July 3, 2026",
+          "D. July 3, 2027"
+        ],
+        "answer": "C. July 3, 2026"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "白宮對OpenAI GPT-5.6模型實施限制",
+    "tabTitle": "科技",
+    "english": "On July 3, 2026, the White House announced strict restrictions on OpenAI's newly released GPT-5.6 model due to national security concerns. Officials stated that the advanced artificial intelligence system possesses capabilities that could be exploited for cyberattacks and disinformation campaigns. Consequently, OpenAI must now obtain federal approval before deploying updates or exporting the technology to foreign entities. While some tech experts argue this move could hinder innovation, the government emphasizes that safeguarding public safety remains its top priority.",
+    "chinese": "2026年7月3日，由於國家安全疑慮，白宮宣布對OpenAI新發布的GPT-5.6模型實施嚴格限制。官員表示，這款先進的人工智慧系統具備可能被利用於網路攻擊和假訊息活動的能力。因此，OpenAI現在在部署更新或將該技術出口給外國實體之前，必須獲得聯邦政府的批准。儘管一些科技專家認為此舉可能會阻礙創新，但政府強調，維護公共安全仍是其首要任務。",
+    "vocabulary": [
+      "impose (v.): 實施、強制實行",
+      "restriction (n.): 限制、約束",
+      "national security (n.): 國家安全",
+      "concern (n.): 疑慮、關切",
+      "advanced (adj.): 先進的、高等的",
+      "possess (v.): 擁有、具備",
+      "capability (n.): 能力、性能",
+      "exploit (v.): 利用、剝削",
+      "cyberattack (n.): 網路攻擊",
+      "disinformation (n.): 假訊息、虛假資訊",
+      "campaign (n.): 活動、運動",
+      "consequently (adv.): 因此、結果",
+      "obtain (v.): 獲得、贏得",
+      "approval (n.): 批准、同意",
+      "deploy (v.): 部署、配置",
+      "export (v.): 出口、輸出",
+      "entity (n.): 實體、獨立存在體",
+      "hinder (v.): 阻礙、妨礙",
+      "innovation (n.): 創新、革新",
+      "safeguard (v.): 保護、維護"
+    ],
+    "quiz": [
+      {
+        "q": "Why did the White House impose restrictions on GPT-5.6?",
+        "options": [
+          "A) Due to financial fraud",
+          "B) Due to national security concerns",
+          "C) Because of copyright issues",
+          "D) To support OpenAI's competitors"
+        ],
+        "answer": "B) Due to national security concerns"
+      },
+      {
+        "q": "What must OpenAI do before exporting GPT-5.6 technology to foreign entities?",
+        "options": [
+          "A) Pay a high tax",
+          "B) Make the source code public",
+          "C) Obtain federal approval",
+          "D) Shut down the servers"
+        ],
+        "answer": "C) Obtain federal approval"
+      },
+      {
+        "q": "According to some tech experts, what could be the negative impact of this move?",
+        "options": [
+          "A) It could hinder innovation.",
+          "B) It could cause a market crash.",
+          "C) It could lead to more cyberattacks.",
+          "D) It could increase government spending."
+        ],
+        "answer": "A) It could hinder innovation."
+      },
+      {
+        "q": "What is the meaning of the word 'impose' in the text?",
+        "options": [
+          "A) To suggest gently",
+          "B) To force a rule to be accepted",
+          "C) To remove a barrier",
+          "D) To study thoroughly"
+        ],
+        "answer": "B) To force a rule to be accepted"
+      },
+      {
+        "q": "Which word is closest in meaning to 'safeguarding'?",
+        "options": [
+          "A) Threatening",
+          "B) Ignoring",
+          "C) Protecting",
+          "D) Accelerating"
+        ],
+        "answer": "C) Protecting"
+      },
+      {
+        "q": "Fill in the blank: The police are investigating the ________ campaign spread by malicious actors online.",
+        "options": [
+          "A) disinformation",
+          "B) innovation",
+          "C) approval",
+          "D) capability"
+        ],
+        "answer": "A) disinformation"
+      },
+      {
+        "q": "What specific risks of GPT-5.6 did the officials mention?",
+        "options": [
+          "A) Job loss and economic recession",
+          "B) Hardware failure and power shortage",
+          "C) Cyberattacks and disinformation campaigns",
+          "D) Academic cheating and plagiarism"
+        ],
+        "answer": "C) Cyberattacks and disinformation campaigns"
+      },
+      {
+        "q": "What does 'consequently' mean in the context of the passage?",
+        "options": [
+          "A) Unexpectedly",
+          "B) As a result",
+          "C) On the other hand",
+          "D) In addition"
+        ],
+        "answer": "B) As a result"
+      },
+      {
+        "q": "Choose the best antonym for 'hinder'.",
+        "options": [
+          "A) Block",
+          "B) Delay",
+          "C) Facilitate",
+          "D) Restrict"
+        ],
+        "answer": "C) Facilitate"
+      },
+      {
+        "q": "In the sentence 'OpenAI must now obtain federal approval,' what part of speech is 'approval'?",
+        "options": [
+          "A) Verb",
+          "B) Noun",
+          "C) Adjective",
+          "D) Adverb"
+        ],
+        "answer": "B) Noun"
+      },
+      {
+        "q": "What is the government's top priority according to the news?",
+        "options": [
+          "A) Promoting technological growth",
+          "B) Reducing national debt",
+          "C) Safeguarding public safety",
+          "D) Enhancing foreign relations"
+        ],
+        "answer": "C) Safeguarding public safety"
+      },
+      {
+        "q": "Which word refers to 'an organization or a thing with distinct and independent existence'?",
+        "options": [
+          "A) Entity",
+          "B) Restriction",
+          "C) Innovation",
+          "D) Concern"
+        ],
+        "answer": "A) Entity"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
