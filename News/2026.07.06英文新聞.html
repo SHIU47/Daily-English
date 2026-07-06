@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUL 06, 2026：台灣社會、金融市場 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 毒油事件擴大，257家下游業者受影響\nTaiwan's food safety crisis has deepened as the toxic oil scandal expands to affect 257 downstream businesses nationwide. Health authorities revealed that contaminated cooking oil was distributed to numerous restaurants and food manufacturers, sparking widespread public anxiety. Officials have ordered the immediate recall of all suspected products and vowed to impose severe penalties on the perpetrators. As investigations continue, the government is scrambling to restore public trust in the island's food supply chain.\n\n[2] SEMICON Taiwan聚焦AI智造與先進封裝\nSEMICON Taiwan 2026 has officially commenced, showcasing groundbreaking advancements in artificial intelligence (AI) smart manufacturing and advanced packaging technologies. This premier event brings together global semiconductor giants to address the soaring demand for high-performance computing. Industry leaders are demonstrating how AI integration optimizes chip production efficiency and significantly reduces energy consumption. Furthermore, next-generation packaging solutions, such as co-packaged optics, are being highlighted as crucial drivers for future technological innovation in the global supply chain.\n\n[3] 民調顯示台灣民眾拒統比率上升\nA recent public opinion poll conducted in Taiwan indicates a significant rise in the percentage of citizens who oppose unification with China. The survey, released on July 6, 2026, reveals that a vast majority of respondents prefer maintaining the status quo or seeking independence. Analysts suggest that this trend reflects growing concerns over regional security and a strengthening sense of Taiwanese identity. Consequently, political leaders are expected to adjust their policies to align with public sentiment.",
+    "chinese": "【1】毒油事件擴大，257家下游業者受影響\n隨著毒油風暴擴大並波及全台257家下游業者，台灣的食品安全危機進一步加劇。衛生主管機關透露，受污染的食用油已被分銷至眾多餐廳及食品製造商，引發大眾廣泛恐慌。官員已下令立即回收所有涉嫌受污染的產品，並誓言對違法者予以重罰。隨著調查持續進行，政府正全力重建民眾對台灣食品供應鏈的信任。\n\n【2】SEMICON Taiwan聚焦AI智造與先進封裝\n2026年台灣國際半導體展（SEMICON Taiwan）已正式開幕，展示了人工智慧（AI）智慧製造與先進封裝技術的突破性進展。這一盛會匯聚了全球半導體巨頭，以應對對高效能運算日益增長的需求。產業領袖們正在展示AI整合如何優化晶片生產效率並顯著降低能耗。此外，次世代封裝解決方案（如共同封裝光學元件）被視為推動全球供應鏈未來技術創新的關鍵驅動力。\n\n【3】民調顯示台灣民眾拒統比率上升\n台灣最新進行的一項民意調查顯示，反對與中國統一的民眾比例顯著上升。這項於2026年7月6日發布的調查顯示，絕大比例的受訪者傾向於維持現狀或尋求獨立。分析人士指出，這一趨勢反映了人們對區域安全日益增加的擔憂，以及台灣認同感的增強。因此，預計政治領袖將調整其政策以符合民意。",
+    "vocabulary": [
+      "crisis (n.): 危機",
+      "scandal (n.): 醜聞",
+      "expand (v.): 擴大",
+      "downstream (adj.): 下游的",
+      "nationwide (adv.): 全國性地",
+      "authority (n.): 主管機關 / 權威",
+      "reveal (v.): 透露 / 顯露",
+      "contaminate (v.): 污染",
+      "distribute (v.): 分銷 / 分發",
+      "manufacturer (n.): 製造商",
+      "spark (v.): 引發 / 激起",
+      "anxiety (n.): 焦慮 / 恐慌",
+      "recall (n./v.): 召回 / 回收",
+      "suspect (v./adj.): 懷疑 / 有嫌疑的",
+      "impose (v.): 施加 / 強制實行",
+      "penalty (n.): 處罰 / 罰款",
+      "perpetrator (n.): 犯罪者 / 行兇者",
+      "investigation (n.): 調查",
+      "scramble (v.): 倉促行動 / 爭奪",
+      "restore (v.): 恢復 / 重建",
+      "commence (v.): 開始；著手",
+      "showcase (v.): 展示；陳列",
+      "groundbreaking (adj.): 突破性的；開創性的",
+      "advancement (n.): 進步；進展",
+      "artificial intelligence (n.): 人工智慧",
+      "smart manufacturing (n.): 智慧製造",
+      "advanced packaging (n.): 先進封裝",
+      "premier (adj.): 首要的；第一流的",
+      "semiconductor (n.): 半導體",
+      "giant (n.): 巨頭；大企業",
+      "address (v.): 處理；應對；解決",
+      "soaring (adj.): 急升的；猛增的",
+      "high-performance computing (n.): 高效能運算",
+      "integration (n.): 整合；結合",
+      "optimize (v.): 優化；完善",
+      "efficiency (n.): 效率；效能",
+      "consumption (n.): 消耗；消耗量",
+      "co-packaged optics (n.): 共同封裝光學元件",
+      "crucial (adj.): 關鍵的；至關重要的",
+      "supply chain (n.): 供應鏈",
+      "public opinion (n.): 民意",
+      "poll (n.): 民意調查",
+      "conduct (v.): 進行、實施",
+      "indicate (v.): 顯示、指出",
+      "significant (adj.): 顯著的、重要的",
+      "oppose (v.): 反對",
+      "unification (n.): 統一",
+      "survey (n.): 調查",
+      "release (v.): 發布、釋出",
+      "majority (n.): 多數、大部分",
+      "respondent (n.): 受訪者、回答者",
+      "prefer (v.): 偏好、更喜歡",
+      "maintain (v.): 維持、保持",
+      "status quo (n.): 現狀",
+      "independence (n.): 獨立",
+      "analyst (n.): 分析師、分析人士",
+      "reflect (v.): 反映、反射",
+      "regional security (n.): 區域安全",
+      "identity (n.): 認同、身份",
+      "sentiment (n.): 輿情、情緒、態度"
+    ],
+    "quiz": [
+      {
+        "q": "How many downstream businesses are affected by the toxic oil scandal?",
+        "options": [
+          "A) 157",
+          "B) 257",
+          "C) 357",
+          "D) 457"
+        ],
+        "answer": "B) 257"
+      },
+      {
+        "q": "What did the health authorities order regarding the suspected products?",
+        "options": [
+          "A) An immediate price increase",
+          "B) An immediate recall",
+          "C) A change in packaging",
+          "D) Exporting them to other countries"
+        ],
+        "answer": "B) An immediate recall"
+      },
+      {
+        "q": "Which word in the text means 'to make something impure or harmful by dirt or chemicals'?",
+        "options": [
+          "A) distribute",
+          "B) contaminate",
+          "C) restore",
+          "D) expand"
+        ],
+        "answer": "B) contaminate"
+      },
+      {
+        "q": "The word 'perpetrators' in the text refers to:",
+        "options": [
+          "A) victims of the food crisis",
+          "B) health inspectors",
+          "C) people who committed the wrongdoing",
+          "D) consumer protection groups"
+        ],
+        "answer": "C) people who committed the wrongdoing"
+      },
+      {
+        "q": "What is the government currently scrambling to do?",
+        "options": [
+          "A) Close down all restaurants",
+          "B) Export more cooking oil",
+          "C) Restore public trust in the food supply chain",
+          "D) Reduce food prices"
+        ],
+        "answer": "C) Restore public trust in the food supply chain"
+      },
+      {
+        "q": "The company decided to _____ all defective products from the market to ensure customer safety.",
+        "options": [
+          "A) recall",
+          "B) impose",
+          "C) expand",
+          "D) reveal"
+        ],
+        "answer": "A) recall"
+      },
+      {
+        "q": "The government plans to _____ stricter regulations on food imports next month.",
+        "options": [
+          "A) spark",
+          "B) scramble",
+          "C) impose",
+          "D) distribute"
+        ],
+        "answer": "C) impose"
+      },
+      {
+        "q": "Widespread use of social media can _____ public anxiety during a health crisis.",
+        "options": [
+          "A) restore",
+          "B) spark",
+          "C) contaminate",
+          "D) suspect"
+        ],
+        "answer": "B) spark"
+      },
+      {
+        "q": "Where was the contaminated cooking oil distributed, according to the text?",
+        "options": [
+          "A) Only to local households",
+          "B) To international markets only",
+          "C) To numerous restaurants and food manufacturers",
+          "D) To schools and hospitals only"
+        ],
+        "answer": "C) To numerous restaurants and food manufacturers"
+      },
+      {
+        "q": "The police launched a thorough _____ to find the cause of the food poisoning.",
+        "options": [
+          "A) penalty",
+          "B) scandal",
+          "C) manufacturer",
+          "D) investigation"
+        ],
+        "answer": "D) investigation"
+      },
+      {
+        "q": "What is the meaning of 'scramble' in the context of the passage?",
+        "options": [
+          "A) To cook eggs quickly",
+          "B) To move or act quickly and with difficulty",
+          "C) To cancel a plan",
+          "D) To ignore a problem"
+        ],
+        "answer": "B) To move or act quickly and with difficulty"
+      },
+      {
+        "q": "What is the tone of the news article?",
+        "options": [
+          "A) Humorous and lighthearted",
+          "B) Factual and serious",
+          "C) Optimistic and celebratory",
+          "D) Indifferent and sarcastic"
+        ],
+        "answer": "B) Factual and serious"
+      },
+      {
+        "q": "What is the main focus of SEMICON Taiwan 2026?",
+        "options": [
+          "Consumer electronics design",
+          "AI smart manufacturing and advanced packaging",
+          "Software development tools",
+          "Traditional agricultural tech"
+        ],
+        "answer": "AI smart manufacturing and advanced packaging"
+      },
+      {
+        "q": "What does the word 'commence' mean in the text?",
+        "options": [
+          "To finish",
+          "To begin",
+          "To delay",
+          "To cancel"
+        ],
+        "answer": "To begin"
+      },
+      {
+        "q": "According to the text, why are global semiconductor giants gathering at the event?",
+        "options": [
+          "To address the soaring demand for high-performance computing",
+          "To discuss international trade tariffs",
+          "To merge their companies",
+          "To protest environmental regulations"
+        ],
+        "answer": "To address the soaring demand for high-performance computing"
+      },
+      {
+        "q": "How does AI integration help chip production according to industry leaders?",
+        "options": [
+          "By replacing all human workers",
+          "By optimizing efficiency and reducing energy consumption",
+          "By increasing the price of chips",
+          "By slowing down the manufacturing process"
+        ],
+        "answer": "By optimizing efficiency and reducing energy consumption"
+      },
+      {
+        "q": "Which of the following is mentioned as a next-generation packaging solution?",
+        "options": [
+          "Co-packaged optics",
+          "Plastic molding",
+          "Wireless charging",
+          "Vacuum sealing"
+        ],
+        "answer": "Co-packaged optics"
+      },
+      {
+        "q": "What part of speech is 'optimize' as used in the text?",
+        "options": [
+          "Noun",
+          "Adjective",
+          "Verb",
+          "Adverb"
+        ],
+        "answer": "Verb"
+      },
+      {
+        "q": "What is the meaning of the word 'soaring'?",
+        "options": [
+          "Falling rapidly",
+          "Rising very quickly",
+          "Staying stable",
+          "Disappearing"
+        ],
+        "answer": "Rising very quickly"
+      },
+      {
+        "q": "Which word in the text means 'extremely important or necessary'?",
+        "options": [
+          "Premier",
+          "Groundbreaking",
+          "Crucial",
+          "Advanced"
+        ],
+        "answer": "Crucial"
+      },
+      {
+        "q": "Fill in the blank: The event showcases groundbreaking advancements ______ artificial intelligence.",
+        "options": [
+          "in",
+          "on",
+          "at",
+          "with"
+        ],
+        "answer": "in"
+      },
+      {
+        "q": "What does 'integration' mean?",
+        "options": [
+          "Separation of parts",
+          "The act of combining things to work together",
+          "Complete destruction",
+          "Financial investment"
+        ],
+        "answer": "The act of combining things to work together"
+      },
+      {
+        "q": "Which sector is SEMICON Taiwan primarily focused on?",
+        "options": [
+          "Automotive manufacturing",
+          "Semiconductor industry",
+          "Medical devices",
+          "Aerospace engineering"
+        ],
+        "answer": "Semiconductor industry"
+      },
+      {
+        "q": "What is highlighted as a 'crucial driver' for future innovation in the global supply chain?",
+        "options": [
+          "Next-generation packaging solutions",
+          "Reduced labor costs",
+          "Traditional manufacturing methods",
+          "Software updates"
+        ],
+        "answer": "Next-generation packaging solutions"
+      },
+      {
+        "q": "According to the poll, what is the trend regarding Taiwanese citizens' opposition to unification?",
+        "options": [
+          "It is decreasing.",
+          "It is rising significantly.",
+          "It remains unchanged.",
+          "It has become unpredictable."
+        ],
+        "answer": "It is rising significantly."
+      },
+      {
+        "q": "When was the survey released?",
+        "options": [
+          "June 6, 2026",
+          "July 6, 2026",
+          "July 16, 2026",
+          "August 6, 2026"
+        ],
+        "answer": "July 6, 2026"
+      },
+      {
+        "q": "What do the majority of respondents prefer?",
+        "options": [
+          "Immediate unification with China",
+          "Maintaining the status quo or seeking independence",
+          "Establishing a new government",
+          "Boycotting future polls"
+        ],
+        "answer": "Maintaining the status quo or seeking independence"
+      },
+      {
+        "q": "What is one of the reasons analysts suggest for this trend?",
+        "options": [
+          "Economic decline",
+          "Growing concerns over regional security",
+          "Changes in educational systems",
+          "A decrease in international trade"
+        ],
+        "answer": "Growing concerns over regional security"
+      },
+      {
+        "q": "What does the word 'conducted' mean in the text?",
+        "options": [
+          "interrupted",
+          "carried out",
+          "refused",
+          "predicted"
+        ],
+        "answer": "carried out"
+      },
+      {
+        "q": "Which word in the text means 'the existing state of affairs'?",
+        "options": [
+          "identity",
+          "sentiment",
+          "status quo",
+          "unification"
+        ],
+        "answer": "status quo"
+      },
+      {
+        "q": "What are political leaders expected to do in response to the poll?",
+        "options": [
+          "Ignore public opinion",
+          "Adjust their policies to align with public sentiment",
+          "Resign from their positions",
+          "Cancel future elections"
+        ],
+        "answer": "Adjust their policies to align with public sentiment"
+      },
+      {
+        "q": "What is the noun form of the verb 'oppose' used in the headline?",
+        "options": [
+          "opposition",
+          "opposable",
+          "opposite",
+          "oppress"
+        ],
+        "answer": "opposition"
+      },
+      {
+        "q": "Fill in the blank: The survey reveals that a vast ________ of respondents prefer the status quo.",
+        "options": [
+          "minority",
+          "majority",
+          "maximum",
+          "minimum"
+        ],
+        "answer": "majority"
+      },
+      {
+        "q": "What has strengthened among Taiwanese citizens according to analysts?",
+        "options": [
+          "Economic dependence on China",
+          "Their sense of Taiwanese identity",
+          "Trust in foreign media",
+          "Military alliance with neighboring countries"
+        ],
+        "answer": "Their sense of Taiwanese identity"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'indicate'?",
+        "options": [
+          "hide",
+          "show",
+          "deny",
+          "question"
+        ],
+        "answer": "show"
+      },
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "Taiwan's economic growth in 2026",
+          "A poll showing growing opposition to unification in Taiwan",
+          "The election of a new Taiwanese president",
+          "Military drills in the Taiwan Strait"
+        ],
+        "answer": "A poll showing growing opposition to unification in Taiwan"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "南韓設立半導體稅收基金促投資",
+    "tabTitle": "金融市場",
+    "english": "South Korea has officially established a specialized semiconductor tax fund to boost strategic investment in its domestic chip industry. The government aims to secure a competitive edge amid intensifying global competition by offering tax incentives and financial support to local manufacturers. This initiative is expected to accelerate technological innovation and strengthen the national supply chain. By fostering a more robust ecosystem, South Korea hopes to maintain its leading position in the global semiconductor market.",
+    "chinese": "南韓已正式設立專門的半導體稅收基金，以促進其國內晶片產業的戰略性投資。面對日益加劇的全球競爭，政府旨在透過向本土製造商提供稅收優惠和資金支持，來確保競爭優勢。此項計劃預計將加速技術創新並強化國家供應鏈。藉由培育更強健的生態系統，南韓希望維持其在全球半導體市場的領先地位。",
+    "vocabulary": [
+      "establish (v.): 建立；設立",
+      "semiconductor (n.): 半導體",
+      "strategic (adj.): 戰略性的",
+      "investment (n.): 投資",
+      "domestic (adj.): 國內的",
+      "aim to (v. phr.): 旨在；目標是",
+      "secure (v.): 獲得；確保",
+      "competitive edge (n. phr.): 競爭優勢",
+      "intensify (v.): 加劇；增強",
+      "global (adj.): 全球的",
+      "competition (n.): 競爭",
+      "tax incentive (n. phr.): 稅收優惠",
+      "financial support (n. phr.): 財務支持；資金援助",
+      "manufacturer (n.): 製造商",
+      "initiative (n.): 倡議；計劃",
+      "accelerate (v.): 加速",
+      "innovation (n.): 創新",
+      "supply chain (n. phr.): 供應鏈",
+      "foster (v.): 培育；促進",
+      "ecosystem (n.): 生態系統"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of South Korea's new tax fund?",
+        "options": [
+          "To reduce imports of foreign vehicles",
+          "To boost strategic investment in the domestic chip industry",
+          "To fund environmental protection projects",
+          "To lower taxes for individual citizens"
+        ],
+        "answer": "To boost strategic investment in the domestic chip industry"
+      },
+      {
+        "q": "In the context of the passage, what does the word 'secure' mean?",
+        "options": [
+          "To lock a door",
+          "To feel safe",
+          "To obtain or ensure",
+          "To worry about"
+        ],
+        "answer": "To obtain or ensure"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'competitive edge'?",
+        "options": [
+          "A dangerous boundary",
+          "An advantage over competitors",
+          "A financial loss",
+          "A sharp tool"
+        ],
+        "answer": "An advantage over competitors"
+      },
+      {
+        "q": "The government aims to secure a competitive edge _______ intensifying global competition.",
+        "options": [
+          "amid",
+          "although",
+          "because",
+          "instead of"
+        ],
+        "answer": "amid"
+      },
+      {
+        "q": "How does the South Korean government plan to support local manufacturers?",
+        "options": [
+          "By increasing import tariffs",
+          "By offering tax incentives and financial support",
+          "By nationalizing private companies",
+          "By restricting foreign travel"
+        ],
+        "answer": "By offering tax incentives and financial support"
+      },
+      {
+        "q": "What does the verb 'foster' mean in the passage?",
+        "options": [
+          "To ignore",
+          "To discourage",
+          "To encourage the development of",
+          "To replace"
+        ],
+        "answer": "To encourage the development of"
+      },
+      {
+        "q": "Which word can best replace 'initiative' in the text?",
+        "options": [
+          "Problem",
+          "Program or plan",
+          "Resistance",
+          "Obstacle"
+        ],
+        "answer": "Program or plan"
+      },
+      {
+        "q": "What is one of the expected outcomes of this initiative?",
+        "options": [
+          "Decreasing the number of local jobs",
+          "Slowing down technological progress",
+          "Strengthening the national supply chain",
+          "Relocating factories to other countries"
+        ],
+        "answer": "Strengthening the national supply chain"
+      },
+      {
+        "q": "What is the antonym of 'domestic' as used in the text?",
+        "options": [
+          "Local",
+          "Internal",
+          "Household",
+          "Foreign"
+        ],
+        "answer": "Foreign"
+      },
+      {
+        "q": "South Korea hopes to _______ its leading position in the global semiconductor market.",
+        "options": [
+          "maintain",
+          "abandon",
+          "decline",
+          "ignore"
+        ],
+        "answer": "maintain"
+      },
+      {
+        "q": "A 'semiconductor' is most closely related to which industry?",
+        "options": [
+          "Agriculture",
+          "Electronics and microchips",
+          "Textiles",
+          "Real estate"
+        ],
+        "answer": "Electronics and microchips"
+      },
+      {
+        "q": "What kind of ecosystem does South Korea hope to foster?",
+        "options": [
+          "A marine ecosystem",
+          "A more robust semiconductor ecosystem",
+          "A forestry ecosystem",
+          "A traditional agricultural ecosystem"
+        ],
+        "answer": "A more robust semiconductor ecosystem"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "AI轉向科學研究：Anthropic進軍創藥",
+    "tabTitle": "科技",
+    "english": "Date: 2026.07.06\nTitle: AI Shifts to Science: Anthropic Enters Drug Discovery, OpenAI Benchmarks\n\nAI companies are increasingly moving into scientific research. Anthropic, a leading AI firm, has announced its expansion into drug discovery, aiming to accelerate the development of new medicines using its advanced AI models. This strategic move highlights a growing trend of AI applications beyond general language tasks. Meanwhile, OpenAI is reportedly establishing new benchmarks to evaluate AI's capabilities in scientific domains, further signaling the industry's focus on scientific advancements. This shift promises significant breakthroughs in fields like biotechnology and healthcare.",
+    "chinese": "日期：2026.07.06\n標題：AI轉向科學研究：Anthropic進軍創藥，OpenAI設立基準\n\nAI公司正日益將業務拓展至科學研究領域。領先的AI公司Anthropic已宣布進軍藥物研發，旨在利用其先進的AI模型加速新藥開發。這一戰略舉措突顯了AI應用超越通用語言任務的日益增長趨勢。同時，據報導OpenAI正在建立新的基準，以評估AI在科學領域的能力，這進一步表明該行業對科學進步的關注。這一轉變預示著生物技術和醫療保健等領域將取得重大突破。",
+    "vocabulary": [
+      "increasingly (adv.): 日益地",
+      "leading (adj.): 領先的",
+      "firm (n.): 公司",
+      "expansion (n.): 擴展，進軍",
+      "drug discovery (n. phrase): 藥物研發",
+      "accelerate (v.): 加速",
+      "advanced (adj.): 先進的",
+      "strategic move (n. phrase): 戰略舉措",
+      "highlights (v.): 突顯",
+      "growing trend (n. phrase): 日益增長的趨勢",
+      "applications (n.): 應用",
+      "general language tasks (n. phrase): 通用語言任務",
+      "reportedly (adv.): 據報導",
+      "establishing (v.): 建立",
+      "benchmarks (n.): 基準，標竿",
+      "evaluate (v.): 評估",
+      "capabilities (n.): 能力",
+      "scientific domains (n. phrase): 科學領域",
+      "breakthroughs (n.): 突破",
+      "biotechnology (n.): 生物技術"
+    ],
+    "quiz": [
+      {
+        "q": "What is the primary focus of this news article?",
+        "options": [
+          "A) AI's impact on literature",
+          "B) AI companies entering scientific research",
+          "C) New AI language models",
+          "D) The history of AI development"
+        ],
+        "answer": "B) AI companies entering scientific research"
+      },
+      {
+        "q": "Which AI company has announced its expansion into drug discovery?",
+        "options": [
+          "A) OpenAI",
+          "B) Google DeepMind",
+          "C) Anthropic",
+          "D) IBM Watson"
+        ],
+        "answer": "C) Anthropic"
+      },
+      {
+        "q": "What is Anthropic's goal in entering drug discovery?",
+        "options": [
+          "A) To develop new AI language models",
+          "B) To create new gaming applications",
+          "C) To accelerate the development of new medicines",
+          "D) To establish new scientific benchmarks"
+        ],
+        "answer": "C) To accelerate the development of new medicines"
+      },
+      {
+        "q": "The article mentions that AI applications are moving beyond which type of tasks?",
+        "options": [
+          "A) Complex mathematical problems",
+          "B) General language tasks",
+          "C) Image recognition",
+          "D) Financial analysis"
+        ],
+        "answer": "B) General language tasks"
+      },
+      {
+        "q": "What is OpenAI reportedly doing in the context of AI's capabilities in scientific domains?",
+        "options": [
+          "A) Developing new drugs",
+          "B) Establishing new benchmarks",
+          "C) Investing in biotechnology firms",
+          "D) Launching a new AI model for art"
+        ],
+        "answer": "B) Establishing new benchmarks"
+      },
+      {
+        "q": "What does Anthropic's \"strategic move\" primarily highlight?",
+        "options": [
+          "A) A decrease in AI investment",
+          "B) AI's focus on entertainment",
+          "C) A growing trend of AI applications beyond general language tasks",
+          "D) The challenges of AI in scientific research"
+        ],
+        "answer": "C) A growing trend of AI applications beyond general language tasks"
+      },
+      {
+        "q": "In the sentence \"aiming to accelerate the development of new medicines,\" what does \"accelerate\" mean?",
+        "options": [
+          "A) To slow down",
+          "B) To speed up",
+          "C) To stop completely",
+          "D) To diversify"
+        ],
+        "answer": "B) To speed up"
+      },
+      {
+        "q": "What does \"benchmarks\" refer to in the context of evaluating AI's capabilities?",
+        "options": [
+          "A) Physical seating arrangements",
+          "B) Standards or points of reference for measurement",
+          "C) Types of computer software",
+          "D) Financial market indicators"
+        ],
+        "answer": "B) Standards or points of reference for measurement"
+      },
+      {
+        "q": "According to the article, which fields are expected to see significant breakthroughs due to AI's shift to science?",
+        "options": [
+          "A) Arts and humanities",
+          "B) Sports and recreation",
+          "C) Biotechnology and healthcare",
+          "D) Automotive engineering and manufacturing"
+        ],
+        "answer": "C) Biotechnology and healthcare"
+      },
+      {
+        "q": "What does the term \"leading AI firm\" imply about Anthropic?",
+        "options": [
+          "A) It is a new and unknown company",
+          "B) It is one of the most important or successful AI companies",
+          "C) It specializes in leadership training",
+          "D) It only works with government contracts"
+        ],
+        "answer": "B) It is one of the most important or successful AI companies"
+      },
+      {
+        "q": "What is the overall trend described in the article regarding AI companies?",
+        "options": [
+          "A) They are reducing their research budgets",
+          "B) They are increasingly focusing on scientific research",
+          "C) They are merging with traditional tech companies",
+          "D) They are moving away from developing new technologies"
+        ],
+        "answer": "B) They are increasingly focusing on scientific research"
+      },
+      {
+        "q": "What does \"drug discovery\" primarily involve?",
+        "options": [
+          "A) Finding lost medication",
+          "B) The process of identifying and developing new therapeutic compounds",
+          "C) Marketing pharmaceutical products",
+          "D) Analyzing drug side effects"
+        ],
+        "answer": "B) The process of identifying and developing new therapeutic compounds"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "中國成功發射新一批極軌衛星",
+    "tabTitle": "科技",
+    "english": "On July 6, 2026, China successfully launched a new batch of polar-orbiting meteorological satellites from the Jiuquan Satellite Launch Center. These advanced satellites are designed to monitor global weather patterns, track climate change, and provide crucial data for disaster prevention. Equipped with state-of-the-art remote sensing instruments, they will significantly enhance the accuracy of global weather forecasting. Officials confirmed that the satellites have entered their planned orbits and are functioning normally, marking another milestone in the country's space exploration program.",
+    "chinese": "2026年7月6日，中國於酒泉衛星發射中心成功發射了新一批極軌氣象衛星。這些先進的衛星旨在監測全球天氣模式、追蹤氣候變化，並為防災減災提供關鍵數據。衛星配備了最先進的遙測儀器，將顯著提升全球天氣預報的準確性。官方證實，這些衛星已進入預定軌道且運作正常，標誌著該國太空探索計劃的又一里程碑。",
+    "vocabulary": [
+      "launch (v.): 發射；發動",
+      "batch (n.): 一批；一組",
+      "polar orbit (n.): 極地軌道",
+      "meteorological (adj.): 氣象的",
+      "monitor (v.): 監測；監視",
+      "pattern (n.): 模式；樣式",
+      "track (v.): 追蹤；追溯",
+      "climate change (n.): 氣候變遷",
+      "crucial (adj.): 關鍵的；至關重要的",
+      "disaster prevention (n.): 防災",
+      "equip (v.): 配備；裝備",
+      "state-of-the-art (adj.): 最先進的",
+      "remote sensing (n.): 遙測；遙感",
+      "instrument (n.): 儀器；工具",
+      "significantly (adv.): 顯著地；大幅地",
+      "enhance (v.): 提升；增強",
+      "accuracy (n.): 準確性；精確度",
+      "forecasting (n.): 預報；預測",
+      "confirm (v.): 證實；確認",
+      "milestone (n.): 里程碑"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of the newly launched satellites?",
+        "options": [
+          "Space tourism",
+          "Global weather monitoring",
+          "Military communication",
+          "Deep space exploration"
+        ],
+        "answer": "Global weather monitoring"
+      },
+      {
+        "q": "Where were the satellites launched from?",
+        "options": [
+          "Jiuquan Satellite Launch Center",
+          "Wenchang Space Launch Site",
+          "Taiyuan Satellite Launch Center",
+          "Xichang Satellite Launch Center"
+        ],
+        "answer": "Jiuquan Satellite Launch Center"
+      },
+      {
+        "q": "Which word in the text means 'extremely important or necessary'?",
+        "options": [
+          "advanced",
+          "crucial",
+          "planned",
+          "normal"
+        ],
+        "answer": "crucial"
+      },
+      {
+        "q": "What kind of orbit do these newly launched satellites use?",
+        "options": [
+          "Geostationary orbit",
+          "Low Earth orbit",
+          "Polar orbit",
+          "Medium Earth orbit"
+        ],
+        "answer": "Polar orbit"
+      },
+      {
+        "q": "The satellites are equipped with state-of-the-art ________ sensing instruments.",
+        "options": [
+          "local",
+          "remote",
+          "direct",
+          "visual"
+        ],
+        "answer": "remote"
+      },
+      {
+        "q": "What will these satellites significantly enhance?",
+        "options": [
+          "The speed of internet",
+          "The accuracy of global weather forecasting",
+          "The distance of space travel",
+          "The defense of national borders"
+        ],
+        "answer": "The accuracy of global weather forecasting"
+      },
+      {
+        "q": "Complete the sentence: 'The satellites have entered their ________ orbits.'",
+        "options": [
+          "planned",
+          "accidental",
+          "temporary",
+          "random"
+        ],
+        "answer": "planned"
+      },
+      {
+        "q": "What does the word 'milestone' mean in the context of the passage?",
+        "options": [
+          "A stone marking distance",
+          "A minor setback",
+          "An important event or stage",
+          "A scientific theory"
+        ],
+        "answer": "An important event or stage"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a function of the satellites?",
+        "options": [
+          "Monitoring global weather patterns",
+          "Tracking climate change",
+          "Providing data for disaster prevention",
+          "Transmitting television signals"
+        ],
+        "answer": "Transmitting television signals"
+      },
+      {
+        "q": "What is the part of speech of 'significantly' as used in the text?",
+        "options": [
+          "Noun",
+          "Verb",
+          "Adjective",
+          "Adverb"
+        ],
+        "answer": "Adverb"
+      },
+      {
+        "q": "Choose the synonym for 'enhance' as used in the text.",
+        "options": [
+          "decrease",
+          "improve",
+          "ignore",
+          "delay"
+        ],
+        "answer": "improve"
+      },
+      {
+        "q": "According to the passage, what is the current status of the satellites?",
+        "options": [
+          "They failed to launch.",
+          "They are functioning normally.",
+          "They are lost in space.",
+          "They are returning to Earth."
+        ],
+        "answer": "They are functioning normally."
+      }
+    ]
+  },
+  "article-6": {
+    "title": "美國國債破39兆，利息支出將破兆",
+    "tabTitle": "金融市場",
+    "english": "The United States national debt has officially surpassed $39 trillion, sparking concerns among economists about long-term fiscal sustainability. As interest rates remain elevated, the annual cost of servicing this massive debt is projected to exceed $1 trillion soon. This rising interest burden threatens to crowd out funding for essential government programs, including infrastructure and healthcare. Analysts warn that without significant policy adjustments or spending cuts, the growing deficit could trigger broader economic instability and weaken the global standing of the US dollar.",
+    "chinese": "美國國債已正式突破 39 兆美元，引發經濟學家對長期財政永續性的擔憂。由於利率維持在高位，償還這筆龐大債務的年利息支出預計很快將超過 1 兆美元。這項日益沉重的利息負擔，恐將擠壓基礎建設和醫療保健等重要政府計畫的資金。分析師警告，若沒有重大的政策調整或削減開支，不斷增長的赤字可能會引發更廣泛的經濟動盪，並削弱美元的國際地位。",
+    "vocabulary": [
+      "national debt (n. phr.): 國債",
+      "surpass (v.): 超過，越過",
+      "spark (v.): 引發，導火線",
+      "fiscal (adj.): 財政的",
+      "sustainability (n.): 永續性，可持續性",
+      "interest rate (n. phr.): 利率",
+      "elevated (adj.): 升高的，處於高位的",
+      "service (v.): 支付（債務）利息，償還",
+      "project (v.): 預計，預估",
+      "exceed (v.): 超過，超出",
+      "burden (n.): 負擔，重擔",
+      "crowd out (v. phr.): 擠出，排擠",
+      "infrastructure (n.): 基礎建設",
+      "analyst (n.): 分析師",
+      "adjustment (n.): 調整，適應",
+      "deficit (n.): 赤字，虧損",
+      "trigger (v.): 引發，觸發",
+      "instability (n.): 不穩定，動盪",
+      "standing (n.): 地位，名望",
+      "spending cut (n. phr.): 削減開支"
+    ],
+    "quiz": [
+      {
+        "q": "What has the US national debt recently surpassed?",
+        "options": [
+          "$39 billion",
+          "$39 trillion",
+          "$1 trillion",
+          "$30 trillion"
+        ],
+        "answer": "$39 trillion"
+      },
+      {
+        "q": "What is projected to exceed $1 trillion soon?",
+        "options": [
+          "Infrastructure budget",
+          "The national deficit",
+          "Annual interest costs on debt",
+          "US healthcare spending"
+        ],
+        "answer": "Annual interest costs on debt"
+      },
+      {
+        "q": "What does the word 'surpassed' mean in the text?",
+        "options": [
+          "decreased",
+          "exceeded",
+          "maintained",
+          "predicted"
+        ],
+        "answer": "exceeded"
+      },
+      {
+        "q": "Which word in the text means 'relating to government revenue, especially taxes'?",
+        "options": [
+          "elevated",
+          "massive",
+          "fiscal",
+          "stable"
+        ],
+        "answer": "fiscal"
+      },
+      {
+        "q": "Why are interest costs rising?",
+        "options": [
+          "Because interest rates remain elevated",
+          "Because the US dollar is weakening",
+          "Because infrastructure spending is decreasing",
+          "Because of policy adjustments"
+        ],
+        "answer": "Because interest rates remain elevated"
+      },
+      {
+        "q": "The phrase 'crowd out' in the text is closest in meaning to:",
+        "options": [
+          "support",
+          "push out or displace",
+          "gather together",
+          "increase"
+        ],
+        "answer": "push out or displace"
+      },
+      {
+        "q": "According to analysts, what could happen without spending cuts or policy adjustments?",
+        "options": [
+          "The national debt will disappear",
+          "Broader economic instability could be triggered",
+          "Interest rates will immediately drop",
+          "Infrastructure funding will double"
+        ],
+        "answer": "Broader economic instability could be triggered"
+      },
+      {
+        "q": "Choose the correct word: The government is trying to reduce its budget ______ by cutting unnecessary expenses.",
+        "options": [
+          "deficit",
+          "standing",
+          "sustainability",
+          "infrastructure"
+        ],
+        "answer": "deficit"
+      },
+      {
+        "q": "What is the meaning of 'infrastructure'?",
+        "options": [
+          "The basic physical and organizational structures needed for a society",
+          "The total amount of money borrowed by a government",
+          "An adjustment made to economic policy",
+          "The interest paid on loans"
+        ],
+        "answer": "The basic physical and organizational structures needed for a society"
+      },
+      {
+        "q": "What might be crowded out by the rising interest burden?",
+        "options": [
+          "High interest rates",
+          "The US dollar's global standing",
+          "Funding for essential government programs",
+          "National debt statistics"
+        ],
+        "answer": "Funding for essential government programs"
+      },
+      {
+        "q": "'Projected' in the context of 'projected to exceed' means:",
+        "options": [
+          "thrown forward",
+          "estimated or predicted",
+          "completed",
+          "rejected"
+        ],
+        "answer": "estimated or predicted"
+      },
+      {
+        "q": "Which of the following is an antonym to 'instability'?",
+        "options": [
+          "volatility",
+          "stability",
+          "fluctuation",
+          "insecurity"
+        ],
+        "answer": "stability"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
