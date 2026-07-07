@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUL 07, 2026：台灣經濟、金融市場 與 地緣政治</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣住宅補助新制七月上路，擴大受惠家庭\nTaiwan’s government officially launched a new housing subsidy program this July, aiming to expand financial support for low- and middle-income families. Under the revised policy, eligibility criteria have been relaxed to cover a broader range of households facing high rental costs. Additionally, the subsidy amount has been adjusted based on regional living costs and family sizes. Authorities expect this initiative to alleviate the financial burden on thousands of citizens, promoting housing justice and social stability across the nation.\n\n[2] 食藥署擴大毒油預防性下架，強化管理防堵食安\nTaiwan's Food and Drug Administration (FDA) has expanded its precautionary recall of contaminated cooking oil to ensure public health. This decision was made after trace amounts of industrial chemicals were detected in several batches during routine inspections. Officials have ordered supermarkets and restaurants nationwide to remove the affected products from their shelves immediately. In addition to the recall, the government plans to implement stricter oversight and regular audits on oil manufacturers to prevent future food safety crises.\n\n[3] 台積電CoPoS先進封裝技術受矚，外資上調目標價\nTSMC is attracting significant attention in the global semiconductor industry due to its revolutionary CoPoS (Chip-on-Polymer-on-Silicon) advanced packaging technology. Analysts predict that this technology will greatly enhance chip performance and energy efficiency, meeting the soaring demands of AI applications. Consequently, several major foreign brokerages have raised their price targets for TSMC, reflecting strong market confidence. This technological breakthrough is expected to solidify TSMC's dominance in the high-end semiconductor manufacturing market.",
+    "chinese": "【1】台灣住宅補助新制七月上路，擴大受惠家庭\n台灣政府於今年七月正式推出全新住宅補助計劃，旨在擴大對中低收入家庭的財務支持。在修正後的政策下，申請資格已放寬，以納入更多面臨高額租金負擔的家庭。此外，補助金額也根據區域生活成本和家庭人數進行了調整。主管機關預期此項措施將減輕數萬名國民的經濟負擔，進而促進全國的居住正義與社會穩定。\n\n【2】食藥署擴大毒油預防性下架，強化管理防堵食安\n台灣食品藥物管理署（食藥署）已擴大對受污染食用油的預防性下架回收，以確保公眾健康。此一決定是在例行檢查中，於數個批次中檢測出微量工業化學物質後所做出的。官方已命令全國的超市和餐廳立即將受影響的產品從貨架上撤下。除了回收之外，政府還計劃對油脂製造商實施更嚴格的監督和定期審計，以防止未來的食品安全危機。\n\n【3】台積電CoPoS先進封裝技術受矚，外資上調目標價\n台積電因其革命性的 CoPoS（晶片堆疊於高分子與矽晶圓上）先進封裝技術，在全球半導體產業中備受矚目。分析師預測，該技術將大幅提升晶片效能與能源效率，以滿足人工智慧應用激增的需求。因此，幾家主要外資券商已調高台積電的目標價，反映出強烈的市場信心。這項技術突破預計將鞏固台積電在高端半導體製造市場的霸主地位。",
+    "vocabulary": [
+      "subsidy (n.): 補助金，津貼",
+      "launch (v.): 推出，發起",
+      "aim (v.): 旨在，目標在於",
+      "expand (v.): 擴大，擴展",
+      "financial (adj.): 財務的，金融的",
+      "revised (adj.): 修正的，修改過的",
+      "policy (n.): 政策",
+      "eligibility (n.): 資格，合適性",
+      "criteria (n.): 標準，準則",
+      "relax (v.): 放寬，放鬆",
+      "household (n.): 家庭，戶",
+      "rental (adj.): 租賃的，出租的",
+      "adjust (v.): 調整，調節",
+      "regional (adj.): 區域的，地區的",
+      "authority (n.): 當局，官方，主管機關",
+      "initiative (n.): 倡議，新措施",
+      "alleviate (v.): 減輕，緩和",
+      "burden (n.): 負擔",
+      "justice (n.): 正義，公平",
+      "stability (n.): 穩定，穩定性",
+      "Food and Drug Administration (n.): 食品藥物管理署",
+      "expand (v.): 擴大",
+      "precautionary (adj.): 預防性的",
+      "recall (n.): 回收；召回",
+      "contaminated (adj.): 受污染的",
+      "cooking oil (n.): 食用油",
+      "ensure (v.): 確保",
+      "public health (n.): 公眾健康",
+      "trace amount (n.): 微量",
+      "industrial chemical (n.): 工業化學物質",
+      "detect (v.): 檢測；發現",
+      "batch (n.): 批；批次",
+      "routine inspection (n.): 例行檢查",
+      "nationwide (adv.): 全國性地",
+      "remove (v.): 移除；撤下",
+      "implement (v.): 實施；執行",
+      "oversight (n.): 監督；監管",
+      "audit (n.): 審計；稽查",
+      "manufacturer (n.): 製造商",
+      "food safety crisis (n.): 食品安全危機",
+      "semiconductor (n.): 半導體",
+      "packaging (n.): 封裝",
+      "revolutionary (adj.): 革命性的",
+      "enhance (v.): 提升，增強",
+      "efficiency (n.): 效率",
+      "soaring (adj.): 急升的，猛增的",
+      "consequently (adv.): 因此，結果",
+      "brokerage (n.): 證券商，經紀商",
+      "reflect (v.): 反映，顯現",
+      "confidence (n.): 信心",
+      "breakthrough (n.): 突破",
+      "solidify (v.): 鞏固，使穩定",
+      "dominance (n.): 支配地位，優勢",
+      "manufacture (v.): 製造",
+      "predict (v.): 預測",
+      "application (n.): 應用",
+      "target (n.): 目標",
+      "attention (n.): 注意，矚目",
+      "demand (n.): 需求",
+      "significant (adj.): 顯著的，重大的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of Taiwan's new housing subsidy program?",
+        "options": [
+          "A) To increase taxes on rental properties",
+          "B) To expand financial support for low- and middle-income families",
+          "C) To encourage citizens to buy luxury apartments",
+          "D) To decrease regional living costs"
+        ],
+        "answer": "B) To expand financial support for low- and middle-income families"
+      },
+      {
+        "q": "What does the word 'subsidy' mean in the text?",
+        "options": [
+          "A) A tax paid to the government",
+          "B) A fine for breaking laws",
+          "C) Money granted by the government to help support someone",
+          "D) A monthly rent payment"
+        ],
+        "answer": "C) Money granted by the government to help support someone"
+      },
+      {
+        "q": "According to the text, how have the eligibility criteria changed?",
+        "options": [
+          "A) They have been relaxed to cover more households.",
+          "B) They have been tightened to exclude low-income families.",
+          "C) They have been completely canceled.",
+          "D) They now only apply to regional governments."
+        ],
+        "answer": "A) They have been relaxed to cover more households."
+      },
+      {
+        "q": "Which word is closest in meaning to 'alleviate'?",
+        "options": [
+          "A) Increase",
+          "B) Ease",
+          "C) Ignore",
+          "D) Create"
+        ],
+        "answer": "B) Ease"
+      },
+      {
+        "q": "On what factors is the adjusted subsidy amount based?",
+        "options": [
+          "A) National GDP and inflation rates",
+          "B) Regional living costs and family sizes",
+          "C) Age of the building and location",
+          "D) Individual career background"
+        ],
+        "answer": "B) Regional living costs and family sizes"
+      },
+      {
+        "q": "What is the singular form of 'criteria'?",
+        "options": [
+          "A) Criterias",
+          "B) Criterium",
+          "C) Criterion",
+          "D) Critera"
+        ],
+        "answer": "C) Criterion"
+      },
+      {
+        "q": "What long-term goals do the authorities expect to promote through this initiative?",
+        "options": [
+          "A) Real estate monopolies",
+          "B) Housing justice and social stability",
+          "C) Population reduction in cities",
+          "D) Higher rental prices"
+        ],
+        "answer": "B) Housing justice and social stability"
+      },
+      {
+        "q": "In the context of the passage, what does 'initiative' refer to?",
+        "options": [
+          "A) A new law enforcement unit",
+          "B) A commercial advertisement",
+          "C) A new plan or program to solve a problem",
+          "D) An academic research paper"
+        ],
+        "answer": "C) A new plan or program to solve a problem"
+      },
+      {
+        "q": "Under the _____ policy, more families can apply for the housing benefits.",
+        "options": [
+          "A) revised",
+          "B) revising",
+          "C) revise",
+          "D) revision"
+        ],
+        "answer": "A) revised"
+      },
+      {
+        "q": "A 'household' is defined as:",
+        "options": [
+          "A) A store that sells furniture",
+          "B) A group of people living together in one home",
+          "C) A government office building",
+          "D) A construction company"
+        ],
+        "answer": "B) A group of people living together in one home"
+      },
+      {
+        "q": "When was the new housing subsidy program officially launched?",
+        "options": [
+          "A) June 2026",
+          "B) July 2026",
+          "C) August 2026",
+          "D) January 2026"
+        ],
+        "answer": "B) July 2026"
+      },
+      {
+        "q": "The term 'regional' relates to:",
+        "options": [
+          "A) A specific area or part of a country",
+          "B) The entire world",
+          "C) Space exploration",
+          "D) History and culture"
+        ],
+        "answer": "A) A specific area or part of a country"
+      },
+      {
+        "q": "What does 'precautionary' mean in the context of the passage?",
+        "options": [
+          "Done to prevent harm",
+          "Happening by accident",
+          "Expensive to buy",
+          "Related to medicine"
+        ],
+        "answer": "Done to prevent harm"
+      },
+      {
+        "q": "Why did the FDA expand the recall of the cooking oil?",
+        "options": [
+          "The oil was too expensive.",
+          "Trace amounts of industrial chemicals were found.",
+          "The oil expired last year.",
+          "Customers complained about the taste."
+        ],
+        "answer": "Trace amounts of industrial chemicals were found."
+      },
+      {
+        "q": "Which word is closest in meaning to 'contaminated'?",
+        "options": [
+          "Purified",
+          "Polluted",
+          "Improved",
+          "Prepared"
+        ],
+        "answer": "Polluted"
+      },
+      {
+        "q": "Who has been ordered to remove the affected products immediately?",
+        "options": [
+          "Only international schools",
+          "Supermarkets and restaurants nationwide",
+          "Individual households",
+          "Oil manufacturing workers"
+        ],
+        "answer": "Supermarkets and restaurants nationwide"
+      },
+      {
+        "q": "Complete the sentence: 'The company was forced to ________ the defective cars.'",
+        "options": [
+          "recall",
+          "expand",
+          "detect",
+          "audit"
+        ],
+        "answer": "recall"
+      },
+      {
+        "q": "What is the meaning of 'oversight' as used in government regulations?",
+        "options": [
+          "An accidental mistake",
+          "Looking past something",
+          "Regulatory supervision",
+          "Rapid production"
+        ],
+        "answer": "Regulatory supervision"
+      },
+      {
+        "q": "What is one of the government's future plans to prevent further crises?",
+        "options": [
+          "To close down all oil factories permanently",
+          "To import oil from other countries only",
+          "To implement stricter oversight and regular audits",
+          "To reduce the price of cooking oil"
+        ],
+        "answer": "To implement stricter oversight and regular audits"
+      },
+      {
+        "q": "In 'This decision was made...', 'was made' is in which voice?",
+        "options": [
+          "Active voice",
+          "Passive voice",
+          "Subjunctive mood",
+          "Imperative mood"
+        ],
+        "answer": "Passive voice"
+      },
+      {
+        "q": "'Routine inspections' are inspections that are done ________.",
+        "options": [
+          "only once a decade",
+          "regularly as a standard procedure",
+          "during emergencies only",
+          "by untrained volunteers"
+        ],
+        "answer": "regularly as a standard procedure"
+      },
+      {
+        "q": "Where were the industrial chemicals detected?",
+        "options": [
+          "In the water supply",
+          "In several batches of cooking oil",
+          "In the soil of the farms",
+          "In the packaging materials"
+        ],
+        "answer": "In several batches of cooking oil"
+      },
+      {
+        "q": "What does 'ensure' mean?",
+        "options": [
+          "To make certain that something will occur",
+          "To doubt the truth of",
+          "To pay money for safety",
+          "To ignore a warning"
+        ],
+        "answer": "To make certain that something will occur"
+      },
+      {
+        "q": "In the phrase 'to prevent future food safety crises', 'crises' is the plural form of ________.",
+        "options": [
+          "crisises",
+          "crisis",
+          "cry",
+          "criteria"
+        ],
+        "answer": "crisis"
+      },
+      {
+        "q": "What is the main reason TSMC is attracting attention?",
+        "options": [
+          "Its new factory in Arizona",
+          "Its CoPoS advanced packaging technology",
+          "A decrease in chip prices",
+          "Its acquisition of another company"
+        ],
+        "answer": "Its CoPoS advanced packaging technology"
+      },
+      {
+        "q": "What do analysts predict the CoPoS technology will improve?",
+        "options": [
+          "Chip size and weight",
+          "Chip performance and energy efficiency",
+          "Manufacturing costs alone",
+          "Labor conditions"
+        ],
+        "answer": "Chip performance and energy efficiency"
+      },
+      {
+        "q": "Why is there a soaring demand for better chip performance?",
+        "options": [
+          "Due to AI applications",
+          "Due to cryptocurrency mining drop",
+          "Due to smartphone sales decline",
+          "Due to global shipping delays"
+        ],
+        "answer": "Due to AI applications"
+      },
+      {
+        "q": "What action did foreign brokerages take regarding TSMC?",
+        "options": [
+          "They sold all their shares",
+          "They raised TSMC's price targets",
+          "They lowered TSMC's rating",
+          "They merged with TSMC"
+        ],
+        "answer": "They raised TSMC's price targets"
+      },
+      {
+        "q": "What does the raised price target reflect?",
+        "options": [
+          "Market uncertainty",
+          "Strong market confidence",
+          "A lack of resources",
+          "High inflation rates"
+        ],
+        "answer": "Strong market confidence"
+      },
+      {
+        "q": "What is the expected outcome of TSMC's technological breakthrough?",
+        "options": [
+          "It will solidify TSMC's dominance in high-end manufacturing",
+          "It will lead to a market crash",
+          "It will cause TSMC to lose its market share",
+          "It will force TSMC to stop production"
+        ],
+        "answer": "It will solidify TSMC's dominance in high-end manufacturing"
+      },
+      {
+        "q": "Which word is closest in meaning to 'enhance'?",
+        "options": [
+          "improve",
+          "decrease",
+          "ignore",
+          "destroy"
+        ],
+        "answer": "improve"
+      },
+      {
+        "q": "What does 'soaring' mean in the context of the passage?",
+        "options": [
+          "falling rapidly",
+          "rising quickly",
+          "staying stable",
+          "disappearing"
+        ],
+        "answer": "rising quickly"
+      },
+      {
+        "q": "Complete the sentence: 'The new technology will ______ TSMC's position in the market.'",
+        "options": [
+          "weaken",
+          "solidify",
+          "neglect",
+          "postpone"
+        ],
+        "answer": "solidify"
+      },
+      {
+        "q": "What is the Chinese meaning of 'brokerage'?",
+        "options": [
+          "政府機構",
+          "證券商，經紀商",
+          "製造工廠",
+          "消費者"
+        ],
+        "answer": "證券商，經紀商"
+      },
+      {
+        "q": "Which of the following is an adjective meaning 'revolutionary'?",
+        "options": [
+          "革命性的",
+          "保守的",
+          "落後的",
+          "簡單的"
+        ],
+        "answer": "革命性的"
+      },
+      {
+        "q": "What does 'dominance' refer to?",
+        "options": [
+          "A state of being weak",
+          "Power and influence over others",
+          "A financial loss",
+          "A type of packaging material"
+        ],
+        "answer": "Power and influence over others"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美國非農數據遜預期，聯準會升息預期降溫道指創新高",
+    "tabTitle": "金融市場",
+    "english": "The latest US non-farm payrolls report showed weaker-than-expected job growth, indicating a cooling labor market. This disappointing economic data has significantly lowered market expectations for further aggressive interest rate hikes by the Federal Reserve. Investors reacted positively to the prospect of a more accommodative monetary policy, sending Wall Street into a broad rally. Consequently, the Dow Jones Industrial Average surged to a historic new high, driven by strong gains in technology and financial sectors.",
+    "chinese": "最新的美國非農就業報告顯示就業增長弱於預期，表明勞動力市場正在降溫。這一令人失望的經濟數據顯著降低了市場對聯準會進一步激進升息的預期。投資人對貨幣政策可能放寬的前景做出積極反應，推動華爾街股市全面上漲。因此，在科技和金融板塊強勁上漲的推動下，道瓊工業平均指數飆升至歷史新高。",
+    "vocabulary": [
+      "non-farm payrolls (n.): 非農就業人口",
+      "expectation (n.): 預期",
+      "labor market (n.): 勞動力市場",
+      "disappointing (adj.): 令人失望的",
+      "significantly (adv.): 顯著地",
+      "aggressive (adj.): 激進的",
+      "interest rate (n.): 利率",
+      "Federal Reserve (n.): 聯邦準備理事會（聯準會）",
+      "investor (n.): 投資人",
+      "prospect (n.): 前景、展望",
+      "accommodative (adj.): 融通的、寬鬆的",
+      "monetary policy (n.): 貨幣政策",
+      "rally (n.): 股市反彈、回升",
+      "consequently (adv.): 因此、結果",
+      "surge (v.): 飆升、急遽上升",
+      "historic (adj.): 有歷史意義的、歷史性的",
+      "sector (n.): 行業、板塊",
+      "job growth (n.): 就業增長",
+      "cool (v.): 降溫、冷卻",
+      "drive (v.): 推動、驅使"
+    ],
+    "quiz": [
+      {
+        "q": "What did the latest US non-farm payrolls report indicate?",
+        "options": [
+          "A rapidly growing labor market",
+          "A cooling labor market",
+          "No change in employment rates",
+          "A sudden rise in inflation"
+        ],
+        "answer": "A cooling labor market"
+      },
+      {
+        "q": "How did the market react to the disappointing economic data regarding the Fed's next moves?",
+        "options": [
+          "Expectations for aggressive rate hikes increased",
+          "Expectations for aggressive rate hikes decreased",
+          "The Fed immediately announced a rate cut",
+          "Investors ignored the data completely"
+        ],
+        "answer": "Expectations for aggressive rate hikes decreased"
+      },
+      {
+        "q": "What does 'accommodative monetary policy' refer to in this context?",
+        "options": [
+          "High interest rates to stop spending",
+          "Strict regulations on commercial banks",
+          "Looser monetary policy to support the economy",
+          "A policy that tightens the money supply"
+        ],
+        "answer": "Looser monetary policy to support the economy"
+      },
+      {
+        "q": "Which stock index reached a historic new high?",
+        "options": [
+          "Nasdaq Composite",
+          "S&P 500 Index",
+          "Dow Jones Industrial Average",
+          "Russell 2000"
+        ],
+        "answer": "Dow Jones Industrial Average"
+      },
+      {
+        "q": "Which sectors primarily drove the surge in the Dow Jones?",
+        "options": [
+          "Energy and agriculture",
+          "Technology and financial",
+          "Healthcare and real estate",
+          "Transportation and utilities"
+        ],
+        "answer": "Technology and financial"
+      },
+      {
+        "q": "What is the meaning of the verb 'surge' as used in the news?",
+        "options": [
+          "To fall rapidly",
+          "To remain stable",
+          "To rise powerfully and quickly",
+          "To fluctuate slightly"
+        ],
+        "answer": "To rise powerfully and quickly"
+      },
+      {
+        "q": "How did investors react to the prospect of a more accommodative monetary policy?",
+        "options": [
+          "Positively",
+          "Negatively",
+          "Indifferently",
+          "With panic selling"
+        ],
+        "answer": "Positively"
+      },
+      {
+        "q": "What does 'non-farm payrolls' measure?",
+        "options": [
+          "Agricultural jobs only",
+          "Total number of paid US workers excluding farm employees and some others",
+          "Government spending on unemployment benefits",
+          "The performance of agricultural stocks"
+        ],
+        "answer": "Total number of paid US workers excluding farm employees and some others"
+      },
+      {
+        "q": "Fill in the blank: 'The disappointing data lowered expectations for _______ interest rate hikes.'",
+        "options": [
+          "aggressive",
+          "defensive",
+          "minor",
+          "temporary"
+        ],
+        "answer": "aggressive"
+      },
+      {
+        "q": "What is the Chinese translation for the vocabulary word 'prospect'?",
+        "options": [
+          "歷史",
+          "前景、展望",
+          "投資人",
+          "政策"
+        ],
+        "answer": "前景、展望"
+      },
+      {
+        "q": "Which word in the text means 'as a result'?",
+        "options": [
+          "Significantly",
+          "Consequently",
+          "Positively",
+          "Accommodative"
+        ],
+        "answer": "Consequently"
+      },
+      {
+        "q": "Why did Wall Street experience a broad rally?",
+        "options": [
+          "Due to higher-than-expected inflation numbers",
+          "Due to the prospect of accommodative monetary policy",
+          "Because of strong agricultural data",
+          "Due to a major decline in technology stocks"
+        ],
+        "answer": "Due to the prospect of accommodative monetary policy"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "中國海軍成功試射潛射戰略導彈，強化核威懾力量",
+    "tabTitle": "地緣政治",
+    "english": "The Chinese People's Liberation Army Navy has successfully conducted a test launch of its latest submarine-launched strategic ballistic missile, according to official defense sources. The test, which took place in the South China Sea, demonstrated the operational readiness and precision of the nation's sea-based nuclear triad. Military analysts suggest that this successful launch is aimed at bolstering China's strategic deterrence capabilities amid rising regional tensions. The defense ministry emphasized that its nuclear policy remains defensive in nature.",
+    "chinese": "根據官方國防消息來源，中國人民解放軍海軍已成功進行了其最新型潛射戰略彈道飛彈的試射。這項在南海進行的測試，展示了該國海基核三位一體打擊力量的作戰準備狀態與精準度。軍事分析家指出，在區域緊張局勢升溫之際，這次成功的發射旨在強化中國的戰略威懾能力。國防部則強調，其核武政策本質上仍屬防衛性質。",
+    "vocabulary": [
+      "conduct (v.): 進行、實施",
+      "submarine-launched (adj.): 潛射的",
+      "strategic (adj.): 戰略的、策略性的",
+      "ballistic missile (n. phr.): 彈道飛彈",
+      "defense (n.): 國防、防衛",
+      "demonstrate (v.): 展示、證明",
+      "operational (adj.): 作戰的、運作上的",
+      "readiness (n.): 準備就緒狀態",
+      "precision (n.): 精準度、精確性",
+      "nuclear triad (n. phr.): 核三位一體",
+      "analyst (n.): 分析家、分析人員",
+      "bolster (v.): 強化、支持",
+      "deterrence (n.): 威懾、阻嚇",
+      "capability (n.): 能力、容量",
+      "regional (adj.): 區域的、地區性的",
+      "tension (n.): 緊張局勢、緊張關係",
+      "emphasize (v.): 強調、著重",
+      "defensive (adj.): 防衛性的、防禦的",
+      "in nature (phr.): 本質上",
+      "take place (v. phr.): 發生、舉行"
+    ],
+    "quiz": [
+      {
+        "q": "Where did the missile test take place?",
+        "options": [
+          "A. The East China Sea",
+          "B. The South China Sea",
+          "C. The Pacific Ocean",
+          "D. The Indian Ocean"
+        ],
+        "answer": "B. The South China Sea"
+      },
+      {
+        "q": "What is the main purpose of this successful launch according to military analysts?",
+        "options": [
+          "A. To start an offensive war",
+          "B. To test a space rocket",
+          "C. To bolster strategic deterrence capabilities",
+          "D. To sign a peace treaty"
+        ],
+        "answer": "C. To bolster strategic deterrence capabilities"
+      },
+      {
+        "q": "What does the word 'bolster' mean in the context of the passage?",
+        "options": [
+          "A. To weaken",
+          "B. To strengthen",
+          "C. To ignore",
+          "D. To delay"
+        ],
+        "answer": "B. To strengthen"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'precision'?",
+        "options": [
+          "A. Accuracy",
+          "B. Speed",
+          "C. Size",
+          "D. Danger"
+        ],
+        "answer": "A. Accuracy"
+      },
+      {
+        "q": "How did the defense ministry describe its nuclear policy?",
+        "options": [
+          "A. Aggressive",
+          "B. Unpredictable",
+          "C. Defensive in nature",
+          "D. Non-existent"
+        ],
+        "answer": "C. Defensive in nature"
+      },
+      {
+        "q": "In the sentence 'The test, which took place...', the word 'which' is a ________.",
+        "options": [
+          "A. relative pronoun",
+          "B. conjunction",
+          "C. preposition",
+          "D. adverb"
+        ],
+        "answer": "A. relative pronoun"
+      },
+      {
+        "q": "What does 'readiness' mean?",
+        "options": [
+          "A. The state of being prepared",
+          "B. The speed of movement",
+          "C. The act of reading",
+          "D. The level of difficulty"
+        ],
+        "answer": "A. The state of being prepared"
+      },
+      {
+        "q": "Which branch of the military conducted the test?",
+        "options": [
+          "A. Air Force",
+          "B. Army",
+          "C. Navy",
+          "D. Space Force"
+        ],
+        "answer": "C. Navy"
+      },
+      {
+        "q": "The term 'nuclear triad' refers to military capabilities spanning land, air, and ________.",
+        "options": [
+          "A. sea",
+          "B. cyber",
+          "C. space",
+          "D. underground"
+        ],
+        "answer": "A. sea"
+      },
+      {
+        "q": "Choose the correct word to complete the sentence: 'The military successfully _______ the operation yesterday.'",
+        "options": [
+          "A. conduct",
+          "B. conducted",
+          "C. conducting",
+          "D. conducts"
+        ],
+        "answer": "B. conducted"
+      },
+      {
+        "q": "What is the meaning of 'deterrence'?",
+        "options": [
+          "A. The act of discouraging an action through fear of consequences",
+          "B. The act of declaring war immediately",
+          "C. A peaceful negotiation process",
+          "D. A system of economic sanctions"
+        ],
+        "answer": "A. The act of discouraging an action through fear of consequences"
+      },
+      {
+        "q": "What type of missile was tested?",
+        "options": [
+          "A. Air-to-air missile",
+          "B. Submarine-launched strategic ballistic missile",
+          "C. Short-range cruise missile",
+          "D. Surface-to-air defense missile"
+        ],
+        "answer": "B. Submarine-launched strategic ballistic missile"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "Anthropic斥資150億美元澳洲建數據中心，Meta轉單三星2奈米晶片",
+    "tabTitle": "科技",
+    "english": "Anthropic has announced a massive $15 billion investment to construct a state-of-the-art data center in Australia, aiming to boost its AI infrastructure in the Asia-Pacific region. Meanwhile, in a significant shift within the semiconductor industry, Meta has reportedly decided to redirect its next-generation chip orders to Samsung's advanced 2-nanometer process. This strategic move by Meta highlights growing competition among chipmakers and represents a major victory for Samsung over its rivals. These developments underscore the rapidly expanding global demand for high-performance computing power.",
+    "chinese": "Anthropic 宣布了一項高達 150 億美元的龐大投資計畫，將在澳洲建設一座先進的數據中心，旨在提升其在亞太地區的人工智慧基礎設施。與此同時，半導體行業出現重大轉變，據報導 Meta 已決定將其下一代晶片訂單轉向三星先進的 2 奈米製程。Meta 的這一戰略舉措突顯了晶片製造商之間日益激烈的競爭，也代表了三星超越對手的重大勝利。這些發展均突顯了全球對高效能運算能力快速增長的需求。",
+    "vocabulary": [
+      "invest (v.): 投資",
+      "infrastructure (n.): 基礎建設",
+      "state-of-the-art (adj.): 最先進的",
+      "semiconductor (n.): 半導體",
+      "redirect (v.): 重新定向；轉移",
+      "nanometer (n.): 奈米",
+      "strategic (adj.): 戰略性的",
+      "competition (n.): 競爭",
+      "rival (n.): 競爭對手",
+      "underscore (v.): 強調；突出",
+      "expand (v.): 擴張；擴大",
+      "high-performance (adj.): 高效能的",
+      "computing power (n. phr.): 運算能力",
+      "massive (adj.): 巨大的；龐大的",
+      "construct (v.): 建造；構建",
+      "aim to (v. phr.): 旨在；以...為目標",
+      "boost (v.): 促進；提升",
+      "region (n.): 地區",
+      "process (n.): 製程；過程",
+      "development (n.): 發展；進展"
+    ],
+    "quiz": [
+      {
+        "q": "How much money is Anthropic investing in Australia?",
+        "options": [
+          "$15 million",
+          "$1.5 billion",
+          "$15 billion",
+          "$150 billion"
+        ],
+        "answer": "$15 billion"
+      },
+      {
+        "q": "Where is Anthropic building its new data center?",
+        "options": [
+          "The United States",
+          "Australia",
+          "South Korea",
+          "Taiwan"
+        ],
+        "answer": "Australia"
+      },
+      {
+        "q": "What is Anthropic's main goal for building the data center?",
+        "options": [
+          "To manufacture 2nm chips",
+          "To boost its AI infrastructure in the Asia-Pacific",
+          "To compete directly with Meta's social media",
+          "To reduce global energy consumption"
+        ],
+        "answer": "To boost its AI infrastructure in the Asia-Pacific"
+      },
+      {
+        "q": "Which company is shifting its chip orders to Samsung?",
+        "options": [
+          "Anthropic",
+          "Apple",
+          "Microsoft",
+          "Meta"
+        ],
+        "answer": "Meta"
+      },
+      {
+        "q": "What technology process will Samsung use to manufacture Meta's new chips?",
+        "options": [
+          "3-nanometer",
+          "2-nanometer",
+          "5-nanometer",
+          "7-nanometer"
+        ],
+        "answer": "2-nanometer"
+      },
+      {
+        "q": "What does the word 'state-of-the-art' mean?",
+        "options": [
+          "Old-fashioned",
+          "Very artistic",
+          "Most advanced",
+          "Inexpensive"
+        ],
+        "answer": "Most advanced"
+      },
+      {
+        "q": "The word 'underscore' in the text is closest in meaning to ________.",
+        "options": [
+          "ignore",
+          "emphasize",
+          "undermine",
+          "predict"
+        ],
+        "answer": "emphasize"
+      },
+      {
+        "q": "Which industry is experiencing a 'significant shift' according to the text?",
+        "options": [
+          "The automobile industry",
+          "The semiconductor industry",
+          "The real estate industry",
+          "The agricultural industry"
+        ],
+        "answer": "The semiconductor industry"
+      },
+      {
+        "q": "What does Meta's strategic move highlight?",
+        "options": [
+          "Growing competition among chipmakers",
+          "A decline in global internet usage",
+          "The failure of Samsung's technology",
+          "A reduction in AI investments"
+        ],
+        "answer": "Growing competition among chipmakers"
+      },
+      {
+        "q": "According to the text, what is rapidly expanding globally?",
+        "options": [
+          "The supply of cheap labor",
+          "The demand for high-performance computing power",
+          "The number of social media platforms",
+          "The cost of building traditional offices"
+        ],
+        "answer": "The demand for high-performance computing power"
+      },
+      {
+        "q": "What is the meaning of the word 'rival'?",
+        "options": [
+          "A supporter",
+          "A competitor",
+          "A customer",
+          "A partner"
+        ],
+        "answer": "A competitor"
+      },
+      {
+        "q": "Complete the sentence: Anthropic's massive investment will help ________ its AI capabilities.",
+        "options": [
+          "boost",
+          "reduce",
+          "ignore",
+          "prevent"
+        ],
+        "answer": "boost"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "微軟推出全新Surface系列，強化AI時代運算效能",
+    "tabTitle": "科技",
+    "english": "Microsoft has officially unveiled its latest Surface lineup, designed specifically to meet the demands of the rapidly evolving AI era. The new devices feature advanced processors that significantly boost AI computing performance, allowing users to run complex machine learning models locally. Furthermore, Microsoft integrated specialized neural processing units (NPUs) to enhance energy efficiency and speed up daily tasks. Industry analysts expect these hardware upgrades to strengthen Microsoft's position in the competitive personal computer market.",
+    "chinese": "微軟正式推出了其最新的 Surface 系列產品，專為滿足快速發展的人工智慧時代的需求而設計。這些新裝置配備了先進的處理器，可顯著提升 AI 運算效能，讓使用者能夠在本地運行複雜的機器學習模型。此外，微軟整合了專門的神經處理單元（NPU），以提高能源效率並加速日常任務。產業分析師預計，這些硬體升級將鞏固微軟在競爭激烈的個人電腦市場中的地位。",
+    "vocabulary": [
+      "unveil (v.): 發表；推出",
+      "lineup (n.): 產品陣容",
+      "specifically (adv.): 專門地；特別地",
+      "demand (n.): 需求",
+      "rapidly (adv.): 迅速地",
+      "evolve (v.): 發展；演變",
+      "era (n.): 時代",
+      "feature (v.): 以...為特色",
+      "advanced (adj.): 先進的",
+      "significantly (adv.): 顯著地",
+      "boost (v.): 提升；促進",
+      "locally (adv.): 在本地",
+      "integrate (v.): 整合；合併",
+      "neural (adj.): 神經的",
+      "enhance (v.): 增強；提高",
+      "efficiency (n.): 效率",
+      "analyst (n.): 分析師",
+      "hardware (n.): 硬體",
+      "strengthen (v.): 鞏固；加強",
+      "competitive (adj.): 競爭激烈的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of Microsoft's new Surface lineup?",
+        "options": [
+          "To replace all traditional desktop computers",
+          "To meet the demands of the evolving AI era",
+          "To reduce the price of personal computers",
+          "To focus solely on cloud computing"
+        ],
+        "answer": "To meet the demands of the evolving AI era"
+      },
+      {
+        "q": "What hardware component was integrated to enhance energy efficiency?",
+        "options": [
+          "Graphics Processing Units (GPUs)",
+          "Neural Processing Units (NPUs)",
+          "Random Access Memory (RAM)",
+          "Hard Disk Drives (HDDs)"
+        ],
+        "answer": "Neural Processing Units (NPUs)"
+      },
+      {
+        "q": "According to the text, what can users do locally with the new devices?",
+        "options": [
+          "Mine cryptocurrency faster",
+          "Run complex machine learning models",
+          "Play high-end games without internet",
+          "Build physical computer hardware"
+        ],
+        "answer": "Run complex machine learning models"
+      },
+      {
+        "q": "What do industry analysts expect from these hardware upgrades?",
+        "options": [
+          "A decline in Microsoft's stock price",
+          "A transition to mobile-only software",
+          "A stronger position for Microsoft in the PC market",
+          "Increased reliance on external servers"
+        ],
+        "answer": "A stronger position for Microsoft in the PC market"
+      },
+      {
+        "q": "What is the meaning of the word 'unveil' in the context of the passage?",
+        "options": [
+          "To hide from the public",
+          "To introduce or show for the first time",
+          "To cancel a project",
+          "To fix a technical error"
+        ],
+        "answer": "To introduce or show for the first time"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'boost'?",
+        "options": [
+          "decrease",
+          "ignore",
+          "improve",
+          "delay"
+        ],
+        "answer": "improve"
+      },
+      {
+        "q": "The word 'locally' in the text means that the AI models are run _______.",
+        "options": [
+          "on a remote cloud server",
+          "in physical retail stores",
+          "on the user's own device",
+          "by artificial intelligence itself"
+        ],
+        "answer": "on the user's own device"
+      },
+      {
+        "q": "Complete the sentence: 'The software company hopes to _______ its position by acquiring smaller startups.'",
+        "options": [
+          "evolve",
+          "strengthen",
+          "unveil",
+          "feature"
+        ],
+        "answer": "strengthen"
+      },
+      {
+        "q": "What does 'efficiency' refer to in the text?",
+        "options": [
+          "Working productively without wasting energy or effort",
+          "The speed of the internet connection",
+          "The weight of the device",
+          "The price of the hardware components"
+        ],
+        "answer": "Working productively without wasting energy or effort"
+      },
+      {
+        "q": "Which of the following is a synonym for 'significantly'?",
+        "options": [
+          "slightly",
+          "considerably",
+          "rarely",
+          "temporarily"
+        ],
+        "answer": "considerably"
+      },
+      {
+        "q": "The phrase 'rapidly evolving' suggests that the AI era is _______.",
+        "options": [
+          "changing very slowly",
+          "developing quickly",
+          "coming to an end",
+          "staying the same"
+        ],
+        "answer": "developing quickly"
+      },
+      {
+        "q": "What is the part of speech of 'competitive' in the phrase 'competitive personal computer market'?",
+        "options": [
+          "Noun",
+          "Verb",
+          "Adjective",
+          "Adverb"
+        ],
+        "answer": "Adjective"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
