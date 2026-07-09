@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUL 09, 2026：台灣經濟、地緣政治 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台灣2026人均GDP預計超越日韓\nAccording to the latest economic forecasts released in July 2026, Taiwan's GDP per capita is projected to surpass those of Japan and South Korea by the end of the year. This impressive growth is largely driven by the continuous expansion of Taiwan's semiconductor industry and robust global demand for high-tech exports. Economists attribute this milestone to strategic industrial upgrades and strong domestic investment. Consequently, Taiwan is solidifying its position as a leading economic powerhouse in East Asia, reflecting its resilience amid global market fluctuations.\n\n[2] 全球半導體拋售潮 台積電股價下跌\nTSMC's stock price experienced a significant decline on Thursday following a massive sell-off in the global semiconductor sector. Investors grew cautious due to rising geopolitical tensions and fears of slowing demand for consumer electronics. Analysts suggest that while the long-term outlook for artificial intelligence remains strong, short-term market corrections are inevitable. This sudden downturn has triggered similar losses across major tech hubs in Asia and the United States, raising concerns about near-term economic growth.\n\n[3] 台股大盤震盪收黑 賣壓湧現\nThe Taiwan Stock Exchange Capitalization Weighted Stock Index (TAIEX) closed lower on Thursday as heavy selling pressure emerged in the afternoon session. Investors locked in profits following recent gains, particularly targeting major semiconductor and technology stocks. Despite a strong morning performance driven by positive global cues, the market experienced high volatility and ultimately finished in negative territory. Analysts suggested that cautious sentiment prevailed ahead of upcoming corporate earnings reports and key economic data.",
+    "chinese": "【1】台灣2026人均GDP預計超越日韓\n根據2026年7月發布的最新經濟預測，台灣的人均國內生產毛額（GDP）預計將在今年年底前超越日本和韓國。這一令人矚目的成長主要得益於台灣半導體產業的持續擴張，以及全球對高科技出口的強勁需求。經濟學家將這一里程碑歸功於戰略性產業升級和強勁的國內投資。因此，台灣正在鞏固其作為東亞領先經濟強國的地位，反映出其在全球市場波動中的韌性。\n\n【2】全球半導體拋售潮 台積電股價下跌\n由於全球半導體板塊出現大規模拋售，台積電股價於週四大幅下跌。因地緣政治緊張局勢升溫以及對消費性電子產品需求放緩的擔憂，投資人態度轉趨謹慎。分析師指出，儘管人工智慧的長期前景依然強勁，但短期市場修正勢在難免。這波突如其來的跌勢已在亞洲和美國的主要科技重鎮引發連帶損失，加劇了人們對短期經濟增長的擔憂。\n\n【3】台股大盤震盪收黑 賣壓湧現\n台灣證券交易所發行量加權股價指數（台股大盤）週四收黑，因午後交易時段湧現沉重賣壓。在近期上漲後，投資人獲利了結，特別針對主要的半導體和科技股。儘管在正面全球股市訊號的推動下，早盤表現強勁，但市場經歷了劇烈震盪，最終收在盤下（負值區域）。分析師指出，在即將公布的企業財報和關鍵經濟數據出爐前，市場瀰漫著謹慎的觀望氣氛。",
+    "vocabulary": [
+      "economic forecast (n. phr.): 經濟預測",
+      "GDP per capita (n. phr.): 人均國內生產毛額",
+      "project (v.): 預估；預測",
+      "surpass (v.): 超越；勝過",
+      "impressive (adj.): 令人矚目的；令人印象深刻的",
+      "be driven by (v. phr.): 由...所驅動/推動",
+      "continuous (adj.): 持續的；不斷的",
+      "expansion (n.): 擴張；擴展",
+      "semiconductor (n.): 半導體",
+      "robust (adj.): 強勁的；堅固的",
+      "export (n.): 出口（物）",
+      "attribute to (v. phr.): 歸功於；歸因於",
+      "milestone (n.): 里程碑",
+      "strategic (adj.): 戰略性的",
+      "domestic investment (n. phr.): 國內投資",
+      "consequently (adv.): 因此；結果",
+      "solidify (v.): 鞏固；使凝固",
+      "powerhouse (n.): 強國；動力源",
+      "resilience (n.): 韌性；彈性",
+      "fluctuation (n.): 波動；起伏",
+      "decline (n.): 下跌，衰退",
+      "sell-off (n.): 拋售，變賣",
+      "semiconductor (n.): 半導體",
+      "cautious (adj.): 謹慎的，小心的",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張局勢，緊張關係",
+      "electronics (n.): 電子產品",
+      "analyst (n.): 分析師",
+      "outlook (n.): 前景，展望",
+      "inevitable (adj.): 不可避免的，必然的",
+      "downturn (n.): 衰退，（經濟）下行",
+      "trigger (v.): 引發，觸發",
+      "hub (n.): 中心，樞紐",
+      "near-term (adj.): 短期的，近期的",
+      "correction (n.): （股市）修正，回檔",
+      "stock price (n. phr.): 股價",
+      "sector (n.): 行業，部門，板塊",
+      "demand (n.): 需求",
+      "artificial intelligence (n. phr.): 人工智慧",
+      "loss (n.): 損失，虧損",
+      "close lower (phr.): 收低；收黑",
+      "selling pressure (n.): 賣壓",
+      "emerge (v.): 湧現；顯露",
+      "lock in profits (phr.): 獲利了結",
+      "recent gains (n.): 近期漲幅",
+      "target (v.): 鎖定；瞄準",
+      "semiconductor (n.): 半導體",
+      "performance (n.): 表現",
+      "global cues (n.): 全球股市訊號；國際市場指引",
+      "volatility (n.): 波動性；震盪",
+      "ultimately (adv.): 最終地",
+      "negative territory (n.): 盤下；負值區域",
+      "analyst (n.): 分析師",
+      "cautious (adj.): 謹慎的",
+      "sentiment (n.): 情緒；態度",
+      "prevail (v.): 佔優勢；盛行",
+      "upcoming (adj.): 即將到來的",
+      "corporate earnings (n.): 企業財報；公司盈餘",
+      "economic data (n.): 經濟數據",
+      "afternoon session (n.): 午後交易時段"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "Japan's declining semiconductor industry",
+          "Taiwan's projected GDP per capita surpassing Japan and South Korea",
+          "A global economic crisis in East Asia",
+          "South Korea's new domestic investment plan"
+        ],
+        "answer": "Taiwan's projected GDP per capita surpassing Japan and South Korea"
+      },
+      {
+        "q": "According to the text, when is Taiwan's GDP per capita expected to exceed those of Japan and South Korea?",
+        "options": [
+          "By the end of 2026",
+          "In early 2025",
+          "By the end of 2030",
+          "In July 2026"
+        ],
+        "answer": "By the end of 2026"
+      },
+      {
+        "q": "What is a major driver of Taiwan's impressive economic growth?",
+        "options": [
+          "Agricultural exports",
+          "Tourism industry expansion",
+          "The continuous expansion of the semiconductor industry",
+          "Foreign financial aid"
+        ],
+        "answer": "The continuous expansion of the semiconductor industry"
+      },
+      {
+        "q": "What does the word 'surpass' mean in the text?",
+        "options": [
+          "To fall behind",
+          "To equal in value",
+          "To go beyond or exceed",
+          "To ignore completely"
+        ],
+        "answer": "To go beyond or exceed"
+      },
+      {
+        "q": "Which word is closest in meaning to 'robust'?",
+        "options": [
+          "Weak",
+          "Strong",
+          "Unstable",
+          "Temporary"
+        ],
+        "answer": "Strong"
+      },
+      {
+        "q": "The company's growth was _______ to its innovative marketing strategy.",
+        "options": [
+          "projected",
+          "attributed",
+          "solidified",
+          "expanded"
+        ],
+        "answer": "attributed"
+      },
+      {
+        "q": "What did economists attribute this economic milestone to?",
+        "options": [
+          "Strategic industrial upgrades and strong domestic investment",
+          "High tax rates and government spending",
+          "Reduced labor costs and foreign loans",
+          "A decline in global trade"
+        ],
+        "answer": "Strategic industrial upgrades and strong domestic investment"
+      },
+      {
+        "q": "What is the meaning of 'resilience'?",
+        "options": [
+          "The ability to recover quickly from difficulties",
+          "A state of constant decline",
+          "Extreme financial wealth",
+          "Strict government regulation"
+        ],
+        "answer": "The ability to recover quickly from difficulties"
+      },
+      {
+        "q": "Prices are subject to constant _______ due to market demand.",
+        "options": [
+          "milestones",
+          "fluctuations",
+          "powerhouses",
+          "semiconductors"
+        ],
+        "answer": "fluctuations"
+      },
+      {
+        "q": "What does 'consequently' mean?",
+        "options": [
+          "In contrast",
+          "As a result",
+          "For example",
+          "On the other hand"
+        ],
+        "answer": "As a result"
+      },
+      {
+        "q": "Taiwan is solidifying its position as a leading economic _______ in East Asia.",
+        "options": [
+          "fluctuation",
+          "powerhouse",
+          "forecast",
+          "upgrade"
+        ],
+        "answer": "powerhouse"
+      },
+      {
+        "q": "What is the meaning of 'projected' in the context of 'projected to surpass'?",
+        "options": [
+          "Estimated or predicted",
+          "Completed successfully",
+          "Cancelled immediately",
+          "Historically proven"
+        ],
+        "answer": "Estimated or predicted"
+      },
+      {
+        "q": "What caused TSMC's stock price to fall?",
+        "options": [
+          "A massive sell-off in the semiconductor sector",
+          "A sudden increase in smartphone sales",
+          "New government regulations on AI",
+          "A shortage of raw materials"
+        ],
+        "answer": "A massive sell-off in the semiconductor sector"
+      },
+      {
+        "q": "Why did investors become cautious?",
+        "options": [
+          "Due to rising labor costs",
+          "Due to geopolitical tensions and slowing consumer demand",
+          "Due to a sudden change in TSMC's leadership",
+          "Due to high interest rates in Europe"
+        ],
+        "answer": "Due to geopolitical tensions and slowing consumer demand"
+      },
+      {
+        "q": "What is the analysts' view on the long-term outlook for artificial intelligence?",
+        "options": [
+          "It is highly unpredictable",
+          "It remains strong",
+          "It is declining rapidly",
+          "It will be replaced by other technologies"
+        ],
+        "answer": "It remains strong"
+      },
+      {
+        "q": "What does the word 'inevitable' mean in the text?",
+        "options": [
+          "Unlikely to happen",
+          "Certain to happen",
+          "Easily prevented",
+          "Temporary"
+        ],
+        "answer": "Certain to happen"
+      },
+      {
+        "q": "Which regions experienced similar losses due to the downturn?",
+        "options": [
+          "Europe and South America",
+          "Africa and the Middle East",
+          "Asia and the United States",
+          "Australia and Canada"
+        ],
+        "answer": "Asia and the United States"
+      },
+      {
+        "q": "Complete the sentence: 'The sudden _______ in the stock market worried many investors.'",
+        "options": [
+          "outlook",
+          "downturn",
+          "tension",
+          "semiconductor"
+        ],
+        "answer": "downturn"
+      },
+      {
+        "q": "What is the part of speech of 'cautious' as used in the passage?",
+        "options": [
+          "Noun",
+          "Verb",
+          "Adjective",
+          "Adverb"
+        ],
+        "answer": "Adjective"
+      },
+      {
+        "q": "What does 'sell-off' refer to in a financial context?",
+        "options": [
+          "Buying a large number of shares",
+          "Selling a large volume of securities or stock",
+          "Merging two major technology companies",
+          "Closing down a factory"
+        ],
+        "answer": "Selling a large volume of securities or stock"
+      },
+      {
+        "q": "According to the text, what are analysts suggesting about short-term market corrections?",
+        "options": [
+          "They are avoidable with good planning",
+          "They are inevitable",
+          "They only affect TSMC",
+          "They will last for decades"
+        ],
+        "answer": "They are inevitable"
+      },
+      {
+        "q": "Which of the following is closest in meaning to the verb 'trigger'?",
+        "options": [
+          "To stop",
+          "To cause",
+          "To delay",
+          "To improve"
+        ],
+        "answer": "To cause"
+      },
+      {
+        "q": "What has raised concerns about near-term economic growth?",
+        "options": [
+          "The sudden downturn in tech hubs",
+          "The rise in consumer electronics demand",
+          "The stability of geopolitical relations",
+          "The decline of artificial intelligence"
+        ],
+        "answer": "The sudden downturn in tech hubs"
+      },
+      {
+        "q": "What does 'near-term' mean?",
+        "options": [
+          "Occurring in the distant future",
+          "Lasting for a very long time",
+          "Relating to the immediate future",
+          "Happening in the past"
+        ],
+        "answer": "Relating to the immediate future"
+      },
+      {
+        "q": "Due to the sudden change in market trends, several new challenges have ______.",
+        "options": [
+          "emerged",
+          "declined",
+          "prevented",
+          "dismissed"
+        ],
+        "answer": "emerged"
+      },
+      {
+        "q": "The high ______ of cryptocurrency makes it a risky investment for beginners.",
+        "options": [
+          "stability",
+          "volatility",
+          "security",
+          "simplicity"
+        ],
+        "answer": "volatility"
+      },
+      {
+        "q": "Investors are advised to remain ______ when trading in a highly unpredictable market.",
+        "options": [
+          "cautious",
+          "reckless",
+          "indifferent",
+          "aggressive"
+        ],
+        "answer": "cautious"
+      },
+      {
+        "q": "Many traders decided to ______ their profits before the market closed for the holiday.",
+        "options": [
+          "lock in",
+          "give up",
+          "look into",
+          "run out"
+        ],
+        "answer": "lock in"
+      },
+      {
+        "q": "According to the article, why did the TAIEX close lower on Thursday?",
+        "options": [
+          "Because of a sudden natural disaster.",
+          "Because heavy selling pressure emerged in the afternoon.",
+          "Because of a massive cyberattack on technology firms.",
+          "Because the government raised interest rates unexpectedly."
+        ],
+        "answer": "Because heavy selling pressure emerged in the afternoon."
+      },
+      {
+        "q": "The new marketing campaign is designed to ______ young consumers aged 18 to 25.",
+        "options": [
+          "target",
+          "avoid",
+          "postpone",
+          "ignore"
+        ],
+        "answer": "target"
+      },
+      {
+        "q": "The ______ sentiment in the boardroom was one of optimism despite the recent losses.",
+        "options": [
+          "prevailing",
+          "vanishing",
+          "uncommon",
+          "temporary"
+        ],
+        "answer": "prevailing"
+      },
+      {
+        "q": "Which sector did investors particularly target for profit-taking?",
+        "options": [
+          "Agriculture and food processing",
+          "Semiconductor and technology",
+          "Tourism and hospitality",
+          "Real estate and construction"
+        ],
+        "answer": "Semiconductor and technology"
+      },
+      {
+        "q": "The company's stock price surged after they released their strong ______ earnings report.",
+        "options": [
+          "corporate",
+          "private",
+          "domestic",
+          "informal"
+        ],
+        "answer": "corporate"
+      },
+      {
+        "q": "Although negotiations were difficult, the two parties ______ reached an agreement.",
+        "options": [
+          "ultimately",
+          "initially",
+          "rarely",
+          "accidentally"
+        ],
+        "answer": "ultimately"
+      },
+      {
+        "q": "After dropping 200 points, the stock index entered negative ______.",
+        "options": [
+          "territory",
+          "boundary",
+          "property",
+          "department"
+        ],
+        "answer": "territory"
+      },
+      {
+        "q": "What are investors waiting for that contributed to the cautious sentiment?",
+        "options": [
+          "A change in political leadership.",
+          "The launch of a new stock exchange.",
+          "Upcoming corporate earnings reports and key economic data.",
+          "A major merger between top tech companies."
+        ],
+        "answer": "Upcoming corporate earnings reports and key economic data."
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美終止伊朗停火 發動空襲油價飆升",
+    "tabTitle": "地緣政治",
+    "english": "On July 9, 2026, the United States officially terminated its ceasefire agreement with Iran, launching a series of targeted airstrikes against military installations. Washington cited recent provocations and intelligence reports of imminent threats as the primary justification for the military action. Following the sudden escalation of geopolitical tensions, global oil prices surged by over eight percent within hours. Market analysts warn that prolonged instability in the Middle East could disrupt critical shipping lanes, potentially triggering broader economic consequences worldwide.",
+    "chinese": "2026年7月9日，美國正式終止與伊朗的停火協議，對其軍事設施發動了一系列針對性的空襲。華盛頓方面指出，近期伊朗的挑釁行為以及有關即將發生威脅的情報報告，是此次軍事行動的主要依據。隨著地緣政治緊張局勢突然升級，全球油價在數小時內飆升了百分之八以上。市場分析師警告，中東地區的長期動盪可能會中斷關鍵的航運通道，並可能引發全球範圍內更廣泛的經濟後果。",
+    "vocabulary": [
+      "terminate (v.): 終止；結束",
+      "ceasefire (n.): 停火；停戰",
+      "installation (n.): 設施；設備",
+      "cite (v.): 引用；指出",
+      "provocation (n.): 挑釁；激怒",
+      "imminent (adj.): 即將發生的；逼近的",
+      "justification (n.): 正當理由；辯護",
+      "escalation (n.): 升級；擴大",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張局勢；緊張關係",
+      "surge (v.): 飆升；急遽上升",
+      "analyst (n.): 分析師；分析家",
+      "prolonged (adj.): 長期的；持續很久的",
+      "instability (n.): 不穩定；動盪",
+      "disrupt (v.): 中斷；擾亂",
+      "shipping lane (n. phr.): 航運通道；航線",
+      "trigger (v.): 引發；觸發",
+      "consequence (n.): 後果；影響",
+      "worldwide (adv.): 全球地；世界各地地",
+      "targeted (adj.): 有針對性的；目標明確的"
+    ],
+    "quiz": [
+      {
+        "q": "What action did the United States take on July 9, 2026?",
+        "options": [
+          "Signed a new peace treaty with Iran",
+          "Terminated its ceasefire and launched airstrikes",
+          "Lifted economic sanctions on Iran",
+          "Withdrew all military forces from the Middle East"
+        ],
+        "answer": "Terminated its ceasefire and launched airstrikes"
+      },
+      {
+        "q": "What did Washington cite as the main reason for the military action?",
+        "options": [
+          "A desire to control oil reserves",
+          "Recent provocations and imminent threats",
+          "Requests from European allies",
+          "Failures in diplomatic negotiations"
+        ],
+        "answer": "Recent provocations and imminent threats"
+      },
+      {
+        "q": "How did global oil prices react to the news?",
+        "options": [
+          "They dropped significantly",
+          "They remained stable",
+          "They surged by over eight percent",
+          "They fluctuated wildly before settling down"
+        ],
+        "answer": "They surged by over eight percent"
+      },
+      {
+        "q": "What is a potential consequence of prolonged instability in the Middle East according to analysts?",
+        "options": [
+          "Lower global inflation",
+          "Disruption of critical shipping lanes",
+          "Increased tourism in the region",
+          "Immediate diplomatic resolution"
+        ],
+        "answer": "Disruption of critical shipping lanes"
+      },
+      {
+        "q": "Which word is closest in meaning to 'terminate'?",
+        "options": [
+          "Begin",
+          "End",
+          "Postpone",
+          "Improve"
+        ],
+        "answer": "End"
+      },
+      {
+        "q": "What does the word 'imminent' mean in the context of the article?",
+        "options": [
+          "Unlikely to happen",
+          "Happening in the distant future",
+          "About to happen very soon",
+          "Already completed"
+        ],
+        "answer": "About to happen very soon"
+      },
+      {
+        "q": "What is the meaning of 'escalation'?",
+        "options": [
+          "A decrease in intensity",
+          "An increase or rise in intensity",
+          "A peaceful agreement",
+          "A complete withdrawal"
+        ],
+        "answer": "An increase or rise in intensity"
+      },
+      {
+        "q": "Which of the following is the best translation for 'provocation'?",
+        "options": [
+          "挑釁",
+          "協議",
+          "談判",
+          "妥協"
+        ],
+        "answer": "挑釁"
+      },
+      {
+        "q": "Complete the sentence: 'The government provided a clear ______ for its sudden policy change.'",
+        "options": [
+          "justification",
+          "instability",
+          "installation",
+          "tension"
+        ],
+        "answer": "justification"
+      },
+      {
+        "q": "What does the word 'disrupt' mean?",
+        "options": [
+          "To make something run smoothly",
+          "To interrupt or prevent something from continuing normally",
+          "To construct or build up",
+          "To analyze carefully"
+        ],
+        "answer": "To interrupt or prevent something from continuing normally"
+      },
+      {
+        "q": "Which of the following words is an adjective meaning 'continuing for a long time'?",
+        "options": [
+          "Prolonged",
+          "Imminent",
+          "Targeted",
+          "Geopolitical"
+        ],
+        "answer": "Prolonged"
+      },
+      {
+        "q": "What is the main tone of the news article?",
+        "options": [
+          "Enthusiastic",
+          "Factual and serious",
+          "Humorous",
+          "Highly subjective"
+        ],
+        "answer": "Factual and serious"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "Anthropic爆監控中國用戶 釀隱私危機",
+    "tabTitle": "科技",
+    "english": "Anthropic, a leading AI safety and research company, has faced severe backlash after reports revealed it was secretly monitoring the data and activities of Chinese users. Investigators discovered that the company tracked user queries and location data without explicit consent. In response, digital rights groups have raised urgent privacy concerns, calling for stricter international regulations on AI developers. Anthropic claimed the monitoring was for safety testing, but critics argue it violates fundamental user privacy rights.",
+    "chinese": "領先的人工智慧安全與研究公司 Anthropic 在報告揭露其暗中監控中國用戶的數據與活動後，面臨了嚴厲的輿論韃伐。調查人員發現，該公司在未經明確同意的情況下，追蹤了用戶的查詢內容與位置數據。對此，數位權利團體提出了緊急的隱私疑慮，呼籲對人工智慧開發商實施更嚴格的國際監管。Anthropic 聲稱該監控是為了安全測試，但批評者認為這侵犯了基本的用戶隱私權。",
+    "vocabulary": [
+      "monitor (v.): 監控，監測",
+      "backlash (n.): 強烈反對，輿論撻伐",
+      "reveal (v.): 揭露，透露",
+      "investigator (n.): 調查人員",
+      "query (n.): 查詢，疑問",
+      "explicit (adj.): 明確的，直率的",
+      "consent (n.): 同意，准許",
+      "digital rights (n. phr.): 數位權利",
+      "privacy concern (n. phr.): 隱私疑慮",
+      "regulation (n.): 規章，監管",
+      "violate (v.): 違反，侵犯",
+      "fundamental (adj.): 基本的，根本的",
+      "critic (n.): 批評者，評論家",
+      "track (v.): 追蹤，追溯",
+      "location data (n. phr.): 位置數據",
+      "safety testing (n. phr.): 安全測試",
+      "severe (adj.): 嚴重的，嚴厲的",
+      "raise (v.): 提出，喚起",
+      "strict (adj.): 嚴格的，嚴厲的",
+      "international (adj.): 國際的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main issue reported about Anthropic?",
+        "options": [
+          "It launched a new AI model in China",
+          "It secretly monitored Chinese users' data",
+          "It partnered with Chinese tech giants",
+          "It closed its services in China"
+        ],
+        "answer": "It secretly monitored Chinese users' data"
+      },
+      {
+        "q": "What kind of data did Anthropic track without consent?",
+        "options": [
+          "Financial records and bank details",
+          "User queries and location data",
+          "Personal photos and videos",
+          "Emails and phone numbers"
+        ],
+        "answer": "User queries and location data"
+      },
+      {
+        "q": "What was Anthropic's defense for the monitoring?",
+        "options": [
+          "It was an accidental software bug",
+          "It was required by the Chinese government",
+          "It was conducted for safety testing",
+          "It was part of a marketing campaign"
+        ],
+        "answer": "It was conducted for safety testing"
+      },
+      {
+        "q": "Which word means 'a strong public reaction against something'?",
+        "options": [
+          "backlash",
+          "consent",
+          "regulation",
+          "query"
+        ],
+        "answer": "backlash"
+      },
+      {
+        "q": "What is the meaning of 'explicit' in the context of 'explicit consent'?",
+        "options": [
+          "hidden and secret",
+          "clear and detailed",
+          "fast and efficient",
+          "temporary and unstable"
+        ],
+        "answer": "clear and detailed"
+      },
+      {
+        "q": "Fill in the blank: 'The company's actions ______ the privacy rights of its users.'",
+        "options": [
+          "violated",
+          "revealed",
+          "consented",
+          "monitored"
+        ],
+        "answer": "violated"
+      },
+      {
+        "q": "Choose the correct word: 'Anthropic has faced severe backlash after reports revealed it ______ secretly monitoring users.'",
+        "options": [
+          "is",
+          "was",
+          "has",
+          "will be"
+        ],
+        "answer": "was"
+      },
+      {
+        "q": "What does the noun 'query' refer to in the text?",
+        "options": [
+          "A search or question",
+          "A computer error",
+          "A subscription fee",
+          "A password"
+        ],
+        "answer": "A search or question"
+      },
+      {
+        "q": "Who called for stricter international regulations on AI developers?",
+        "options": [
+          "Anthropic's CEO",
+          "Digital rights groups",
+          "Chinese government officials",
+          "Financial investors"
+        ],
+        "answer": "Digital rights groups"
+      },
+      {
+        "q": "'Fundamental' is closest in meaning to:",
+        "options": [
+          "basic and essential",
+          "complex and difficult",
+          "minor and secondary",
+          "modern and advanced"
+        ],
+        "answer": "basic and essential"
+      },
+      {
+        "q": "'Investigators discovered that the company tracked data without ______ consent.'",
+        "options": [
+          "explicit",
+          "explicitly",
+          "explicitness",
+          "explicate"
+        ],
+        "answer": "explicit"
+      },
+      {
+        "q": "What is the meaning of 'regulation'?",
+        "options": [
+          "An official rule or law",
+          "A type of software",
+          "A protest by citizens",
+          "A commercial advertisement"
+        ],
+        "answer": "An official rule or law"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "SK海力士擬赴美IPO 募資280億美元",
+    "tabTitle": "金融市場",
+    "english": "South Korean chipmaker SK Hynix is planning a massive $28 billion initial public offering (IPO) in the United States to fund its expansion in the artificial intelligence memory chip market. The company aims to secure a dominant position as demand for High Bandwidth Memory (HBM) chips continues to surge. This strategic move will help SK Hynix compete more aggressively against rivals like Samsung and Micron. Industry analysts expect this listing to be one of the largest tech IPOs in recent history, reflecting the growing significance of AI infrastructure worldwide.",
+    "chinese": "南韓晶片製造商SK海力士（SK Hynix）正計劃在美國進行一項規模高達280億美元的首次公開募股（IPO），以資助其在人工智慧記憶體晶片市場的擴張。隨著市場對高頻寬記憶體（HBM）晶片的需求持續激增，該公司旨在鞏固其主導地位。這一戰略舉措將有助於SK海力士更積極地與三星和美光等對手競爭。行業分析師預計，這次上市將成為近年來規模最大的科技業IPO之一，反映出全球人工智慧基礎設施日益增長的重要性。",
+    "vocabulary": [
+      "initial public offering (n.): 首次公開募股 (IPO)",
+      "chipmaker (n.): 晶片製造商",
+      "expansion (n.): 擴張，擴展",
+      "artificial intelligence (n.): 人工智慧 (AI)",
+      "secure (v.): 獲得，爭取到",
+      "dominant (adj.): 主導的，佔優勢的",
+      "demand (n.): 需求",
+      "high bandwidth memory (n.): 高頻寬記憶體 (HBM)",
+      "surge (v.): 激增，急遽上升",
+      "strategic (adj.): 戰略性的，策略上的",
+      "compete (v.): 競爭",
+      "aggressively (adv.): 積極地，有侵略性地",
+      "rival (n.): 競爭對手",
+      "industry analyst (n.): 行業分析師",
+      "listing (n.): 上市，掛牌",
+      "reflect (v.): 反映，顯現",
+      "significance (n.): 重要性，意義",
+      "infrastructure (n.): 基礎建設，基礎設施",
+      "fund (v.): 資助，提供資金",
+      "recent (adj.): 最近的，近來的"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main purpose of SK Hynix's planned US IPO?",
+        "options": [
+          "To acquire Samsung",
+          "To fund its AI memory chip expansion",
+          "To close down its US offices",
+          "To reduce its tax liabilities"
+        ],
+        "answer": "To fund its AI memory chip expansion"
+      },
+      {
+        "q": "How much money does SK Hynix plan to raise through the IPO?",
+        "options": [
+          "$2.8 billion",
+          "$18 billion",
+          "$28 billion",
+          "$80 billion"
+        ],
+        "answer": "$28 billion"
+      },
+      {
+        "q": "What type of chip demand is currently surging, according to the article?",
+        "options": [
+          "Graphic cards",
+          "High Bandwidth Memory (HBM) chips",
+          "Mobile processors",
+          "Audio chips"
+        ],
+        "answer": "High Bandwidth Memory (HBM) chips"
+      },
+      {
+        "q": "Which of the following is NOT mentioned as a rival of SK Hynix in the text?",
+        "options": [
+          "Samsung",
+          "Micron",
+          "Intel",
+          "None of the above"
+        ],
+        "answer": "Intel"
+      },
+      {
+        "q": "What does the word 'secure' mean in the context of the passage?",
+        "options": [
+          "To lock a door",
+          "To make safe",
+          "To obtain or achieve",
+          "To worry about"
+        ],
+        "answer": "To obtain or achieve"
+      },
+      {
+        "q": "According to industry analysts, what will this listing represent?",
+        "options": [
+          "A minor event in the tech sector",
+          "One of the largest tech IPOs in recent history",
+          "A failure for South Korean markets",
+          "A shift away from AI technology"
+        ],
+        "answer": "One of the largest tech IPOs in recent history"
+      },
+      {
+        "q": "The word 'surge' in the text is closest in meaning to ________.",
+        "options": [
+          "decrease slowly",
+          "remain stable",
+          "increase suddenly and powerfully",
+          "fluctuate unpredictably"
+        ],
+        "answer": "increase suddenly and powerfully"
+      },
+      {
+        "q": "What does the large scale of the IPO reflect?",
+        "options": [
+          "The growing significance of AI infrastructure",
+          "A decline in global tech investments",
+          "SK Hynix's plan to stop making chips",
+          "High inflation rates in the US"
+        ],
+        "answer": "The growing significance of AI infrastructure"
+      },
+      {
+        "q": "Which of the following is the correct part of speech and meaning for 'strategic'?",
+        "options": [
+          "noun: 策略",
+          "adjective: 戰略性的，策略上的",
+          "verb: 制定戰略",
+          "adverb: 戰略性地"
+        ],
+        "answer": "adjective: 戰略性的，策略上的"
+      },
+      {
+        "q": "Where does SK Hynix plan to launch its IPO?",
+        "options": [
+          "South Korea",
+          "The United States",
+          "Japan",
+          "China"
+        ],
+        "answer": "The United States"
+      },
+      {
+        "q": "The word 'rival' is synonymous with ________.",
+        "options": [
+          "partner",
+          "competitor",
+          "customer",
+          "employee"
+        ],
+        "answer": "competitor"
+      },
+      {
+        "q": "What does the verb 'fund' mean in the text?",
+        "options": [
+          "To spend money wastefully",
+          "To provide money for a specific purpose",
+          "To borrow money from a bank",
+          "To lose money in an investment"
+        ],
+        "answer": "To provide money for a specific purpose"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "微軟全球裁員4800人 涵蓋Xbox部門",
+    "tabTitle": "國際大事",
+    "english": "Microsoft has announced a major restructuring plan that includes cutting approximately 4,800 jobs, primarily affecting its gaming division, Xbox. This workforce reduction represents a significant shift as the tech giant aims to streamline operations and adapt to evolving market demands in the interactive entertainment sector. According to internal memos, the layoffs will impact various departments, including game development, marketing, and support services. Despite these cuts, Microsoft remains committed to its long-term gaming strategy and cloud services.",
+    "chinese": "微軟宣布了一項重大的重組計劃，其中包括裁員約 4,800 人，主要影響其遊戲部門 Xbox。這次裁員代表著一個重大的轉變，因為這家科技巨頭旨在精簡營運，並適應互動娛樂領域不斷變化的市場需求。根據內部備忘錄，此次裁員將影響包括遊戲開發、行銷和支援服務在內的多個部門。儘管進行了裁員，微軟仍致力於其長期遊戲戰略和雲端服務。",
+    "vocabulary": [
+      "restructuring (n.): 重組",
+      "primarily (adv.): 主要地",
+      "division (n.): 部門、分支",
+      "workforce (n.): 勞動力、員工總數",
+      "reduction (n.): 減少、削減",
+      "significant (adj.): 顯著的、重大的",
+      "shift (n.): 轉變、變化",
+      "streamline (v.): 精簡、使效率更高",
+      "operation (n.): 營運、運作",
+      "adapt (v.): 適應",
+      "evolving (adj.): 發展中的、不斷變化的",
+      "interactive (adj.): 互動的",
+      "entertainment (n.): 娛樂",
+      "sector (n.): 行業、領域",
+      "internal (adj.): 內部的",
+      "memo (n.): 備忘錄",
+      "layoff (n.): 裁員",
+      "impact (v.): 影響",
+      "committed (adj.): 致力於...的、承諾的",
+      "strategy (n.): 策略、戰略"
+    ],
+    "quiz": [
+      {
+        "q": "How many jobs is Microsoft cutting in this restructuring plan?",
+        "options": [
+          "2,400",
+          "4,800",
+          "8,400",
+          "12,000"
+        ],
+        "answer": "4,800"
+      },
+      {
+        "q": "Which division is primarily affected by the layoffs?",
+        "options": [
+          "Windows",
+          "Office",
+          "Xbox",
+          "Azure"
+        ],
+        "answer": "Xbox"
+      },
+      {
+        "q": "What is the meaning of 'streamline' in the context of the text?",
+        "options": [
+          "To make a system or organization more efficient",
+          "To increase the overall budget",
+          "To delay a process indefinitely",
+          "To ignore traditional rules"
+        ],
+        "answer": "To make a system or organization more efficient"
+      },
+      {
+        "q": "Why is Microsoft cutting these jobs?",
+        "options": [
+          "To shut down its gaming business entirely",
+          "To streamline operations and adapt to market demands",
+          "To move its headquarters to another country",
+          "To avoid paying taxes"
+        ],
+        "answer": "To streamline operations and adapt to market demands"
+      },
+      {
+        "q": "Which word is a synonym for 'layoff'?",
+        "options": [
+          "Promotion",
+          "Hiring",
+          "Redundancy",
+          "Recruitment"
+        ],
+        "answer": "Redundancy"
+      },
+      {
+        "q": "Complete the sentence based on the news: The layoffs will impact various departments ________ game development and marketing.",
+        "options": [
+          "including",
+          "excluding",
+          "instead of",
+          "regardless of"
+        ],
+        "answer": "including"
+      },
+      {
+        "q": "Despite the cuts, what does Microsoft remain committed to?",
+        "options": [
+          "Its hardware manufacturing only",
+          "Its long-term gaming strategy and cloud services",
+          "Acquiring more mobile companies",
+          "Reducing prices of all its consoles"
+        ],
+        "answer": "Its long-term gaming strategy and cloud services"
+      },
+      {
+        "q": "What does the word 'evolving' mean in 'evolving market demands'?",
+        "options": [
+          "Declining rapidly",
+          "Staying completely static",
+          "Gradually developing and changing",
+          "Happening instantaneously"
+        ],
+        "answer": "Gradually developing and changing"
+      },
+      {
+        "q": "Choose the correct word to fill in the blank: The company hopes to ________ to changing consumer preferences.",
+        "options": [
+          "adapt",
+          "adopt",
+          "adept",
+          "addict"
+        ],
+        "answer": "adapt"
+      },
+      {
+        "q": "What does the noun 'sector' refer to in the text?",
+        "options": [
+          "A mathematical instrument",
+          "A specific area of economic or business activity",
+          "A military zone",
+          "A type of computer memory"
+        ],
+        "answer": "A specific area of economic or business activity"
+      },
+      {
+        "q": "How did the details about the layoffs become known to the public?",
+        "options": [
+          "Through a public press conference",
+          "Through internal memos",
+          "Through an anonymous social media post",
+          "Through a government audit report"
+        ],
+        "answer": "Through internal memos"
+      },
+      {
+        "q": "What is the antonym of the word 'internal'?",
+        "options": [
+          "External",
+          "Interior",
+          "Inward",
+          "Intimate"
+        ],
+        "answer": "External"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
