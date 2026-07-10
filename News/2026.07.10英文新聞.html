@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUL 10, 2026：金融市場、科技 與 國際大事</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 強颱巴威襲台，台股休市一天夜盤指數飆新高\nAs Typhoon Bawei struck Taiwan, local authorities suspended work and school, leading to the closure of the Taiwan Stock Exchange on Friday. Despite the physical market shutdown, Taiwan index futures soared to an all-time high during the night session. This surge was primarily driven by strong global market sentiment and robust demand for technology shares. Analysts advise investors to remain cautious, warning of potential market volatility when regular trading resumes next week.\n\n[2] 毒油事件延燒，卓揆將於7/14赴立院專案報告\nFollowing the widening scandal of tainted food oil in Taiwan, Premier Cho Jung-tai is scheduled to deliver a special report to the Legislative Yuan on July 14. The controversy has sparked widespread public anxiety and raised serious concerns over food safety regulations. During the upcoming legislative session, the Premier will outline the government's investigation progress, immediate response measures, and plans to tighten food safety inspections. Lawmakers from both the ruling and opposition parties are expected to demand accountability and demand stricter oversight.\n\n[3] 陸委會示警，10國人赴中失聯含4人團體蒸發\nTaiwan’s Mainland Affairs Council (MAC) has issued a warning to citizens traveling to China after ten Taiwanese individuals recently went missing, including a group of four who disappeared entirely. The MAC urged travelers to register their personal details on government platforms before departure to ensure their safety. Amid rising geopolitical tensions, the council emphasized that Taiwanese citizens should exercise caution and remain vigilant regarding their personal security when visiting China, Hong Kong, or Macau.",
+    "chinese": "【1】強颱巴威襲台，台股休市一天夜盤指數飆新高\n隨著強烈颱風巴威襲台，地方政府宣布停班停課，導致台灣證券交易所於週五休市。儘管實體市場關閉，台指期貨在夜盤交易中仍飆升至歷史新高。這一波漲勢主要受到全球市場強勁情緒以及對科技股的蓬勃需求所推動。分析師建議投資人保持謹慎，並警告下週恢復正常交易時，市場可能會出現波動。\n\n【2】毒油事件延燒，卓揆將於7/14赴立院專案報告\n隨著台灣毒食用油醜聞持續擴大，行政院長卓榮泰預計於7月14日向立法院進行專案報告。此爭議引發了廣泛的公眾焦慮，並對食品安全法規提出了嚴重質質。在即將召開的立法院會議中，院長將概述政府的調查進度、即時應對措施以及加強食品安全檢查的計劃。朝野政黨的立委預計將要求追究責任並實施更嚴格的監督。\n\n【3】陸委會示警，10國人赴中失聯含4人團體蒸發\n台灣大陸委員會（陸委會）在十名台灣人近期於中國失聯（其中包括一個四人團體完全蒸發）後，向前往中國的民眾發出警告。陸委會呼籲旅客在出發前，先在政府平台上登記個人資料以確保安全。在近年地緣政治緊張局勢升溫之際，該委員會強調，台灣公民在訪問中國、香港或澳門時，應保持謹慎並對人身安全提高警覺。",
+    "vocabulary": [
+      "strike (v.): 襲擊；打擊",
+      "suspend (v.): 暫停；中止",
+      "closure (n.): 關閉；停業",
+      "index (n.): 指數",
+      "futures (n.): 期貨",
+      "soar (v.): 猛增；飆升",
+      "all-time high (n.): 歷史新高",
+      "session (n.): 期間；會議；（交易）盤",
+      "surge (n.): 激增；湧動",
+      "primarily (adv.): 主要地",
+      "sentiment (n.): 情緒；態度",
+      "robust (adj.): 強勁的；堅固的",
+      "demand (n.): 需求",
+      "share (n.): 股份；股票",
+      "analyst (n.): 分析師",
+      "advise (v.): 建議；忠告",
+      "cautious (adj.): 謹慎的；小心的",
+      "potential (adj.): 潛在的；可能的",
+      "volatility (n.): 波動性；易變性",
+      "resume (v.): 重新開始；恢復",
+      "tainted (adj.): 受污染的；有瑕疵的",
+      "scandal (n.): 醜聞；醜事",
+      "premier (n.): 總理；行政院長",
+      "deliver (v.): 發表（演說）；遞送",
+      "legislative (adj.): 立法的；立法機關的",
+      "controversy (n.): 爭議；爭辯",
+      "spark (v.): 引發；觸發",
+      "widespread (adj.): 廣泛的；普遍的",
+      "anxiety (n.): 焦慮；不安",
+      "regulation (n.): 規章；法規",
+      "outline (v.): 概述；描繪…的輪廓",
+      "investigation (n.): 調查；審查",
+      "immediate (adj.): 立即的；即刻的",
+      "tighten (v.): 加強；使變緊",
+      "inspection (n.): 檢查；檢驗",
+      "lawmaker (n.): 立法委員；國會議員",
+      "ruling (adj.): 執政的；統治的",
+      "opposition (adj.): 反對的；在野的",
+      "accountability (n.): 問責性；負有責任",
+      "oversight (n.): 監督；監管",
+      "Mainland Affairs Council (n.): 大陸委員會（陸委會）",
+      "issue (v.): 發布；發行",
+      "warning (n.): 警告",
+      "individual (n.): 個人；個體",
+      "missing (adj.): 失蹤的；失聯的",
+      "disappear (v.): 消失",
+      "entirely (adv.): 完全地",
+      "urge (v.): 呼籲；催促",
+      "register (v.): 登記；註冊",
+      "platform (n.): 平台",
+      "departure (n.): 出發；啟程",
+      "ensure (v.): 確保；保證",
+      "amid (prep.): 在...之中",
+      "geopolitical (adj.): 地緣政治的",
+      "tension (n.): 緊張局勢；緊張關係",
+      "emphasize (v.): 強調",
+      "exercise caution (phr.): 保持謹慎",
+      "vigilant (adj.): 警惕的；警覺的",
+      "regarding (prep.): 關於；至於",
+      "security (n.): 安全；保障"
+    ],
+    "quiz": [
+      {
+        "q": "What caused the closure of the Taiwan Stock Exchange?",
+        "options": [
+          "A. A technical system failure",
+          "B. Typhoon Bawei",
+          "0C. A national holiday",
+          "D. An economic recession"
+        ],
+        "answer": "B. Typhoon Bawei"
+      },
+      {
+        "q": "Which of the following reached an all-time high during the night session?",
+        "options": [
+          "A. Physical stock trading",
+          "B. The unemployment rate",
+          "C. Taiwan index futures",
+          "D. Government tax revenue"
+        ],
+        "answer": "C. Taiwan index futures"
+      },
+      {
+        "q": "What does the word 'suspend' mean in the context of the article?",
+        "options": [
+          "A. To cancel permanently",
+          "B. To stop temporarily",
+          "C. To improve quickly",
+          "D. To support financially"
+        ],
+        "answer": "B. To stop temporarily"
+      },
+      {
+        "q": "What was the primary driver of the surge in futures?",
+        "options": [
+          "A. Strong global market sentiment",
+          "B. Decreased demand for technology shares",
+          "C. Government interventions",
+          "D. High inflation rates"
+        ],
+        "answer": "A. Strong global market sentiment"
+      },
+      {
+        "q": "What do analysts warn investors about regarding next week?",
+        "options": [
+          "A. A complete market crash",
+          "B. Potential market volatility",
+          "C. A shortage of technology shares",
+          "D. High transaction fees"
+        ],
+        "answer": "B. Potential market volatility"
+      },
+      {
+        "q": "Which word is closest in meaning to 'robust'?",
+        "options": [
+          "A. Weak",
+          "B. Unstable",
+          "C. Strong",
+          "D. Expensive"
+        ],
+        "answer": "C. Strong"
+      },
+      {
+        "q": "When is regular trading expected to resume?",
+        "options": [
+          "A. During the weekend",
+          "B. Next week",
+          "C. In a month",
+          "D. Instantly on Friday evening"
+        ],
+        "answer": "B. Next week"
+      },
+      {
+        "q": "What does 'all-time high' refer to?",
+        "options": [
+          "A. The lowest point in history",
+          "B. The average price over ten years",
+          "C. The highest level ever reached",
+          "D. A standard trading volume"
+        ],
+        "answer": "C. The highest level ever reached"
+      },
+      {
+        "q": "Which of the following is antonymous to 'cautious'?",
+        "options": [
+          "A. Careful",
+          "B. Reckless",
+          "C. Prudent",
+          "D. Guarded"
+        ],
+        "answer": "B. Reckless"
+      },
+      {
+        "q": "What type of shares experienced robust demand according to the text?",
+        "options": [
+          "A. Agricultural shares",
+          "B. Real estate shares",
+          "C. Technology shares",
+          "D. Energy shares"
+        ],
+        "answer": "C. Technology shares"
+      },
+      {
+        "q": "The noun form of 'volatile' used in the text is:",
+        "options": [
+          "A. Volatilize",
+          "B. Volatiles",
+          "C. Volatility",
+          "D. Volatilities"
+        ],
+        "answer": "C. Volatility"
+      },
+      {
+        "q": "Why was work and school suspended in Taiwan?",
+        "options": [
+          "A. Because of heavy snow",
+          "B. Because of a political election",
+          "C. Because of Typhoon Bawei",
+          "D. Because of a public health emergency"
+        ],
+        "answer": "C. Because of Typhoon Bawei"
+      },
+      {
+        "q": "The restaurant was closed after health inspectors found _______ ingredients in the kitchen.",
+        "options": [
+          "fresh",
+          "tainted",
+          "organic",
+          "nutritious"
+        ],
+        "answer": "tainted"
+      },
+      {
+        "q": "The politician resigned immediately after the financial _______ was exposed by the media.",
+        "options": [
+          "scandal",
+          "achievement",
+          "campaign",
+          "agreement"
+        ],
+        "answer": "scandal"
+      },
+      {
+        "q": "The new policy has caused a lot of _______ among local residents who disagree with the changes.",
+        "options": [
+          "harmony",
+          "controversy",
+          "celebration",
+          "cooperation"
+        ],
+        "answer": "controversy"
+      },
+      {
+        "q": "The sudden price hike is expected to _______ protests across the country.",
+        "options": [
+          "prevent",
+          "spark",
+          "solve",
+          "ignore"
+        ],
+        "answer": "spark"
+      },
+      {
+        "q": "Many students experience deep _______ before taking their final college entrance exams.",
+        "options": [
+          "anxiety",
+          "excitement",
+          "boredom",
+          "satisfaction"
+        ],
+        "answer": "anxiety"
+      },
+      {
+        "q": "The government introduced a new _______ to limit carbon emissions from factories.",
+        "options": [
+          "regulation",
+          "rumor",
+          "recreation",
+          "reception"
+        ],
+        "answer": "regulation"
+      },
+      {
+        "q": "During the meeting, the manager will _______ the key goals for the next quarter.",
+        "options": [
+          "outline",
+          "forget",
+          "cancel",
+          "oppose"
+        ],
+        "answer": "outline"
+      },
+      {
+        "q": "Safety _______ must be carried out regularly to prevent accidents in the factory.",
+        "options": [
+          "inspections",
+          "invitations",
+          "intentions",
+          "impressions"
+        ],
+        "answer": "inspections"
+      },
+      {
+        "q": "Public officials must hold high standards of _______ to maintain trust with the citizens.",
+        "options": [
+          "privacy",
+          "accountability",
+          "secrecy",
+          "flexibility"
+        ],
+        "answer": "accountability"
+      },
+      {
+        "q": "Why is Premier Cho scheduled to report to the Legislative Yuan on July 14?",
+        "options": [
+          "To celebrate a national holiday",
+          "To address the tainted food oil scandal",
+          "To propose a new environmental tax",
+          "To welcome foreign diplomats"
+        ],
+        "answer": "To address the tainted food oil scandal"
+      },
+      {
+        "q": "What is one of the things the Premier will outline during his report?",
+        "options": [
+          "The government's budget for next year",
+          "Plans to build new highways",
+          "Immediate response measures and investigation progress",
+          "A new trade agreement with neighboring countries"
+        ],
+        "answer": "Immediate response measures and investigation progress"
+      },
+      {
+        "q": "Who is demanding accountability and stricter oversight regarding the issue?",
+        "options": [
+          "Only the ruling party",
+          "Lawmakers from both ruling and opposition parties",
+          "International food safety organizations",
+          "Local oil manufacturing companies"
+        ],
+        "answer": "Lawmakers from both ruling and opposition parties"
+      },
+      {
+        "q": "According to the passage, how many Taiwanese individuals recently went missing in China?",
+        "options": [
+          "A) Four",
+          "B) Six",
+          "C) Ten",
+          "D) Fourteen"
+        ],
+        "answer": "C) Ten"
+      },
+      {
+        "q": "What does the acronym 'MAC' stand for in the context of this news?",
+        "options": [
+          "A) Ministry of Asian Commerce",
+          "B) Mainland Affairs Council",
+          "C) Military Administration Commission",
+          "D) Migration and Customs Agency"
+        ],
+        "answer": "B) Mainland Affairs Council"
+      },
+      {
+        "q": "What did the MAC urge travelers to do before departure?",
+        "options": [
+          "A) Cancel their trips",
+          "B) Apply for a new passport",
+          "C) Register their personal details on government platforms",
+          "D) Contact local Chinese authorities"
+        ],
+        "answer": "C) Register their personal details on government platforms"
+      },
+      {
+        "q": "Why did the MAC issue this warning?",
+        "options": [
+          "A) Due to severe weather conditions",
+          "B) Because ten Taiwanese citizens went missing in China",
+          "C) Because of a change in visa policy",
+          "D) To promote tourism in Hong Kong and Macau"
+        ],
+        "answer": "B) Because ten Taiwanese citizens went missing in China"
+      },
+      {
+        "q": "What is the meaning of the word 'vigilant' as used in the passage?",
+        "options": [
+          "A) Indifferent",
+          "B) Excited",
+          "C) Alert and watchful",
+          "D) Careless"
+        ],
+        "answer": "C) Alert and watchful"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'ensure'?",
+        "options": [
+          "A) To neglect",
+          "B) To guarantee",
+          "C) To damage",
+          "D) To ignore"
+        ],
+        "answer": "B) To guarantee"
+      },
+      {
+        "q": "The phrase 'exercise caution' means to:",
+        "options": [
+          "A) Be extremely careful",
+          "B) Do physical exercise",
+          "C) Ignore advice",
+          "D) Travel frequently"
+        ],
+        "answer": "A) Be extremely careful"
+      },
+      {
+        "q": "Under what circumstances did the MAC advise citizens to remain vigilant?",
+        "options": [
+          "A) Decreasing economic activities",
+          "B) Rising geopolitical tensions",
+          "C) Improving diplomatic relations",
+          "D) Changes in airline regulations"
+        ],
+        "answer": "B) Rising geopolitical tensions"
+      },
+      {
+        "q": "Who disappeared as part of a group, according to the text?",
+        "options": [
+          "A) Ten government officials",
+          "B) A group of four individuals",
+          "C) Two business travelers",
+          "D) A family of six"
+        ],
+        "answer": "B) A group of four individuals"
+      },
+      {
+        "q": "Which regions, besides China, did the MAC mention regarding personal security?",
+        "options": [
+          "A) Japan and South Korea",
+          "B) Singapore and Malaysia",
+          "C) Hong Kong and Macau",
+          "D) Vietnam and Thailand"
+        ],
+        "answer": "C) Hong Kong and Macau"
+      },
+      {
+        "q": "What is the word class (part of speech) of 'departure' in the text?",
+        "options": [
+          "A) Verb",
+          "B) Noun",
+          "C) Adjective",
+          "D) Adverb"
+        ],
+        "answer": "B) Noun"
+      },
+      {
+        "q": "What does 'amid' mean in the phrase 'amid rising geopolitical tensions'?",
+        "options": [
+          "A) Before",
+          "B) In the middle of / during",
+          "C) After",
+          "D) Far away from"
+        ],
+        "answer": "B) In the middle of / during"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "中國傳放行輝達H200晶片，多家AI巨頭受惠",
+    "tabTitle": "科技",
+    "english": "China has reportedly given the green light for domestic tech companies to purchase Nvidia's advanced H200 artificial intelligence chips. This move is expected to benefit several Chinese AI giants, including Alibaba, Tencent, and Baidu, which have faced strict US export controls on high-end hardware. Although Washington has constantly tightened restrictions on cutting-edge processors, Nvidia has managed to customize specific models to comply with regulations while serving the massive Chinese market. Industry experts suggest this approval could significantly boost China's generative AI development.",
+    "chinese": "據報導，中國已批准國內科技公司採購輝達（Nvidia）先進的 H200 人工智慧晶片。此舉預計將使包括阿里巴巴、騰訊和百度在內的多家中國 AI 巨頭受益，這些企業此前因美國對高端硬體的出口管制而面臨限制。儘管華盛頓不斷收緊對頂尖處理器的限制，輝達仍成功定制了符合法規的特定型號，以服務龐大的中國市場。行業專家指出，此次批准可能會顯著推動中國生成式人工智慧的發展。",
+    "vocabulary": [
+      "reportedly (adv.): 據報導，據稱",
+      "domestic (adj.): 國內的，家庭的",
+      "artificial intelligence (n.): 人工智慧",
+      "benefit (v.): 受益，對...有益",
+      "giant (n.): 巨頭，大企業",
+      "export control (n.): 出口管制",
+      "hardware (n.): 硬體",
+      "constantly (adv.): 不斷地，持續地",
+      "tighten (v.): 收緊，變緊",
+      "restriction (n.): 限制，約束",
+      "cutting-edge (adj.): 頂尖的，最先進的",
+      "processor (n.): 處理器",
+      "customize (v.): 客製化，定制",
+      "comply with (phr.): 遵守，符合",
+      "regulation (n.): 規章，法規",
+      "massive (adj.): 龐大的，巨大的",
+      "industry (n.): 行業，工業",
+      "approval (n.): 批准，同意",
+      "significantly (adv.): 顯著地，重要地",
+      "generative (adj.): 生成的，有生產力的"
+    ],
+    "quiz": [
+      {
+        "q": "According to the passage, Nvidia's H200 chip purchases have ________ been approved by China.",
+        "options": [
+          "officially",
+          "reportedly",
+          "secretly",
+          "never"
+        ],
+        "answer": "reportedly"
+      },
+      {
+        "q": "Which of the following companies is NOT mentioned as a potential beneficiary in the text?",
+        "options": [
+          "Alibaba",
+          "Tencent",
+          "Baidu",
+          "Apple"
+        ],
+        "answer": "Apple"
+      },
+      {
+        "q": "The word 'domestic' in the text refers to companies located in ________.",
+        "options": [
+          "the United States",
+          "Europe",
+          "China",
+          "Japan"
+        ],
+        "answer": "China"
+      },
+      {
+        "q": "What does Nvidia do to 'comply with' US regulations?",
+        "options": [
+          "It stops selling to China.",
+          "It customizes specific models.",
+          "It ignores the rules.",
+          "It sues the US government."
+        ],
+        "answer": "It customizes specific models."
+      },
+      {
+        "q": "Washington has constantly ________ restrictions on cutting-edge processors.",
+        "options": [
+          "loosened",
+          "tightened",
+          "removed",
+          "forgotten"
+        ],
+        "answer": "tightened"
+      },
+      {
+        "q": "What is the main purpose of the H200 chip?",
+        "options": [
+          "Mobile gaming",
+          "Artificial intelligence",
+          "Electric vehicles",
+          "Bitcoin mining"
+        ],
+        "answer": "Artificial intelligence"
+      },
+      {
+        "q": "Which word has the closest meaning to 'cutting-edge'?",
+        "options": [
+          "Outdated",
+          "Sharp",
+          "Advanced",
+          "Cheap"
+        ],
+        "answer": "Advanced"
+      },
+      {
+        "q": "The phrase 'massive Chinese market' implies that the market is ________.",
+        "options": [
+          "very small",
+          "extremely large",
+          "shrinking",
+          "unstable"
+        ],
+        "answer": "extremely large"
+      },
+      {
+        "q": "Why did Chinese AI giants face difficulties previously?",
+        "options": [
+          "Lack of funding",
+          "US export controls",
+          "High taxes in China",
+          "Poor software development"
+        ],
+        "answer": "US export controls"
+      },
+      {
+        "q": "The noun 'approval' in the last sentence is derived from which verb?",
+        "options": [
+          "Approve",
+          "Prove",
+          "Improve",
+          "Disprove"
+        ],
+        "answer": "Approve"
+      },
+      {
+        "q": "Who suggests that this approval could boost China's generative AI development?",
+        "options": [
+          "US politicians",
+          "Nvidia's CEO",
+          "Industry experts",
+          "Chinese consumers"
+        ],
+        "answer": "Industry experts"
+      },
+      {
+        "q": "Complete the sentence: 'This approval could ________ boost China's generative AI development.'",
+        "options": [
+          "significantly",
+          "insignificantly",
+          "rarely",
+          "negatively"
+        ],
+        "answer": "significantly"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "新加坡企業供應鏈韌性全球最強，經濟續成長",
+    "tabTitle": "國際大事",
+    "english": "According to a recent global index, Singaporean enterprises have been ranked as the world's most resilient in managing supply chain disruptions. By leveraging strategic investments in digital infrastructure and adopting diversified sourcing strategies, these local firms have successfully mitigated the impacts of international trade volatility. This robust supply chain performance has significantly bolstered Singapore's overall economic growth. Consequently, the nation continues to strengthen its position as a secure global trade hub, attracting substantial foreign investments for long-term prosperity.",
+    "chinese": "根據最新的一項全球指數，新加坡企業在應對供應鏈中斷方面被評為全球最具韌性。透過對數位基礎設施的戰略性投資以及採用多元化的採購策略，這些本地企業成功緩解了國際貿易波動帶來的衝擊。這種強韌的供應鏈表現顯著推動了新加坡的整體經濟成長。因此，該國繼續鞏固其作為安全全球貿易樞紐的地位，吸引了大量的外部投資以確保長期繁榮。",
+    "vocabulary": [
+      "resilient (adj.): 有彈性的；能迅速恢復的",
+      "enterprise (n.): 企業；公司",
+      "disruption (n.): 中斷；擾亂",
+      "strategic (adj.): 戰略性的；策略上的",
+      "infrastructure (n.): 基礎建設",
+      "diversified (adj.): 多元化的；多樣的",
+      "sourcing (n.): 採購；尋找貨源",
+      "mitigate (v.): 緩和；減輕",
+      "volatility (n.): 波動；不穩定性",
+      "robust (adj.): 強韌的；堅固的",
+      "bolster (v.): 增強；扶持",
+      "overall (adj.): 整體的；全面的",
+      "consequently (adv.): 因此；結果",
+      "strengthen (v.): 加強；鞏固",
+      "hub (n.): 樞紐；中心",
+      "substantial (adj.): 大量的；重大的",
+      "prosperity (n.): 繁榮；興旺",
+      "leverage (v.): 利用（以達成目的）",
+      "index (n.): 指數；指標",
+      "foreign investment (n. phr.): 外來投資"
+    ],
+    "quiz": [
+      {
+        "q": "What does the global index rank Singaporean enterprises highest in?",
+        "options": [
+          "Digital marketing",
+          "Supply chain resilience",
+          "Labor cost reduction",
+          "Agricultural production"
+        ],
+        "answer": "Supply chain resilience"
+      },
+      {
+        "q": "What strategies helped Singaporean firms mitigate trade volatility?",
+        "options": [
+          "Increasing taxes and reducing workforce",
+          "Relying on a single supplier",
+          "Digital infrastructure investments and diversified sourcing",
+          "Halting international trade"
+        ],
+        "answer": "Digital infrastructure investments and diversified sourcing"
+      },
+      {
+        "q": "Which word is closest in meaning to 'resilient'?",
+        "options": [
+          "fragile",
+          "adaptable",
+          "temporary",
+          "rigid"
+        ],
+        "answer": "adaptable"
+      },
+      {
+        "q": "What does 'mitigate' mean in the context of the passage?",
+        "options": [
+          "To make something worse",
+          "To make something less severe",
+          "To ignore completely",
+          "To increase the price of"
+        ],
+        "answer": "To make something less severe"
+      },
+      {
+        "q": "How has Singapore's robust supply chain performance affected its economy?",
+        "options": [
+          "It has significantly bolstered economic growth.",
+          "It has caused a severe recession.",
+          "It had no noticeable impact.",
+          "It forced the country to isolate its economy."
+        ],
+        "answer": "It has significantly bolstered economic growth."
+      },
+      {
+        "q": "What is the meaning of 'bolster'?",
+        "options": [
+          "To weaken",
+          "To support or strengthen",
+          "To delay",
+          "To criticize"
+        ],
+        "answer": "To support or strengthen"
+      },
+      {
+        "q": "'International trade volatility' refers to trade conditions that are:",
+        "options": [
+          "highly stable and predictable",
+          "constantly changing and uncertain",
+          "completely free of cost",
+          "limited to local markets"
+        ],
+        "answer": "constantly changing and uncertain"
+      },
+      {
+        "q": "Singapore is strengthening its position as a secure global trade ________.",
+        "options": [
+          "barrier",
+          "hub",
+          "competitor",
+          "liability"
+        ],
+        "answer": "hub"
+      },
+      {
+        "q": "Which of the following is an example of 'infrastructure'?",
+        "options": [
+          "A company's logo",
+          "Transportation and communication networks",
+          "A customer's feedback",
+          "An employee's daily schedule"
+        ],
+        "answer": "Transportation and communication networks"
+      },
+      {
+        "q": "If a company has a 'diversified' sourcing strategy, it means they:",
+        "options": [
+          "buy from only one supplier",
+          "get materials from various different sources",
+          "produce all materials internally",
+          "stop purchasing materials"
+        ],
+        "answer": "get materials from various different sources"
+      },
+      {
+        "q": "What is expected to attract substantial foreign investments to Singapore?",
+        "options": [
+          "Its high tax rates",
+          "Its supply chain resilience",
+          "Its geographical size",
+          "Its reliance on a single industry"
+        ],
+        "answer": "Its supply chain resilience"
+      },
+      {
+        "q": "Which of the following is a synonym for 'prosperity'?",
+        "options": [
+          "Poverty",
+          "Failure",
+          "Wealth and success",
+          "Decline"
+        ],
+        "answer": "Wealth and success"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "美聯儲6月會議紀要，官員對升息分歧大",
+    "tabTitle": "金融市場",
+    "english": "The Federal Reserve released the minutes of its June policy meeting, revealing deep divisions among officials regarding future interest rate hikes. While some policymakers argued that persistent inflation requires further monetary tightening, others expressed concerns over potential economic slowdowns and advocated for a pause. Ultimately, the central bank decided to hold interest rates steady, but signaled that more hikes could lie ahead if economic indicators do not improve. Investors are closely monitoring upcoming data to gauge the Fed's next moves.",
+    "chinese": "美聯儲公布了其六月份政策會議的紀要，揭示了官員們對於未來升息存在著巨大分歧。儘管部分決策者認為持續的通貨膨脹需要進一步收緊貨幣政策，但其他人則對潛在的經濟放緩表示擔憂，並主張暫停升息。最終，中央銀行決定維持利率不變，但也暗示如果經濟指標未能改善，未來可能還會進一步升息。投資人正密切關注即將公布的數據，以評估美聯儲的下一步行動。",
+    "vocabulary": [
+      "minutes (n.): 會議紀錄",
+      "reveal (v.): 透露；揭露",
+      "division (n.): 分歧；分裂",
+      "regarding (prep.): 關於",
+      "policymaker (n.): 決策者",
+      "persistent (adj.): 持續的；執意的",
+      "inflation (n.): 通貨膨脹",
+      "monetary (adj.): 貨幣的",
+      "tightening (n.): 緊縮",
+      "express (v.): 表達",
+      "potential (adj.): 潛在的",
+      "slowdown (n.): （經濟）放緩；衰退",
+      "advocate (v.): 主張；提倡",
+      "pause (n.): 暫停",
+      "central bank (n.): 中央銀行",
+      "steady (adj.): 穩定的",
+      "signal (v.): 暗示；示意",
+      "indicator (n.): 指標",
+      "monitor (v.): 監控；密切關注",
+      "gauge (v.): 評估；測量"
+    ],
+    "quiz": [
+      {
+        "q": "What did the Federal Reserve release?",
+        "options": [
+          "A new currency",
+          "The June meeting minutes",
+          "A tax reform plan",
+          "An employment report"
+        ],
+        "answer": "The June meeting minutes"
+      },
+      {
+        "q": "According to the text, what is the main source of division among Fed officials?",
+        "options": [
+          "Tax rates",
+          "Interest rate hikes",
+          "Government spending",
+          "Trade tariffs"
+        ],
+        "answer": "Interest rate hikes"
+      },
+      {
+        "q": "Why did some policymakers argue for further monetary tightening?",
+        "options": [
+          "Due to low unemployment",
+          "Due to persistent inflation",
+          "To support local banks",
+          "To lower the national debt"
+        ],
+        "answer": "Due to persistent inflation"
+      },
+      {
+        "q": "What did other officials worry about regarding further rate hikes?",
+        "options": [
+          "An economic slowdown",
+          "A sudden rise in exports",
+          "A decrease in oil prices",
+          "An increase in stock market values"
+        ],
+        "answer": "An economic slowdown"
+      },
+      {
+        "q": "What did the Fed ultimately decide to do with interest rates in June?",
+        "options": [
+          "Lower them",
+          "Raise them significantly",
+          "Hold them steady",
+          "Abolish them"
+        ],
+        "answer": "Hold them steady"
+      },
+      {
+        "q": "What did the central bank signal about the future?",
+        "options": [
+          "No more hikes will ever occur",
+          "More hikes could lie ahead",
+          "Interest rates will be cut soon",
+          "They will stop monitoring data"
+        ],
+        "answer": "More hikes could lie ahead"
+      },
+      {
+        "q": "What are investors currently monitoring to gauge the Fed's next moves?",
+        "options": [
+          "Political speeches",
+          "Upcoming economic data",
+          "Social media trends",
+          "Weather patterns"
+        ],
+        "answer": "Upcoming economic data"
+      },
+      {
+        "q": "Which word in the text means 'to express support for a particular plan or action'?",
+        "options": [
+          "reveal",
+          "gauge",
+          "advocate",
+          "monitor"
+        ],
+        "answer": "advocate"
+      },
+      {
+        "q": "In the context of the passage, what does 'monetary tightening' refer to?",
+        "options": [
+          "Printing more money",
+          "Reducing interest rates",
+          "Policies to restrict money supply",
+          "Increasing government spending"
+        ],
+        "answer": "Policies to restrict money supply"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'persistent'?",
+        "options": [
+          "Temporary",
+          "Continuous",
+          "Unexpected",
+          "Minor"
+        ],
+        "answer": "Continuous"
+      },
+      {
+        "q": "The word 'gauge' in the text is closest in meaning to:",
+        "options": [
+          "ignore",
+          "assess",
+          "accelerate",
+          "postpone"
+        ],
+        "answer": "assess"
+      },
+      {
+        "q": "What condition might lead to more rate hikes in the future?",
+        "options": [
+          "If economic indicators do not improve",
+          "If inflation drops to zero immediately",
+          "If the central bank closes down",
+          "If investors stop monitoring data"
+        ],
+        "answer": "If economic indicators do not improve"
+      }
+    ]
+  },
+  "article-6": {
+    "title": "韓股進入熊市，監管擬限制槓桿ETF發行",
+    "tabTitle": "金融市場",
+    "english": "South Korean stocks have officially entered a bear market as the benchmark Kospi index fell more than 20% from its recent peak, driven by global economic uncertainties and a tech-sector sell-off. In response to the market downturn, financial regulators are considering strict measures to curb the issuance of highly leveraged exchange-traded funds (ETFs). Officials worry that these risky investment products could amplify market volatility and cause severe losses for retail investors. Regulatory authorities are expected to announce new guidelines next week to stabilize the financial system.",
+    "chinese": "由於全球經濟不確定性以及科技板塊的拋售潮，韓國基準綜合股價指數（Kospi）自近期高點下跌超過20%，韓國股市已正式進入熊市。為了應對市場低迷，金融監管機構正考慮採取嚴格措施，以限制高槓桿指數股票型基金（ETF）的發行。官員們擔心，這些高風險的投資產品可能會放大市場波動，並給散戶投資者帶來嚴重損失。預計監管機構將於下週公布新指引，以穩定金融體系。",
+    "vocabulary": [
+      "benchmark (n.): 基準；水準",
+      "bear market (n.): 熊市；空頭市場",
+      "peak (n.): 頂峰；高峰",
+      "uncertainty (n.): 不確定性",
+      "sell-off (n.): 拋售；股價大跌",
+      "downturn (n.): （經濟、活動的）衰退；低迷",
+      "regulator (n.): 監管機構；監管者",
+      "curb (v.): 限制；控制",
+      "issuance (n.): 發行；發布",
+      "leveraged (adj.): 槓桿化的",
+      "exchange-traded fund (n.): 指數股票型基金 (ETF)",
+      "amplify (v.): 放大；增強",
+      "volatility (n.): 波動性；易變性",
+      "severe (adj.): 嚴重的；嚴厲的",
+      "retail investor (n.): 散戶投資者",
+      "authority (n.): 當局；官方",
+      "guideline (n.): 指引；準則",
+      "stabilize (v.): （使）穩定",
+      "financial system (n.): 金融體系",
+      "in response to (phr.): 為了回應...；針對..."
+    ],
+    "quiz": [
+      {
+        "q": "Why did South Korean stocks enter a bear market?",
+        "options": [
+          "A) Due to a sudden rise in oil prices",
+          "B) Due to global economic uncertainties and a tech-sector sell-off",
+          "C) Because regulators banned ETFs",
+          "D) Because retail investors stopped trading"
+        ],
+        "answer": "B) Due to global economic uncertainties and a tech-sector sell-off"
+      },
+      {
+        "q": "What does the word 'curb' mean in the context of the news?",
+        "options": [
+          "A) To encourage or promote",
+          "B) To ignore or neglect",
+          "C) To restrict or limit",
+          "D) To expand or increase"
+        ],
+        "answer": "C) To restrict or limit"
+      },
+      {
+        "q": "How much has the benchmark Kospi index fallen from its recent peak?",
+        "options": [
+          "A) Less than 10%",
+          "B) Exactly 15%",
+          "C) More than 20%",
+          "D) Nearly 50%"
+        ],
+        "answer": "C) More than 20%"
+      },
+      {
+        "q": "What is the meaning of 'retail investor'?",
+        "options": [
+          "A) An individual investor who buys and sells securities for their personal account",
+          "B) A large financial institution that manages billions of dollars",
+          "C) A government official who regulates the stock market",
+          "D) A company that lists its shares on the stock exchange"
+        ],
+        "answer": "A) An individual investor who buys and sells securities for their personal account"
+      },
+      {
+        "q": "Why are financial regulators concerned about leveraged ETFs?",
+        "options": [
+          "A) They believe they are too cheap to buy.",
+          "B) They fear they might amplify market volatility and cause severe losses.",
+          "C) They think these products are not popular enough.",
+          "D) They want to encourage more people to invest in them."
+        ],
+        "answer": "B) They fear they might amplify market volatility and cause severe losses."
+      },
+      {
+        "q": "Which word is closest in meaning to 'amplify'?",
+        "options": [
+          "A) Reduce",
+          "B) Increase",
+          "C) Simplify",
+          "D) Eliminate"
+        ],
+        "answer": "B) Increase"
+      },
+      {
+        "q": "In the phrase 'driven by global economic uncertainties,' what does 'driven by' mean?",
+        "options": [
+          "A) Steered by a vehicle",
+          "B) Caused or influenced by",
+          "C) Transported by",
+          "D) Opposed by"
+        ],
+        "answer": "B) Caused or influenced by"
+      },
+      {
+        "q": "When are the regulatory authorities expected to announce new guidelines?",
+        "options": [
+          "A) Next month",
+          "B) Next week",
+          "C) Later today",
+          "D) Next year"
+        ],
+        "answer": "B) Next week"
+      },
+      {
+        "q": "What is a 'bear market'?",
+        "options": [
+          "A) A market experiencing rapid growth and rising prices",
+          "B) A market characterized by falling prices and pessimism",
+          "C) A market where only agricultural goods are traded",
+          "D) A market with zero trading volume"
+        ],
+        "answer": "B) A market characterized by falling prices and pessimism"
+      },
+      {
+        "q": "Financial regulators are considering strict measures ________ the issuance of highly leveraged ETFs.",
+        "options": [
+          "A) to curb",
+          "B) curb",
+          "C) curbed",
+          "D) for curb"
+        ],
+        "answer": "A) to curb"
+      },
+      {
+        "q": "What does 'volatility' refer to in financial markets?",
+        "options": [
+          "A) The total number of companies listed",
+          "B) The speed and size of price changes",
+          "C) The amount of taxes paid by investors",
+          "D) The process of issuing new shares"
+        ],
+        "answer": "B) The speed and size of price changes"
+      },
+      {
+        "q": "What is the main goal of the upcoming guidelines mentioned in the text?",
+        "options": [
+          "A) To shut down the stock market completely",
+          "B) To stabilize the financial system",
+          "C) To double the profits of retail investors",
+          "D) To increase the price of tech stocks"
+        ],
+        "answer": "B) To stabilize the financial system"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
