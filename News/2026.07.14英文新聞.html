@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日英文新聞深度學習：${dates.display}</title>
+    <!-- Tailwind CSS for modern, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            min-height: 100vh;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1rem; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        .main-tabs-container {
+            background-color: #f1f5f9; 
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem 1.25rem 0 1.25rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-tab-button {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: -1px; 
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b; 
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .main-tab-button.active {
+            color: #2563eb; 
+            border-bottom-color: #2563eb; 
+            background-color: #ffffff;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .sub-tab-button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sub-tab-button.active {
+            color: #ffffff;
+            background-color: #3b82f6; 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .quiz-option:hover { background-color: #f1f5f9; }
+        .quiz-option.selected { border-color: #3b82f6; background-color: #eff6ff; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #10b981; font-weight: 700; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; font-weight: 700; }
+
+        .prose p {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            margin-bottom: 1em;
+        }
+        ::-webkit-scrollbar { height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">每日英語新聞深度學習</h1>
+            <p class="mt-2 text-blue-600 font-bold uppercase tracking-widest">JUL 14, 2026：科技、地緣政治 與 科技</p>
+        </header>
+
+        <div class="container-card overflow-hidden border border-slate-200">
+            <!-- Main News Tabs -->
+            <div id="main-tabs" class="main-tabs-container border-b border-slate-200"></div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 sm:p-12">
+                <div class="text-center p-20 text-slate-400">
+                    <p class="text-xl">內容加載中...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-10 text-slate-400 text-sm">
+            <p>© 2026 Professional English Learning Program. Designed for Strategic Leadership.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        // --- DATA STRUCTURE ---
+        const NEWS_DATA = {
+  "taiwan-focus": {
+    "title": "台灣本地焦點",
+    "english": "[1] 台積電上半年營收2.4兆年增36% 嘉義先進封裝擴產至2031年\nTaiwan Semiconductor Manufacturing Company (TSMC) reported a remarkable consolidated revenue of NT$2.4 trillion for the first half of 2026, representing a 36% year-on-year growth. This surge is primarily driven by the robust global demand for advanced artificial intelligence chips. To sustain this momentum, the chipmaker has announced plans to continuously expand its advanced packaging capacity in Chiayi until 2031. This strategic expansion is crucial for securing TSMC's leadership in the semiconductor industry.\n\n[2] 青安3.0補貼不隨升息加碼 寬限期成政策拉鋸關鍵\nThe Taiwanese government has decided that the subsidies for the 'Youth Home Loan 3.0' program will not increase in response to future interest rate hikes. Instead, the focus of policy debates has shifted to the extension of the grace period. While some officials argue that a longer grace period helps young buyers manage initial costs, critics warn it might lead to higher long-term financial risks. Consequently, balancing financial stability with housing affordability remains a critical challenge for policymakers.\n\n[3] 颱風巴威致彰化近1.5萬戶停電 搶修盼入夜前完成\nTyphoon Bawei caused significant disruption in Changhua on July 14, 2026, leading to nearly 15,000 households experiencing power outages. Strong winds and heavy rain brought down power lines and damaged electrical infrastructure across the county. Taiwan Power Company (Taipower) immediately deployed teams to repair the affected areas. They are working diligently to restore electricity, with hopes of completing most repairs before nightfall, minimizing inconvenience for residents.",
+    "chinese": "【1】台積電上半年營收2.4兆年增36% 嘉義先進封裝擴產至2031年\n台積電（TSMC）公布2026年上半年合併營收達新台幣2.4兆元，年增率高達36%。這一增長主要受到全球對先進人工智慧晶片強勁需求的推動。為了維持這一成長動能，這家晶片製造商宣布計劃將其在嘉義的先進封裝產能持續擴產至2031年。這項戰略性擴張對於確保台積電在半導體產業的領導地位至關重要。\n\n【2】青安3.0補貼不隨升息加碼 寬限期成政策拉鋸關鍵\n台灣政府已決定，「青安貸款3.0」計畫的補貼將不會隨未來的升息而加碼。相反地，政策辯論的焦點已轉移至寬限期的延長。儘管部分官員認為較長的寬限期有助於年輕買家管理初期成本，但批評者警告這可能會導致更高的長期財務風險。因此，在財務穩定與購屋負擔能力之間取得平衡，仍是政策制定者面臨的關鍵挑戰。\n\n【3】颱風巴威致彰化近1.5萬戶停電 搶修盼入夜前完成\n2026年7月14日，颱風巴威在彰化造成嚴重破壞，導致近15,000戶家庭停電。強風豪雨吹倒了電線桿，並損壞了全縣的電力基礎設施。台灣電力公司（台電）立即部署團隊前往受影響地區進行搶修。他們正努力恢復供電，希望能趕在入夜前完成大部分維修工作，以最大程度地減少居民的不便。",
+    "vocabulary": [
+      "consolidated (adj.): 合併的、統一的",
+      "revenue (n.): 營收、收入",
+      "represent (v.): 代表、相當於",
+      "year-on-year (adj.): 與去年同期相比的",
+      "surge (n.): 激增、急遽上升",
+      "primarily (adv.): 主要地",
+      "robust (adj.): 強勁的、堅固的",
+      "demand (n.): 需求",
+      "artificial intelligence (n.): 人工智慧",
+      "sustain (v.): 維持、持續",
+      "momentum (n.): 動能、勢頭",
+      "chipmaker (n.): 晶片製造商",
+      "announce (v.): 宣布、宣告",
+      "continuously (adv.): 持續地、不斷地",
+      "expand (v.): 擴張、擴大",
+      "advanced packaging (n.): 先進封裝",
+      "capacity (n.): 產能、容量",
+      "strategic (adj.): 戰略性的、策略上的",
+      "crucial (adj.): 至關重要的、關鍵的",
+      "semiconductor (n.): 半導體",
+      "subsidy (n.): 補貼、津貼",
+      "interest rate (n.): 利率",
+      "hike (n.): （價格、利率等）大幅提高、增加",
+      "grace period (n.): 寬限期",
+      "policy (n.): 政策",
+      "debate (n.): 辯論、爭論",
+      "shift (v.): 轉移、改變",
+      "extension (n.): 延長、擴大",
+      "official (n.): 官員",
+      "manage (v.): 管理、應對",
+      "initial (adj.): 初期的、開始的",
+      "critic (n.): 批評者、反對者",
+      "warn (v.): 警告、提醒",
+      "financial (adj.): 財務的、金融的",
+      "risk (n.): 風險、危險",
+      "consequently (adv.): 因此、結果",
+      "balance (v.): 權衡、使平衡",
+      "stability (n.): 穩定、穩定性",
+      "affordability (n.): 負擔能力",
+      "policymaker (n.): 政策制定者",
+      "Typhoon (n.): 颱風",
+      "disruption (n.): 中斷；混亂",
+      "leading to (phr.): 導致",
+      "household (n.): 家庭；住戶",
+      "power outage (n.): 停電",
+      "strong winds (n.): 強風",
+      "heavy rain (n.): 豪雨",
+      "bring down (phr. v.): 吹倒；弄倒",
+      "power line (n.): 電線",
+      "damage (v.): 損壞",
+      "electrical infrastructure (n.): 電力基礎設施",
+      "deploy (v.): 部署；調派",
+      "repair (v.): 修復；搶修",
+      "affected area (n.): 受影響地區",
+      "diligently (adv.): 勤奮地；努力地",
+      "restore (v.): 恢復",
+      "electricity (n.): 電力",
+      "nightfall (n.): 黃昏；入夜",
+      "minimize (v.): 最小化",
+      "inconvenience (n.): 不便"
+    ],
+    "quiz": [
+      {
+        "q": "What was TSMC's revenue for the first half of 2026?",
+        "options": [
+          "A) NT$1.2 trillion",
+          "B) NT$2.4 trillion",
+          "C) NT$3.6 trillion",
+          "D) NT$4.8 trillion"
+        ],
+        "answer": "B) NT$2.4 trillion"
+      },
+      {
+        "q": "By how much did TSMC's revenue grow compared to the same period last year?",
+        "options": [
+          "A) 26%",
+          "B) 30%",
+          "C) 36%",
+          "D) 40%"
+        ],
+        "answer": "C) 36%"
+      },
+      {
+        "q": "What is the primary driver of TSMC's revenue growth?",
+        "options": [
+          "A) Low-end smartphone chips",
+          "B) Global demand for advanced AI chips",
+          "C) Automotive sensors",
+          "D) Standard memory chips"
+        ],
+        "answer": "B) Global demand for advanced AI chips"
+      },
+      {
+        "q": "Until which year does TSMC plan to expand its advanced packaging capacity in Chiayi?",
+        "options": [
+          "A) 2028",
+          "B) 2030",
+          "C) 2031",
+          "D) 2035"
+        ],
+        "answer": "C) 2031"
+      },
+      {
+        "q": "What does the word 'revenue' mean in the text?",
+        "options": [
+          "A) Tax paid to the government",
+          "B) Money received from selling goods or services",
+          "C) Total production cost",
+          "D) Net profit after taxes"
+        ],
+        "answer": "B) Money received from selling goods or services"
+      },
+      {
+        "q": "Which word in the text means 'strong and healthy; vigorous'?",
+        "options": [
+          "A) Robust",
+          "B) Consolidated",
+          "C) Strategic",
+          "D) Crucial"
+        ],
+        "answer": "A) Robust"
+      },
+      {
+        "q": "Choose the synonym for 'sustain' as used in the passage.",
+        "options": [
+          "A) Stop",
+          "B) Maintain",
+          "C) Decline",
+          "D) Initiate"
+        ],
+        "answer": "B) Maintain"
+      },
+      {
+        "q": "The phrase 'year-on-year' is used to compare financial figures with _______.",
+        "options": [
+          "A) the previous month",
+          "B) the same period of the previous year",
+          "C) the next quarter",
+          "D) a decade ago"
+        ],
+        "answer": "B) the same period of the previous year"
+      },
+      {
+        "q": "Where is TSMC expanding its advanced packaging capacity?",
+        "options": [
+          "A) Hsinchu",
+          "B) Tainan",
+          "C) Taichung",
+          "D) Chiayi"
+        ],
+        "answer": "D) Chiayi"
+      },
+      {
+        "q": "What does 'capacity' refer to in the context of 'packaging capacity'?",
+        "options": [
+          "A) The maximum amount that can be produced",
+          "B) The size of the boxes used for shipping",
+          "C) The electrical voltage of the chips",
+          "D) The number of employees in the factory"
+        ],
+        "answer": "A) The maximum amount that can be produced"
+      },
+      {
+        "q": "Which of the following is closest in meaning to 'crucial'?",
+        "options": [
+          "A) Unimportant",
+          "B) Optional",
+          "C) Essential",
+          "D) Secondary"
+        ],
+        "answer": "C) Essential"
+      },
+      {
+        "q": "What is the main purpose of the strategic expansion mentioned in the text?",
+        "options": [
+          "A) To reduce the price of the chips",
+          "B) To secure TSMC's leadership in the semiconductor industry",
+          "C) To shut down older factories",
+          "D) To transition into a software company"
+        ],
+        "answer": "B) To secure TSMC's leadership in the semiconductor industry"
+      },
+      {
+        "q": "What is the main focus of the current policy debate regarding the Youth Home Loan 3.0?",
+        "options": [
+          "The interest rate cuts",
+          "The extension of the grace period",
+          "The eligibility age of buyers",
+          "The total loan amount"
+        ],
+        "answer": "The extension of the grace period"
+      },
+      {
+        "q": "Will the subsidies for the Youth Home Loan 3.0 program increase if interest rates rise?",
+        "options": [
+          "Yes, they will increase automatically.",
+          "No, they will not increase.",
+          "Only for first-time buyers.",
+          "It depends on the bank."
+        ],
+        "answer": "No, they will not increase."
+      },
+      {
+        "q": "What does 'grace period' mean in the context of a home loan?",
+        "options": [
+          "A period during which no interest is charged.",
+          "A period during which the borrower only pays interest and not the principal.",
+          "The time allowed to cancel the loan without penalty.",
+          "The deadline to apply for the subsidy."
+        ],
+        "answer": "A period during which the borrower only pays interest and not the principal."
+      },
+      {
+        "q": "Choose the word closest in meaning to 'subsidy'.",
+        "options": [
+          "Tax",
+          "Financial aid",
+          "Debt",
+          "Fine"
+        ],
+        "answer": "Financial aid"
+      },
+      {
+        "q": "The government decided not to increase subsidies in ________ to future rate hikes.",
+        "options": [
+          "response",
+          "regard",
+          "relation",
+          "respect"
+        ],
+        "answer": "response"
+      },
+      {
+        "q": "Why do some officials support a longer grace period?",
+        "options": [
+          "It reduces the total interest paid.",
+          "It helps young buyers manage initial costs.",
+          "It guarantees lower housing prices.",
+          "It eliminates financial risks."
+        ],
+        "answer": "It helps young buyers manage initial costs."
+      },
+      {
+        "q": "What is the meaning of 'affordability'?",
+        "options": [
+          "The ability to be easily carried",
+          "The state of being cheap and low quality",
+          "The ability to be spared or paid for",
+          "The speed of financial transactions"
+        ],
+        "answer": "The ability to be spared or paid for"
+      },
+      {
+        "q": "Critics warn that a longer grace period ________ lead to higher long-term financial risks.",
+        "options": [
+          "might",
+          "should",
+          "ought",
+          "would have"
+        ],
+        "answer": "might"
+      },
+      {
+        "q": "Which word is an adverb meaning 'as a result'?",
+        "options": [
+          "Subsidize",
+          "Consequently",
+          "Initial",
+          "Stability"
+        ],
+        "answer": "Consequently"
+      },
+      {
+        "q": "What is the critical challenge for policymakers mentioned in the text?",
+        "options": [
+          "Lowering the interest rates to zero",
+          "Balancing financial stability with housing affordability",
+          "Stopping young people from buying houses",
+          "Increasing the tax on luxury homes"
+        ],
+        "answer": "Balancing financial stability with housing affordability"
+      },
+      {
+        "q": "The word 'initial' in the text is closest in meaning to:",
+        "options": [
+          "final",
+          "beginning",
+          "unimportant",
+          "extra"
+        ],
+        "answer": "beginning"
+      },
+      {
+        "q": "In the sentence 'balancing financial stability with housing affordability remains a critical challenge,' the word 'balancing' acts as a:",
+        "options": [
+          "Gerund (noun)",
+          "Verb in past tense",
+          "Preposition",
+          "Adverb"
+        ],
+        "answer": "Gerund (noun)"
+      },
+      {
+        "q": "What was the main cause of the power outages in Changhua?",
+        "options": [
+          "A. An earthquake",
+          "B. Typhoon Bawei",
+          "C. A technical malfunction",
+          "D. Heavy snowfall"
+        ],
+        "answer": "B. Typhoon Bawei"
+      },
+      {
+        "q": "Approximately how many households experienced power outages?",
+        "options": [
+          "A. About 1,500",
+          "B. Nearly 15,000",
+          "C. Exactly 15,000",
+          "D. Around 5,000"
+        ],
+        "answer": "B. Nearly 15,000"
+      },
+      {
+        "q": "According to the news, on what date did Typhoon Bawei cause disruption in Changhua?",
+        "options": [
+          "A. June 14, 2026",
+          "B. July 4, 2026",
+          "C. July 14, 2026",
+          "D. August 14, 2026"
+        ],
+        "answer": "C. July 14, 2026"
+      },
+      {
+        "q": "What two weather conditions are mentioned as contributing to the damage?",
+        "options": [
+          "A. Thunderstorms and hail",
+          "B. Strong winds and heavy rain",
+          "C. Fog and light drizzle",
+          "D. Heatwave and drought"
+        ],
+        "answer": "B. Strong winds and heavy rain"
+      },
+      {
+        "q": "What specific infrastructure was brought down by the weather?",
+        "options": [
+          "A. Telephone poles",
+          "B. Traffic lights",
+          "C. Power lines",
+          "D. Building roofs"
+        ],
+        "answer": "C. Power lines"
+      },
+      {
+        "q": "Besides power lines, what other type of infrastructure was damaged?",
+        "options": [
+          "A. Road infrastructure",
+          "B. Water infrastructure",
+          "C. Communication infrastructure",
+          "D. Electrical infrastructure"
+        ],
+        "answer": "D. Electrical infrastructure"
+      },
+      {
+        "q": "Which company is responsible for repairing the affected areas?",
+        "options": [
+          "A. Changhua City Council",
+          "B. Taiwan Power Company",
+          "C. The local police",
+          "D. A private construction firm"
+        ],
+        "answer": "B. Taiwan Power Company"
+      },
+      {
+        "q": "What did Taipower do immediately after the outages?",
+        "options": [
+          "A. Issued a warning",
+          "B. Deployed teams",
+          "C. Contacted the government",
+          "D. Shut down all power"
+        ],
+        "answer": "B. Deployed teams"
+      },
+      {
+        "q": "What is the main goal of the repair teams?",
+        "options": [
+          "A. To assess the damage",
+          "B. To evacuate residents",
+          "C. To restore electricity",
+          "D. To build new power plants"
+        ],
+        "answer": "C. To restore electricity"
+      },
+      {
+        "q": "When do the repair teams hope to complete most of the work?",
+        "options": [
+          "A. By morning",
+          "B. Before nightfall",
+          "C. Next week",
+          "D. By the end of the month"
+        ],
+        "answer": "B. Before nightfall"
+      },
+      {
+        "q": "What is the purpose of completing repairs quickly?",
+        "options": [
+          "A. To save money",
+          "B. To minimize inconvenience for residents",
+          "C. To impress the media",
+          "D. To test new equipment"
+        ],
+        "answer": "B. To minimize inconvenience for residents"
+      },
+      {
+        "q": "Who does the news state will be affected if repairs are not completed quickly?",
+        "options": [
+          "A. Tourists",
+          "B. Businesses",
+          "C. Residents",
+          "D. Government officials"
+        ],
+        "answer": "C. Residents"
+      }
+    ]
+  },
+  "article-3": {
+    "title": "美軍宣布7月14日恢復對伊朗海上封鎖 油價飆漲",
+    "tabTitle": "地緣政治",
+    "english": "On July 14, the United States military officially announced the resumption of its naval blockade against Iran, aiming to restrict the country's oil exports and pressure its government. This sudden geopolitical move has immediately triggered widespread anxiety in global energy markets. Consequently, international crude oil prices surged by over five percent within hours of the announcement. Analysts warn that prolonged maritime tensions in the Strait of Hormuz could further disrupt global supply chains and escalate inflation concerns worldwide.",
+    "chinese": "美國軍方於7月14日正式宣布，恢復對伊朗的海上封鎖，旨在限制該國的石油出口並向其政府施壓。這一突如來的地緣政治舉措立即引發了全球能源市場的廣泛焦慮。因此，在該聲明發布後的數小時內，國際原油價格飆升了百分之五以上。分析人士警告，荷姆茲海峽長期持續的海上緊張局勢可能會進一步破壞全球供應鏈，並加劇全球對通貨膨脹的擔憂。",
+    "vocabulary": [
+      "resumption (n.): 重新開始；恢復",
+      "naval (adj.): 海軍的；軍艦的",
+      "blockade (n.): 封鎖",
+      "aim (v.): 旨在；以...為目標",
+      "restrict (v.): 限制；約束",
+      "pressure (v.): 施壓；逼迫",
+      "geopolitical (adj.): 地緣政治的",
+      "trigger (v.): 引發；觸發",
+      "widespread (adj.): 廣泛的；普遍的",
+      "anxiety (n.): 焦慮；憂慮",
+      "consequently (adv.): 因此；結果",
+      "crude oil (n.): 原油",
+      "surge (v.): 飆升；急遽上升",
+      "analyst (n.): 分析師",
+      "prolonged (adj.): 長期的；持續很久的",
+      "maritime (adj.): 海事的；海洋的",
+      "tension (n.): 緊張局勢；緊張關係",
+      "disrupt (v.): 干擾；中斷",
+      "escalate (v.): 升級；加劇",
+      "inflation (n.): 通貨膨脹"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main objective of the US naval blockade against Iran?",
+        "options": [
+          "To establish a new military base",
+          "To restrict Iran's oil exports and pressure its government",
+          "To promote free trade in the region",
+          "To assist Iran in modernizing its navy"
+        ],
+        "answer": "To restrict Iran's oil exports and pressure its government"
+      },
+      {
+        "q": "How did the global energy markets react immediately to the US announcement?",
+        "options": [
+          "Crude oil prices dropped significantly.",
+          "There was no noticeable reaction.",
+          "Widespread anxiety was triggered and oil prices surged.",
+          "Global supply chains were immediately resolved."
+        ],
+        "answer": "Widespread anxiety was triggered and oil prices surged."
+      },
+      {
+        "q": "Which word in the text means 'the act of starting something again after a pause'?",
+        "options": [
+          "resumption",
+          "restriction",
+          "disruption",
+          "escalation"
+        ],
+        "answer": "resumption"
+      },
+      {
+        "q": "In the phrase 'surged by over five percent,' what does the word 'surged' mean?",
+        "options": [
+          "decreased slowly",
+          "stabilized",
+          "rose rapidly",
+          "fluctuated slightly"
+        ],
+        "answer": "rose rapidly"
+      },
+      {
+        "q": "According to the text, where are the maritime tensions located?",
+        "options": [
+          "The Panama Canal",
+          "The Strait of Hormuz",
+          "The South China Sea",
+          "The Suez Canal"
+        ],
+        "answer": "The Strait of Hormuz"
+      },
+      {
+        "q": "Fill in the blank: The sudden announcement has ______ widespread anxiety among investors.",
+        "options": [
+          "triggered",
+          "restricted",
+          "prolonged",
+          "resumed"
+        ],
+        "answer": "triggered"
+      },
+      {
+        "q": "What is the meaning of the word 'maritime' in the context of the passage?",
+        "options": [
+          "Relating to space exploration",
+          "Relating to mountain regions",
+          "Relating to shipping or navigation on the sea",
+          "Relating to agricultural development"
+        ],
+        "answer": "Relating to shipping or navigation on the sea"
+      },
+      {
+        "q": "What do analysts warn could happen if maritime tensions are prolonged?",
+        "options": [
+          "Global inflation concerns will completely disappear.",
+          "Global supply chains could be further disrupted.",
+          "Oil prices will instantly return to normal.",
+          "Iran will increase its oil exports."
+        ],
+        "answer": "Global supply chains could be further disrupted."
+      },
+      {
+        "q": "Choose the closest synonym for the word 'disrupt' as used in the text.",
+        "options": [
+          "improve",
+          "interrupt",
+          "organize",
+          "continue"
+        ],
+        "answer": "interrupt"
+      },
+      {
+        "q": "Complete the sentence: 'Consequently, international crude oil prices ______ by over five percent.'",
+        "options": [
+          "surges",
+          "surging",
+          "surged",
+          "has surged"
+        ],
+        "answer": "surged"
+      },
+      {
+        "q": "What does 'escalate' mean in the sentence '...and escalate inflation concerns worldwide'?",
+        "options": [
+          "To make something less intense",
+          "To explain something clearly",
+          "To solve a complex problem",
+          "To rapidly increase or make more intense"
+        ],
+        "answer": "To rapidly increase or make more intense"
+      },
+      {
+        "q": "On what date did the US military officially announce the resumption of the blockade?",
+        "options": [
+          "June 14, 2026",
+          "July 4, 2026",
+          "July 14, 2026",
+          "August 14, 2026"
+        ],
+        "answer": "July 14, 2026"
+      }
+    ]
+  },
+  "article-4": {
+    "title": "英特爾砸57億美元擴產愛爾蘭廠 提升AI處理器產能",
+    "tabTitle": "科技",
+    "english": "Intel announced on July 14, 2026, a significant investment of $5.7 billion to expand its manufacturing facility in Leixlip, Ireland. This strategic move aims to substantially boost the company's production capacity for advanced AI processors. The expansion is expected to strengthen Intel's position in the rapidly growing artificial intelligence market and create numerous job opportunities in the region.",
+    "chinese": "英特爾於2026年7月14日宣布，將投入57億美元巨額資金，擴建其位於愛爾蘭萊克斯利普的製造廠。這項策略性舉措旨在大幅提升該公司先進AI處理器的生產產能。此次擴張預計將鞏固英特爾在快速成長的人工智慧市場中的地位，並為該地區創造大量就業機會。",
+    "vocabulary": [
+      "announce (v.): 宣布",
+      "significant (adj.): 重大的，顯著的",
+      "investment (n.): 投資",
+      "expand (v.): 擴建，擴大",
+      "manufacturing facility (n.phr.): 製造廠",
+      "strategic (adj.): 策略性的",
+      "move (n.): 舉措，行動",
+      "aim to (v.phr.): 旨在，目標是",
+      "substantially (adv.): 大幅地，實質上",
+      "boost (v.): 提升，促進",
+      "production capacity (n.phr.): 生產產能",
+      "advanced (adj.): 先進的",
+      "AI processors (n.phr.): AI處理器",
+      "expected (adj.): 預期的",
+      "strengthen (v.): 鞏固，加強",
+      "position (n.): 地位",
+      "rapidly growing (adj.phr.): 快速成長的",
+      "artificial intelligence (n.phr.): 人工智慧",
+      "market (n.): 市場",
+      "job opportunities (n.phr.): 就業機會"
+    ],
+    "quiz": [
+      {
+        "q": "What is the main topic of the news article?",
+        "options": [
+          "Intel's new product launch",
+          "Intel's financial report",
+          "Intel's investment in Ireland for AI processor expansion",
+          "Intel's acquisition of another company"
+        ],
+        "answer": "Intel's investment in Ireland for AI processor expansion"
+      },
+      {
+        "q": "How much money is Intel investing?",
+        "options": [
+          "$5.7 million",
+          "$7.5 billion",
+          "$5.7 billion",
+          "$7.5 million"
+        ],
+        "answer": "$5.7 billion"
+      },
+      {
+        "q": "Where is Intel expanding its manufacturing facility?",
+        "options": [
+          "In the United States",
+          "In Germany",
+          "In Ireland",
+          "In Asia"
+        ],
+        "answer": "In Ireland"
+      },
+      {
+        "q": "What is the primary goal of this investment?",
+        "options": [
+          "To reduce operational costs",
+          "To increase production of traditional CPUs",
+          "To boost AI processor production capacity",
+          "To develop new software"
+        ],
+        "answer": "To boost AI processor production capacity"
+      },
+      {
+        "q": "What type of processors will see increased production?",
+        "options": [
+          "Graphics cards",
+          "Standard CPUs",
+          "AI processors",
+          "Memory chips"
+        ],
+        "answer": "AI processors"
+      },
+      {
+        "q": "When was this announcement made?",
+        "options": [
+          "July 14, 2025",
+          "July 14, 2026",
+          "August 14, 2026",
+          "July 14, 2024"
+        ],
+        "answer": "July 14, 2026"
+      },
+      {
+        "q": "What is expected to be a result of this expansion for Intel?",
+        "options": [
+          "A decrease in market share",
+          "A weaker position in the AI market",
+          "Strengthened position in the AI market",
+          "A shift away from hardware production"
+        ],
+        "answer": "Strengthened position in the AI market"
+      },
+      {
+        "q": "The investment is described as 'strategic' because it...",
+        "options": [
+          "Is a minor financial decision",
+          "Aims for long-term benefits and market advantage",
+          "Only affects local employment",
+          "Is a temporary solution"
+        ],
+        "answer": "Aims for long-term benefits and market advantage"
+      },
+      {
+        "q": "What does 'substantially boost' imply about the increase in production?",
+        "options": [
+          "It will be a small increase",
+          "It will be a significant and large increase",
+          "It will be a temporary increase",
+          "It will only affect a niche market"
+        ],
+        "answer": "It will be a significant and large increase"
+      },
+      {
+        "q": "What other positive outcome is mentioned for the region?",
+        "options": [
+          "Reduced energy consumption",
+          "New tourist attractions",
+          "Creation of job opportunities",
+          "Improved public transportation"
+        ],
+        "answer": "Creation of job opportunities"
+      },
+      {
+        "q": "The news article focuses on Intel's efforts in which technological field?",
+        "options": [
+          "Quantum computing",
+          "Virtual reality",
+          "Artificial intelligence",
+          "Biotechnology"
+        ],
+        "answer": "Artificial intelligence"
+      },
+      {
+        "q": "The manufacturing facility being expanded is located in:",
+        "options": [
+          "Dublin",
+          "Leixlip",
+          "Cork",
+          "Galway"
+        ],
+        "answer": "Leixlip"
+      }
+    ]
+  },
+  "article-5": {
+    "title": "蘋果起訴OpenAI竊取商業秘密 科技巨頭訴訟戰升溫",
+    "tabTitle": "科技",
+    "english": "Apple has officially filed a lawsuit against OpenAI, accusing the artificial intelligence giant of stealing valuable trade secrets to develop its latest models. According to legal documents, Apple claims that several former employees leaked proprietary algorithms and chip designs before joining OpenAI. This high-profile legal battle marks a significant escalation in the competition between major technology companies over AI dominance. OpenAI has denied the allegations, stating it respects intellectual property rights.",
+    "chinese": "蘋果公司已正式對 OpenAI 提起訴訟，指控這家人工智慧巨頭竊取其珍貴的商業秘密以開發其最新模型。根據法律文件，蘋果聲稱數名涉案的前員工在加入 OpenAI 之前，洩露了專有的演算法和晶片設計。這場備受矚目的法律戰標誌著各大科技公司在爭奪人工智慧主導權的競爭中，衝突顯著升級。OpenAI 則否認了這些指控，並表示其一向尊重智慧財產權。",
+    "vocabulary": [
+      "lawsuit (n.): 訴訟",
+      "accuse (v.): 指控",
+      "trade secret (n.): 商業秘密",
+      "proprietary (adj.): 專有的；專利的",
+      "algorithm (n.): 演算法",
+      "high-profile (adj.): 備受矚目的；高調的",
+      "escalation (n.): 升級；擴大",
+      "dominance (n.): 主導地位；支配",
+      "allegation (n.): （無證據的）指控；申訴",
+      "intellectual property (n.): 智慧財產",
+      "file (v.): 提出（起訴、申請等）",
+      "giant (n.): 巨頭；大企業",
+      "valuable (adj.): 有價值的；珍貴的",
+      "document (n.): 文件；公文",
+      "leak (v.): 洩露；透露",
+      "chip (n.): 晶片",
+      "significant (adj.): 顯著的；重大的",
+      "competition (n.): 競爭",
+      "deny (v.): 否認",
+      "respect (v.): 尊重"
+    ],
+    "quiz": [
+      {
+        "q": "Why did Apple sue OpenAI?",
+        "options": [
+          "A) For copying their logo design",
+          "B) For stealing trade secrets to develop AI models",
+          "C) For hiring too many Apple employees",
+          "D) For failing to pay tax on AI services"
+        ],
+        "answer": "B) For stealing trade secrets to develop AI models"
+      },
+      {
+        "q": "What did the former Apple employees allegedly leak?",
+        "options": [
+          "A) Marketing strategies and financial reports",
+          "B) Proprietary algorithms and chip designs",
+          "C) Customer personal data",
+          "D) iPhone release dates"
+        ],
+        "answer": "B) Proprietary algorithms and chip designs"
+      },
+      {
+        "q": "How did OpenAI react to the lawsuit?",
+        "options": [
+          "A) They admitted to the theft.",
+          "B) They agreed to pay a fine.",
+          "C) They denied the allegations.",
+          "D) They countersued Apple immediately."
+        ],
+        "answer": "C) They denied the allegations."
+      },
+      {
+        "q": "What does the word 'proprietary' mean in the text?",
+        "options": [
+          "A) Free for public use",
+          "B) Outdated and useless",
+          "C) Owned by a private holder; protected by patent",
+          "D) Shared among all competitors"
+        ],
+        "answer": "C) Owned by a private holder; protected by patent"
+      },
+      {
+        "q": "Which word is closest in meaning to 'escalation'?",
+        "options": [
+          "A) Decrease",
+          "B) Intensification",
+          "C) Resolution",
+          "D) Delay"
+        ],
+        "answer": "B) Intensification"
+      },
+      {
+        "q": "What is the meaning of 'allegation'?",
+        "options": [
+          "A) A proven scientific fact",
+          "B) A formal legal agreement",
+          "C) An assertion made without proof",
+          "D) A public apology"
+        ],
+        "answer": "C) An assertion made without proof"
+      },
+      {
+        "q": "The legal battle represents a significant escalation in what area?",
+        "options": [
+          "A) Mobile phone pricing",
+          "B) AI dominance competition",
+          "C) Social media marketing",
+          "D) Environmental protection"
+        ],
+        "answer": "B) AI dominance competition"
+      },
+      {
+        "q": "In the phrase 'filed a lawsuit', what does 'filed' mean?",
+        "options": [
+          "A) Organized in a folder",
+          "B) Smooth down with a tool",
+          "C) Officially submitted a legal case",
+          "D) Walked in a line"
+        ],
+        "answer": "C) Officially submitted a legal case"
+      },
+      {
+        "q": "Who allegedly leaked the secrets to OpenAI?",
+        "options": [
+          "A) Current OpenAI executives",
+          "B) Several former Apple employees",
+          "C) Independent security researchers",
+          "D) Government officials"
+        ],
+        "answer": "B) Several former Apple employees"
+      },
+      {
+        "q": "What is the noun form of 'accuse' used to describe the act of accusing someone?",
+        "options": [
+          "A) Accusation",
+          "B) Accusable",
+          "C) Accuser",
+          "D) Accusingly"
+        ],
+        "answer": "A) Accusation"
+      },
+      {
+        "q": "Which of the following is the best definition for 'intellectual property'?",
+        "options": [
+          "A) Real estate owned by smart people",
+          "B) Creations of the mind protected by law",
+          "C) Physical equipment used in offices",
+          "D) Financial investments in tech stocks"
+        ],
+        "answer": "B) Creations of the mind protected by law"
+      },
+      {
+        "q": "According to the text, what is OpenAI's stance on intellectual property?",
+        "options": [
+          "A) They believe it should be abolished.",
+          "B) They claim it does not apply to AI.",
+          "C) They state they respect it.",
+          "D) They refused to comment on it."
+        ],
+        "answer": "C) They state they respect it."
+      }
+    ]
+  },
+  "article-6": {
+    "title": "泰國酒吧大火釀28死70傷 消防安全問題再浮現",
+    "tabTitle": "國際大事",
+    "english": "A devastating fire swept through a crowded nightclub in Thailand on Tuesday, killing at least 28 people and injuring 70 others. Eyewitnesses reported that the blaze started near the stage before quickly engulfing the entire building, which lacked proper emergency exits. Investigators are currently looking into potential electrical failures and the club's compliance with fire safety regulations. This tragedy has once again sparked national outrage over the government's lax enforcement of safety standards in entertainment venues.",
+    "chinese": "週二，泰國一家擁擠的夜總會發生毀滅性大火，造成至少 28 人死亡、70 人受傷。目擊者報告稱，火勢是從舞台附近開始的，隨後迅速吞噬了整棟缺乏適當安全出口的建築。調查人員目前正在調查潛在的電氣故障以及該俱樂部對消防安全法規的遵守情況。這場悲劇再次引發了全國對政府在娛樂場所安全標準執法不力的憤怒。",
+    "vocabulary": [
+      "devastating (adj.): 毀滅性的；破壞性極大的",
+      "sweep through (phr. v.): 席捲；迅速蔓延",
+      "crowded (adj.): 擁擠的；擠滿人群的",
+      "injure (v.): 使受傷；損害",
+      "eyewitness (n.): 目擊者；見證人",
+      "blaze (n.): 大火；烈火",
+      "engulf (v.): 吞噬；包圍",
+      "emergency exit (n.): 安全出口；緊急出口",
+      "investigator (n.): 調查人員",
+      "potential (adj.): 潛在的；可能的",
+      "electrical failure (n.): 電氣故障",
+      "compliance (n.): 遵守；服從",
+      "regulation (n.): 規章；法規",
+      "tragedy (n.): 悲劇；慘劇",
+      "spark (v.): 引發；觸發",
+      "outrage (n.): 憤怒；憤慨",
+      "lax (adj.): 鬆懈的；不嚴格的",
+      "enforcement (n.): 執法；實施",
+      "safety standard (n.): 安全標準",
+      "entertainment venue (n.): 娛樂場所"
+    ],
+    "quiz": [
+      {
+        "q": "How many people died in the Thailand nightclub fire?",
+        "options": [
+          "14",
+          "28",
+          "70",
+          "98"
+        ],
+        "answer": "28"
+      },
+      {
+        "q": "According to eyewitnesses, where did the fire start?",
+        "options": [
+          "Near the kitchen",
+          "Near the stage",
+          "Near the entrance",
+          "Near the restroom"
+        ],
+        "answer": "Near the stage"
+      },
+      {
+        "q": "What major safety issue did the building have?",
+        "options": [
+          "No fire extinguishers",
+          "Lack of proper emergency exits",
+          "Unlicensed security guards",
+          "Poor ventilation"
+        ],
+        "answer": "Lack of proper emergency exits"
+      },
+      {
+        "q": "What does the word 'devastating' mean in the text?",
+        "options": [
+          "Extremely exciting",
+          "Highly beneficial",
+          "Causing severe shock or damage",
+          "Moderately challenging"
+        ],
+        "answer": "Causing severe shock or damage"
+      },
+      {
+        "q": "Which word is closest in meaning to 'blaze'?",
+        "options": [
+          "Sparkle",
+          "Fire",
+          "Smoke",
+          "Ash"
+        ],
+        "answer": "Fire"
+      },
+      {
+        "q": "The word 'engulf' in the text most nearly means:",
+        "options": [
+          "To completely surround or cover",
+          "To extinguish slowly",
+          "To escape from",
+          "To build up"
+        ],
+        "answer": "To completely surround or cover"
+      },
+      {
+        "q": "What are investigators currently looking into?",
+        "options": [
+          "The price of the tickets",
+          "Potential electrical failures",
+          "The music playlist",
+          "Weather conditions"
+        ],
+        "answer": "Potential electrical failures"
+      },
+      {
+        "q": "'Lax' enforcement of safety standards means the enforcement is:",
+        "options": [
+          "Very strict",
+          "Not strict enough",
+          "Extremely efficient",
+          "Non-existent"
+        ],
+        "answer": "Not strict enough"
+      },
+      {
+        "q": "What has the tragedy sparked among the public?",
+        "options": [
+          "Global celebration",
+          "Indifference",
+          "National outrage",
+          "Financial donations"
+        ],
+        "answer": "National outrage"
+      },
+      {
+        "q": "What is the meaning of 'compliance'?",
+        "options": [
+          "The act of obeying a rule or law",
+          "The process of making a complaint",
+          "A state of confusion",
+          "Financial profit"
+        ],
+        "answer": "The act of obeying a rule or law"
+      },
+      {
+        "q": "Choose the correct word to complete the sentence: 'The police are searching for ________ who saw the accident.'",
+        "options": [
+          "investigators",
+          "eyewitnesses",
+          "regulations",
+          "compliance"
+        ],
+        "answer": "eyewitnesses"
+      },
+      {
+        "q": "Who is being criticized for the lax enforcement of safety standards?",
+        "options": [
+          "The nightclub customers",
+          "The musicians",
+          "The government",
+          "The firefighters"
+        ],
+        "answer": "The government"
+      }
+    ]
+  }
+};
+
+        // --- CORE UI LOGIC ---
+        if(Object.keys(NEWS_DATA).length > 0) { currentTopicId = Object.keys(NEWS_DATA)[0]; } 
+        let currentSubTab = 'article'; 
+        let quizState = {}; 
+        let quizResult = {}; 
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('main-tabs');
+            tabsContainer.innerHTML = Object.entries(NEWS_DATA).map(([id, data]) => {
+                const isActive = id === currentTopicId ? 'active' : '';
+                const displayTitle = data.title.includes('：') ? data.title.split('：')[0] : data.title;
+                return `<button class="main-tab-button ${isActive}" onclick="changeTopic('${id}')">${displayTitle}</button>`;
+            }).join('');
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const data = NEWS_DATA[currentTopicId];
+            if (!data) return;
+            const quizLength = data.quiz ? data.quiz.length : 0;
+            const subTabsHTML = `
+                <div class="mb-8 flex space-x-2 border-b pb-4 border-slate-100 overflow-x-auto">
+                    <button class="sub-tab-button ${currentSubTab === 'article' ? 'active' : ''}" onclick="changeSubTab('article')">📰 英文原文</button>
+                    <button class="sub-tab-button ${currentSubTab === 'translation' ? 'active' : ''}" onclick="changeSubTab('translation')">🇹🇼 中文翻譯</button>
+                    <button class="sub-tab-button ${currentSubTab === 'vocabulary' ? 'active' : ''}" onclick="changeSubTab('vocabulary')">📚 單字庫 (${data.vocabulary.length})</button>
+                    <button class="sub-tab-button ${currentSubTab === 'quiz' ? 'active' : ''}" onclick="initQuiz()">📝 測驗 (${quizLength} 題)</button>
+                </div>
+            `;
+            let contentHTML = '';
+            switch (currentSubTab) {
+                case 'article': contentHTML = renderArticle(data.english, data.title); break;
+                case 'translation': contentHTML = renderTranslation(data.chinese, data.title); break;
+                case 'vocabulary': contentHTML = renderVocabulary(data.vocabulary, data.title); break;
+                case 'quiz': contentHTML = renderQuiz(currentTopicId, data.quiz, data.title); break;
+            }
+            contentArea.innerHTML = subTabsHTML + contentHTML;
+            if (currentSubTab === 'quiz') updateQuizDisplay(currentTopicId, data.quiz);
+        }
+
+        function renderArticle(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-slate-700 leading-relaxed p-6 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition" onclick="changeSubTab('translation')">🇹🇼 前往中文翻譯</button></div>`;
+        }
+
+        function renderTranslation(text, title) {
+            return `<h2 class="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">${title}</h2><div class="prose max-w-none text-lg text-gray-700 leading-relaxed p-6 bg-green-50 border-l-8 border-green-500 rounded-2xl shadow-sm"><p>${text.trim()}</p></div><div class="mt-8 text-center"><button class="px-8 py-3 bg-green-600 text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition" onclick="changeSubTab('vocabulary')">📖 前往單字庫複習</button></div>`;
+        }
+
+        function renderVocabulary(vocabArray, title) {
+            const listItems = vocabArray.map(item => {
+                const parts = item.split(': ');
+                return `<li class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"><span class="font-bold text-blue-700">${parts[0]}</span> <span class="text-slate-500 block text-sm mt-1">${parts[1]}</span></li>`;
+            }).join('');
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">核心單字與片語</h2><ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${listItems}</ul><div class="mt-12 text-center"><button class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition" onclick="initQuiz()">📝 開始測驗</button></div>`;
+        }
+
+        function renderQuiz(topicId, quizQuestions, title) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const questionsHTML = quizQuestions.map((q, index) => {
+                const selected = currentQuizState[index];
+                const isSubmitted = result !== undefined;
+                const optionsHTML = q.options.map((option, optIndex) => {
+                    let classes = 'quiz-option p-4 my-2 border-2 border-gray-100 rounded-xl block text-left';
+                    if (isSubmitted) {
+                        if (option === q.answer) classes += ' correct';
+                        else if (selected === option) classes += ' incorrect';
+                    } else if (selected === option) classes += ' selected';
+                    const escapedOption = option.replace(/'/g, "\'");
+                    return `<div class="${classes} ${isSubmitted ? 'pointer-events-none' : ''}" onclick="selectOption('${topicId}', ${index}, '${escapedOption}')"><span class="font-bold mr-3 text-slate-400">${String.fromCharCode(65 + optIndex)}.</span> ${option}${isSubmitted && option === q.answer ? '<span class="ml-2 text-green-600 font-bold">✓</span>' : ''}</div>`;
+                }).join('');
+                return `<div class="mb-10 p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"><p class="text-xl font-bold text-slate-900 mb-6">Q${index + 1}: ${q.q}</p>${optionsHTML}</div>`;
+            }).join('');
+            const resultHTML = result ? `<div class="text-center p-10 bg-blue-600 text-white rounded-3xl mb-10 shadow-2xl"><h3 class="text-3xl font-black mb-2">測驗得分</h3><p class="text-6xl font-black">${result.score} / ${result.total}</p><button class="mt-6 px-6 py-2 bg-white text-blue-600 font-bold rounded-full" onclick="initQuiz(true)">🔄 重新測驗</button></div>` : '';
+            return `<h2 class="text-3xl font-extrabold text-slate-900 mb-8">內容測驗</h2>${resultHTML}<div id="quiz-questions">${questionsHTML}</div><div class="mt-12 text-center">${result === undefined ? `<button id="submit-quiz-button" class="w-full sm:w-auto px-12 py-4 bg-red-600 text-white text-xl font-black rounded-2xl shadow-xl hover:bg-red-700 transition disabled:opacity-30" onclick="submitQuizAnswer('${topicId}')" disabled>送出答案並查看結果</button>` : ''}<p id="quiz-message" class="mt-4 text-slate-400"></p></div>`;
+        }
+
+        function initQuiz(forceReset = false) {
+            const topicId = currentTopicId;
+            if (forceReset || currentSubTab !== 'quiz') {
+                quizState[topicId] = {};
+                quizResult[topicId] = undefined;
+                currentSubTab = 'quiz';
+            }
+            renderContent();
+        }
+
+        function selectOption(topicId, questionIndex, selectedOption) {
+            if (quizResult[topicId] !== undefined) return;
+            quizState[topicId] = quizState[topicId] || {};
+            quizState[topicId][questionIndex] = selectedOption;
+            updateQuizDisplay(topicId, NEWS_DATA[topicId].quiz);
+        }
+
+        function submitQuizAnswer(topicId) {
+            const questions = NEWS_DATA[topicId].quiz;
+            const answers = quizState[topicId] || {};
+            let score = 0;
+            questions.forEach((q, index) => { if (answers[index] === q.answer) score++; });
+            quizResult[topicId] = { score, total: questions.length };
+            renderContent();
+        }
+
+        function updateQuizDisplay(topicId, quizQuestions) {
+            const currentQuizState = quizState[topicId] || {};
+            const result = quizResult[topicId];
+            const answeredCount = Object.keys(currentQuizState).length;
+            const submitButton = document.getElementById('submit-quiz-button');
+            const quizMessage = document.getElementById('quiz-message');
+            if (submitButton) {
+                submitButton.disabled = answeredCount !== quizQuestions.length;
+                quizMessage.textContent = answeredCount === quizQuestions.length ? '所有題目已作答完畢' : `已作答：${answeredCount} / ${quizQuestions.length}`;
+            }
+            if (result === undefined) {
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    const qIdxText = el.closest('.mb-10').querySelector('p').innerText;
+                    const qIdx = parseInt(qIdxText.match(/Q(d+):/)[1]) - 1;
+                    const optValue = el.innerText.substring(3).replace('✓', '').trim();
+                    el.classList.remove('selected');
+                    if (currentQuizState[qIdx] === optValue) el.classList.add('selected');
+                });
+            }
+        }
+
+        function changeTopic(id) { currentTopicId = id; currentSubTab = 'article'; renderTabs(); renderContent(); }
+        function changeSubTab(tab) { currentSubTab = tab; renderContent(); }
+
+        window.onload = () => {
+            renderTabs();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
